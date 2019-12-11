@@ -22,7 +22,6 @@ public class WebService {
     public String  error="";
     public Boolean status;
 
-
     // private
 
     private PBase parent;
