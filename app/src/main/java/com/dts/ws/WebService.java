@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public class WebService {
 
     public Cursor openDTCursor;
-    public String openDTResult;
 
     public String  error="";
+    public String  rawdata="";
     public Boolean status;
 
     // private
@@ -29,7 +29,6 @@ public class WebService {
     private ArrayList<String> results=new ArrayList<String>();
 
     private String URL,sql;
-    private int mode;
     private boolean errflag;
 
     // OpenDT
@@ -41,11 +40,9 @@ public class WebService {
     public WebService(PBase Parent,String Url) {
         parent=Parent;
         URL=Url;
-        mode=0;
     }
 
     public void openDT(String SQL) {
-        mode=1;
         sql=SQL;
         execute();
     }
@@ -53,17 +50,12 @@ public class WebService {
     //region OpenDT
 
     private void processOpenDT() {
-        errflag = false;
-        OpenDT(sql);
-    }
-
-    public void OpenDT(String sql) {
-        String str;
+        String str,vv,val1,val2,val3,val4,val5;
         int rc;
 
-        METHOD_NAME = "getDT";
+        METHOD_NAME = "getClsType1";
 
-        results.clear();
+        results.clear();errflag = false;rawdata="";
 
         try {
 
@@ -81,84 +73,39 @@ public class WebService {
             HttpTransportSE transport = new HttpTransportSE(URL);
             transport.call(NAMESPACE+METHOD_NAME, envelope);
 
-            SoapObject resSoap =(SoapObject) envelope.getResponse();
+            SoapObject response =(SoapObject) envelope.getResponse();
             SoapObject result = (SoapObject) envelope.bodyIn;
 
-            rc=resSoap.getPropertyCount()-1;
+            rc=response.getPropertyCount();
 
             for (int i = 0; i < rc; i++) {
-                str = ((SoapObject) result.getProperty(0)).getPropertyAsString(i);
+                Object property = response.getProperty(i);
 
-                if (i==0) {
-                    if (!str.equalsIgnoreCase("#")) throw new Exception(str);
-                } else {
-                    results.add(str);
+                if (property instanceof SoapObject) {
 
-                    if (i==1) odt_rows = Integer.parseInt(str);
-                    if (i==2) odt_cols=Integer.parseInt(str);
-                 }
-            }
+                    SoapObject item = (SoapObject) property;
 
-            createCursor();
+                    val1= item.getProperty("code").toString();
+                    val2= item.getProperty("cant").toString();
+                    val3= item.getProperty("total").toString();
 
-        } catch (Exception e) {
-            errflag=true;
-            error=e.getMessage();
-            createVoidCursor();
-        }
+                    //SoapObject sitem = (SoapObject) item.getProperty("item");
+                    //val4= sitem.getProperty("code").toString();
 
-    }
-
-    private void createCursor() {
-        String[] mRow = new String[odt_cols];
-        MatrixCursor cursor = new MatrixCursor(mRow);
-        int pos;
-        String ss;
-
-        try {
-            createVoidCursor();
-            if (odt_rows==0) return;
-
-            pos=2;
-            for (int i = 0; i <odt_rows; i++) {
-                for (int j = 0; j <odt_cols; j++) {
-                    try {
-                        ss=results.get(pos);
-                        if (ss.equalsIgnoreCase("anyType{}")) ss = "";
-                        mRow[j]=ss;
-                    } catch (Exception e) {
-                        mRow[j]="";
-                    }
-                    pos++;
+                    str = val1+" , "+val2+" , "+val3+"\n";
+                    rawdata+=str+"\n";
                 }
-                cursor.addRow(mRow);
             }
 
-            int rc=cursor.getCount();
-
-            openDTCursor=cursor;
         } catch (Exception e) {
             errflag=true;
             error=e.getMessage();
-            createVoidCursor();
+            rawdata="Error : "+error;
         }
+
     }
-
-    private void createVoidCursor() {
-        String[] mRow = new String[odt_cols];
-        MatrixCursor cursor = new MatrixCursor(mRow);
-
-        try {
-            openDTCursor=cursor;
-        } catch (Exception e) {
-            errflag=true;
-            error=e.getMessage();
-        }
-    }
-
 
     //endregion
-
 
     //region WebService Core
 
@@ -168,15 +115,10 @@ public class WebService {
     }
 
     public void wsExecute(){
-
         errflag=false;status=false;error="";
 
         try {
-            switch (mode) {
-                case 1:
-                    processOpenDT();break;
-            }
-
+            processOpenDT();
             status=errflag;
         } catch (Exception e) {
             error=e.getMessage();
@@ -186,7 +128,6 @@ public class WebService {
 
     public void wsFinished()  {
         status=!errflag;
-        //
         try {
             parent.wsCallBack(errflag,error);
         } catch (Exception e) {

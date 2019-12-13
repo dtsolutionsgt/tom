@@ -139,10 +139,11 @@
             android:layout_alignEnd="@+id/textView6"
             android:layout_alignParentBottom="false"
             android:layout_marginStart="-3dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="-2dp"
             android:layout_marginEnd="-3dp"
             android:ems="10"
             android:inputType="textPassword"
+            android:text="password"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -200,6 +201,7 @@
             android:layout_marginEnd="-3dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:text="Usuario 1"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -211,7 +213,7 @@
             android:layout_alignBottom="@+id/textView6"
             android:layout_alignParentStart="true"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="1dp"
             android:adjustViewBounds="true"
             android:padding="8dp"
@@ -226,7 +228,7 @@
             android:layout_alignParentBottom="false"
             android:layout_marginStart="5dp"
             android:layout_marginTop="3dp"
-            android:padding="8dp"
+            android:padding="10dp"
             android:src="@drawable/login_user" />
 
         <ImageView
