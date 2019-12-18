@@ -4,14 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.dts.ws.WebService;
-import com.dts.ws.WebServiceBase;
 import com.dts.ws.wsTest;
 
 public class Mainmenu extends PBase {
 
     private TextView lbl1;
 
-    //private WebService ws;
+    private WebService ws;
 
     private wsTest wsb;
 
@@ -27,9 +26,10 @@ public class Mainmenu extends PBase {
         lbl1=(TextView) findViewById(R.id.textView8);
 
         URL="http://192.168.1.94/XMLTest/webservice1.asmx";
-
-        //ws=new WebService(Mainmenu.this,URL);
         wsb=new wsTest(Mainmenu.this,URL);
+
+
+
     }
 
     //region Events
@@ -43,6 +43,10 @@ public class Mainmenu extends PBase {
         }
     }
 
+    public void doWCF(View view) {
+        ws.openDT("select * from P_LINEA");
+    }
+
     //endregion
 
     //region Main
@@ -51,7 +55,7 @@ public class Mainmenu extends PBase {
     public void wsCallBack(Boolean throwing,String errmsg) {
         try {
             if (throwing) throw new Exception(errmsg);
-            lbl1.setText(wsb.rawdata);
+            lbl1.setText("Items : "+wsb.items.size());
         } catch (Exception e) {
             msgbox(e.getMessage()+"-\n"+errmsg);
             lbl1.setText(errmsg);

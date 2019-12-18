@@ -9,8 +9,10 @@ import com.dts.tom.PBase;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,43 @@ public class WebService {
     //region OpenDT
 
     private void processOpenDT() {
+        String str,vv,val1,val2,val3,val4,val5;
+        int rc;
+
+        final String METHOD_NAME = "Get_All_Filter";
+        final String NAMESPACE = "http://tempuri.org/";
+        final String URL = "http://192.168.1.94/tomimswcf/Cliente/Cliente/ServiceCliente.svc";
+        final String SOAP_ACTION = "http://tempuri.org/IServiceCliente/Get_All_Filter";
+
+        StringBuilder sb;
+        XmlSerializer writer;
+
+        try {
+
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+            request.addProperty("pActivo",true);
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.dotNet = true;
+            envelope.setOutputSoapObject(request);
+
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+            androidHttpTransport.call(SOAP_ACTION, envelope);
+            SoapPrimitive result = (SoapPrimitive)envelope.getResponse();
+
+            //to get the data
+            String resultData = result.toString();
+            // 0 is the first object of data
+
+        } catch (Exception e) {
+            errflag = true;
+            error = e.getMessage();
+            rawdata = "Error : " + error;
+        }
+    }
+
+    private void processOpenDT_old() {
         String str,vv,val1,val2,val3,val4,val5;
         int rc;
 
@@ -104,6 +143,7 @@ public class WebService {
         }
 
     }
+
 
     //endregion
 

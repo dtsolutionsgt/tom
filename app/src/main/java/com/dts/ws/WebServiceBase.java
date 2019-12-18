@@ -9,14 +9,12 @@ import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class WebServiceBase {
 
-    public String  error="",rawdata="";
+    public String  error="",rawdata="", methodname="";
     public Boolean status;
 
     protected SoapObject request;
@@ -27,8 +25,6 @@ public class WebServiceBase {
 
     private String URL,sql;
     private boolean errflag;
-
-    private String wsnamespace ="http://tempuri.org/",wsmethodname;
 
     private ArrayList<clsWSParam> params = new ArrayList<clsWSParam>();
 
@@ -41,7 +37,7 @@ public class WebServiceBase {
     }
 
     public void callMethod(String methodname) {
-        wsmethodname = methodname;
+        this.methodname = methodname;
         execute();
     }
 
@@ -55,7 +51,7 @@ public class WebServiceBase {
 
         try {
 
-            request = new SoapObject(wsnamespace, wsmethodname);
+            request = new SoapObject("http://tempuri.org/", methodname);
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.dotNet = true;
 
@@ -63,7 +59,7 @@ public class WebServiceBase {
 
             envelope.setOutputSoapObject(request);
             HttpTransportSE transport = new HttpTransportSE(URL);
-            transport.call(wsnamespace+wsmethodname, envelope);
+            transport.call("http://tempuri.org/"+ methodname, envelope);
 
             response =(SoapObject) envelope.getResponse();
             result = (SoapObject) envelope.bodyIn;
@@ -76,9 +72,7 @@ public class WebServiceBase {
 
     }
 
-    public void dataCallback() {
-
-    }
+    public void dataCallback() {}
 
     //endregion
 
@@ -114,7 +108,6 @@ public class WebServiceBase {
     }
 
     //endregion
-
 
     //region WebService Core
 
@@ -171,7 +164,6 @@ public class WebServiceBase {
     }
 
     //endregion
-
 
 
 }
