@@ -18,7 +18,6 @@ public class GetAllEmpresasForHH extends WebServiceBase {
     @Override
     public void dataCallback() {
         clsBeEmpresa item;
-        String str,vv,val1,val2,val3,val4,val5;
         int rc;
 
         items.clear();
