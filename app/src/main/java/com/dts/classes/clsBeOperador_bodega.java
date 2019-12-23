@@ -1,5 +1,6 @@
 package com.dts.classes;
 
+
 public class clsBeOperador_bodega {
     public int  idoperadorbodega;
     public int  idoperador;
