@@ -10,7 +10,9 @@ import java.util.Comparator;
 
 public class GetOperadoresByBodegaForHH extends WebServiceBase {
 
-    public ArrayList<clsBeOperador_bodega> items = new ArrayList<clsBeOperador_bodega>();
+    public ArrayList<clsBeOperador> items = new ArrayList<clsBeOperador>();
+    public ArrayList<clsBeOperador> otems = new ArrayList<clsBeOperador>();
+    public ArrayList<clsBeOperador_bodega> bitems = new ArrayList<clsBeOperador_bodega>();
 
     public GetOperadoresByBodegaForHH(PBase Parent, String Url) {
         super(Parent,Url);
@@ -21,7 +23,7 @@ public class GetOperadoresByBodegaForHH extends WebServiceBase {
         clsBeOperador_bodega item;
         int rc;
 
-        items.clear();
+        bitems.clear();
         rc=response.getPropertyCount();
 
         for (int i = 0; i < rc; i++) {
@@ -35,7 +37,7 @@ public class GetOperadoresByBodegaForHH extends WebServiceBase {
                 item=new clsBeOperador_bodega();
                 item.idoperador= Integer.parseInt(xmlitem.getProperty("IdOperador").toString());
                 item.idbodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
-                items.add(item);
+                bitems.add(item);
 
             }
         }

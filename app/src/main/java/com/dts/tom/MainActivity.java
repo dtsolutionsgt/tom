@@ -177,6 +177,32 @@ public class MainActivity extends PBase {
 
         });
 
+
+        spinprint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                try {
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTextColor(Color.BLACK);
+                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    //idimpres=wsprn.items.get(position).idimpresora;
+
+                } catch (Exception e) {
+                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                    mu.msgbox(e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+
+        });
+
     }
 
     //endregion
