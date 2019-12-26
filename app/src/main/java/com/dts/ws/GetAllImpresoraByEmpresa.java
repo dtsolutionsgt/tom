@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetAllImpresoraByEmpresa extends WebServiceBase {
+public class GetAllImpresoraByEmpresa extends WebServiceBase
+{
 
     public ArrayList<clsBeImpresora> items = new ArrayList<clsBeImpresora>();
 
@@ -16,17 +17,21 @@ public class GetAllImpresoraByEmpresa extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback()
+    {
         clsBeImpresora item;
         int rc;
 
         items.clear();
         rc=response.getPropertyCount();
 
-        for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++)
+        {
 
             Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
+
+            if (property instanceof SoapObject)
+            {
 
                 SoapObject xmlitem = (SoapObject) property;
 
@@ -43,8 +48,10 @@ public class GetAllImpresoraByEmpresa extends WebServiceBase {
 
     }
 
-    public class Sorter implements Comparator<clsBeImpresora> {
-        public int compare(clsBeImpresora left, clsBeImpresora right) {
+    public class Sorter implements Comparator<clsBeImpresora>
+    {
+        public int compare(clsBeImpresora left, clsBeImpresora right)
+        {
             return left.nombre.compareTo(right.nombre);
         }
     }

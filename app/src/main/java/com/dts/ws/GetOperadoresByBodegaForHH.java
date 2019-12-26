@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetOperadoresByBodegaForHH extends WebServiceBase {
+public class GetOperadoresByBodegaForHH extends WebServiceBase
+{
 
     public ArrayList<clsBeOperador> items = new ArrayList<clsBeOperador>();
-    public ArrayList<clsBeOperador> otems = new ArrayList<clsBeOperador>();
     public ArrayList<clsBeOperador_bodega> bitems = new ArrayList<clsBeOperador_bodega>();
 
     public GetOperadoresByBodegaForHH(PBase Parent, String Url) {
@@ -19,17 +19,21 @@ public class GetOperadoresByBodegaForHH extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback()
+    {
         clsBeOperador_bodega item;
         int rc;
 
         bitems.clear();
         rc=response.getPropertyCount();
 
-        for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++)
+        {
 
             Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
+
+            if (property instanceof SoapObject)
+            {
 
                 SoapObject xmlitem = (SoapObject) property;
 

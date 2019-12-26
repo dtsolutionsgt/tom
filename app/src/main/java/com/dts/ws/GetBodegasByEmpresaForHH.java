@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetBodegasByEmpresaForHH extends WebServiceBase {
+public class GetBodegasByEmpresaForHH extends WebServiceBase
+{
 
     public ArrayList<clsBeBodega> items = new ArrayList<clsBeBodega>();
 
@@ -18,20 +19,23 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback()
+    {
         clsBeBodega item;
         int rc;
 
         items.clear();
         rc=response.getPropertyCount();
 
-        for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++)
+        {
 
             Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
+
+            if (property instanceof SoapObject)
+            {
 
                 SoapObject xmlitem = (SoapObject) property;
-
                 //Nombres de campos deber respetar Mayusculas
                 item=new clsBeBodega();
                 item.idbodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
@@ -45,8 +49,10 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
 
     }
 
-    public class Sorter implements Comparator<clsBeBodega> {
-        public int compare(clsBeBodega left, clsBeBodega right) {
+    public class Sorter implements Comparator<clsBeBodega>
+    {
+        public int compare(clsBeBodega left, clsBeBodega right)
+        {
             return left.nombre.compareTo(right.nombre);
         }
     }

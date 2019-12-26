@@ -12,7 +12,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 
-public class WebServiceBase {
+public class WebServiceBase
+{
 
     public String  error="",rawdata="", methodname="";
     public Boolean status;
