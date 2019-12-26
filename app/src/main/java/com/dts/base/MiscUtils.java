@@ -16,7 +16,8 @@ import com.dts.tom.R;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-public class MiscUtils {
+public class MiscUtils
+{
 		
 	private Context cCont;
 	private DecimalFormat ffrmdec,ffrmint,ffrmint2,ffrmdec2,ffrmgps;
@@ -24,7 +25,8 @@ public class MiscUtils {
 
 	private PBase pB;
 	
-	public MiscUtils(Context context,String currsymb) {
+	public MiscUtils(Context context,String currsymb)
+	{
 		cCont=context; 
 		curr=currsymb;
 		
@@ -35,7 +37,8 @@ public class MiscUtils {
 		ffrmgps = new DecimalFormat("##0.0000000");
 	}
 	
-	public MiscUtils(Context context) {
+	public MiscUtils(Context context)
+	{
 		cCont=context; 
 		curr="";
 		

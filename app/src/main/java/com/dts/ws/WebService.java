@@ -14,7 +14,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 
-public class WebService {
+public class WebService
+{
 
     public Cursor openDTCursor;
     public String openDTResult;
@@ -38,13 +39,15 @@ public class WebService {
     private final String NAMESPACE ="http://tempuri.org/";
     private String METHOD_NAME;
 
-    public WebService(PBase Parent,String Url) {
+    public WebService(PBase Parent,String Url)
+    {
         parent=Parent;
         URL=Url;
         mode=0;
     }
 
-    public void openDT(String SQL) {
+    public void openDT(String SQL)
+    {
         mode=1;
         sql=SQL;
         execute();
@@ -52,12 +55,14 @@ public class WebService {
 
     //region OpenDT
 
-    private void processOpenDT() {
+    private void processOpenDT()
+    {
         errflag = false;
         OpenDT(sql);
     }
 
-    public void OpenDT(String sql) {
+    public void OpenDT(String sql)
+    {
         String str;
         int rc;
 
@@ -86,12 +91,15 @@ public class WebService {
 
             rc=resSoap.getPropertyCount()-1;
 
-            for (int i = 0; i < rc; i++) {
+            for (int i = 0; i < rc; i++)
+            {
                 str = ((SoapObject) result.getProperty(0)).getPropertyAsString(i);
 
-                if (i==0) {
+                if (i==0)
+                {
                     if (!str.equalsIgnoreCase("#")) throw new Exception(str);
-                } else {
+                } else
+                {
                     results.add(str);
 
                     if (i==1) odt_rows = Integer.parseInt(str);
@@ -109,24 +117,32 @@ public class WebService {
 
     }
 
-    private void createCursor() {
+    private void createCursor()
+    {
         String[] mRow = new String[odt_cols];
         MatrixCursor cursor = new MatrixCursor(mRow);
         int pos;
         String ss;
 
-        try {
+        try
+        {
             createVoidCursor();
+
             if (odt_rows==0) return;
 
             pos=2;
-            for (int i = 0; i <odt_rows; i++) {
-                for (int j = 0; j <odt_cols; j++) {
-                    try {
+
+            for (int i = 0; i <odt_rows; i++)
+            {
+                for (int j = 0; j <odt_cols; j++)
+                {
+                    try
+                    {
                         ss=results.get(pos);
                         if (ss.equalsIgnoreCase("anyType{}")) ss = "";
                         mRow[j]=ss;
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
                         mRow[j]="";
                     }
                     pos++;
@@ -137,20 +153,25 @@ public class WebService {
             int rc=cursor.getCount();
 
             openDTCursor=cursor;
-        } catch (Exception e) {
+
+        } catch (Exception e)
+        {
             errflag=true;
             error=e.getMessage();
             createVoidCursor();
         }
     }
 
-    private void createVoidCursor() {
+    private void createVoidCursor()
+    {
         String[] mRow = new String[odt_cols];
         MatrixCursor cursor = new MatrixCursor(mRow);
 
-        try {
+        try
+        {
             openDTCursor=cursor;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             errflag=true;
             error=e.getMessage();
         }
@@ -162,52 +183,65 @@ public class WebService {
 
     //region WebService Core
 
-    private void execute() {
+    private void execute()
+    {
         AsyncCallWS wstask = new AsyncCallWS();
         wstask.execute();
     }
 
-    public void wsExecute(){
+    public void wsExecute()
+    {
 
         errflag=false;status=false;error="";
 
         try {
-            switch (mode) {
+            switch (mode)
+            {
                 case 1:
                     processOpenDT();break;
             }
 
             status=errflag;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             error=e.getMessage();
             status=false;
         }
     }
 
-    public void wsFinished()  {
+    public void wsFinished()
+    {
         status=!errflag;
         //
-        try {
+        try
+        {
             parent.wsCallBack(errflag,error);
         } catch (Exception e) {
         }
     }
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWS extends AsyncTask<String, Void, Void>
+    {
 
         @Override
-        protected Void doInBackground(String... params) {
-            try {
+        protected Void doInBackground(String... params)
+        {
+            try
+            {
                 wsExecute();
             } catch (Exception e) {}
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            try {
+        protected void onPostExecute(Void result)
+        {
+            try
+            {
                 wsFinished();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
+
             }
         }
 

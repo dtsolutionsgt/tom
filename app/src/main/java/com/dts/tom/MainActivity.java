@@ -10,26 +10,32 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 
 
-public class MainActivity extends PBase {
+public class MainActivity extends PBase
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        try {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        try
+        {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
             grantPermissions();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
     //region Grant permissions
 
-    private void grantPermissions() {
+    private void grantPermissions()
+    {
 
         try {
-            if (Build.VERSION.SDK_INT >= 20) {
+            if (Build.VERSION.SDK_INT >= 20)
+            {
 
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     startApplication();
@@ -43,12 +49,11 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void startApplication() {
-        try {
+    private void startApplication()
+    {
+        try
+        {
             super.InitBase();
-
-
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
@@ -56,10 +61,13 @@ public class MainActivity extends PBase {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        try {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        try
+        {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            {
                 startApplication();
-            } else {
+            } else
+            {
                 super.finish();
             }
         } catch (Exception e) {
@@ -71,7 +79,8 @@ public class MainActivity extends PBase {
 
     //region Events
 
-    public void doMenu(View view) {
+    public void doMenu(View view)
+    {
         startActivity(new Intent(this,Mainmenu.class));
     }
 

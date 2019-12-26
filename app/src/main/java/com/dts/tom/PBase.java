@@ -18,7 +18,8 @@ import com.dts.base.clsClasses;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
-public class PBase extends Activity {
+public class PBase extends Activity
+{
 
     protected String sql;
 
@@ -36,13 +37,14 @@ public class PBase extends Activity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pbase);
     }
 
-    public void InitBase(){
-
+    public void InitBase()
+    {
         vApp=this.getApplication();
         gl=((appGlobals) this.getApplication());
 
@@ -55,14 +57,17 @@ public class PBase extends Activity {
 
     // Web service call back
 
-    public void wsCallBack(Boolean throwing,String errmsg) throws Exception {
+    public void wsCallBack(Boolean throwing,String errmsg) throws Exception
+    {
         if (throwing) throw new Exception(errmsg);
     }
 
     // Aux
 
-    protected void msgbox(String msg){
-        try{
+    protected void msgbox(String msg)
+    {
+        try
+        {
             mu.msgbox(msg);
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -77,13 +82,15 @@ public class PBase extends Activity {
         toastcent(""+val);
     }
 
-    protected void toastlong(String msg) {
+    protected void toastlong(String msg)
+    {
         Toast toast= Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 
-    protected void toastcent(String msg) {
+    protected void toastcent(String msg)
+    {
 
         if (mu.emptystr(msg)) return;
 
@@ -92,7 +99,8 @@ public class PBase extends Activity {
         toast.show();
     }
 
-    public void addlog(final String methodname, String msg, String info) {
+    public void addlog(final String methodname, String msg, String info)
+    {
 
         final String vmethodname = methodname;
         final String vmsg = msg;
@@ -108,7 +116,8 @@ public class PBase extends Activity {
 
     }
 
-    protected void setAddlog(String methodname,String msg,String info) {
+    protected void setAddlog(String methodname,String msg,String info)
+    {
 
         BufferedWriter writer = null;
         FileWriter wfile;
