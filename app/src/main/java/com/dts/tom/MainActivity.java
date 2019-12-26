@@ -138,8 +138,8 @@ public class MainActivity extends PBase {
                     fillBodega();
 
                 } catch (Exception e) {
-                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    mu.msgbox(e.getMessage());
+                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                    //mu.msgbox(e.getMessage());
                 }
 
             }
@@ -164,8 +164,8 @@ public class MainActivity extends PBase {
                     fillUserImpres();
 
                 } catch (Exception e) {
-                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    mu.msgbox(e.getMessage());
+                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                    //mu.msgbox(e.getMessage());
                 }
 
             }
@@ -190,8 +190,8 @@ public class MainActivity extends PBase {
                     //idimpres=wsprn.items.get(position).idimpresora;
 
                 } catch (Exception e) {
-                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    mu.msgbox(e.getMessage());
+                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                    //mu.msgbox(e.getMessage());
                 }
 
             }
