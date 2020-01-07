@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetBodegasByEmpresaForHH extends WebServiceBase
-{
+public class GetBodegasByEmpresaForHH extends WebServiceBase {
 
     public ArrayList<clsBeBodega> items = new ArrayList<clsBeBodega>();
 

@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetOperadoresByBodegaForHH extends WebServiceBase
-{
+public class GetOperadoresByBodegaForHH extends WebServiceBase {
 
     private ArrayList<clsBeOperador> oitems = new ArrayList<clsBeOperador>();
     public ArrayList<clsBeOperador_bodega> items = new ArrayList<clsBeOperador_bodega>();

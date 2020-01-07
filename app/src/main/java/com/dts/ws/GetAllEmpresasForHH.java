@@ -5,8 +5,7 @@ import com.dts.tom.PBase;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 
-public class GetAllEmpresasForHH extends WebServiceBase
-{
+public class GetAllEmpresasForHH extends WebServiceBase {
 
     public ArrayList<clsBeEmpresa> items = new ArrayList<clsBeEmpresa>();
 
