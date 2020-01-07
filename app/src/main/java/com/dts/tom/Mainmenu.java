@@ -52,7 +52,7 @@ public class Mainmenu extends PBase {
     //region Main
 
     @Override
-    public void wsCallBack(Boolean throwing,String errmsg) {
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
             if (throwing) throw new Exception(errmsg);
             lbl1.setText("Items : "+wsb.items.size());

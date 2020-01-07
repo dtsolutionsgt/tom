@@ -224,7 +224,7 @@
             android:layout_marginEnd="50dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:text="password"
+            android:text="123"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -298,6 +298,15 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_toEndOf="@+id/imageView6" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -321,5 +330,19 @@
             android:src="@drawable/palet" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="TextView"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

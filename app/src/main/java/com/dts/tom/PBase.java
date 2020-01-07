@@ -55,7 +55,7 @@ public class PBase extends Activity {
 
     // Web service call back
 
-    public void wsCallBack(Boolean throwing,String errmsg) throws Exception {
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) throws Exception {
 
     }
 

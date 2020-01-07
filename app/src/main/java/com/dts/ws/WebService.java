@@ -169,7 +169,7 @@ public class WebService {
     public void wsFinished()  {
         status=!errflag;
         try {
-            parent.wsCallBack(errflag,error);
+            parent.wsCallBack(errflag,error,0);
         } catch (Exception e) {
         }
     }

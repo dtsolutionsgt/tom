@@ -16,30 +16,37 @@ public class GetAllImpresoraByEmpresa extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback()  throws Exception {
         clsBeImpresora item;
         int rc;
 
-        items.clear();
-        rc=response.getPropertyCount();
+        try {
+            items.clear();
+            rc = response.getPropertyCount();
 
-        for (int i = 0; i < rc; i++) {
+            for (int i = 0; i < rc; i++) {
 
-            Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
+                Object property = response.getProperty(i);
+                if (property instanceof SoapObject) {
 
-                SoapObject xmlitem = (SoapObject) property;
+                    SoapObject xmlitem = (SoapObject) property;
 
-                //Nombres de campos deber respetar Mayusculas
-                item=new clsBeImpresora();
-                item.idempresa= Integer.parseInt(xmlitem.getProperty("IdImpresora").toString());
-                item.nombre= xmlitem.getProperty("Nombre").toString();
-                items.add(item);
+                    //Nombres de campos deber respetar Mayusculas
+                    item = new clsBeImpresora();
+                    item.idempresa = Integer.parseInt(xmlitem.getProperty("IdImpresora").toString());
+                    item.nombre = xmlitem.getProperty("Nombre").toString();
+                    items.add(item);
 
+                }
             }
-        }
 
-        Collections.sort(items, new Sorter());
+            Collections.sort(items, new Sorter());
+
+        } catch (Exception e) {
+            errorlevel = 3;
+            error = "Error a procesar datos : \n" + this.getClass().getSimpleName() + "\n" + e.getMessage();
+            throw new Exception(error);
+        }
 
     }
 

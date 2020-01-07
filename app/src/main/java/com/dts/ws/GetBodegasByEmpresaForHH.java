@@ -18,31 +18,38 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback() throws Exception {
         clsBeBodega item;
         int rc;
 
-        items.clear();
-        rc=response.getPropertyCount();
+        try {
 
-        for (int i = 0; i < rc; i++) {
+            items.clear();
+            rc = response.getPropertyCount();
 
-            Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
+            for (int i = 0; i < rc; i++) {
 
-                SoapObject xmlitem = (SoapObject) property;
+                Object property = response.getProperty(i);
+                if (property instanceof SoapObject) {
 
-                //Nombres de campos deber respetar Mayusculas
-                item=new clsBeBodega();
-                item.idbodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
-                item.nombre= xmlitem.getProperty("Nombre").toString();
-                items.add(item);
+                    SoapObject xmlitem = (SoapObject) property;
 
+                    //Nombres de campos deber respetar Mayusculas
+                    item = new clsBeBodega();
+
+                    item.idbodega = Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
+                    item.nombre = xmlitem.getProperty("Nombre").toString();
+                    items.add(item);
+
+                }
             }
+
+            Collections.sort(items, new Sorter());
+        } catch (Exception e) {
+            errorlevel = 3;
+            error = "Error a procesar datos : \n" + this.getClass().getSimpleName() + "\n" + e.getMessage();
+            throw new Exception(error);
         }
-
-        Collections.sort(items, new Sorter());
-
     }
 
     public class Sorter implements Comparator<clsBeBodega> {

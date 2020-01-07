@@ -5,22 +5,34 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.dts.classes.clsBeOperador;
+import com.dts.classes.clsBeOperador_bodega;
 import com.dts.ws.GetAllEmpresasForHH;
 import com.dts.ws.GetAllImpresoraByEmpresa;
 import com.dts.ws.GetBodegasByEmpresaForHH;
 import com.dts.ws.GetOperadoresByBodegaForHH;
+import com.dts.ws.IvanWebService;
+import com.dts.ws.OperadorValidoForHH;
+import com.dts.ws.WebServiceBase;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -28,18 +40,27 @@ public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
+    private TextView lblver,lbldate,lblurl;
+    private ProgressBar pbar;
 
     private GetAllEmpresasForHH wsemp;
     private GetBodegasByEmpresaForHH wsbod;
     private GetOperadoresByBodegaForHH wsuser;
     private GetAllImpresoraByEmpresa wsprn;
+    private OperadorValidoForHH wsoper;
 
     private ArrayList<String> emplist= new ArrayList<String>();
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> prnlist= new ArrayList<String>();
     private ArrayList<String> userlist= new ArrayList<String>();
 
-    private int callhandle,idemp,idbodega,idimpres,iduser;
+    private clsBeOperador_bodega seluser=new clsBeOperador_bodega();
+
+    private int callhandle,idemp,idbodega,idimpres,iduser=-1;
+    private String xmlstr;
+
+    private String wserror;
+    private boolean errflag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +83,20 @@ public class MainActivity extends PBase {
             spinprint = (Spinner) findViewById(R.id.spinner3);
             spinuser = (Spinner) findViewById(R.id.spinner4);
             txtpass = (EditText) findViewById(R.id.editText3);
+            lblver=(TextView)  findViewById(R.id.textView4);
+            lbldate=(TextView)  findViewById(R.id.textView3);
+            lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
+            pbar=(ProgressBar)  findViewById(R.id.progressBar);
+
+            getURL();
 
             setHandlers();
-
-            gl.wsurl = "http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx";
 
             wsemp = new GetAllEmpresasForHH(MainActivity.this, gl.wsurl);
             wsbod = new GetBodegasByEmpresaForHH(MainActivity.this, gl.wsurl);
             wsuser = new GetOperadoresByBodegaForHH(MainActivity.this, gl.wsurl);
             wsprn = new GetAllImpresoraByEmpresa(MainActivity.this, gl.wsurl);
+            wsoper = new OperadorValidoForHH(MainActivity.this, gl.wsurl);
 
             fillLogin();
 
@@ -116,7 +142,8 @@ public class MainActivity extends PBase {
     //region Events
 
     public void doLogin(View view) {
-        checkLogin();
+        //checkLogin();
+        doTest();
      }
 
     public void doMenu(View view) {
@@ -137,10 +164,7 @@ public class MainActivity extends PBase {
                     idemp=wsemp.items.get(position).idempresa;
                     fillBodega();
 
-                } catch (Exception e) {
-                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    //mu.msgbox(e.getMessage());
-                }
+                } catch (Exception e) { }
 
             }
 
@@ -163,10 +187,7 @@ public class MainActivity extends PBase {
                     idbodega=wsbod.items.get(position).idbodega;
                     fillUserImpres();
 
-                } catch (Exception e) {
-                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    //mu.msgbox(e.getMessage());
-                }
+                } catch (Exception e) { }
 
             }
 
@@ -177,7 +198,6 @@ public class MainActivity extends PBase {
 
         });
 
-
         spinprint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -187,12 +207,32 @@ public class MainActivity extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    //idimpres=wsprn.items.get(position).idimpresora;
+                    idimpres=wsprn.items.get(position).idimpresora;
 
-                } catch (Exception e) {
-                    //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                    //mu.msgbox(e.getMessage());
-                }
+                } catch (Exception e) { }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+
+        });
+
+        spinuser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                try {
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTextColor(Color.BLACK);
+                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    seluser=wsuser.items.get(position);
+                    iduser=wsuser.items.get(position).idoperador;
+
+                } catch (Exception e) { }
 
             }
 
@@ -210,15 +250,44 @@ public class MainActivity extends PBase {
     //region Main
 
     private void checkLogin() {
-        startActivity(new Intent(this,Mainmenu.class));
+        String psw=txtpass.getText().toString();
+
+        if (iduser==-1) {
+            msgbox("¡Falta seleccionar un operador!");return;
+        }
+
+        if (psw.isEmpty()) {
+            msgbox("¡La contraseña es requerida!");return;
+        }
+
+        if (!psw.equalsIgnoreCase(seluser.operador.clave)) {
+            msgbox("¡Contraseña incorrecta!");return;
+        }
+
+        //msgbox();
+        //writeXml()
+        checkOperadorHH();
+
+        //startActivity(new Intent(this,Mainmenu.class));
     }
 
-    //endregion
+    private void checkOperadorHH() {
 
-    //region Login
+        try{
+            idemp=0;
+            callhandle=4;
+
+            xmlstr=wsoper.writeXml();
+            wsoper.addParam("oBeOperador",xmlstr);
+
+            wsoper.callMethod("OperadorValidoForHHXml");
+        } catch (Exception e){
+            msgbox(e.getMessage());
+        }
+    }
 
     @Override
-    public void wsCallBack(Boolean throwing,String errmsg) {
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
             if (throwing) throw new Exception(errmsg);
 
@@ -230,11 +299,16 @@ public class MainActivity extends PBase {
                 case 3:
                     fillSpinuser();
                     fillSpinimpres();
+                    pbar.setVisibility(View.INVISIBLE);
                     break;
+                case 4:
+                    toast("Scalar result "+wsoper.scalar);
+                    break;
+
             }
         } catch (Exception e) {
-            msgbox(e.getMessage()+"-\n"+errmsg);
-         }
+            msgbox(errmsg);pbar.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -246,7 +320,7 @@ public class MainActivity extends PBase {
         try{
             idemp=0;
             callhandle=1;
-            wsemp.callMethod("GetAllEmpresasForHH");
+            wsemp.callMethod("Get_All_Empresas_For_HH");
         } catch (Exception e){
             msgbox(e.getMessage());
         }
@@ -258,10 +332,10 @@ public class MainActivity extends PBase {
             callhandle=2;
 
             wsbod.addParam("IdEmpresa",""+idemp);
-            wsbod.callMethod("GetBodegasByEmpresaForHH");
+            wsbod.callMethod("Get_Bodegas_By_IdEmpresa_For_HH");
 
-            wsprn.addParam("IdEmpresa",""+idemp);
-            wsprn.callMethod("GetAllImpresoraByEmpresa");
+            //wsprn.addParam("IdEmpresa",""+idemp);
+            //wsprn.callMethod("GetAllImpresoraByEmpresa");
 
         } catch (Exception e){
             msgbox(e.getMessage());
@@ -270,10 +344,10 @@ public class MainActivity extends PBase {
 
     private void fillUserImpres() {
         try{
-            iduser=0;idimpres=0;
+            iduser=-1;idimpres=0;
             callhandle=3;
             wsuser.addParam("IdBodega",""+idbodega);
-            wsuser.callMethod("GetOperadoresByBodegaForHH");
+            wsuser.callMethod("Get_Operadores_By_IdBodega_For_HH");
         } catch (Exception e){
             msgbox(e.getMessage());
         }
@@ -325,7 +399,7 @@ public class MainActivity extends PBase {
             userlist.clear();
 
             for (int i = 0; i <wsuser.items.size(); i++) {
-                userlist.add(""+wsuser.items.get(i).idoperador);
+                userlist.add(wsuser.items.get(i).operador.apellidos+" "+wsuser.items.get(i).operador.nombres);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, userlist);
@@ -360,12 +434,142 @@ public class MainActivity extends PBase {
 
     //region Aux
 
+    private void getURL() {
+        gl.wsurl = "http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx";
+        gl.wsurl="";
+
+        try {
+            File file1 = new File(Environment.getExternalStorageDirectory(), "/tomws.txt");
+            if (file1.exists()) {
+                FileInputStream fIn = new FileInputStream(file1);
+                BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+                gl.wsurl = myReader.readLine();
+                myReader.close();
+            }
+
+        } catch (Exception e) {
+            gl.wsurl ="";
+        }
+
+        if (!gl.wsurl.isEmpty()) lblurl.setText(gl.wsurl);else lblurl.setText("Falta archivo con URL");
+    }
+
     //endregion
 
     //region Dialogs
 
 
     //endregion
+
+    //region TEST WS
+
+    public class clsBePaises {
+        public int  IdPais;
+        public int  ISONUM;
+        public String ISO2;
+        public String ISO3;
+        public String NOMBRE;
+        public boolean Activo;
+
+        /*
+        public clsBePaises(int _IdPais,int _ISONUM,String _ISO2,String _ISO3,String _NOMBRE,boolean _Activo){
+            IdPais=_IdPais;
+            ISONUM=_ISONUM;
+            ISO2=_ISO2;
+            ISO3=_ISO3;
+            NOMBRE=_NOMBRE;
+            Activo=_Activo;
+        }
+         */
+    }
+
+    private void doTest() {
+        wsexecute();
+    }
+
+
+    //endregion
+
+    //region WebService Thread Core
+
+    private void wsexecute() {
+        wserror="";
+        AsyncCallWS wstask = new AsyncCallWS();
+        wstask.execute();
+    }
+
+    private void wsExecute(){
+        IvanWebService iws;
+        String mResult;
+
+        errflag=false;wserror="";
+        iws = new IvanWebService("http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx");
+
+        try {
+
+            //clsBePaises pais=new clsBePaises(0,0,"","","",true);
+            clsBePaises pais=new clsBePaises();
+            pais.IdPais=2;
+
+            //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
+            iws.call("ws_WSTest", "oBePais", pais);
+
+            //clsBePaises retpais=new clsBePaises(0,0,"","","",true);
+            clsBePaises retpais=new clsBePaises();
+            Boolean ret = false;
+            String rmsg="",rval="";
+
+
+            ret = (Boolean) iws.getReturnValue(ret.getClass());
+            //rval = (String) iws.getVariableValue("oBePais", new String().getClass());
+            //rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
+            retpais = (clsBePaises) iws.getVariableValue("oBePais", retpais.getClass());
+
+
+        } catch (Exception e) {
+            errflag=true;
+            wserror=e.getMessage();
+        }
+
+        String ss=iws.mResult;
+        String ast=iws.argstr;
+    }
+
+    private void wsFinished()  {
+        try {
+            if (errflag) msgbox(wserror);else toast("To koukas ty chytroline");
+        } catch (Exception e) {
+        }
+    }
+
+    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                wsExecute();
+            } catch (Exception e) {}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                wsFinished();
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+
+    }
+
+    //endregion
+
 
     //region Activity Events
 
