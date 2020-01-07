@@ -54,6 +54,7 @@ public class IvanWebService {
                         "<soap:Body>" +
                         "<" + methodName + " xmlns=\"http://tempuri.org/\">";
 
+
                 argstr="<clsBePaises>";
                 argstr+="<IdPais>1</IdPais>";
                 argstr+="<ISONUM>0</ISONUM>";
