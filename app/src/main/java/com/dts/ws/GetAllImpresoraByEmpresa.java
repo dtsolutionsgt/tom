@@ -17,7 +17,7 @@ public class GetAllImpresoraByEmpresa extends WebServiceBase
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback() throws Exception {
         clsBeImpresora item;
         int rc;
 

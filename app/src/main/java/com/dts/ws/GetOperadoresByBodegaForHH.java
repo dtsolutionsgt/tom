@@ -13,8 +13,6 @@ public class GetOperadoresByBodegaForHH extends WebServiceBase
 
     private ArrayList<clsBeOperador> oitems = new ArrayList<clsBeOperador>();
     public ArrayList<clsBeOperador_bodega> items = new ArrayList<clsBeOperador_bodega>();
-    public ArrayList<clsBeOperador> items = new ArrayList<clsBeOperador>();
-    public ArrayList<clsBeOperador_bodega> bitems = new ArrayList<clsBeOperador_bodega>();
 
     public GetOperadoresByBodegaForHH(PBase Parent, String Url) {
         super(Parent,Url);

@@ -16,7 +16,7 @@ public class GetAllEmpresasForHH extends WebServiceBase
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback() throws Exception {
         clsBeEmpresa item;
         int rc;
 

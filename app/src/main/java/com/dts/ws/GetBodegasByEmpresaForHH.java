@@ -19,7 +19,7 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase
     }
 
     @Override
-    public void dataCallback() {
+    public void dataCallback() throws Exception {
         clsBeBodega item;
         int rc;
 
