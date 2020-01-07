@@ -27,11 +27,13 @@ public class wsTest extends WebServiceBase {
         items.clear();
         rc=response.getPropertyCount();
 
-        for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++)
+        {
 
             Object property = response.getProperty(i);
 
-            if (property instanceof SoapObject) {
+            if (property instanceof SoapObject)
+            {
 
                 SoapObject item = (SoapObject) property;
 
@@ -42,6 +44,7 @@ public class wsTest extends WebServiceBase {
                 ct=new clsTest1();
 
                 ct.code=val1;
+
                 try {ct.cant=Integer.parseInt(val2);} catch (Exception e) {ct.cant=0;}
                 try {ct.total=Double.parseDouble(val3);} catch (Exception e) {ct.total=0;}
 
@@ -55,7 +58,8 @@ public class wsTest extends WebServiceBase {
                     cts.code=val4;
                     try {cts.total=Double.parseDouble(val5);} catch (Exception e) {cts.total=0;}
 
-                } catch (Exception e) {
+                } catch (Exception e)
+                {
                     cts.code="";cts.total=0;
                 }
 

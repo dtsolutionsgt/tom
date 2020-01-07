@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetBodegasByEmpresaForHH extends WebServiceBase {
+public class GetBodegasByEmpresaForHH extends WebServiceBase
+{
 
     public ArrayList<clsBeBodega> items = new ArrayList<clsBeBodega>();
 
@@ -18,7 +19,7 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
     }
 
     @Override
-    public void dataCallback() throws Exception {
+    public void dataCallback() {
         clsBeBodega item;
         int rc;
 
@@ -27,19 +28,18 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
             items.clear();
             rc = response.getPropertyCount();
 
-            for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++) {
 
-                Object property = response.getProperty(i);
-                if (property instanceof SoapObject) {
+            Object property = response.getProperty(i);
+            if (property instanceof SoapObject) {
 
-                    SoapObject xmlitem = (SoapObject) property;
+                SoapObject xmlitem = (SoapObject) property;
 
-                    //Nombres de campos deber respetar Mayusculas
-                    item = new clsBeBodega();
-
-                    item.idbodega = Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
-                    item.nombre = xmlitem.getProperty("Nombre").toString();
-                    items.add(item);
+                //Nombres de campos deber respetar Mayusculas
+                item=new clsBeBodega();
+                item.idbodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
+                item.nombre= xmlitem.getProperty("Nombre").toString();
+                items.add(item);
 
                 }
             }
@@ -52,8 +52,10 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
         }
     }
 
-    public class Sorter implements Comparator<clsBeBodega> {
-        public int compare(clsBeBodega left, clsBeBodega right) {
+    public class Sorter implements Comparator<clsBeBodega>
+    {
+        public int compare(clsBeBodega left, clsBeBodega right)
+        {
             return left.nombre.compareTo(right.nombre);
         }
     }

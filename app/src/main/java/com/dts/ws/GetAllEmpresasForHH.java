@@ -5,16 +5,18 @@ import com.dts.tom.PBase;
 import org.ksoap2.serialization.SoapObject;
 import java.util.ArrayList;
 
-public class GetAllEmpresasForHH extends WebServiceBase {
+public class GetAllEmpresasForHH extends WebServiceBase
+{
 
     public ArrayList<clsBeEmpresa> items = new ArrayList<clsBeEmpresa>();
 
-    public GetAllEmpresasForHH(PBase Parent, String Url) {
+    public GetAllEmpresasForHH(PBase Parent, String Url)
+    {
         super(Parent,Url);
     }
 
     @Override
-    public void dataCallback() throws Exception {
+    public void dataCallback() {
         clsBeEmpresa item;
         int rc;
 
@@ -22,10 +24,10 @@ public class GetAllEmpresasForHH extends WebServiceBase {
             items.clear();
             rc=response.getPropertyCount();
 
-            for (int i = 0; i < rc; i++) {
+        for (int i = 0; i < rc; i++) {
 
-                Object property = response.getProperty(i);
-                if (property instanceof SoapObject) {
+            Object property = response.getProperty(i);
+            if (property instanceof SoapObject) {
 
                     SoapObject xmlitem = (SoapObject) property;
 

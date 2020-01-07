@@ -1,7 +1,6 @@
 package com.dts.ws;
 
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
 
 import com.dts.tom.PBase;
