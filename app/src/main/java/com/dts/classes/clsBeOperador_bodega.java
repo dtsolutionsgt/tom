@@ -1,6 +1,8 @@
 package com.dts.classes;
 
 
+import java.util.Date;
+
 public class clsBeOperador_bodega {
     public int  idoperadorbodega;
     public int  idoperador;

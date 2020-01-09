@@ -3,6 +3,8 @@ package com.dts.tom;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.dts.classes.XmlUtils;
 import com.dts.ws.WebService;
 import com.dts.ws.wsTest;
 
@@ -29,17 +31,21 @@ public class Mainmenu extends PBase {
         wsb=new wsTest(Mainmenu.this,URL);
 
 
-
     }
 
     //region Events
 
     public void doTest(View view) {
+        XmlUtils xml=new XmlUtils();
         try{
-            wsb.addParam("SQL","select * from P_LINEA");
-            wsb.callMethod("getClsType1");
+
+            lbl1.setText(xml.serializeXml(gl.seloper,"oBeOperador"));
+            //wsb.addParam("SQL","select * from P_LINEA");
+            //wsb.callMethod("getClsType1");
         } catch (Exception e){
             msgbox(e.getMessage());
+            String sx=xml.xxml;
+            lbl1.setText(xml.xxml);
         }
     }
 

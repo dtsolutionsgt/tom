@@ -26,8 +26,9 @@ public class GetAllEmpresasForHH extends WebServiceBase {
         for (int i = 0; i < rc; i++) {
 
             Object property = response.getProperty(i);
-            if (property instanceof SoapObject) {
 
+            if (property instanceof SoapObject)
+            {
                     SoapObject xmlitem = (SoapObject) property;
 
                     //Nombres de campos deber respetar Mayusculas
@@ -41,7 +42,8 @@ public class GetAllEmpresasForHH extends WebServiceBase {
             }
 
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             errorlevel=3;
             error="Error a procesar datos : \n"+this.getClass().getSimpleName()+"\n"+e.getMessage();
             throw new Exception(error);

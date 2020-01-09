@@ -1,6 +1,10 @@
 package com.dts.ws;
 
 
+import com.dts.classes.XmlUtils;
+import com.dts.classes.clsBeOperador_bodega;
+import com.dts.tom.MainActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,26 +23,28 @@ import java.util.Date;
 public class IvanWebService {
 
         private URL mUrl;
+
         public String mResult;
         public String argstr;
         private String mMethodName;
 
-        public IvanWebService(String url){
-            try {
+        public IvanWebService(String url) {
+            try             {
                 mUrl = new URL(url);
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException e)  {
                  e.printStackTrace();
             }
         }
 
-        public void call(String methodName,Object... args) throws IOException,IllegalArgumentException, IllegalAccessException{
+        public void call(String methodName,Object... args) throws IOException,IllegalArgumentException, IllegalAccessException
+        {
             String ss="";
 
             mMethodName = methodName;
 
             //try {
-                URLConnection conn = mUrl.openConnection();
 
+                URLConnection conn = mUrl.openConnection();
                 conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
                 conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
                 conn.setDoOutput(true);
@@ -54,20 +60,29 @@ public class IvanWebService {
                         "<soap:Body>" +
                         "<" + methodName + " xmlns=\"http://tempuri.org/\">";
 
+                /*
+            XmlUtils xml=new XmlUtils();
+            try{
 
-                argstr="<clsBePaises>";
+                String xms=xml.serializeXml(args[1],"oBePais");
+                body+=xms;
+             } catch (Exception e){
+               String ee=e.getMessage();
+            }
+                /*
+                argstr="<oBePais>";
                 argstr+="<IdPais>1</IdPais>";
                 argstr+="<ISONUM>0</ISONUM>";
                 argstr+="<ISO2/>";
                 argstr+="<ISO3/>";
                 argstr+="<NOMBRE/>";
                 argstr+="<Activo>false</Activo>";
-                argstr+="</clsBePaises>";
-                body+=argstr;
-
-                //body += buildArgs(args);
+                argstr+="</oBePais>";
+                */
 
 
+
+                body += buildArgs(args);
                 body += "</" + methodName + ">" +
                         "</soap:Body>" +
                         "</soap:Envelope>";
@@ -79,6 +94,7 @@ public class IvanWebService {
 
                 mResult = "";
                 String line;
+
                 while ((line = rd.readLine()) != null) {
                     mResult += line;
                 }
@@ -119,12 +135,20 @@ public class IvanWebService {
         }
 
         private String buildArgValue(Object obj) throws IllegalArgumentException, IllegalAccessException {
+          //Class<?> cl = obj.getClass();
 
-            Class<?> cl = obj.getClass();
+            Class<?> cl = null;
+            try {
+                cl = obj.getClass();
+            } catch (Exception e) {
+                return "";
+            }
+
             String result = "";
+
             if(cl.isPrimitive()) return obj.toString();
             if(cl.getName().contains("java.lang.")) return obj.toString();
-            if(cl.getName().equals("java.util.Date")){
+            if(cl.getName().equals("java.util.Date")) {
                 DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
                 return dfm.format((Date)obj);
             }
@@ -133,7 +157,8 @@ public class IvanWebService {
                 String xmlName = cl.getName().substring(cl.getName().lastIndexOf(".") + 1);
                 xmlName = xmlName.replace(";", "");
                 Object[] arr = (Object[])obj;
-                for(int i=0; i< arr.length; i++) {
+
+                for(int i=0; i< arr.length; i++)  {
                     result += "<" + xmlName + ">";
                     result += buildArgValue(arr[i]);
                     result += "</" + xmlName + ">";
@@ -143,7 +168,7 @@ public class IvanWebService {
 
             Field[] fields = cl.getDeclaredFields();
 
-            for(int i=0;i<fields.length;i++) {
+            for(int i=0;i<fields.length-1;i++)  {
                 result += "<" + fields[i].getName() + ">";
                 result += buildArgValue(fields[i].get(obj));
                 result += "</" + fields[i].getName() + ">";
@@ -168,17 +193,17 @@ public class IvanWebService {
             int start = body.indexOf("<" + name + ">");
             start += name.length() + 2; //with < and > char
             int end = body.indexOf("</" + name + ">");
-            if(end == -1)
-                body = "";
-            else
-                body = body.substring(start, end);
+
+            if(end == -1) body = "";else body = body.substring(start, end);
             if(cl.getName().toLowerCase().contains("string")) return body;
             if(cl.getName().toLowerCase().contains("double")) return Double.parseDouble(body);
             if(cl.getName().toLowerCase().contains("date")){
                 DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 return dfm.parse(body.replace("T"," "));
             }
+
             if(cl.getName().toLowerCase().contains("boolean")) return Boolean.parseBoolean(body);
+
             if(cl.isArray()) {
                 if(body == "") return Array.newInstance(cl.getComponentType(), 0); //return empty array
                 String xmlName = cl.getName().substring(cl.getName().lastIndexOf(".") + 1);
@@ -191,9 +216,17 @@ public class IvanWebService {
                 }
                 return arr;
             }
-            Object result = cl.newInstance();
+
+            Object result = null;
+            try {
+                result = cl.newInstance();
+            } catch (Exception e) {
+                String ee=e.getMessage();
+            }
+
             Field[] fields = cl.getDeclaredFields();
-            for(int i=0;i<fields.length;i++) {
+            for(int i=0;i<fields.length-1;i++) {
+                String ss=fields[i].getName();
                 fields[i].set(result, getVariableValue(body, fields[i].getName(), fields[i].getType()));
             }
             return result;

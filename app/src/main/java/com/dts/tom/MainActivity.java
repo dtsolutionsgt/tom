@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
-import com.dts.classes.clsBeOperador;
+import com.dts.classes.XmlUtils;
 import com.dts.classes.clsBeOperador_bodega;
 import com.dts.ws.GetAllEmpresasForHH;
 import com.dts.ws.GetAllImpresoraByEmpresa;
@@ -27,7 +27,6 @@ import com.dts.ws.GetBodegasByEmpresaForHH;
 import com.dts.ws.GetOperadoresByBodegaForHH;
 import com.dts.ws.IvanWebService;
 import com.dts.ws.OperadorValidoForHH;
-import com.dts.ws.WebServiceBase;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,7 +53,7 @@ public class MainActivity extends PBase {
     private ArrayList<String> prnlist= new ArrayList<String>();
     private ArrayList<String> userlist= new ArrayList<String>();
 
-    private clsBeOperador_bodega seluser=new clsBeOperador_bodega();
+    private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
     private int callhandle,idemp,idbodega,idimpres,iduser=-1;
     private String xmlstr;
@@ -229,7 +228,7 @@ public class MainActivity extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    seluser=wsuser.items.get(position);
+                    seloper =wsuser.items.get(position);
                     iduser=wsuser.items.get(position).idoperador;
 
                 } catch (Exception e) { }
@@ -260,7 +259,7 @@ public class MainActivity extends PBase {
             msgbox("¡La contraseña es requerida!");return;
         }
 
-        if (!psw.equalsIgnoreCase(seluser.operador.clave)) {
+        if (!psw.equalsIgnoreCase(seloper.operador.clave)) {
             msgbox("¡Contraseña incorrecta!");return;
         }
 
@@ -406,7 +405,10 @@ public class MainActivity extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinuser.setAdapter(dataAdapter);
 
-            if (userlist.size()>0) spinuser.setSelection(0);
+            if (userlist.size()>0) {
+                spinuser.setSelection(0);
+                seloper =wsuser.items.get(0);
+            }
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
@@ -471,7 +473,6 @@ public class MainActivity extends PBase {
         public String NOMBRE;
         public boolean Activo;
 
-        /*
         public clsBePaises(int _IdPais,int _ISONUM,String _ISO2,String _ISO3,String _NOMBRE,boolean _Activo){
             IdPais=_IdPais;
             ISONUM=_ISONUM;
@@ -480,10 +481,13 @@ public class MainActivity extends PBase {
             NOMBRE=_NOMBRE;
             Activo=_Activo;
         }
-         */
+
     }
 
     private void doTest() {
+        gl.seloper= seloper;
+        //startActivity(new Intent(this,Mainmenu.class));
+
         wsexecute();
     }
 
@@ -498,7 +502,7 @@ public class MainActivity extends PBase {
         wstask.execute();
     }
 
-    private void wsExecute(){
+    private void wsExecute() {
         IvanWebService iws;
         String mResult;
 
@@ -507,26 +511,23 @@ public class MainActivity extends PBase {
 
         try {
 
-            //clsBePaises pais=new clsBePaises(0,0,"","","",true);
-            clsBePaises pais=new clsBePaises();
+            clsBePaises pais=new clsBePaises(1,1,"","","",true);
             pais.IdPais=2;
 
-            //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
             iws.call("ws_WSTest", "oBePais", pais);
+            //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
 
-            //clsBePaises retpais=new clsBePaises(0,0,"","","",true);
-            clsBePaises retpais=new clsBePaises();
+            clsBePaises retpais=new clsBePaises(1,1,"","","",true);
             Boolean ret = false;
-            String rmsg="",rval="";
-
+            String rmsg="",rval="",mr=iws.mResult;
 
             ret = (Boolean) iws.getReturnValue(ret.getClass());
-            //rval = (String) iws.getVariableValue("oBePais", new String().getClass());
             //rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
             retpais = (clsBePaises) iws.getVariableValue("oBePais", retpais.getClass());
 
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             errflag=true;
             wserror=e.getMessage();
         }
@@ -537,7 +538,7 @@ public class MainActivity extends PBase {
 
     private void wsFinished()  {
         try {
-            if (errflag) msgbox(wserror);else toast("To koukas ty chytroline");
+            if (errflag) msgbox(wserror);else toast("OK");
         } catch (Exception e) {
         }
     }

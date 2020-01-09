@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class GetAllImpresoraByEmpresa extends WebServiceBase {
+public class GetAllImpresoraByEmpresa extends WebServiceBase
+{
 
     public ArrayList<clsBeImpresora> items = new ArrayList<clsBeImpresora>();
 
