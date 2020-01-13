@@ -51,10 +51,8 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
         }
     }
 
-    public class Sorter implements Comparator<clsBeBodega>
-    {
-        public int compare(clsBeBodega left, clsBeBodega right)
-        {
+    public class Sorter implements Comparator<clsBeBodega> {
+        public int compare(clsBeBodega left, clsBeBodega right) {
             return left.nombre.compareTo(right.nombre);
         }
     }

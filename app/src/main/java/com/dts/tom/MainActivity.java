@@ -8,7 +8,9 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +22,9 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.classes.XmlUtils;
+import com.dts.classes.clsBeMenu_sistema;
 import com.dts.classes.clsBeOperador_bodega;
+import com.dts.classes.clsBePaises;
 import com.dts.ws.GetAllEmpresasForHH;
 import com.dts.ws.GetAllImpresoraByEmpresa;
 import com.dts.ws.GetBodegasByEmpresaForHH;
@@ -465,24 +469,36 @@ public class MainActivity extends PBase {
 
     //region TEST WS
 
-    public class clsBePaises {
-        public int  IdPais;
-        public int  ISONUM;
-        public String ISO2;
-        public String ISO3;
-        public String NOMBRE;
-        public boolean Activo;
-
-        public clsBePaises(int _IdPais,int _ISONUM,String _ISO2,String _ISO3,String _NOMBRE,boolean _Activo){
-            IdPais=_IdPais;
-            ISONUM=_ISONUM;
-            ISO2=_ISO2;
-            ISO3=_ISO3;
-            NOMBRE=_NOMBRE;
-            Activo=_Activo;
-        }
-
-    }
+//    public class clsBePaises {
+//        public int  IdPais;
+//        public int  ISONUM;
+//        public String ISO2;
+//        public String ISO3;
+//        public String NOMBRE;
+//        public boolean Activo;
+//
+//        public clsBePaises(){
+//            IdPais=0;
+//            ISONUM=0;
+//            ISO2="";
+//            ISO3="";
+//            NOMBRE="";
+//            Activo=true;
+//        }
+//
+//        /*
+//        public clsBePaises(int _IdPais,int _ISONUM,String _ISO2,String _ISO3,String _NOMBRE,boolean _Activo){
+//            IdPais=_IdPais;
+//            ISONUM=_ISONUM;
+//            ISO2=_ISO2;
+//            ISO3=_ISO3;
+//            NOMBRE=_NOMBRE;
+//            Activo=_Activo;
+//        }
+//        */
+//
+//
+//    }
 
     private void doTest() {
         gl.seloper= seloper;
@@ -511,23 +527,40 @@ public class MainActivity extends PBase {
 
         try {
 
-            clsBePaises pais=new clsBePaises(1,1,"","","",true);
-            pais.IdPais=2;
+            clsBePaises[] pais=new clsBePaises[0];
+            clsBePaises[] retpais = new clsBePaises[1];
 
-            iws.call("ws_WSTest", "oBePais", pais);
+//            pais[0].ISO2="ISO2";
+//            pais[0].ISO3="ISO3";
+
+            clsBeMenu_sistema mm=new clsBeMenu_sistema();
+            mm.mNivel=5;
+            clsBeMenu_sistema[] menu=new clsBeMenu_sistema[0];
+            clsBeMenu_sistema[] retmenu=new clsBeMenu_sistema[1];
+
+            menu[0]=mm;
+
+            //iws.call("ws_WSTest", "oBePais", pais);
             //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
+            iws.call("ws_WSTest", "oBePais", menu, "errmsg" , "--");
 
-            clsBePaises retpais=new clsBePaises(1,1,"","","",true);
             Boolean ret = false;
             String rmsg="",rval="",mr=iws.mResult;
 
-            ret = (Boolean) iws.getReturnValue(ret.getClass());
-            //rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
-            retpais = (clsBePaises) iws.getVariableValue("oBePais", retpais.getClass());
+           // ret = (Boolean) iws.getReturnValue(ret.getClass());
+           // rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
 
+//            Object oo = iws.getVariableValue("oBePais", retpais.getClass());
+//            retpais = (clsBePaises[]) oo;
 
-        } catch (Exception e)
-        {
+            //retpais = (clsBePaises[]) iws.getVariableValue("oBePais", retpais.getClass());
+            retmenu = (clsBeMenu_sistema[]) iws.getVariableValue("oBePais", retmenu.getClass());
+
+            String ss="";
+
+            //retpais = (clsBePaises) iws.getClassValue("oBePais", retpais.getClass(),retpais);
+
+        } catch (Exception e)   {
             errflag=true;
             wserror=e.getMessage();
         }
