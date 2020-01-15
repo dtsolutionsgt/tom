@@ -62,7 +62,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
 
             convertView = l_Inflater.inflate(R.layout.activity_list_adapter_detalle_cambio_ubic, null);
             holder = new ViewHolder();
-
+//a
             holder.lblTareaDet  = (TextView) convertView.findViewById(R.id.lblTareaDet);
             holder.lblIdStock = (TextView) convertView.findViewById(R.id.lblIdStock);
             holder.lblCodigo  = (TextView) convertView.findViewById(R.id.lblCodigo);

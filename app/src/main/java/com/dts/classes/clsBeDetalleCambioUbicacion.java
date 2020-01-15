@@ -1,5 +1,7 @@
 package com.dts.classes;
 
+import java.util.Date;
+
 public class clsBeDetalleCambioUbicacion {
 
     public int IdTareaEnc;
