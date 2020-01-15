@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -32,25 +34,20 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         try{
 
-            txtTarea.addTextChangedListener(new TextWatcher(){
+            txtTarea.setOnKeyListener(new View.OnKeyListener(){
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        switch (keyCode) {
+                            case KeyEvent.KEYCODE_ENTER:
+                                //Metodo para filtrar la lista o llamar al WS
+                                return true;
+                        }
                     }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //Aquí poner el método para ir a buscar al ws la tarea.
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
+                    return false;
                 }
-            );
+            });
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

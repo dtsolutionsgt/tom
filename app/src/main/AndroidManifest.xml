@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_view_tareas_cambio_ubic"></activity>
+        <activity android:name=".list_adapter_detalle_cambio_ubic"></activity>
+        <activity android:name=".list_view_tareas_cambio_ubic" />
         <activity android:name=".frm_cambio_ubicacion_dirigida" />
         <activity android:name=".frm_cambio_ubicacion_ciega" />
         <activity android:name=".frm_detalle_cambio_ubicacion" />
