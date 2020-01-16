@@ -5,10 +5,12 @@ import java.util.Date;
 public class clsBeDetalleCambioUbicacion {
 
     public int IdTareaEnc;
+    public int IdTareaDet;
     public int IdStock;
     public String Codigo;
     public String NombreProducto;
     public int IdUbicacionDestino;
+    public String UbicacionDestino;
     public String Descripcion;
     public int IdEstadoOrigen;
     public int IdEstadoDestino;
@@ -31,13 +33,14 @@ public class clsBeDetalleCambioUbicacion {
     public String Serial;
     public int IdPropietario;
     public String NombrePropietario;
-    public boolean Recibido;
+    public double Recibido;
     public int IdProducto;
     public int IdProductoBodega;
     public int IdUnidadMedidaBasica;
     public String Estado;
     public int IdUbicacionOrigen;
-    public int IdPresentacion;
+    public String UbicacionOrigen;
+        public int IdPresentacion;
     public int nivel;
     public int indice_x;
     public String Tramo;

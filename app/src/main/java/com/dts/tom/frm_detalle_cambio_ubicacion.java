@@ -2,6 +2,8 @@ package com.dts.tom;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dts.classes.clsBeDetalleCambioUbicacion;
 
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 
 public class frm_detalle_cambio_ubicacion extends PBase {
 
+    private TextView lblTituloForma;
     private EditText txtCodigo;
     private ListView listView;
     private CheckBox chkUbicados,chkTodos;
@@ -39,8 +43,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         listView = (ListView) findViewById(R.id.listDetalle);
         chkUbicados = (CheckBox) findViewById(R.id.chkUbicados);
         chkTodos = (CheckBox) findViewById(R.id.chkTodos);
+        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
 
         setHandlers();
+
+        clearAll();
+        listItems();
 
 
     }
@@ -95,7 +103,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                     adapter.setSelectedIndex(position);
 
-                    //Escribir aquí la mágia.
+                    Procesa_Registro(vItem.IdTareaDet);
 
                     adapter.refreshItems();
 
@@ -109,4 +117,75 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
 
     }
+
+    private void listItems(){
+        Cursor DT;
+        clsBeDetalleCambioUbicacion vItem;
+
+        items.clear();
+
+        try {
+
+            DT= null; //Asignar al dt los objetos
+
+            if (DT.getCount()==0) return;
+
+            DT.moveToFirst();
+            while (!DT.isAfterLast()) {
+
+                vItem = new clsBeDetalleCambioUbicacion();
+
+                vItem.IdTareaDet=1;
+                vItem.IdStock=1;
+                vItem.Codigo="";
+                vItem.NombreProducto = "";
+                vItem.NombrePresentacion = "";
+                vItem.UbicacionOrigen = "";
+                vItem.UbicacionDestino = "";
+                vItem.Cantidad = 0.0;
+                vItem.Recibido = 0.0;
+                vItem.NombreOperador = "";
+
+                items.add(vItem);
+
+                DT.moveToNext();
+
+            }
+
+            adapter=new list_adapter_detalle_cambio_ubic(this,items);
+            listView.setAdapter(adapter);
+
+        } catch (Exception e) {
+            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),sql);
+            //mu.msgbox("listItems: "+ e.getMessage());
+        }
+
+    }
+
+    private void clearAll() {
+        try{
+            for (int i = 0; i < items.size(); i++ ) {
+                items.get(i);
+            }
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void Procesa_Registro(int IdTareaDet){
+
+        try{
+
+            Intent intent = new Intent(this,frm_cambio_ubicacion_dirigida.class);
+            startActivity(intent);
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
+
+
+    }
+
 }
