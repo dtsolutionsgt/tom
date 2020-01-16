@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class frm_cambio_ubicacion_ciega extends PBase {
+public class
+frm_cambio_ubicacion_ciega extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
