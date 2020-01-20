@@ -81,6 +81,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="Cambio_Ubicacion_Nueva"
             android:text="Nueva"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"

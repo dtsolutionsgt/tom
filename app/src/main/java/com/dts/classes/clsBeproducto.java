@@ -56,6 +56,7 @@ public class clsBeproducto {
   public double largo;
   public double alto;
   public double ancho;
+  public  int IdProductoBodega;
 
 
 }

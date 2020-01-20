@@ -17,12 +17,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dts.classes.clsBeDetalleCambioUbicacion;
+import com.dts.classes.clsBetrans_ubic_hh_det;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class frm_detalle_cambio_ubicacion extends PBase {
 
-    private TextView lblTituloForma;
+    private TextView lblTituloForma,lblRegs,lblTotal;
     private EditText txtCodigo;
     private ListView listView;
     private CheckBox chkUbicados,chkTodos;
@@ -31,6 +33,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private ArrayList<clsBeDetalleCambioUbicacion> items= new ArrayList<clsBeDetalleCambioUbicacion>();
     private list_adapter_detalle_cambio_ubic adapter;
     private clsBeDetalleCambioUbicacion selitem;
+    private ArrayList<clsBetrans_ubic_hh_det> pListBeTareasCambioDet= new ArrayList<clsBetrans_ubic_hh_det>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,13 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         chkUbicados = (CheckBox) findViewById(R.id.chkUbicados);
         chkTodos = (CheckBox) findViewById(R.id.chkTodos);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+        lblRegs = (TextView) findViewById(R.id.lblRegs);
+        lblTotal = (TextView) findViewById(R.id.lblTotal);
 
         setHandlers();
 
         clearAll();
-        listItems();
+        Inicia_Tarea_Lista();
 
 
     }
@@ -119,45 +125,40 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     }
 
     private void listItems(){
-        Cursor DT;
+
         clsBeDetalleCambioUbicacion vItem;
 
         items.clear();
 
         try {
 
-            DT= null; //Asignar al dt los objetos
-
-            if (DT.getCount()==0) return;
-
-            DT.moveToFirst();
-            while (!DT.isAfterLast()) {
+            for (int i = 0; i < pListBeTareasCambioDet.size(); i++ ) {
 
                 vItem = new clsBeDetalleCambioUbicacion();
 
-                vItem.IdTareaDet=1;
-                vItem.IdStock=1;
-                vItem.Codigo="";
-                vItem.NombreProducto = "";
-                vItem.NombrePresentacion = "";
-                vItem.UbicacionOrigen = "";
-                vItem.UbicacionDestino = "";
-                vItem.Cantidad = 0.0;
-                vItem.Recibido = 0.0;
-                vItem.NombreOperador = "";
+                vItem.IdTareaDet=pListBeTareasCambioDet.get(i).IdTareaUbicacionDet;
+                vItem.IdStock=pListBeTareasCambioDet.get(i).IdStock;
+                vItem.Codigo=pListBeTareasCambioDet.get(i).Producto.codigo;
+                vItem.NombreProducto = pListBeTareasCambioDet.get(i).Producto.nombre;
+                vItem.NombrePresentacion = pListBeTareasCambioDet.get(i).ProductoPresentacion.nombre;
+                vItem.UbicacionOrigen = pListBeTareasCambioDet.get(i).UbicacionOrigen.descripcion;
+                vItem.UbicacionDestino = pListBeTareasCambioDet.get(i).UbicacionDestino.descripcion;
+                vItem.Cantidad = pListBeTareasCambioDet.get(i).cantidad;
+                vItem.Recibido = pListBeTareasCambioDet.get(i).recibido;
+                vItem.NombreOperador = String.valueOf(pListBeTareasCambioDet.get(i).IdOperador);
 
                 items.add(vItem);
 
-                DT.moveToNext();
-
             }
+
+            lblRegs.setText("Regs: "+ items.size());
 
             adapter=new list_adapter_detalle_cambio_ubic(this,items);
             listView.setAdapter(adapter);
 
         } catch (Exception e) {
-            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),sql);
-            //mu.msgbox("listItems: "+ e.getMessage());
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),sql);
+            mu.msgbox("listItems: "+ e.getMessage());
         }
 
     }
@@ -177,6 +178,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         try{
 
+            gl.IdTareaUbicDet = 0;
+            gl.IdTareaUbicDet = IdTareaDet;
+            gl.tareadet = pListBeTareasCambioDet.get(IdTareaDet);
+
             Intent intent = new Intent(this,frm_cambio_ubicacion_dirigida.class);
             startActivity(intent);
 
@@ -185,7 +190,26 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             mu.msgbox( e.getMessage());
         }
 
+    }
 
+    private void Inicia_Tarea_Lista(){
+
+        try{
+
+            pListBeTareasCambioDet = new ArrayList<clsBetrans_ubic_hh_det>();
+
+            pListBeTareasCambioDet = null; //Get_All_By_IdTransUbicEnc_And_IdOperador(gl.IdTarea, iif(chkTodos.isChecked(), 0, gl.IdOperador))
+
+            if (pListBeTareasCambioDet.size() > 0){
+
+                listItems();
+
+            }
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
     }
 
 }
