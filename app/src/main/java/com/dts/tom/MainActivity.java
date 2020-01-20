@@ -376,7 +376,6 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
-
     }
 
     private void fillSpinbod() {
