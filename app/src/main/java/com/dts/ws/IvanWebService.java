@@ -214,7 +214,7 @@ public class IvanWebService {
     private Object getVariableValue(String body, String name, Class<?> cl) throws IllegalAccessException, InstantiationException, ParseException {
 
         int start = body.indexOf("<" + name + ">");
-        start += name.length() + 2; //with < and > char
+        if (start>-1)start += name.length() + 2;else start=0; //with < and > char
         int end = body.indexOf("</" + name + ">");
 
         if (end == -1) body = "";else body = body.substring(start, end);
@@ -267,7 +267,7 @@ public class IvanWebService {
 //        }
 
         Field[] fields = cl.getDeclaredFields();
-        for (int i = 0; i < fields.length - 1; i++) {
+        for (int i = 0; i < fields.length; i++) {
             fields[i].set(result, getVariableValue(body, fields[i].getName(), fields[i].getType()));
         }
 

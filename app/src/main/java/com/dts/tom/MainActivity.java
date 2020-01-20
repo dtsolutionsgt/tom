@@ -522,38 +522,30 @@ public class MainActivity extends PBase {
         String mResult;
 
         errflag=false;wserror="";
-        iws = new IvanWebService("http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx");
+        iws = new IvanWebService("http://192.168.1.114/WSTOMHH_QA/TOMHHWS.asmx");
 
         try {
 
-            clsBePaises[] pais=new clsBePaises[0];
+            clsBePaises[] pais=new clsBePaises[10];
             clsBePaises[] retpais = new clsBePaises[1];
+            pais[0] = new clsBePaises();
+            pais[0].IdPais = 2;
 
 //            pais[0].ISO2="ISO2";
 //            pais[0].ISO3="ISO3";
 
-            clsBeMenu_sistema mm=new clsBeMenu_sistema();
-            mm.mNivel=5;
-            clsBeMenu_sistema[] menu=new clsBeMenu_sistema[0];
-            clsBeMenu_sistema[] retmenu=new clsBeMenu_sistema[1];
 
-            menu[0]=mm;
-
-            //iws.call("ws_WSTest", "oBePais", pais);
-            //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
-            iws.call("ws_WSTest", "oBePais", menu, "errmsg" , "--");
+            iws.call("Get_Paises", "BePais", pais[0]);
 
             Boolean ret = false;
             String rmsg="",rval="",mr=iws.mResult;
 
-           // ret = (Boolean) iws.getReturnValue(ret.getClass());
-           // rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
+            ret = (Boolean) iws.getReturnValue(ret.getClass());
 
-//            Object oo = iws.getVariableValue("oBePais", retpais.getClass());
-//            retpais = (clsBePaises[]) oo;
+            pais = (clsBePaises[]) iws.getVariableValue("BePais", retpais.getClass());
 
-            //retpais = (clsBePaises[]) iws.getVariableValue("oBePais", retpais.getClass());
-            retmenu = (clsBeMenu_sistema[]) iws.getVariableValue("oBePais", retmenu.getClass());
+            String nombre;
+            nombre = pais[0].NOMBRE;
 
             String ss="";
 
