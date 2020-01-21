@@ -548,7 +548,6 @@ public class MainActivity extends PBase {
             idemp=1;
             iws.call("Get_Bodegas_By_IdEmpresa_For_HH", "IdEmpresa", idemp);
 
-
             //Boolean ret = false;
             //String rmsg="",rval="",mr=iws.mResult;
 
