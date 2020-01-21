@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.dts.classes.XmlUtils;
 import com.dts.classes.clsBeBodega;
+import com.dts.classes.clsBeEmpresa;
 import com.dts.classes.clsBeMenu_sistema;
 import com.dts.classes.clsBeOperador_bodega;
 import com.dts.classes.clsBePaises;
