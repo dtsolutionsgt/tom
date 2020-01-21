@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.classes.XmlUtils;
+import com.dts.classes.clsBeBodega;
 import com.dts.classes.clsBeMenu_sistema;
 import com.dts.classes.clsBeOperador_bodega;
 import com.dts.classes.clsBePaises;
@@ -187,7 +188,7 @@ public class MainActivity extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    idbodega=wsbod.items.get(position).idbodega;
+                    idbodega=wsbod.items.get(position).IdBodega;
                     fillUserImpres();
 
                 } catch (Exception e) { }
@@ -383,7 +384,7 @@ public class MainActivity extends PBase {
             bodlist.clear();
 
             for (int i = 0; i <wsbod.items.size(); i++) {
-                bodlist.add(wsbod.items.get(i).nombre);
+                bodlist.add(wsbod.items.get(i).Nombre);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
@@ -529,22 +530,27 @@ public class MainActivity extends PBase {
             clsBePaises[] pais=new clsBePaises[0];
             clsBePaises[] retpais = new clsBePaises[1];
 
-//            pais[0].ISO2="ISO2";
-//            pais[0].ISO3="ISO3";
 
-            clsBeMenu_sistema mm=new clsBeMenu_sistema();
-            mm.mNivel=5;
-            clsBeMenu_sistema[] menu=new clsBeMenu_sistema[0];
+            clsBeMenu_sistema[] menu=new clsBeMenu_sistema[1];
             clsBeMenu_sistema[] retmenu=new clsBeMenu_sistema[1];
+            menu[0]=new clsBeMenu_sistema();
+            menu[0].IdMenu="1";
 
-            menu[0]=mm;
+            clsBeBodega[] bod=new clsBeBodega[1];
+
 
             //iws.call("ws_WSTest", "oBePais", pais);
             //iws.call("ws_WSTest", "oBePais", pais, "errmsg" , "--");
-            iws.call("ws_WSTest", "oBePais", menu, "errmsg" , "--");
+            //iws.call("ws_WSTest", "oBePais", menu, "errmsg" , "--");
 
-            Boolean ret = false;
-            String rmsg="",rval="",mr=iws.mResult;
+            idemp=1;
+            iws.call("Get_Bodegas_By_IdEmpresa_For_HH", "IdEmpresa", idemp);
+
+
+            //Boolean ret = false;
+            //String rmsg="",rval="",mr=iws.mResult;
+
+            bod = (clsBeBodega[]) iws.getReturnValue(bod.getClass());
 
            // ret = (Boolean) iws.getReturnValue(ret.getClass());
            // rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
@@ -553,10 +559,9 @@ public class MainActivity extends PBase {
 //            retpais = (clsBePaises[]) oo;
 
             //retpais = (clsBePaises[]) iws.getVariableValue("oBePais", retpais.getClass());
-            retmenu = (clsBeMenu_sistema[]) iws.getVariableValue("oBePais", retmenu.getClass());
+            //retmenu = (clsBeMenu_sistema[]) iws.getVariableValue("oBePais", retmenu.getClass());
 
             String ss="";
-
             //retpais = (clsBePaises) iws.getClassValue("oBePais", retpais.getClass(),retpais);
 
         } catch (Exception e)   {

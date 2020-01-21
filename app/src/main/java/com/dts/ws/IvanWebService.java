@@ -210,13 +210,11 @@ public class IvanWebService {
         return getVariableValue(mResult, name, cl);
     }
 
-
     private Object getVariableValue(String body, String name, Class<?> cl) throws IllegalAccessException, InstantiationException, ParseException {
 
         int start = body.indexOf("<" + name + ">");
-        start += name.length() + 2; //with < and > char
+        if (start>-1)  start += name.length() + 2;else start=0;//with < and > char
         int end = body.indexOf("</" + name + ">");
-
         if (end == -1) body = "";else body = body.substring(start, end);
 
         String gname = cl.getName();
@@ -225,11 +223,10 @@ public class IvanWebService {
             return body;
         }
         if (cl.getName().toLowerCase().contains("double")) {
-            return Double.parseDouble(body);
+            if (body.isEmpty()) return 0; else return Double.parseDouble(body);
         }
         if (cl.getName().toLowerCase().contains("int")) {
-            if (body.isEmpty()) return 0; else
-                return Integer.parseInt(body);
+            if (body.isEmpty()) return 0; else return Integer.parseInt(body);
         }
 
         if (cl.getName().toLowerCase().contains("date")) {

@@ -36,8 +36,8 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
 
                 //Nombres de campos deber respetar Mayusculas
                 item=new clsBeBodega();
-                item.idbodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
-                item.nombre= xmlitem.getProperty("Nombre").toString();
+                item.IdBodega= Integer.parseInt(xmlitem.getProperty("IdBodega").toString());
+                item.Nombre= xmlitem.getProperty("Nombre").toString();
                 items.add(item);
 
                 }
@@ -53,7 +53,7 @@ public class GetBodegasByEmpresaForHH extends WebServiceBase {
 
     public class Sorter implements Comparator<clsBeBodega> {
         public int compare(clsBeBodega left, clsBeBodega right) {
-            return left.nombre.compareTo(right.nombre);
+            return left.Nombre.compareTo(right.Nombre);
         }
     }
 
