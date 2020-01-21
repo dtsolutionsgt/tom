@@ -121,9 +121,9 @@
                     android:id="@+id/lblVence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/cmbEstado"
                     android:layout_alignTop="@+id/txtVence"
                     android:layout_alignEnd="@+id/lblLote"
+                    android:layout_alignBottom="@+id/txtVence"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="0dp"
                     android:gravity="center_vertical"
@@ -141,8 +141,6 @@
                     android:layout_alignEnd="@+id/lblVence"
                     android:layout_alignBottom="@+id/txtEstado"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="-3dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Estado:"
@@ -154,13 +152,30 @@
                     android:id="@+id/txtCantidad"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtEstado"
+                    android:layout_below="@+id/txtUbicDestino"
                     android:layout_alignStart="@id/txtEstado"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentBottom="false"
                     android:layout_marginTop="10dp"
                     android:inputType="numberDecimal"
                     android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/lbCant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/txtCantidad"
+                    android:layout_alignBottom="@+id/txtCantidad"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toEndOf="@+id/txtCantidad"
+                    android:gravity="right|center_vertical"
+                    android:numeric="decimal"
+                    android:paddingLeft="3dp"
+                    android:text="00.00"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -171,6 +186,8 @@
                     android:layout_alignEnd="@+id/lblEstado"
                     android:layout_alignBottom="@+id/txtCantidad"
                     android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Cantidad:"
@@ -178,28 +195,12 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/lbCant"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/txtEstado"
-                    android:layout_alignBottom="@+id/txtCantidad"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toEndOf="@+id/txtCantidad"
-                    android:gravity="right|center_vertical"
-                    android:numeric="decimal"
-                    android:paddingLeft="3dp"
-                    android:text="00.00"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
                 <EditText
                     android:id="@+id/txtUbicDestino"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lbCant"
+                    android:layout_below="@+id/txtEstado"
+                    android:layout_alignEnd="@+id/txtEstado"
                     android:layout_marginTop="10dp"
                     android:inputType="textPersonName" />
 
@@ -210,6 +211,9 @@
                     android:layout_alignTop="@+id/txtUbicDestino"
                     android:layout_alignBottom="@+id/txtUbicDestino"
                     android:layout_alignParentStart="true"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_toStartOf="@+id/txtUbicDestino"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
@@ -217,6 +221,17 @@
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtEstadoDestino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtCantidad"
+                    android:layout_alignStart="@+id/txtCantidad"
+                    android:layout_alignEnd="@+id/lbCant"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="0dp"
+                    android:inputType="textPersonName" />
 
                 <TextView
                     android:id="@+id/lblCambioEstado"
@@ -226,23 +241,16 @@
                     android:layout_alignTop="@+id/txtEstadoDestino"
                     android:layout_alignEnd="@+id/lblCantidad"
                     android:layout_alignBottom="@+id/txtEstadoDestino"
-                    android:layout_marginStart="0dp"
+                    android:layout_marginStart="-1dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="0dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Estado Destino:"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtEstadoDestino"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtUbicDestino"
-                    android:layout_alignStart="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/txtUbicDestino"
-                    android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
 
                 <EditText
                     android:id="@+id/txtPresentacion"
@@ -301,7 +309,7 @@
         android:background="@drawable/color_medium">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/lblTituloForma"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"

@@ -264,7 +264,7 @@ public class IvanWebService {
 //        }
 
         Field[] fields = cl.getDeclaredFields();
-        for (int i = 0; i < fields.length - 1; i++) {
+        for (int i = 0; i < fields.length; i++) {
             fields[i].set(result, getVariableValue(body, fields[i].getName(), fields[i].getType()));
         }
 

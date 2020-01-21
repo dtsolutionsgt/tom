@@ -523,12 +523,14 @@ public class MainActivity extends PBase {
         String mResult;
 
         errflag=false;wserror="";
-        iws = new IvanWebService("http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx");
+        iws = new IvanWebService("http://192.168.1.114/WSTOMHH_QA/TOMHHWS.asmx");
 
         try {
 
-            clsBePaises[] pais=new clsBePaises[0];
+            clsBePaises[] pais=new clsBePaises[10];
             clsBePaises[] retpais = new clsBePaises[1];
+            pais[0] = new clsBePaises();
+            pais[0].IdPais = 2;
 
 
             clsBeMenu_sistema[] menu=new clsBeMenu_sistema[1];
@@ -552,11 +554,9 @@ public class MainActivity extends PBase {
 
             bod = (clsBeBodega[]) iws.getReturnValue(bod.getClass());
 
-           // ret = (Boolean) iws.getReturnValue(ret.getClass());
-           // rmsg = (String) iws.getVariableValue("errmsg", new String().getClass());
+            //ret = (Boolean) iws.getReturnValue(ret.getClass());
 
-//            Object oo = iws.getVariableValue("oBePais", retpais.getClass());
-//            retpais = (clsBePaises[]) oo;
+            pais = (clsBePaises[]) iws.getVariableValue("BePais", retpais.getClass());
 
             //retpais = (clsBePaises[]) iws.getVariableValue("oBePais", retpais.getClass());
             //retmenu = (clsBeMenu_sistema[]) iws.getVariableValue("oBePais", retmenu.getClass());
