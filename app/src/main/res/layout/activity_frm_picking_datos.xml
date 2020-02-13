@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relPrinPick"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Picking.frm_picking_datos">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnConfirmarPk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Confirmar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/background_light">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:textColor="@color/medium"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lblLicPlate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/color_medium"
+        android:gravity="center"
+        android:text="0EN0405140000717"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/relEnc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblLicPlate"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/btnDanado"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="130dp"
+            android:background="@drawable/color_medium"
+            android:text="Reemplazo"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btNE"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="24dp"
+            android:layout_toEndOf="@+id/btnDanado"
+            android:background="@color/colorPrimary"
+            android:text="N.E."
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@id/relEnc"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/txtBarra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="172dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView10"
+            style="@style/StyleText"
+            android:layout_alignTop="@+id/txtBarra"
+            android:layout_alignBottom="@+id/txtBarra"
+            android:layout_alignParentStart="true"
+            android:text="Barra:" />
+
+        <EditText
+            android:id="@+id/txtFechaCad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtBarra"
+            android:layout_alignStart="@+id/txtBarra"
+            android:layout_alignEnd="@+id/txtBarra"
+            android:layout_marginTop="10dp"
+            android:inputType="date" />
+
+        <TextView
+            android:id="@+id/lblCad"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtFechaCad"
+            android:layout_alignEnd="@+id/textView10"
+            android:layout_alignBottom="@+id/txtFechaCad"
+            android:layout_alignParentStart="true"
+            android:text="Cad:" />
+
+        <EditText
+            android:id="@+id/txtLote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtFechaCad"
+            android:layout_alignStart="@+id/txtFechaCad"
+            android:layout_alignEnd="@+id/txtFechaCad"
+            android:layout_marginTop="10dp"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView13"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtLote"
+            android:layout_alignEnd="@+id/lblCad"
+            android:layout_alignBottom="@+id/txtLote"
+            android:layout_alignParentStart="true"
+            android:text="Lote:" />
+
+        <Spinner
+            android:id="@+id/cmbPresentacion"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/txtLote"
+            android:layout_alignStart="@+id/txtLote"
+            android:layout_alignEnd="@+id/txtLote"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/textView14"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/cmbPresentacion"
+            android:layout_alignEnd="@+id/textView13"
+            android:layout_alignBottom="@+id/cmbPresentacion"
+            android:layout_alignParentStart="true"
+            android:text="Presentación:" />
+
+        <EditText
+            android:id="@+id/txtUniBas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cmbPresentacion"
+            android:layout_alignStart="@+id/cmbPresentacion"
+            android:layout_alignEnd="@+id/cmbPresentacion"
+            android:layout_marginTop="10dp"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView15"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtUniBas"
+            android:layout_alignEnd="@+id/textView14"
+            android:layout_alignBottom="@+id/txtUniBas"
+            android:layout_alignParentStart="true"
+            android:text="Uni. bas.:" />
+
+        <EditText
+            android:id="@+id/txtCantidadPick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtUniBas"
+            android:layout_alignStart="@+id/txtUniBas"
+            android:layout_alignEnd="@+id/txtUniBas"
+            android:layout_marginTop="10dp"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/textView16"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtCantidadPick"
+            android:layout_alignEnd="@+id/textView15"
+            android:layout_alignBottom="@+id/txtCantidadPick"
+            android:layout_alignParentStart="true"
+            android:text="Cantidad:" />
+
+        <EditText
+            android:id="@+id/txtPesoPick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtCantidadPick"
+            android:layout_alignStart="@+id/txtCantidadPick"
+            android:layout_alignEnd="@+id/txtCantidadPick"
+            android:layout_marginTop="10dp"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/textView17"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txtPesoPick"
+            android:layout_alignEnd="@+id/textView16"
+            android:layout_alignBottom="@+id/txtPesoPick"
+            android:layout_alignParentStart="true"
+            android:text="Peso:" />
+
+        <Spinner
+            android:id="@+id/cmbEstado"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/txtPesoPick"
+            android:layout_alignStart="@+id/txtPesoPick"
+            android:layout_alignEnd="@+id/txtPesoPick"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/textView18"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/cmbEstado"
+            android:layout_alignEnd="@+id/textView17"
+            android:layout_alignBottom="@+id/cmbEstado"
+            android:layout_alignParentStart="true"
+            android:text="Estado:" />
+
+        <Button
+            android:id="@+id/btnFechaVence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cmbEstado"
+            android:layout_alignStart="@+id/cmbEstado"
+            android:layout_alignEnd="@+id/cmbEstado"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/color_medium"
+            android:text="Vence en: 0 días"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</RelativeLayout>

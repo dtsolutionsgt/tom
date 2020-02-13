@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Recepcion.frm_detalle_ingresos">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnAtender"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Atender"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Detalle de ingreso"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/cmbPropietario"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp" />
+
+    <TextView
+        android:id="@+id/textView67"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbPropietario"
+        android:layout_alignBottom="@+id/cmbPropietario"
+        android:text="Propietario:" />
+
+    <Spinner
+        android:id="@+id/cmbProveedor"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbPropietario"
+        android:layout_alignStart="@+id/cmbPropietario"
+        android:layout_alignEnd="@+id/cmbPropietario"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp" />
+
+    <TextView
+        android:id="@+id/textView68"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbPropietario"
+        android:layout_alignEnd="@+id/textView67"
+        android:layout_alignBottom="@+id/cmbProveedor"
+        android:layout_alignParentStart="true"
+        android:text="Proveedor:" />
+
+    <Spinner
+        android:id="@+id/cmbTipoDoc"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbProveedor"
+        android:layout_alignStart="@+id/cmbProveedor"
+        android:layout_alignEnd="@+id/cmbProveedor"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp" />
+
+    <TextView
+        android:id="@+id/textView69"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbProveedor"
+        android:layout_alignEnd="@+id/textView68"
+        android:layout_alignBottom="@+id/cmbTipoDoc"
+        android:layout_alignParentStart="true"
+        android:text="Tipo doc:" />
+
+    <EditText
+        android:id="@+id/txtOc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbTipoDoc"
+        android:layout_alignStart="@+id/cmbTipoDoc"
+        android:layout_alignEnd="@+id/cmbTipoDoc"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView70"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbTipoDoc"
+        android:layout_alignEnd="@+id/textView69"
+        android:layout_alignBottom="@+id/txtOc"
+        android:layout_alignParentStart="true"
+        android:text="OC #:" />
+
+    <EditText
+        android:id="@+id/txtRef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOc"
+        android:layout_alignStart="@+id/txtOc"
+        android:layout_alignEnd="@+id/txtOc"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView71"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOc"
+        android:layout_alignEnd="@+id/textView70"
+        android:layout_alignBottom="@+id/txtRef"
+        android:layout_alignParentStart="true"
+        android:text="Ref #:" />
+
+    <EditText
+        android:id="@+id/txtMarch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtRef"
+        android:layout_alignStart="@+id/txtRef"
+        android:layout_alignEnd="@+id/txtRef"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView72"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtMarch"
+        android:layout_alignEnd="@+id/textView71"
+        android:layout_alignBottom="@+id/txtMarch"
+        android:layout_alignParentStart="true"
+        android:text="March #:" />
+
+    <EditText
+        android:id="@+id/txtGuia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMarch"
+        android:layout_alignStart="@+id/txtMarch"
+        android:layout_alignEnd="@+id/txtMarch"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView73"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtGuia"
+        android:layout_alignEnd="@+id/textView72"
+        android:layout_alignBottom="@+id/txtGuia"
+        android:layout_alignParentStart="true"
+        android:text="Guía #:" />
+
+    <EditText
+        android:id="@+id/txtEstadoRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtGuia"
+        android:layout_alignStart="@+id/txtGuia"
+        android:layout_alignEnd="@+id/txtGuia"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView74"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtEstadoRec"
+        android:layout_alignEnd="@+id/textView73"
+        android:layout_alignBottom="@+id/txtEstadoRec"
+        android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <Spinner
+        android:id="@+id/cmbFechaRec"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtEstadoRec"
+        android:layout_alignStart="@+id/txtEstadoRec"
+        android:layout_alignEnd="@+id/txtEstadoRec"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView75"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbFechaRec"
+        android:layout_alignEnd="@+id/textView74"
+        android:layout_alignBottom="@+id/cmbFechaRec"
+        android:layout_alignParentStart="true"
+        android:text="Fecha Rec.:" />
+
+    <EditText
+        android:id="@+id/txtMuelleRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbFechaRec"
+        android:layout_alignStart="@+id/cmbFechaRec"
+        android:layout_alignEnd="@+id/cmbFechaRec"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView76"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtMuelleRec"
+        android:layout_alignEnd="@+id/textView75"
+        android:layout_alignBottom="@+id/txtMuelleRec"
+        android:layout_alignParentStart="true"
+        android:text="Muelle:" />
+</RelativeLayout>

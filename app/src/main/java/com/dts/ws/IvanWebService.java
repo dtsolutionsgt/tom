@@ -220,7 +220,7 @@ public class IvanWebService {
         String gname = cl.getName();
 
         if (cl.getName().toLowerCase().contains("string")) {
-            return body;
+            if (end <start)return "";else return body;
         }
         if (cl.getName().toLowerCase().contains("double")) {
             if (body.isEmpty()) return 0; else return Double.parseDouble(body);
@@ -230,6 +230,7 @@ public class IvanWebService {
         }
 
         if (cl.getName().toLowerCase().contains("date")) {
+            String ss = body;
             DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             return dfm.parse(body.replace("T", " "));
         }

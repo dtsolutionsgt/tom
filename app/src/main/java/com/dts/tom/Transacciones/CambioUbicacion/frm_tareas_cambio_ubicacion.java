@@ -1,6 +1,7 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.CambioUbicacion;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.TextView;
 
 import com.dts.classes.clsBeCambioUbicacion;
 import com.dts.classes.clsBetrans_ubic_hh_enc;
+import com.dts.tom.PBase;
+import com.dts.tom.R;
+import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
+import com.dts.ws.IvanWebService;
 
 import java.util.ArrayList;
 
@@ -19,6 +24,12 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private TextView lblTituloForma,lblRegs;
     private EditText txtTarea;
     private ListView listView;
+    private String wserror;
+    private boolean errflag;
+    private int pIdTarea=0;
+    boolean Modo=false;
+
+    clsBeCambioUbicacion[] BeListCambioUbicacion=new clsBeCambioUbicacion[5];
 
     private ArrayList<clsBeCambioUbicacion> items= new ArrayList<clsBeCambioUbicacion>();
     private list_view_tareas_cambio_ubic adapter;
@@ -32,7 +43,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         super.InitBase();
 
-
         txtTarea = (EditText) findViewById(R.id.txtTarea);
         listView = (ListView) findViewById(R.id.listTareas);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
@@ -42,11 +52,14 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             lblTituloForma.setText("Listado de tareas de cambios de estado");
         }
 
+        if(gl.modo_cambio==2){
+            Modo=true;
+        }
+
         setHandlers();
 
-
         clearAll();
-        Llena_Tareas_Ubicacion(0);
+        Load_Cambio();
 
     }
 
@@ -100,17 +113,18 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         try {
 
-            for (int i = 0; i < pListBeTareasCambioHH.size(); i++ ) {
+            for (int i = 0; i < BeListCambioUbicacion.length; i++ ) {
 
                 vItem = new clsBeCambioUbicacion();
 
-                vItem.IdTareaUbicacionEnc=pListBeTareasCambioHH.get(i).IdTareaUbicacionEnc;
-                vItem.DescripcionMotivo=pListBeTareasCambioHH.get(i).Descripcion;
-                vItem.IdMotivoUbicacion=pListBeTareasCambioHH.get(i).IdMotivoUbicacion;
-                vItem.estado = pListBeTareasCambioHH.get(i).estado;
+                vItem.IdTareaUbicacionEnc=BeListCambioUbicacion[i].IdTareaUbicacionEnc;
+                vItem.DescripcionMotivo=BeListCambioUbicacion[i].DescripcionMotivo;
+                vItem.IdMotivoUbicacion=BeListCambioUbicacion[i].IdMotivoUbicacion;
+                vItem.Observacion=BeListCambioUbicacion[i].Observacion;
+                vItem.Estado = BeListCambioUbicacion[i].Estado;
 
                 items.add(vItem);
-
+                //Load_Cambio();
             }
 
             lblRegs.setText("Regs: "+ items.size());
@@ -144,7 +158,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             gl.IdTareaUbicEnc =IdTarea;
             gl.tareaenc = pListBeTareasCambioHH.get(IdTarea);
 
-            Intent intent = new Intent(this,frm_detalle_cambio_ubicacion.class);
+            Intent intent = new Intent(this, frm_detalle_cambio_ubicacion.class);
             startActivity(intent);
 
         }catch (Exception e){
@@ -157,27 +171,21 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private void Llena_Tareas_Ubicacion(int pIdTarea){
 
-        boolean Modo=false;
-
-        pListBeTareasCambioHH = new ArrayList<clsBetrans_ubic_hh_enc>();
+        //BeListCambioUbicacion = new clsBeCambioUbicacion[1];
 
         try{
 
-            if(gl.modo_cambio==2){
-                Modo=true;
-            }
+            //pListBeTareasCambioHH = null;//Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador(gl.IdBodega,gl.IdBodega,pIdTarea,Modo);
 
-            pListBeTareasCambioHH = null;//Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador(gl.IdBodega,gl.IdBodega,pIdTarea,Modo);
-
-            if (pListBeTareasCambioHH.size() > 0){
+            if (BeListCambioUbicacion.length > 0){
 
                 listItems();
 
-                if ((pIdTarea>0) & (pListBeTareasCambioHH.size()==1)){
+                /*if ((pIdTarea>0) & (BeListCambioUbicacion.length==1)){
 
                     Procesa_Registro(pIdTarea);
 
-                }
+                }*/
 
             }else{
                 if (pIdTarea != 0) {
@@ -199,7 +207,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             gl.IdTareaUbicEnc =0;
 
-            Intent intent = new Intent(this,frm_cambio_ubicacion_ciega.class);
+            Intent intent = new Intent(this, frm_cambio_ubicacion_ciega.class);
             startActivity(intent);
 
 
@@ -215,13 +223,92 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         try{
 
-
+            wsexecute();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
     }
+
+    //region WebService Thread Core
+
+    private void wsexecute() {
+        wserror="";
+        frm_tareas_cambio_ubicacion.AsyncCallWS wstask = new frm_tareas_cambio_ubicacion.AsyncCallWS();
+        wstask.execute();
+    }
+
+    private void wsExecute() {
+
+        IvanWebService iws;
+        String mResult;
+
+        errflag=false;wserror="";
+        iws = new IvanWebService("http://192.168.1.6/WSTOMHH_QA/TOMHHWS.asmx");
+
+        try {
+
+            BeListCambioUbicacion = new clsBeCambioUbicacion[5];
+
+           iws.call("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,"pIdOperador",1,"pIdTarea",pIdTarea,"cambio_estado",Modo);
+
+            BeListCambioUbicacion=(clsBeCambioUbicacion[]) iws.getReturnValue(BeListCambioUbicacion.getClass());
+
+
+            if (BeListCambioUbicacion.length > 0){
+                //Llena_Tareas_Ubicacion(pIdTarea);
+
+            }
+
+
+        }catch (Exception e)   {
+            errflag=true;
+            wserror=e.getMessage();
+        }
+
+
+        String ss=iws.mResult;
+        String ast=iws.argstr;
+
+    }
+
+    private void wsFinished()  {
+        try {
+            if (errflag) msgbox(wserror);else toast("OK");
+        } catch (Exception e) {
+        }
+    }
+
+    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                wsExecute();
+            } catch (Exception e) {}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+                wsFinished();
+                Llena_Tareas_Ubicacion(0);
+            } catch (Exception e) {
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+
+
+    }
+
+    //endregion
 
     protected void onResume() {
         try{

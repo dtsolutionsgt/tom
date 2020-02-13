@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.InventarioInicial.frm_inv_ini_conteo">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnCompletar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Completar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Tramo"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/txtUbicInv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView27"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicInv"
+        android:layout_alignBottom="@+id/txtUbicInv"
+        android:layout_alignParentStart="true"
+        android:text="Ubicación:" />
+
+    <TextView
+        android:id="@+id/lblUbicDesc"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUbicInv"
+        android:layout_alignEnd="@+id/txtUbicInv"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/txtCodBarra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblUbicDesc"
+        android:layout_alignStart="@+id/txtUbicInv"
+        android:layout_alignEnd="@+id/txtUbicInv"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView31"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtCodBarra"
+        android:layout_alignEnd="@+id/textView27"
+        android:layout_alignBottom="@+id/txtCodBarra"
+        android:layout_alignParentStart="true"
+        android:text="Barra:" />
+
+    <TextView
+        android:id="@+id/lblDescProd"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtCodBarra"
+        android:layout_alignEnd="@+id/txtCodBarra"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <Spinner
+        android:id="@+id/cmbPresInvIni"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/lblDescProd"
+        android:layout_alignStart="@+id/txtCodBarra"
+        android:layout_alignEnd="@+id/txtCodBarra"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView33"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbPresInvIni"
+        android:layout_alignEnd="@+id/textView31"
+        android:layout_alignBottom="@+id/cmbPresInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Presentación:" />
+
+    <Spinner
+        android:id="@+id/cmbEstadoInvIni"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbPresInvIni"
+        android:layout_alignStart="@+id/cmbPresInvIni"
+        android:layout_alignEnd="@+id/cmbPresInvIni"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView34"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbEstadoInvIni"
+        android:layout_alignEnd="@+id/textView33"
+        android:layout_alignBottom="@+id/cmbEstadoInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <EditText
+        android:id="@+id/txtLoteInvIni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbEstadoInvIni"
+        android:layout_alignStart="@+id/cmbEstadoInvIni"
+        android:layout_alignEnd="@+id/cmbEstadoInvIni"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView35"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtLoteInvIni"
+        android:layout_alignEnd="@+id/textView34"
+        android:layout_alignBottom="@+id/txtLoteInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Lote:" />
+
+    <EditText
+        android:id="@+id/txtVenceInvIni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtLoteInvIni"
+        android:layout_alignStart="@+id/txtLoteInvIni"
+        android:layout_alignEnd="@+id/txtLoteInvIni"
+        android:layout_marginTop="10dp"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/textView36"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtVenceInvIni"
+        android:layout_alignEnd="@+id/textView35"
+        android:layout_alignBottom="@+id/txtVenceInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Vence:" />
+
+    <EditText
+        android:id="@+id/txtCantInvIni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtVenceInvIni"
+        android:layout_alignStart="@+id/txtVenceInvIni"
+        android:layout_alignEnd="@+id/txtVenceInvIni"
+        android:layout_marginTop="10dp"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView37"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtCantInvIni"
+        android:layout_alignEnd="@+id/textView36"
+        android:layout_alignBottom="@+id/txtCantInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Cantidad:" />
+
+    <EditText
+        android:id="@+id/txtPesoInvIni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCantInvIni"
+        android:layout_alignStart="@+id/txtCantInvIni"
+        android:layout_alignEnd="@+id/txtCantInvIni"
+        android:layout_marginTop="10dp"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView38"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtPesoInvIni"
+        android:layout_alignEnd="@+id/textView37"
+        android:layout_alignBottom="@+id/txtPesoInvIni"
+        android:layout_alignParentStart="true"
+        android:text="Peso:" />
+
+    <Button
+        android:id="@+id/btnGuardarConteo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtPesoInvIni"
+        android:layout_alignStart="@+id/txtPesoInvIni"
+        android:layout_alignEnd="@+id/txtPesoInvIni"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/color_medium"
+        android:text="Guardar"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/lblUnidadInv"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnGuardarConteo"
+        android:layout_alignEnd="@+id/textView38"
+        android:layout_alignBottom="@+id/btnGuardarConteo"
+        android:layout_alignParentStart="true"
+        android:text="UNI"
+        android:textColor="#00C2FD"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+</RelativeLayout>

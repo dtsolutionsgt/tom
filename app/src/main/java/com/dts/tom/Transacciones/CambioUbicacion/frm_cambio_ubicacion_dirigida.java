@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.CambioUbicacion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import com.dts.classes.clsBebodega_ubicacion;
 import com.dts.classes.clsBeproducto_estado;
 import com.dts.classes.clsBetrans_movimientos;
 import com.dts.classes.clsBetrans_ubic_hh_det;
+import com.dts.tom.PBase;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

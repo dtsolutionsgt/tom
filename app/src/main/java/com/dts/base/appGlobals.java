@@ -30,7 +30,7 @@ public class appGlobals extends Application {
     public clsBeVW_Stock_Res BeStockPallet;
 
     //Variables globales generales.
-    public int IdBodega,IdOperador,IdEmpresa;
+    public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
 
 
 }

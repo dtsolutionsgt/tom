@@ -8,9 +8,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,12 +19,11 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
-import com.dts.classes.XmlUtils;
 import com.dts.classes.clsBeBodega;
-import com.dts.classes.clsBeEmpresa;
 import com.dts.classes.clsBeMenu_sistema;
 import com.dts.classes.clsBeOperador_bodega;
 import com.dts.classes.clsBePaises;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.ws.GetAllEmpresasForHH;
 import com.dts.ws.GetAllImpresoraByEmpresa;
 import com.dts.ws.GetBodegasByEmpresaForHH;
@@ -168,6 +165,7 @@ public class MainActivity extends PBase {
 
                     idemp=wsemp.items.get(position).idempresa;
                     fillBodega();
+                    gl.IdEmpresa = idemp;
 
                 } catch (Exception e) { }
 
@@ -190,6 +188,7 @@ public class MainActivity extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     idbodega=wsbod.items.get(position).IdBodega;
+                    gl.IdBodega = idbodega;
                     fillUserImpres();
 
                 } catch (Exception e) { }
@@ -213,6 +212,7 @@ public class MainActivity extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     idimpres=wsprn.items.get(position).idimpresora;
+                    gl.IdImpresora = idimpres;
 
                 } catch (Exception e) { }
 
@@ -236,6 +236,7 @@ public class MainActivity extends PBase {
 
                     seloper =wsuser.items.get(position);
                     iduser=wsuser.items.get(position).idoperador;
+                    gl.IdOperador = iduser;
 
                 } catch (Exception e) { }
 
@@ -503,9 +504,9 @@ public class MainActivity extends PBase {
 
     private void doTest() {
         gl.seloper= seloper;
-        //startActivity(new Intent(this,Mainmenu.class));
+        startActivity(new Intent(this, frm_tareas_cambio_ubicacion.class));
 
-        wsexecute();
+        //wsexecute();
     }
 
 

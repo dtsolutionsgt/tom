@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Packing.frm_Packing">
+
+    <Spinner
+        android:id="@+id/spinner7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnGuardarDirigida"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Ubicar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Packing"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/txtUbicOr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView54"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicOr"
+        android:layout_alignBottom="@+id/txtUbicOr"
+        android:text="Origen:" />
+
+    <TextView
+        android:id="@+id/lblUbicOrigen"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/txtUbicOr"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/txtPrd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblUbicOrigen"
+        android:layout_alignStart="@+id/txtUbicOr"
+        android:layout_alignEnd="@+id/txtUbicOr"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView56"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtPrd"
+        android:layout_alignEnd="@+id/textView54"
+        android:layout_alignBottom="@+id/txtPrd"
+        android:layout_alignParentStart="true"
+        android:text="Producto:" />
+
+    <TextView
+        android:id="@+id/textView57"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/txtPrd"
+        android:layout_alignEnd="@+id/txtPrd"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:text="TextView" />
+
+    <Spinner
+        android:id="@+id/spinner5"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/textView57"
+        android:layout_alignStart="@+id/txtPrd"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp" />
+
+    <TextView
+        android:id="@+id/textView58"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/spinner5"
+        android:layout_alignEnd="@+id/textView56"
+        android:layout_alignBottom="@+id/spinner5"
+        android:layout_alignParentStart="true"
+        android:text="Presentación:" />
+
+    <Spinner
+        android:id="@+id/spinner6"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/spinner5"
+        android:layout_alignStart="@+id/spinner5"
+        android:layout_alignEnd="@+id/spinner5"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView59"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner5"
+        android:layout_alignEnd="@+id/textView58"
+        android:layout_alignBottom="@+id/spinner6"
+        android:layout_alignParentStart="true"
+        android:text="Lote:" />
+
+    <Spinner
+        android:id="@+id/spinner8"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/spinner6"
+        android:layout_alignStart="@+id/spinner6"
+        android:layout_alignEnd="@+id/spinner6"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView60"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner6"
+        android:layout_alignEnd="@+id/textView59"
+        android:layout_alignBottom="@+id/spinner8"
+        android:layout_alignParentStart="true"
+        android:text="Vence:" />
+
+    <Spinner
+        android:id="@+id/spinner9"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/spinner8"
+        android:layout_alignStart="@+id/spinner8"
+        android:layout_alignEnd="@+id/spinner8"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView61"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/spinner9"
+        android:layout_alignEnd="@+id/textView60"
+        android:layout_alignBottom="@+id/spinner9"
+        android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <EditText
+        android:id="@+id/editText11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner9"
+        android:layout_alignStart="@+id/spinner9"
+        android:layout_alignEnd="@+id/spinner9"
+        android:layout_marginTop="10dp"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView62"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText11"
+        android:layout_alignEnd="@+id/textView61"
+        android:layout_alignBottom="@+id/editText11"
+        android:layout_alignParentStart="true"
+        android:text="Cantidad:" />
+
+    <EditText
+        android:id="@+id/editText12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText11"
+        android:layout_alignStart="@+id/editText11"
+        android:layout_alignEnd="@+id/editText11"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView63"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText12"
+        android:layout_alignEnd="@+id/textView62"
+        android:layout_alignBottom="@+id/editText12"
+        android:layout_alignParentStart="true"
+        android:text="Nuevo LP:" />
+
+    <EditText
+        android:id="@+id/editText13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText12"
+        android:layout_alignStart="@+id/editText12"
+        android:layout_alignEnd="@+id/editText12"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView64"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText13"
+        android:layout_alignEnd="@+id/textView63"
+        android:layout_alignBottom="@+id/editText13"
+        android:layout_alignParentStart="true"
+        android:text="Lp Anterior:" />
+
+    <TextView
+        android:id="@+id/textView65"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText13"
+        android:layout_alignStart="@+id/editText13"
+        android:layout_marginTop="5dp"
+        android:text="IdStock: 0" />
+
+    <TextView
+        android:id="@+id/textView66"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText13"
+        android:layout_alignEnd="@+id/editText13"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/textView65"
+        android:paddingLeft="100dp"
+        android:text="0" />
+
+</RelativeLayout>

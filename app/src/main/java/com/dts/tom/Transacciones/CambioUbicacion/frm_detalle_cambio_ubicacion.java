@@ -1,12 +1,7 @@
-package com.dts.tom;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.dts.tom.Transacciones.CambioUbicacion;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,9 +13,11 @@ import android.widget.TextView;
 
 import com.dts.classes.clsBeDetalleCambioUbicacion;
 import com.dts.classes.clsBetrans_ubic_hh_det;
+import com.dts.tom.PBase;
+import com.dts.tom.R;
+import com.dts.ladapt.CambioUbicacion.list_adapter_detalle_cambio_ubic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class frm_detalle_cambio_ubicacion extends PBase {
 

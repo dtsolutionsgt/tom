@@ -1,9 +1,6 @@
-package com.dts.tom;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.dts.ladapt.CambioUbicacion;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +9,7 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.dts.classes.clsBeDetalleCambioUbicacion;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 
