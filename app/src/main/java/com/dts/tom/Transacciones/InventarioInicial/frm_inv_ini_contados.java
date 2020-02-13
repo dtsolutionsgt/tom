@@ -1,15 +1,16 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.InventarioInicial;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class
-frm_cambio_ubicacion_ciega extends PBase {
+import com.dts.tom.R;
+
+public class frm_inv_ini_contados extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
+        setContentView(R.layout.activity_frm_inv_ini_contados);
     }
 }

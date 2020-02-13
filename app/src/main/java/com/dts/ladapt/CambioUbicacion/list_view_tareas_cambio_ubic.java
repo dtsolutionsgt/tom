@@ -1,18 +1,15 @@
-package com.dts.tom;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.dts.ladapt.CambioUbicacion;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dts.classes.clsBeCambioUbicacion;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 
@@ -60,7 +57,6 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
 
         if (convertView == null) {
 
-
             convertView = l_Inflater.inflate(R.layout.activity_list_view_tareas_cambio_ubic, null);
             holder = new ViewHolder();
 
@@ -74,6 +70,11 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        holder.lblTarea.setText(""+items.get(position).IdTareaUbicacionEnc);
+        holder.lblMotivo.setText(items.get(position).DescripcionMotivo);
+        holder.lblObserva.setText(items.get(position).Observacion);
+        holder.lblEstado.setText(items.get(position).Estado);
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(26,138,198));

@@ -5,7 +5,7 @@
     android:id="@+id/relAdapterDetalle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".list_adapter_detalle_cambio_ubic">
+    tools:context="com.dts.ladapt.CambioUbicacion.list_adapter_detalle_cambio_ubic">
 
     <RelativeLayout
         android:id="@+id/relInterDetalle"

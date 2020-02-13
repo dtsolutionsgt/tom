@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Recepcion.frm_list_rec_prod">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnFinalizarRece"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Finalizar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Listado de tareas"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView77"
+        style="@style/StyleText"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/reltop"
+        android:background="@drawable/color_light"
+        android:gravity="center"
+        android:text="NoDocumento:" />
+
+    <Button
+        android:id="@+id/btnCompletaRec"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView77"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/holo_red_dark"
+        android:text="Incompleta"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editText9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnCompletaRec"
+        android:layout_alignStart="@+id/btnCompletaRec"
+        android:layout_alignEnd="@+id/btnCompletaRec"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView78"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText9"
+        android:layout_alignBottom="@+id/editText9"
+        android:text="Código:" />
+
+    <ListView
+        android:id="@+id/listRec"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_above="@+id/chkRecepcionados"
+        android:layout_below="@+id/editText9"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp" />
+
+    <Button
+        android:id="@+id/btnDetalleRec"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_medium"
+        android:text="Detalle"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnRegs"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_blue_dark"
+        android:text="Registros: 0"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <CheckBox
+        android:id="@+id/chkRecepcionados"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnDetalleRec"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Recepcionados"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
+</RelativeLayout>

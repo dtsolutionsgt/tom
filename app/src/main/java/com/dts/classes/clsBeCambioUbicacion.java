@@ -9,16 +9,18 @@ public class clsBeCambioUbicacion {
     public int  IdMotivoUbicacion;
     public String DescripcionMotivo;
     public Date FechaInicio;
-    public Date HorarioInicio;
+    public Date HoraInicio;
     public Date FechaFin;
-    public Date HorarioFin;
-    public String user_agr;
-    public Date fec_agr;
-    public String user_mod;
-    public Date fec_mod;
+    public Date HoraFin;
+    public String User_agr;
+    public Date Fec_agr;
+    public String User_mod;
+    public Date Fec_mod;
     public String Observacion;
-    public boolean activo;
-    public boolean operador_por_linea;
-    public boolean ubicacion_con_hh;
-    public String estado;
+    public boolean Activo;
+    public boolean Operador_por_linea;
+    public boolean Ubicacion_con_hh;
+    public String Estado;
+    public boolean Cambio_estado;
+
 }

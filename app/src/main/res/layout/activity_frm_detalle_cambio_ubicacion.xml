@@ -5,7 +5,7 @@
     android:id="@+id/relPrincipalList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frm_detalle_cambio_ubicacion">
+    tools:context=".Transacciones.CambioUbicacion.frm_detalle_cambio_ubicacion">
 
     <RelativeLayout
         android:id="@+id/relList"

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.InventarioInicial.frm_inv_ini_contados">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnRegs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/color_medium"
+            android:text="Regs: 0"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnCambiar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/btnRegs"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Cambiar"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Listado de conteos realizados"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/txtCodProd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView30"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtCodProd"
+        android:layout_alignBottom="@+id/txtCodProd"
+        android:text="Producto:" />
+
+    <EditText
+        android:id="@+id/txtUbicConts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtCodProd"
+        android:layout_alignStart="@+id/txtCodProd"
+        android:layout_alignEnd="@+id/txtCodProd"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView32"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicConts"
+        android:layout_alignEnd="@+id/textView30"
+        android:layout_alignBottom="@+id/txtUbicConts"
+        android:layout_alignParentStart="true"
+        android:text="Ubicación:" />
+
+    <TextView
+        android:id="@+id/lblPrdCont"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/txtUbicConts"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:text="TextView" />
+
+    <ListView
+        android:id="@+id/listConts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/relbot"
+        android:layout_below="@id/lblPrdCont" />
+</RelativeLayout>

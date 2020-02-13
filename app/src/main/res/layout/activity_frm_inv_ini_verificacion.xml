@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.InventarioInicial.frm_inv_ini_verificacion">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnCompletar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Completar tramo"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Verificación"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/editText5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView46"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText5"
+        android:layout_alignBottom="@+id/editText5"
+        android:text="Barra:" />
+
+    <TextView
+        android:id="@+id/lblDescVer"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/editText5"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/txtUmbasVeri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblDescVer"
+        android:layout_alignStart="@+id/editText5"
+        android:layout_alignEnd="@+id/editText5"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView49"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUmbasVeri"
+        android:layout_alignEnd="@+id/textView46"
+        android:layout_alignBottom="@+id/txtUmbasVeri"
+        android:layout_alignParentStart="true"
+        android:text="U.M.Bas:" />
+
+    <Spinner
+        android:id="@+id/cmbPresVeri"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtUmbasVeri"
+        android:layout_alignStart="@+id/txtUmbasVeri"
+        android:layout_alignEnd="@+id/txtUmbasVeri"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView50"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUmbasVeri"
+        android:layout_alignEnd="@+id/textView49"
+        android:layout_alignBottom="@+id/cmbPresVeri"
+        android:layout_alignParentStart="true"
+        android:text="Presentación:" />
+
+    <Spinner
+        android:id="@+id/cmbEstadoVeri"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbPresVeri"
+        android:layout_alignStart="@+id/cmbPresVeri"
+        android:layout_alignEnd="@+id/cmbPresVeri"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textView51"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbEstadoVeri"
+        android:layout_alignEnd="@+id/textView50"
+        android:layout_alignBottom="@+id/cmbEstadoVeri"
+        android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <Button
+        android:id="@+id/btnGuardarVeri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@+id/cmbEstadoVeri"
+        android:layout_alignStart="@+id/cmbEstadoVeri"
+        android:layout_alignEnd="@+id/cmbEstadoVeri"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="192dp"
+        android:background="@drawable/color_medium"
+        android:text="Guardar"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+</RelativeLayout>

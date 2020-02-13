@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frm_cambio_ubicacion_ciega">
+    tools:context=".Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega">
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -249,7 +249,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/cmbEstado"
+                    android:id="@+id/cmbEstadoDanado"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_below="@+id/cmbVence"
@@ -261,9 +261,9 @@
                     android:id="@+id/lblEstado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/cmbEstado"
+                    android:layout_alignTop="@+id/cmbEstadoDanado"
                     android:layout_alignEnd="@+id/lblVence"
-                    android:layout_alignBottom="@+id/cmbEstado"
+                    android:layout_alignBottom="@+id/cmbEstadoDanado"
                     android:layout_alignParentStart="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
@@ -276,8 +276,8 @@
                     android:id="@+id/txtCantidad"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/cmbEstado"
-                    android:layout_alignStart="@+id/cmbEstado"
+                    android:layout_below="@+id/cmbEstadoDanado"
+                    android:layout_alignStart="@+id/cmbEstadoDanado"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentBottom="false"
                     android:layout_marginTop="10dp"
@@ -305,7 +305,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/cmbEstado"
+                    android:layout_alignEnd="@+id/cmbEstadoDanado"
                     android:layout_alignBottom="@+id/txtCantidad"
                     android:layout_marginBottom="0dp"
                     android:layout_toEndOf="@+id/txtCantidad"

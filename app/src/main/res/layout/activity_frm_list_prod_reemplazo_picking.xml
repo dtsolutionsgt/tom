@@ -2,47 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relPrincipalList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion">
-
-    <RelativeLayout
-        android:id="@+id/relList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/relInfo"
-        android:layout_below="@id/relHead"
-        android:orientation="vertical">
-
-        <ListView
-            android:id="@+id/listTareas"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
-
-        </ListView>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relInfo"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_above="@id/relbot">
-
-        <TextView
-            android:id="@+id/lblRegs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="10dp"
-            android:text="Regs: 0"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp" />
-    </RelativeLayout>
+    tools:context=".Transacciones.Picking.frm_list_prod_reemplazo_picking">
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -64,15 +26,14 @@
             android:background="@drawable/back" />
 
         <Button
-            android:id="@+id/btnNuevo"
-            android:layout_width="224dp"
+            android:id="@+id/btnActualizaPickingDet"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
-            android:onClick="Cambio_Ubicacion_Nueva"
-            android:text="Nueva"
+            android:text="Actualizar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -93,7 +54,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Listado de tareas de cambios de ubicacion"
+            android:text="Lista de Productos"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -101,36 +62,29 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relHead"
+        android:id="@+id/relCenter"
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbot"
         android:layout_below="@+id/reltop"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="0dp">
-
-        <EditText
-            android:id="@+id/txtTarea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="18dp"
-            android:layout_toEndOf="@+id/lblTarea"
-            android:ems="10" />
+        android:layout_alignParentEnd="true">
 
         <TextView
-            android:id="@+id/lblTarea"
+            android:id="@+id/lblCantRegs"
+            style="@style/StyleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="45dp"
+            android:text="Registros: 0" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/lblCantRegs"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="49dp"
-            android:layout_marginTop="30dp"
-            android:text="Tarea:"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp" />
-
+            android:layout_alignParentTop="true" />
     </RelativeLayout>
-
 </RelativeLayout>
