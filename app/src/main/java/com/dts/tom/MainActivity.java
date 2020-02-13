@@ -1,6 +1,7 @@
 package com.dts.tom;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -133,6 +134,14 @@ public class MainActivity extends PBase {
     //endregion
 
     //region Events
+
+    public void doLogin(View view) {
+        startActivity(new Intent(this,Mainmenu.class));
+    }
+
+    public void doMenu(View view) {
+        startActivity(new Intent(this,Mainmenu.class));
+    }
 
     private void setHandlers() {
 

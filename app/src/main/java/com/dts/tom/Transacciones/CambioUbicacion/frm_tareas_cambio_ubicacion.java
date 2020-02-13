@@ -15,7 +15,7 @@ import com.dts.classes.clsBetrans_ubic_hh_enc;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
-import com.dts.ws.IvanWebService;
+
 
 import java.util.ArrayList;
 
@@ -241,17 +241,18 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private void wsExecute() {
 
-        IvanWebService iws;
+        //IvanWebService iws;
         String mResult;
 
         errflag=false;wserror="";
-        iws = new IvanWebService("http://192.168.1.6/WSTOMHH_QA/TOMHHWS.asmx");
+        //iws = new IvanWebService("http://192.168.1.6/WSTOMHH_QA/TOMHHWS.asmx");
 
+        /*
         try {
 
             BeListCambioUbicacion = new clsBeCambioUbicacion[5];
 
-           iws.call("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,"pIdOperador",1,"pIdTarea",pIdTarea,"cambio_estado",Modo);
+            iws.call("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,"pIdOperador",1,"pIdTarea",pIdTarea,"cambio_estado",Modo);
 
             BeListCambioUbicacion=(clsBeCambioUbicacion[]) iws.getReturnValue(BeListCambioUbicacion.getClass());
 
@@ -267,9 +268,10 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             wserror=e.getMessage();
         }
 
-
         String ss=iws.mResult;
         String ast=iws.argstr;
+
+         */
 
     }
 
