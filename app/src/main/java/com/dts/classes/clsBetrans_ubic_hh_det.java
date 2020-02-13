@@ -21,8 +21,8 @@ public class clsBetrans_ubic_hh_det {
   public String estado;
   public String atributo_variante_1;
   public clsBeproducto Producto;
-  public clsBebodega_ubicacion UbicacionOrigen;
-  public clsBebodega_ubicacion UbicacionDestino;
+  public clsBeBodega_ubicacion UbicacionOrigen;
+  public clsBeBodega_ubicacion UbicacionDestino;
   public clsBeproducto_presentacion ProductoPresentacion;
   public clsBestock Stock;
   public clsBeunidad_medida UnidadMedida;

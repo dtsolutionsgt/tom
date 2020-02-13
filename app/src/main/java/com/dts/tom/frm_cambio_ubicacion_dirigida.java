@@ -1,7 +1,5 @@
 package com.dts.tom;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,12 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.dts.classes.clsBebodega_ubicacion;
+import com.dts.classes.clsBeBodega_ubicacion;
 import com.dts.classes.clsBeproducto_estado;
 import com.dts.classes.clsBetrans_movimientos;
-import com.dts.classes.clsBetrans_ubic_hh_det;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -164,7 +160,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     private boolean validaOrigen(){
-        clsBebodega_ubicacion BeUbicacion;
+        clsBeBodega_ubicacion BeUbicacion;
 
         try{
 
@@ -192,7 +188,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     private  boolean validaDestino(){
-        clsBebodega_ubicacion BeUbicacion;
+        clsBeBodega_ubicacion BeUbicacion;
 
         try{
 

@@ -25,6 +25,12 @@ dependencies {
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
     implementation files('libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
+
+    implementation('org.simpleframework:simple-xml:2.7.1')  {
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

@@ -3,7 +3,7 @@ package com.dts.classes;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeEmpresa {
+public class clsBeEmpresaAnd {
 
     @Element(required=false) public int IdEmpresa;
     @Element(required=false) public String Nombre;
@@ -20,6 +20,7 @@ public class clsBeEmpresa {
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod;
     @Element(required=false) public boolean ClienteRapido;
+    @Element(required=false) public String Imagen;
     @Element(required=false) public boolean Operador_logistico;
     @Element(required=false) public int Puerto_escaner;
     @Element(required=false) public boolean Control_presentaciones;
@@ -34,16 +35,16 @@ public class clsBeEmpresa {
     @Element(required=false) public int IdMotivoAjusteInventario;
 
 
-    public clsBeEmpresa() {
+    public clsBeEmpresaAnd() {
     }
 
-    public clsBeEmpresa(int IdEmpresa,String Nombre,String Direccion,String Telefono,
-                        String Email,String Razon_social,String Representante,int Corr_cod_barra,
-                        String Path_printer,boolean Activo,String User_agr,String Fec_agr,
-                        String User_mod,String Fec_mod,boolean ClienteRapido,
-                        boolean Operador_logistico,int Puerto_escaner,boolean Control_presentaciones,boolean Anulaciones_por_supervisor,
-                        String Codigo,String Clave,int Intento,int Duracionclave,
-                        int Duracionclavetemporal,boolean codigo_automatico,boolean politica_contrasenas,int IdMotivoAjusteInventario
+    public clsBeEmpresaAnd(int IdEmpresa,String Nombre,String Direccion,String Telefono,
+                           String Email,String Razon_social,String Representante,int Corr_cod_barra,
+                           String Path_printer,boolean Activo,String User_agr,String Fec_agr,
+                           String User_mod,String Fec_mod,boolean ClienteRapido,String Imagen,
+                           boolean Operador_logistico,int Puerto_escaner,boolean Control_presentaciones,boolean Anulaciones_por_supervisor,
+                           String Codigo,String Clave,int Intento,int Duracionclave,
+                           int Duracionclavetemporal,boolean codigo_automatico,boolean politica_contraseñas,int IdMotivoAjusteInventario
     ) {
 
         this.IdEmpresa=IdEmpresa;
@@ -61,6 +62,7 @@ public class clsBeEmpresa {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.ClienteRapido=ClienteRapido;
+        this.Imagen=Imagen;
         this.Operador_logistico=Operador_logistico;
         this.Puerto_escaner=Puerto_escaner;
         this.Control_presentaciones=Control_presentaciones;
@@ -167,16 +169,12 @@ public class clsBeEmpresa {
     public void setClienteRapido(boolean value) {
         ClienteRapido=value;
     }
-
-    /*
-    public byte[] getImagen() {
+    public String getImagen() {
         return Imagen;
     }
-    public void setImagen(byte[] value) {
+    public void setImagen(String value) {
         Imagen=value;
     }
-     */
-
     public boolean getOperador_logistico() {
         return Operador_logistico;
     }
@@ -237,10 +235,10 @@ public class clsBeEmpresa {
     public void setcodigo_automatico(boolean value) {
         codigo_automatico=value;
     }
-    public boolean getpolitica_contraseñas() {
+    public boolean getpolitica_contrasenas() {
         return politica_contrasenas;
     }
-    public void setpolitica_contraseñas(boolean value) {
+    public void setpolitica_contrasenas(boolean value) {
         politica_contrasenas=value;
     }
     public int getIdMotivoAjusteInventario() {

@@ -216,7 +216,7 @@ public class DateUtils {
 		return sd+"/"+sm+"/"+sy;
 	}
 
-   public long ffecha00(long f) {
+    public long ffecha00(long f) {
 		f=(long) f/10000;
 		f=f*10000;
 		return f;
@@ -511,7 +511,6 @@ public class DateUtils {
 
         return sd+"/"+sm+"/"+sy;
     }
-
 
     //endregion
 }

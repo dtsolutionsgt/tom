@@ -1,215 +1,177 @@
 package com.dts.classes;
 
-import java.util.Hashtable;
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
 
-public class clsBeOperador implements KvmSerializable {
+import org.simpleframework.xml.Element;
 
-    public int  idoperador;
-    public int  idempresa;
-    public int  idroloperador;
-    public int  idjornada;
-    public String nombres;
-    public String apellidos;
-    public String direccion;
-    public String telefono;
-    public String codigo;
-    public String clave;
-    public int  activo;
-    public String user_agr;
-    public int  fec_agr;
-    public String user_mod;
-    public int  fec_mod;
-    public int costo_hora;
-    public int  usa_hh;
+public class clsBeOperador {
 
-    public clsBeOperador() {}
+    @Element(required=false) public int IdOperador;
+    @Element(required=false) public int IdEmpresa;
+    @Element(required=false) public int IdRolOperador;
+    @Element(required=false) public int IdJornada;
+    @Element(required=false) public String Nombres;
+    @Element(required=false) public String Apellidos;
+    @Element(required=false) public String Direccion;
+    @Element(required=false) public String Telefono;
+    @Element(required=false) public String Codigo;
+    @Element(required=false) public String Clave;
+    @Element(required=false) public boolean Activo;
+    @Element(required=false) public String User_agr;
+    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String User_mod;
+    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public double Costo_hora;
+    @Element(required=false) public boolean Usa_hh;
+    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
 
-    public clsBeOperador(
-            int  _idoperador,
-            int  _idempresa,
-            int  _idroloperador,
-            int  _idjornada,
-            String _nombres,
-            String _apellidos,
-            String _direccion,
-            String _telefono,
-            String _codigo,
-            String _clave,
-            int  _activo,
-            String _user_agr,
-            int  _fec_agr,
-            String _user_mod,
-            int  _fec_mod,
-            int _costo_hora,
-            int  _usa_hh) {
 
-        idoperador=_idoperador;
-        idempresa=_idempresa;
-        idroloperador=_idroloperador;
-        idjornada=_idjornada;
-        nombres=_nombres;
-        apellidos=_apellidos;
-        direccion=_direccion;
-        telefono=_telefono;
-        codigo=_codigo;
-        clave=_clave;
-        activo =_activo;
-        user_agr=_user_agr;
-        fec_agr=_fec_agr;
-        user_mod=_user_mod;
-        fec_mod=_fec_mod;
-        costo_hora=_costo_hora;
-        usa_hh=_usa_hh;
+    public clsBeOperador() {
+    }
+
+    public clsBeOperador(int IdOperador, int IdEmpresa, int IdRolOperador, int IdJornada,
+                         String Nombres, String Apellidos, String Direccion, String Telefono,
+                         String Codigo, String Clave, boolean Activo, String User_agr,
+                         String Fec_agr, String User_mod, String Fec_mod, double Costo_hora,
+                         boolean Usa_hh, boolean IsNew, clsBeRol_operador RolOperador) {
+
+        this.IdOperador=IdOperador;
+        this.IdEmpresa=IdEmpresa;
+        this.IdRolOperador=IdRolOperador;
+        this.IdJornada=IdJornada;
+        this.Nombres=Nombres;
+        this.Apellidos=Apellidos;
+        this.Direccion=Direccion;
+        this.Telefono=Telefono;
+        this.Codigo=Codigo;
+        this.Clave=Clave;
+        this.Activo=Activo;
+        this.User_agr=User_agr;
+        this.Fec_agr=Fec_agr;
+        this.User_mod=User_mod;
+        this.Fec_mod=Fec_mod;
+        this.Costo_hora=Costo_hora;
+        this.Usa_hh=Usa_hh;
+        this.IsNew = IsNew;
+        this.RolOperador=RolOperador;
 
     }
 
 
-    public int getPropertyCount() {
-        return 17;
+    public int getIdOperador() {
+        return IdOperador;
+    }
+    public void setIdOperador(int value) {
+        IdOperador=value;
+    }
+    public int getIdEmpresa() {
+        return IdEmpresa;
+    }
+    public void setIdEmpresa(int value) {
+        IdEmpresa=value;
+    }
+    public int getIdRolOperador() {
+        return IdRolOperador;
+    }
+    public void setIdRolOperador(int value) {
+        IdRolOperador=value;
+    }
+    public int getIdJornada() {
+        return IdJornada;
+    }
+    public void setIdJornada(int value) {
+        IdJornada=value;
+    }
+    public String getNombres() {
+        return Nombres;
+    }
+    public void setNombres(String value) {
+        Nombres=value;
+    }
+    public String getApellidos() {
+        return Apellidos;
+    }
+    public void setApellidos(String value) {
+        Apellidos=value;
+    }
+    public String getDireccion() {
+        return Direccion;
+    }
+    public void setDireccion(String value) {
+        Direccion=value;
+    }
+    public String getTelefono() {
+        return Telefono;
+    }
+    public void setTelefono(String value) {
+        Telefono=value;
+    }
+    public String getCodigo() {
+        return Codigo;
+    }
+    public void setCodigo(String value) {
+        Codigo=value;
+    }
+    public String getClave() {
+        return Clave;
+    }
+    public void setClave(String value) {
+        Clave=value;
+    }
+    public boolean getActivo() {
+        return Activo;
+    }
+    public void setActivo(boolean value) {
+        Activo=value;
+    }
+    public String getUser_agr() {
+        return User_agr;
+    }
+    public void setUser_agr(String value) {
+        User_agr=value;
+    }
+    public String getFec_agr() {
+        return Fec_agr;
+    }
+    public void setFec_agr(String value) {
+        Fec_agr=value;
+    }
+    public String getUser_mod() {
+        return User_mod;
+    }
+    public void setUser_mod(String value) {
+        User_mod=value;
+    }
+    public String getFec_mod() {
+        return Fec_mod;
+    }
+    public void setFec_mod(String value) {
+        Fec_mod=value;
+    }
+    public double getCosto_hora() {
+        return Costo_hora;
+    }
+    public void setCosto_hora(double value) {
+        Costo_hora=value;
+    }
+    public boolean getUsa_hh() {
+        return Usa_hh;
+    }
+    public void setUsa_hh(boolean value) {
+        Usa_hh=value;
+    }
+    public boolean getIsNe() {
+        return IsNew;
+    }
+    public void setIsNe(boolean value) {
+        IsNew =value;
+    }
+    public clsBeRol_operador getRolOperador() {
+        return RolOperador;
+    }
+    public void setRolOperador(clsBeRol_operador value) {
+        RolOperador=value;
     }
 
-    public Object getProperty(int arg0) {
-
-        switch(arg0)    {
-            case 0:
-                return idoperador;
-            case 1:
-                return idempresa;
-            case 2:
-                return idroloperador;
-            case 3:
-                return idjornada;
-            case 4:
-                return nombres;
-            case 5:
-                return apellidos;
-            case 6:
-                return direccion;
-            case 7:
-                return telefono;
-            case 8:
-                return codigo;
-            case 9:
-                return clave;
-            case 10:
-                return activo;
-            case 11:
-                return user_agr;
-            case 12:
-                return fec_agr;
-            case 13:
-                return user_mod;
-            case 14:
-                return fec_mod;
-            case 15:
-                return costo_hora;
-            case 16:
-                return usa_hh;
-        }
-
-        return null;
-    }
-
-    public void getPropertyInfo(int index, Hashtable arg1, PropertyInfo info) {
-        switch(index)   {
-
-            case 0:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "idoperador";break;
-            case 1:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "idempresa";break;
-            case 2:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "idroloperador";break;
-            case 3:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "idjornada";break;
-            case 4:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "nombres";break;
-            case 5:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "apellidos";break;
-            case 6:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "direccion";break;
-            case 7:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "telefono";break;
-            case 8:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "codigo";break;
-            case 9:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "clave";break;
-            case 10:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "activo";break;
-            case 11:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "user_agr";break;
-            case 12:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "fec_agr";break;
-            case 13:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "user_mod";break;
-            case 14:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "fec_mod";break;
-            case 15:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "costo_hora";break;
-            case 16:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "usa_hh";break;
-        }
-    }
-
-    public void setProperty(int index, Object value) {
-
-        switch(index)   {
-
-            case 0:
-                idoperador = Integer.parseInt(value.toString());break;
-            case 1:
-                idempresa = Integer.parseInt(value.toString());break;
-            case 2:
-                idroloperador = Integer.parseInt(value.toString());break;
-            case 3:
-                idjornada = Integer.parseInt(value.toString());break;
-            case 4:
-                nombres = value.toString();break;
-            case 5:
-                apellidos = value.toString();break;
-            case 6:
-                direccion = value.toString();break;
-            case 7:
-                telefono = value.toString();break;
-            case 8:
-               //codigo = value.toString();break;
-                codigo ="";break;
-            case 9:
-                clave = value.toString();break;
-            case 10:
-                activo = Integer.parseInt(value.toString());break;
-            case 11:
-                user_agr = value.toString();break;
-            case 12:
-                fec_agr = Integer.parseInt(value.toString());break;
-            case 13:
-                user_mod = value.toString();break;
-            case 14:
-                fec_mod = Integer.parseInt(value.toString());break;
-            case 15:
-                costo_hora = 0;break;
-            case 16:
-                usa_hh = Integer.parseInt(value.toString());break;
-        }
-
-    }
 }
 
