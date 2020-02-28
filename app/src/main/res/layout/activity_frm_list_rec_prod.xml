@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Recepcion.frm_list_rec_prod">
 
+    <HorizontalScrollView
+        android:id="@+id/srollRec"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/chkRecepcionados"
+        android:layout_below="@id/txtCodigoProductoRecepcion">
+
+        <ListView
+            android:id="@+id/listRec"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp" />
+    </HorizontalScrollView>
+
     <RelativeLayout
         android:id="@+id/relbot"
         android:layout_width="match_parent"
@@ -62,7 +77,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView77"
+        android:id="@+id/lblNoDocumento"
         style="@style/StyleText"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -75,7 +90,7 @@
         android:id="@+id/btnCompletaRec"
         android:layout_width="204dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView77"
+        android:layout_below="@+id/lblNoDocumento"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="172dp"
@@ -88,7 +103,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/txtCodigoProductoRecepcion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnCompletaRec"
@@ -103,18 +118,9 @@
         style="@style/StyleText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText9"
-        android:layout_alignBottom="@+id/editText9"
+        android:layout_alignTop="@+id/txtCodigoProductoRecepcion"
+        android:layout_alignBottom="@+id/txtCodigoProductoRecepcion"
         android:text="Código:" />
-
-    <ListView
-        android:id="@+id/listRec"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_above="@+id/chkRecepcionados"
-        android:layout_below="@+id/editText9"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp" />
 
     <Button
         android:id="@+id/btnDetalleRec"

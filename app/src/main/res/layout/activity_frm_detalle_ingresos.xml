@@ -33,6 +33,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="Atender_rece"
             android:text="Atender"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
@@ -271,4 +272,5 @@
         android:layout_alignBottom="@+id/txtMuelleRec"
         android:layout_alignParentStart="true"
         android:text="Muelle:" />
+
 </RelativeLayout>

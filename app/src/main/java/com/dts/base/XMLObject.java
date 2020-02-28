@@ -3,14 +3,13 @@ package com.dts.base;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 
-import com.dts.base.WebService;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -50,6 +49,38 @@ public class XMLObject  {
         return data;
     }
 
+    public Object getSingle( String name, Class<?> cl)
+            throws Exception {
+
+        String body=getXMLRegionSingle(name);
+
+        int start = body.indexOf("<" + name + ">");
+        if (start>-1)  start += name.length() + 2;else start=0;//with <and > char
+        int end = body.indexOf("</" + name + ">");
+        if (end == -1) body = "";else body = body.substring(start, end);
+
+        String gname = cl.getName();
+
+        if (cl.getName().toLowerCase().contains("string")) {
+            return body;
+        }
+        if (cl.getName().toLowerCase().contains("double")) {
+            if (body.isEmpty()) return 0; else return
+                    Double.parseDouble(body);
+        }
+        if (cl.getName().toLowerCase().contains("int")) {
+            if (body.isEmpty()) return 0; else return
+                    Integer.parseInt(body);
+        }
+
+        if (cl.getName().toLowerCase().contains("boolean")) {
+            return Boolean.parseBoolean(body);
+        }
+
+        return null;
+    }
+
+
     public String getXMLRegion(String nodename) throws Exception {
         String st,ss,sv,en,sxml;
         Node xmlnode;
@@ -79,6 +110,41 @@ public class XMLObject  {
                     return sxml;
                 }
            }
+        } catch (Exception e) {
+            throw new Exception(" XMLObject getXMLRegion : "+ e.getMessage());
+        }
+        return "";
+    }
+
+    public String getXMLRegionSingle(String nodename) throws Exception {
+        String st,ss,sv,en,sxml;
+        Node xmlnode;
+
+        try {
+
+            InputStream istream = new ByteArrayInputStream( ws.xmlresult.getBytes() );
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(istream);
+
+            Element root=doc.getDocumentElement();
+
+            NodeList children=root.getChildNodes();
+            Node bodyroot=children.item(0);
+            NodeList body=bodyroot.getChildNodes();
+            Node responseroot=body.item(0);
+            NodeList response=responseroot.getChildNodes();
+
+            ss="";
+            for(int i =0;i<response.getLength();i++) {
+                ss+=response.item(i).getNodeName()+",\n";
+
+                if (response.item(i).getNodeName().equalsIgnoreCase(nodename)) {
+                    xmlnode=response.item(i);
+                    sxml=nodeToString(xmlnode);
+                    return sxml;
+                }
+            }
         } catch (Exception e) {
             throw new Exception(" XMLObject getXMLRegion : "+ e.getMessage());
         }

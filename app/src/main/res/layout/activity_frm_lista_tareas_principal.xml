@@ -80,7 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/editText8"
         android:layout_alignBottom="@+id/editText8"
-        android:text="Tarea:" />
+        android:text="Tarea:"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnNuevaTarea"
@@ -108,12 +109,30 @@
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 
-    <ListView
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnNuevaTarea"
-        android:layout_below="@+id/editText8"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_above="@id/btnNuevaTarea"
+        android:layout_below="@id/editText8">
+
+        <ListView
+            android:id="@+id/listTareas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal" />
+    </HorizontalScrollView>
+
+    <ProgressBar
+        android:id="@+id/pgrtareas"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="158dp"
+        android:indeterminate="false"
+        android:max="48"
+        android:progress="1"
+        android:progressDrawable="@drawable/progress_bar_circular_style"
+        android:visibility="invisible" />
+
 </RelativeLayout>

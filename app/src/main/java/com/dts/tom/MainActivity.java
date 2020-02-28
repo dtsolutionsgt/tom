@@ -1,6 +1,7 @@
 package com.dts.tom;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,21 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
-import com.dts.classes.clsBeBodega;
-import com.dts.classes.clsBeBodegaList;
-import com.dts.classes.clsBeEmpresaAnd;
-import com.dts.classes.clsBeEmpresaAndList;
-import com.dts.classes.clsBeImpresora;
-import com.dts.classes.clsBeOperador_bodega;
-import com.dts.classes.clsBeOperador_bodegaList;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAnd;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
+import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,13 +36,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import static br.com.zbra.androidlinq.Linq.stream;
 
 public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
     private TextView lblver,lbldate,lblurl;
-    private ProgressBar pbar;
+    private ProgressDialog progress;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -67,6 +70,8 @@ public class MainActivity extends PBase {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
+            ProgressDialog("Inicializando pantalla de inicio");
+
             grantPermissions();
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +90,6 @@ public class MainActivity extends PBase {
             lblver=(TextView)  findViewById(R.id.textView4);
             lbldate=(TextView)  findViewById(R.id.textView3);
             lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
-            pbar=(ProgressBar)  findViewById(R.id.progressBar);
 
             getURL();
 
@@ -136,7 +140,15 @@ public class MainActivity extends PBase {
     //region Events
 
     public void doLogin(View view) {
-        startActivity(new Intent(this,Mainmenu.class));
+
+        try{
+
+            Valida_Ingreso();
+            //startActivity(new Intent(this,Mainmenu.class));
+
+        }catch (Exception e){
+
+        }
     }
 
     public void doMenu(View view) {
@@ -155,6 +167,7 @@ public class MainActivity extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     idemp=empresas.items.get(position).IdEmpresa;
+                    gl.IdEmpresa = idemp;
                     idbodega=0;
                     execws(2);
                   } catch (Exception e) {
@@ -179,6 +192,7 @@ public class MainActivity extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     idbodega=bodegas.items.get(position).IdBodega;
+                    gl.IdBodega = idbodega;
                     idimpres=0;
                     execws(3);
 
@@ -204,7 +218,8 @@ public class MainActivity extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    //idimpres=wsprn.items.get(position).idimpresora;
+                    idimpres=impres.get(position).IdImpresora;
+                    gl.IdImpresora = idimpres;
 
                 } catch (Exception e) { }
 
@@ -226,8 +241,9 @@ public class MainActivity extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    //seloper =wsuser.items.get(position);
-                    //iduser=wsuser.items.get(position).IdOperador;
+                    seloper =users.items.get(position);
+                    iduser=users.items.get(position).IdOperador;
+                    gl.IdOperador = iduser;
 
                 } catch (Exception e) { }
 
@@ -282,25 +298,111 @@ public class MainActivity extends PBase {
 
             switch (ws.callback) {
                 case 1:
+                    progress.setMessage("Cargando empresas");
                     processEmpresas();break;
                 case 2:
+                    progress.setMessage("Cargando bodegas");
                     processBodegas();break;
                 case 3:
+                    progress.setMessage("Cargando impresoras");
                     processImpresoras();
 
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
+                    progress.setMessage("Cargando usuarios");
                     processUsers();break;
             }
 
-            pbar.setVisibility(View.INVISIBLE);
+            progress.cancel();
+
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-            pbar.setVisibility(View.INVISIBLE);
         }
     }
 
+    //endregion
+
+    //region MetodosGeneral
+
+    private void Licencia_Valida(){
+
+        try{
+
+        }catch (Exception e){
+
+        }
+    }
+
+    private void Valida_Ingreso(){
+
+        try{
+
+            if (gl.IdEmpresa>0){
+
+                if (gl.IdBodega>0){
+
+                    if (gl.IdOperador>0){
+
+                    if (!txtpass.getText().toString().isEmpty()){
+
+                                List<clsBeBodega> BeBodega =
+                                        stream(bodegas.items)
+                                                .where(c -> c.IdBodega  == gl.IdBodega)
+                                                .toList();
+
+                        gl.CodigoBodega = BeBodega.get(0).Codigo;
+
+                        List<clsBeOperador_bodega> BeOperadorBodega =
+                                stream(users.items)
+                                        .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
+                                                c.IdBodega == gl.IdBodega)
+                                        .toList();
+
+                        if (BeOperadorBodega.size()>0){
+
+                            gl.gOperadorBodega = BeOperadorBodega;
+
+                            List<clsBeImpresora> BeImpresora =
+                                    stream(impres)
+                                    .where(c-> c.IdBodega == gl.IdBodega).toList();
+
+                            if (BeImpresora.size()>0){
+                                gl.gImpresora = BeImpresora;
+                                if (gl.gImpresora.get(0).Direccion_Ip ==""){
+                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                }
+                            }else{
+                                mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
+                            }
+
+                            //Get_BeImpresora_By_IdImpresora(gIdImpresora)
+
+                            startActivity(new Intent(this,Mainmenu.class));
+
+                        }else{
+                         mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
+                        }
+
+                        }else{
+                        mu.msgbox("Ingrese clave");
+                    }
+                    }else{
+                        mu.msgbox("No se ha seleccionado un operador válido");
+                    }
+                }else{
+                    mu.msgbox("No se ha seleccionado una bodega válida");
+                }
+            }else{
+                mu.msgbox("No se ha seleccionado una empresa válida");
+            }
+
+        }catch (Exception e){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
     //endregion
 
 
@@ -362,6 +464,9 @@ public class MainActivity extends PBase {
                     imp=new clsBeImpresora();
                     imp.IdImpresora=dt.getInt(0);
                     imp.Nombre=dt.getString(2);
+                    imp.mac_adress=dt.getString(9);
+                    imp.Direccion_Ip=dt.getString(3);
+                    imp.IdBodega = dt.getInt(10);
                     impres.add(imp);
 
                     dt.moveToNext();
@@ -384,16 +489,20 @@ public class MainActivity extends PBase {
         try {
             users=xobj.getresult(clsBeOperador_bodegaList.class,"Get_Operadores_By_IdBodega_For_HH");
 
-            for (int i = users.items.size()-1; i>=0; i--) {
-                if (users.items.get(i).Operador.Activo) {
-                    users.items.get(i).Fec_agr=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
-                } else {
-                    users.items.remove(i);
+            if (users.items!=null){
+
+                for (int i = users.items.size()-1; i>=0; i--) {
+                    if (users.items.get(i).Operador.Activo) {
+                        users.items.get(i).Fec_agr=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
+                    } else {
+                        users.items.remove(i);
+                    }
                 }
+
+                if (users.items.size()>0) Collections.sort(users.items, new UserSort());
+                fillSpinUser();
             }
 
-            if (users.items.size()>0) Collections.sort(users.items, new UserSort());
-            fillSpinUser();
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -503,6 +612,15 @@ public class MainActivity extends PBase {
         }
 
         if (!gl.wsurl.isEmpty()) lblurl.setText(gl.wsurl);else lblurl.setText("Falta archivo con URL");
+    }
+
+    public void ProgressDialog(String mensaje){
+        progress=new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void execws(int callbackvalue) {

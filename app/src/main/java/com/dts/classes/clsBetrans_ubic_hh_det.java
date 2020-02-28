@@ -1,5 +1,10 @@
 package com.dts.classes;
 
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
+
 import java.util.Date;
 
 public class clsBetrans_ubic_hh_det {
@@ -20,12 +25,12 @@ public class clsBetrans_ubic_hh_det {
   public double recibido;
   public String estado;
   public String atributo_variante_1;
-  public clsBeproducto Producto;
+  public clsBeProducto Producto;
   public clsBeBodega_ubicacion UbicacionOrigen;
   public clsBeBodega_ubicacion UbicacionDestino;
-  public clsBeproducto_presentacion ProductoPresentacion;
+  public clsBeProducto_Presentacion ProductoPresentacion;
   public clsBestock Stock;
-  public clsBeunidad_medida UnidadMedida;
+  public clsBeUnidad_medida UnidadMedida;
 
 
 

@@ -2,9 +2,10 @@ package com.dts.base;
 
 public class clsClasses {
 
-
-
-
+	public class clsMenu {
+		public int ID,Icon;
+		public String Name;
+	}
 
     //
 

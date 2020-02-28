@@ -185,7 +185,7 @@
         android:text="U.M.Bas:" />
 
     <EditText
-        android:id="@+id/editText16"
+        android:id="@+id/txtCantidadRec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtUmbasRec"
@@ -200,9 +200,9 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText16"
+        android:layout_alignTop="@+id/txtCantidadRec"
         android:layout_alignEnd="@+id/textView84"
-        android:layout_alignBottom="@+id/editText16"
+        android:layout_alignBottom="@+id/txtCantidadRec"
         android:layout_alignParentStart="true"
         android:text="Cantidad:" />
 
@@ -210,8 +210,8 @@
         android:id="@+id/txtPesoUnitario"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText16"
-        android:layout_alignEnd="@+id/editText16"
+        android:layout_below="@+id/txtCantidadRec"
+        android:layout_alignEnd="@+id/txtCantidadRec"
         android:layout_marginTop="10dp"
         android:inputType="number" />
 
@@ -230,7 +230,7 @@
         android:id="@+id/txtPeso"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/editText16"
+        android:layout_alignStart="@+id/txtCantidadRec"
         android:layout_alignTop="@+id/textView86"
         android:layout_alignBottom="@+id/textView86"
         android:layout_marginEnd="3dp"

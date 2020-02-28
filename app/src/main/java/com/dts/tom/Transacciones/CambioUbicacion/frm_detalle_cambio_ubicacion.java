@@ -135,9 +135,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 vItem.IdTareaDet=pListBeTareasCambioDet.get(i).IdTareaUbicacionDet;
                 vItem.IdStock=pListBeTareasCambioDet.get(i).IdStock;
-                vItem.Codigo=pListBeTareasCambioDet.get(i).Producto.codigo;
-                vItem.NombreProducto = pListBeTareasCambioDet.get(i).Producto.nombre;
-                vItem.NombrePresentacion = pListBeTareasCambioDet.get(i).ProductoPresentacion.nombre;
+                vItem.Codigo=pListBeTareasCambioDet.get(i).Producto.Codigo;
+                vItem.NombreProducto = pListBeTareasCambioDet.get(i).Producto.Nombre;
+                vItem.NombrePresentacion = pListBeTareasCambioDet.get(i).ProductoPresentacion.Nombre;
                 vItem.UbicacionOrigen = pListBeTareasCambioDet.get(i).UbicacionOrigen.Descripcion;
                 vItem.UbicacionDestino = pListBeTareasCambioDet.get(i).UbicacionDestino.Descripcion;
                 vItem.Cantidad = pListBeTareasCambioDet.get(i).cantidad;

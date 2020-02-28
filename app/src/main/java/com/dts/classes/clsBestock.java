@@ -1,5 +1,9 @@
 package com.dts.classes;
 
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+
 import java.util.Date;
 
 public class clsBestock {
@@ -37,8 +41,8 @@ public class clsBestock {
   public double temperatura;
   public String atributo_variante_1;
 
-  public clsBeproducto_estado ProductoEstado;
-  public clsBeproducto_presentacion Presentacion;
-  public clsBeproducto Producto;
+  public clsBeProducto_estado ProductoEstado;
+  public clsBeProducto_Presentacion Presentacion;
+  public clsBeProducto Producto;
 
 }

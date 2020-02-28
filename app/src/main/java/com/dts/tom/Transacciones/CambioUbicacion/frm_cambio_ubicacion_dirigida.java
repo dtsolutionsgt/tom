@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,14 +8,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.dts.classes.clsBeBodega_ubicacion;
-import com.dts.classes.clsBeproducto_estado;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.clsBetrans_movimientos;
-import com.dts.classes.clsBetrans_ubic_hh_det;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -126,12 +122,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gl.IdOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
             gl.IdDestino = gl.tareadet.UbicacionDestino.IdUbicacion;
 
-            txtCodigoPrd.setText(gl.tareadet.Producto.nombre);
-            txtPresentacion.setText(gl.tareadet.ProductoPresentacion.nombre);
+            txtCodigoPrd.setText(gl.tareadet.Producto.Nombre);
+            txtPresentacion.setText(gl.tareadet.ProductoPresentacion.Nombre);
             //txtProp.setText(gl.tareadet.Producto.Propietario.Nombre_comercial);
             txtLote.setText(gl.tareadet.Stock.lote);
             txtVence.setText(String.valueOf(gl.tareadet.Stock.fecha_vence));
-            txtEstado.setText(gl.tareadet.Stock.ProductoEstado.nombre);
+            txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
             txtCantidad.setText(String.valueOf(gl.tareadet.cantidad - gl.tareadet.recibido));
             gl.gCantDisponible = gl.tareadet.cantidad - gl.tareadet.recibido;
             gl.tareadet.estado = "En proceso";
@@ -147,12 +143,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             if (gl.modo_cambio==2){
 
-                clsBeproducto_estado prest;
+                clsBeProducto_estado prest;
 
                 prest = null;//frmInicio.m_proxy.Get_Single_By_IdEstado(gl.tareadet.IdEstadoDestino)
 
                 if(prest!=null){
-                    txtUbicDestino.setText(prest.nombre);
+                    txtUbicDestino.setText(prest.Nombre);
                 }
 
 
@@ -375,14 +371,14 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.IdRecepcion = gl.tareadet.Stock.IdRecepcionEnc;
             gMovimientoDet.cantidad = vCantidadAUbicar;
             gMovimientoDet.serie = gl.tareadet.Stock.serial;
-            gMovimientoDet.peso = gl.tareadet.ProductoPresentacion.peso * vCantidadAUbicar;
+            gMovimientoDet.peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.lote = gl.tareadet.Stock.lote;
             gMovimientoDet.fecha_vence = gl.tareadet.Stock.fecha_vence;
             gMovimientoDet.fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
                 if (gl.BeStockPallet!=null) {
-                    gMovimientoDet.barra_pallet = gl.BeStockPallet.codigo_barra;
+                    gMovimientoDet.barra_pallet = gl.BeStockPallet.Codigo_Barra;
                 }else{
                     gMovimientoDet.barra_pallet = "";
                 }
