@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class frm_recepcion_datos extends PBase {
     private Spinner cmbEstadoProductoRec,cmbPresRec,cmbVenceRec;
     private EditText txtBarra,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC;
     private TextView lblDatosProd,lblPropPrd;
+    private Button btnCantPendiente,btnCantRecibida;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -77,6 +79,7 @@ public class frm_recepcion_datos extends PBase {
 
         cmbEstadoProductoRec = (Spinner)findViewById(R.id.cmbEstadoProductoRec);
         cmbPresRec = (Spinner) findViewById(R.id.cmbPresRec);
+        cmbVenceRec = (Spinner) findViewById(R.id.cmbVenceRec);
         txtBarra = (EditText) findViewById(R.id.txtBarra);
         txtLoteRec = (EditText) findViewById(R.id.txtLoteRec);
         txtUmbasRec = (EditText) findViewById(R.id.txtUmbasRec);
@@ -87,8 +90,14 @@ public class frm_recepcion_datos extends PBase {
         txtCostoOC = (EditText) findViewById(R.id.txtCostoOC);
         lblDatosProd = (TextView)findViewById(R.id.lblTituloForma);
         lblPropPrd = (TextView)findViewById(R.id.lblPropPrd);
+        btnCantRecibida = (Button)findViewById(R.id.btnCantRecibida);
+        btnCantPendiente = (Button)findViewById(R.id.btnCantPendiente);
 
         setHandlers();
+
+        if (gl.gselitem != null) {
+            BeOcDet=gl.gselitem;
+        }
 
         execws(1);
 
@@ -167,7 +176,6 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.gselitem != null) {
 
-                BeOcDet=gl.gselitem;
                 Escaneo_Pallet = gl.gEscaneo_Pallet;
 
                 BeProducto.IdProductoBodega = BeOcDet.IdProductoBodega;
@@ -192,6 +200,7 @@ public class frm_recepcion_datos extends PBase {
         int vPresentacion;
         int IndicePres;
         double Factor;
+        double CostoOC=0;
 
         try{
 
@@ -208,7 +217,7 @@ public class frm_recepcion_datos extends PBase {
                 pListBeProductoPallet = new clsBeProducto_palletList();
                 pListTransRecDet = new clsBeTrans_re_detList();
 
-                if (pListTransRecDet!=null & pListTransRecDet.items.size() > 0){
+                if (pListTransRecDet.items!=null){
 
                     pIdRecepcionDet = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
 
@@ -290,7 +299,7 @@ public class frm_recepcion_datos extends PBase {
                 if(Cant_Recibida - Cant_Recibida<0){
                     Cant_Pendiente = 0;
                 }else{
-                    Cant_Pendiente =  Cant_Recibida - Cant_Recibida;
+                    Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
                 }
 
                 txtCantidadRec.setText(Cant_Pendiente+"");
@@ -304,9 +313,9 @@ public class frm_recepcion_datos extends PBase {
                         if (gl.gBeOrdenCompra.DetalleLotes.items.size()>0){
 
                             BeLoteLinea = stream(gl.gBeOrdenCompra.DetalleLotes.items)
-                                    .where(c->c.No_linea == BeOcDet.No_Linea &
+                                    .where(c->c.No_linea == BeOcDet.No_Linea &&
                                             c.IdOrdenCompraDet == pIdOrdenCompraDet
-                                            & c.Codigo_producto == BeOcDet.Codigo_Producto).first();
+                                            && c.Codigo_producto == BeOcDet.Codigo_Producto).first();
 
                             if (BeLoteLinea!=null){
                                 txtLoteRec.setText(BeLoteLinea.Lote);
@@ -328,11 +337,46 @@ public class frm_recepcion_datos extends PBase {
 
                         }
                     }
-
                 }
 
-                }
+                    txtUmbasRec.setText(BeProducto.UnidadMedida.Nombre);
+                    txtPeso.setText("");
 
+                    if (!BeProducto.Control_peso){
+                        txtPeso.setVisibility(View.INVISIBLE);
+                        txtPesoUnitario.setVisibility(View.INVISIBLE);
+                    }
+
+                    if(!BeProducto.Control_vencimiento){
+                        cmbVenceRec.setVisibility(View.INVISIBLE);
+                    }
+
+                    if (!gl.gBeRecepcion.Muestra_precio){
+                     txtCostoOC.setVisibility(View.INVISIBLE);
+                     txtCostoReal.setVisibility(View.INVISIBLE);
+                    }
+
+                    CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
+                            && c.IdPresentacion == vPresentacion).select(c->c.Costo).first();
+
+                    if (gl.gBeOrdenCompra!=null) {
+                        if (((gl.gBeOrdenCompra.IdOrdenCompraEnc > 0) && (CostoOC > 0))) {
+                            txtCostoOC.setText(mu.round(CostoOC, 10)+"");
+                        }
+                        else {
+                            txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+                        }
+
+                    } else {
+                        txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+                    }
+
+                    txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+
+                    btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
+                    btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
+
+                }
 
             }
 
@@ -379,7 +423,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
 
-            rPresentacion  = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega & c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c->c.IdPresentacion).firstOrDefault(0);
+            rPresentacion  = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c->c.IdPresentacion).firstOrDefault(0);
 
 
         }catch (Exception e){
@@ -397,7 +441,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (BeProducto.Control_lote & BeProducto.Genera_lote){
+            if (BeProducto.Control_lote && BeProducto.Genera_lote){
 
                 dia =calendario.get(Calendar.DAY_OF_MONTH);
                 mes = calendario.get(Calendar.MONTH)+1;

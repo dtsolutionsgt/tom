@@ -60,7 +60,7 @@ public class clsBeProducto {
   @Element(required=false) public String Fec_agr;
   @Element(required=false) public String User_mod;
   @Element(required=false) public String Fec_mod;
-  @Element(required=false) public Byte Imagen;
+  @Element(required=false) public String Imagen;
   @Element(required=false) public String Noserie;
   @Element(required=false) public String Noparte;
   @Element(required=false) public boolean Fechamanufactura;
@@ -108,7 +108,7 @@ public class clsBeProducto {
                        boolean Control_vencimiento,boolean Control_lote,boolean Peso_recepcion,boolean Peso_despacho,
                        boolean Temperatura_recepcion,boolean Temperatura_despacho,boolean Materia_prima,boolean Kit,
                        int Tolerancia,int Ciclo_vida,String User_agr,String Fec_agr,
-                       String User_mod,String Fec_mod,Byte Imagen,String Noserie,
+                       String User_mod,String Fec_mod,String Imagen,String Noserie,
                        String Noparte,boolean Fechamanufactura,boolean Capturar_aniada,boolean Control_peso,
                        boolean Captura_arancel,boolean Es_hardware,double Largo,double Alto,
                        double Ancho,int IdProductoBodega,clsBePropietarios Propietario,clsBeProducto_Presentacion Presentacion,
@@ -449,10 +449,10 @@ public class clsBeProducto {
   public void setFec_mod(String value) {
     Fec_mod=value;
   }
-  public Byte getImagen() {
+  public String getImagen() {
     return Imagen;
   }
-  public void setImagen(Byte value) {
+  public void setImagen(String value) {
     Imagen=value;
   }
   public String getNoserie() {

@@ -152,7 +152,7 @@ public class frm_list_rec_prod extends PBase {
 
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    selitem = sitem;
+                    selitem = pListDetalleOC.items.get(position-1);
 
                     selid = sitem.No_Linea;
                     selidx = position;
