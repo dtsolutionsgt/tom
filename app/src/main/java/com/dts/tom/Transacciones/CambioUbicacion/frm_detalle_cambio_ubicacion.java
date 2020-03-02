@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dts.classes.clsBeDetalleCambioUbicacion;
-import com.dts.classes.clsBetrans_ubic_hh_det;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.CambioUbicacion.list_adapter_detalle_cambio_ubic;
@@ -30,7 +29,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private ArrayList<clsBeDetalleCambioUbicacion> items= new ArrayList<clsBeDetalleCambioUbicacion>();
     private list_adapter_detalle_cambio_ubic adapter;
     private clsBeDetalleCambioUbicacion selitem;
-    private ArrayList<clsBetrans_ubic_hh_det> pListBeTareasCambioDet= new ArrayList<clsBetrans_ubic_hh_det>();
+    //private ArrayList<clsBetrans_ubic_hh_det> pListBeTareasCambioDet= new ArrayList<clsBetrans_ubic_hh_det>();
 
 
     @Override
@@ -129,7 +128,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         try {
 
-            for (int i = 0; i < pListBeTareasCambioDet.size(); i++ ) {
+            /*for (int i = 0; i < pListBeTareasCambioDet.size(); i++ ) {
 
                 vItem = new clsBeDetalleCambioUbicacion();
 
@@ -146,7 +145,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 items.add(vItem);
 
-            }
+            }*/
 
             lblRegs.setText("Regs: "+ items.size());
 
@@ -177,7 +176,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             gl.IdTareaUbicDet = 0;
             gl.IdTareaUbicDet = IdTareaDet;
-            gl.tareadet = pListBeTareasCambioDet.get(IdTareaDet);
+            //gl.tareadet = pListBeTareasCambioDet.get(IdTareaDet);
 
             Intent intent = new Intent(this,frm_cambio_ubicacion_dirigida.class);
             startActivity(intent);
@@ -193,7 +192,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         try{
 
-            pListBeTareasCambioDet = new ArrayList<clsBetrans_ubic_hh_det>();
+           /* pListBeTareasCambioDet = new ArrayList<clsBetrans_ubic_hh_det>();
 
             pListBeTareasCambioDet = null; //Get_All_By_IdTransUbicEnc_And_IdOperador(gl.IdTarea, iif(chkTodos.isChecked(), 0, gl.IdOperador))
 
@@ -201,7 +200,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 listItems();
 
-            }
+            }*/
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

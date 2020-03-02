@@ -489,18 +489,21 @@ public class MainActivity extends PBase {
         try {
             users=xobj.getresult(clsBeOperador_bodegaList.class,"Get_Operadores_By_IdBodega_For_HH");
 
-            if (users.items!=null){
+            if (users!=null){
+                if (users.items!=null){
 
-                for (int i = users.items.size()-1; i>=0; i--) {
-                    if (users.items.get(i).Operador.Activo) {
-                        users.items.get(i).Fec_agr=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
-                    } else {
-                        users.items.remove(i);
+                    for (int i = users.items.size()-1; i>=0; i--) {
+                        if (users.items.get(i).Operador.Activo) {
+                            users.items.get(i).Fec_agr=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
+                        } else {
+                            users.items.remove(i);
+                        }
                     }
+
+                    if (users.items.size()>0) Collections.sort(users.items, new UserSort());
+                    fillSpinUser();
                 }
 
-                if (users.items.size()>0) Collections.sort(users.items, new UserSort());
-                fillSpinUser();
             }
 
         } catch (Exception e) {

@@ -28,20 +28,40 @@ public class XMLObject  {
     private Cursor data;
     private int adimx,adimy;
 
+    public String debg="";
+
     public XMLObject(WebService webservice) {
         ws=webservice;
     }
 
     public <T> T get(Class<? extends T> type, String source) throws Exception {
-        String xnode=getXMLRegion(source);
-        Serializer serializer = new Persister();
-        return serializer.read( type, xnode);
+
+        try {
+
+            String xnode=getXMLRegion(source);
+            Serializer serializer = new Persister();
+            return serializer.read( type, xnode);
+
+        }catch (Exception e){
+            throw new Exception(" XMLObject get : "+e.getMessage());
+        }
+
     }
 
     public <T> T getresult(Class<? extends T> type, String source) throws Exception {
-        String xnode=getXMLRegion(source+"Result");
-        Serializer serializer = new Persister();
-        return serializer.read( type, xnode);
+
+        try{
+
+            String xnode=getXMLRegion(source+"Result");
+            Serializer serializer = new Persister();
+            if (!xnode.isEmpty()){
+                return serializer.read( type, xnode);
+            }
+
+        }catch (Exception e){
+            throw new Exception(" XMLObject getresult : "+ws.xmlresult);
+        }
+        return null;
     }
 
     public Cursor filldt() throws Exception {
@@ -84,6 +104,7 @@ public class XMLObject  {
     public String getXMLRegion(String nodename) throws Exception {
         String st,ss,sv,en,sxml;
         Node xmlnode;
+        int cVals=0;
 
         try {
 
@@ -101,17 +122,26 @@ public class XMLObject  {
             NodeList response=responseroot.getChildNodes();
 
             ss="";
-            for(int i =0;i<response.getLength();i++) {
+
+            for(int i =0;i<response.getLength();i++)
+            {
+
                 ss+=response.item(i).getNodeName()+",\n";
 
-                if (response.item(i).getNodeName().equalsIgnoreCase(nodename)) {
-                    xmlnode=response.item(i);
-                    sxml=nodeToString(xmlnode);
-                    return sxml;
+                if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
+                {
+                    cVals=response.item(i).getChildNodes().getLength();
+
+                    if (cVals>0){
+                        xmlnode=response.item(i);
+                        sxml=nodeToString(xmlnode);
+                        return sxml;
+                    }
                 }
            }
         } catch (Exception e) {
-            throw new Exception(" XMLObject getXMLRegion : "+ e.getMessage());
+            debg = e.getMessage() + "\n "+ ws.xmlresult;
+            throw new Exception(" XMLObject getXMLRegion : "+ debg);
         }
         return "";
     }

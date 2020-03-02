@@ -1,5 +1,6 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class frm_list_rec_prod extends PBase {
     private Button btnRegs,btnCompletaRec;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
+    private ProgressDialog progress;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet;
@@ -72,13 +74,25 @@ public class frm_list_rec_prod extends PBase {
 
         setHandlers();
 
+        ProgressDialog();
+
         Load();
 
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void Load(){
 
         try{
+
+            progress.setMessage("Inicializando valores");
 
             lblNoDocumento.setText("");
 
@@ -118,8 +132,11 @@ public class frm_list_rec_prod extends PBase {
 
                     }
 
+                    progress.setMessage("Inicializando Oc");
                     execws(1);
+                    progress.setMessage("Actualizando estado de oc");
                     execws(2);
+                    progress.setMessage("Obteniendo valores de OC");
                     execws(3);
 
                     Lista_Detalle_OC();
@@ -133,6 +150,7 @@ public class frm_list_rec_prod extends PBase {
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox(e.getClass()+e.getMessage());
         }
 
@@ -215,6 +233,8 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+            progress.setMessage("Validando estado de recepción");
+
             if (gBeOrdenCompra.DetalleOC.items!=null){
 
                 for (int i = gBeOrdenCompra.DetalleOC.items.size()-1; i>=0; i--) {
@@ -259,7 +279,10 @@ public class frm_list_rec_prod extends PBase {
 
             }
 
+            progress.cancel();
+
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox(e.getClass()+" "+ e.getMessage());
         }
 
@@ -273,6 +296,8 @@ public class frm_list_rec_prod extends PBase {
         BeListDetalleOC.clear();
 
         try{
+
+            progress.setMessage("Cargando detalle de OC");
 
             if(pListDetalleOC.items!=null){
 

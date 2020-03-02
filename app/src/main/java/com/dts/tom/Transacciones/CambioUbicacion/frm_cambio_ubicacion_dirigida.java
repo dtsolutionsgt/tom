@@ -9,8 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
-import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
-import com.dts.classes.clsBetrans_movimientos;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -22,7 +20,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private TextView lblTituloForma,lbCant,lblCambioEstado;
     private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
     private double vCantidadAUbicar;
-    private clsBetrans_movimientos gMovimientoDet;
+    //private clsBetrans_movimientos gMovimientoDet;
     private boolean compl;
 
     @Override
@@ -119,7 +117,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         try{
 
 
-            gl.IdOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
+            /*gl.IdOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
             gl.IdDestino = gl.tareadet.UbicacionDestino.IdUbicacion;
 
             txtCodigoPrd.setText(gl.tareadet.Producto.Nombre);
@@ -153,7 +151,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
 
             }
-
+*/
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
@@ -286,25 +284,25 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             Date currentTime = Calendar.getInstance().getTime();
 
             if (vCantidadAUbicar>0){
-                gl.tareadet.recibido = gl.tareadet.recibido + vCantidadAUbicar;
+                //gl.tareadet.recibido = gl.tareadet.recibido + vCantidadAUbicar;
             }else {
-                gl.tareadet.recibido = 0;
+                //gl.tareadet.recibido = 0;
             }
 
-            if (gl.tareadet.recibido ==0){
+            /*if (gl.tareadet.recibido ==0){
                 gl.tareadet.HoraInicio =currentTime;
                 gl.tareadet.HoraFin = currentTime;
                 gl.tareadet.estado = "Pendiente";
                 gl.tareadet.recibido = gl.tareadet.cantidad;
                 gl.tareadet.Realizado = true;
-            }
+            }*/
 
             Crear_movimiento();
 
             //Llama al WS para realizar la actualización de los registros.
             //if Actualizar_Trans_Ubic_HH_Det(gl.tareadet, gMovimientoDet){
 
-            gl.tareaenc.estado = "Pendiente";
+           /* gl.tareaenc.estado = "Pendiente";
 
             if (gl.tareaenc.estado.equals("NUEVO")) {
                 gl.tareaenc.HoraInicio =  currentTime;
@@ -328,7 +326,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 mu.msgbox("Cambio de estado aplicado");
             }else{
                 mu.msgbox("Cambio de ubicación aplicado");
-            }
+            }*/
 
             //Actualiza_Tarea_Lista();
 
@@ -346,7 +344,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try{
 
-            gMovimientoDet = new clsBetrans_movimientos();
+           /* gMovimientoDet = new clsBetrans_movimientos();
 
             gMovimientoDet.IdMovimiento = 0;
             gMovimientoDet.IdEmpresa = gl.IdEmpresa;
@@ -394,7 +392,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.cantidad_hist = gMovimientoDet.cantidad;
             gMovimientoDet.peso_hist = gMovimientoDet.peso;
             gMovimientoDet.IsNew = true;
-
+*/
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

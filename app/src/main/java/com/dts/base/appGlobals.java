@@ -9,8 +9,6 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detL
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
-import com.dts.classes.clsBetrans_ubic_hh_det;
-import com.dts.classes.clsBetrans_ubic_hh_enc;
 
 import java.util.List;
 
@@ -39,8 +37,8 @@ public class appGlobals extends Application {
 
 
     //Clases para cambio de ubicación y estado.
-    public clsBetrans_ubic_hh_det tareadet;
-    public clsBetrans_ubic_hh_enc tareaenc;
+   // public clsBetrans_ubic_hh_det tareadet;
+   // public clsBetrans_ubic_hh_enc tareaenc;
     public clsBeVW_stock_res BeStockPallet;
     public int gIdProductoBuenEstadoPorDefecto;
 

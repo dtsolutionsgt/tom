@@ -11,7 +11,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dts.classes.clsBeCambioUbicacion;
-import com.dts.classes.clsBetrans_ubic_hh_enc;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
@@ -34,7 +33,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private ArrayList<clsBeCambioUbicacion> items= new ArrayList<clsBeCambioUbicacion>();
     private list_view_tareas_cambio_ubic adapter;
     private clsBeCambioUbicacion selitem;
-    private ArrayList<clsBetrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBetrans_ubic_hh_enc>();
+    //private ArrayList<clsBetrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBetrans_ubic_hh_enc>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +155,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             gl.IdTareaUbicEnc =0;
             gl.IdTareaUbicEnc =IdTarea;
-            gl.tareaenc = pListBeTareasCambioHH.get(IdTarea);
+           //gl.tareaenc = pListBeTareasCambioHH.get(IdTarea);
 
             Intent intent = new Intent(this, frm_detalle_cambio_ubicacion.class);
             startActivity(intent);

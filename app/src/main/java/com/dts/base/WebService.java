@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import com.dts.tom.PBase;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -55,44 +54,50 @@ public class WebService {
         }
     }
 
-    public void callMethod(String methodName, Object... args) throws IOException, IllegalArgumentException, IllegalAccessException {
-        String ss = "",line="";
+    public void callMethod(String methodName, Object... args) throws Exception {
 
-        mMethodName = methodName;mResult = "";xmlresult="";
+       try{
 
-        URLConnection conn = mUrl.openConnection();
-        conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
-        conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
-        conn.setDoOutput(true);
+           String ss = "",line="";
 
-        OutputStream ostream = conn.getOutputStream();
+           mMethodName = methodName;mResult = "";xmlresult="";
 
-        OutputStreamWriter wr = new OutputStreamWriter(ostream);
+           URLConnection conn = mUrl.openConnection();
+           conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
+           conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
+           conn.setDoOutput(true);
 
-        String body = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
-                "xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:" +
-                "soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-                "<soap:Body>" +
-                "<" + methodName + " xmlns=\"http://tempuri.org/\">";
+           OutputStream ostream = conn.getOutputStream();
 
-        body += buildArgs(args);
-        body += "</" + methodName + ">" +
-                "</soap:Body>" +
-                "</soap:Envelope>";
-        wr.write(body);
-        wr.flush();
+           OutputStreamWriter wr = new OutputStreamWriter(ostream);
 
-        // Get the response
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+           String body = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                   "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
+                   "xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:" +
+                   "soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+                   "<soap:Body>" +
+                   "<" + methodName + " xmlns=\"http://tempuri.org/\">";
 
-        while ((line = rd.readLine()) != null) mResult += line;
+           body += buildArgs(args);
+           body += "</" + methodName + ">" +
+                   "</soap:Body>" +
+                   "</soap:Envelope>";
+           wr.write(body);
+           wr.flush();
 
-        wr.close();rd.close();
+           // Get the response
+           BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-        mResult=mResult.replace("ñ","n");
-        xmlresult=mResult;
+           while ((line = rd.readLine()) != null) mResult += line;
 
+           wr.close();rd.close();
+
+           mResult=mResult.replace("ñ","n");
+           xmlresult=mResult;
+
+       }catch (Exception e){
+           throw new Exception(" WebService callMethod : "+ e.getMessage());
+       }
     }
 
     //endregion
