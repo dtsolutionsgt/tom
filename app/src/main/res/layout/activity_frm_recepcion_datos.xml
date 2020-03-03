@@ -357,8 +357,9 @@
 
     <DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="match_parent"
-        android:layout_height="82dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:headerBackground="@drawable/color_medium"
         android:visibility="invisible" />
 
     <ImageView
@@ -368,6 +369,7 @@
         android:layout_alignTop="@+id/cmbVenceRec"
         android:layout_alignEnd="@+id/txtBarra"
         android:layout_alignBottom="@+id/cmbVenceRec"
-        android:src="@drawable/printicon" />
+        android:onClick="ChangeDate"
+        android:src="@drawable/calendar" />
 
 </RelativeLayout>

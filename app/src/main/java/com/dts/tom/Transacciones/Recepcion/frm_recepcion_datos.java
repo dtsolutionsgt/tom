@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,6 +48,7 @@ public class frm_recepcion_datos extends PBase {
     private Button btnCantPendiente,btnCantRecibida;
     private ProgressDialog progress;
     private DatePicker dpResult;
+    private ImageView imgDate;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -116,10 +120,9 @@ public class frm_recepcion_datos extends PBase {
 
         dpResult = (DatePicker) findViewById(R.id.datePicker);
 
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
+        imgDate = (ImageView)findViewById(R.id.imgDate);
+
+        setCurrentDateOnView();
 
         setHandlers();
 
@@ -142,6 +145,63 @@ public class frm_recepcion_datos extends PBase {
         progress.setProgress(0);
         progress.show();
     }
+
+    public void ChangeDate(View view){
+        showDialog(DATE_DIALOG_ID);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                return new DatePickerDialog(this,R.style.DialogTheme, datePickerListener,
+                        year, month,day);
+
+
+
+        }
+        return null;
+    }
+
+    public void setCurrentDateOnView() {
+
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+        // set current date into textview
+        cmbVenceRec.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+                .append(month + 1).append("-").append(day).append("-")
+                .append(year).append(" "));
+
+        // set current date into datepicker
+        dpResult.init(year, month, day, null);
+
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+            // set selected date into textview
+            cmbVenceRec.setText(new StringBuilder().append(month + 1)
+                    .append("-").append(day).append("-").append(year)
+                    .append(" "));
+
+            // set selected date into datepicker also
+            dpResult.init(year, month, day, null);
+
+        }
+    };
+
 
     private void setHandlers() {
 
@@ -295,10 +355,13 @@ public class frm_recepcion_datos extends PBase {
             lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
+                lblVence.setVisibility(View.VISIBLE);
                 cmbVenceRec.setVisibility(View.VISIBLE);
+                imgDate.setVisibility(View.VISIBLE);
             }else{
                 cmbVenceRec.setVisibility(View.INVISIBLE);
                 lblVence.setVisibility(View.INVISIBLE);
+                imgDate.setVisibility(View.INVISIBLE);
             }
 
             Valida_Lote();
@@ -398,6 +461,7 @@ public class frm_recepcion_datos extends PBase {
             if(!BeProducto.Control_vencimiento){
                 cmbVenceRec.setVisibility(View.INVISIBLE);
                 lblVence.setVisibility(View.INVISIBLE);
+                imgDate.setVisibility(View.INVISIBLE);
             }
 
             if (!gl.gBeRecepcion.Muestra_precio){

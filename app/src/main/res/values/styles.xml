@@ -25,4 +25,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">#BA5536</item>
+    </style>
+
 </resources>
