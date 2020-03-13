@@ -18,6 +18,8 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class frm_lista_tareas_principal extends PBase {
 
@@ -232,6 +234,8 @@ public class frm_lista_tareas_principal extends PBase {
 
             }
 
+            Collections.sort(BeListTareas,new OrdenarItems());
+
             adapter=new list_adapter_tareashh(this,BeListTareas);
             listView.setAdapter(adapter);
 
@@ -242,6 +246,15 @@ public class frm_lista_tareas_principal extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox(e.getMessage());
         }
+    }
+
+    public class OrdenarItems implements Comparator<clsBeTareasIngresoHH> {
+
+        public int compare(clsBeTareasIngresoHH left,clsBeTareasIngresoHH rigth){
+            return left.IdOrderCompraEnc-rigth.IdOrderCompraEnc;
+            //return left.Nombre.compareTo(rigth.Nombre);
+        }
+
     }
 
     private void procesar_registro(){
@@ -285,15 +298,19 @@ public class frm_lista_tareas_principal extends PBase {
 
                     selid = 0;
 
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                    selitem = sitem;
+                    if (position>0){
 
-                    selid = sitem.IdRecepcionEnc;
-                    selidx = position;
-                    adapter.setSelectedIndex(position);
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                        selitem = sitem;
 
-                    procesar_registro();
+                        selid = sitem.IdRecepcionEnc;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
+
+                        procesar_registro();
+
+                    }
 
                 }
 

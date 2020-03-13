@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_adapt_detalle_recepcion"></activity>
+        <activity android:name=".list_adapt_detalle_recepcion" />
         <activity android:name=".list_adapter_tareashh" />
         <activity android:name=".list_view_menu" />
         <activity android:name=".Transacciones.Recepcion.frm_recepcion_datos" />
