@@ -506,8 +506,6 @@ public class frm_detalle_ingresos extends PBase {
         progress.show();
     }
 
-
-
     public void Atender_rece(View view){
         startActivity(new Intent(this, frm_list_rec_prod.class));
     }
