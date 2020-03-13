@@ -106,7 +106,6 @@ public class frm_list_rec_prod extends PBase {
                     gBeReOC = new clsBeTrans_re_oc();
                     pListDetalleOC =new clsBeTrans_oc_detList();
 
-
                     gBeOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.OC;
                     gl.gBeOrdenCompra = gBeOrdenCompra;
 
@@ -156,11 +155,9 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-
     private void setHandlers() {
 
         try{
-
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

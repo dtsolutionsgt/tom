@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion">
 
-    <RelativeLayout
-        android:id="@+id/relList"
+    <HorizontalScrollView
+        android:id="@+id/HScrollV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/relInfo"
+        android:layout_height="507dp"
         android:layout_below="@id/relHead"
-        android:orientation="vertical">
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp">
 
         <ListView
             android:id="@+id/listTareas"
@@ -22,8 +22,7 @@
             android:scrollbars="vertical">
 
         </ListView>
-
-    </RelativeLayout>
+    </HorizontalScrollView>
 
     <RelativeLayout
         android:id="@+id/relInfo"
@@ -64,7 +63,7 @@
             android:background="@drawable/back" />
 
         <Button
-            android:id="@+id/btnNuevo"
+            android:id="@+id/btnNueva"
             android:layout_width="224dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"

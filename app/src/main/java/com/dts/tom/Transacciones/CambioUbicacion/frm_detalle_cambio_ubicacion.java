@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.clsBeDetalleCambioUbicacion;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -29,7 +30,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private ArrayList<clsBeDetalleCambioUbicacion> items= new ArrayList<clsBeDetalleCambioUbicacion>();
     private list_adapter_detalle_cambio_ubic adapter;
     private clsBeDetalleCambioUbicacion selitem;
-    //private ArrayList<clsBetrans_ubic_hh_det> pListBeTareasCambioDet= new ArrayList<clsBetrans_ubic_hh_det>();
+    private ArrayList<clsBeTrans_ubic_hh_det> pListBeTareasCambioDet= new ArrayList<clsBeTrans_ubic_hh_det>();
 
 
     @Override
@@ -40,7 +41,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         super.InitBase();
 
         txtCodigo = (EditText) findViewById(R.id.txtCodigo);
-        listView = (ListView) findViewById(R.id.listDetalle);
+        listView = (ListView) findViewById(R.id.listTareas);
         chkUbicados = (CheckBox) findViewById(R.id.chkUbicados);
         chkTodos = (CheckBox) findViewById(R.id.chkTodos);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
@@ -51,7 +52,6 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         clearAll();
         Inicia_Tarea_Lista();
-
 
     }
 

@@ -1,5 +1,6 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,13 +11,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dts.classes.clsBeCambioUbicacion;
+import com.dts.base.WebService;
+import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_encList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
-
+import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class frm_tareas_cambio_ubicacion extends PBase {
 
@@ -28,12 +34,20 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private int pIdTarea=0;
     boolean Modo=false;
 
-    clsBeCambioUbicacion[] BeListCambioUbicacion=new clsBeCambioUbicacion[5];
+    private WebServiceHandler ws;
+    private XMLObject xobj;
+    private ProgressDialog progress;
+    private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
+    private clsBeTrans_ubic_hh_encList pListBeTransUbicHhEnc = new clsBeTrans_ubic_hh_encList();
+    private clsBeTrans_ubic_hh_enc pBeTareasCambioHH = new clsBeTrans_ubic_hh_enc();
 
-    private ArrayList<clsBeCambioUbicacion> items= new ArrayList<clsBeCambioUbicacion>();
+    clsBeTrans_ubic_hh_enc[] BeTransUbicHhEnc=new clsBeTrans_ubic_hh_enc[5];
+
+    //private ArrayList<clsBeCambioUbicacion> items= new ArrayList<clsBeCambioUbicacion>();
     private list_view_tareas_cambio_ubic adapter;
-    private clsBeCambioUbicacion selitem;
-    //private ArrayList<clsBetrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBetrans_ubic_hh_enc>();
+    //private clsBeCambioUbicacion selitem;
+
+    private ArrayList<clsBeTrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBeTrans_ubic_hh_enc>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +56,45 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         super.InitBase();
 
+        ws = new WebServiceHandler(frm_tareas_cambio_ubicacion.this, gl.wsurl);
+        xobj = new XMLObject(ws);
+
         txtTarea = (EditText) findViewById(R.id.txtTarea);
         listView = (ListView) findViewById(R.id.listTareas);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblRegs = (TextView) findViewById(R.id.lblRegs);
 
+        Modo = (gl.modo_cambio==2?true:false);
+
         if (gl.modo_cambio==2){
             lblTituloForma.setText("Listado de tareas de cambios de estado");
-        }
-
-        if(gl.modo_cambio==2){
-            Modo=true;
         }
 
         setHandlers();
 
         clearAll();
-        Load_Cambio();
 
+        ProgressDialog("Cargando forma");
+
+        Load();
+    }
+
+    public void ProgressDialog(String mensaje){
+        progress=new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
+    }
+
+    private void Load(){
+
+        try{
+            execws(2);
+        }catch (Exception e){
+            mu.msgbox(e.getClass()+e.getMessage());
+        }
     }
 
     private void setHandlers(){
@@ -87,7 +122,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Object lvObj = listView.getItemAtPosition(position);
-                    clsBeCambioUbicacion vItem = (clsBeCambioUbicacion) lvObj;
+                    clsBeTrans_ubic_hh_enc vItem = (clsBeTrans_ubic_hh_enc) lvObj;
 
                     adapter.setSelectedIndex(position);
 
@@ -105,44 +140,11 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     }
 
-    private void listItems(){
-        clsBeCambioUbicacion vItem;
-
-        items.clear();
-
-        try {
-
-            for (int i = 0; i < BeListCambioUbicacion.length; i++ ) {
-
-                vItem = new clsBeCambioUbicacion();
-
-                vItem.IdTareaUbicacionEnc=BeListCambioUbicacion[i].IdTareaUbicacionEnc;
-                vItem.DescripcionMotivo=BeListCambioUbicacion[i].DescripcionMotivo;
-                vItem.IdMotivoUbicacion=BeListCambioUbicacion[i].IdMotivoUbicacion;
-                vItem.Observacion=BeListCambioUbicacion[i].Observacion;
-                vItem.Estado = BeListCambioUbicacion[i].Estado;
-
-                items.add(vItem);
-                //Load_Cambio();
-            }
-
-            lblRegs.setText("Regs: "+ items.size());
-
-            adapter=new list_view_tareas_cambio_ubic(this,items);
-            listView.setAdapter(adapter);
-
-        } catch (Exception e) {
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),sql);
-            mu.msgbox("listItems: "+ e.getMessage());
-        }
-
-    }
-
     private void clearAll() {
         try{
-            for (int i = 0; i < items.size(); i++ ) {
+          /*  for (int i = 0; i < items.size(); i++ ) {
                 items.get(i);
-            }
+            }*/
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -155,7 +157,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             gl.IdTareaUbicEnc =0;
             gl.IdTareaUbicEnc =IdTarea;
-           //gl.tareaenc = pListBeTareasCambioHH.get(IdTarea);
+            gl.tareaenc = pBeTareasCambioHH;
 
             Intent intent = new Intent(this, frm_detalle_cambio_ubicacion.class);
             startActivity(intent);
@@ -170,27 +172,33 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private void Llena_Tareas_Ubicacion(int pIdTarea){
 
-        //BeListCambioUbicacion = new clsBeCambioUbicacion[1];
+        clsBeTrans_ubic_hh_enc vItem;
+        pListBeTareasCambioHH.clear();
 
         try{
 
-            //pListBeTareasCambioHH = null;//Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador(gl.IdBodega,gl.IdBodega,pIdTarea,Modo);
+            progress.setMessage("Cargando tareas de cambio de ubicación");
 
-            if (BeListCambioUbicacion.length > 0){
+           if(!pListBeTransUbicHhEnc.items.isEmpty() && pListBeTransUbicHhEnc.items!=null ){
 
-                listItems();
+               for (int i = pListBeTransUbicHhEnc.items.size()-1; i>=0; i--) {
 
-                /*if ((pIdTarea>0) & (BeListCambioUbicacion.length==1)){
+                   vItem = new clsBeTrans_ubic_hh_enc();
 
-                    Procesa_Registro(pIdTarea);
+                   vItem.IdTareaUbicacionEnc = pListBeTransUbicHhEnc.items.get(i).getIdTareaUbicacionEnc();
+                   vItem.DescripcionMotivo = pListBeTransUbicHhEnc.items.get(i).getDescripcionMotivo();
+                   vItem.Observacion = pListBeTransUbicHhEnc.items.get(i).getObservacion();
+                   vItem.Estado = pListBeTransUbicHhEnc.items.get(i).getEstado();
 
-                }*/
+                   pListBeTareasCambioHH.add(vItem);
 
-            }else{
-                if (pIdTarea != 0) {
-                    mu.msgbox("La tarea #" + pIdTarea + " no existe");
-                }
-            }
+               }
+
+               lblRegs.setText("Regs: "+pListBeTransUbicHhEnc.items.size());
+           }
+
+            adapter=new list_view_tareas_cambio_ubic(this,pListBeTareasCambioHH);
+            listView.setAdapter(adapter);
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -217,99 +225,90 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     }
 
-    private  void Load_Cambio(){
-        int idUbicRecep;
-
-        try{
-
-            wsexecute();
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-            mu.msgbox( e.getMessage());
-        }
-    }
-
-    //region WebService Thread Core
-
-    private void wsexecute() {
-        wserror="";
-        frm_tareas_cambio_ubicacion.AsyncCallWS wstask = new frm_tareas_cambio_ubicacion.AsyncCallWS();
-        wstask.execute();
-    }
-
-    private void wsExecute() {
-
-        //IvanWebService iws;
-        String mResult;
-
-        errflag=false;wserror="";
-        //iws = new IvanWebService("http://192.168.1.6/WSTOMHH_QA/TOMHHWS.asmx");
-
-        /*
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
+            if (throwing) throw new Exception(errmsg);
 
-            BeListCambioUbicacion = new clsBeCambioUbicacion[5];
-
-            iws.call("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,"pIdOperador",1,"pIdTarea",pIdTarea,"cambio_estado",Modo);
-
-            BeListCambioUbicacion=(clsBeCambioUbicacion[]) iws.getReturnValue(BeListCambioUbicacion.getClass());
-
-
-            if (BeListCambioUbicacion.length > 0){
-                //Llena_Tareas_Ubicacion(pIdTarea);
-
+            switch (ws.callback) {
+                case 1:
+                    processMotivosUbiHH();break;
+                case 2:
+                    processTareasCambioUbicacion();break;
             }
 
-
-        }catch (Exception e)   {
-            errflag=true;
-            wserror=e.getMessage();
-        }
-
-        String ss=iws.mResult;
-        String ast=iws.argstr;
-
-         */
-
-    }
-
-    private void wsFinished()  {
-        try {
-            if (errflag) msgbox(wserror);else toast("OK");
         } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private void processMotivosUbiHH(){
 
-        @Override
-        protected Void doInBackground(String... params) {
-            try {
-                wsExecute();
-            } catch (Exception e) {}
-            return null;
+        try {
+
+            progress.setMessage("Obteniendo Motivos de ubicación en HH");
+
+            pListBeMotivoUbicacion = xobj.getresult(clsBeMotivo_ubicacionList.class,"Get_Motivos_Ubicacion_For_HH");
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processTareasCambioUbicacion(){
+
+        try {
+
+            progress.setMessage("Obteniendo Tareas de cambio de ubicación en HH");
+
+            pListBeTransUbicHhEnc = xobj.getresult(clsBeTrans_ubic_hh_encList.class,"Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador");
+
+            if(pListBeTransUbicHhEnc!=null){
+                if(pListBeTransUbicHhEnc.items!=null){
+                    Llena_Tareas_Ubicacion(0);
+                }
+            }
+
+            progress.cancel();
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        public void wsExecute(){
             try {
-                wsFinished();
-                Llena_Tareas_Ubicacion(0);
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Get_Motivos_Ubicacion_For_HH");
+                        break;
+                    case 2:
+                        callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
+                                                                                    "pIdOperador",gl.IdOperador,
+                                                                                    "pIdTarea",0,
+                                                                                    "cambio_estado",Modo);
+                        break;
+                }
+
             } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
             }
         }
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
-
-
     }
 
-    //endregion
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
 
     protected void onResume() {
         try{

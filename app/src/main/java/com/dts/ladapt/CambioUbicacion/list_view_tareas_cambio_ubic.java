@@ -6,22 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dts.classes.clsBeCambioUbicacion;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
 
 public class list_view_tareas_cambio_ubic extends BaseAdapter {
 
-    private static ArrayList<clsBeCambioUbicacion> items;
+    private static ArrayList<clsBeTrans_ubic_hh_enc> items;
 
     private int selectedIndex;
 
     private LayoutInflater l_Inflater;
 
-    public list_view_tareas_cambio_ubic(Context context, ArrayList<clsBeCambioUbicacion> results) {
+    public list_view_tareas_cambio_ubic(Context context, ArrayList<clsBeTrans_ubic_hh_enc> results) {
         items = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
@@ -76,11 +77,14 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
         holder.lblObserva.setText(items.get(position).Observacion);
         holder.lblEstado.setText(items.get(position).Estado);
 
-        if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(26,138,198));
-        } else {
-            convertView.setBackgroundColor(Color.TRANSPARENT);
+        LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.encabezado);
+
+        if (position>0){
+            encabezado.setVisibility(View.GONE);
+        }else{
+            encabezado.setVisibility(View.VISIBLE);
         }
+
 
         return convertView;
     }

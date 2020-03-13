@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 
 import java.util.ArrayList;
 
@@ -178,9 +179,19 @@ public class Mainmenu extends PBase {
 
                     break;
 
-                case 2:
+                case 2://Cambio de Ubicación
 
-                case 3:
+                    gl.modo_cambio = 1;
+                    startActivity(new Intent(this, frm_tareas_cambio_ubicacion.class));
+
+                    break;
+
+                case 3://Cambio de Estado
+
+                    gl.modo_cambio = 2;
+                    startActivity(new Intent(this, frm_tareas_cambio_ubicacion.class));
+
+                    break;
 
                 case 4:
 
