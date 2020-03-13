@@ -31,7 +31,7 @@ public class clsBeStock_rec {
     @Element(required=false) public double Uds_lic_plate;
     @Element(required=false) public int No_bulto;
     @Element(required=false) public String Fecha_Manufactura;
-    @Element(required=false) public int Añada;
+    @Element(required=false) public int Anada;
     @Element(required=false) public String User_agr;
     @Element(required=false) public String Fec_agr;
     @Element(required=false) public String User_mod;
@@ -60,7 +60,7 @@ public class clsBeStock_rec {
                           int IdUbicacion_anterior,int IdRecepcionEnc,int IdRecepcionDet,int IdPedidoEnc,
                           int IdPickingEnc,int IdDespachoEnc,String Lote,String Lic_plate,
                           String Serial,double Cantidad,String Fecha_Ingreso,String Fecha_vence,
-                          double Uds_lic_plate,int No_bulto,String Fecha_Manufactura,int Añada,
+                          double Uds_lic_plate,int No_bulto,String Fecha_Manufactura,int Anada,
                           String User_agr,String Fec_agr,String User_mod,String Fec_mod,
                           boolean Activo,double Peso,double Temperatura,boolean Regularizado,
                           String Fecha_regularizacion,int No_linea,String Atributo_Variante_1,boolean IsNew,
@@ -90,7 +90,7 @@ public class clsBeStock_rec {
         this.Uds_lic_plate=Uds_lic_plate;
         this.No_bulto=No_bulto;
         this.Fecha_Manufactura=Fecha_Manufactura;
-        this.Añada=Añada;
+        this.Anada = Anada;
         this.User_agr=User_agr;
         this.Fec_agr=Fec_agr;
         this.User_mod=User_mod;
@@ -251,11 +251,11 @@ public class clsBeStock_rec {
     public void setFecha_Manufactura(String value) {
         Fecha_Manufactura=value;
     }
-    public int getAñada() {
-        return Añada;
+    public int getAnada() {
+        return Anada;
     }
-    public void setAñada(int value) {
-        Añada=value;
+    public void setAnada(int value) {
+        Anada =value;
     }
     public String getUser_agr() {
         return User_agr;

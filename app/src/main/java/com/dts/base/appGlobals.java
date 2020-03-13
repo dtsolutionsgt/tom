@@ -49,6 +49,7 @@ public class appGlobals extends Application {
     public String tipoIngreso;
     public int IdPropietario;
     public int gIdRecepcionEnc;
+    public int TipoOpcion;
     public clsBeTrans_oc_detList gListDetalleOC = new clsBeTrans_oc_detList();
     public clsBeTrans_re_enc gBeRecepcion = new clsBeTrans_re_enc();
     public boolean gEscaneo_Pallet;
@@ -60,6 +61,7 @@ public class appGlobals extends Application {
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
     public int tipoTarea;
+    public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
 
 
 }

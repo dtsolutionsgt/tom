@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class MainActivity extends PBase {
     private EditText txtpass;
     private TextView lblver,lbldate,lblurl;
     private ProgressDialog progress;
+    private ImageView imgIngresar;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -90,6 +92,7 @@ public class MainActivity extends PBase {
             lblver=(TextView)  findViewById(R.id.textView4);
             lbldate=(TextView)  findViewById(R.id.textView3);
             lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
+            imgIngresar = (ImageView) findViewById(R.id.imageView11);
 
             getURL();
 
@@ -143,8 +146,12 @@ public class MainActivity extends PBase {
 
         try{
 
+            imgIngresar.setVisibility(View.INVISIBLE);
+
             Valida_Ingreso();
             //startActivity(new Intent(this,Mainmenu.class));
+
+            imgIngresar.setVisibility(View.VISIBLE);
 
         }catch (Exception e){
 

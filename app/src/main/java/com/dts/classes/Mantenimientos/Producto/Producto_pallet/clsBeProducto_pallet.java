@@ -26,7 +26,7 @@ public class clsBeProducto_pallet {
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod;
     @Element(required=false) public boolean Activo;
-
+    @Element(required=false) public boolean IsNew;
 
     public clsBeProducto_pallet() {
     }
@@ -36,7 +36,7 @@ public class clsBeProducto_pallet {
                                 String Codigo_Barra,String Codigo_Producto,double Cantidad,String Lote,
                                 boolean Impreso,int Reimpresiones,String Fecha_vence,String Fecha_ingreso,
                                 String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                                boolean Activo) {
+                                boolean Activo,boolean IsNew) {
 
         this.IdPallet=IdPallet;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -59,6 +59,7 @@ public class clsBeProducto_pallet {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
+        this.IsNew = IsNew;
 
     }
 
@@ -188,6 +189,12 @@ public class clsBeProducto_pallet {
     }
     public void setActivo(boolean value) {
         Activo=value;
+    }
+    public boolean getIsNew() {
+        return IsNew;
+    }
+    public void setIsNew(boolean value) {
+        IsNew=value;
     }
 
 }

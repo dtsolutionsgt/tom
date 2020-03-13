@@ -68,15 +68,49 @@ public class frm_list_rec_prod extends PBase {
         xobj = new XMLObject(ws);
 
         lblNoDocumento = (TextView) findViewById(R.id.lblNoDocumento);
+
         btnRegs = (Button) findViewById(R.id.btnRegs);
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
         listView = (ListView)findViewById(R.id.listRec);
+
+        txtCodigoProductoRecepcion = (EditText)findViewById(R.id.txtCodigoProductoRecepcion);
 
         setHandlers();
 
         ProgressDialog();
 
         Load();
+
+    }
+
+    private void Procesa_Barra_Producto(){
+
+         int FilaActual= 0;
+        boolean LongitudValida = true;
+        String vCodigoBodegaBarraPallet = "";
+        String vCodigoProductoBarraPallet= "";
+        String vLP = "";
+        boolean vPalletOk = false;
+        boolean TxtCantidadHasFocus = false;
+
+        try{
+
+            if (!txtCodigoProductoRecepcion.getText().toString().isEmpty()){
+
+                String vStarWithParameter = "$";
+
+                if (gBeConfiguracionBarraPallet!=null){
+                    vStarWithParameter = gBeConfiguracionBarraPallet.IdentificadorInicio;
+                }
+
+
+
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("Procesa_Barra_Producto: "+e.getMessage());
+        }
 
     }
 
@@ -133,14 +167,6 @@ public class frm_list_rec_prod extends PBase {
 
                     progress.setMessage("Inicializando Oc");
                     execws(1);
-                    progress.setMessage("Actualizando estado de oc");
-                    execws(2);
-                    progress.setMessage("Obteniendo valores de OC");
-                    execws(3);
-
-                    Lista_Detalle_OC();
-
-                    Recepcion_Completa();
 
                 }
 
@@ -165,15 +191,19 @@ public class frm_list_rec_prod extends PBase {
 
                     selid = 0;
 
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    selitem = pListDetalleOC.items.get(position-1);
+                    if (position>0){
 
-                    selid = sitem.No_Linea;
-                    selidx = position;
-                    adapter.setSelectedIndex(position);
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                        selitem = pListDetalleOC.items.get(position-1);
 
-                    procesar_registro();
+                        selid = sitem.No_Linea;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
+
+                        procesar_registro();
+
+                    }
 
                 }
 
@@ -388,6 +418,19 @@ public class frm_list_rec_prod extends PBase {
                 if (throwing) throw new Exception(errmsg);
 
                 switch (ws.callback) {
+                    case 1:
+                        progress.setMessage("Actualizando estado de oc");
+                        execws(2);
+                        break;
+                    case 2:
+                        progress.setMessage("Obteniendo valores de OC");
+                        execws(3);
+                        break;
+                    case 3:
+                        Lista_Detalle_OC();
+                        Recepcion_Completa();
+                        execws(4);
+                        break;
                     case 4:
                         processBanderasRecep();
                         break;
