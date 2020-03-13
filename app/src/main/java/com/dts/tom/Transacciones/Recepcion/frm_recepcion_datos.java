@@ -1833,7 +1833,7 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
-//llenaStocks
+//llenaStock
     private void Llena_Stock(){
 
         try{
