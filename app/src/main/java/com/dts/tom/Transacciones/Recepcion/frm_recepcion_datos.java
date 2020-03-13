@@ -72,11 +72,12 @@ public class frm_recepcion_datos extends PBase {
     private Spinner cmbEstadoProductoRec,cmbPresRec;
     private EditText txtBarra,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence;
-    private Button btnCantPendiente,btnCantRecibida;
+    private Button btnCantPendiente,btnCantRecibida,btnBack,btnIr;
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate;
     private CheckBox chkPaletizar;
+    private Dialog dialog;
 
     //Objeto para dialogo de parametros
     private TextView lblSerieTit,lblPesoTit,lblTempTit,lblPrducto,lblLicPlate,lblFManufact,lblAnada,lblTempEsta,lblTempReal,lblPresParam,lblPesoEsta,lblPesoReal,lblSerialIni,lblSerialFin;
@@ -182,6 +183,9 @@ public class frm_recepcion_datos extends PBase {
         imgDate = (ImageView)findViewById(R.id.imgDate);
 
         chkPaletizar = (CheckBox)findViewById(R.id.chkPaletizar);
+
+        btnBack = (Button)findViewById(R.id.btnBack);
+        btnIr = (Button)findViewById(R.id.btnIr);
 
         setCurrentDateOnView();
 
@@ -441,7 +445,7 @@ public class frm_recepcion_datos extends PBase {
                 Cant_Recibida_Actual = Double.parseDouble(txtCantidadRec.getText().toString());
             }
 
-            Dialog dialog = new Dialog(activity);
+            dialog = new Dialog(activity);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_parametros1);
 
@@ -494,9 +498,6 @@ public class frm_recepcion_datos extends PBase {
 
 
             });
-
-            Button btnBack = (Button)findViewById(R.id.btnBack);
-            Button btnIr = (Button)findViewById(R.id.btnIr);
 
             lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
 
@@ -634,10 +635,6 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            if (GuardarParametros()){
-                dialog.cancel();
-            }
-
             dialog.show();
 
             mu.msgbox(MensajeParam);
@@ -645,6 +642,16 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
         mu.msgbox("MuestraParametros1: "+ e.getMessage());
         }
+    }
+
+    public void BotonIrGuardarParametros(View view){
+        if (GuardarParametros()){
+            dialog.cancel();
+        }
+    }
+
+    public void SalirPantallaParametros(View view){
+        dialog.cancel();
     }
 
     private void Valida_Temperatura(){
@@ -1163,14 +1170,17 @@ public class frm_recepcion_datos extends PBase {
 
             if (pIndexParam==-1){
 
-               if (pListBEProductoParametro.items!=null){
-                   Carga_Param = true;
-               }else{
-                   execws(10);
+                if (pListBEProductoParametro!=null){
 
-                   if (plistBeReDetParametros.items!=null){
-                       Carga_Param = true;
-                   }
+                    if (pListBEProductoParametro.items!=null){
+                        Carga_Param = true;
+                    }else{
+                        execws(10);
+
+                        if (plistBeReDetParametros.items!=null){
+                            Carga_Param = true;
+                        }
+                }
 
                }
 
@@ -2833,6 +2843,8 @@ public class frm_recepcion_datos extends PBase {
                 if (pListBEProductoParametro.items!=null){
                     Muestra_Propiedades_Producto();
                 }
+            }else{
+                Muestra_Propiedades_Producto();
             }
 
         }catch (Exception e){
