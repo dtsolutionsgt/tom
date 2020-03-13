@@ -1819,7 +1819,7 @@ public class frm_recepcion_datos extends PBase {
                 Muestra_Propiedades_Producto();
                 return;
             }
-//guardar
+
             if (gl.TipoOpcion==1 && gl.gBeRecepcion.IsNew){
 
                execws(12);
