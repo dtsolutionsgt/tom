@@ -48,6 +48,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detLis
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametros;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametrosList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
+import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
@@ -123,6 +124,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_palletList listaProdPallets = new clsBeProducto_palletList();
     private clsBeStock_rec vBeStockRec = new clsBeStock_rec();
     private clsBeProducto_pallet BeProdPallet  = new clsBeProducto_pallet();
+    private clsBeStock gBeStockAnt;
 
     double vFactorNuevaRec=0;
     double vCantNuevaRec=0;
@@ -364,7 +366,7 @@ public class frm_recepcion_datos extends PBase {
                 }else if(Mostrar_Propiedades_Parametros()){
                     Muestra_Propiedades_Producto();
             }
-
+                Guardar_Recepcion();
             }
 
         }catch (Exception e){
@@ -1834,16 +1836,37 @@ public class frm_recepcion_datos extends PBase {
 
                execws(12);
 
+            }else{
+                ContinuaGuardandoRecepcion();
             }
-
-            ContinuaGuardandoRecepcion();
 
         }catch (Exception e){
             mu.msgbox("Guardar_Recepcion: "+ e.getMessage());
         }
 
     }
-//llenaStock
+
+    public void BotonGuardarRecepcion(View view){
+
+        try{
+
+            if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
+
+                if (Escaneo_Pallet){
+                    //Guardar_Recepcion_Pallet
+                }else{
+                    Guardar_Recepcion();
+                }
+
+            }else{
+                Guardar_Recepcion();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("BotonGuardarRecepcion:"+e.getMessage());
+        }
+    }
+
     private void Llena_Stock(){
 
         try{
@@ -1915,6 +1938,14 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void ContinuaGuardandoRecepcion(){
+        int vIndice=-1;
+        String Resultado = "";
+        int CantRegSeries  = pListBeStockSeRec.items.size() - 1;
+        int CantRegStock=0;
+        int CantRegPP=0;
+        int vCont = 0;
+        String msj  = "";
+        clsBeTrans_re_detList auxListTransRecDet = new clsBeTrans_re_detList();
 
         try{
 
@@ -1926,8 +1957,60 @@ public class frm_recepcion_datos extends PBase {
 
                         if (mode==1){
                             Llena_Detalle_Recepcion_Nueva();
+                        }else{
+                            List auxList =  stream(pListTransRecDet.items).select(c->c.IdRecepcionDet).toList();
+                            vIndice = auxList.indexOf(pIdRecepcionDet);
+
+                            Llena_Detalle_Recepcion_Existente(vIndice);
+
                         }
                         break;
+
+                    case 2:
+                        //Aquí código de recepción ciega.
+                        break;
+                }
+
+                int I=0;
+
+                auxListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == pIdRecepcionDet).toList();
+
+                //Esto es el equivalente a ReDim en .net
+                if (gl.gBeRecepcion.Detalle.items!=null){
+                    System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
+                    gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
+                }
+
+                for  (clsBeTrans_re_det RD: auxListTransRecDet.items){
+                    gl.gBeRecepcion.Detalle.items.set(I,RD);
+                    I += 1;
+                }
+
+                if (gl.gBeRecepcion.DetalleParametros.items!=null){
+                    System.arraycopy(gl.gBeRecepcion.DetalleParametros.items,0,plistBeReDetParametros.items,0,Math.min(gl.gBeRecepcion.DetalleParametros.items.size(), plistBeReDetParametros.items.size()));
+                    gl.gBeRecepcion.DetalleParametros.items = plistBeReDetParametros.items;
+                }
+
+                I = 0;
+
+                for  (clsBeTrans_re_det_parametros RD: plistBeReDetParametros.items){
+                    gl.gBeRecepcion.DetalleParametros.items.set(I,RD);
+                    I += 1;
+                }
+
+                if (pListBeStockRec.items.size()==0){
+                    mu.msgbox("No se guardó el stock, no se puede continuar");
+                    return;
+                }
+
+                CantRegStock = pListBeStockRec.items.size() - 1;
+
+                //Productos_Pallet
+                CantRegPP = pListBeProductoPallet.items.size() - 1;
+
+                if (mode==1){
+
+                }else{
 
                 }
 
@@ -1935,6 +2018,32 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("ContinuaGuardandoRecepcion: "+e.getMessage());
+        }
+
+    }
+
+    private void Imprime_Barra_Despues_Guardar(){
+
+        try{
+
+            if (gl.IdImpresora>0){
+
+                if (BeTransReDet.Presentacion.EsPallet){
+
+                    //ImprimirBarra
+
+                }else{
+                    if (BeTransReDet.Presentacion.Imprime_barra){
+
+                        //ImprimirBarra
+
+                    }
+                }
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
         }
 
     }
@@ -2201,6 +2310,261 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("Llena_Detalle_Recepcion_Nueva:"+e.getMessage());
+        }
+    }
+
+    private void Llena_Detalle_Recepcion_Existente(int vIndice){
+
+        double Factor= 1;
+        double TotalLinea;
+        double vCant=0;
+
+        try{
+
+            if (BeProducto!=null){
+                BeTransReDet = new clsBeTrans_re_det();
+                BeTransReDet = pListTransRecDet.items.get(vIndice);
+
+                BeTransReDet.Producto.IdProducto = BeProducto.IdProducto;
+                BeTransReDet.Producto.Codigo = BeProducto.Codigo;
+                BeTransReDet.IdProductoBodega = BeProducto.IdProductoBodega;
+                BeTransReDet.Nombre_producto = BeProducto.Nombre;
+
+                BeTransReDet.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
+                BeTransReDet.IdRecepcionDet = pIdRecepcionDet;
+
+                BeTransReDet.Presentacion = new clsBeProducto_Presentacion();
+
+                if (IdPreseSelect>0){
+
+                    BeTransReDet.Presentacion.IdPresentacion = IdPreseSelect;
+                    BeTransReDet.IdPresentacion = IdPreseSelect;
+
+                    clsBeProducto_Presentacion bePresentacion = new clsBeProducto_Presentacion();
+
+                    bePresentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion == IdPreseSelect).first();
+
+                    if (bePresentacion.EsPallet){
+                        Factor = bePresentacion.Factor * bePresentacion.CamasPorTarima * bePresentacion.CajasPorCama;
+                    }else{
+                        Factor = bePresentacion.Factor;
+                    }
+
+
+                }else{
+                    Factor = 0;
+                }
+
+                BeTransReDet.No_Linea = pLineaOC;
+
+                if (txtUmbasRec.getText().toString().isEmpty()){
+                    mu.msgbox("No existe Unidad de Medida en Producto "+BeProducto.Codigo);
+                    return;
+                }else{
+                    BeTransReDet.UnidadMedida = new  clsBeUnidad_medida();
+                    BeTransReDet.UnidadMedida.IdUnidadMedida = BeProducto.UnidadMedida.IdUnidadMedida;
+                    BeTransReDet.IdUnidadMedida = BeProducto.UnidadMedida.IdUnidadMedida;
+                }
+
+                BeTransReDet.ProductoEstado = new clsBeProducto_estado();
+                BeTransReDet.ProductoEstado.IdEstado = IdEstadoSelect;
+
+                BeTransReDet.IdProductoEstado = IdEstadoSelect;
+
+                BeTransReDet.IsNew = true;
+
+                BeTransReDet.User_agr = gl.IdOperador+"";
+                BeTransReDet.Fec_agr = String.valueOf(du.getFechaActual());
+
+                BeTransReDet.MotivoDevolucion = new clsBeMotivo_devolucion();
+
+                if (txtCantidadRec.getText().toString().isEmpty()){
+                    mu.msgbox("Ingrese la cantidad a Recibir");
+                    return;
+                }else if (Double.parseDouble(txtCantidadRec.getText().toString())==0){
+                    mu.msgbox("La cantidad a Recibir debe ser mayor a 0");
+                    return;
+                }else{
+                    BeTransReDet.cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
+                }
+
+                BeTransReDet.peso_unitario = Double.parseDouble(txtPesoUnitario.getText().toString());
+
+                BeTransReDet.Nombre_producto = BeProducto.Nombre;
+                BeTransReDet.Nombre_presentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion == IdPreseSelect).select(c->c.Nombre).first();
+                BeTransReDet.Nombre_unidad_medida = BeProducto.UnidadMedida.Nombre;
+                BeTransReDet.Codigo_Producto = BeProducto.Codigo;
+                BeTransReDet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                BeTransReDet.IdUbicacionAnterior = gl.gBeRecepcion.IdUbicacionRecepcion;
+
+                BeTransReDet.ProductoEstado = new  clsBeProducto_estado();
+                if (IdEstadoSelect>0){
+                    BeTransReDet.ProductoEstado.IdEstado = IdEstadoSelect;
+                }else{
+                    mu.msgbox("No existe Estado en Producto "+BeProducto.Codigo);
+                    return;
+                }
+
+                if (BeProducto.Control_lote){
+                    if (txtLoteRec.getText().toString().isEmpty()){
+                        mu.msgbox("Debe ingresar el lote del producto "+BeProducto.Codigo);
+                    }else{
+                        BeTransReDet.Lote = txtLoteRec.getText().toString();
+                    }
+                }else{
+                    if (!txtLoteRec.getText().toString().isEmpty()){
+                        BeTransReDet.Lote = txtLoteRec.getText().toString();
+                    }
+                }
+
+                if (BeProducto.Control_vencimiento){
+
+                    if (cmbVenceRec.getText().toString().isEmpty()){
+                        mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
+                        return;
+                    }else{
+                        BeTransReDet.Fecha_vence = cmbVenceRec.getText().toString();
+                        if (!Valida_Fecha_Vencimiento()){
+                            mu.msgbox("Se debe corregir la fecha de vencimiento del producto: "+BeProducto.Codigo);
+                            return;
+                        }
+
+                    }
+
+                }else{
+                    BeTransReDet.Fecha_vence="";
+                }
+
+                BeTransReDet.Fecha_ingreso = String.valueOf(du.getFechaActual());
+
+                if (!txtPeso.getText().toString().isEmpty()){
+                    BeTransReDet.Peso = Double.parseDouble(txtPeso.getText().toString());
+                }else{
+                    BeTransReDet.Peso= 0;
+                }
+                BeTransReDet.Peso_Estadistico = 0;
+                BeTransReDet.Peso_Minimo = 0;
+                BeTransReDet.Peso_Maximo = 0;
+
+                BeTransReDet.Observacion = "";
+                BeTransReDet.Aniada = 0;
+
+                Valida_Costo();
+
+                BeTransReDet.Costo = Double.parseDouble(txtCostoReal.getText().toString());
+                BeTransReDet.Costo_Oc = Double.parseDouble(txtCostoOC.getText().toString());
+                BeTransReDet.Costo_Estadistico = 0;
+
+                BeTransReDet.IdOperadorBodega = gl.IdOperador;
+                BeTransReDet.Nombre_producto_estado = stream(LProductoEstado.items).where(c->c.IdEstado==IdEstadoSelect).select(c->c.Nombre).first();
+
+                if (txtCantidadRec.getText().toString().isEmpty()){
+                    vCant =Double.parseDouble(txtCantidadRec.getText().toString());
+                }
+
+                TotalLinea = Double.parseDouble(txtCostoReal.getText().toString()) * vCant;
+
+                listaStockPalletsNuevos = new clsBeStock_recList();
+                listaProdPalletsNuevos = new clsBeProducto_palletList();
+
+                if (pListBeStockRec.items!=null){
+
+                    listaStock = new clsBeStock_recList();
+                    listaProdPallets = new clsBeProducto_palletList();
+
+                    if (BeTransReDet.Presentacion.IdPresentacion > 0){
+
+                        listaStock.items = stream(pListBeStockRec.items).where(c->c.IdProductoBodega == BeTransReDet.IdProductoBodega
+                                && c.IdRecepcionDet == BeTransReDet.IdRecepcionDet
+                                && c.Presentacion.IdPresentacion == BeTransReDet.Presentacion.IdPresentacion).toList();
+
+                        if (pListBeProductoPallet.items!=null){
+
+                            listaProdPallets.items = stream(pListBeProductoPallet.items).where(p->p.IdRecepcionDet == BeTransReDet.IdRecepcionDet &&
+                                    p.IdProductoBodega == BeTransReDet.IdProductoBodega &&
+                                    p.IdPresentacion == BeTransReDet.Presentacion.IdPresentacion).toList();
+
+                            for (clsBeProducto_pallet BePP : listaProdPallets.items){
+
+                                BePP.Lote = txtLoteRec.getText().toString();
+                                BePP.User_agr = gl.OperadorBodega.IdOperadorBodega+"";
+                                BePP.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
+                                BePP.Cantidad = (1 * Factor);
+
+                                if (BeProducto.Control_vencimiento){
+                                    BePP.Fecha_vence = cmbVenceRec.getText().toString();
+                                }else {
+                                    BePP.Fecha_vence = "";
+                                }
+
+                            }
+
+                        }
+
+                    }else{
+
+                        listaStock.items =stream(pListBeStockRec.items).where(c->c.IdProductoBodega == BeTransReDet.IdProductoBodega  &&
+                                c.IdRecepcionDet == pIdRecepcionDet
+                                && c.IdUnidadMedida == BeTransReDet.IdUnidadMedida).toList();
+
+                    }
+
+                    if (stream(listaStock.items).count()==0){
+                        mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                    }
+
+                    for( clsBeStock_rec BeStockRec : listaStock.items){
+
+                        BeStockRec.IsNew = true;
+
+                        BeStockRec.ProductoEstado = new  clsBeProducto_estado();
+
+                        if (IdEstadoSelect>0){
+
+                            BeStockRec.ProductoEstado.IdEstado = IdEstadoSelect;
+                            BeStockRec.IdProductoEstado = IdEstadoSelect;
+
+                            if (LProductoEstado.items.size()> 0){
+
+                                clsBeProducto_estado BeEstado = new clsBeProducto_estado();
+
+                                BeEstado = stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).first();
+
+                                if (BeEstado.Danado){
+                                    BeStockRecNuevaRec = BeStockRec;
+                                    vCantNuevaRec = vCant;
+                                    vFactorNuevaRec = Factor;
+                                    execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                }else{
+                                    BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;//CInt(txtIdUbicacion.Text.Trim)
+                                }
+
+                            }
+
+                        }
+
+                        Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
+                    }
+
+                    for (clsBeStock_rec PN :listaStockPalletsNuevos.items){
+                        pListBeStockRec.items.add(PN);
+                    }
+
+                    for  (clsBeProducto_pallet PP :listaProdPalletsNuevos.items){
+                        pListBeProductoPallet.items.add(PP);
+                    }
+
+                }
+
+                BeTransReDet.MotivoDevolucion = new  clsBeMotivo_devolucion();
+
+                BeTransReDet.Atributo_Variante_1 = "";
+
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("Llena_Detalle_Recepcion_Existente:"+e.getMessage());
         }
     }
 
@@ -2693,6 +3057,14 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Nuevo_Correlativo_LicensePlate_S","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,"pIdProducto",BeProducto.IdProducto,"UltimoPalletGenerado",vBeStockRec.Lic_plate);
                         break;
+                    case 16:
+                        //Guardar_Recepcion_Nueva
+                        callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,"pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,"pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,"pListProductoPallet",lBeProdPallet.items,"pIdEmpresa",gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
+                        break;
+                    case 17 :
+                        //Guardar_Recepcion_Edita
+                        callMethod("GuardarRecepcionModif","pRecEnc",gl.gBeRecepcion,"pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,"pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,"pListProductoPallet",lBeProdPallet.items,"pbeStockAnt",gBeStockAnt,"pIdEmpresa",gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
+                        break;
                 }
 
             }catch (Exception e){
@@ -2755,7 +3127,12 @@ public class frm_recepcion_datos extends PBase {
                 case 15:
                     processNuevoLPS();
                     break;
-
+                case 16:
+                    processGuardarRecNueva();
+                    break;
+                case 17:
+                    processGuardarRecModif();
+                    break;
 
             }
 
@@ -2996,6 +3373,47 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processNuevoLPS: "+e.getMessage());
+        }
+
+    }
+
+    private void processGuardarRecNueva(){
+
+        try{
+
+            String Resultado="";
+
+            Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+
+            if (!Resultado.isEmpty()){
+                Imprime_Barra_Despues_Guardar();
+            }else{
+                mu.msgbox("No se pudo guardar la recepción");
+                return;
+            }
+
+        }catch (Exception e){
+        mu.msgbox("processGuardarRecNueva:"+e.getMessage());
+        }
+    }
+
+    private void processGuardarRecModif(){
+
+        try{
+
+            String Resultado="";
+
+            Resultado = xobj.getresult(String.class,"GuardarRecepcionModif");
+
+            if (!Resultado.isEmpty()){
+                Imprime_Barra_Despues_Guardar();
+            }else{
+                mu.msgbox("No se pudo guardar la recepción");
+                return;
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processGuardarRecModif:"+e.getMessage());
         }
 
     }
