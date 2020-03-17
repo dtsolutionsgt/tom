@@ -350,7 +350,6 @@ public class frm_detalle_ingresos extends PBase {
                     execws(5);
                 }else{
 
-
                     if (pListBeStockRecPI.items!= null){
 
                         List<clsBeStock_rec> BeStockRec =
@@ -362,7 +361,6 @@ public class frm_detalle_ingresos extends PBase {
                             gBeStockRec = BeStockRec.get(0);
                         }
                     }
-
                 }
 
                 BloquearControles();
@@ -518,9 +516,9 @@ public class frm_detalle_ingresos extends PBase {
 
         gBeRecepcion = new clsBeTrans_re_enc();
         gl.gBeRecepcion = new clsBeTrans_re_enc();
-       pListTransRecDet = new clsBeTrans_re_detList();
-       gBeReOC = new clsBeTrans_re_oc();
-       pListDetalleOC = new clsBeTrans_oc_detList();
+        pListTransRecDet = new clsBeTrans_re_detList();
+        gBeReOC = new clsBeTrans_re_oc();
+        pListDetalleOC = new clsBeTrans_oc_detList();
         gBeOrdenCompra = new clsBeTrans_oc_enc();
         gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
         pListBeStockRecPI = new clsBeStock_recList();

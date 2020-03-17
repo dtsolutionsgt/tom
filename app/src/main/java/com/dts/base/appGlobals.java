@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
@@ -39,7 +40,7 @@ public class appGlobals extends Application {
 
 
     //Clases para cambio de ubicación y estado.
-    //public clsBetrans_ubic_hh_det tareadet;
+    public clsBeTrans_ubic_hh_det tareadet;
     public clsBeTrans_ubic_hh_enc tareaenc;
 
     public clsBeVW_stock_res BeStockPallet;

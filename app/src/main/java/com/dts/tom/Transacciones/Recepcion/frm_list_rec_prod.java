@@ -209,7 +209,6 @@ public class frm_list_rec_prod extends PBase {
 
             });
 
-
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+ e.getMessage());
         }
