@@ -1,7 +1,9 @@
 package com.dts.tom;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import com.dts.base.MiscUtils;
 import com.dts.base.appGlobals;
 import com.dts.base.DateUtils;
 import com.dts.base.clsClasses;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_detalle_cambio_ubicacion;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -140,7 +143,6 @@ public class PBase extends Activity {
     protected double iif(boolean condition,int valtrue,int valfalse) {
         if (condition) return valtrue;else return valfalse;
     }
-
 
     // Activity Events
 

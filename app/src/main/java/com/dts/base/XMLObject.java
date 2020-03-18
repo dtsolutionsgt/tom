@@ -59,7 +59,7 @@ public class XMLObject  {
             }
 
         }catch (Exception e){
-            throw new Exception(" XMLObject getresult : "+ws.xmlresult);
+            throw new Exception(" XMLObject Error: "+ e.getMessage()+ " GetResult:" +ws.xmlresult);
         }
         return null;
     }

@@ -24,7 +24,7 @@ public class clsBeDetalleCambioUbicacion {
     public boolean serealizado;
     public int IdEstado;
     public String NombreEstado;
-    public boolean añada;
+    public boolean anada;
     public String lote;
     public Date fecha_ingreso;
     public String NombrePresentacion;

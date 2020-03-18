@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.dts.tom.R;
 import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
 import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -37,15 +40,13 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
+
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
+
     private clsBeTrans_ubic_hh_encList pListBeTransUbicHhEnc = new clsBeTrans_ubic_hh_encList();
     private clsBeTrans_ubic_hh_enc pBeTareasCambioHH = new clsBeTrans_ubic_hh_enc();
 
-    clsBeTrans_ubic_hh_enc[] BeTransUbicHhEnc=new clsBeTrans_ubic_hh_enc[5];
-
-    //private ArrayList<clsBeCambioUbicacion> items= new ArrayList<clsBeCambioUbicacion>();
     private list_view_tareas_cambio_ubic adapter;
-    //private clsBeCambioUbicacion selitem;
 
     private ArrayList<clsBeTrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBeTrans_ubic_hh_enc>();
 
@@ -64,11 +65,9 @@ public class frm_tareas_cambio_ubicacion extends PBase {
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblRegs = (TextView) findViewById(R.id.lblRegs);
 
-        Modo = (gl.modo_cambio==2?true:false);
+        Modo = (gl.modo_cambio==1?true:false);
 
-        if (gl.modo_cambio==2){
-            lblTituloForma.setText("Listado de tareas de cambios de estado");
-        }
+        lblTituloForma.setText(String.format("Listado de tareas de cambios de %s",(Modo==true?"ubicación":"estado")));
 
         setHandlers();
 
@@ -108,7 +107,8 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-                                Llena_Tareas_Ubicacion(Integer.getInteger(txtTarea.getText().toString()));
+                                pIdTarea=Integer.parseInt(txtTarea.getText().toString());
+                                execws(2);
                                 return true;
                         }
                     }
@@ -155,7 +155,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         try{
 
-            gl.IdTareaUbicEnc =0;
             gl.IdTareaUbicEnc =IdTarea;
             gl.tareaenc = pBeTareasCambioHH;
 
@@ -211,12 +210,10 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         try{
 
-
             gl.IdTareaUbicEnc =0;
 
             Intent intent = new Intent(this, frm_cambio_ubicacion_ciega.class);
             startActivity(intent);
-
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -266,7 +263,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             if(pListBeTransUbicHhEnc!=null){
                 if(pListBeTransUbicHhEnc.items!=null){
-                    Llena_Tareas_Ubicacion(0);
+                    Llena_Tareas_Ubicacion(pIdTarea);
                 }
             }
 
@@ -308,6 +305,52 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void msgAskExit(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    frm_tareas_cambio_ubicacion.super.finish();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void Regresar(View view){
+        msgAskExit(String.format("Está seguro de salir de las tareas de cambios de %s",(Modo==true?"ubicación":"estado")));
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        try{
+
+            msgAskExit(String.format("Está seguro de salir de las tareas de cambios de %s",(Modo==true?"ubicación":"estado")));
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     protected void onResume() {

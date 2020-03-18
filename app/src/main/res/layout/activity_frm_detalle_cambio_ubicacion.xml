@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relPrincipalList"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".Transacciones.CambioUbicacion.frm_detalle_cambio_ubicacion">
 
     <RelativeLayout
@@ -46,6 +46,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="18dp"
             android:layout_toEndOf="@id/lblCodigo"
+            android:singleLine="true"
             android:ems="10" />
 
         <TextView
@@ -65,61 +66,29 @@
     <HorizontalScrollView
         android:id="@+id/Listado"
         android:layout_width="match_parent"
-        android:layout_height="440dp"
-        android:layout_below="@id/relHead"
-        android:visibility="visible">
+        android:layout_height="457dp"
+        android:layout_above="@id/relInfo2"
+        android:layout_below="@id/relHead">
 
         <ListView
             android:id="@+id/listDetalle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:scrollbars="horizontal|vertical" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
     </HorizontalScrollView>
 
     <RelativeLayout
-        android:id="@+id/relInfo"
-        android:layout_width="match_parent"
-        android:layout_height="109dp"
-        android:layout_above="@id/relbot"
-        android:layout_below="@id/Listado"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="0dp">
-
-        <TextView
-            android:id="@+id/lblTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/chkTodos"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="79dp"
-            android:text="Regs: 0"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/lblRegs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/chkUbicados"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="73dp"
-            android:layout_marginTop="15dp"
-            android:text="Regs: 0"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp" />
+        android:id="@+id/relInfo2"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_above="@id/relInfo1">
 
         <CheckBox
             android:id="@+id/chkUbicados"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="5dp"
             android:text="Ubicados"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
@@ -128,12 +97,38 @@
             android:id="@+id/chkTodos"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="50dp"
             android:text="Todos"
             android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relInfo1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/relbot">
+
+        <TextView
+            android:id="@+id/lblTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="95dp"
+            android:text="Regs: 0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblRegs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="60dp"
+            android:text="Regs: 0"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
     </RelativeLayout>
@@ -155,7 +150,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
 
         <Button
             android:id="@+id/btnFinalizarTarea"
