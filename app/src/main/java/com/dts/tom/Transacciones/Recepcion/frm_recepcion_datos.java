@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.dts.base.WebService;
@@ -60,7 +62,10 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.IntStream;
 
 import br.com.zbra.androidlinq.Linq;
@@ -960,6 +965,7 @@ public class frm_recepcion_datos extends PBase {
         try {
 
             pListBeStockRec = new clsBeStock_recList();
+
             ArrayList<clsBeStock_rec> ArraStock = new ArrayList<clsBeStock_rec>();
 
             if (PallCorrecto){
