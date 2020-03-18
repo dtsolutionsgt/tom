@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dts.base.AppMethods;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
@@ -16,19 +18,20 @@ import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_est
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class frm_cambio_ubicacion_dirigida extends PBase {
 
-    private TextView lblTituloForma,lbCant,lblCambioEstado;
-    private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
+    private TextView lblTituloForma,lbCant,lblCambioEstado,lblUbicDestino;
+    private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
     private double vCantidadAUbicar;
-    //private clsBetrans_movimientos gMovimientoDet;
+   // private clsBeTrans_movimientos gMovimientoDet;
     private boolean compl;
 
     private clsBeBodega_ubicacion bodega_ubicacion;
-    private int ubicacionAValidar;
 
     private frm_cambio_ubicacion_dirigida.WebServiceHandler ws;
     private XMLObject xobj;
@@ -56,14 +59,29 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         txtCantidad = (EditText) findViewById(R.id.txtCantidad);
         txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
         txtEstadoDestino = (EditText) findViewById(R.id.txtEstadoDestino);
+        txtPropietario = (EditText) findViewById(R.id.txtPropietario);
+
+        lblUbicDestino = (TextView)findViewById(R.id.lblDestino);
 
         lblTituloForma.setText( String.format("Cambio de %s dirigido",(gl.modo_cambio==1?"ubicación":"estado")));
+
         lblCambioEstado.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
         txtEstadoDestino.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
 
+        app.readOnly(txtCodigoPrd);
+        app.readOnly(txtPresentacion);
+        app.readOnly(txtPropietario);
+        app.readOnly(txtLote);
+        app.readOnly(txtVence);
+        app.readOnly(txtEstado);
+
         setHandlers();
 
+        ProgressDialog("Cargando forma");
+
         Inicia_Tarea_Detalle();
+
+        progress.cancel();
 
     }
 
@@ -79,7 +97,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
                                  validaOrigen();
-                                 txtUbicDestino.requestFocus();
                         }
                     }
                     return false;
@@ -94,7 +111,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
                                 validaDestino();
-                                txtCantidad.requestFocus();
                         }
                     }
                     return false;
@@ -129,13 +145,19 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gl.IdOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
             gl.IdDestino = gl.tareadet.UbicacionDestino.IdUbicacion;
 
+            lblTituloForma.setText(gl.tareadet.UbicacionOrigen.NombreCompleto);
+
             txtCodigoPrd.setText(gl.tareadet.Producto.Nombre);
             txtPresentacion.setText(gl.tareadet.ProductoPresentacion.Nombre);
-            //txtProp.setText(gl.tareadet.Producto.Propietario.Nombre_comercial);
+            txtPropietario.setText(gl.tareadet.Producto.Propietario.Nombre_comercial);
             txtLote.setText(gl.tareadet.Stock.Lote);
-            txtVence.setText(String.valueOf(gl.tareadet.Stock.Fecha_vence));
+
+            txtVence.setText(app.strFecha(gl.tareadet.Stock.Fecha_vence));
+
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
             txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
+            lblUbicDestino.setText(gl.tareadet.UbicacionDestino.NombreCompleto);
+
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
 
@@ -144,9 +166,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             }
 
             txtUbicDestino.setText("");
-
-            //Llama al WS para actualizar trans_ubic_hh_det
-            //frmInicio.m_proxy.Actualizar_Trans_Ubic_HH_Det(tareadet, Nothing)
 
             if (gl.modo_cambio==2){
 
@@ -168,23 +187,15 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
-    private boolean validaOrigen(){
+    private void validaOrigen(){
 
         try{
 
-            if (txtUbicDestino.getText().toString() !=""){
+            if (txtUbicOrigen.getText().toString() !=""){
 
                 bodega_ubicacion = new clsBeBodega_ubicacion();
 
-                ubicacionAValidar=gl.IdOrigen;
-
                 execws(1);
-
-                if (bodega_ubicacion == null)return false;
-
-                if (bodega_ubicacion.IdUbicacion != gl.IdOrigen){
-                    mu.msgbox("La ubicación destino no coincide");
-                }
 
             }
 
@@ -192,12 +203,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
-
-        return true;
-
     }
 
-    private  boolean validaDestino(){
+    private void validaDestino(){
 
         try{
 
@@ -205,16 +213,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
                 bodega_ubicacion = new clsBeBodega_ubicacion();
 
-                ubicacionAValidar=gl.IdDestino;
-
-                execws(1);
-
-                if (bodega_ubicacion == null)return false;
-
-                if (bodega_ubicacion.IdUbicacion != gl.IdDestino){
-                    mu.msgbox("La ubicación destino no coincide");
-                }
-
+                execws(2);
             }
 
         }catch (Exception e){
@@ -222,7 +221,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             mu.msgbox( e.getMessage());
         }
 
-        return true;
     }
 
     private void Cambio_Ubicacion(){
@@ -232,23 +230,28 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             vCantidadAUbicar=0;
             compl = false;
             double cantStock;
-            String tipoOp="ubicación";
 
             cantStock = gl.gCantDisponible;
 
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString());
 
-            if (vCantidadAUbicar<0) mu.msgbox("La cantidad no puede ser negativa");
+            if (vCantidadAUbicar<0) {
+                mu.msgbox("La cantidad no puede ser negativa");
+                txtCantidad.requestFocus();
+                return;
+            }
 
-            if (vCantidadAUbicar >cantStock)mu.msgbox("Cantidad mayor que stock disponible: "+ cantStock); txtCantidad.requestFocus();
-
-            iif ((gl.modo_cambio==2),tipoOp="estado",tipoOp="ubicación");
+            if (vCantidadAUbicar >cantStock){
+                mu.msgbox("Cantidad mayor que stock disponible: "+ cantStock);
+                txtCantidad.requestFocus();
+                return;
+            }
 
             if ((vCantidadAUbicar-cantStock)==0){
                 compl=true;
             }
 
-            msgAsk("¿Aplicar cambio de "+ tipoOp);
+            msgAsk("¿Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -417,7 +420,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         progress.show();
     }
 
-
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
@@ -425,7 +427,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             switch (ws.callback) {
                 case 1:
-                    processUbicacion();break;
+                    processUbicOrigen();break;
+                case 2:
+                    processUbicDestino();break;
             }
 
         } catch (Exception e) {
@@ -433,13 +437,47 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         }
     }
 
-    private void processUbicacion(){
+    private void processUbicOrigen(){
 
         try {
 
             progress.setMessage("Validando ubicación");
 
             bodega_ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if (bodega_ubicacion == null){
+                throw new Exception("Ubicación origen incorrecta");
+            }
+
+            if (bodega_ubicacion.IdUbicacion != gl.IdOrigen){
+                mu.msgbox("La ubicación origen no coincide");
+            }
+
+            txtUbicDestino.requestFocus();
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processUbicDestino(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+
+            bodega_ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if (bodega_ubicacion == null){
+                throw new Exception("Ubicación destino incorrecta");
+            }
+
+            if (bodega_ubicacion.IdUbicacion != gl.IdDestino){
+                mu.msgbox("La ubicación destino no coincide");
+            }
+
+            txtCantidad.requestFocus();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -458,9 +496,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",ubicacionAValidar,
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",gl.IdOrigen,
                                 "pIdBodega",gl.IdBodega);
                         break;
+                    case 2:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",gl.IdDestino,
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 3:
+                        callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
+                                "pMovimiento");
                 }
 
             } catch (Exception e) {
@@ -476,6 +521,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     public void Regresar(View view){
         msgAskExit(String.format("Está seguro de salir del cambio de %s",(gl.modo_cambio==1?"ubicación":"estado")));
+    }
+
+    public void AplicarCambio(View view){
+        Cambio_Ubicacion();
     }
 
     private void msgAskExit(String msg) {

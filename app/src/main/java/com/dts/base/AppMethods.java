@@ -4,8 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.dts.tom.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AppMethods {
 
@@ -70,6 +74,36 @@ public class AppMethods {
 			{toast(ex.getMessage());}
 	}
 
+	public void readOnly(EditText txt){
+		try{
+
+			txt.setFocusable(false);
+			txt.setFocusableInTouchMode(false);
+			txt.setClickable(false);
+
+		}catch (Exception ex){
+
+		}
+	}
     //endregion
 
+	//region Public
+
+	public String strFecha(String fecha){
+
+		String fechaVence="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			Date date = dateFormat.parse(fecha);
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			fechaVence=dateFormat.format(date);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return fechaVence;
+	}
+	//endregion
 }
