@@ -17,7 +17,7 @@ public class clsBeStock_rec_methods implements List<clsBeStock_rec> {
     @Override
     public boolean isEmpty() {
         return false;
-    }
+    }//cambios
 
     @Override
     public boolean contains(@Nullable Object o) {
