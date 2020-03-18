@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class clsBeStock_recList {
+public class clsBeStock_recList  {
     @ElementList(inline=true,required = false)
     public List<clsBeStock_rec> items ;
 
