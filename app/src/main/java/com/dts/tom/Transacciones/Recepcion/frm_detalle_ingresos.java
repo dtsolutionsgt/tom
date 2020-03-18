@@ -352,14 +352,15 @@ public class frm_detalle_ingresos extends PBase {
 
 
                     if (pListBeStockRecPI.items!= null){
+                        if (pListBeStockRecPI.items.size()>0){
+                            List<clsBeStock_rec> BeStockRec =
+                                    stream(pListBeStockRecPI.items)
+                                            .where(c -> c.Lic_plate.equals(""))
+                                            .toList();
 
-                        List<clsBeStock_rec> BeStockRec =
-                                stream(pListBeStockRecPI.items)
-                                        .where(c -> c.Lic_plate.equals(""))
-                                        .toList();
-
-                        if (BeStockRec!=null){
-                            gBeStockRec = BeStockRec.get(0);
+                            if (BeStockRec!=null){
+                                gBeStockRec = BeStockRec.get(0);
+                            }
                         }
                     }
 

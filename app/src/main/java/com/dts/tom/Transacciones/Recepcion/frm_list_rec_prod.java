@@ -52,6 +52,7 @@ public class frm_list_rec_prod extends PBase {
     private boolean Escaneo_Pallet;
     private boolean Finalizada = false, Anulada = false;
     private double Cant_Recibida_Anterior;
+    private int browse;
 
     private clsBeTrans_oc_det selitem;
 
@@ -74,6 +75,8 @@ public class frm_list_rec_prod extends PBase {
         listView = (ListView)findViewById(R.id.listRec);
 
         txtCodigoProductoRecepcion = (EditText)findViewById(R.id.txtCodigoProductoRecepcion);
+
+        browse = 0;
 
         setHandlers();
 
@@ -240,7 +243,9 @@ public class frm_list_rec_prod extends PBase {
                 gl.gselitem = selitem;
 
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                gl.gpListDetalleOC.items = pListDetalleOC.items;
 
+                browse=1;
                 startActivity(new Intent(this, frm_recepcion_datos.class));
 
             }
@@ -472,6 +477,35 @@ public class frm_list_rec_prod extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                pListDetalleOC.items= gl.gpListDetalleOC.items;
+                Lista_Detalle_OC();
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        try{
+            //msgAskExit("Salir sin guardar datos");
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
 }

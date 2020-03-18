@@ -57,6 +57,8 @@ public class appGlobals extends Application {
     public String CodigoRecepcion;
     public clsBeTrans_oc_detList gpListDetalleOC;
     public clsBeTrans_oc_enc gBeOrdenCompra;
+    public double  CantRec=0;
+    public  double CantOC=0;
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
