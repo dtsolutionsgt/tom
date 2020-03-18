@@ -292,7 +292,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                         callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
                                                                                     "pIdOperador",gl.IdOperador,
                                                                                     "pIdTarea",pIdTarea,
-                                                                                    "cambio_estado",Modo);
+                                                                                    "cambio_estado",!Modo);
                         break;
                 }
 

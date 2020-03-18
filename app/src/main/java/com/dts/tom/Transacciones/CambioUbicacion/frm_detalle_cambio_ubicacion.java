@@ -49,6 +49,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     private ArrayList<clsBeTrans_ubic_hh_det> pBeTransUbicHhDetListArray= new ArrayList<clsBeTrans_ubic_hh_det>();
 
+    private int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,6 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private void setHandlers(){
 
         try{
-
 
             txtCodigo.setOnKeyListener(new View.OnKeyListener(){
 
@@ -191,6 +192,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                     adapter.setSelectedIndex(position);
 
+                    index = position;
+
                     Procesa_Registro(vItem.IdTareaUbicacionDet);
 
                     adapter.refreshItems();
@@ -202,7 +205,6 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
-
 
     }
 
@@ -231,7 +233,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         try{
 
             gl.IdTareaUbicDet = IdTareaDet;
-            gl.tareadet = pBeTransUbicHhDetListArray.get(IdTareaDet);
+            gl.tareadet = pBeTransUbicHhDetList.items.get(index);
 
             Intent intent = new Intent(this,frm_cambio_ubicacion_dirigida.class);
             startActivity(intent);
@@ -258,7 +260,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                     vItem = new clsBeTrans_ubic_hh_det();
 
-                    vItem.IdTareaUbicacionEnc = pBeTransUbicHhDetList.items.get(i).getIdTareaUbicacionEnc();
+                    vItem.IdTareaUbicacionDet = pBeTransUbicHhDetList.items.get(i).getIdTareaUbicacionDet();
                     vItem.IdStock = pBeTransUbicHhDetList.items.get(i).getIdStock();
                     vItem.Producto.Codigo=pBeTransUbicHhDetList.items.get(i).getProducto().getCodigo();
                     vItem.Producto.Nombre = pBeTransUbicHhDetList.items.get(i).getProducto().getNombre();
@@ -268,12 +270,13 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                     vItem.Cantidad = pBeTransUbicHhDetList.items.get(i).getCantidad();
                     vItem.Recibido = pBeTransUbicHhDetList.items.get(i).getRecibido();
                     vItem.Operador.Nombres = pBeTransUbicHhDetList.items.get(i).Operador.getNombres();
+                    vItem.IdTareaUbicacionEnc = pBeTransUbicHhDetList.items.get(i).getIdTareaUbicacionEnc();
 
                     pBeTransUbicHhDetListArray.add(vItem);
 
                 }
 
-                lblRegs.setText("Regs: " + pBeTransUbicHhDetList.items.size());
+                lblTotal.setText("Regs: " + pBeTransUbicHhDetList.items.size());
             }
 
             adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);

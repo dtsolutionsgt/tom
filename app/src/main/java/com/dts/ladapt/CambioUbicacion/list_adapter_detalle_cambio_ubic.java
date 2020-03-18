@@ -79,7 +79,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.lblTareaDet.setText(""+pBeTransUbicHhDetListArray.get(position).IdTareaUbicacionEnc);
+        holder.lblTareaDet.setText(""+pBeTransUbicHhDetListArray.get(position).IdTareaUbicacionDet);
         holder.lblIdStock.setText(""+pBeTransUbicHhDetListArray.get(position).IdStock);
         holder.lblCodigo.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Codigo);
         holder.lblProducto.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Nombre);

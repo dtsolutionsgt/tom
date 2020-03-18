@@ -22,13 +22,13 @@
 
             <RelativeLayout
                 android:id="@+id/rllineas"
-                android:layout_width="match_parent"
-                android:layout_height="1000dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/lblOrigen"
-                    android:layout_width="150dp"
-                    android:layout_height="21dp"
+                    android:layout_width="165dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtUbicOrigen"
                     android:layout_alignBottom="@+id/txtUbicOrigen"
                     android:layout_alignParentTop="true"
@@ -44,28 +44,14 @@
 
                 <EditText
                     android:id="@+id/txtUbicOrigen"
-                    android:layout_width="240dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="226dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="172dp"
+                    android:layout_marginLeft="176dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:inputType="textPersonName"
-                    android:textColor="@android:color/black" />
-
-                <EditText
-                    android:id="@+id/txtCodigoPrd"
-                    android:layout_width="239dp"
-                    android:layout_height="84dp"
-                    android:layout_below="@+id/txtUbicOrigen"
-                    android:layout_alignStart="@+id/txtUbicOrigen"
-                    android:layout_alignEnd="@+id/txtUbicOrigen"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="0dp"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/black" />
 
@@ -77,6 +63,7 @@
                     android:layout_alignTop="@+id/txtCodigoPrd"
                     android:layout_alignEnd="@+id/lblOrigen"
                     android:layout_alignBottom="@+id/txtCodigoPrd"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginBottom="0dp"
@@ -86,6 +73,23 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtCodigoPrd"
+                    android:layout_width="225dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtUbicOrigen"
+                    android:layout_alignStart="@+id/txtUbicOrigen"
+                    android:layout_alignEnd="@+id/txtUbicOrigen"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="#EDEAEA"
+                    android:inputType="textPersonName"
+                    android:maxLines="3"
+                    android:minHeight="48dp"
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/lblPresentacion"
@@ -102,12 +106,53 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <EditText
+                    android:id="@+id/txtPresentacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/txtCodigoPrd"
+                    android:layout_alignStart="@id/txtCodigoPrd"
+                    android:layout_alignEnd="@id/txtCodigoPrd"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="10dp"
+                    android:background="#E3E0E0"
+                    android:inputType="textPersonName" />
+
+                <TextView
+                    android:id="@+id/lblPropietario"
+                    android:layout_width="146dp"
+                    android:layout_height="39dp"
+                    android:layout_alignTop="@id/txtPropietario"
+                    android:layout_alignEnd="@id/lblPresentacion"
+                    android:layout_alignBottom="@id/txtPropietario"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="-4dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="Propietario:"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtPropietario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/txtPresentacion"
+                    android:layout_alignStart="@id/txtPresentacion"
+                    android:layout_alignEnd="@id/txtPresentacion"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="10dp"
+                    android:background="#E3E0E0"
+                    android:inputType="textPersonName" />
+
                 <TextView
                     android:id="@+id/lblLote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtLote"
-                    android:layout_alignEnd="@+id/lblPresentacion"
+                    android:layout_alignEnd="@id/lblPropietario"
                     android:layout_alignBottom="@+id/txtLote"
                     android:layout_alignParentStart="true"
                     android:gravity="center_vertical"
@@ -116,6 +161,18 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtLote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/txtPropietario"
+                    android:layout_alignStart="@id/txtPropietario"
+                    android:layout_alignEnd="@id/txtPropietario"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#E3E0E0"
+                    android:inputType="textPersonName" />
 
                 <TextView
                     android:id="@+id/lblVence"
@@ -133,6 +190,18 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <EditText
+                    android:id="@+id/txtVence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/txtLote"
+                    android:layout_alignStart="@+id/txtLote"
+                    android:layout_alignEnd="@+id/txtLote"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="10dp"
+                    android:background="#E3E0E0"
+                    android:inputType="textPersonName" />
+
                 <TextView
                     android:id="@+id/lblEstado"
                     android:layout_width="wrap_content"
@@ -149,59 +218,14 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/txtCantidad"
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtUbicDestino"
-                    android:layout_alignStart="@id/txtEstado"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
-                    android:inputType="numberDecimal"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/lbCant"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignBottom="@+id/txtCantidad"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toEndOf="@+id/txtCantidad"
-                    android:gravity="right|center_vertical"
-                    android:numeric="decimal"
-                    android:paddingLeft="3dp"
-                    android:text="00.00"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/lblCantidad"
+                    android:id="@+id/txtEstado"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lblEstado"
-                    android:layout_alignBottom="@+id/txtCantidad"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Cantidad:"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtUbicDestino"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtEstado"
-                    android:layout_alignEnd="@+id/txtEstado"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/txtVence"
+                    android:layout_alignStart="@+id/txtVence"
+                    android:layout_alignEnd="@+id/txtVence"
                     android:layout_marginTop="10dp"
+                    android:background="#E3E0E0"
                     android:inputType="textPersonName" />
 
                 <TextView
@@ -223,15 +247,61 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/txtEstadoDestino"
+                    android:id="@+id/txtUbicDestino"
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/txtEstado"
+                    android:layout_alignEnd="@+id/txtEstado"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textPersonName" />
+
+                <TextView
+                    android:id="@+id/lblCantidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtCantidad"
-                    android:layout_alignStart="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lbCant"
-                    android:layout_marginTop="10dp"
+                    android:layout_alignTop="@+id/txtCantidad"
+                    android:layout_alignEnd="@+id/lblEstado"
+                    android:layout_alignBottom="@+id/txtCantidad"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
-                    android:inputType="textPersonName" />
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="Cantidad:"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtCantidad"
+                    android:layout_width="125dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/txtUbicDestino"
+                    android:layout_alignStart="@id/txtEstado"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="10dp"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/lbCant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/txtCantidad"
+                    android:layout_alignBottom="@+id/txtCantidad"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toEndOf="@+id/txtCantidad"
+                    android:gravity="bottom|right"
+                    android:numeric="decimal"
+                    android:paddingLeft="3dp"
+                    android:paddingBottom="5dp"
+                    android:text="00.00"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/lblCambioEstado"
@@ -253,46 +323,14 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/txtPresentacion"
+                    android:id="@+id/txtEstadoDestino"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtCodigoPrd"
-                    android:layout_alignStart="@+id/txtCodigoPrd"
-                    android:layout_alignEnd="@+id/txtCodigoPrd"
-                    android:layout_alignParentBottom="false"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/txtCantidad"
+                    android:layout_alignStart="@+id/txtCantidad"
+                    android:layout_alignEnd="@+id/lbCant"
                     android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/txtLote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtPresentacion"
-                    android:layout_alignStart="@+id/txtPresentacion"
-                    android:layout_alignEnd="@+id/txtPresentacion"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/txtVence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtLote"
-                    android:layout_alignStart="@+id/txtLote"
-                    android:layout_alignEnd="@+id/txtLote"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/txtEstado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtVence"
-                    android:layout_alignStart="@+id/txtVence"
-                    android:layout_alignEnd="@+id/txtVence"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="0dp"
                     android:inputType="textPersonName" />
 
             </RelativeLayout>
@@ -339,7 +377,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
 
         <Button
             android:id="@+id/btnGuardarDirigida"
@@ -349,6 +388,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="AplicarCambio"
             android:text="Ubicar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
