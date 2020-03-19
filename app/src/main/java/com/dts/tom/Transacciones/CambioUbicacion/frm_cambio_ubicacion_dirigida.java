@@ -15,6 +15,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -28,7 +29,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private TextView lblTituloForma,lbCant,lblCambioEstado,lblUbicDestino;
     private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
     private double vCantidadAUbicar;
-   // private clsBeTrans_movimientos gMovimientoDet;
+    private clsBeTrans_movimientos gMovimientoDet;
     private boolean compl;
 
     private clsBeBodega_ubicacion bodega_ubicacion;
@@ -124,7 +125,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-                                Cambio_Ubicacion();
+                                cambioUbicEst();
                         }
                     }
                     return false;
@@ -223,7 +224,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
-    private void Cambio_Ubicacion(){
+    private void cambioUbicEst(){
 
         try{
 
@@ -296,55 +297,23 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             Date currentTime = Calendar.getInstance().getTime();
 
             if (vCantidadAUbicar>0){
-                //gl.tareadet.recibido = gl.tareadet.recibido + vCantidadAUbicar;
+                gl.tareadet.Recibido = gl.tareadet.Recibido + vCantidadAUbicar;
             }else {
-                //gl.tareadet.recibido = 0;
+                gl.tareadet.Recibido = 0;
             }
 
-            /*if (gl.tareadet.recibido ==0){
-                gl.tareadet.HoraInicio =currentTime;
-                gl.tareadet.HoraFin = currentTime;
-                gl.tareadet.estado = "Pendiente";
-                gl.tareadet.recibido = gl.tareadet.cantidad;
+            if (gl.tareadet.Recibido ==0){
+                gl.tareadet.HoraInicio =app.strFecha(currentTime);
+                gl.tareadet.HoraFin = app.strFecha(currentTime);
+                gl.tareadet.Estado = "Pendiente";
+                gl.tareadet.Recibido = gl.tareadet.Cantidad;
                 gl.tareadet.Realizado = true;
-            }*/
+            }
 
             Crear_movimiento();
 
             //Llama al WS para realizar la actualización de los registros.
-            //if Actualizar_Trans_Ubic_HH_Det(gl.tareadet, gMovimientoDet){
-
-           /* gl.tareaenc.estado = "Pendiente";
-
-            if (gl.tareaenc.estado.equals("NUEVO")) {
-                gl.tareaenc.HoraInicio =  currentTime;
-                gl.tareaenc.FechaInicio = currentTime;
-            }
-
-
-            if (gl.modo_cambio==2){
-                gl.tareaenc.cambio_estado = true;
-            }else{
-                gl.tareaenc.cambio_estado = false;
-            }
-
-            if (compl) {
-                gl.tareaenc.estado = "Finalizado";
-                gl.tareaenc.HoraFin = currentTime;
-                gl.tareaenc.FechaFin = currentTime;
-            }
-
-            if(gl.modo_cambio==2){
-                mu.msgbox("Cambio de estado aplicado");
-            }else{
-                mu.msgbox("Cambio de ubicación aplicado");
-            }*/
-
-            //Actualiza_Tarea_Lista();
-
-
-            //}
-
+            execws(3);
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -356,7 +325,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try{
 
-           /* gMovimientoDet = new clsBetrans_movimientos();
+            gMovimientoDet = new clsBeTrans_movimientos();
 
             gMovimientoDet.IdMovimiento = 0;
             gMovimientoDet.IdEmpresa = gl.IdEmpresa;
@@ -379,32 +348,31 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.IdTipoTarea = 2;
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = gl.tareadet.Stock.IdRecepcionEnc;
-            gMovimientoDet.cantidad = vCantidadAUbicar;
-            gMovimientoDet.serie = gl.tareadet.Stock.serial;
-            gMovimientoDet.peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
-            gMovimientoDet.lote = gl.tareadet.Stock.lote;
-            gMovimientoDet.fecha_vence = gl.tareadet.Stock.fecha_vence;
-            gMovimientoDet.fecha = gl.tareadet.HoraFin;
+            gMovimientoDet.Cantidad = vCantidadAUbicar;
+            gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
+            gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
+            gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
+            gMovimientoDet.Fecha_vence = gl.tareadet.Stock.Fecha_vence;
+            gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
                 if (gl.BeStockPallet!=null) {
-                    gMovimientoDet.barra_pallet = gl.BeStockPallet.Codigo_Barra;
+                    gMovimientoDet.Barra_pallet = gl.BeStockPallet.Codigo_Barra;
                 }else{
-                    gMovimientoDet.barra_pallet = "";
+                    gMovimientoDet.Barra_pallet = "";
                 }
 
             }else{
-                gMovimientoDet.barra_pallet = "";
+                gMovimientoDet.Barra_pallet = "";
             }
 
-            gMovimientoDet.hora_ini = gl.tareadet.HoraInicio;
-            gMovimientoDet.hora_fin = gl.tareadet.HoraFin;
-            gMovimientoDet.fecha_agr = gl.tareadet.HoraFin;
-            gMovimientoDet.usuario_agr = String.valueOf(gl.tareadet.IdOperador);
-            gMovimientoDet.cantidad_hist = gMovimientoDet.cantidad;
-            gMovimientoDet.peso_hist = gMovimientoDet.peso;
+            gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
+            gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
+            gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
+            gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperador);
+            gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
+            gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
             gMovimientoDet.IsNew = true;
-*/
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -420,6 +388,40 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         progress.show();
     }
 
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOrigen.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 2:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 3:
+                        callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
+                                "pMovimiento",gMovimientoDet);
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
@@ -430,6 +432,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     processUbicOrigen();break;
                 case 2:
                     processUbicDestino();break;
+                case 3:
+                    processCambio();
+                    break;
             }
 
         } catch (Exception e) {
@@ -446,11 +451,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             bodega_ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (bodega_ubicacion == null){
+                txtUbicOrigen.selectAll();
+                txtUbicOrigen.requestFocus();
                 throw new Exception("Ubicación origen incorrecta");
             }
 
             if (bodega_ubicacion.IdUbicacion != gl.IdOrigen){
                 mu.msgbox("La ubicación origen no coincide");
+                txtUbicOrigen.selectAll();
+                txtUbicOrigen.requestFocus();
+                return;
             }
 
             txtUbicDestino.requestFocus();
@@ -470,11 +480,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             bodega_ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (bodega_ubicacion == null){
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
                 throw new Exception("Ubicación destino incorrecta");
             }
 
             if (bodega_ubicacion.IdUbicacion != gl.IdDestino){
                 mu.msgbox("La ubicación destino no coincide");
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                return;
             }
 
             txtCantidad.requestFocus();
@@ -485,38 +500,50 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
-    public class WebServiceHandler extends WebService {
+    private void processCambio(){
 
-        public WebServiceHandler(PBase Parent,String Url) {
-            super(Parent,Url);
-        }
+        try {
 
-        @Override
-        public void wsExecute(){
-            try {
-                switch (ws.callback) {
-                    case 1:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",gl.IdOrigen,
-                                "pIdBodega",gl.IdBodega);
-                        break;
-                    case 2:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",gl.IdDestino,
-                                "pIdBodega",gl.IdBodega);
-                        break;
-                    case 3:
-                        callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
-                                "pMovimiento");
+            progress.setMessage("Validando ubicación");
+
+            boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_Det",boolean.class);
+
+            if (actualizar){
+
+                Date currentTime = Calendar.getInstance().getTime();
+
+                gl.tareaenc.Estado = "Pendiente";
+
+                if (gl.tareaenc.Estado.equals("NUEVO")) {
+                    gl.tareaenc.HoraInicio =  app.strFecha(currentTime);
+                    gl.tareaenc.FechaInicio = app.strFecha(currentTime);
                 }
 
-            } catch (Exception e) {
-                error=e.getMessage();errorflag =true;msgbox(error);
-            }
-        }
-    }
+                if (gl.modo_cambio==2){
+                    gl.tareaenc.Cambio_estado = true;
+                }else{
+                    gl.tareaenc.Cambio_estado = false;
+                }
 
-    private void execws(int callbackvalue) {
-        ws.callback=callbackvalue;
-        ws.execute();
+                if (compl) {
+                    gl.tareaenc.Estado = "Finalizado";
+                    gl.tareaenc.HoraFin = app.strFecha(currentTime);
+                    gl.tareaenc.FechaFin = app.strFecha(currentTime);
+                }
+
+                if(gl.modo_cambio==2){
+                    mu.msgbox("Cambio de estado aplicado");
+                }else{
+                    mu.msgbox("Cambio de ubicación aplicado");
+                }
+
+                //Actualiza_Tarea_Lista();
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     public void Regresar(View view){
@@ -524,7 +551,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     public void AplicarCambio(View view){
-        Cambio_Ubicacion();
+        cambioUbicEst();
     }
 
     private void msgAskExit(String msg) {

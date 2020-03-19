@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -93,6 +94,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
         }
+
     }
 
     private void setHandlers(){
@@ -321,6 +323,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             }
 
             progress.cancel();
+
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.Gravity;
 
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.dts.base.AppMethods;
@@ -37,6 +38,7 @@ public class PBase extends Activity {
     protected long fecha;
     protected String s,ss;
 
+    protected InputMethodManager keyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class PBase extends Activity {
         mu=new MiscUtils(this);
         du=new DateUtils();
         app=new AppMethods(this,gl);
+
+        keyboard = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
 
         browse=0;
     }
@@ -142,6 +146,16 @@ public class PBase extends Activity {
 
     protected double iif(boolean condition,int valtrue,int valfalse) {
         if (condition) return valtrue;else return valfalse;
+    }
+
+    protected void showkeyb(){
+        if (keyboard != null) {
+            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    protected void hidekeyb() {
+        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     // Activity Events

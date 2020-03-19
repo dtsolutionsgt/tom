@@ -52,7 +52,7 @@
                     android:layout_marginLeft="176dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textColor="@android:color/black" />
 
                 <TextView
@@ -87,7 +87,6 @@
                     android:layout_marginBottom="0dp"
                     android:background="#EDEAEA"
                     android:inputType="textPersonName"
-                    android:maxLines="3"
                     android:minHeight="48dp"
                     android:textColor="@android:color/black" />
 
@@ -253,7 +252,7 @@
                     android:layout_below="@+id/txtEstado"
                     android:layout_alignEnd="@+id/txtEstado"
                     android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
 
                 <TextView
                     android:id="@+id/lblCantidad"

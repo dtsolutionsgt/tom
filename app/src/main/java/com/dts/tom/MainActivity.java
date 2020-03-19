@@ -365,6 +365,7 @@ public class MainActivity extends PBase {
                                 stream(users.items)
                                         .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
                                                 c.IdBodega == gl.IdBodega)
+                                        .orderBy(c-> c.Operador.IdOperador)
                                         .toList();
 
                         if (BeOperadorBodega.size()>0){
@@ -507,7 +508,7 @@ public class MainActivity extends PBase {
                         }
                     }
 
-                    if (users.items.size()>0) Collections.sort(users.items, new UserSort());
+                    //if (users.items.size()>0) Collections.sort(users.items, new UserSort());
                     fillSpinUser();
                 }
 
