@@ -66,5 +66,5 @@ public class appGlobals extends Application {
     public int tipoTarea;
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
 
-
+    public int mode=0;
 }

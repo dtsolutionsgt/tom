@@ -232,7 +232,7 @@ public class frm_detalle_ingresos extends PBase {
             progress.setMessage("Cargando recepción");
 
             gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class,"GetSingleRec");
-
+            gl.mode =1;
             if (gBeRecepcion!=null){
                 Llenar_Campos();
             }
@@ -274,7 +274,7 @@ public class frm_detalle_ingresos extends PBase {
                 txtMuelleRec.setText(gBeRecepcion.Muelle.Nombre);
             }
 
-            if (gl.tipoTarea==1) {
+            if (gl.TipoOpcion==1) {
 
                 progress.setMessage("Obteniendo detalle de recepción");
 

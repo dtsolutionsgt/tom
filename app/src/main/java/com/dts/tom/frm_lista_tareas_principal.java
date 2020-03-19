@@ -77,13 +77,13 @@ public class frm_lista_tareas_principal extends PBase {
                     switch (gl.tipoIngreso){
 
                         case "HCOC00":
-
+                            gl.TipoOpcion =1;
                             execws(1);
 
                             break;
 
                         case "HSOC00":
-
+                            gl.TipoOpcion =2;
                             execws(2);
 
                             break;
