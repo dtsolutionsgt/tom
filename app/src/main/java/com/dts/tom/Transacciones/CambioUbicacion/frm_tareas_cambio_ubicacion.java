@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -76,6 +77,9 @@ public class frm_tareas_cambio_ubicacion extends PBase {
         ProgressDialog("Cargando forma");
 
         Load();
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     public void ProgressDialog(String mensaje){
@@ -222,6 +226,38 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     }
 
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Get_Motivos_Ubicacion_For_HH");
+                        break;
+                    case 2:
+                        callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
+                                "pIdOperador",gl.IdOperador,
+                                "pIdTarea",pIdTarea,
+                                "cambio_estado",!Modo);
+                        break;
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
@@ -273,38 +309,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
-    }
-
-    public class WebServiceHandler extends WebService {
-
-        public WebServiceHandler(PBase Parent,String Url) {
-            super(Parent,Url);
-        }
-
-        @Override
-        public void wsExecute(){
-            try {
-                switch (ws.callback) {
-                    case 1:
-                        callMethod("Get_Motivos_Ubicacion_For_HH");
-                        break;
-                    case 2:
-                        callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
-                                                                                    "pIdOperador",gl.IdOperador,
-                                                                                    "pIdTarea",pIdTarea,
-                                                                                    "cambio_estado",!Modo);
-                        break;
-                }
-
-            } catch (Exception e) {
-                error=e.getMessage();errorflag =true;msgbox(error);
-            }
-        }
-    }
-
-    private void execws(int callbackvalue) {
-        ws.callback=callbackvalue;
-        ws.execute();
     }
 
     private void msgAskExit(String msg) {

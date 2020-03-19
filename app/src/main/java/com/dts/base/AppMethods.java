@@ -74,6 +74,57 @@ public class AppMethods {
 			{toast(ex.getMessage());}
 	}
 
+    //endregion
+
+	//region Public
+
+	public String strFecha(String fecha){
+
+		String rsltfecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			Date date = dateFormat.parse(fecha);
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			rsltfecha=dateFormat.format(date);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return rsltfecha;
+	}
+
+	public String strFecha(Date fecha){
+
+		String rsltfecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+			rsltfecha=dateFormat.format(fecha);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return rsltfecha;
+	}
+
+	public String strFechaHora(Date fecha){
+
+		String rsltfecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+			rsltfecha=dateFormat.format(fecha);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return rsltfecha;
+	}
+
 	public void readOnly(EditText txt){
 		try{
 
@@ -84,26 +135,6 @@ public class AppMethods {
 		}catch (Exception ex){
 
 		}
-	}
-    //endregion
-
-	//region Public
-
-	public String strFecha(String fecha){
-
-		String fechaVence="";
-
-		try{
-
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-			Date date = dateFormat.parse(fecha);
-			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			fechaVence=dateFormat.format(date);
-
-		}catch (Exception ex){
-			toast(ex.getMessage());
-		}
-		return fechaVence;
 	}
 	//endregion
 }
