@@ -71,6 +71,7 @@ import java.util.stream.IntStream;
 import br.com.zbra.androidlinq.Linq;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 
 public class frm_recepcion_datos extends PBase {
 
@@ -119,7 +120,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeStock_recList pListBeStockRec = new clsBeStock_recList();
     private clsBeProducto_palletList pListBeProductoPallet = new clsBeProducto_palletList();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
-    private clsBeI_nav_barras_pallet BeINavBarraPallet;
+    private clsBeI_nav_barras_pallet BeINavBarraPallet = new clsBeI_nav_barras_pallet();
     private clsBeLicensePlatesList pListBeLicensePlate = new clsBeLicensePlatesList();
     private clsBeTrans_re_enc auxRec = new clsBeTrans_re_enc();
     private clsBeTrans_re_det BeTransReDet= new clsBeTrans_re_det();
@@ -211,7 +212,9 @@ public class frm_recepcion_datos extends PBase {
             BeOcDet=gl.gselitem;
         }
 
-        execws(1);
+        if(!gl.Escaneo_Pallet){
+            execws(1);
+        }
 
     }
 
@@ -247,13 +250,13 @@ public class frm_recepcion_datos extends PBase {
 
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
+        month = c.get(Calendar.MONTH)+1;
         day = c.get(Calendar.DAY_OF_MONTH);
 
         // set current date into textview
         cmbVenceRec.setText(new StringBuilder()
                 // Month is 0 based, just add 1
-                .append(month + 1).append("-").append(day).append("-")
+                .append(day).append("-").append(month).append("-")
                 .append(year).append(" "));
 
         // set current date into datepicker
@@ -268,11 +271,11 @@ public class frm_recepcion_datos extends PBase {
                               int selectedMonth, int selectedDay) {
 
             year = selectedYear;
-            month = selectedMonth;
+            month = selectedMonth+1;
             day = selectedDay;
             // set selected date into textview
-            cmbVenceRec.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
+            cmbVenceRec.setText(new StringBuilder().append(day)
+                    .append("-").append(month).append("-").append(year)
                     .append(" "));
 
             // set selected date into datepicker also
@@ -1095,9 +1098,9 @@ public class frm_recepcion_datos extends PBase {
                         ObjNS.NoSerieInicial =txtSerieIni.getText().toString();
                         ObjNS.NoSerieFinal = txtSerieFin.getText().toString();
                         ObjNS.User_agr = gl.IdOperador+"";
-                        ObjNS.Fec_agr =String.valueOf(du.getFechaActual());;
+                        ObjNS.Fec_agr =String.valueOf(du.getFechaActual());
                         ObjNS.User_mod = gl.IdOperador+"";
-                        ObjNS.Fec_mod = String.valueOf(du.getFechaActual());;
+                        ObjNS.Fec_mod = String.valueOf(du.getFechaActual());
                         ObjNS.Activo = true;
                         ObjNS.IsNew = true;
 
@@ -1133,7 +1136,7 @@ public class frm_recepcion_datos extends PBase {
                     pListBeStockRec.items.get(pIndexStock).IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                     pListBeStockRec.items.get(pIndexStock).IdProductoBodega = BeProducto.IdProductoBodega;
                     pListBeStockRec.items.get(pIndexStock).Lic_plate = txtLicPlate.getText().toString();
-                    pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso = String.valueOf(du.getFechaActual());;
+                    pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso = String.valueOf(du.getFechaActual());
 
                     if (IdPreseSelectParam>0){
                         pListBeStockRec.items.get(pIndexStock).IdPresentacion = IdPreseSelectParam;
@@ -1274,6 +1277,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     dialog.cancel();
+                    Mostro_Propiedades = true;
                     Guardar_Recepcion();
 
                 }else{
@@ -1464,6 +1468,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             dialog.cancel();
+            Mostro_Propiedades = true;
             Guardar_Recepcion();
 
         }catch (Exception e){
@@ -1562,7 +1567,9 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            execws(5);
+            if (!Mostro_Propiedades){
+                execws(5);
+            }
 
             Mostrar_Propiedades_Parametros = Mostrar;
 
@@ -1591,6 +1598,12 @@ public class frm_recepcion_datos extends PBase {
                 pIdOrdenCompraDet= BeOcDet.IdOrdenCompraDet;
                 pIdOrdenCompraEnc = BeOcDet.IdOrdenCompraEnc;
                 pLineaOC = BeOcDet.No_Linea;
+
+                BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
+
+                if (frm_list_rec_prod.BeProducto!=null){
+                    BeProducto = frm_list_rec_prod.BeProducto;
+                }
 
                 Carga_Datos_Producto();
 
@@ -1829,6 +1842,10 @@ public class frm_recepcion_datos extends PBase {
             btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
 
 
+            if (Escaneo_Pallet){
+                LlenaCamposEsPallet();
+            }
+
             progress.cancel();
 
         }catch (Exception e){
@@ -1836,6 +1853,47 @@ public class frm_recepcion_datos extends PBase {
             mu.msgbox(e.getClass()+" "+e.getMessage());
         }
 
+    }
+
+    private void LlenaCamposEsPallet(){
+
+        try{
+
+            txtLoteRec.setText(BeINavBarraPallet.Lote);
+            cmbVenceRec.setText(BeINavBarraPallet.Fecha_Vence);
+
+            if (!EsTransferenciaInternaWMS){
+                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
+            }else{
+                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_Presentacion+"");
+            }
+
+            List AuxList = stream(BeProducto.Presentaciones.items).select(c->c.Codigo_barra).toList();
+
+            int indxPres=AuxList.indexOf(BeINavBarraPallet.UM_Producto);
+
+            if (indxPres>-1){
+                cmbPresRec.setSelection(indxPres);
+            }else{
+                mu.msgbox("No está definida la presentación contenida en pallet para el LP: "+BeINavBarraPallet.IdPallet);
+            }
+
+            List AuxLis1=stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+
+            int indxEstado=AuxLis1.indexOf(gl.gIdProductoBuenEstadoPorDefecto);
+
+            if(indxEstado>-1){
+                cmbEstadoProductoRec.setSelection(indxEstado);
+            }else{
+                mu.msgbox("No existe un estado por defecto");
+                return;
+            }
+
+            Llena_Detalle_Recepcion_Nueva();
+
+        }catch (Exception e){
+            mu.msgbox("LlenaCamposEsPallet:"+e.getMessage());
+        }
     }
 
     private double Get_Factor_Presentacion(int vIdPresentacion){
@@ -2043,11 +2101,11 @@ public class frm_recepcion_datos extends PBase {
                 if (Escaneo_Pallet){
                     //Guardar_Recepcion_Pallet
                 }else{
-                    Guardar_Recepcion();
+                    ValidaCampos();
                 }
 
             }else{
-                Guardar_Recepcion();
+                ValidaCampos();
             }
 
         }catch (Exception e){
@@ -2369,7 +2427,11 @@ public class frm_recepcion_datos extends PBase {
                    BeTransReDet.cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
                }
 
-                BeTransReDet.peso_unitario = Double.parseDouble(txtPesoUnitario.getText().toString());
+               if (txtPesoUnitario.getText().toString().isEmpty()){
+                   BeTransReDet.peso_unitario = 0;
+               }else{
+                   BeTransReDet.peso_unitario = Double.parseDouble(txtPesoUnitario.getText().toString());
+               }
 
                 BeTransReDet.Nombre_producto = BeProducto.Nombre;
 
@@ -2502,7 +2564,7 @@ public class frm_recepcion_datos extends PBase {
                             BePP.Cantidad = (1 * Factor);
 
                             if (BeProducto.Control_vencimiento){
-                                BePP.Fecha_vence = cmbVenceRec.getText().toString();
+                                BePP.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
                             }else {
                                 BePP.Fecha_vence = "";
                             }
@@ -2697,7 +2759,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_vence = cmbVenceRec.getText().toString();
+                        BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
                         if (!Valida_Fecha_Vencimiento()){
                             mu.msgbox("Se debe corregir la fecha de vencimiento del producto: "+BeProducto.Codigo);
                             return;
@@ -2766,7 +2828,7 @@ public class frm_recepcion_datos extends PBase {
                                 BePP.Cantidad = (1 * Factor);
 
                                 if (BeProducto.Control_vencimiento){
-                                    BePP.Fecha_vence = cmbVenceRec.getText().toString();
+                                    BePP.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
                                 }else {
                                     BePP.Fecha_vence = "";
                                 }
@@ -2889,7 +2951,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (BeProducto.Control_vencimiento){
-                BeStockRec.Fecha_vence = cmbVenceRec.getText().toString();
+                BeStockRec.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
             }else{
                 BeStockRec.Fecha_vence = "";
             }
@@ -3111,7 +3173,9 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (cmbVenceRec.getText().toString().equals(String.valueOf(du.getFechaActual()))){
+            String FechaVence=du.convierteFecha(cmbVenceRec.getText().toString());
+
+            if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
                msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
                }else{
                    Valida_Fecha=  true;
