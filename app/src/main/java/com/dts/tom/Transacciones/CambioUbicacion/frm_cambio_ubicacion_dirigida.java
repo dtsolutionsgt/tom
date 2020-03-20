@@ -29,14 +29,17 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private TextView lblTituloForma,lbCant,lblCambioEstado,lblUbicDestino;
     private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
     private double vCantidadAUbicar;
-    private clsBeTrans_movimientos gMovimientoDet;
     private boolean compl;
 
+    private clsBeTrans_movimientos gMovimientoDet;
     private clsBeBodega_ubicacion bodega_ubicacion;
+    private clsBeProducto_estado gProdEstado;
 
     private frm_cambio_ubicacion_dirigida.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
+
+    private Date fecha_ini;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +146,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try{
 
+            fecha_ini = Calendar.getInstance().getTime();
+
             gl.IdOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
             gl.IdDestino = gl.tareadet.UbicacionDestino.IdUbicacion;
 
@@ -161,24 +166,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
-
-            if (gl.modo_cambio==2){
-                txtEstadoDestino.setText("");
-            }
+            gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
 
             txtUbicDestino.setText("");
 
             if (gl.modo_cambio==2){
-
-                clsBeProducto_estado prest;
-
-                prest = null;//frmInicio.m_proxy.Get_Single_By_IdEstado(gl.tareadet.IdEstadoDestino)
-
-                if(prest!=null){
-                    txtUbicDestino.setText(prest.Nombre);
-                }
-
-
+                txtEstadoDestino.setText("");
+                execws(4);
             }
 
         }catch (Exception e){
@@ -302,18 +296,19 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 gl.tareadet.Recibido = 0;
             }
 
-            if (gl.tareadet.Recibido ==0){
-                gl.tareadet.HoraInicio =app.strFecha(currentTime);
-                gl.tareadet.HoraFin = app.strFecha(currentTime);
-                gl.tareadet.Estado = "Pendiente";
-                gl.tareadet.Recibido = gl.tareadet.Cantidad;
-                gl.tareadet.Realizado = true;
+            if (gl.tareadet.Recibido ==0) {
+                gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
             }
 
-            Crear_movimiento();
+            gl.tareadet.HoraFin = app.strFechaHora(currentTime);
+            gl.tareadet.Estado = "Pendiente";
+            gl.tareadet.Recibido = gl.tareadet.Cantidad;
+            gl.tareadet.Realizado = true;
 
-            //Llama al WS para realizar la actualización de los registros.
-            execws(3);
+            if (Crear_movimiento()){
+                //Llama al WS para realizar la actualización de los registros.
+                execws(3);
+            }
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -321,7 +316,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
-    private void Crear_movimiento(){
+    private boolean Crear_movimiento(){
 
         try{
 
@@ -352,7 +347,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_vence = gl.tareadet.Stock.Fecha_vence;
+            gMovimientoDet.Fecha_vence =app.strFechaSQL(gl.tareadet.Stock.Fecha_vence.toString());
             gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
@@ -374,8 +369,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
             gMovimientoDet.IsNew = true;
 
+            return true;
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            return false;
         }
     }
 
@@ -414,6 +411,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     case 3:
                         callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
                                 "pMovimiento",gMovimientoDet);
+                    case 4:
+                        callMethod("Get_Single_By_IdEstado","pIdEstado",gl.tareadet.IdEstadoDestino);
                 }
 
             } catch (Exception e) {
@@ -434,6 +433,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     processUbicDestino();break;
                 case 3:
                     processCambio();
+                    break;
+                case 4:
+                    processProdEstado();
                     break;
             }
 
@@ -538,6 +540,24 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 }
 
                 //Actualiza_Tarea_Lista();
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processProdEstado(){
+
+        try {
+
+            progress.setMessage("Obteniendo el estado del producto");
+
+            gProdEstado = xobj.getresult(clsBeProducto_estado.class,"Get_Single_By_IdEstado");
+
+            if (gProdEstado != null){
+                txtUbicDestino.setText(gProdEstado.Nombre);
             }
 
         } catch (Exception e) {

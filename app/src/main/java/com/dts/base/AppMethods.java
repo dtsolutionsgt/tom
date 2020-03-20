@@ -95,6 +95,23 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
+    public String strFechaSQL(String fecha){
+
+        String rsltfecha="";
+
+        try{
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            Date date = dateFormat.parse(fecha);
+            dateFormat = new SimpleDateFormat("yyyyMMdd");
+            rsltfecha=dateFormat.format(date);
+
+        }catch (Exception ex){
+            toast(ex.getMessage());
+        }
+        return rsltfecha;
+    }
+
 	public String strFecha(Date fecha){
 
 		String rsltfecha="";
