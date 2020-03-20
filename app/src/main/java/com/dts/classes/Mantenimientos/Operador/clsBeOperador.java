@@ -35,7 +35,8 @@ public class clsBeOperador {
                          String Nombres, String Apellidos, String Direccion, String Telefono,
                          String Codigo, String Clave, boolean Activo, String User_agr,
                          String Fec_agr, String User_mod, String Fec_mod, double Costo_hora,
-                         boolean Usa_hh, boolean IsNew, clsBeRol_operador RolOperador) {
+                         boolean Usa_hh, boolean IsNew, clsBeRol_operador RolOperador)
+    {
 
         this.IdOperador=IdOperador;
         this.IdEmpresa=IdEmpresa;

@@ -48,17 +48,21 @@ public class XMLObject  {
 
     }
 
-    public <T> T getresult(Class<? extends T> type, String source) throws Exception {
+    public <T> T getresult(Class<? extends T> type, String source) throws Exception
+    {
 
         try{
 
             String xnode=getXMLRegion(source+"Result");
             Serializer serializer = new Persister();
-            if (!xnode.isEmpty()){
+
+            if (!xnode.isEmpty())
+            {
                 return serializer.read( type, xnode);
             }
 
-        }catch (Exception e){
+        }catch (Exception e)
+        {
             throw new Exception(" XMLObject Error: "+ e.getMessage()+ " GetResult:" +ws.xmlresult);
         }
         return null;

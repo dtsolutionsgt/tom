@@ -452,13 +452,15 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             bodega_ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
-            if (bodega_ubicacion == null){
+            if (bodega_ubicacion == null)
+            {
                 txtUbicOrigen.selectAll();
                 txtUbicOrigen.requestFocus();
                 throw new Exception("Ubicación origen incorrecta");
             }
 
-            if (bodega_ubicacion.IdUbicacion != gl.IdOrigen){
+            if (bodega_ubicacion.IdUbicacion != gl.IdOrigen)
+            {
                 mu.msgbox("La ubicación origen no coincide");
                 txtUbicOrigen.selectAll();
                 txtUbicOrigen.requestFocus();

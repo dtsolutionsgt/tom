@@ -1,10 +1,13 @@
 package com.dts.base;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dts.tom.PBase;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -12,9 +15,16 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import static android.content.ContentValues.TAG;
 
 public class WebService {
 
@@ -48,7 +58,8 @@ public class WebService {
     public void wsExecute(){ }
 
     public void wsFinished() {
-        try {
+        try
+        {
             parent.wsCallBack(errorflag,error,0);
         } catch (Exception e) {
         }
@@ -56,15 +67,18 @@ public class WebService {
 
     public void callMethod(String methodName, Object... args) throws Exception {
 
+        URLConnection conn = mUrl.openConnection();
+        String ss = "",line="";
+        int TIMEOUT = 150000;
+        mMethodName = methodName;mResult = "";xmlresult="";
+
        try{
 
-           String ss = "",line="";
-
-           mMethodName = methodName;mResult = "";xmlresult="";
-
-           URLConnection conn = mUrl.openConnection();
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
+           conn.setReadTimeout(TIMEOUT);
+           conn.setConnectTimeout(TIMEOUT);
+           conn.setDoInput(true);
            conn.setDoOutput(true);
 
            OutputStream ostream = conn.getOutputStream();
@@ -78,12 +92,17 @@ public class WebService {
                    "<soap:Body>" +
                    "<" + methodName + " xmlns=\"http://tempuri.org/\">";
 
-           body += buildArgs(args);
+           body += buildArgValue2(args);
            body += "</" + methodName + ">" +
                    "</soap:Body>" +
                    "</soap:Envelope>";
+          // wr.write(URLEncoder.encode(body, "UTF-8"));
            wr.write(body);
            wr.flush();
+
+           conn.connect();
+
+           //InputStream is = new BufferedInputStream(conn.getInputStream());
 
            // Get the response
            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -95,7 +114,8 @@ public class WebService {
            mResult=mResult.replace("ñ","n");
            xmlresult=mResult;
 
-       }catch (Exception e){
+       }catch (Exception e)
+       {
            throw new Exception(" WebService callMethod : "+ e.getMessage());
        }
     }
@@ -104,21 +124,105 @@ public class WebService {
 
     //region Arguments
 
-    private String buildArgs(Object... args) throws IllegalArgumentException, IllegalAccessException {
+    private String buildArgValue2(Object... obj) throws IllegalArgumentException, IllegalAccessException{
+
         String result = "";
         String argName = "";
-        for (int i = 0; i < args.length; i++) {
-            if (i % 2 == 0) {
-                argName = args[i].toString();
-            } else {
-                result += "<" + argName + ">";
-                argstr = result;
-                result += buildArgValue(args[i]);
-                argstr = result;
-                result += "</" + argName + ">";
-                argstr = result;
+
+        try{
+
+            for (int i = 0; i < obj.length; i++)
+            {
+                Class<?> cl = obj[i].getClass();
+                if (i % 2 == 0)
+                {
+                    argName = obj[i].toString();
+                } else
+                {
+                    if(cl.isPrimitive() || (cl.getName().contains("java.lang.")) || (cl.getName().contains("java.int")))
+                    {
+
+                        if (obj!=null)
+                        {
+                            result += "<" + argName + ">";
+                            argstr = result;
+                            result += buildArgValue(obj[i].toString());
+                            argstr = result;
+                            result += "</" + argName + ">";
+                            argstr = result;
+                        }else
+                        {
+                            result += "<" + argName + ">";
+                            result += "</" + argName + ">";
+                            argstr = result;
+                        }
+
+                        //return argstr;
+                    }
+                    if(cl.getName().equals("java.util.Date"))
+                    {
+                        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+                        result += "<" + argName + ">";
+                        argstr = result;
+                        result += dfm.format((Date)obj[i]);
+                        argstr = result;
+                        result += "</" + argName + ">";
+                        argstr = result;
+                        //return argstr;
+                    }else
+                    {//Is a strong type class
+                        String vResultObjects =buildArgs(obj);
+                        return vResultObjects;
+                    }
+                }
+            }
+
+        }catch (Exception ex)
+        {
+            try
+            {
+                throw new Exception(" WebService callMethod : "+ ex.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
+        return result;
+    }
+
+    private String buildArgs(Object... args) throws IllegalArgumentException, IllegalAccessException {
+
+        String result = "";
+        String argName = "";
+
+        try
+        {
+
+            for (int i = 0; i < args.length; i++)
+            {
+                if (i % 2 == 0) {
+                    argName = args[i].toString();
+                } else
+                {
+                    result += "<" + argName + ">";
+                    argstr = result;
+                    result += buildArgValue(args[i]);
+                    argstr = result;
+                    result += "</" + argName + ">";
+                    argstr = result;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                throw new Exception(" WebService callMethod : "+ ex.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return result;
     }
 
@@ -126,43 +230,263 @@ public class WebService {
         //Class<?> cl = obj.getClass();
 
         Class<?> cl = null;
-        try {
+
+        try
+        {
             cl = obj.getClass();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return "";
         }
 
         String result = "";
 
-        if (cl.isPrimitive()) return obj.toString();
-        if (cl.getName().contains("java.lang.")) return obj.toString();
-        if (cl.getName().equals("java.util.Date")) {
-            DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-            return dfm.format((Date) obj);
-        }
+        try
+        {
+            if(cl.isPrimitive() || (cl.getName().contains("java.lang.")) || (cl.getName().contains("java.int")))
+            {
+                if (obj!=null)
+                {
+                    return obj.toString();
+                }else
+                {
+                    return null;
+                }
 
-        if (cl.isArray()) {
-            String xmlName = cl.getName().substring(cl.getName().lastIndexOf(".") + 1);
-            xmlName = xmlName.replace(";", "");
-            Object[] arr = (Object[]) obj;
-
-            for (int i = 0; i < arr.length; i++) {
-                result += "<" + xmlName + ">";
-                result += buildArgValue(arr[i]);
-                result += "</" + xmlName + ">";
             }
-            return result;
-        }
+            if (cl.getName().equals("java.util.Date"))
+            {
 
-        Field[] fields = cl.getDeclaredFields();
+                DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date convertedDate = new Date();
 
-        for (int i = 0; i < fields.length - 1; i++) {
-            result += "<" + fields[i].getName() + ">";
-            result += buildArgValue(fields[i].get(obj));
-            result += "</" + fields[i].getName() + ">";
+                try
+                {
+
+                    if (obj!=null)
+                    {
+                        convertedDate = dfm.parse(obj.toString());
+                        result += buildArgValue(convertedDate);
+                        return obj.toString();
+                    }else
+                    {
+                        return "1900-01-01T00:00:01";
+                    }
+
+                } catch (ParseException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    result += buildArgValue("1900-01-01T00:00:01");
+                }
+            }
+
+            if (cl.isArray())
+            {
+                String xmlName = cl.getName().substring(cl.getName().lastIndexOf(".") + 1);
+                xmlName = xmlName.replace(";", "");
+                Object[] arr = (Object[]) obj;
+
+                for (int i = 0; i < arr.length; i++) {
+                    result += "<" + xmlName + ">";
+                    result += buildArgValue(arr[i]);
+                    result += "</" + xmlName + ">";
+                }
+                return result;
+            }
+
+            Field[] fields = cl.getDeclaredFields();
+
+            String fieldname ="";
+
+            String ClassName = cl.getName();
+
+            for (int i = 0; i < fields.length - 1; i++)
+            {
+
+                fieldname =fields[i].getName();
+
+                if(fieldname == "Tag" || fieldname == "Fec_agr")
+                {
+                    Log.d("tag",fieldname);
+                }
+
+                result += "<" + fieldname  + ">";
+
+                if(fieldname!= "Tag")
+                {
+                    if (fieldname.startsWith("Fec_") || fieldname.startsWith("Fech") || fieldname.startsWith("Hora") )
+                    {
+                        if (obj!=null)
+                        {
+                            String vFecha =fields[i].get(obj).toString();
+
+                            if(vFecha.contains("T"))
+                            {
+                                DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+                                Date convertedDate = new Date();
+                                try
+                                {
+
+                                    convertedDate = dfm.parse(vFecha);
+                                    result += buildArgValue(convertedDate);
+
+                                } catch (ParseException e)
+                                {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                    result += buildArgValue("");
+                                }
+                            }else
+                            {
+
+                                DateFormat dfm = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+                                Date convertedDate = new Date();
+
+                                try
+                                {
+                                    convertedDate = dfm.parse(vFecha);
+                                    DateFormat destDf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+                                    // format the date into another format
+                                    String dateStr = destDf.format(convertedDate);
+
+                                    result += buildArgValue(dateStr);
+
+                                } catch (ParseException e)
+                                {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                    result += buildArgValue("");
+                                }
+
+                            }
+
+                        }
+
+                    }else
+                    {
+                        Object vobj = fields[i].get(obj);
+                        if (vobj!=null)
+                        {
+                            result += buildArgValue(vobj);
+                        }
+                    }
+
+                }else
+                {
+                    //Si el valor es obj.java en campo tag....
+                    result += buildArgValue("");
+                }
+
+                result += "</" + fields[i].getName() + ">";
+            }
+
+//            if (ClassName.contains("clsBeTrans_ubic_hh_det") || ClassName.contains("Movimiento") )
+//            {
+//
+//                for (int i = 0; i < fields.length - 1; i++)
+//                {
+//
+//                    fieldname =fields[i].getName();
+//
+//                    if(fieldname == "Tag" || fieldname == "Fec_agr")
+//                    {
+//                        Log.d("tag",fieldname);
+//                    }
+//
+//                    result += "<" + fieldname  + ">";
+//
+//                    if(fieldname!= "Tag")
+//                    {
+//                        if (fieldname.startsWith("Fec_") || fieldname.startsWith("Fech") || fieldname.startsWith("Hora") )
+//                        {
+//                            if (obj!=null)
+//                            {
+//                                String vFecha =fields[i].get(obj).toString();
+//
+//                                if(vFecha.contains("T"))
+//                                {
+//                                    DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+//
+//                                    Date convertedDate = new Date();
+//                                    try
+//                                    {
+//
+//                                        convertedDate = dfm.parse(vFecha);
+//                                        result += buildArgValue(convertedDate);
+//
+//                                    } catch (ParseException e)
+//                                    {
+//                                        // TODO Auto-generated catch block
+//                                        e.printStackTrace();
+//                                        result += buildArgValue("");
+//                                    }
+//                                }else
+//                                {
+//
+//                                    DateFormat dfm = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+//                                    Date convertedDate = new Date();
+//
+//                                    try
+//                                    {
+//                                        convertedDate = dfm.parse(vFecha);
+//                                        DateFormat destDf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+//                                        // format the date into another format
+//                                        String dateStr = destDf.format(convertedDate);
+//
+//                                        result += buildArgValue(dateStr);
+//
+//                                    } catch (ParseException e)
+//                                    {
+//                                        // TODO Auto-generated catch block
+//                                        e.printStackTrace();
+//                                        result += buildArgValue("");
+//                                    }
+//
+//                                }
+//
+//                            }
+//
+//                        }else
+//                        {
+//                            Object vobj = fields[i].get(obj);
+//                            if (vobj!=null)
+//                            {
+//                                result += buildArgValue(vobj);
+//                            }
+//                        }
+//
+//                    }else
+//                    {
+//                        //Si el valor es obj.java en campo tag....
+//                        result += buildArgValue("");
+//                    }
+//
+//                    result += "</" + fields[i].getName() + ">";
+//                }
+//
+//            }else
+//            {
+//                Log.d("Omited post class", ClassName);
+//            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         return result;
+    }
+
+    private Date stringToDate(String aDate)
+    {
+        String aFormat = "yyyy-MM-dd HH:mm:ss Z";
+        if(aDate==null) return null;
+        ParsePosition pos = new ParsePosition(0);
+        SimpleDateFormat simpledateformat = new SimpleDateFormat(aFormat);
+        Date stringDate = simpledateformat.parse(aDate, pos);
+        return stringDate;
     }
 
     //endregion
