@@ -207,6 +207,7 @@ public class MainActivity extends PBase {
 
                     idbodega=bodegas.items.get(position).IdBodega;
                     gl.IdBodega = idbodega;
+                    gl. gCodigoBodega= bodegas.items.get(position).Codigo;
                     idimpres=0;
                     execws(3);
 

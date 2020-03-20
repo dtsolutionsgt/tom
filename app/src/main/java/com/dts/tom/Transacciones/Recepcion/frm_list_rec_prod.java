@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,7 +15,10 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
+import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
@@ -28,6 +33,9 @@ import com.dts.tom.list_adapt_detalle_recepcion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_list_rec_prod extends PBase {
 
@@ -45,14 +53,24 @@ public class frm_list_rec_prod extends PBase {
     private  clsBeTrans_re_oc gBeReOC = new clsBeTrans_re_oc();
     private clsBeTrans_oc_detList pListDetalleOC = new clsBeTrans_oc_detList();
     private clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
+    private static clsBeI_nav_barras_palletList lBeINavBarraPallet = new clsBeI_nav_barras_palletList();
+    public static clsBeI_nav_barras_pallet BeINavBarraPallet= new clsBeI_nav_barras_pallet();
     private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
     private static ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
+    public  static clsBeProducto BeProducto = new clsBeProducto();
 
     private boolean Escaneo_Pallet;
     private boolean Finalizada = false, Anulada = false;
     private double Cant_Recibida_Anterior;
     private int browse;
+    public String pLP="";
+    private String vLP="";
+    public String vCodigoBodegaBarraPallet = "";
+    public String vCodigoProductoBarraPallet= "";
+    public static boolean EsTransferenciaInternaWMS=false;
+
+    private int Idx = -1;
 
     private clsBeTrans_oc_det selitem;
 
@@ -88,11 +106,12 @@ public class frm_list_rec_prod extends PBase {
 
     private void Procesa_Barra_Producto(){
 
-         int FilaActual= 0;
+        int FilaActual= 0;
         boolean LongitudValida = true;
-        String vCodigoBodegaBarraPallet = "";
-        String vCodigoProductoBarraPallet= "";
-        String vLP = "";
+        vCodigoBodegaBarraPallet = "";
+        vCodigoProductoBarraPallet= "";
+        vLP="";
+        pLP="";
         boolean vPalletOk = false;
         boolean TxtCantidadHasFocus = false;
 
@@ -106,7 +125,92 @@ public class frm_list_rec_prod extends PBase {
                     vStarWithParameter = gBeConfiguracionBarraPallet.IdentificadorInicio;
                 }
 
+                if (txtCodigoProductoRecepcion.getText().toString().startsWith("$") |
+                        txtCodigoProductoRecepcion.getText().toString().startsWith("(01)") |
+                        txtCodigoProductoRecepcion.getText().toString().startsWith(vStarWithParameter)){
 
+                    int vLengthBarra  = txtCodigoProductoRecepcion.getText().toString().length();
+
+                     if(gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")
+                             | gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
+                             && vLengthBarra > 6){
+
+                         LongitudValida = true;
+                     }else{
+                         LongitudValida = false;
+                     }
+
+                     if (LongitudValida){
+
+                         Escaneo_Pallet=true;
+                         gl.Escaneo_Pallet=true;
+
+                         if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
+                             pLP = txtCodigoProductoRecepcion.getText().toString().substring(4, 16);
+                             gBeStockRec = stream(pListBeStockRecPI.items).where(c->c.Lic_plate.equals(pLP)).first();
+                         }else{
+
+                             int vLongitudBodegaOrigen  = 4;
+
+                             if (gBeConfiguracionBarraPallet!=null){
+                                 vLongitudBodegaOrigen = gBeConfiguracionBarraPallet.LongCodBodegaOrigen;
+                             }
+
+                             int vLongitudCodigoProducto=8;
+                             if (gBeConfiguracionBarraPallet!=null){
+                                 vLongitudCodigoProducto = gBeConfiguracionBarraPallet.LongCodProducto;
+                             }
+
+                             int vLongitudCodigoPallet=8;
+                             if (gBeConfiguracionBarraPallet!=null){
+                                 vLongitudCodigoPallet = gBeConfiguracionBarraPallet.LongLP;
+                             }
+
+                             pLP = txtCodigoProductoRecepcion.getText().toString().replace("$", "");
+
+                             vCodigoBodegaBarraPallet = pLP.substring(0, vLongitudBodegaOrigen);
+
+                             vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
+
+                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto);
+
+                             if (gBeConfiguracionBarraPallet!=null){
+                                 if (gBeConfiguracionBarraPallet.CodigoNumerico){
+                                     vCodigoProductoBarraPallet = vCodigoProductoBarraPallet;
+                                 }else{
+                                     vCodigoProductoBarraPallet = vCodigoProductoBarraPallet;
+                                 }
+                             }
+
+                             int vLongitudBarraPallet=pLP.length();
+
+                            if ((vLongitudBodegaOrigen + vLongitudCodigoProducto + vLongitudCodigoPallet)>= vLongitudBarraPallet){
+
+                                vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
+
+                                if (vLP.equals("")){
+                                    txtCodigoProductoRecepcion.setText("");
+                                    mu.msgbox("La barra de pallet no tiene el formato correcto");
+                                    return;
+                                }
+
+                            }else{
+                                vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
+                            }
+
+                            if (gBeOrdenCompra.IdTipoIngresoOC == 4){
+                                EsTransferenciaInternaWMS =true;
+                             }
+
+                            execws(5);
+
+                         }
+
+                     }
+
+                }else{
+
+                }
 
             }
 
@@ -115,6 +219,39 @@ public class frm_list_rec_prod extends PBase {
             mu.msgbox("Procesa_Barra_Producto: "+e.getMessage());
         }
 
+    }
+
+    private void Continua_Validando_Barra(){
+
+        try{
+
+            if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) | BeINavBarraPallet.Bodega_Destino.trim().equals(gl.gCodigoBodega)){
+
+            List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+
+                Idx = AuxList.indexOf(vCodigoProductoBarraPallet);
+
+                if (Idx>-1){
+                    if (!BeINavBarraPallet.Recibido){
+                        if (BeINavBarraPallet.Activo){
+                            gl.mode=1;
+                            selitem = pListDetalleOC.items.get(Idx);
+                            gl.gselitem = selitem;
+
+                            gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                            gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                            browse=1;
+                            startActivity(new Intent(this, frm_recepcion_datos.class));
+
+                        }
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Continua_Validando_Barra"+e.getMessage());
+        }
     }
 
     public void ProgressDialog(){
@@ -404,6 +541,9 @@ public class frm_list_rec_prod extends PBase {
                     case 4:
                         callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
                         break;
+                    case 5:
+                       callMethod("Get_All_Pallet_Ingreso_By_Barra","pCodigoBarraPallet",pLP,"pIdBodega",gl.IdBodega,"BeProducto",BeProducto);
+                        break;
 
                 }
 
@@ -437,6 +577,9 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 4:
                         processBanderasRecep();
+                        break;
+                    case 5:
+                        processPalletIngreso();
                         break;
                 }
 
@@ -473,6 +616,42 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    private void processPalletIngreso(){
+
+        try{
+
+            lBeINavBarraPallet = xobj.getresult(clsBeI_nav_barras_palletList.class,"Get_All_Pallet_Ingreso_By_Barra");
+
+            if (lBeINavBarraPallet!=null){
+                if (lBeINavBarraPallet.items!=null){
+
+                    if (lBeINavBarraPallet.items.size()==1){
+                        BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
+                    }else {
+                        if(gBeOrdenCompra.IdTipoIngresoOC ==4){
+                            BeINavBarraPallet = stream(lBeINavBarraPallet.items).where(c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo) && c.Bodega_Destino.equals(gl. gCodigoBodega)).first();
+                        }else{
+                            mu.msgbox("Excepción no controlada por barra de pallet en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
+                        return;
+                        }
+                    }
+
+                }else{
+                    mu.msgbox("El código de pallet : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                    return;
+                }
+            }else{
+                mu.msgbox("El código de pallet : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                return;
+            }
+
+            Continua_Validando_Barra();
+
+        }catch (Exception e){
+            mu.msgbox("processPalletIngreso"+e.getMessage());
+        }
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
@@ -497,14 +676,44 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    @Override
-    public void onBackPressed() {
+    private void msgAskExit(String msg) {
         try{
-            //msgAskExit("Salir sin guardar datos");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    doExit();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        try{
+            msgAskExit("Está seguro de salir");
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
 
 }

@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -20,11 +21,14 @@ import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.stream.Stream;
+
+import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_lista_tareas_principal extends PBase {
 
     private EditText txtTarea;
-    private TextView lblTitulo,lblRegs;
+    private TextView lblTitulo, lblRegs;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -51,14 +55,14 @@ public class frm_lista_tareas_principal extends PBase {
         listView = (ListView) findViewById(R.id.listTareas);
         lblRegs = (TextView) findViewById(R.id.btnRegsList);
 
-        pbar=(ProgressBar)  findViewById(R.id.pgrtareas);
+        pbar = (ProgressBar) findViewById(R.id.pgrtareas);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
 
         ProgressDialog("Cargando forma");
 
-        ws= new WebServiceHandler(frm_lista_tareas_principal.this, gl.wsurl);
-        xobj= new XMLObject(ws);
+        ws = new WebServiceHandler(frm_lista_tareas_principal.this, gl.wsurl);
+        xobj = new XMLObject(ws);
 
         setHandlers();
 
@@ -277,6 +281,31 @@ public class frm_lista_tareas_principal extends PBase {
 
     }
 
+    private void GetFila(){
+
+        try{
+
+            int vIdTarea=0;
+
+            if (!txtTarea.getText().toString().isEmpty()){
+
+                selid = Integer.parseInt(txtTarea.getText().toString());
+
+                vIdTarea = stream(pListBeTareasIngresoHH.items).where(c->c.IdRecepcionEnc == selid).select(c->c.IdRecepcionEnc).first();
+
+                if (vIdTarea>0){
+                    procesar_registro();
+                }else{
+                    mu.msgbox("No existe la tarea "+selid);
+                }
+
+            }
+
+        }catch (Exception e){
+         mu.msgbox("GetFila:"+e.getMessage());
+        }
+    }
+
     public void ProgressDialog(String mensaje){
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
@@ -289,7 +318,7 @@ public class frm_lista_tareas_principal extends PBase {
 
     private void setHandlers() {
 
-        try{
+        try {
 
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -298,7 +327,7 @@ public class frm_lista_tareas_principal extends PBase {
 
                     selid = 0;
 
-                    if (position>0){
+                    if (position > 0) {
 
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
@@ -316,6 +345,16 @@ public class frm_lista_tareas_principal extends PBase {
 
             });
 
+            txtTarea.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        GetFila();
+                    }
+
+                    return false;
+                }
+            });
 
             }catch (Exception e){
 

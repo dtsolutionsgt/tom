@@ -5,7 +5,7 @@ import org.simpleframework.xml.ElementList;
 import java.util.List;
 
 public class clsBeTrans_movimiento_palletList {
-    @ElementList(inline=true)
-    public List<clsBeTrans_movimiento_pallet> items;
+    //@ElementList(inline=true)
+   // public List<clsBeTrans_movimiento_pallet> items;
 }
 

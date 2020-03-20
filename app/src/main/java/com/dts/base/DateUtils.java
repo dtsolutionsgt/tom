@@ -1,6 +1,9 @@
 package com.dts.base;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtils {
 	
@@ -373,9 +376,29 @@ public class DateUtils {
 		return f;
 	}
 
-	public long getFechaActual(){
-		long f,fecha;
-		String fechaS;
+	public String convierteFecha(String Fecha){
+		String vFecha="";
+
+		try{
+
+			long f;
+			String fechaS;
+			int cyear,cmonth,cday,ch,cm;
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("yyyyMMdd");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
+	public String getFechaActual() throws ParseException {
+		String fechaS,vFecha;
 		int cyear,cmonth,cday,ch,cm;
 
 		final Calendar c = Calendar.getInstance();
@@ -383,12 +406,14 @@ public class DateUtils {
 		cmonth = c.get(Calendar.MONTH)+1;
 		cday = c.get(Calendar.DAY_OF_MONTH);
 
-		//#HS_20181120_1725 Campo de fecha sin hora.
-		f=cfechaSinHora(cyear,cmonth,cday);
-		fechaS=f+"0000";
-		fecha= Long.parseLong(fechaS);
+		fechaS=cyear+"-"+cmonth+"-"+cday+"";
 
-		return fecha;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = dateFormat.parse(fechaS);
+		dateFormat = new SimpleDateFormat("yyyyMMdd");
+		vFecha=dateFormat.format(date);
+
+		return vFecha;
 	}
 
 	public long getFechaActualReport(){
