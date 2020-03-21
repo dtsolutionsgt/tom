@@ -153,7 +153,6 @@ public class WebService {
                             argstr = result;
                         }
 
-                        //return argstr;
                     }
                     if(cl.getName().equals("java.util.Date"))
                     {
