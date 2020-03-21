@@ -30,7 +30,7 @@ public class clsBeStock_rec {
     @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public double Uds_lic_plate;
     @Element(required=false) public int No_bulto;
-    @Element(required=false) public String Fecha_Manufactura;
+    @Element(required=false) public String Fecha_Manufactura="1900-01-01T00:00:01";
     @Element(required=false) public int Anada;
     @Element(required=false) public String User_agr;
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";

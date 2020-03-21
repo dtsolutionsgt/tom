@@ -85,6 +85,9 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
             encabezado.setVisibility(View.VISIBLE);
         }
 
+        if(selectedIndex!= -1 && position == selectedIndex) {
+            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        }
 
         return convertView;
     }

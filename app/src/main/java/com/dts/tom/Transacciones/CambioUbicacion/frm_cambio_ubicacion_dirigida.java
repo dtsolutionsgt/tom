@@ -28,6 +28,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     private TextView lblTituloForma,lbCant,lblCambioEstado,lblUbicDestino;
     private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
+
     private double vCantidadAUbicar;
     private boolean compl;
 
@@ -166,7 +167,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
-            gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
+            gl.tareadet.HoraInicio = app.strFechaHoraXML(fecha_ini);
 
             txtUbicDestino.setText("");
 
@@ -297,10 +298,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             }
 
             if (gl.tareadet.Recibido ==0) {
-                gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
+                gl.tareadet.HoraInicio = app.strFechaHoraXML(fecha_ini);
             }
 
-            gl.tareadet.HoraFin = app.strFechaHora(currentTime);
+            gl.tareadet.HoraFin = app.strFechaHoraXML(currentTime);
             gl.tareadet.Estado = "Pendiente";
             gl.tareadet.Recibido = gl.tareadet.Cantidad;
             gl.tareadet.Realizado = true;
@@ -347,7 +348,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_Vence =app.strFechaSQL(gl.tareadet.Stock.Fecha_vence.toString());
+            gMovimientoDet.Fecha_Vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
             gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
@@ -496,6 +497,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 return;
             }
 
+            txtCantidad.selectAll();
             txtCantidad.requestFocus();
 
         } catch (Exception e) {
@@ -569,53 +571,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     public void Regresar(View view){
-        msgAskExit(String.format("Está seguro de salir del cambio de %s",(gl.modo_cambio==1?"ubicación":"estado")));
+       finish();
     }
 
     public void AplicarCambio(View view){
         cambioUbicEst();
     }
 
-    private void msgAskExit(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
-
-            dialog.setIcon(R.drawable.cambioubic);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    frm_cambio_ubicacion_dirigida.super.finish();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ;
-                }
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
-    }
-
     @Override
-    public void onBackPressed() {
-
-        try{
-
-            msgAskExit(String.format("Está seguro de salir del cambio de %s",(gl.modo_cambio==1?"ubicación":"estado")));
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
+    public void onBackPressed()
+    {
     }
 
 }

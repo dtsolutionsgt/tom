@@ -385,9 +385,6 @@ public class frm_list_rec_prod extends PBase {
                 startActivity(new Intent(this, frm_recepcion_datos.class));
 
             }
-
-
-
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+ e.getMessage());
         }

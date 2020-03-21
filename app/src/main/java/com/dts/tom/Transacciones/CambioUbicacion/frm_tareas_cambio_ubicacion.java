@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_encList;
 import com.dts.tom.PBase;
@@ -27,6 +28,9 @@ import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_tareas_cambio_ubicacion extends PBase {
 
@@ -68,7 +72,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
         Modo = (gl.modo_cambio==1?true:false);
 
-        lblTituloForma.setText(String.format("Listado de tareas de cambios de %s",(Modo==true?"ubicación":"estado")));
+        lblTituloForma.setText(String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
         setHandlers();
 
@@ -111,8 +115,27 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
+                                //Metodo para filtrar la lista o llamar al WS
                                 pIdTarea=Integer.parseInt(txtTarea.getText().toString());
-                                execws(2);
+
+                                if (!txtTarea.getText().toString().isEmpty()){
+                                    //Sirve para filtrar los registros por un producto especifico.
+
+                                    if (pListBeTransUbicHhEnc!=null){
+                                        if(pListBeTransUbicHhEnc.items != null){
+                                            List<clsBeTrans_ubic_hh_enc> BeTransUbicHhEncTmp =
+                                                    stream(pListBeTransUbicHhEnc.items)
+                                                            .where(c -> c.getIdTareaUbicacionEnc()==pIdTarea)
+                                                            .toList();
+
+                                            pListBeTransUbicHhEnc.items=BeTransUbicHhEncTmp;
+                                            Llena_Tareas_Ubicacion();
+                                            txtTarea.setText("");
+                                        }
+                                    }
+                                }else{
+                                    Load();
+                                }
                                 return true;
                         }
                     }
@@ -173,7 +196,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     }
 
-    private void Llena_Tareas_Ubicacion(int pIdTarea){
+    private void Llena_Tareas_Ubicacion(){
 
         clsBeTrans_ubic_hh_enc vItem;
         pListBeTareasCambioHH.clear();
@@ -299,7 +322,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             if(pListBeTransUbicHhEnc!=null){
                 if(pListBeTransUbicHhEnc.items!=null){
-                    Llena_Tareas_Ubicacion(pIdTarea);
+                    Llena_Tareas_Ubicacion();
                 }
             }
 

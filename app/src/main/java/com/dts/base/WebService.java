@@ -161,7 +161,7 @@ public class WebService {
                     }
                     if(cl.getName().equals("java.util.Date"))
                     {
-                        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+                        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         result += "<" + argName + ">";
                         argstr = result;
                         result += dfm.format((Date)obj[i]);
@@ -372,6 +372,8 @@ public class WebService {
                         if (vobj!=null)
                         {
                             result += buildArgValue(vobj);
+                        }else{
+                            result += buildArgValue("");
                         }
                     }
 
@@ -394,7 +396,7 @@ public class WebService {
 
     private Date stringToDate(String aDate)
     {
-        String aFormat = "yyyy-MM-dd HH:mm:ss Z";
+        String aFormat = "yyyy-MM-dd HH:mm:ss";
         if(aDate==null) return null;
         ParsePosition pos = new ParsePosition(0);
         SimpleDateFormat simpledateformat = new SimpleDateFormat(aFormat);

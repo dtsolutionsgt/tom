@@ -95,7 +95,22 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
-    public String strFechaSQL(String fecha){
+	public String strFecha(Date fecha){
+
+		String rsltfecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			rsltfecha=dateFormat.format(fecha);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return rsltfecha;
+	}
+
+    public String strFechaXML(String fecha){
 
         String rsltfecha="";
 
@@ -112,28 +127,13 @@ public class AppMethods {
         return rsltfecha;
     }
 
-	public String strFecha(Date fecha){
+	public String strFechaHoraXML(Date fecha){
 
 		String rsltfecha="";
 
 		try{
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-			rsltfecha=dateFormat.format(fecha);
-
-		}catch (Exception ex){
-			toast(ex.getMessage());
-		}
-		return rsltfecha;
-	}
-
-	public String strFechaHora(Date fecha){
-
-		String rsltfecha="";
-
-		try{
-
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			rsltfecha=dateFormat.format(fecha);
 
 		}catch (Exception ex){
