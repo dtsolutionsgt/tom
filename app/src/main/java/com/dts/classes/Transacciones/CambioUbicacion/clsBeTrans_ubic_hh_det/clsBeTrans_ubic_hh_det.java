@@ -43,7 +43,37 @@ public class clsBeTrans_ubic_hh_det {
     @Element(required=false) public clsBeOperador Operador=new clsBeOperador();
 
 
-    public clsBeTrans_ubic_hh_det() {
+    public clsBeTrans_ubic_hh_det()
+    {
+        this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
+        this.IdTareaUbicacionDet=IdTareaUbicacionDet;
+        this.IdStock=IdStock;
+        this.IdUbicacionOrigen=IdUbicacionOrigen;
+        this.IdUbicacionDestino=IdUbicacionDestino;
+        this.IdEstadoOrigen=IdEstadoOrigen;
+        this.IdEstadoDestino=IdEstadoDestino;
+        this.IdOperador=IdOperador;
+        this.HoraInicio=HoraInicio;
+        this.HoraFin=HoraFin;
+        this.Realizado=Realizado;
+        this.Cantidad=Cantidad;
+        this.Activo=Activo;
+        this.Recibido=Recibido;
+        this.Estado=Estado;
+        this.Atributo_variante_1=Atributo_variante_1;
+        this.IdTramo=IdTramo;
+        this.Tramo=Tramo;
+        this.Indice_x=Indice_x;
+        this.Nivel=Nivel;
+        this.ProductoPresentacion=ProductoPresentacion;
+        this.UnidadMedida=UnidadMedida;
+        this.ProductoEstado=ProductoEstado;
+        this.UbicacionOrigen=UbicacionOrigen;
+        this.UbicacionDestino=UbicacionDestino;
+        this.Producto=Producto;
+        this.Stock=Stock;
+        this.Operador=Operador;
+
     }
 
     public clsBeTrans_ubic_hh_det(int IdTareaUbicacionEnc,int IdTareaUbicacionDet,int IdStock,int IdUbicacionOrigen,
