@@ -95,30 +95,13 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
-    public String strFechaSQL(String fecha){
-
-        String rsltfecha="";
-
-        try{
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            Date date = dateFormat.parse(fecha);
-            dateFormat = new SimpleDateFormat("yyyyMMdd");
-            rsltfecha=dateFormat.format(date);
-
-        }catch (Exception ex){
-            toast(ex.getMessage());
-        }
-        return rsltfecha;
-    }
-
 	public String strFecha(Date fecha){
 
 		String rsltfecha="";
 
 		try{
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 			rsltfecha=dateFormat.format(fecha);
 
 		}catch (Exception ex){
@@ -127,13 +110,30 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
-	public String strFechaHora(Date fecha){
+    public String strFechaXML(String fecha){
+
+        String rsltfecha="";
+
+        try{
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = dateFormat.parse(fecha);
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:00'");
+            rsltfecha=dateFormat.format(date);
+
+        }catch (Exception ex){
+            toast(ex.getMessage());
+        }
+        return rsltfecha;
+    }
+
+	public String strFechaHoraXML(Date fecha){
 
 		String rsltfecha="";
 
 		try{
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			rsltfecha=dateFormat.format(fecha);
 
 		}catch (Exception ex){

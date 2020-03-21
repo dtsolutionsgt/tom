@@ -1,8 +1,6 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -73,7 +71,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         Modo = (gl.modo_cambio==1?true:false);
 
-        lblTituloForma.setText( String.format("Listado de tareas de cambios de %s",(Modo==true?"ubicación":"estado")));
+        lblTituloForma.setText( String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
         setHandlers();
 
@@ -108,8 +106,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-                                //Metodo para filtrar la lista o llamar al WS
 
+                                //Metodo para filtrar la lista o llamar al WS
                                 if (!txtCodigo.getText().toString().isEmpty()){
                                     //Sirve para filtrar los registros por un producto especifico.
 
@@ -230,6 +228,48 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     }
 
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
+        try {
+            if (throwing) throw new Exception(errmsg);
+
+            switch (ws.callback) {
+                case 1:
+                    processTareaDetalleCambioUbicacion();break;
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Get_All_By_IdTransUbicEnc_And_IdOperador","pIdTransUbicHhEnc",gl.IdTareaUbicEnc,
+                                "pIdOperador",gl.IdOperador);
+                        break;
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
     private void Procesa_Registro(int IdTareaDet){
 
         try{
@@ -284,6 +324,20 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);
             listView.setAdapter(adapter);
 
+            if (pBeTransUbicHhDetList.items.size()==1){
+
+                Object lvObj = listView.getItemAtPosition(0);
+                clsBeTrans_ubic_hh_det vItemTmp = (clsBeTrans_ubic_hh_det) lvObj;
+
+                adapter.setSelectedIndex(0);
+
+                index = 0;
+
+                Procesa_Registro(vItemTmp.IdTareaUbicacionDet);
+
+                adapter.refreshItems();
+
+            }
             progress.cancel();
 
         }catch (Exception e){
@@ -293,26 +347,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     }
 
-    @Override
-    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
-        try {
-            if (throwing) throw new Exception(errmsg);
-
-            switch (ws.callback) {
-                case 1:
-                    processTareaDetalleCambioUbicacion();break;
-            }
-
-        } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-        }
-    }
-
     private void processTareaDetalleCambioUbicacion(){
 
         try {
 
-            progress.setMessage("Obteniendo detalle de la tareas de cambio de ubicación");
+            progress.setMessage("Obteniendo detalle de la tarea de cambio de ubicación");
 
             pBeTransUbicHhDetList = xobj.getresult(clsBeTrans_ubic_hh_detList.class,"Get_All_By_IdTransUbicEnc_And_IdOperador");
 
@@ -332,79 +371,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     }
 
-    public class WebServiceHandler extends WebService {
-
-        public WebServiceHandler(PBase Parent,String Url) {
-            super(Parent,Url);
-        }
-
-        @Override
-        public void wsExecute(){
-            try {
-                switch (ws.callback) {
-                    case 1:
-                        callMethod("Get_All_By_IdTransUbicEnc_And_IdOperador","pIdTransUbicHhEnc",gl.IdTareaUbicEnc,
-                                "pIdOperador",gl.IdOperador);
-                        break;
-                }
-
-            } catch (Exception e) {
-                error=e.getMessage();errorflag =true;msgbox(error);
-            }
-        }
-    }
-
-    private void execws(int callbackvalue) {
-        ws.callback=callbackvalue;
-        ws.execute();
-    }
-
     public void Regresar(View view){
-       msgAskExit(String.format("Está seguro de salir del detalle de la tarea de cambio de %s",(Modo==true?"ubicación":"estado")));
-    }
-
-    private void msgAskExit(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
-
-            dialog.setIcon(R.drawable.cambioubic);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    gl.tareadet=new clsBeTrans_ubic_hh_det();
-                    gl.IdTareaUbicDet = 0;
-                    frm_detalle_cambio_ubicacion.super.finish();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ;
-                }
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
+      finish();
     }
 
     @Override
-    public void onBackPressed() {
-
-        try{
-
-            msgAskExit(String.format("Está seguro de salir del detalle de la tarea de cambio de %s",(Modo==true?"ubicación":"estado")));
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
-    }
+    public void onBackPressed() {}
 
 }

@@ -1,5 +1,7 @@
 package com.dts.tom;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 
 import java.util.ArrayList;
@@ -181,8 +184,7 @@ public class Mainmenu extends PBase {
 
                 case 2://Cambio de Ubicación
 
-                    gl.modo_cambio = 1;
-                    startActivity(new Intent(this, frm_tareas_cambio_ubicacion.class));
+                    msgAskUbicNoDirigida("Ubicación no dirigida");
 
                     break;
 
@@ -209,6 +211,40 @@ public class Mainmenu extends PBase {
 
         }catch (Exception e){
             mu.msgbox(e.getMessage());
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskUbicNoDirigida(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    gl.modo_cambio = 1;
+                    gl.IdTareaUbicEnc =0;
+
+                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                    startActivity(intent);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    gl.modo_cambio = 1;
+                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 

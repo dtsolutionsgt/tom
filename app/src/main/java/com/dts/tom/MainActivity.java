@@ -118,10 +118,8 @@ public class MainActivity extends PBase {
 
     private void grantPermissions() {
         try {
-            if (Build.VERSION.SDK_INT >= 20)
-            {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-                {
+            if (Build.VERSION.SDK_INT >= 20) {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     startApplication();
                 } else {
                     ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -207,7 +205,6 @@ public class MainActivity extends PBase {
 
                     idbodega=bodegas.items.get(position).IdBodega;
                     gl.IdBodega = idbodega;
-                    gl. gCodigoBodega= bodegas.items.get(position).Codigo;
                     idimpres=0;
                     execws(3);
 
@@ -441,26 +438,18 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()
-    {
-        class BodegaSort implements Comparator<clsBeBodega>
-        {
-            public int compare(clsBeBodega left, clsBeBodega right)
-            {
+    private void processBodegas() {
+        class BodegaSort implements Comparator<clsBeBodega> {
+            public int compare(clsBeBodega left, clsBeBodega right) {
                 return left.Nombre.compareTo(right.Nombre);
             }
         }
 
         try {
-
             bodegas=xobj.getresult(clsBeBodegaList.class,"Get_Bodegas_By_IdEmpresa_For_HH");
 
-            if (bodegas!=null)
-            {
-                Collections.sort(bodegas.items, new BodegaSort());
-                fillSpinBod();
-            }
-
+            Collections.sort(bodegas.items, new BodegaSort());
+            fillSpinBod();
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
