@@ -100,10 +100,6 @@ public class WebService {
            wr.write(body);
            wr.flush();
 
-           //conn.connect();
-
-           //InputStream is = new BufferedInputStream(conn.getInputStream());
-
            // Get the response
            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
