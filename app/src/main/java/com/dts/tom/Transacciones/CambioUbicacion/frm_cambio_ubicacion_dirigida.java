@@ -303,7 +303,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             gl.tareadet.HoraFin = app.strFechaHoraXML(currentTime);
             gl.tareadet.Estado = "Pendiente";
-            gl.tareadet.Recibido = gl.tareadet.Cantidad;
             gl.tareadet.Realizado = true;
 
             if (Crear_movimiento()){

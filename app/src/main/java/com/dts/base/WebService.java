@@ -325,14 +325,10 @@ public class WebService {
 
                             if(vFecha.contains("T"))
                             {
-                                DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                                Date convertedDate = new Date();
-
                                 try
                                 {
-                                    convertedDate = dfm.parse(vFecha);
-                                    result += buildArgValue(convertedDate,fieldname);
-                                } catch (ParseException e)
+                                    result += buildArgValue(vFecha,fieldname);
+                                } catch (Exception e)
                                 {
                                     Log.e("#EJC_Invalid_Format","ParamName: " + fieldname + " Se aplicó valor x Defecto REF#2");
                                     result += buildArgValue("1900-01-01T00:00:01",fieldname);
