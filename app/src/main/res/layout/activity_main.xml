@@ -133,9 +133,9 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView6"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="0dp"
-        android:layout_marginRight="60dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/frame_rect">
 
         <ImageView

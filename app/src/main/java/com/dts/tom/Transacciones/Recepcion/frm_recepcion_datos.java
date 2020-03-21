@@ -1599,10 +1599,16 @@ public class frm_recepcion_datos extends PBase {
                 pIdOrdenCompraEnc = BeOcDet.IdOrdenCompraEnc;
                 pLineaOC = BeOcDet.No_Linea;
 
-                BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
+                if (Escaneo_Pallet){
 
-                if (frm_list_rec_prod.BeProducto!=null){
-                    BeProducto = frm_list_rec_prod.BeProducto;
+                    BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
+
+                    if (frm_list_rec_prod.BeProducto!=null){
+                        if (frm_list_rec_prod.BeProducto.IdProducto>0){
+                            BeProducto = frm_list_rec_prod.BeProducto;
+                        }
+                    }
+
                 }
 
                 Carga_Datos_Producto();

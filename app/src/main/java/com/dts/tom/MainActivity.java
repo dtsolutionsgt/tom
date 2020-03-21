@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -269,6 +270,23 @@ public class MainActivity extends PBase {
                 return;
             }
 
+        });
+
+        txtpass.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+
+                    imgIngresar.setVisibility(View.INVISIBLE);
+
+                    Valida_Ingreso();
+
+                    imgIngresar.setVisibility(View.VISIBLE);
+
+                }
+
+                return false;
+            }
         });
 
     }
