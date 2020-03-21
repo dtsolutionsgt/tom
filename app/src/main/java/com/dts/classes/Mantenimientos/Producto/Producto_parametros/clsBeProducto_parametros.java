@@ -16,9 +16,9 @@ public class clsBeProducto_parametros {
     @Element(required=false) public boolean Valor_logico;
     @Element(required=false) public boolean Capturar_siempre;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public clsBeP_parametro TipoParametro=new clsBeP_parametro();

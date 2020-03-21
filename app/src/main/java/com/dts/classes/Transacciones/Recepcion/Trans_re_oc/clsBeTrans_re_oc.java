@@ -16,7 +16,7 @@ public class clsBeTrans_re_oc {
     @Element(required=false) public String Hora_ini_hh;
     @Element(required=false) public String Hora_fin_hh;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public Byte Firma_operador;
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public clsBeTrans_oc_enc OC=new clsBeTrans_oc_enc();

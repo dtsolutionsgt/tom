@@ -26,7 +26,7 @@ public class clsBeVW_Movimientos {
     @Element(required=false) public double Cantidad;
     @Element(required=false) public double Peso;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_Vence;
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha;
     @Element(required=false) public int IdTipoTarea;
     @Element(required=false) public String No_Doc_Ingreso;

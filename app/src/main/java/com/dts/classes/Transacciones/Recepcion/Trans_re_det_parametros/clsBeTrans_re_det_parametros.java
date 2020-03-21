@@ -16,8 +16,8 @@ public class clsBeTrans_re_det_parametros {
     @Element(required=false) public double Valor_numerico;
     @Element(required=false) public String Valor_fecha;
     @Element(required=false) public boolean Valor_logico;
-    @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String User_agr= "1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public String Valor_Unico;
     @Element(required=false) public clsBeP_parametro TipoParametro=new clsBeP_parametro();

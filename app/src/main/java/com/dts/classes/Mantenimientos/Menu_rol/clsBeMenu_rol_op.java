@@ -8,9 +8,9 @@ public class clsBeMenu_rol_op {
     @Element(required=false) public String IdMenuSistemaOP;
     @Element(required=false) public int IdRolOperador;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Visible;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public clsBeMenu_sistema_op MenuSistemaOp=new clsBeMenu_sistema_op();

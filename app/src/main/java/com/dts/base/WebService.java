@@ -319,19 +319,24 @@ public class WebService {
                     {
                         if (obj!=null)
                         {
-                            String vFecha =fields[i].get(obj).toString();
+
+                            Object oFecha =fields[i].get(obj);
+                            String vFecha="1900-01-01T00:00:01";
+
+                            if (oFecha!=null)
+                            {
+                                vFecha=oFecha.toString();
+                            }
 
                             if(vFecha.contains("T"))
                             {
                                 DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
                                 Date convertedDate = new Date();
+
                                 try
                                 {
-
                                     convertedDate = dfm.parse(vFecha);
                                     result += buildArgValue(convertedDate);
-
                                 } catch (ParseException e)
                                 {
                                     // TODO Auto-generated catch block
@@ -350,16 +355,13 @@ public class WebService {
                                     DateFormat destDf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
                                     // format the date into another format
                                     String dateStr = destDf.format(convertedDate);
-
                                     result += buildArgValue(dateStr);
-
                                 } catch (ParseException e)
                                 {
                                     // TODO Auto-generated catch block
                                     e.printStackTrace();
                                     result += buildArgValue("");
                                 }
-
                             }
 
                         }
@@ -381,95 +383,6 @@ public class WebService {
 
                 result += "</" + fields[i].getName() + ">";
             }
-
-//            if (ClassName.contains("clsBeTrans_ubic_hh_det") || ClassName.contains("Movimiento") )
-//            {
-//
-//                for (int i = 0; i < fields.length - 1; i++)
-//                {
-//
-//                    fieldname =fields[i].getName();
-//
-//                    if(fieldname == "Tag" || fieldname == "Fec_agr")
-//                    {
-//                        Log.d("tag",fieldname);
-//                    }
-//
-//                    result += "<" + fieldname  + ">";
-//
-//                    if(fieldname!= "Tag")
-//                    {
-//                        if (fieldname.startsWith("Fec_") || fieldname.startsWith("Fech") || fieldname.startsWith("Hora") )
-//                        {
-//                            if (obj!=null)
-//                            {
-//                                String vFecha =fields[i].get(obj).toString();
-//
-//                                if(vFecha.contains("T"))
-//                                {
-//                                    DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-//
-//                                    Date convertedDate = new Date();
-//                                    try
-//                                    {
-//
-//                                        convertedDate = dfm.parse(vFecha);
-//                                        result += buildArgValue(convertedDate);
-//
-//                                    } catch (ParseException e)
-//                                    {
-//                                        // TODO Auto-generated catch block
-//                                        e.printStackTrace();
-//                                        result += buildArgValue("");
-//                                    }
-//                                }else
-//                                {
-//
-//                                    DateFormat dfm = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-//                                    Date convertedDate = new Date();
-//
-//                                    try
-//                                    {
-//                                        convertedDate = dfm.parse(vFecha);
-//                                        DateFormat destDf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-//                                        // format the date into another format
-//                                        String dateStr = destDf.format(convertedDate);
-//
-//                                        result += buildArgValue(dateStr);
-//
-//                                    } catch (ParseException e)
-//                                    {
-//                                        // TODO Auto-generated catch block
-//                                        e.printStackTrace();
-//                                        result += buildArgValue("");
-//                                    }
-//
-//                                }
-//
-//                            }
-//
-//                        }else
-//                        {
-//                            Object vobj = fields[i].get(obj);
-//                            if (vobj!=null)
-//                            {
-//                                result += buildArgValue(vobj);
-//                            }
-//                        }
-//
-//                    }else
-//                    {
-//                        //Si el valor es obj.java en campo tag....
-//                        result += buildArgValue("");
-//                    }
-//
-//                    result += "</" + fields[i].getName() + ">";
-//                }
-//
-//            }else
-//            {
-//                Log.d("Omited post class", ClassName);
-//            }
 
         } catch (Exception e)
         {

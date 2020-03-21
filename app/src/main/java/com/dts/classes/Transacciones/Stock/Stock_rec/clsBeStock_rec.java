@@ -27,15 +27,15 @@ public class clsBeStock_rec {
     @Element(required=false) public String Serial;
     @Element(required=false) public double Cantidad;
     @Element(required=false) public String Fecha_Ingreso;
-    @Element(required=false) public String Fecha_vence;
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public double Uds_lic_plate;
     @Element(required=false) public int No_bulto;
     @Element(required=false) public String Fecha_Manufactura;
     @Element(required=false) public int Anada;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public double Peso;
     @Element(required=false) public double Temperatura;
@@ -59,7 +59,7 @@ public class clsBeStock_rec {
                           int IdProductoEstado,int IdPresentacion,int IdUnidadMedida,int IdUbicacion,
                           int IdUbicacion_anterior,int IdRecepcionEnc,int IdRecepcionDet,int IdPedidoEnc,
                           int IdPickingEnc,int IdDespachoEnc,String Lote,String Lic_plate,
-                          String Serial,double Cantidad,String Fecha_Ingreso,String Fecha_vence,
+                          String Serial,double Cantidad,String Fecha_Ingreso,String Fecha_Vence,
                           double Uds_lic_plate,int No_bulto,String Fecha_Manufactura,int Anada,
                           String User_agr,String Fec_agr,String User_mod,String Fec_mod,
                           boolean Activo,double Peso,double Temperatura,boolean Regularizado,
@@ -86,7 +86,7 @@ public class clsBeStock_rec {
         this.Serial=Serial;
         this.Cantidad=Cantidad;
         this.Fecha_Ingreso=Fecha_Ingreso;
-        this.Fecha_vence=Fecha_vence;
+        this.Fecha_Vence=Fecha_Vence;
         this.Uds_lic_plate=Uds_lic_plate;
         this.No_bulto=No_bulto;
         this.Fecha_Manufactura=Fecha_Manufactura;
@@ -227,11 +227,11 @@ public class clsBeStock_rec {
     public void setFecha_Ingreso(String value) {
         Fecha_Ingreso=value;
     }
-    public String getFecha_vence() {
-        return Fecha_vence;
+    public String getFecha_Vence() {
+        return Fecha_Vence;
     }
-    public void setFecha_vence(String value) {
-        Fecha_vence=value;
+    public void setFecha_Vence(String value) {
+        Fecha_Vence=value;
     }
     public double getUds_lic_plate() {
         return Uds_lic_plate;

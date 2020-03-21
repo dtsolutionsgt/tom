@@ -8,9 +8,9 @@ public class clsBeProducto_estado_ubic {
     @Element(required=false) public int IdProductoEstadUbic;
     @Element(required=false) public int IdEstado;
     @Element(required=false) public int IdUbicacionDefecto;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean IsNew;
