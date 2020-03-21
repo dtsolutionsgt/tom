@@ -116,9 +116,9 @@ public class AppMethods {
 
         try{
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date date = dateFormat.parse(fecha);
-            dateFormat = new SimpleDateFormat("yyyyMMdd");
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:00'");
             rsltfecha=dateFormat.format(date);
 
         }catch (Exception ex){
@@ -133,7 +133,7 @@ public class AppMethods {
 
 		try{
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			rsltfecha=dateFormat.format(fecha);
 
 		}catch (Exception ex){
