@@ -33,7 +33,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double CantidadUmBas;
   @Element(required=false) public double Factor;
   @Element(required=false) public double CantidadPresentacion;
-  @Element(required=false) public String Fecha_Vence;
+  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
   @Element(required=false) public String NomEstado;
   @Element(required=false) public boolean EstadoUtilizable;
   @Element(required=false) public boolean Danado;

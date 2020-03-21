@@ -58,7 +58,7 @@ public class XMLObject  {
 
             if (!xnode.isEmpty())
             {
-                return serializer.read( type, xnode);
+                return serializer.read(type, xnode);
             }
 
         }catch (Exception e)

@@ -347,7 +347,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_vence =app.strFechaSQL(gl.tareadet.Stock.Fecha_vence.toString());
+            gMovimientoDet.Fecha_Vence =app.strFechaSQL(gl.tareadet.Stock.Fecha_vence.toString());
             gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){

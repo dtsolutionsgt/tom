@@ -25,20 +25,20 @@ public class clsBeStock {
     @Element(required=false) public int IdPedidoEnc;
     @Element(required=false) public int IdPickingEnc;
     @Element(required=false) public int IdDespachoEnc;
-    @Element(required=false) public String Lote;
+    @Element(required=false) public String Lote="";
     @Element(required=false) public String Lic_plate;
-    @Element(required=false) public String Serial;
-    @Element(required=false) public double Cantidad;
-    @Element(required=false) public String Fecha_Ingreso;
-    @Element(required=false) public String Fecha_vence;
+    @Element(required=false) public String Serial="";
+    @Element(required=false) public double Cantidad=0;
+    @Element(required=false) public String Fecha_Ingreso="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public double Uds_lic_plate;
     @Element(required=false) public int No_bulto;
-    @Element(required=false) public String Fecha_Manufactura;
+    @Element(required=false) public String Fecha_Manufactura="1900-01-01T00:00:01";
     @Element(required=false) public int Anada;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public double Peso;
     @Element(required=false) public double Temperatura;
@@ -53,7 +53,49 @@ public class clsBeStock {
     @Element(required=false) public int IdStockOrigen;
     @Element(required=false) public clsBeRevision Revision=new clsBeRevision();
 
-    public clsBeStock() {
+    public clsBeStock()
+    {
+        this.IdBodega=IdBodega;
+        this.IdStock=IdStock;
+        this.IdPropietarioBodega=IdPropietarioBodega;
+        this.IdProductoBodega=IdProductoBodega;
+        this.IdProductoEstado=IdProductoEstado;
+        this.IdPresentacion=IdPresentacion;
+        this.IdUnidadMedida=IdUnidadMedida;
+        this.IdUbicacion=IdUbicacion;
+        this.IdUbicacion_anterior=IdUbicacion_anterior;
+        this.IdRecepcionEnc=IdRecepcionEnc;
+        this.IdRecepcionDet=IdRecepcionDet;
+        this.IdPedidoEnc=IdPedidoEnc;
+        this.IdPickingEnc=IdPickingEnc;
+        this.IdDespachoEnc=IdDespachoEnc;
+        this.Lote=Lote;
+        this.Lic_plate=Lic_plate;
+        this.Serial=Serial;
+        this.Cantidad=Cantidad;
+        this.Fecha_Ingreso=Fecha_Ingreso;
+        this.Fecha_vence=Fecha_vence;
+        this.Uds_lic_plate=Uds_lic_plate;
+        this.No_bulto=No_bulto;
+        this.Fecha_Manufactura=Fecha_Manufactura;
+        this.Anada=Anada;
+        this.User_agr=User_agr;
+        this.Fec_agr=Fec_agr;
+        this.User_mod=User_mod;
+        this.Fec_mod=Fec_mod;
+        this.Activo=Activo;
+        this.Peso=Peso;
+        this.Temperatura=Temperatura;
+        this.Atributo_Variante_1=Atributo_Variante_1;
+        this.IsNew=IsNew;
+        this.ProductoValidado=ProductoValidado;
+        this.UbicacionAnterior=UbicacionAnterior;
+        this.Presentacion=Presentacion;
+        this.ProductoEstado=ProductoEstado;
+        this.Parametros=Parametros;
+        this.Producto=Producto;
+        this.IdStockOrigen=IdStockOrigen;
+        this.Revision=Revision;
     }
 
     public clsBeStock(int IdBodega,int IdStock,int IdPropietarioBodega,int IdProductoBodega,

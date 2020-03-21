@@ -9,19 +9,19 @@ public class clsBeBodega_area {
     @Element(required=false) public String Descripcion;
     @Element(required=false) public boolean Sistema;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String Codigo;
     @Element(required=false) public boolean Activo;
-    @Element(required=false) public double Alto;
-    @Element(required=false) public double Largo;
-    @Element(required=false) public double Ancho;
-    @Element(required=false) public double Margen_izquierdo;
-    @Element(required=false) public double Margen_derecho;
-    @Element(required=false) public double Margen_superior;
-    @Element(required=false) public double Margen_inferior;
-    @Element(required=false) public boolean Is;
+    @Element(required=false) public double Alto=0;
+    @Element(required=false) public double Largo=0;
+    @Element(required=false) public double Ancho=0;
+    @Element(required=false) public double Margen_izquierdo=0;
+    @Element(required=false) public double Margen_derecho=0;
+    @Element(required=false) public double Margen_superior=0;
+    @Element(required=false) public double Margen_inferior=0;
+    @Element(required=false) public boolean Is=false;
 
 
     public clsBeBodega_area() {

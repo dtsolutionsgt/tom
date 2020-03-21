@@ -1771,11 +1771,11 @@ public class frm_recepcion_datos extends PBase {
                         if (BeLoteLinea!=null){
                             txtLoteRec.setText(BeLoteLinea.Lote);
 
-                            if (!BeLoteLinea.Fecha_vence.isEmpty()){
+                            if (!BeLoteLinea.Fecha_Vence.isEmpty()){
 
                                 VenceList.clear();
 
-                                VenceList.add(BeLoteLinea.Fecha_vence);
+                                VenceList.add(BeLoteLinea.Fecha_Vence);
 
                                 cmbVenceRec.setText(VenceList.get(0));
 
@@ -2474,7 +2474,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_vence = cmbVenceRec.getText().toString();
+                        BeTransReDet.Fecha_Vence = cmbVenceRec.getText().toString();
                         if (!Valida_Fecha_Vencimiento()){
                             return;
                         }else{
@@ -2483,7 +2483,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                 }else{
-                    BeTransReDet.Fecha_vence = "";
+                    BeTransReDet.Fecha_Vence = "";
                     Continua_Llenando_Detalle_Recepcion_Nueva();
                 }
 
@@ -2564,9 +2564,9 @@ public class frm_recepcion_datos extends PBase {
                             BePP.Cantidad = (1 * Factor);
 
                             if (BeProducto.Control_vencimiento){
-                                BePP.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                                BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
                             }else {
-                                BePP.Fecha_vence = "";
+                                BePP.Fecha_Vence = "";
                             }
 
                         }
@@ -2759,7 +2759,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                        BeTransReDet.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
                         if (!Valida_Fecha_Vencimiento()){
                             mu.msgbox("Se debe corregir la fecha de vencimiento del producto: "+BeProducto.Codigo);
                             return;
@@ -2768,7 +2768,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                 }else{
-                    BeTransReDet.Fecha_vence="";
+                    BeTransReDet.Fecha_Vence="";
                 }
 
                 BeTransReDet.Fecha_ingreso = String.valueOf(du.getFechaActual());
@@ -2828,9 +2828,9 @@ public class frm_recepcion_datos extends PBase {
                                 BePP.Cantidad = (1 * Factor);
 
                                 if (BeProducto.Control_vencimiento){
-                                    BePP.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                                    BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
                                 }else {
-                                    BePP.Fecha_vence = "";
+                                    BePP.Fecha_Vence = "";
                                 }
 
                             }
@@ -2951,9 +2951,9 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (BeProducto.Control_vencimiento){
-                BeStockRec.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                BeStockRec.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
             }else{
-                BeStockRec.Fecha_vence = "";
+                BeStockRec.Fecha_Vence = "";
             }
 
             BeStockRec.ProductoValidado = true;
@@ -3039,7 +3039,7 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.Codigo_Barra = BeStockRec.Presentacion.Codigo_barra;
                         BeProdPallet.Reimpresiones = 0;
                         BeProdPallet.Cantidad = BeStockRec.Cantidad;
-                        BeProdPallet.Fecha_vence = BeStockRec.Fecha_vence;
+                        BeProdPallet.Fecha_Vence = BeStockRec.Fecha_Vence;
                         BeProdPallet.Fec_agr =String.valueOf(du.getFechaActual());
                         BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
                         BeProdPallet.Lote = BeStockRec.Lote;
@@ -3086,9 +3086,9 @@ public class frm_recepcion_datos extends PBase {
                 BeProdPallet.Reimpresiones = 0;
                 BeProdPallet.Cantidad = vBeStockRec.Cantidad;
                 if (BeProducto.Control_vencimiento){
-                    BeProdPallet.Fecha_vence = vBeStockRec.Fecha_vence;
+                    BeProdPallet.Fecha_Vence = vBeStockRec.Fecha_Vence;
                 }else{
-                    BeProdPallet.Fecha_vence = "";
+                    BeProdPallet.Fecha_Vence = "";
                 }
                 BeProdPallet.Fec_agr = String.valueOf(du.getFechaActual());
                 BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());

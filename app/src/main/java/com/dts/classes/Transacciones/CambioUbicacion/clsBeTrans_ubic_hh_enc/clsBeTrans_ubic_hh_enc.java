@@ -12,9 +12,9 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public String FechaFin;
     @Element(required=false) public String HoraFin;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String Observacion;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean Operador_por_linea;

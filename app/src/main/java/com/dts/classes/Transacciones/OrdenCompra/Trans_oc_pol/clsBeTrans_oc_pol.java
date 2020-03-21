@@ -34,9 +34,9 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public double Total_flete;
     @Element(required=false) public double Total_seguro;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
 
 
     public clsBeTrans_oc_pol() {

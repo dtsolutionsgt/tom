@@ -19,12 +19,12 @@ public class clsBeProducto_pallet {
     @Element(required=false) public String Lote;
     @Element(required=false) public boolean Impreso;
     @Element(required=false) public int Reimpresiones;
-    @Element(required=false) public String Fecha_vence;
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha_ingreso;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean IsNew;
 
@@ -52,7 +52,7 @@ public class clsBeProducto_pallet {
         this.Lote=Lote;
         this.Impreso=Impreso;
         this.Reimpresiones=Reimpresiones;
-        this.Fecha_vence=Fecha_vence;
+        this.Fecha_Vence=Fecha_vence;
         this.Fecha_ingreso=Fecha_ingreso;
         this.User_agr=User_agr;
         this.Fec_agr=Fec_agr;
@@ -149,10 +149,10 @@ public class clsBeProducto_pallet {
         Reimpresiones=value;
     }
     public String getFecha_vence() {
-        return Fecha_vence;
+        return Fecha_Vence;
     }
     public void setFecha_vence(String value) {
-        Fecha_vence=value;
+        Fecha_Vence=value;
     }
     public String getFecha_ingreso() {
         return Fecha_ingreso;

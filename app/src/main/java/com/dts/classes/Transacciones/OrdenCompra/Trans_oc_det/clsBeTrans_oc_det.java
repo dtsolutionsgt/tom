@@ -30,9 +30,9 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public double Costo;
     @Element(required=false) public double Total_linea;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String Atributo_variante_1;
     @Element(required=false) public String Codigo_Producto;

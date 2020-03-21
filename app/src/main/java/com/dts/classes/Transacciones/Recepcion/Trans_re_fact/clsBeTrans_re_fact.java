@@ -10,9 +10,9 @@ public class clsBeTrans_re_fact {
     @Element(required=false) public int Orden;
     @Element(required=false) public String NoFactura;
     @Element(required=false) public String Observacion;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
     @Element(required=false) public boolean Completa;
     @Element(required=false) public boolean IsNew;

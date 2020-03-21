@@ -16,9 +16,9 @@ public class clsBeEmpresa {
     @Element(required=false) public String Path_printer;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean ClienteRapido;
     @Element(required=false) public boolean Operador_logistico;
     @Element(required=false) public int Puerto_escaner;
@@ -34,7 +34,35 @@ public class clsBeEmpresa {
     @Element(required=false) public int IdMotivoAjusteInventario;
 
 
-    public clsBeEmpresa() {
+    public clsBeEmpresa()
+    {
+        this.IdEmpresa=IdEmpresa;
+        this.Nombre=Nombre;
+        this.Direccion=Direccion;
+        this.Telefono=Telefono;
+        this.Email=Email;
+        this.Razon_social=Razon_social;
+        this.Representante=Representante;
+        this.Corr_cod_barra=Corr_cod_barra;
+        this.Path_printer=Path_printer;
+        this.Activo=Activo;
+        this.User_agr=User_agr;
+        this.Fec_agr=Fec_agr;
+        this.User_mod=User_mod;
+        this.Fec_mod=Fec_mod;
+        this.ClienteRapido=ClienteRapido;
+        this.Operador_logistico=Operador_logistico;
+        this.Puerto_escaner=Puerto_escaner;
+        this.Control_presentaciones=Control_presentaciones;
+        this.Anulaciones_por_supervisor=Anulaciones_por_supervisor;
+        this.Codigo=Codigo;
+        this.Clave=Clave;
+        this.Intento=Intento;
+        this.Duracionclave=Duracionclave;
+        this.Duracionclavetemporal=Duracionclavetemporal;
+        this.codigo_automatico=codigo_automatico;
+        this.politica_contrasenas=politica_contrasenas;
+        this.IdMotivoAjusteInventario=IdMotivoAjusteInventario;
     }
 
     public clsBeEmpresa(int IdEmpresa,String Nombre,String Direccion,String Telefono,

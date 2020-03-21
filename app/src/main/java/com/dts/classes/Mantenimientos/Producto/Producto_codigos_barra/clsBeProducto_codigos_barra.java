@@ -11,9 +11,9 @@ public class clsBeProducto_codigos_barra {
     @Element(required=false) public int IdProducto;
     @Element(required=false) public int IdProveedor;
     @Element(required=false) public String Codigo_barra;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String User_agr;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean IsNew;

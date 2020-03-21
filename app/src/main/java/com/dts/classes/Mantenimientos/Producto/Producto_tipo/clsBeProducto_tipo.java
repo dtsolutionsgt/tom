@@ -13,9 +13,9 @@ public class clsBeProducto_tipo {
     @Element(required=false) public String NombreTipoProducto;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Seleccion;
     @Element(required=false) public int idTipoProducto;
     @Element(required=false) public String Nombre;

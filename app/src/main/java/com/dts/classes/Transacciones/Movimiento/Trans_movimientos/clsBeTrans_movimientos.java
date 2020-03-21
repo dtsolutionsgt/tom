@@ -23,7 +23,7 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public String Serie;
     @Element(required=false) public double Peso;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_vence;
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha;
     @Element(required=false) public String Barra_pallet;
     @Element(required=false) public String Hora_ini;
@@ -42,7 +42,7 @@ public class clsBeTrans_movimientos {
                                   int IdPropietarioBodega,int IdProductoBodega,int IdUbicacionOrigen,int IdUbicacionDestino,
                                   int IdPresentacion,int IdEstadoOrigen,int IdEstadoDestino,int IdUnidadMedida,
                                   int IdTipoTarea,int IdBodegaDestino,int IdRecepcion,double Cantidad,
-                                  String Serie,double Peso,String Lote,String Fecha_vence,
+                                  String Serie,double Peso,String Lote,String Fecha_Vence,
                                   String Fecha,String Barra_pallet,String Hora_ini,String Hora_fin,
                                   String Fecha_agr,String Usuario_agr,double Cantidad_hist,double Peso_hist,
                                   boolean IsNew) {
@@ -66,7 +66,7 @@ public class clsBeTrans_movimientos {
         this.Serie=Serie;
         this.Peso=Peso;
         this.Lote=Lote;
-        this.Fecha_vence=Fecha_vence;
+        this.Fecha_Vence=Fecha_Vence;
         this.Fecha=Fecha;
         this.Barra_pallet=Barra_pallet;
         this.Hora_ini=Hora_ini;
@@ -194,11 +194,11 @@ public class clsBeTrans_movimientos {
     public void setLote(String value) {
         Lote=value;
     }
-    public String getFecha_vence() {
-        return Fecha_vence;
+    public String getFecha_Vence() {
+        return Fecha_Vence;
     }
-    public void setFecha_vence(String value) {
-        Fecha_vence=value;
+    public void setFecha_Vence(String value) {
+        Fecha_Vence=value;
     }
     public String getFecha() {
         return Fecha;

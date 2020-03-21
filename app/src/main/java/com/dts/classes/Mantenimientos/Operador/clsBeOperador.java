@@ -19,9 +19,9 @@ public class clsBeOperador {
     @Element(required=false) public String Clave;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr;
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod;
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public double Costo_hora;
     @Element(required=false) public boolean Usa_hh;
     @Element(required=false) public boolean IsNew;

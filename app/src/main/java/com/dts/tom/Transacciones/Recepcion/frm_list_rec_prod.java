@@ -300,7 +300,7 @@ public class frm_list_rec_prod extends PBase {
                         gBeOrdenCompra.Fecha_Recepcion = du.getActDate()+"";
                         gBeOrdenCompra.Hora_Inicio_Recepcion =  du.getActDate()+"";
                         gBeOrdenCompra.User_Mod = gl.IdOperador+"";
-                        gBeOrdenCompra.Fec_Mod =  du.getActDate()+"";
+                        gBeOrdenCompra.Fec_mod =  du.getActDate()+"";
 
 
                     }
