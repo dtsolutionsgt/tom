@@ -40,7 +40,7 @@ public class appGlobals extends Application {
 
 
     //Clases para cambio de ubicación y estado.
-    public clsBeTrans_ubic_hh_det tareadet;
+    public clsBeTrans_ubic_hh_det tareadet = new clsBeTrans_ubic_hh_det();
     public clsBeTrans_ubic_hh_enc tareaenc;
 
     public clsBeVW_stock_res BeStockPallet;

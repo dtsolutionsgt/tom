@@ -100,10 +100,6 @@ public class WebService {
            wr.write(body);
            wr.flush();
 
-           conn.connect();
-
-           //InputStream is = new BufferedInputStream(conn.getInputStream());
-
            // Get the response
            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -146,7 +142,7 @@ public class WebService {
                         {
                             result += "<" + argName + ">";
                             argstr = result;
-                            result += buildArgValue(obj[i].toString());
+                            result += buildArgValue(obj[i].toString(),argName);
                             argstr = result;
                             result += "</" + argName + ">";
                             argstr = result;
@@ -157,7 +153,6 @@ public class WebService {
                             argstr = result;
                         }
 
-                        //return argstr;
                     }
                     if(cl.getName().equals("java.util.Date"))
                     {
@@ -206,7 +201,7 @@ public class WebService {
                 {
                     result += "<" + argName + ">";
                     argstr = result;
-                    result += buildArgValue(args[i]);
+                    result += buildArgValue(args[i],argName);
                     argstr = result;
                     result += "</" + argName + ">";
                     argstr = result;
@@ -226,7 +221,7 @@ public class WebService {
         return result;
     }
 
-    private String buildArgValue(Object obj) throws IllegalArgumentException, IllegalAccessException {
+    private String buildArgValue(Object obj, String pFieldName) throws IllegalArgumentException, IllegalAccessException {
         //Class<?> cl = obj.getClass();
 
         Class<?> cl = null;
@@ -250,6 +245,7 @@ public class WebService {
                     return obj.toString();
                 }else
                 {
+                    Log.e("#EJC_Null","#EJC20200320_NullPointer Esto no debería suceder...");
                     return null;
                 }
 
@@ -266,7 +262,7 @@ public class WebService {
                     if (obj!=null)
                     {
                         convertedDate = dfm.parse(obj.toString());
-                        result += buildArgValue(convertedDate);
+                        result += buildArgValue(convertedDate,pFieldName);
                         return obj.toString();
                     }else
                     {
@@ -275,9 +271,8 @@ public class WebService {
 
                 } catch (ParseException e)
                 {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    result += buildArgValue("1900-01-01T00:00:01");
+                    Log.e("#EJC_Invalid_Format","ParamName: " + pFieldName + " Se aplicó valor x Defecto REF#1");
+                    result += buildArgValue("1900-01-01T00:00:01",pFieldName);
                 }
             }
 
@@ -289,7 +284,7 @@ public class WebService {
 
                 for (int i = 0; i < arr.length; i++) {
                     result += "<" + xmlName + ">";
-                    result += buildArgValue(arr[i]);
+                    result += buildArgValue(arr[i],xmlName);
                     result += "</" + xmlName + ">";
                 }
                 return result;
@@ -306,7 +301,7 @@ public class WebService {
 
                 fieldname =fields[i].getName();
 
-                if(fieldname == "Tag" || fieldname == "Fec_agr")
+                if(fieldname == "Tag" || fieldname == "Fec_agr" || fieldname.startsWith("Fecha") )
                 {
                     Log.d("tag",fieldname);
                 }
@@ -330,18 +325,13 @@ public class WebService {
 
                             if(vFecha.contains("T"))
                             {
-                                DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                                Date convertedDate = new Date();
-
                                 try
                                 {
-                                    convertedDate = dfm.parse(vFecha);
-                                    result += buildArgValue(convertedDate);
-                                } catch (ParseException e)
+                                    result += buildArgValue(vFecha,fieldname);
+                                } catch (Exception e)
                                 {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                    result += buildArgValue("");
+                                    Log.e("#EJC_Invalid_Format","ParamName: " + fieldname + " Se aplicó valor x Defecto REF#2");
+                                    result += buildArgValue("1900-01-01T00:00:01",fieldname);
                                 }
                             }else
                             {
@@ -355,15 +345,27 @@ public class WebService {
                                     DateFormat destDf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
                                     // format the date into another format
                                     String dateStr = destDf.format(convertedDate);
-                                    result += buildArgValue(dateStr);
+                                    result += buildArgValue(dateStr,fieldname);
                                 } catch (ParseException e)
                                 {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                    result += buildArgValue("");
+                                    Log.e("#EJC_Invalid_Format","ParamName: " + fieldname + " Se aplicó valor x Defecto REF#3");
+                                    if (fieldname=="Fechamanufactura")
+                                    {
+                                        result += buildArgValue(false,fieldname);
+                                    }else
+                                    {
+                                        result += buildArgValue("1900-01-01T00:00:01",fieldname);
+                                    }
                                 }
                             }
 
+                        }else
+                        {
+                            Object vobj = fields[i].get(obj);
+                            if (vobj!=null)
+                            {
+                                result += buildArgValue(vobj,fieldname);
+                            }
                         }
 
                     }else
@@ -371,14 +373,15 @@ public class WebService {
                         Object vobj = fields[i].get(obj);
                         if (vobj!=null)
                         {
-                            result += buildArgValue(vobj);
+                            result += buildArgValue(vobj,fieldname);
                         }
                     }
 
                 }else
                 {
+                    Log.e("#EJC_Invalid_Format","ParamName: " + fieldname + " Se aplicó valor x Defecto REF#4");
                     //Si el valor es obj.java en campo tag....
-                    result += buildArgValue("");
+                    result += buildArgValue("",fieldname);
                 }
 
                 result += "</" + fields[i].getName() + ">";

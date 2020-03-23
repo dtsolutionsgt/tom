@@ -26,8 +26,9 @@ import java.util.Locale;
 
 public class frm_cambio_ubicacion_dirigida extends PBase {
 
-    private TextView lblTituloForma,lbCant,lblCambioEstado,lblUbicDestino;
+    private TextView lblTituloForma,lblCant,lblCambioEstado,lblUbicDestino;
     private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
+
     private double vCantidadAUbicar;
     private boolean compl;
 
@@ -52,7 +53,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         xobj = new XMLObject(ws);
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lbCant = (TextView) findViewById(R.id.lbCant);
+        lblCant = (TextView) findViewById(R.id.lbCant);
         lblCambioEstado = (TextView) findViewById(R.id.lblCambioEstado);
         txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
         txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
@@ -166,8 +167,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
-            gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
+            gl.tareadet.HoraInicio = app.strFechaHoraXML(fecha_ini);
 
+            lblCant.setText(gl.gCantDisponible+"");
             txtUbicDestino.setText("");
 
             if (gl.modo_cambio==2){
@@ -226,8 +228,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             compl = false;
             double cantStock;
 
-            cantStock = gl.gCantDisponible;
-
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString());
 
             if (vCantidadAUbicar<0) {
@@ -235,6 +235,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 txtCantidad.requestFocus();
                 return;
             }
+
+            cantStock = gl.gCantDisponible;
 
             if (vCantidadAUbicar >cantStock){
                 mu.msgbox("Cantidad mayor que stock disponible: "+ cantStock);
@@ -297,13 +299,23 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             }
 
             if (gl.tareadet.Recibido ==0) {
-                gl.tareadet.HoraInicio = app.strFechaHora(fecha_ini);
+                gl.tareadet.HoraInicio = app.strFechaHoraXML(fecha_ini);
+                gl.tareaenc.FechaInicio = app.strFechaHoraXML(fecha_ini);
             }
 
-            gl.tareadet.HoraFin = app.strFechaHora(currentTime);
-            gl.tareadet.Estado = "Pendiente";
-            gl.tareadet.Recibido = gl.tareadet.Cantidad;
-            gl.tareadet.Realizado = true;
+            if(gl.tareadet.getCantidad()==gl.tareadet.getRecibido()){
+                gl.tareadet.Realizado = true;
+            }
+
+            gl.tareaenc.Cambio_estado = (gl.modo_cambio==2?true:false);
+
+            if (compl) {
+                gl.tareaenc.Estado = "Finalizado";
+                gl.tareaenc.HoraFin = app.strFecha(currentTime);
+                gl.tareaenc.FechaFin = app.strFecha(currentTime);
+            }else{
+                gl.tareadet.Estado = "Pendiente";
+            }
 
             if (Crear_movimiento()){
                 //Llama al WS para realizar la actualización de los registros.
@@ -347,7 +359,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_Vence =app.strFechaSQL(gl.tareadet.Stock.Fecha_vence.toString());
+            gMovimientoDet.Fecha_Vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
             gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
@@ -411,8 +423,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     case 3:
                         callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
                                 "pMovimiento",gMovimientoDet);
+                        break;
                     case 4:
                         callMethod("Get_Single_By_IdEstado","pIdEstado",gl.tareadet.IdEstadoDestino);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -496,6 +510,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 return;
             }
 
+            txtCantidad.selectAll();
             txtCantidad.requestFocus();
 
         } catch (Exception e) {
@@ -508,41 +523,17 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try {
 
-            progress.setMessage("Validando ubicación");
+            progress.setMessage("Procesando cambio de ubicación");
 
-            boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_Det",boolean.class);
+            boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_DetResult",boolean.class);
 
             if (actualizar){
-
-                Date currentTime = Calendar.getInstance().getTime();
-
-                gl.tareaenc.Estado = "Pendiente";
-
-                if (gl.tareaenc.Estado.equals("NUEVO")) {
-                    gl.tareaenc.HoraInicio =  app.strFecha(currentTime);
-                    gl.tareaenc.FechaInicio = app.strFecha(currentTime);
-                }
-
-                if (gl.modo_cambio==2){
-                    gl.tareaenc.Cambio_estado = true;
-                }else{
-                    gl.tareaenc.Cambio_estado = false;
-                }
-
-                if (compl) {
-                    gl.tareaenc.Estado = "Finalizado";
-                    gl.tareaenc.HoraFin = app.strFecha(currentTime);
-                    gl.tareaenc.FechaFin = app.strFecha(currentTime);
-                }
-
-                if(gl.modo_cambio==2){
-                    mu.msgbox("Cambio de estado aplicado");
-                }else{
-                    mu.msgbox("Cambio de ubicación aplicado");
-                }
-
-                //Actualiza_Tarea_Lista();
+                msgAskExit(String.format("Cambio de %s aplicado",(gl.modo_cambio==1?"ubicación":"estado")));
+            }else{
+                msgbox("Ocurrió un error al procesar el cambio de ubicación");
             }
+
+            progress.cancel();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -569,7 +560,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     public void Regresar(View view){
-        msgAskExit(String.format("Está seguro de salir del cambio de %s",(gl.modo_cambio==1?"ubicación":"estado")));
+       finish();
     }
 
     public void AplicarCambio(View view){
@@ -581,19 +572,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage( msg);
 
             dialog.setIcon(R.drawable.cambioubic);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     frm_cambio_ubicacion_dirigida.super.finish();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 
@@ -606,16 +591,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     @Override
-    public void onBackPressed() {
-
-        try{
-
-            msgAskExit(String.format("Está seguro de salir del cambio de %s",(gl.modo_cambio==1?"ubicación":"estado")));
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
+    public void onBackPressed()
+    {
     }
 
 }

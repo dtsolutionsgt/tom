@@ -15,7 +15,7 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public String Observacion;
+    @Element(required=false) public String Observacion="";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean Operador_por_linea;
     @Element(required=false) public boolean Ubicacion_con_hh;
@@ -24,7 +24,7 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public int IdPrioridad;
     @Element(required=false) public int IdTipoTarea;
     @Element(required=false) public int IdBodega;
-    @Element(required=false) public String Asunto;
+    @Element(required=false) public String Asunto="";
     @Element(required=false) public String DescripcionMotivo;
     @Element(required=false) public boolean IsNew;
 
