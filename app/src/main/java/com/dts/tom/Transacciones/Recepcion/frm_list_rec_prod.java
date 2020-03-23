@@ -300,7 +300,7 @@ public class frm_list_rec_prod extends PBase {
                         gBeOrdenCompra.Fecha_Recepcion = du.getActDate()+"";
                         gBeOrdenCompra.Hora_Inicio_Recepcion =  du.getActDate()+"";
                         gBeOrdenCompra.User_Mod = gl.IdOperador+"";
-                        gBeOrdenCompra.Fec_mod =  du.getActDate()+"";
+                        gBeOrdenCompra.Fec_Mod =  du.getActDate()+"";
 
 
                     }
@@ -513,6 +513,17 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    private void Recepcion_Completa(double vTipoDiferencia){
+
+        try{
+
+
+
+        }catch (Exception e){
+            mu.msgbox("Recepcion_Completa:"+e.getMessage());
+        }
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -664,6 +675,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==1){
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
+                Recepcion_Completa(0);
             }
 
 

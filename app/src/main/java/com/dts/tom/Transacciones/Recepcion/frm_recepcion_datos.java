@@ -8,8 +8,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.KeyEvent;
@@ -23,10 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -60,15 +54,8 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.IntStream;
-
-import br.com.zbra.androidlinq.Linq;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
@@ -130,6 +117,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeStock_recList listaStock = new clsBeStock_recList();
     private clsBeProducto_palletList listaProdPallets = new clsBeProducto_palletList();
     private clsBeStock_rec vBeStockRec = new clsBeStock_rec();
+    private clsBeStock_rec vBeStockRecPallet = new clsBeStock_rec();
     private clsBeProducto_pallet BeProdPallet  = new clsBeProducto_pallet();
     private clsBeStock gBeStockAnt;
     private clsBeTrans_oc_det beTransOCDet =new clsBeTrans_oc_det();
@@ -1278,7 +1266,7 @@ public class frm_recepcion_datos extends PBase {
 
                     dialog.cancel();
                     Mostro_Propiedades = true;
-                    Guardar_Recepcion();
+                    Guardar_Recepcion_Nueva();
 
                 }else{
 
@@ -1469,7 +1457,7 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.cancel();
             Mostro_Propiedades = true;
-            Guardar_Recepcion();
+            Guardar_Recepcion_Nueva();
 
         }catch (Exception e){
             mu.msgbox("SigueValidandoParametros:"+e.getMessage());
@@ -1569,6 +1557,8 @@ public class frm_recepcion_datos extends PBase {
 
             if (!Mostro_Propiedades){
                 execws(5);
+            }else{
+                Guardar_Recepcion_Nueva();
             }
 
             Mostrar_Propiedades_Parametros = Mostrar;
@@ -1897,8 +1887,155 @@ public class frm_recepcion_datos extends PBase {
 
             Llena_Detalle_Recepcion_Nueva();
 
+            Llena_Stock_Rec_Pallet_Proveedor();
+
+            double vCantidad  = BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
+
+            String vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
+                    +"Cant: "+vCantidad +"\n "
+                    +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
+                    +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                    +"Lote: "+BeINavBarraPallet.Lote +"\n"
+                    +"¿El producto está completo y en buen estado?";
+
+
+
+            msgValidaProductoPallet(vMensaje1);
+
         }catch (Exception e){
             mu.msgbox("LlenaCamposEsPallet:"+e.getMessage());
+        }
+    }
+
+    private void Guardar_Pallet(){
+
+        try{
+
+            vBeStockRecPallet.Uds_lic_plate = BeINavBarraPallet.Cantidad_UMP;
+            vBeStockRecPallet.No_bulto = 0;
+
+            execws(21);
+
+        }catch (Exception e){
+            mu.msgbox("Guardar_Pallet:"+e.getMessage());
+        }
+
+    }
+
+    private void Llena_Stock_Rec_Pallet_Proveedor(){
+
+        vBeStockRecPallet = new clsBeStock_rec();
+        double vCantidad=0;
+
+        try{
+
+            if (BeINavBarraPallet!=null){
+
+                vBeStockRecPallet.IdStockRec = 0;
+                vBeStockRecPallet.IdPropietarioBodega = gl.gBeOrdenCompra.IdPropietarioBodega;
+                vBeStockRecPallet.IdProductoBodega = BeProducto.IdProductoBodega;
+                if (IdPreseSelect>0){
+                    vBeStockRecPallet.IdPresentacion =IdPreseSelect;
+                    vBeStockRecPallet.Presentacion = new  clsBeProducto_Presentacion();
+                    vBeStockRecPallet.Presentacion.IdPresentacion = IdPreseSelect;
+                }else{
+                    vBeStockRecPallet.IdPresentacion =0;
+                    vBeStockRecPallet.Presentacion = new  clsBeProducto_Presentacion();
+                    vBeStockRecPallet.Presentacion.IdPresentacion = 0;
+                }
+
+                vBeStockRecPallet.IdUnidadMedida = BeProducto.IdUnidadMedidaBasica;
+                vBeStockRecPallet.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
+                vBeStockRecPallet.IdRecepcionDet = pIdRecepcionDet;
+                vBeStockRecPallet.Lote = BeINavBarraPallet.Lote;
+                vBeStockRecPallet.Lic_plate = BeINavBarraPallet.Codigo_barra;
+                vBeStockRecPallet.Serial = "";
+
+                if (vBeStockRecPallet.IdPresentacion > 0){
+
+                    if (!EsTransferenciaInternaWMS){
+                        if (BeProducto.Presentacion.EsPallet){
+                            vCantidad = BeINavBarraPallet.Cantidad_UMP * BeProducto.Presentacion.Factor * BeProducto.Presentacion.CamasPorTarima * BeProducto.Presentacion.CajasPorCama;
+                        }else{
+                            vCantidad = BeProducto.Presentacion.Factor * BeINavBarraPallet.Cantidad_UMP;
+                        }
+                    }else{
+
+                        if (BeProducto.Presentacion.EsPallet){
+                            vCantidad = BeINavBarraPallet.Cantidad_Presentacion * BeProducto.Presentacion.Factor * BeProducto.Presentacion.CamasPorTarima * BeProducto.Presentacion.CajasPorCama;
+                        }else{
+                            vCantidad = BeINavBarraPallet.Cantidad_Presentacion * BeProducto.Presentacion.Factor;
+                        }
+
+                    }
+
+                }else{
+                    vCantidad = BeINavBarraPallet.Cantidad_UMP;
+                }
+
+                vBeStockRecPallet.Cantidad = vCantidad;
+                vBeStockRecPallet.Fecha_Ingreso = du.getFechaActual();
+                vBeStockRecPallet.Fecha_Vence = BeINavBarraPallet.Fecha_Vence;
+                vBeStockRecPallet.Uds_lic_plate = BeINavBarraPallet.Cantidad_Presentacion;
+                vBeStockRecPallet.No_bulto = BeINavBarraPallet.IdPallet;
+                vBeStockRecPallet.Fecha_Manufactura = BeINavBarraPallet.Fecha_Produccion;
+                vBeStockRecPallet.Serial = "";
+                vBeStockRecPallet.Anada = 0;
+                vBeStockRecPallet.Fec_agr = du.getFechaActual();
+                vBeStockRecPallet.User_agr = gl.IdOperador+"";
+                vBeStockRecPallet.Fec_mod = du.getFechaActual();
+                vBeStockRecPallet.User_mod = gl.IdOperador+"";
+                vBeStockRecPallet.Peso = 0.0;
+                vBeStockRecPallet.Temperatura = 0.0;
+                vBeStockRecPallet.Regularizado = false;
+                vBeStockRecPallet.IsNew = true;
+
+                vBeStockRecPallet.ProductoEstado = new  clsBeProducto_estado();
+
+                if (IdEstadoSelect>0){
+
+                    vBeStockRecPallet.ProductoEstado.IdEstado = IdEstadoSelect;
+                    vBeStockRecPallet.IdProductoEstado = IdEstadoSelect;
+
+                    if (LProductoEstado.items.size()>0){
+
+                        if (stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).select(c->c.Danado).first()){
+                            execws(20);
+                        }else{
+                            vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                        }
+
+                    }
+
+                }
+
+                Continua_Llenando_Stock_Pallet_Proveedor();
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Llena_Stock_Rec_Pallet_Proveedor");
+        }
+
+    }
+
+    private void Continua_Llenando_Stock_Pallet_Proveedor(){
+
+        try{
+
+
+            vBeStockRecPallet.IdUbicacion_anterior = vBeStockRecPallet.IdUbicacion;
+
+            if (!txtUmbasRec.getText().toString().isEmpty()){
+                vBeStockRecPallet.IdUnidadMedida = BeProducto.UnidadMedida.IdUnidadMedida;
+            }
+
+            vBeStockRec.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
+            vBeStockRec.ProductoValidado = true;
+            vBeStockRec.No_linea = pLineaOC;
+
+        }catch (Exception e){
+            mu.msgbox("Continua_Llenando_Stock_Pallet_Proveedor:"+e.getMessage());
         }
     }
 
@@ -2068,7 +2205,7 @@ public class frm_recepcion_datos extends PBase {
 
     //region GuardarRecepcion
 
-    private void Guardar_Recepcion(){
+    private void Guardar_Recepcion_Nueva(){
 
         try{
 
@@ -2258,6 +2395,7 @@ public class frm_recepcion_datos extends PBase {
 
             int I=0;
 
+            auxListTransRecDet = new clsBeTrans_re_detList();
             auxListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == pIdRecepcionDet).toList();
 
             //Esto es el equivalente a ReDim en .net
@@ -3233,6 +3371,35 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private void msgValidaProductoPallet(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Guardar_Pallet();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
     private void msgValidaFechaVence(String msg) {
 
         try{
@@ -3399,8 +3566,8 @@ public class frm_recepcion_datos extends PBase {
                         //Guardar_Recepcion_Nueva
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",lBeProdPallet.items,"pIdEmpresa",gl.IdEmpresa,
+                                "pListStockRecSer",pListBeStockSeRec,"pListStockRec",pListBeStockRec.items.toArray(),
+                                "pListProductoPallet",lBeProdPallet,"pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
                         break;
                     case 17 :
@@ -3416,6 +3583,21 @@ public class frm_recepcion_datos extends PBase {
                         break;
                     case 19:
                         callMethod("Max_IdRecepcion_Det_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        break;
+                    case 20:
+                        callMethod("Get_IdUbicMerma_By_IdBodega","pIdBodega",gl.IdBodega);
+                        break;
+                    case 21:
+                        callMethod("Finalizar_Recepcion_Parcial_Pallet_Proveedor","pRecEnc",gl.gBeRecepcion,
+                                "pIdOrdenCompraEnc",pIdOrdenCompraEnc,
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdEmpresa", gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUsuario",gl.IdOperador,
+                                "pBeStockRec",vBeStockRecPallet,
+                                "pBeRecDet",BeTransReDet,
+                                "pBeBarraPallet",BeINavBarraPallet,
+                                "pEsTransferencia",EsTransferenciaInternaWMS);
                         break;
                 }
 
@@ -3490,6 +3672,15 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 19:
                     processMaxIdRecepcionDet();
+                    break;
+                case 20:
+                    processGetIdUbicacionMerma();
+                    break;
+                case 21:
+                    beTransOCDet =new clsBeTrans_oc_det();
+                    beTransOCDet.IdOrdenCompraEnc = pIdOrdenCompraEnc;
+                    beTransOCDet.IdOrdenCompraDet = pIdOrdenCompraDet;
+                    execws(18);
                     break;
 
             }
@@ -3618,7 +3809,7 @@ public class frm_recepcion_datos extends PBase {
             if(Pperzonalizados|PCap_Manu|PCap_Anada|PGenera_lp|PTiene_Ctrl_Peso|PTiene_Ctrl_Temp|PTiene_PorSeries|PTiene_Pres){
                 Muestra_Propiedades_Producto();
             }else{
-                Guardar_Recepcion();
+                Guardar_Recepcion_Nueva();
             }
 
         }catch (Exception e){
@@ -3859,6 +4050,19 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processMaxIdRecepcionDet"+e.getMessage());
+        }
+    }
+
+    private void processGetIdUbicacionMerma(){
+
+        try{
+
+            vBeStockRecPallet.IdUbicacion = xobj.getresult(Integer.class,"Get_IdUbicMerma_By_IdBodega");
+
+            Continua_Llenando_Stock_Pallet_Proveedor();
+
+        }catch (Exception e){
+            mu.msgbox("processGetIdUbicacionMerma"+e.getMessage());
         }
     }
 

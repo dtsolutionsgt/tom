@@ -296,7 +296,7 @@ public class WebService {
 
             String ClassName = cl.getName();
 
-            for (int i = 0; i < fields.length - 1; i++)
+            for (int i = 0; i <= fields.length-1; i++)
             {
 
                 fieldname =fields[i].getName();

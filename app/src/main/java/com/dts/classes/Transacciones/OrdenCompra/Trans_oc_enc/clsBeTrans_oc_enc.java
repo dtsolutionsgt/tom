@@ -25,9 +25,9 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String Hora_Creacion;
     @Element(required=false) public String No_Documento;
     @Element(required=false) public String User_Agr;
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_Agr ="1900-01-01T00:00:01";
     @Element(required=false) public String User_Mod;
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_Mod="1900-01-01T00:00:01";
     @Element(required=false) public String Procedencia;
     @Element(required=false) public String No_Marchamo;
     @Element(required=false) public String Referencia;
@@ -86,9 +86,9 @@ public class clsBeTrans_oc_enc {
         this.Hora_Creacion=Hora_Creacion;
         this.No_Documento=No_Documento;
         this.User_Agr=User_Agr;
-        this.Fec_agr=Fec_Agr;
+        this.Fec_Agr =Fec_Agr;
         this.User_Mod=User_Mod;
-        this.Fec_mod=Fec_Mod;
+        this.Fec_Mod =Fec_Mod;
         this.Procedencia=Procedencia;
         this.No_Marchamo=No_Marchamo;
         this.Referencia=Referencia;
@@ -183,10 +183,10 @@ public class clsBeTrans_oc_enc {
         User_Agr=value;
     }
     public String getFec_Agr() {
-        return Fec_agr;
+        return Fec_Agr;
     }
     public void setFec_Agr(String value) {
-        Fec_agr=value;
+        Fec_Agr =value;
     }
     public String getUser_Mod() {
         return User_Mod;
@@ -195,10 +195,10 @@ public class clsBeTrans_oc_enc {
         User_Mod=value;
     }
     public String getFec_Mod() {
-        return Fec_mod;
+        return Fec_Mod;
     }
     public void setFec_Mod(String value) {
-        Fec_mod=value;
+        Fec_Mod =value;
     }
     public String getProcedencia() {
         return Procedencia;
