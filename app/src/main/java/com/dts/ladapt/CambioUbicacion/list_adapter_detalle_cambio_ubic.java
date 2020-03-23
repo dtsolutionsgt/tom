@@ -100,6 +100,8 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        }else{
+            convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         return convertView;

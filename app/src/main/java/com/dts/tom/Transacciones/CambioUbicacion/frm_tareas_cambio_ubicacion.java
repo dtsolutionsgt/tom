@@ -382,12 +382,11 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     protected void onResume() {
         try{
+            Load();
             super.onResume();
-
-            //listItems(); //Actualiza los items al regresar.
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
+
 }

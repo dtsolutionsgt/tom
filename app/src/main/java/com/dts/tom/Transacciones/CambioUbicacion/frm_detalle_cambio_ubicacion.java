@@ -40,6 +40,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private ProgressDialog progress;
 
     boolean Modo=false;
+    boolean inicio=true;
 
     private list_adapter_detalle_cambio_ubic adapter;
 
@@ -79,7 +80,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         ProgressDialog("Cargando forma");
 
-        Load();
+        //Load();
 
     }
 
@@ -298,7 +299,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             if(!pBeTransUbicHhDetList.items.isEmpty() && pBeTransUbicHhDetList.items!=null ){
 
-                for (int i = pBeTransUbicHhDetList.items.size()-1; i>=0; i--) {
+                for (int i = 0; i<=pBeTransUbicHhDetList.items.size()-1; i++) {
 
                     vItem = new clsBeTrans_ubic_hh_det();
 
@@ -335,9 +336,13 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 Procesa_Registro(vItemTmp.IdTareaUbicacionDet);
 
-                adapter.refreshItems();
-
+            }else{
+                adapter.setSelectedIndex(-1);
+                index = -1;
             }
+
+            adapter.refreshItems();
+
             progress.cancel();
 
         }catch (Exception e){
@@ -377,5 +382,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     @Override
     public void onBackPressed() {}
+
+    @Override
+    protected void onResume(){
+        Load();
+        super.onResume();
+    }
 
 }
