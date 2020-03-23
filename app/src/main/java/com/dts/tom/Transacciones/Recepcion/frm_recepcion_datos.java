@@ -1173,7 +1173,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     pListBeStockRec.items.get(pIndexStock).Regularizado =false;
-                    pListBeStockRec.items.get(pIndexStock).Fecha_regularizacion = "190-01-1";
+                    pListBeStockRec.items.get(pIndexStock).Fecha_regularizacion =du.convierteFecha("01-01-1900");
 
                     if (pListBeStockSeRec.items!=null){
                         for (clsBeStock_se_rec bo: pListBeStockSeRec.items){
@@ -1396,7 +1396,7 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Fechamanufactura){
                 ObjS.Fecha_Manufactura = txtFechaManu.getText().toString();
             }else{
-                ObjS.Fecha_Manufactura = "1900-1-1";
+                ObjS.Fecha_Manufactura = du.convierteFecha("01-01-1900");
             }
 
             ObjS.Serial = txtSerial.getText().toString();
@@ -2183,7 +2183,7 @@ public class frm_recepcion_datos extends PBase {
                 pListBeStockRec.items.get(pIndiceListaStock).Temperatura = 0.0;
 
                 pListBeStockRec.items.get(pIndiceListaStock).Regularizado = false;
-                pListBeStockRec.items.get(pIndiceListaStock).Fecha_regularizacion = "19000101";
+                pListBeStockRec.items.get(pIndiceListaStock).Fecha_regularizacion = du.convierteFecha("01-01-1900");
 
                 pListBeStockRec.items.get(pIndiceListaStock).Atributo_Variante_1 = "";
                 pListBeStockRec.items.get(pIndiceListaStock).No_linea = pLineaOC;

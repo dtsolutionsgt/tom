@@ -387,7 +387,7 @@ public class DateUtils {
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			Date date = dateFormat.parse(Fecha);
-			dateFormat = new SimpleDateFormat("yyyyMMdd");
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
 			vFecha=dateFormat.format(date);
 
@@ -410,7 +410,7 @@ public class DateUtils {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = dateFormat.parse(fechaS);
-		dateFormat = new SimpleDateFormat("yyyyMMdd");
+		dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		vFecha=dateFormat.format(date);
 
 		return vFecha;
