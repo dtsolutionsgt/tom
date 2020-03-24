@@ -513,17 +513,6 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    private void Recepcion_Completa(double vTipoDiferencia){
-
-        try{
-
-
-
-        }catch (Exception e){
-            mu.msgbox("Recepcion_Completa:"+e.getMessage());
-        }
-    }
-
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -675,7 +664,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==1){
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
-                Recepcion_Completa(0);
+                Recepcion_Completa();
             }
 
 
