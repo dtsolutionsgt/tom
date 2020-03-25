@@ -2570,9 +2570,20 @@ public class frm_recepcion_datos extends PBase {
             auxListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == pIdRecepcionDet).toList();
 
             //Esto es el equivalente a ReDim en .net
-            if (gl.gBeRecepcion.Detalle.items!=null){
-                System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
-                gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
+            if (gl.gBeRecepcion.Detalle.items!=null)
+            {
+                //#EJC20200325: Aquí da error en algunas ocasiones
+
+                try{
+
+                    System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
+                    gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
+
+                }catch (Exception ex)
+                {
+                    mu.msgbox("#20200325_0338AM: When redim array -> "+ex.getMessage());
+                }
+
             }
 
             for  (clsBeTrans_re_det RD: auxListTransRecDet.items){

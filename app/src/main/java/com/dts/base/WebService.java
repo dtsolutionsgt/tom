@@ -20,7 +20,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -371,9 +373,48 @@ public class WebService {
                     }else
                     {
                         Object vobj = fields[i].get(obj);
+                        
                         if (vobj!=null)
                         {
-                            result += buildArgValue(vobj,fieldname);
+                            if (vobj instanceof ArrayList)
+                            {
+                                Log.i("islist","vojb");
+
+                                try{
+
+                                    for (Object vItem: ((ArrayList) vobj).toArray())
+                                    {
+                                        System.out.println(vItem);
+
+                                        Class<?> clchild = null;
+
+                                        try
+                                        {
+                                            //#EJC20200325: No colocar inicio, hasta no definir el objeto completo
+                                            result="";
+                                            String ClassNamechild = vItem.getClass().getSimpleName();
+                                            System.out.println(ClassNamechild);
+                                            result+=buildArgs(ClassNamechild,vItem);
+
+                                        } catch (Exception e)
+                                        {
+                                            return "";
+                                        }
+
+                                    }
+
+                                }catch (Exception ex)
+                                {
+                                   Log.e("Nosepudo",ex.getMessage());
+                                }
+
+                                return result;
+
+                            }else
+                            {
+                                result += buildArgValue(vobj,fieldname);
+                            }
+
                         }
                     }
 
