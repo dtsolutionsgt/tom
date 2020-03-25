@@ -59,6 +59,7 @@ import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
+import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
 
 public class frm_recepcion_datos extends PBase {
 
@@ -97,6 +98,8 @@ public class frm_recepcion_datos extends PBase {
     private int IndexPresSelected=-1;
     private String MensajeParam="";
     private int pIndiceListaStock = -1;
+    private double CostoOC=0;
+    private int vPresentacion;
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
@@ -124,6 +127,7 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_rec ObjS = new clsBeStock_rec();
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
+    private   clsBeTrans_re_detList LRecepcionCantidad = new clsBeTrans_re_detList();
 
     double vFactorNuevaRec=0;
     double vCantNuevaRec=0;
@@ -200,9 +204,14 @@ public class frm_recepcion_datos extends PBase {
             BeOcDet=gl.gselitem;
         }
 
-        if(!gl.Escaneo_Pallet){
-            execws(1);
-        }
+
+            if(!gl.Escaneo_Pallet){
+                execws(1);
+            }else{
+                Load();
+            }
+
+
 
     }
 
@@ -312,11 +321,11 @@ public class frm_recepcion_datos extends PBase {
                     double CamasPorTarima = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CamasPorTarima).first();
 
                     if (EsPallet|PermitePaletizar){
-                        chkPaletizar.setVisibility(View.INVISIBLE);
+                        chkPaletizar.setVisibility(View.GONE);
                     }else if(PermitePaletizar && CajasPorCama>0 && CamasPorTarima>0) {
                         chkPaletizar.setVisibility(View.VISIBLE);
                     }else{
-                        chkPaletizar.setVisibility(View.INVISIBLE);
+                        chkPaletizar.setVisibility(View.GONE);
                     }
 
                 }
@@ -339,6 +348,39 @@ public class frm_recepcion_datos extends PBase {
                     return false;
                 }
             });
+
+            txtBarra.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        if (BeProducto.Control_vencimiento){
+                            cmbVenceRec.setSelectAllOnFocus(true);
+                            cmbVenceRec.requestFocus();
+                        }
+
+                        if (BeProducto.Control_lote){
+                            txtLoteRec.setSelectAllOnFocus(true);
+                            txtLoteRec.requestFocus();
+                        }
+
+                        if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
+                            txtCantidadRec.setSelectAllOnFocus(true);
+                            txtCantidadRec.requestFocus();
+                        }
+
+                    }
+
+                    return false;
+                }
+            });
+
+            txtCantidadRec.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+                public void onFocusChange(View v, boolean hasFocus){
+                    if (hasFocus)
+                        ((EditText)v).selectAll();
+                } });
+
+
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
@@ -567,7 +609,7 @@ public class frm_recepcion_datos extends PBase {
                     txtLicPlate.setFocusable(false);
                     txtLicPlate.setFocusableInTouchMode(false);
                     txtLicPlate.setClickable(false);
-                    txtLicPlate.setVisibility(View.INVISIBLE);
+                    txtLicPlate.setVisibility(View.GONE);
                 }else{
                     if (bePresentacion.EsPallet | bePresentacion.Permitir_paletizar){
 
@@ -610,22 +652,22 @@ public class frm_recepcion_datos extends PBase {
 
                         }
                     }else{
-                        lblLicPlate.setVisibility(View.INVISIBLE);
+                        lblLicPlate.setVisibility(View.GONE);
                         txtLicPlate.setFocusable(false);
                         txtLicPlate.setFocusableInTouchMode(false);
                         txtLicPlate.setClickable(false);
-                        txtLicPlate.setVisibility(View.INVISIBLE);
+                        txtLicPlate.setVisibility(View.GONE);
                     }
 
                 }
 
                 txtLoteRec.setText(pNumeroLP);
             }else{
-                lblLicPlate.setVisibility(View.INVISIBLE);
+                lblLicPlate.setVisibility(View.GONE);
                 txtLicPlate.setFocusable(false);
                 txtLicPlate.setFocusableInTouchMode(false);
                 txtLicPlate.setClickable(false);
-                txtLicPlate.setVisibility(View.INVISIBLE);
+                txtLicPlate.setVisibility(View.GONE);
             }
 
             if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
@@ -633,15 +675,15 @@ public class frm_recepcion_datos extends PBase {
                 txtFechaManu.setVisibility(View.VISIBLE);
 
             }else{
-                lblFManufact.setVisibility(View.INVISIBLE);
-                txtFechaManu.setVisibility(View.INVISIBLE);
+                lblFManufact.setVisibility(View.GONE);
+                txtFechaManu.setVisibility(View.GONE);
             }
 
             txtAnada.setText("0");
 
             if (!BeProducto.Capturar_aniada){
-                lblAnada.setVisibility(View.INVISIBLE);
-                txtAnada.setVisibility(View.INVISIBLE);
+                lblAnada.setVisibility(View.GONE);
+                txtAnada.setVisibility(View.GONE);
             }else{
                 lblAnada.setVisibility(View.VISIBLE);
                 txtAnada.setVisibility(View.VISIBLE);
@@ -715,35 +757,35 @@ public class frm_recepcion_datos extends PBase {
                 switch (BeProducto.IdPerfilSerializado){
 
                     case 1:
-                        lblSerialP.setVisibility(View.INVISIBLE);
-                        txtSerial.setVisibility(View.INVISIBLE);
-                        lblSerialIni.setVisibility(View.INVISIBLE);
-                        txtSerieIni.setVisibility(View.INVISIBLE);
-                        lblSerialFin.setVisibility(View.INVISIBLE);
-                        txtSerieFin.setVisibility(View.INVISIBLE);
+                        lblSerialP.setVisibility(View.GONE);
+                        txtSerial.setVisibility(View.GONE);
+                        lblSerialIni.setVisibility(View.GONE);
+                        txtSerieIni.setVisibility(View.GONE);
+                        lblSerialFin.setVisibility(View.GONE);
+                        txtSerieFin.setVisibility(View.GONE);
                         break;
                     case 2:
-                        lblSerialP.setVisibility(View.INVISIBLE);
-                        txtSerial.setVisibility(View.INVISIBLE);
+                        lblSerialP.setVisibility(View.GONE);
+                        txtSerial.setVisibility(View.GONE);
                         break;
                     case 3:
                         txtSerial.setText(BeProducto.Noserie);
                     default:
-                        lblSerialP.setVisibility(View.INVISIBLE);
-                        txtSerial.setVisibility(View.INVISIBLE);
-                        lblSerialIni.setVisibility(View.INVISIBLE);
-                        txtSerieIni.setVisibility(View.INVISIBLE);
-                        lblSerialFin.setVisibility(View.INVISIBLE);
-                        txtSerieFin.setVisibility(View.INVISIBLE);
+                        lblSerialP.setVisibility(View.GONE);
+                        txtSerial.setVisibility(View.GONE);
+                        lblSerialIni.setVisibility(View.GONE);
+                        txtSerieIni.setVisibility(View.GONE);
+                        lblSerialFin.setVisibility(View.GONE);
+                        txtSerieFin.setVisibility(View.GONE);
                         break;
                 }
             }else{
-                lblSerialP.setVisibility(View.INVISIBLE);
-                txtSerial.setVisibility(View.INVISIBLE);
-                lblSerialIni.setVisibility(View.INVISIBLE);
-                txtSerieIni.setVisibility(View.INVISIBLE);
-                lblSerialFin.setVisibility(View.INVISIBLE);
-                txtSerieFin.setVisibility(View.INVISIBLE);
+                lblSerialP.setVisibility(View.GONE);
+                txtSerial.setVisibility(View.GONE);
+                lblSerialIni.setVisibility(View.GONE);
+                txtSerieIni.setVisibility(View.GONE);
+                lblSerialFin.setVisibility(View.GONE);
+                txtSerieFin.setVisibility(View.GONE);
             }
         }catch (Exception e){
             mu.msgbox("Valida_Perfil_Serializado"+e.getMessage());
@@ -757,11 +799,11 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Temperatura_recepcion){
                 txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia, 6)+"");
             }else{
-                lblTempTit.setVisibility(View.INVISIBLE);
-                lblTempEsta.setVisibility(View.INVISIBLE);
-                lblTempReal.setVisibility(View.INVISIBLE);
-                txtTempEsta.setVisibility(View.INVISIBLE);
-                txtTempReal.setVisibility(View.INVISIBLE);
+                lblTempTit.setVisibility(View.GONE);
+                lblTempEsta.setVisibility(View.GONE);
+                lblTempReal.setVisibility(View.GONE);
+                txtTempEsta.setVisibility(View.GONE);
+                txtTempReal.setVisibility(View.GONE);
             }
 
         }catch (Exception e){
@@ -804,13 +846,13 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }else{
-                lblPres.setVisibility(View.INVISIBLE);
-                cmbPresParams.setVisibility(View.INVISIBLE);
-                lblPesoTit.setVisibility(View.INVISIBLE);
-                lblPesoEsta.setVisibility(View.INVISIBLE);
-                txtPesoEsta.setVisibility(View.INVISIBLE);
-                lblPesoReal.setVisibility(View.INVISIBLE);
-                txtPesoReal.setVisibility(View.INVISIBLE);
+                lblPres.setVisibility(View.GONE);
+                cmbPresParams.setVisibility(View.GONE);
+                lblPesoTit.setVisibility(View.GONE);
+                lblPesoEsta.setVisibility(View.GONE);
+                txtPesoEsta.setVisibility(View.GONE);
+                lblPesoReal.setVisibility(View.GONE);
+                txtPesoReal.setVisibility(View.GONE);
             }
 
         }catch (Exception e){
@@ -1599,17 +1641,72 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
 
-                }
+                }else{
 
-                Carga_Datos_Producto();
+                    if (frm_list_rec_prod.BeProducto!=null){
+                        if (frm_list_rec_prod.BeProducto.IdProducto>0){
+                            BeProducto = frm_list_rec_prod.BeProducto;
+                        }
+                    }
+
+                    if (gl.Carga_Producto_x_Pallet){
+
+                        Carga_Datos_Producto_Por_Pallet();
+
+                    }else{
+                        txtCantidadRec.requestFocus();
+                        txtCantidadRec.selectAll();
+                        txtCantidadRec.setSelectAllOnFocus(true);
+
+                        Carga_Datos_Producto();
+                    }
+
+                }
 
             }
 
         }catch (Exception e){
-            mu.msgbox(e.getClass()+" "+ e.getMessage());
+            mu.msgbox("Load:"+ e.getMessage());
         }
 
 
+    }
+
+    private void Carga_Datos_Producto_Por_Pallet(){
+
+        try{
+
+            if (BeProducto.IdProducto!=0){
+
+                Mostro_Propiedades = false;
+
+                plistBeReDetParametros =  new clsBeTrans_re_det_parametrosList();
+                lBeProdPallet = new clsBeProducto_palletList();
+                pListBeStockSeRec = new clsBeStock_se_recList();
+
+                if (pListTransRecDet.items!=null){
+
+                    pIdRecepcionDet = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
+
+                    if (gl.TipoOpcion==2){
+                        pLineaOC  = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
+                    }else if(pLineaOC==-1){
+                        pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
+                    }
+
+                }else{
+
+                    pListTransRecDet.items = new ArrayList<clsBeTrans_re_det>();
+
+                    execws(19);
+
+                }
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Carga_Datos_Producto_Por_Pallet:"+e.getMessage());
+        }
     }
 
     private void Carga_Datos_Producto(){
@@ -1666,10 +1763,11 @@ public class frm_recepcion_datos extends PBase {
 
     private void LlenaDatosFaltantes(){
 
-        int vPresentacion;
-        double CostoOC=0;
+        vPresentacion=0;
+        CostoOC=0;
         double Factor=0;
         boolean EsPallet=false;
+        int Indx=-1;
 
         try{
 
@@ -1692,10 +1790,15 @@ public class frm_recepcion_datos extends PBase {
                 lblVence.setVisibility(View.VISIBLE);
                 cmbVenceRec.setVisibility(View.VISIBLE);
                 imgDate.setVisibility(View.VISIBLE);
+
+                if (!gl.gFechaVenceAnterior.equals("")){
+                    cmbVenceRec.setText(gl.gFechaVenceAnterior);
+                }
+
             }else{
-                cmbVenceRec.setVisibility(View.INVISIBLE);
-                lblVence.setVisibility(View.INVISIBLE);
-                imgDate.setVisibility(View.INVISIBLE);
+                cmbVenceRec.setVisibility(View.GONE);
+                lblVence.setVisibility(View.GONE);
+                imgDate.setVisibility(View.GONE);
             }
 
             Valida_Lote();
@@ -1716,7 +1819,8 @@ public class frm_recepcion_datos extends PBase {
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
                 }
 
-                int Indx =  PresList.indexOf(stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.Nombre).first());
+                List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                Indx =AxuListPres.indexOf(vPresentacion);
 
                 cmbPresRec.setSelection(Indx);
 
@@ -1730,24 +1834,40 @@ public class frm_recepcion_datos extends PBase {
                         cmbPresRec.setVisibility(View.VISIBLE);
                         cmbPresRec.setSelection(0);
                     }else{
-                        cmbPresRec.setVisibility(View.INVISIBLE);
+                        cmbPresRec.setVisibility(View.GONE);
                     }
 
                 }else{
-                    lblPres.setVisibility(View.INVISIBLE);
-                    cmbPresRec.setVisibility(View.INVISIBLE);
+                    lblPres.setVisibility(View.GONE);
+                    cmbPresRec.setVisibility(View.GONE);
                 }
 
             }
 
+            if (gl.Carga_Producto_x_Pallet){
 
-            Cant_Recibida = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad_recibida).first();
-            Cant_A_Recibir = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad).first();
-            if(Cant_Recibida - Cant_Recibida<0){
-                Cant_Pendiente = 0;
+                if  (BeProducto.Presentaciones.items.get(Indx).EsPallet){
+
+                    Cant_Recibida = gBeStockRec.Uds_lic_plate;
+                    Cant_A_Recibir = Factor;
+
+                    FinalizCargaProductos();
+
+                }else{
+
+                execws(22);
+
+                }
+
             }else{
-                Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
-            }
+
+                Cant_Recibida = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad_recibida).first();
+                Cant_A_Recibir = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad).first();
+                if(Cant_Recibida - Cant_Recibida<0){
+                    Cant_Pendiente = 0;
+                }else{
+                    Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
+                }
 
             txtCantidadRec.setText(Cant_Pendiente+"");
 
@@ -1782,27 +1902,46 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
+                FinalizCargaProductos();
+
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox(e.getClass()+" "+e.getMessage());
+        }
+
+    }
+
+    private void FinalizCargaProductos(){
+
+        try{
+
             txtUmbasRec.setText(BeProducto.UnidadMedida.Nombre);
             txtPeso.setText("");
 
+            if (BeProducto.Control_lote){
+                txtLoteRec.setText(gl.gLoteAnterior);
+            }
+
             if (!BeProducto.Control_peso){
-                txtPeso.setVisibility(View.INVISIBLE);
-                txtPesoUnitario.setVisibility(View.INVISIBLE);
-                lblPeso.setVisibility(View.INVISIBLE);
-                lblPUn.setVisibility(View.INVISIBLE);
+                txtPeso.setVisibility(View.GONE);
+                txtPesoUnitario.setVisibility(View.GONE);
+                lblPeso.setVisibility(View.GONE);
+                lblPUn.setVisibility(View.GONE);
             }
 
             if(!BeProducto.Control_vencimiento){
-                cmbVenceRec.setVisibility(View.INVISIBLE);
-                lblVence.setVisibility(View.INVISIBLE);
-                imgDate.setVisibility(View.INVISIBLE);
+                cmbVenceRec.setVisibility(View.GONE);
+                lblVence.setVisibility(View.GONE);
+                imgDate.setVisibility(View.GONE);
             }
 
             if (!gl.gBeRecepcion.Muestra_precio){
-                txtCostoOC.setVisibility(View.INVISIBLE);
-                txtCostoReal.setVisibility(View.INVISIBLE);
-                lblCosto.setVisibility(View.INVISIBLE);
-                lblCReal.setVisibility(View.INVISIBLE);
+                txtCostoOC.setVisibility(View.GONE);
+                txtCostoReal.setVisibility(View.GONE);
+                lblCosto.setVisibility(View.GONE);
+                lblCReal.setVisibility(View.GONE);
             }
 
             CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
@@ -1837,6 +1976,21 @@ public class frm_recepcion_datos extends PBase {
             btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
             btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
 
+            if (gl.Carga_Producto_x_Pallet){
+
+                txtLoteRec.setText(gBeStockRec.Lote);
+
+                txtLoteRec.setFocusable(false);
+                txtLoteRec.setFocusableInTouchMode(false);
+                txtLoteRec.setClickable(false);
+
+                cmbVenceRec.setText(gBeStockRec.Fecha_Vence);
+
+                cmbVenceRec.setFocusable(false);
+                cmbVenceRec.setFocusableInTouchMode(false);
+                cmbVenceRec.setClickable(false);
+
+            }
 
             if (Escaneo_Pallet){
                 LlenaCamposEsPallet();
@@ -1845,10 +1999,8 @@ public class frm_recepcion_datos extends PBase {
             progress.cancel();
 
         }catch (Exception e){
-            progress.cancel();
-            mu.msgbox(e.getClass()+" "+e.getMessage());
+            mu.msgbox("FinalizCargaProductos:"+e.getMessage());
         }
-
     }
 
     private void LlenaCamposEsPallet(){
@@ -2061,10 +2213,11 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-
-            rPresentacion  = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c->c.IdPresentacion).firstOrDefault(0);
-
-
+            if(gl.Carga_Producto_x_Pallet){
+                rPresentacion = gBeStockRec.IdPresentacion;
+            }else {
+                rPresentacion = stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).firstOrDefault(0);
+            }
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
         }
@@ -2091,8 +2244,8 @@ public class frm_recepcion_datos extends PBase {
                 txtLoteRec.setText(lCorrelativo);
             }else if(!BeProducto.Control_lote){
                 txtLoteRec.setText("");
-                txtLoteRec.setVisibility(View.INVISIBLE);
-                lblLote.setVisibility(View.INVISIBLE);
+                txtLoteRec.setVisibility(View.GONE);
+                lblLote.setVisibility(View.GONE);
             }
 
         }catch (Exception e){
@@ -2212,8 +2365,10 @@ public class frm_recepcion_datos extends PBase {
             if (Mostrar_Propiedades_Parametros){
                 Muestra_Propiedades_Producto();
             }else{
-                Llena_Stock();
-                Mostro_Propiedades = true;
+                if (!Mostro_Propiedades){
+                    Llena_Stock();
+                    Mostro_Propiedades = true;
+                }
             }
 
             if (!Mostro_Propiedades){
@@ -2291,13 +2446,21 @@ public class frm_recepcion_datos extends PBase {
 
                 pListBeStockRec.items.get(pIndiceListaStock).IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 pListBeStockRec.items.get(pIndiceListaStock).IdProductoBodega = BeProducto.IdProductoBodega;
-                pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = "";
+                if (pListBeStockRec.items.get(pIndiceListaStock).Lic_plate!=null){
+                    pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = pListBeStockRec.items.get(pIndiceListaStock).Lic_plate;
+                }else{
+                    pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = "";
+                }
                 pListBeStockRec.items.get(pIndiceListaStock).Fecha_Ingreso = String.valueOf(du.getFechaActual());
                 pListBeStockRec.items.get(pIndiceListaStock).IdRecepcionDet = pIdRecepcionDet;
 
                 pListBeStockRec.items.get(pIndiceListaStock).Fecha_Manufactura = "1990-01-01";
 
-                pListBeStockRec.items.get(pIndiceListaStock).Serial = "";
+                if (pListBeStockRec.items.get(pIndiceListaStock).Serial!=null){
+
+                }else{
+                    pListBeStockRec.items.get(pIndiceListaStock).Serial = "";
+                }
                 pListBeStockRec.items.get(pIndiceListaStock).Anada = 0;
                 pListBeStockRec.items.get(pIndiceListaStock).Fec_agr = String.valueOf(du.getFechaActual());
                 pListBeStockRec.items.get(pIndiceListaStock).User_agr = gl.IdOperador+"";
@@ -2315,9 +2478,17 @@ public class frm_recepcion_datos extends PBase {
                     pListBeStockRec.items.get(pIndiceListaStock).IdPresentacion = 0;
                 }
 
-                pListBeStockRec.items.get(pIndiceListaStock).Peso = 0.0;
+                if (pListBeStockRec.items.get(pIndiceListaStock).Peso>0){
+                    pListBeStockRec.items.get(pIndiceListaStock).Peso =pListBeStockRec.items.get(pIndiceListaStock).Peso ;
+                }else{
+                    pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
+                }
 
-                pListBeStockRec.items.get(pIndiceListaStock).Temperatura = 0.0;
+                if (pListBeStockRec.items.get(pIndiceListaStock).Temperatura>0){
+                    pListBeStockRec.items.get(pIndiceListaStock).Temperatura = pListBeStockRec.items.get(pIndiceListaStock).Temperatura;
+                }else{
+                    pListBeStockRec.items.get(pIndiceListaStock).Temperatura = 0.0;
+                }
 
                 pListBeStockRec.items.get(pIndiceListaStock).Regularizado = false;
                 pListBeStockRec.items.get(pIndiceListaStock).Fecha_regularizacion = du.convierteFecha("01-01-1900");
@@ -2603,11 +2774,13 @@ public class frm_recepcion_datos extends PBase {
                          return;
                     }else{
                         BeTransReDet.Lote = txtLoteRec.getText().toString();
+                        gl.gLoteAnterior = txtLoteRec.getText().toString();
                     }
 
                 }else{
                     if (!txtLoteRec.getText().toString().isEmpty()){
                         BeTransReDet.Lote = txtLoteRec.getText().toString();
+                        gl.gLoteAnterior = txtLoteRec.getText().toString();
                     }
 
                 }
@@ -2619,6 +2792,7 @@ public class frm_recepcion_datos extends PBase {
                         return;
                     }else{
                         BeTransReDet.Fecha_Vence = cmbVenceRec.getText().toString();
+                        gl.gFechaVenceAnterior = txtLoteRec.getText().toString();
                         if (!Valida_Fecha_Vencimiento()){
                             return;
                         }else{
@@ -3599,6 +3773,9 @@ public class frm_recepcion_datos extends PBase {
                                 "pBeBarraPallet",BeINavBarraPallet,
                                 "pEsTransferencia",EsTransferenciaInternaWMS);
                         break;
+                    case 22:
+                        callMethod("Get_All_BeTrasReDet_By_IdOrdenCompraEnc","pIdOrdenCompraEnc",pIdOrdenCompraEnc);
+                        break;
                 }
 
             }catch (Exception e){
@@ -3682,6 +3859,10 @@ public class frm_recepcion_datos extends PBase {
                     beTransOCDet.IdOrdenCompraDet = pIdOrdenCompraDet;
                     execws(18);
                     break;
+                case 22:
+                    processCantRecConOC();
+                    break;
+
 
             }
 
@@ -4053,6 +4234,50 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    public void ExitForm(View view){
+        msgAskExit("Está seguro de salir");
+    }
+
+    private void msgAskExit(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    doExit();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void doExit(){
+        try{
+
+            //LimpiaValores();
+            super.finish();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     private void processGetIdUbicacionMerma(){
 
         try{
@@ -4066,10 +4291,49 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    private void processCantRecConOC(){
+
+        try{
+
+            LRecepcionCantidad = xobj.getresult(clsBeTrans_re_detList.class,"Get_All_BeTrasReDet_By_IdOrdenCompraEnc");
+
+            if (LRecepcionCantidad!=null){
+                if (LRecepcionCantidad.items!=null){
+                    Cant_Recibida = stream(LRecepcionCantidad.items).where(c->c.IdProductoBodega == pIdProductoBodega &&
+                            c.IdPresentacion == vPresentacion &&
+                            c.No_Linea == pLineaOC).select(c->c.cantidad_recibida).first();
+                }
+            }
+
+            Cant_A_Recibir = gl.gselitem.Cantidad;
+
+            if(Cant_Recibida - Cant_Recibida<0){
+                Cant_Pendiente = 0;
+            }else{
+                Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
+            }
+
+            FinalizCargaProductos();
+
+        }catch (Exception e){
+            mu.msgbox("processCantRecConOC"+e.getMessage());
+        }
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        try{
+            msgAskExit("Está seguro de salir");
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
     //endregion
 }

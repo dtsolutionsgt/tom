@@ -60,6 +60,9 @@ public class appGlobals extends Application {
     public clsBeTrans_oc_enc gBeOrdenCompra;
     public double  CantRec=0;
     public  double CantOC=0;
+    public String gLoteAnterior="";
+    public String gFechaVenceAnterior="";
+    public boolean Carga_Producto_x_Pallet=false;
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
