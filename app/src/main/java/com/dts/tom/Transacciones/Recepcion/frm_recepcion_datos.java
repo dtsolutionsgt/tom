@@ -1972,6 +1972,14 @@ public class frm_recepcion_datos extends PBase {
             txtBarra.setClickable(false);
 
             txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtCostoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtTempEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoUnitario.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
             btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
@@ -2792,7 +2800,7 @@ public class frm_recepcion_datos extends PBase {
                         return;
                     }else{
                         BeTransReDet.Fecha_Vence = cmbVenceRec.getText().toString();
-                        gl.gFechaVenceAnterior = txtLoteRec.getText().toString();
+                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString();
                         if (!Valida_Fecha_Vencimiento()){
                             return;
                         }else{
@@ -4216,6 +4224,8 @@ public class frm_recepcion_datos extends PBase {
 
             super.finish();
 
+            gl.Carga_Producto_x_Pallet=false;
+
         }catch (Exception e){
             mu.msgbox("processActualizaCantidadRecibida"+e.getMessage());
         }
@@ -4272,6 +4282,7 @@ public class frm_recepcion_datos extends PBase {
 
             //LimpiaValores();
             super.finish();
+            gl.Carga_Producto_x_Pallet=false;
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }

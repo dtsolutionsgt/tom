@@ -119,6 +119,8 @@ public class frm_detalle_ingresos extends PBase {
                         break;
                     case 5:
                         callMethod("Get_Stock_Rec_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        break;
+
                 }
 
             } catch (Exception e) {
@@ -144,6 +146,7 @@ public class frm_detalle_ingresos extends PBase {
                 case 5:
                     processStockRec();
                     break;
+
             }
 
         } catch (Exception e) {
@@ -506,6 +509,7 @@ public class frm_detalle_ingresos extends PBase {
     }
 
     public void Atender_rece(View view){
+        browse=1;
         startActivity(new Intent(this, frm_list_rec_prod.class));
     }
 
@@ -524,6 +528,11 @@ public class frm_detalle_ingresos extends PBase {
         gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
         pListBeStockRecPI = new clsBeStock_recList();
         gBeStockRec = new clsBeStock_rec();
+        gl.CodigoRecepcion ="";
+        gl.Carga_Producto_x_Pallet = false;
+        gl.gFechaVenceAnterior = "";
+        gl.gLoteAnterior ="";
+        gl.Escaneo_Pallet=false;
 
     }
 
@@ -570,6 +579,24 @@ public class frm_detalle_ingresos extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                doExit();
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
     }
 
     @Override

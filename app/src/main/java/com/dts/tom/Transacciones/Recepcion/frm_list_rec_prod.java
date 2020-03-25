@@ -73,6 +73,8 @@ public class frm_list_rec_prod extends PBase {
     public String vCodigoProductoBarraPallet= "";
     public static boolean EsTransferenciaInternaWMS=false;
     private  int vIdOrdenCompra=0;
+    private double vTipoDiferencia;
+    private boolean Finalizar=false;
 
     private int Idx = -1;
 
@@ -502,6 +504,11 @@ public class frm_list_rec_prod extends PBase {
         try{
 
             //LimpiaValores();
+            gl.CodigoRecepcion ="";
+            gl.Carga_Producto_x_Pallet = false;
+            gl.gFechaVenceAnterior = "";
+            gl.gLoteAnterior ="";
+            gl.Escaneo_Pallet=false;
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -589,7 +596,7 @@ public class frm_list_rec_prod extends PBase {
 
     private boolean Recepcion_Completa(){
 
-        double vTipoDiferencia;
+        vTipoDiferencia=0;
         double Cantidad_recibida,Cantidad;
 
         try{
@@ -700,6 +707,15 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    private void Finalizar_Recepcion(){
+
+        try{
+
+        }catch (Exception e){
+            mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
+        }
+    }
+
     public class OrdenarItems implements Comparator<clsBeTrans_oc_det> {
 
         public int compare(clsBeTrans_oc_det left,clsBeTrans_oc_det rigth){
@@ -760,6 +776,12 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
                                 "pCodigo",txtCodigoProductoRecepcion.getText().toString(),"IdBodega",gl.IdBodega);
                         break;
+                    case 10:
+                        callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
+                        break;
+                    case 11:
+                        callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        break;
                 }
 
             }catch (Exception e){
@@ -810,6 +832,12 @@ public class frm_list_rec_prod extends PBase {
                     case 9:
                         processGetProductoByCodigo();
                         break;
+                    case 10:
+                        processBanderasRecepFinaliza();
+                        break;
+                    case 11:
+                        processGetDetalleByIdRepcionEnc();
+                        break;
                 }
 
             } catch (Exception e) {
@@ -834,6 +862,11 @@ public class frm_list_rec_prod extends PBase {
             }
 
             if (Finalizada & Anulada){
+                gl.CodigoRecepcion ="";
+                gl.Carga_Producto_x_Pallet = false;
+                gl.gFechaVenceAnterior = "";
+                gl.gLoteAnterior ="";
+                gl.Escaneo_Pallet=false;
                 super.finish();
             }
 
@@ -916,6 +949,83 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
+    private void processBanderasRecepFinaliza(){
+
+        try {
+
+            progress.setMessage("Obteniendo banderas de recepción");
+
+            Finalizada =(Boolean) xobj.getSingle("pFinalizada",Boolean.class);
+            Anulada =(Boolean) xobj.getSingle("pAnulada",Boolean.class);
+
+            if (Finalizada){
+                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " ya fue finalizada");
+            }
+
+            if (Anulada){
+                mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " fue anulada");
+            }
+
+            if (Finalizada | Anulada){
+                onResume();
+            }else{
+                pListTransRecDet = new clsBeTrans_re_detList();
+                execws(11);
+            }
+
+
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processGetDetalleByIdRepcionEnc(){
+        try{
+
+            pListTransRecDet = xobj.getresult(clsBeTrans_re_detList.class,"Get_Detalle_By_IdRecepcionEnc");
+
+            if (pListTransRecDet!=null){
+                if (pListTransRecDet.items!=null){
+
+                    if (gl.TipoOpcion ==1){
+                        if (!Recepcion_Completa()){
+
+                            if (vTipoDiferencia!=0){
+                                pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOC.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
+                                Lista_Detalle_OC();
+                            }
+
+                            if (vTipoDiferencia>0){
+
+                            }else if(vTipoDiferencia < 0){
+
+                            }
+
+                        }
+                    }
+
+                }else{
+
+                }
+            }else{
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
+        }
+    }
+
+    private void Termina_Finalizacion_Recepcion(){
+        try{
+
+        }catch (Exception e){
+            mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
+        }
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
@@ -929,6 +1039,7 @@ public class frm_list_rec_prod extends PBase {
             super.onResume();
 
             if (browse==1){
+                browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
                 Recepcion_Completa();

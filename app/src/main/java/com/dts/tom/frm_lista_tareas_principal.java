@@ -270,6 +270,7 @@ public class frm_lista_tareas_principal extends PBase {
             switch (gl.tipoTarea) {
 
                 case 1:
+                    browse=1;
                     gl.gIdRecepcionEnc = selid;
                     startActivity(new Intent(this, frm_detalle_ingresos.class));
                 break;
@@ -359,6 +360,26 @@ public class frm_lista_tareas_principal extends PBase {
             }catch (Exception e){
 
             }
+
+    }
+
+
+
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                Load();
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
 
     }
 
