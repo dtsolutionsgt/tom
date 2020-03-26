@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -75,6 +77,7 @@ public class frm_list_rec_prod extends PBase {
     private  int vIdOrdenCompra=0;
     private double vTipoDiferencia;
     private boolean Finalizar=false;
+    private Dialog dialog;
 
     private int Idx = -1;
 
@@ -1104,6 +1107,21 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
+        }
+    }
+
+    private void MuestraPantallaFirma(Activity activity){
+
+        try{
+
+            dialog = new Dialog(activity);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.frmfirmadig);
+
+
+
+        }catch (Exception e){
+            mu.msgbox("MuestraPantallaFirma");
         }
     }
 

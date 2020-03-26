@@ -1,7 +1,9 @@
 package com.dts.tom;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -379,6 +381,55 @@ public class frm_lista_tareas_principal extends PBase {
 
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());
+        }
+
+    }
+
+    public void SalirTareas(View view){
+        msgAskExit("Está seguro de salir");
+    }
+
+    private void msgAskExit(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    doExit();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void doExit(){
+        try{
+
+            pListBeTareasIngresoHH = new clsBeTareasIngresoHHList();
+            BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
+
+            gl.tipoTarea=0;
+            super.finish();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }

@@ -426,31 +426,37 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.Control_vencimiento){
                 if(cmbVenceRec.getText().toString().isEmpty()){
-                    mu.msgbox("La fecha no puede estar vacía.");
+                    msgboxValidaFechaVence("La fecha no puede estar vacía.");
                     return false;
                 }
             }
 
             if (BeProducto.Control_lote){
                 if(txtLoteRec.getText().toString().isEmpty()){
-                    mu.msgbox("El campo de lote no puede estar vacío.");
+                    msgboxValidaLote("El campo de lote no puede estar vacío.");
                     return false;
                 }
             }
 
             if(BeProducto.Control_peso){
                 if (txtPeso.getText().toString().isEmpty()){
-                    mu.msgbox("El peso no puede estar vacío");
+                    msgboxValidaPeso("El peso no puede estar vacío");
                     return false;
                 }
             }
 
             if (txtCantidadRec.getText().toString().isEmpty()){
                 mu.msgbox("La cantidad no puede estar vacía");
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+                txtCantidadRec.setSelectAllOnFocus(true);
                 return false;
             }else{
                 if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
                     mu.msgbox("La cantidad debe ser mayor a 0");
+                    txtCantidadRec.requestFocus();
+                    txtCantidadRec.selectAll();
+                    txtCantidadRec.setSelectAllOnFocus(true);
                     return false;
                 }
             }
@@ -460,6 +466,87 @@ public class frm_recepcion_datos extends PBase {
         }
 
         return EsValido;
+    }
+
+    public void msgboxValidaLote(String msg) {
+
+        try{
+
+            if (!(msg.isEmpty())){
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setTitle(R.string.app_name);
+                dialog.setMessage(msg);
+                dialog.setCancelable(false);
+
+                dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        txtLoteRec.requestFocus();
+                        txtLoteRec.selectAll();
+                        txtLoteRec.setSelectAllOnFocus(true);
+                    }
+                });
+                dialog.show();
+
+            }
+
+        } catch (Exception ex) {
+        }
+    }
+
+    public void msgboxValidaFechaVence(String msg) {
+
+        try{
+
+            if (!(msg.isEmpty())){
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setTitle(R.string.app_name);
+                dialog.setMessage(msg);
+                dialog.setCancelable(false);
+
+                dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        cmbVenceRec.requestFocus();
+                        cmbVenceRec.selectAll();
+                        cmbVenceRec.setSelectAllOnFocus(true);
+                    }
+                });
+                dialog.show();
+
+            }
+
+        } catch (Exception ex) {
+        }
+    }
+
+    public void msgboxValidaPeso(String msg) {
+
+        try{
+
+            if (!(msg.isEmpty())){
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                dialog.setTitle(R.string.app_name);
+                dialog.setMessage(msg);
+                dialog.setCancelable(false);
+
+                dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        txtPeso.requestFocus();
+                        txtPeso.selectAll();
+                        txtPeso.setSelectAllOnFocus(true);
+                    }
+                });
+                dialog.show();
+
+            }
+
+        } catch (Exception ex) {
+        }
     }
 
     private void Muestra_Propiedades_Producto(){
@@ -497,6 +584,7 @@ public class frm_recepcion_datos extends PBase {
                 if(vCant>1){
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de un pallet");
                     txtCantidadRec.setText(1+"");
+                    txtCantidadRec.selectAll();
                 }
 
             }else if (bePresentacion.Permitir_paletizar && chkPaletizar.isChecked() &&!bePresentacion.Genera_lp_auto){
@@ -510,6 +598,7 @@ public class frm_recepcion_datos extends PBase {
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de "+bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima
                             + " "+ bePresentacion.Nombre);
                     txtCantidadRec.setText(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima+"");
+                    txtCantidadRec.selectAll();
                 }
 
             }
@@ -565,6 +654,11 @@ public class frm_recepcion_datos extends PBase {
             txtPesoReal =(EditText)dialog.findViewById(R.id.txtPesoReal);
             txtSerieIni =(EditText)dialog.findViewById(R.id.txtSerieIni);
             txtSerieFin =(EditText)dialog.findViewById(R.id.txtSerieFin);
+
+            txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtTempEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             cmbPresParams = (Spinner)dialog.findViewById(R.id.cmbPresParams);
 
@@ -699,7 +793,15 @@ public class frm_recepcion_datos extends PBase {
 
             Carga_Parametros_Personalizados();
 
-            txtFechaIng.setText(String.valueOf(du.getFechaActual()));
+            final Calendar c = Calendar.getInstance();
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH)+1;
+            day = c.get(Calendar.DAY_OF_MONTH);
+
+            txtFechaIng.setText(new StringBuilder()
+                    // Month is 0 based, just add 1
+                    .append(day).append("-").append(month).append("-")
+                    .append(year).append(" "));
 
             if  (pIndexStock>=0){
 
@@ -707,7 +809,10 @@ public class frm_recepcion_datos extends PBase {
 
                 if (pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso!=null){
                     if (pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso.isEmpty()){
-                        txtFechaIng.setText(String.valueOf(du.getFechaActual()));
+                        txtFechaIng.setText(new StringBuilder()
+                                // Month is 0 based, just add 1
+                                .append(day).append("-").append(month).append("-")
+                                .append(year).append(" "));
                     }else{
                         txtFechaIng.setText(pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso);
                     }
@@ -869,8 +974,6 @@ public class frm_recepcion_datos extends PBase {
         boolean Guardar=false;
 
         try{
-
-            String FechaActual = calendario.get(Calendar.DAY_OF_MONTH) + calendario.get(Calendar.MONTH)+1 +calendario.get(Calendar.YEAR) +"";
 
             Parametros_Ingresados =Parametros_Obligatorios_Ingresados(Detalle);
 
@@ -1874,6 +1977,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             txtCantidadRec.setText(Cant_Pendiente+"");
+                txtCantidadRec.selectAll();
 
             clsBeTrans_oc_det_lote BeLoteLinea;
 
@@ -1979,11 +2083,7 @@ public class frm_recepcion_datos extends PBase {
             txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCostoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtTempEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoUnitario.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
             btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
@@ -2024,8 +2124,10 @@ public class frm_recepcion_datos extends PBase {
 
             if (!EsTransferenciaInternaWMS){
                 txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
+                txtCantidadRec.selectAll();
             }else{
                 txtCantidadRec.setText(BeINavBarraPallet.Cantidad_Presentacion+"");
+                txtCantidadRec.selectAll();
             }
 
             List AuxList = stream(BeProducto.Presentaciones.items).select(c->c.Codigo_barra).toList();
@@ -2757,9 +2859,11 @@ public class frm_recepcion_datos extends PBase {
 
                if (txtCantidadRec.getText().toString().isEmpty()){
                    mu.msgbox("Ingrese la cantidad a Recibir");
+                   txtCantidadRec.requestFocus();
                    return;
                }else if (Double.parseDouble(txtCantidadRec.getText().toString())==0){
                    mu.msgbox("La cantidad a Recibir debe ser mayor a 0");
+                   txtCantidadRec.requestFocus();
                    return;
                }else{
                    BeTransReDet.cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
@@ -3771,8 +3875,8 @@ public class frm_recepcion_datos extends PBase {
                         //Guardar_Recepcion_Nueva
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                "pListStockRecSer",pListBeStockSeRec,"pListStockRec",pListBeStockRec.items.toArray(),
-                                "pListProductoPallet",lBeProdPallet,"pIdEmpresa",gl.IdEmpresa,
+                                "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
+                                "pListProductoPallet",lBeProdPallet.items,"pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
                         break;
                     case 17 :
