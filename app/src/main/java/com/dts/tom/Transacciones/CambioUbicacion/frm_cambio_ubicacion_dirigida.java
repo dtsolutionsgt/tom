@@ -236,6 +236,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 return;
             }
 
+            if (vCantidadAUbicar==0) {
+                mu.msgbox("La cantidad debe ser mayor que 0");
+                txtCantidad.requestFocus();
+                return;
+            }
+
             cantStock = gl.gCantDisponible;
 
             if (vCantidadAUbicar >cantStock){
@@ -248,7 +254,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 compl=true;
             }
 
-            msgAsk("¿Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+            msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -263,8 +269,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            dialog.setCancelable(false);
+
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
+            dialog.setMessage("¿" + msg + "?");
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -573,6 +581,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.cambioubic);
 

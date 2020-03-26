@@ -27,7 +27,9 @@ import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -37,8 +39,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private TextView lblTituloForma,lblRegs;
     private EditText txtTarea;
     private ListView listView;
-    private String wserror;
-    private boolean errflag;
     private int pIdTarea=0;
     boolean Modo=false;
 
@@ -46,44 +46,49 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
-
     private clsBeTrans_ubic_hh_encList pListBeTransUbicHhEnc = new clsBeTrans_ubic_hh_encList();
-    private clsBeTrans_ubic_hh_enc pBeTareasCambioHH = new clsBeTrans_ubic_hh_enc();
 
     private list_view_tareas_cambio_ubic adapter;
 
     private ArrayList<clsBeTrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBeTrans_ubic_hh_enc>();
 
+    private int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_tareas_cambio_ubicacion);
 
-        super.InitBase();
+        try{
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_frm_tareas_cambio_ubicacion);
 
-        ws = new WebServiceHandler(frm_tareas_cambio_ubicacion.this, gl.wsurl);
-        xobj = new XMLObject(ws);
+            super.InitBase();
 
-        txtTarea = (EditText) findViewById(R.id.txtTarea);
-        listView = (ListView) findViewById(R.id.listTareas);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblRegs = (TextView) findViewById(R.id.lblRegs);
+            ws = new WebServiceHandler(frm_tareas_cambio_ubicacion.this, gl.wsurl);
+            xobj = new XMLObject(ws);
 
-        Modo = (gl.modo_cambio==1?true:false);
+            txtTarea = (EditText) findViewById(R.id.txtTarea);
+            listView = (ListView) findViewById(R.id.listTareas);
+            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+            lblRegs = (TextView) findViewById(R.id.lblRegs);
 
-        lblTituloForma.setText(String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
+            Modo = (gl.modo_cambio==1?true:false);
 
-        setHandlers();
+            lblTituloForma.setText(String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
-        clearAll();
+            setHandlers();
 
-        ProgressDialog("Cargando forma");
+            clearAll();
 
-        Load();
+            ProgressDialog("Cargando forma");
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            Load();
 
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
     }
 
     public void ProgressDialog(String mensaje){
@@ -98,7 +103,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private void Load(){
 
         try{
-            execws(2);
+            execws(1);
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
         }
@@ -153,6 +158,8 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
                     adapter.setSelectedIndex(position);
 
+                    index = position;
+
                     Procesa_Registro(vItem.IdTareaUbicacionEnc);
 
                     adapter.refreshItems();
@@ -180,10 +187,19 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private void Procesa_Registro(int IdTarea){
 
+        Date currentTime = Calendar.getInstance().getTime();
+
         try{
 
             gl.IdTareaUbicEnc =IdTarea;
-            gl.tareaenc = pBeTareasCambioHH;
+            gl.tareaenc = pListBeTransUbicHhEnc.items.get(index);
+
+            if(gl.tareaenc.getEstado().equals("Nuevo")){
+                gl.tareaenc.setEstado("Pendiente");
+                gl.tareaenc.setFec_mod(app.strFecha(currentTime));
+                gl.tareaenc.setFechaInicio(app.strFecha(currentTime));
+                gl.tareaenc.setUser_mod(""+gl.IdOperador);
+            }
 
             Intent intent = new Intent(this, frm_detalle_cambio_ubicacion.class);
             startActivity(intent);
@@ -192,8 +208,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
-
-
     }
 
     private void Llena_Tareas_Ubicacion(){
@@ -205,31 +219,40 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             progress.setMessage("Cargando tareas de cambio de ubicación");
 
-           if(!pListBeTransUbicHhEnc.items.isEmpty() && pListBeTransUbicHhEnc.items!=null ){
+            if(pListBeTransUbicHhEnc != null) {
 
-               for (int i = pListBeTransUbicHhEnc.items.size()-1; i>=0; i--) {
+                if(pListBeTransUbicHhEnc.items!=null ){
 
-                   vItem = new clsBeTrans_ubic_hh_enc();
+                    for (int i = 0; i<=pListBeTransUbicHhEnc.items.size()-1; i++) {
 
-                   vItem.IdTareaUbicacionEnc = pListBeTransUbicHhEnc.items.get(i).getIdTareaUbicacionEnc();
-                   vItem.DescripcionMotivo = pListBeTransUbicHhEnc.items.get(i).getDescripcionMotivo();
-                   vItem.Observacion = pListBeTransUbicHhEnc.items.get(i).getObservacion();
-                   vItem.Estado = pListBeTransUbicHhEnc.items.get(i).getEstado();
+                        vItem = new clsBeTrans_ubic_hh_enc();
 
-                   pListBeTareasCambioHH.add(vItem);
+                        vItem.IdTareaUbicacionEnc = pListBeTransUbicHhEnc.items.get(i).getIdTareaUbicacionEnc();
+                        vItem.DescripcionMotivo = pListBeTransUbicHhEnc.items.get(i).getDescripcionMotivo();
+                        vItem.Observacion = pListBeTransUbicHhEnc.items.get(i).getObservacion();
+                        vItem.Estado = pListBeTransUbicHhEnc.items.get(i).getEstado();
 
-               }
+                        pListBeTareasCambioHH.add(vItem);
 
-               lblRegs.setText("Regs: "+pListBeTransUbicHhEnc.items.size());
-           }
+                    }
 
-            adapter=new list_view_tareas_cambio_ubic(this,pListBeTareasCambioHH);
-            listView.setAdapter(adapter);
+                    lblRegs.setText("Regs: "+pListBeTransUbicHhEnc.items.size());
+                }
+
+                adapter=new list_view_tareas_cambio_ubic(this,pListBeTareasCambioHH);
+                listView.setAdapter(adapter);
+
+            }else{
+                adapter = null;
+                listView.setAdapter(adapter);
+            }
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
+
+        progress.cancel();
 
     }
 
@@ -265,9 +288,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Motivos_Ubicacion_For_HH");
-                        break;
-                    case 2:
                         callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
                                 "pIdOperador",gl.IdOperador,
                                 "pIdTarea",pIdTarea,
@@ -275,7 +295,8 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                         break;
                 }
 
-            } catch (Exception e) {
+            }catch (Exception e){
+                addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
         }
@@ -287,29 +308,15 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             if (throwing) throw new Exception(errmsg);
 
             switch (ws.callback) {
+
                 case 1:
-                    processMotivosUbiHH();break;
-                case 2:
                     processTareasCambioUbicacion();break;
             }
 
         } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-    }
-
-    private void processMotivosUbiHH(){
-
-        try {
-
-            progress.setMessage("Obteniendo Motivos de ubicación en HH");
-
-            pListBeMotivoUbicacion = xobj.getresult(clsBeMotivo_ubicacionList.class,"Get_Motivos_Ubicacion_For_HH");
-
-        } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-        }
-
     }
 
     private void processTareasCambioUbicacion(){
@@ -326,21 +333,23 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                 }
             }
 
-            progress.cancel();
-
         } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
+        progress.cancel();
 
     }
 
     private void msgAskExit(String msg) {
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
+            dialog.setCancelable(false);
             dialog.setIcon(R.drawable.cambioubic);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -382,7 +391,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     protected void onResume() {
         try{
-            Load();
+            Llena_Tareas_Ubicacion();
             super.onResume();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
