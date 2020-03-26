@@ -557,7 +557,8 @@ public class frm_recepcion_datos extends PBase {
 
 
             if (plistBeReDetParametros.items!=null){
-                vIndiceParam = plistBeReDetParametros.items.indexOf(pIdRecepcionDet);
+                List AuxDetParams = stream(plistBeReDetParametros.items).select(c->c.IdParametroDet).toList();
+                vIndiceParam = AuxDetParams.indexOf(pIdRecepcionDet);
             }
 
             pIndexParam = vIndiceParam;
@@ -686,7 +687,8 @@ public class frm_recepcion_datos extends PBase {
             lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
 
             if (pListBeStockRec.items!=null){
-                pIndexStock = pListBeStockRec.items.indexOf(pIdRecepcionDet);
+                List AuxStock=stream(pListBeStockRec.items).select(c->c.IdRecepcionDet).toList();
+                pIndexStock =AuxStock.indexOf(pIdRecepcionDet);
             }
 
             IndexPresentacion = IndexPresSelected;
@@ -699,11 +701,12 @@ public class frm_recepcion_datos extends PBase {
 
             if (IndexPresentacion!=-1){
                 if((bePresentacion.EsPallet|bePresentacion.Permitir_paletizar)&&(bePresentacion.CamasPorTarima ==0| bePresentacion.CajasPorCama==0)){
-                    mu.msgbox("La presentación no tiene los valores necesarios para recepcionar pallets");
+                   // mu.msgbox("La presentación no tiene los valores necesarios para recepcionar pallets");
                     txtLicPlate.setFocusable(false);
                     txtLicPlate.setFocusableInTouchMode(false);
                     txtLicPlate.setClickable(false);
                     txtLicPlate.setVisibility(View.GONE);
+                    lblLicPlate.setVisibility(View.GONE);
                 }else{
                     if (bePresentacion.EsPallet | bePresentacion.Permitir_paletizar){
 
@@ -755,7 +758,7 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                txtLoteRec.setText(pNumeroLP);
+                txtLicPlate.setText(pNumeroLP);
             }else{
                 lblLicPlate.setVisibility(View.GONE);
                 txtLicPlate.setFocusable(false);
@@ -946,12 +949,13 @@ public class frm_recepcion_datos extends PBase {
                 cmbPresParams.setClickable(false);
 
                 if (IdPreseSelect!= -1){
-                    IndexPresentacion = PresList.indexOf(IdPreseSelect);
+                    List AuxPresParam = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                    IndexPresentacion =AuxPresParam.indexOf(IdPreseSelect);
                     cmbPresParams.setSelection(IndexPresentacion);
                 }
 
             }else{
-                lblPres.setVisibility(View.GONE);
+                lblPresParam.setVisibility(View.GONE);
                 cmbPresParams.setVisibility(View.GONE);
                 lblPesoTit.setVisibility(View.GONE);
                 lblPesoEsta.setVisibility(View.GONE);
@@ -1163,9 +1167,11 @@ public class frm_recepcion_datos extends PBase {
 
                     if  ((BeProducto.Presentaciones!=null)){
 
-                        if (BeProducto.Presentaciones.items!=null){
+                        if (BeProducto.Presentaciones.items!=null) {
 
-                        int IndexPresentacion = BeProducto.Presentaciones.items.indexOf(IdPreseSelect);
+                            List AuxLisPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+
+                        int IndexPresentacion = AuxLisPres.indexOf(IdPreseSelect);
 
                         clsBeProducto_Presentacion bePresentacion = new clsBeProducto_Presentacion();
 
@@ -1197,9 +1203,16 @@ public class frm_recepcion_datos extends PBase {
                             BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
                             BeProdPallet.IsNew = true;
 
+                            if (pListBeProductoPallet.items!=null){
+                                pListBeProductoPallet.items.add(BeProdPallet);
+                                pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
+                            }else{
 
-                            pListBeProductoPallet.items.add(BeProdPallet);
-                            pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
+                                pListBeProductoPallet.items =  new ArrayList<clsBeProducto_pallet>();
+
+                                pListBeProductoPallet.items.add(BeProdPallet);
+                                pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
+                            }
                         }
                         }else{
                             BeStock_rec.Presentacion.IdPresentacion = 0;
@@ -1237,7 +1250,12 @@ public class frm_recepcion_datos extends PBase {
                         ObjNS.Activo = true;
                         ObjNS.IsNew = true;
 
-                        pListBeStockSeRec.items.add(ObjNS);
+                        if (pListBeStockSeRec.items!=null){
+                            pListBeStockSeRec.items.add(ObjNS);
+                        }else{
+                            pListBeStockSeRec.items = new ArrayList<clsBeStock_se_rec>();
+                            pListBeStockSeRec.items.add(ObjNS);
+                        }
 
                     }else if(BeProducto.IdPerfilSerializado == 3){
                         if (txtSerial.getText().toString().isEmpty()){
@@ -1251,9 +1269,11 @@ public class frm_recepcion_datos extends PBase {
 
                             if (pListBeStockRec!=null){
 
+                                List AuxStockRec = stream(pListBeStockRec.items).select(c->c.Serial).toList();
+
                                 int lIndex=-1;
 
-                                lIndex = pListBeStockRec.items.indexOf(pListBeStockRec.items.get(pIndexStock).Serial);
+                                lIndex = AuxStockRec.indexOf(pListBeStockRec.items.get(pIndexStock).Serial);
 
                                 if (lIndex>-1){
                                     mu.msgbox("El Serial " +txtSerial.getText().toString() +" se encuentra ya ingresado");
@@ -1446,9 +1466,11 @@ public class frm_recepcion_datos extends PBase {
 
                             if (pListBeStockRec.items!=null){
 
+                                List AuxListSerial = stream(pListBeStockRec.items).select(c->c.Serial).toList();
+
                                 int lIndex=-1;
 
-                                lIndex = pListBeStockRec.items.indexOf( ObjS.Serial );
+                                lIndex = AuxListSerial.indexOf( ObjS.Serial );
 
                                 if (lIndex>-1){
                                     MensajeParam+="El Serial "+ txtSerial.getText().toString()+" se encuentra ya ingresado\n";
@@ -2029,7 +2051,9 @@ public class frm_recepcion_datos extends PBase {
             txtPeso.setText("");
 
             if (BeProducto.Control_lote){
-                txtLoteRec.setText(gl.gLoteAnterior);
+                if (!gl.gLoteAnterior.isEmpty()){
+                    txtLoteRec.setText(gl.gLoteAnterior);
+                }
             }
 
             if (!BeProducto.Control_peso){
@@ -3492,8 +3516,12 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
                         BeProdPallet.IsNew = true;
 
-                        listaProdPallets.items.add(BeProdPallet);
-                        listaProdPalletsNuevos.items.add(BeProdPallet);
+                        if (listaProdPalletsNuevos.items!=null){
+                            listaProdPalletsNuevos.items.add(BeProdPallet);
+                        }else{
+                            listaProdPalletsNuevos.items = new ArrayList<clsBeProducto_pallet>();
+                            listaProdPalletsNuevos.items.add(BeProdPallet);
+                        }
 
                     }
 
@@ -3542,7 +3570,12 @@ public class frm_recepcion_datos extends PBase {
                 BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
                 BeProdPallet.IsNew = true;
 
-                listaProdPalletsNuevos.items.add(BeProdPallet);
+                if (listaProdPalletsNuevos.items!=null){
+                    listaProdPalletsNuevos.items.add(BeProdPallet);
+                }else{
+                    listaProdPalletsNuevos.items = new ArrayList<clsBeProducto_pallet>();
+                    listaProdPalletsNuevos.items.add(BeProdPallet);
+                }
 
             }
 
@@ -3876,7 +3909,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
                                 "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",lBeProdPallet.items,"pIdEmpresa",gl.IdEmpresa,
+                                "pListProductoPallet",listaProdPalletsNuevos.items,"pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
                         break;
                     case 17 :
@@ -3884,7 +3917,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("GuardarRecepcionModif","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
                                 "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",lBeProdPallet.items,"pbeStockAnt",gBeStockAnt,
+                                "pListProductoPallet",listaProdPalletsNuevos.items,"pbeStockAnt",gBeStockAnt,
                                 "pIdEmpresa",gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
                         break;
                     case 18:

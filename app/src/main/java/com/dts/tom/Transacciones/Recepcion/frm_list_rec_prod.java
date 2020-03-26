@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -403,6 +404,8 @@ public class frm_list_rec_prod extends PBase {
             progress.setMessage("Inicializando valores");
 
             lblNoDocumento.setText("");
+
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
             if (gl.tipoTarea==1){
 
