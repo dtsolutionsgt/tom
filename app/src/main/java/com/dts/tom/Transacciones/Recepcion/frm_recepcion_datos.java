@@ -1515,6 +1515,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg);
 
+            dialog.setCancelable(false);
+
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -1550,6 +1552,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -3572,6 +3576,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
 
+            dialog.setCancelable(false);
+
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -3600,6 +3606,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -3630,6 +3638,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
 
+            dialog.setCancelable(false);
+
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -3658,6 +3668,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg );
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -4265,6 +4277,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 

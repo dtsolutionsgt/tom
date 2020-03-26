@@ -25,6 +25,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_est
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
@@ -47,6 +48,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private EditText txtUbicOrigen,txtCodigoPrd,txtCantidad,txtUbicDestino;
     private TextView lblUbicCompleta,lblDescProducto;
     private Spinner cmbPresentacion,cmbLote,cmbVence,cmbEstadoDanado,cmbEstadoUbicacion;
+
+    private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
     private clsBeProducto_Presentacion presentacion = new clsBeProducto_Presentacion();
     private ArrayList<clsBeProducto_Presentacion> presentacionArrayList = new ArrayList<clsBeProducto_Presentacion>();
@@ -97,38 +100,48 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
+       try{
+           super.onCreate(savedInstanceState);
+           setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
-        ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
-        xobj = new XMLObject(ws);
+           super.InitBase();
 
-        txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
-        txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
-        txtCantidad = (EditText) findViewById(R.id.txtCantidad);
-        txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
+           ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
+           xobj = new XMLObject(ws);
 
-        lblUbicCompleta = (TextView) findViewById(R.id.lblUbicCompleta);
-        lblDescProducto = (TextView) findViewById(R.id.lblDescProd);
+           txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
+           txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
+           txtCantidad = (EditText) findViewById(R.id.txtCantidad);
+           txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
 
-        cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
-        cmbLote = (Spinner) findViewById(R.id.cmbLote);
-        cmbVence = (Spinner) findViewById(R.id.cmbVence);
-        cmbEstadoDanado = (Spinner) findViewById(R.id.cmbEstadoDanado);
-        cmbEstadoUbicacion = (Spinner) findViewById(R.id.cmbEstadoDestino);
+           lblUbicCompleta = (TextView) findViewById(R.id.lblUbicCompleta);
+           lblDescProducto = (TextView) findViewById(R.id.lblDescProd);
 
-        ProgressDialog("Cargando forma");
+           cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
+           cmbLote = (Spinner) findViewById(R.id.cmbLote);
+           cmbVence = (Spinner) findViewById(R.id.cmbVence);
+           cmbEstadoDanado = (Spinner) findViewById(R.id.cmbEstadoDanado);
+           cmbEstadoUbicacion = (Spinner) findViewById(R.id.cmbEstadoDestino);
 
-        Load();
+           ProgressDialog("Cargando forma");
 
+           Load();
+
+           progress.cancel();
+
+       }catch (Exception ex){
+           addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+           msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+       }
     }
 
     private void Load(){
 
         try{
-           // execws(1);
-        }catch (Exception e){
-            mu.msgbox(e.getClass()+e.getMessage());
+           execws(3);
+        }catch (Exception ex){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
 
     }
@@ -146,8 +159,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     idPresentacion=presentacionList.items.get(position).IdPresentacion;
                     execws(2);
-                } catch (Exception e) {
-                    msgbox(e.getMessage());
+                } catch (Exception ex) {
+                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
                 }
             }
 
@@ -171,8 +185,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     execws(3);
 
-                } catch (Exception e) {
-                    msgbox(e.getMessage());
+                } catch (Exception ex) {
+                    addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
                 }
 
             }
@@ -287,8 +302,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbPresentacion.setAdapter(dataAdapter);
 
             if (cmbPresentacionList.size()>0) cmbPresentacion.setSelection(0);
-        } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+        } catch (Exception ex) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
     }
 
@@ -305,8 +321,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbPresentacion.setAdapter(dataAdapter);
 
             if (cmbPresentacionList.size()>0) cmbPresentacion.setSelection(0);
-        } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+        } catch (Exception ex) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
     }
     private void LlenaFechaVence() {
@@ -385,6 +402,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             switch (ws.callback) {
                 case 1:
                     processTareaDetalleCambioUbicacion();break;
+                case 2:
+                    processMotivosUbiHH();break;
+                case 3:
+
+                case 4:
+
+
             }
 
         } catch (Exception e) {
@@ -406,6 +430,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Get_All_By_IdTransUbicEnc_And_IdOperador","pIdTransUbicHhEnc",gl.IdTareaUbicEnc,
                                 "pIdOperador",gl.IdOperador);
                         break;
+                    case 2:
+                        callMethod("Get_Motivos_Ubicacion_For_HH");
+                        break;
+
                 }
 
             } catch (Exception e) {
@@ -481,6 +509,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processMotivosUbiHH(){
+
+        try {
+
+            progress.setMessage("Obteniendo Motivos de ubicación en HH");
+
+            pListBeMotivoUbicacion = xobj.getresult(clsBeMotivo_ubicacionList.class,"Get_Motivos_Ubicacion_For_HH");
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

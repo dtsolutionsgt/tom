@@ -221,6 +221,7 @@ public class Mainmenu extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
             dialog.setMessage("¿" + msg + "?");
 
             dialog.setIcon(R.drawable.cambioubic);

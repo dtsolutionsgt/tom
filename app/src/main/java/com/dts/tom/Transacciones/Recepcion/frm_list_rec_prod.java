@@ -275,6 +275,7 @@ public class frm_list_rec_prod extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
             dialog.setMessage( msg);
 
             dialog.setIcon(R.drawable.ic_quest);
@@ -1062,6 +1063,8 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 

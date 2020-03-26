@@ -84,16 +84,6 @@
         android:layout_above="@id/relInfo1">
 
         <CheckBox
-            android:id="@+id/chkUbicados"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:text="Ubicados"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-        <CheckBox
             android:id="@+id/chkTodos"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
@@ -161,6 +151,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="validacion_finalizar_tarea"
             android:text="Finalizar Tarea"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
