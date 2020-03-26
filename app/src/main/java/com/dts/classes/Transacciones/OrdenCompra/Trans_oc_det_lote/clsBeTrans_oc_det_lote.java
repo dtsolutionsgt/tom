@@ -14,7 +14,7 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public double Cantidad;
     @Element(required=false) public double Cantidad_recibida;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
 
 
     public clsBeTrans_oc_det_lote() {
@@ -33,8 +33,7 @@ public class clsBeTrans_oc_det_lote {
         this.Cantidad=Cantidad;
         this.Cantidad_recibida=Cantidad_recibida;
         this.Lote=Lote;
-        this.Fecha_Vence=Fecha_vence;
-
+        this.Fecha_vence =Fecha_vence;
     }
 
 
@@ -93,10 +92,10 @@ public class clsBeTrans_oc_det_lote {
         Lote=value;
     }
     public String getFecha_vence() {
-        return Fecha_Vence;
+        return Fecha_vence;
     }
     public void setFecha_vence(String value) {
-        Fecha_Vence=value;
+        Fecha_vence =value;
     }
 
 }

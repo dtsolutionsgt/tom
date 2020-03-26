@@ -2017,11 +2017,11 @@ public class frm_recepcion_datos extends PBase {
                         if (BeLoteLinea!=null){
                             txtLoteRec.setText(BeLoteLinea.Lote);
 
-                            if (!BeLoteLinea.Fecha_Vence.isEmpty()){
+                            if (!BeLoteLinea.Fecha_vence.isEmpty()){
 
                                 VenceList.clear();
 
-                                VenceList.add(BeLoteLinea.Fecha_Vence);
+                                VenceList.add(BeLoteLinea.Fecha_vence);
 
                                 cmbVenceRec.setText(VenceList.get(0));
 
@@ -2714,8 +2714,15 @@ public class frm_recepcion_datos extends PBase {
 
                 try{
 
-                    System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
-                    gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
+                    //System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
+                    //gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
+
+                    gl.gBeRecepcion.Detalle.items = new ArrayList<>();
+
+                    for(clsBeTrans_re_det  det: auxListTransRecDet.items)
+                    {
+                        gl.gBeRecepcion.Detalle.items.add(det);
+                    }
 
                 }catch (Exception ex)
                 {
@@ -2724,11 +2731,12 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            for  (clsBeTrans_re_det RD: auxListTransRecDet.items){
-                gl.gBeRecepcion.Detalle.items = new ArrayList<clsBeTrans_re_det>();
-                gl.gBeRecepcion.Detalle.items.add(I,RD);
-                I += 1;
-            }
+//            for  (clsBeTrans_re_det RD: auxListTransRecDet.items)
+//            {
+//                gl.gBeRecepcion.Detalle.items = new ArrayList<clsBeTrans_re_det>();
+//                gl.gBeRecepcion.Detalle.items.add(I,RD);
+//                I += 1;
+//            }
 
             if (gl.gBeRecepcion.DetalleParametros.items!=null){
                 System.arraycopy(gl.gBeRecepcion.DetalleParametros.items,0,plistBeReDetParametros.items,0,Math.min(gl.gBeRecepcion.DetalleParametros.items.size(), plistBeReDetParametros.items.size()));
@@ -2942,7 +2950,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_Vence = cmbVenceRec.getText().toString();
+                        BeTransReDet.Fecha_vence = cmbVenceRec.getText().toString();
                         gl.gFechaVenceAnterior = cmbVenceRec.getText().toString();
                         if (!Valida_Fecha_Vencimiento()){
                             return;
@@ -2952,7 +2960,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                 }else{
-                    BeTransReDet.Fecha_Vence = "";
+                    BeTransReDet.Fecha_vence = "";
                     Continua_Llenando_Detalle_Recepcion_Nueva();
                 }
 
@@ -3228,7 +3236,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                        BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
                         if (!Valida_Fecha_Vencimiento()){
                             mu.msgbox("Se debe corregir la fecha de vencimiento del producto: "+BeProducto.Codigo);
                             return;
@@ -3237,7 +3245,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                 }else{
-                    BeTransReDet.Fecha_Vence="";
+                    BeTransReDet.Fecha_vence ="";
                 }
 
                 BeTransReDet.Fecha_ingreso = String.valueOf(du.getFechaActual());
@@ -4149,13 +4157,13 @@ public class frm_recepcion_datos extends PBase {
                 PTiene_PorSeries=true;
             }
 
-            if (BeProducto.Presentaciones!=null){
-                if (BeProducto.Presentaciones.items!=null){
-                    PTiene_Pres=true;
-                }
-            }
-
-            if(Pperzonalizados|PCap_Manu|PCap_Anada|PGenera_lp|PTiene_Ctrl_Peso|PTiene_Ctrl_Temp|PTiene_PorSeries|PTiene_Pres){
+//            if (BeProducto.Presentaciones!=null){
+//                if (BeProducto.Presentaciones.items!=null){
+//                    PTiene_Pres=true;
+//                }
+//            }
+//PTiene_Pres
+            if(Pperzonalizados|PCap_Manu|PCap_Anada|PGenera_lp|PTiene_Ctrl_Peso|PTiene_Ctrl_Temp|PTiene_PorSeries){
                 Muestra_Propiedades_Producto();
             }else{
                 Guardar_Recepcion_Nueva();

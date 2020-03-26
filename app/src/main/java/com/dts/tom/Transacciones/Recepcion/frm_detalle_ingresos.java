@@ -236,7 +236,8 @@ public class frm_detalle_ingresos extends PBase {
 
             gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class,"GetSingleRec");
             gl.mode =1;
-            if (gBeRecepcion!=null){
+            if (gBeRecepcion!=null)
+            {
                 Llenar_Campos();
             }
 

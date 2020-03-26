@@ -26,7 +26,7 @@ public class clsBeTrans_re_det {
     @Element(required=false) public String Nombre_unidad_medida;
     @Element(required=false) public String Nombre_producto_estado;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha_ingreso;
     @Element(required=false) public double Peso;
     @Element(required=false) public double Peso_Estadistico;
@@ -69,7 +69,7 @@ public class clsBeTrans_re_det {
     public clsBeTrans_re_det(int IdPresentacion,int IdUnidadMedida,int IdProductoEstado,int IdMotivoDevolucion,
                              int IdRecepcionDet,int IdRecepcionEnc,int IdProductoBodega,int IdOperadorBodega,
                              int No_Linea,double cantidad_recibida,String Nombre_producto,String Nombre_presentacion,
-                             String Nombre_unidad_medida,String Nombre_producto_estado,String Lote,String Fecha_Vence,
+                             String Nombre_unidad_medida,String Nombre_producto_estado,String Lote,String Fecha_vence,
                              String Fecha_ingreso,double Peso,double Peso_Estadistico,double Peso_Minimo,
                              double Peso_Maximo,double peso_unitario,String User_agr,String Fec_agr,
                              String Observacion,int Aniada,double Costo,double Costo_Oc,
@@ -95,7 +95,7 @@ public class clsBeTrans_re_det {
         this.Nombre_unidad_medida=Nombre_unidad_medida;
         this.Nombre_producto_estado=Nombre_producto_estado;
         this.Lote=Lote;
-        this.Fecha_Vence=Fecha_Vence;
+        this.Fecha_vence = Fecha_vence;
         this.Fecha_ingreso=Fecha_ingreso;
         this.Peso=Peso;
         this.Peso_Estadistico=Peso_Estadistico;
@@ -224,11 +224,11 @@ public class clsBeTrans_re_det {
     public void setLote(String value) {
         Lote=value;
     }
-    public String getFecha_Vence() {
-        return Fecha_Vence;
+    public String getFecha_vence() {
+        return Fecha_vence;
     }
-    public void setFecha_Vence(String value) {
-        Fecha_Vence=value;
+    public void setFecha_vence(String value) {
+        Fecha_vence =value;
     }
     public String getFecha_ingreso() {
         return Fecha_ingreso;

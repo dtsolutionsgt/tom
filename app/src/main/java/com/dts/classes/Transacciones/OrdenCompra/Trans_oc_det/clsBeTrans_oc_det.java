@@ -43,10 +43,12 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public clsBeProducto Producto=new clsBeProducto();
     @Element(required=false) public clsBeProducto_Presentacion Presentacion=new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public int RowIndex;
 
 
-    public clsBeTrans_oc_det() {
+    public clsBeTrans_oc_det()
+    {
     }
 
     public clsBeTrans_oc_det(int IdOrdenCompraEnc,int IdOrdenCompraDet,int IdProductoBodega,int IdArancel,
@@ -300,6 +302,12 @@ public class clsBeTrans_oc_det {
     }
     public void setRowIndex(int value) {
         RowIndex=value;
+    }
+    public String getFecha_vence() {
+        return Fecha_vence;
+    }
+    public void setFecha_vence(String value) {
+        Fecha_vence=value;
     }
 
 }

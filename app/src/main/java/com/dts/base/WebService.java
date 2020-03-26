@@ -238,6 +238,11 @@ public class WebService {
 
         String result = "";
 
+        if(result.contains("elementData"))
+        {
+            Log.e("Pausa", "Debug");
+        }
+
         try
         {
             if(cl.isPrimitive() || (cl.getName().contains("java.lang.")) || (cl.getName().contains("java.int")))
@@ -292,6 +297,11 @@ public class WebService {
                 return result;
             }
 
+            if(result.contains("elementData"))
+            {
+                Log.e("Pausa", "Debug");
+            }
+
             Field[] fields = cl.getDeclaredFields();
 
             String fieldname ="";
@@ -309,6 +319,11 @@ public class WebService {
                 }
 
                 result += "<" + fieldname  + ">";
+
+                if(result.contains("elementData"))
+                {
+                    Log.e("Pausa", "Debug");
+                }
 
                 if(fieldname!= "Tag")
                 {
@@ -372,7 +387,14 @@ public class WebService {
 
                     }else
                     {
-                        Object vobj = fields[i].get(obj);
+                        Object vobj =null;
+
+                        if (obj instanceof ArrayList){
+                            vobj =obj;
+                        }else
+                        {
+                            vobj = fields[i].get(obj);
+                        }
                         
                         if (vobj!=null)
                         {
