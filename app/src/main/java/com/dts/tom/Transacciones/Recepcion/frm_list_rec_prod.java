@@ -999,10 +999,17 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia>0){
 
+                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+
                             }else if(vTipoDiferencia < 0){
+
+                                msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
                             }
 
+                        }else{
+                            Finalizar = true;
+                            Termina_Finalizacion_Recepcion();
                         }
                     }
 
@@ -1018,8 +1025,81 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-    private void Termina_Finalizacion_Recepcion(){
+    private void msgValidaFaltantes(String msg) {
+
         try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = false;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgValidaSobrantes(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void Termina_Finalizacion_Recepcion(){
+
+        try{
+
+            if (Finalizar){
+
+                if (gl.gBeRecepcion.Firma_piloto==null){
+
+                }
+
+            }else{
+                return;
+            }
 
         }catch (Exception e){
             mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
