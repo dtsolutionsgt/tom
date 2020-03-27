@@ -5,22 +5,22 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_rellenado {
 
-    @Element(required=false) public int IdRellenado;
-    @Element(required=false) public int IdPresentacion;
-    @Element(required=false) public int IdProductoEstado;
-    @Element(required=false) public int IdUbicacion;
-    @Element(required=false) public int IdTipoAccion;
-    @Element(required=false) public double Minimo;
-    @Element(required=false) public double Maximo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdRellenado=0;
+    @Element(required=false) public int IdPresentacion=0;
+    @Element(required=false) public int IdProductoEstado=0;
+    @Element(required=false) public int IdUbicacion=0;
+    @Element(required=false) public int IdTipoAccion=0;
+    @Element(required=false) public double Minimo=0;
+    @Element(required=false) public double Maximo=0;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean IsNew;
-    @Element(required=false) public String Estado;
-    @Element(required=false) public String Presentacion;
-    @Element(required=false) public String Ubicacion;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String Estado="";
+    @Element(required=false) public String Presentacion="";
+    @Element(required=false) public String Ubicacion="";
 
 
     public clsBeProducto_rellenado() {

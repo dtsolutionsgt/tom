@@ -5,19 +5,19 @@ import org.simpleframework.xml.Element;
 
 public class clsBeBodega_muelles {
 
-    @Element(required=false) public int IdMuelle;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public String Codigo_barra;
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdMuelle=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public String Codigo_barra="";
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public int Color;
-    @Element(required=false) public String Imagen;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean Entrada;
-    @Element(required=false) public boolean Salida;
+    @Element(required=false) public int Color=0;
+    @Element(required=false) public String Imagen="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean Entrada=false;
+    @Element(required=false) public boolean Salida=false;
 
 
     public clsBeBodega_muelles() {

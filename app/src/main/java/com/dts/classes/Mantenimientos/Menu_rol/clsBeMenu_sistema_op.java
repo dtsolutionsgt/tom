@@ -5,12 +5,12 @@ import org.simpleframework.xml.Element;
 
 public class clsBeMenu_sistema_op {
 
-    @Element(required=false) public String IdMenuSistemaOP;
-    @Element(required=false) public int IdTipoTarea;
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public int Nivel;
-    @Element(required=false) public String Padre;
-    @Element(required=false) public int Posicion;
+    @Element(required=false) public String IdMenuSistemaOP="";
+    @Element(required=false) public int IdTipoTarea=0;
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public int Nivel=0;
+    @Element(required=false) public String Padre="";
+    @Element(required=false) public int Posicion=0;
 
 
     public clsBeMenu_sistema_op() {

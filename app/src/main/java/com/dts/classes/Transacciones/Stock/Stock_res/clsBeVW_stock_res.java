@@ -8,89 +8,89 @@ import org.simpleframework.xml.Element;
 
 public class clsBeVW_stock_res {
 
-  @Element(required=false) public int IdBodega;
-  @Element(required=false) public int IdPropietario;
-  @Element(required=false) public int IdPropietarioBodega;
-  @Element(required=false) public int IdProducto;
-  @Element(required=false) public int IdProductoBodega;
-  @Element(required=false) public int IdStock;
-  @Element(required=false) public int IdStockRes;
-  @Element(required=false) public int IdUbicacion;
-  @Element(required=false) public int IdUbicacion_Anterior;
-  @Element(required=false) public int IdUnidadMedida;
-  @Element(required=false) public int IdProductoEstado;
-  @Element(required=false) public int IdPresentacion;
-  @Element(required=false) public int IdRecepcionEnc;
-  @Element(required=false) public String Propietario;
-  @Element(required=false) public String UMBas;
-  @Element(required=false) public String Nombre_Presentacion;
-  @Element(required=false) public String Codigo_Producto;
-  @Element(required=false) public String Nombre_Producto;
-  @Element(required=false) public String Lote;
-  @Element(required=false) public String Fecha_ingreso;
-  @Element(required=false) public String Serial;
-  @Element(required=false) public int Anada;
-  @Element(required=false) public double CantidadUmBas;
-  @Element(required=false) public double Factor;
-  @Element(required=false) public double CantidadPresentacion;
+  @Element(required=false) public int IdBodega=0;
+  @Element(required=false) public int IdPropietario=0;
+  @Element(required=false) public int IdPropietarioBodega=0;
+  @Element(required=false) public int IdProducto=0;
+  @Element(required=false) public int IdProductoBodega=0;
+  @Element(required=false) public int IdStock=0;
+  @Element(required=false) public int IdStockRes=0;
+  @Element(required=false) public int IdUbicacion=0;
+  @Element(required=false) public int IdUbicacion_Anterior=0;
+  @Element(required=false) public int IdUnidadMedida=0;
+  @Element(required=false) public int IdProductoEstado=0;
+  @Element(required=false) public int IdPresentacion=0;
+  @Element(required=false) public int IdRecepcionEnc=0;
+  @Element(required=false) public String Propietario="";
+  @Element(required=false) public String UMBas="";
+  @Element(required=false) public String Nombre_Presentacion="";
+  @Element(required=false) public String Codigo_Producto="";
+  @Element(required=false) public String Nombre_Producto="";
+  @Element(required=false) public String Lote="";
+  @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:01";
+  @Element(required=false) public String Serial="";
+  @Element(required=false) public int Anada=0;
+  @Element(required=false) public double CantidadUmBas=0;
+  @Element(required=false) public double Factor=0;
+  @Element(required=false) public double CantidadPresentacion=0;
   @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
-  @Element(required=false) public String NomEstado;
-  @Element(required=false) public boolean EstadoUtilizable;
-  @Element(required=false) public boolean Danado;
-  @Element(required=false) public String Lic_plate_Anterior;
-  @Element(required=false) public String Lic_plate;
-  @Element(required=false) public double Peso;
-  @Element(required=false) public int IdIndiceRotacion;
-  @Element(required=false) public double AltoUbicacion;
-  @Element(required=false) public double LargoUbicacion;
-  @Element(required=false) public double AnchoUbicacion;
-  @Element(required=false) public double CantidadReservadaUMBas;
-  @Element(required=false) public int IdTramo;
-  @Element(required=false) public double Ancho_ubicacion;
-  @Element(required=false) public double Largo_ubicacion;
-  @Element(required=false) public double Alto_ubicacion;
-  @Element(required=false) public String IndiceRotacion;
-  @Element(required=false) public double Existencia_min_umbas;
-  @Element(required=false) public double Existencia_max_umbas;
-  @Element(required=false) public String Codigo_Barra;
-  @Element(required=false) public double Costo;
-  @Element(required=false) public double Tolerancia;
-  @Element(required=false) public double Existencia_min_pres;
-  @Element(required=false) public double Existencia_max_pres;
-  @Element(required=false) public String Atributo_variante_1;
-  @Element(required=false) public int Ubicacion_Nivel;
-  @Element(required=false) public int Ubicacion_Indice_x;
-  @Element(required=false) public String Ubicacion_Nombre;
-  @Element(required=false) public String Ubicacion_Tramo;
-  @Element(required=false) public int IdPedido;
-  @Element(required=false) public int IdPedidoDet;
-  @Element(required=false) public int IdPicking;
-  @Element(required=false) public double TotalLinea;
+  @Element(required=false) public String NomEstado="";
+  @Element(required=false) public boolean EstadoUtilizable=false;
+  @Element(required=false) public boolean Danado=false;
+  @Element(required=false) public String Lic_plate_Anterior="";
+  @Element(required=false) public String Lic_plate="";
+  @Element(required=false) public double Peso=0;
+  @Element(required=false) public int IdIndiceRotacion=0;
+  @Element(required=false) public double AltoUbicacion=0;
+  @Element(required=false) public double LargoUbicacion=0;
+  @Element(required=false) public double AnchoUbicacion=0;
+  @Element(required=false) public double CantidadReservadaUMBas=0;
+  @Element(required=false) public int IdTramo=0;
+  @Element(required=false) public double Ancho_ubicacion=0;
+  @Element(required=false) public double Largo_ubicacion=0;
+  @Element(required=false) public double Alto_ubicacion=0;
+  @Element(required=false) public String IndiceRotacion="";
+  @Element(required=false) public double Existencia_min_umbas=0;
+  @Element(required=false) public double Existencia_max_umbas=0;
+  @Element(required=false) public String Codigo_Barra="";
+  @Element(required=false) public double Costo=0;
+  @Element(required=false) public double Tolerancia=0;
+  @Element(required=false) public double Existencia_min_pres=0;
+  @Element(required=false) public double Existencia_max_pres=0;
+  @Element(required=false) public String Atributo_variante_1="";
+  @Element(required=false) public int Ubicacion_Nivel=0;
+  @Element(required=false) public int Ubicacion_Indice_x=0;
+  @Element(required=false) public String Ubicacion_Nombre="";
+  @Element(required=false) public String Ubicacion_Tramo="";
+  @Element(required=false) public int IdPedido=0;
+  @Element(required=false) public int IdPedidoDet=0;
+  @Element(required=false) public int IdPicking=0;
+  @Element(required=false) public double TotalLinea=0;
   @Element(required=false) public clsBeProducto_Presentacion BePresentacionProductoEnStock=new clsBeProducto_Presentacion();
-  @Element(required=false) public double AltoUMBas;
-  @Element(required=false) public double LargoUmBas;
-  @Element(required=false) public double AnchoUmBas;
-  @Element(required=false) public boolean acepto;
-  @Element(required=false) public double peso_pickeado;
-  @Element(required=false) public double peso_verificado;
-  @Element(required=false) public double Cantidad_Pickeada;
-  @Element(required=false) public double Cantidad_Verificada;
-  @Element(required=false) public double Cantidad_Despachada;
-  @Element(required=false) public boolean encontrado;
+  @Element(required=false) public double AltoUMBas=0;
+  @Element(required=false) public double LargoUmBas=0;
+  @Element(required=false) public double AnchoUmBas=0;
+  @Element(required=false) public boolean acepto=false;
+  @Element(required=false) public double peso_pickeado=0;
+  @Element(required=false) public double peso_verificado=0;
+  @Element(required=false) public double Cantidad_Pickeada=0;
+  @Element(required=false) public double Cantidad_Verificada=0;
+  @Element(required=false) public double Cantidad_Despachada=0;
+  @Element(required=false) public boolean encontrado=false;
   @Element(required=false) public clsBeBodega_ubicacion UbicacionActual=new clsBeBodega_ubicacion();
-  @Element(required=false) public double Cantidad_Res;
-  @Element(required=false) public String ValorTexto;
-  @Element(required=false) public double ValorNumerico;
-  @Element(required=false) public String ValorFecha;
-  @Element(required=false) public Byte ValorLogico;
-  @Element(required=false) public String No_Serie;
-  @Element(required=false) public String No_Serie_Inicial;
-  @Element(required=false) public String No_Serie_Final;
-  @Element(required=false) public double CantidadReservada;
-  @Element(required=false) public int IdFamilia;
-  @Element(required=false) public int IdClasificacion;
-  @Element(required=false) public int IdTipoProducto;
-  @Element(required=false) public String NombreTipoProducto;
+  @Element(required=false) public double Cantidad_Res=0;
+  @Element(required=false) public String ValorTexto="";
+  @Element(required=false) public double ValorNumerico=0.0;
+  @Element(required=false) public String ValorFecha="1900-01-01T00:00:01";
+  @Element(required=false) public boolean ValorLogico=false;
+  @Element(required=false) public String No_Serie="";
+  @Element(required=false) public String No_Serie_Inicial="";
+  @Element(required=false) public String No_Serie_Final="";
+  @Element(required=false) public double CantidadReservada=0;
+  @Element(required=false) public int IdFamilia=0;
+  @Element(required=false) public int IdClasificacion=0;
+  @Element(required=false) public int IdTipoProducto=0;
+  @Element(required=false) public String NombreTipoProducto="";
 
 
   public clsBeVW_stock_res() {
@@ -114,7 +114,7 @@ public class clsBeVW_stock_res {
                            double LargoUmBas,double AnchoUmBas,boolean acepto,double peso_pickeado,
                            double peso_verificado,double Cantidad_Pickeada,double Cantidad_Verificada,double Cantidad_Despachada,
                            boolean encontrado,clsBeBodega_ubicacion UbicacionActual,double Cantidad_Res,String ValorTexto,
-                           double ValorNumerico,String ValorFecha,Byte ValorLogico,String No_Serie,
+                           double ValorNumerico,String ValorFecha,boolean ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto) {
 
@@ -649,10 +649,10 @@ public class clsBeVW_stock_res {
   public void setValorFecha(String value) {
     ValorFecha=value;
   }
-  public Byte getValorLogico() {
+  public boolean getValorLogico() {
     return ValorLogico;
   }
-  public void setValorLogico(Byte value) {
+  public void setValorLogico(boolean value) {
     ValorLogico=value;
   }
   public String getNo_Serie() {

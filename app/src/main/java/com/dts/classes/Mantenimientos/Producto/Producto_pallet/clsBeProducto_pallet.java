@@ -5,28 +5,28 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_pallet {
 
-    @Element(required=false) public int IdPallet;
-    @Element(required=false) public int IdPropietarioBodega;
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public int IdPresentacion;
-    @Element(required=false) public int IdOperadorBodega;
-    @Element(required=false) public int IdImpresora;
-    @Element(required=false) public int IdRecepcionEnc;
-    @Element(required=false) public int IdRecepcionDet;
-    @Element(required=false) public String Codigo_Barra;
-    @Element(required=false) public String Codigo_Producto;
-    @Element(required=false) public double Cantidad;
-    @Element(required=false) public String Lote;
-    @Element(required=false) public boolean Impreso;
-    @Element(required=false) public int Reimpresiones;
+    @Element(required=false) public int IdPallet=0;
+    @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdPresentacion=0;
+    @Element(required=false) public int IdOperadorBodega=0;
+    @Element(required=false) public int IdImpresora=0;
+    @Element(required=false) public int IdRecepcionEnc=0;
+    @Element(required=false) public int IdRecepcionDet=0;
+    @Element(required=false) public String Codigo_Barra="";
+    @Element(required=false) public String Codigo_Producto="";
+    @Element(required=false) public double Cantidad=0;
+    @Element(required=false) public String Lote="";
+    @Element(required=false) public boolean Impreso=false;
+    @Element(required=false) public int Reimpresiones=0;
     @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_ingreso;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:01";
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean IsNew=false;
 
     public clsBeProducto_pallet() {
     }

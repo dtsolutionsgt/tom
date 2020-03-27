@@ -5,20 +5,20 @@ import org.simpleframework.xml.Element;
 
 public class clsBeStock_se_rec {
 
-    @Element(required=false) public int IdStockSeRec;
-    @Element(required=false) public int IdStockRec;
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public String NoSerie;
-    @Element(required=false) public String NoSerieInicial;
-    @Element(required=false) public String NoSerieFinal;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdStockSeRec=0;
+    @Element(required=false) public int IdStockRec=0;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public String NoSerie="";
+    @Element(required=false) public String NoSerieInicial="";
+    @Element(required=false) public String NoSerieFinal="";
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean Regularizado;
-    @Element(required=false) public String Fecha_regularizacion;
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean Regularizado=false;
+    @Element(required=false) public String Fecha_regularizacion="1900-01-01T00:00:01";
+    @Element(required=false) public boolean IsNew=false;
 
 
     public clsBeStock_se_rec() {

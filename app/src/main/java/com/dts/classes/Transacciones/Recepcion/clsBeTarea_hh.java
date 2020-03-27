@@ -5,24 +5,24 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTarea_hh {
 
-  @Element(required=false) public int IdTareahh;
-  @Element(required=false) public int IdPropietario;
-  @Element(required=false) public int IdBodega;
-  @Element(required=false) public int IdMuelle;
-  @Element(required=false) public int IdEstado;
-  @Element(required=false) public int IdPrioridad;
-  @Element(required=false) public int IdTipoTarea;
-  @Element(required=false) public int IdTransaccion;
-  @Element(required=false) public int Tipo;
-  @Element(required=false) public String FechaInicio;
-  @Element(required=false) public String FechaFin;
-  @Element(required=false) public boolean DiaCompleto;
-  @Element(required=false) public String Asunto;
-  @Element(required=false) public String Ubicacion;
-  @Element(required=false) public String Descripcion;
-  @Element(required=false) public String Recordatorio;
-  @Element(required=false) public boolean CreaTarea;
-  @Element(required=false) public boolean IsNew;
+  @Element(required=false) public int IdTareahh=0;
+  @Element(required=false) public int IdPropietario=0;
+  @Element(required=false) public int IdBodega=0;
+  @Element(required=false) public int IdMuelle=0;
+  @Element(required=false) public int IdEstado=0;
+  @Element(required=false) public int IdPrioridad=0;
+  @Element(required=false) public int IdTipoTarea=0;
+  @Element(required=false) public int IdTransaccion=0;
+  @Element(required=false) public int Tipo=0;
+  @Element(required=false) public String FechaInicio="1900-01-01T00:00:01";
+  @Element(required=false) public String FechaFin="1900-01-01T00:00:01";
+  @Element(required=false) public boolean DiaCompleto=false;
+  @Element(required=false) public String Asunto="";
+  @Element(required=false) public String Ubicacion="";
+  @Element(required=false) public String Descripcion="";
+  @Element(required=false) public String Recordatorio="";
+  @Element(required=false) public boolean CreaTarea=false;
+  @Element(required=false) public boolean IsNew=false;
 
 
   public clsBeTarea_hh() {

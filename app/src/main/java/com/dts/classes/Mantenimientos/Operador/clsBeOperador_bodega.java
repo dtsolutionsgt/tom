@@ -4,15 +4,15 @@ import org.simpleframework.xml.Element;
 
 public class clsBeOperador_bodega {
 
-    @Element(required=false) public int IdOperadorBodega;
-    @Element(required=false) public int IdOperador;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdOperadorBodega=0;
+    @Element(required=false) public int IdOperador=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeOperador Operador=new clsBeOperador();
 
 

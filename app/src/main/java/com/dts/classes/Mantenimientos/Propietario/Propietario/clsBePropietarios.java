@@ -7,24 +7,24 @@ import org.simpleframework.xml.Element;
 
 public class clsBePropietarios {
 
-    @Element(required=false) public int IdPropietario;
-    @Element(required=false) public int IdEmpresa;
-    @Element(required=false) public int IdTipoActualizacionCosto;
-    @Element(required=false) public String Contacto;
-    @Element(required=false) public String Nombre_comercial;
-    @Element(required=false) public Byte Imagen;
-    @Element(required=false) public String Telefono;
-    @Element(required=false) public String Direccion;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdPropietario=0;
+    @Element(required=false) public int IdEmpresa=0;
+    @Element(required=false) public int IdTipoActualizacionCosto=0;
+    @Element(required=false) public String Contacto="";
+    @Element(required=false) public String Nombre_comercial="";
+    @Element(required=false) public String Imagen="";
+    @Element(required=false) public String Telefono="";
+    @Element(required=false) public String Direccion="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public String Email;
-    @Element(required=false) public boolean Actualiza_costo_oc;
-    @Element(required=false) public int Color;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public boolean Sistema;
+    @Element(required=false) public String Email="";
+    @Element(required=false) public boolean Actualiza_costo_oc=false;
+    @Element(required=false) public int Color=0;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
 
 
@@ -32,7 +32,7 @@ public class clsBePropietarios {
     }
 
     public clsBePropietarios(int IdPropietario,int IdEmpresa,int IdTipoActualizacionCosto,String Contacto,
-                             String Nombre_comercial,Byte Imagen,String Telefono,String Direccion,
+                             String Nombre_comercial,String Imagen,String Telefono,String Direccion,
                              boolean Activo,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Email,boolean Actualiza_costo_oc,int Color,
                              String Codigo,boolean Sistema,clsBeEmpresa Empresa) {
@@ -90,10 +90,10 @@ public class clsBePropietarios {
     public void setNombre_comercial(String value) {
         Nombre_comercial=value;
     }
-    public Byte getImagen() {
+    public String getImagen() {
         return Imagen;
     }
-    public void setImagen(Byte value) {
+    public void setImagen(String value) {
         Imagen=value;
     }
     public String getTelefono() {

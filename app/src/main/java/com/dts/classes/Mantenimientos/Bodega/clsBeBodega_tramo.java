@@ -7,37 +7,37 @@ import org.simpleframework.xml.Element;
 
 public class clsBeBodega_tramo {
 
-    @Element(required=false) public int IdTramo;
-    @Element(required=false) public int IdSector;
-    @Element(required=false) public int IdArea;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public boolean Sistema;
-    @Element(required=false) public String Descripcion;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdTramo=0;
+    @Element(required=false) public int IdSector=0;
+    @Element(required=false) public int IdArea=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public boolean Sistema=false;
+    @Element(required=false) public String Descripcion="";
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public double Alto;
-    @Element(required=false) public double Largo;
-    @Element(required=false) public double Ancho;
-    @Element(required=false) public double Margen_izquierdo;
-    @Element(required=false) public double Margen_derecho;
-    @Element(required=false) public double Margen_superior;
-    @Element(required=false) public double Margen_inferior;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public int Indice_x;
-    @Element(required=false) public int Orientacion;
-    @Element(required=false) public int IdTipoProductoDefault;
-    @Element(required=false) public int IdFontEnc;
-    @Element(required=false) public int IdTipoRack;
-    @Element(required=false) public boolean Es_Rack;
-    @Element(required=false) public boolean Horizontal;
-    @Element(required=false) public double VolumenUtilizado;
-    @Element(required=false) public double CantidadUtilizada;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public double Alto=0;
+    @Element(required=false) public double Largo=0;
+    @Element(required=false) public double Ancho=0;
+    @Element(required=false) public double Margen_izquierdo=0;
+    @Element(required=false) public double Margen_derecho=0;
+    @Element(required=false) public double Margen_superior=0;
+    @Element(required=false) public double Margen_inferior=0;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public int Indice_x=0;
+    @Element(required=false) public int Orientacion=0;
+    @Element(required=false) public int IdTipoProductoDefault=0;
+    @Element(required=false) public int IdFontEnc=0;
+    @Element(required=false) public int IdTipoRack=0;
+    @Element(required=false) public boolean Es_Rack=false;
+    @Element(required=false) public boolean Horizontal=false;
+    @Element(required=false) public double VolumenUtilizado=0;
+    @Element(required=false) public double CantidadUtilizada=0;
     @Element(required=false) public Object Tag=new Object();
     @Element(required=false) public clsBeFont_Enc pFont=new clsBeFont_Enc();
-    @Element(required=false) public int Nivel;
+    @Element(required=false) public int Nivel=0;
 
 
     public clsBeBodega_tramo() {

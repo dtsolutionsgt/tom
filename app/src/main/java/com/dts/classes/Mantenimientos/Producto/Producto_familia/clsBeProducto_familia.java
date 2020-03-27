@@ -7,15 +7,15 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_familia {
 
-    @Element(required=false) public int IdFamilia;
+    @Element(required=false) public int IdFamilia=0;
     @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public boolean IsNew=false;
 
 
     public clsBeProducto_familia() {

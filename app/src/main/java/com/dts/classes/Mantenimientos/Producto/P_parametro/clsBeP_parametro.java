@@ -5,17 +5,17 @@ import org.simpleframework.xml.Element;
 
 public class clsBeP_parametro {
 
-    @Element(required=false) public int IdParametro;
-    @Element(required=false) public String Tipo;
-    @Element(required=false) public String Descripcion;
-    @Element(required=false) public String Valor_texto;
-    @Element(required=false) public double Valor_numerico;
-    @Element(required=false) public String Valor_fecha;
-    @Element(required=false) public boolean Valor_logico;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdParametro=0;
+    @Element(required=false) public String Tipo="";
+    @Element(required=false) public String Descripcion="";
+    @Element(required=false) public String Valor_texto="";
+    @Element(required=false) public double Valor_numerico=0;
+    @Element(required=false) public String Valor_fecha="1900-01-01T00:00:01";
+    @Element(required=false) public boolean Valor_logico=false;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
 
 

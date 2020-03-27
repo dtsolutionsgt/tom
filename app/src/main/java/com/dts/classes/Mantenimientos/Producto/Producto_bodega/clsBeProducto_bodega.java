@@ -7,14 +7,14 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_bodega {
 
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public int IdProducto;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean Sistema;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdProducto=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean Sistema=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public clsBeProducto Producto=new clsBeProducto();
 

@@ -55,6 +55,29 @@ public class DateUtils {
 		return sh+":"+sm;
 	}
 
+	public boolean EsFecha(String vFecha){
+
+		boolean correcta=false;
+		int cant=0;
+		String mounth;
+		String day;
+		String year;
+
+		if (!vFecha.isEmpty()){
+
+			vFecha.trim();
+
+			cant = vFecha.length();
+
+			day = vFecha.substring(0,2);
+
+
+		}
+
+		return correcta;
+
+	}
+
 	public String geActTimeStr(){
 		long f,ch,cm,cs;
 		String s,ss;
@@ -388,6 +411,27 @@ public class DateUtils {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
+	public String convierteFechaMostar(String Fecha){
+		String vFecha="";
+
+		try{
+
+			long f;
+			String fechaS;
+			int cyear,cmonth,cday,ch,cm;
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 			vFecha=dateFormat.format(date);
 

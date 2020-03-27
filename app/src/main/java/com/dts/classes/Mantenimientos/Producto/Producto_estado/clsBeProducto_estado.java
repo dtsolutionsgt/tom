@@ -7,22 +7,22 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_estado {
 
-    @Element(required=false) public int IdEstado;
-    @Element(required=false) public int IdPropietario;
+    @Element(required=false) public int IdEstado=0;
+    @Element(required=false) public int IdPropietario=0;
     @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public int IdUbicacionDefecto;
-    @Element(required=false) public int IdUbicacionBodegaDefecto;
-    @Element(required=false) public boolean Utilizable;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public int IdUbicacionDefecto=0;
+    @Element(required=false) public int IdUbicacionBodegaDefecto=0;
+    @Element(required=false) public boolean Utilizable=false;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Danado;
-    @Element(required=false) public boolean Sistema;
-    @Element(required=false) public boolean IsNew;
-    @Element(required=false) public String Descripcion;
+    @Element(required=false) public boolean Danado=false;
+    @Element(required=false) public boolean Sistema=false;
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String Descripcion="";
 
 
     public clsBeProducto_estado() {

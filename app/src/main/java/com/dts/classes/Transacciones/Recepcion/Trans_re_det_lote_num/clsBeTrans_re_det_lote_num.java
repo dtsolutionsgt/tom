@@ -5,14 +5,14 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_re_det_lote_num {
 
-    @Element(required=false) public int IdLoteNum;
-    @Element(required=false) public int IdRecepcionEnc;
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public String Lote;
-    @Element(required=false) public int Lote_Numerico;
-    @Element(required=false) public String FechaIngreso;
-    @Element(required=false) public double Cantidad;
+    @Element(required=false) public int IdLoteNum=0;
+    @Element(required=false) public int IdRecepcionEnc=0;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public String Lote="";
+    @Element(required=false) public int Lote_Numerico=0;
+    @Element(required=false) public String FechaIngreso="1900-01-01T00:00:01";
+    @Element(required=false) public double Cantidad=0;
 
 
     public clsBeTrans_re_det_lote_num() {

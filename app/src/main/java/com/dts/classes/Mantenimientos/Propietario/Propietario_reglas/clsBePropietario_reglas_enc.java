@@ -7,19 +7,19 @@ import org.simpleframework.xml.Element;
 
 public class clsBePropietario_reglas_enc {
 
-    @Element(required=false) public int IdReglaPropietarioEnc;
-    @Element(required=false) public int IdReglaRecepcion;
-    @Element(required=false) public int IdPropietario;
-    @Element(required=false) public int IdMensajeRegla;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdReglaPropietarioEnc=0;
+    @Element(required=false) public int IdReglaRecepcion=0;
+    @Element(required=false) public int IdPropietario=0;
+    @Element(required=false) public int IdMensajeRegla=0;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeReglas_recepcion Regla=new clsBeReglas_recepcion();
-    @Element(required=false) public String Propietario;
-    @Element(required=false) public String Mensaje;
+    @Element(required=false) public String Propietario="";
+    @Element(required=false) public String Mensaje="";
     @Element(required=false) public clsBePropietario_reglas_detList ReglasDet=new clsBePropietario_reglas_detList();
 
 

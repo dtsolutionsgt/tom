@@ -7,13 +7,13 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProveedor_bodega {
 
-    @Element(required=false) public int IdAsignacion;
-    @Element(required=false) public int IdProveedor;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdAsignacion=0;
+    @Element(required=false) public int IdProveedor=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public clsBeProveedor Proveedor=new clsBeProveedor();
 

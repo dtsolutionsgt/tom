@@ -5,14 +5,14 @@ import org.simpleframework.xml.Element;
 
 public class clsBeLicensePlates {
 
-    @Element(required=false) public int IdRecepcionEnc;
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public int IdPresentacion;
-    @Element(required=false) public String LicensePlates;
-    @Element(required=false) public double CantidadUnidadBasica;
-    @Element(required=false) public double CantidadPresentacion;
-    @Element(required=false) public double CantidadMaximaPresentacion;
-    @Element(required=false) public double CantidadDisponible;
+    @Element(required=false) public int IdRecepcionEnc=0;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdPresentacion=0;
+    @Element(required=false) public String LicensePlates="";
+    @Element(required=false) public double CantidadUnidadBasica=0;
+    @Element(required=false) public double CantidadPresentacion=0;
+    @Element(required=false) public double CantidadMaximaPresentacion=0;
+    @Element(required=false) public double CantidadDisponible=0;
 
 
     public clsBeLicensePlates() {

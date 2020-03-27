@@ -5,18 +5,18 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTareasIngresoHH {
 
-    @Element(required=false) public int IdRecepcionEnc;
-    @Element(required=false) public int IdPropietarioBodega;
-    @Element(required=false) public int IdPropietario;
-    @Element(required=false) public String NombrePropietario;
-    @Element(required=false) public int IdProveedor;
-    @Element(required=false) public String NombreProveedor;
-    @Element(required=false) public String NoDocumentoOc;
-    @Element(required=false) public String NombreMotivoDevolucion;
-    @Element(required=false) public String NombreTipoIngresoOC;
-    @Element(required=false) public String NoReferenciaOC;
-    @Element(required=false) public int IdOrderCompraEnc;
-    @Element(required=false) public String NombreTipoRecepcion;
+    @Element(required=false) public int IdRecepcionEnc=0;
+    @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public int IdPropietario=0;
+    @Element(required=false) public String NombrePropietario="";
+    @Element(required=false) public int IdProveedor=0;
+    @Element(required=false) public String NombreProveedor="";
+    @Element(required=false) public String NoDocumentoOc="";
+    @Element(required=false) public String NombreMotivoDevolucion="";
+    @Element(required=false) public String NombreTipoIngresoOC="";
+    @Element(required=false) public String NoReferenciaOC="";
+    @Element(required=false) public int IdOrderCompraEnc=0;
+    @Element(required=false) public String NombreTipoRecepcion="";
 
 
     public clsBeTareasIngresoHH() {

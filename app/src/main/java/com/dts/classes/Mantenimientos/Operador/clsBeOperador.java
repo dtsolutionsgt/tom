@@ -7,24 +7,24 @@ import org.simpleframework.xml.Element;
 
 public class clsBeOperador {
 
-    @Element(required=false) public int IdOperador;
-    @Element(required=false) public int IdEmpresa;
-    @Element(required=false) public int IdRolOperador;
-    @Element(required=false) public int IdJornada;
-    @Element(required=false) public String Nombres;
-    @Element(required=false) public String Apellidos;
-    @Element(required=false) public String Direccion;
-    @Element(required=false) public String Telefono;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public String Clave;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdOperador=0;
+    @Element(required=false) public int IdEmpresa=0;
+    @Element(required=false) public int IdRolOperador=0;
+    @Element(required=false) public int IdJornada=0;
+    @Element(required=false) public String Nombres="";
+    @Element(required=false) public String Apellidos="";
+    @Element(required=false) public String Direccion="";
+    @Element(required=false) public String Telefono="";
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public String Clave="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public double Costo_hora;
-    @Element(required=false) public boolean Usa_hh;
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public double Costo_hora=0;
+    @Element(required=false) public boolean Usa_hh=false;
+    @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
 
 

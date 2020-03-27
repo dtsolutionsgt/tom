@@ -4,22 +4,22 @@ import org.simpleframework.xml.Element;
 
 public class clsBeRevision {
 
-    @Element(required=false) public String Producto;
-    @Element(required=false) public String Presentacion;
-    @Element(required=false) public String Estado;
-    @Element(required=false) public String Ubicacion;
-    @Element(required=false) public double Minimo;
-    @Element(required=false) public double Maximo;
-    @Element(required=false) public double Disponible;
-    @Element(required=false) public int IdPropietarioBodega;
-    @Element(required=false) public int IdProductoBodega;
-    @Element(required=false) public int IdPresentacion;
-    @Element(required=false) public int IdProductoEstado;
-    @Element(required=false) public int IdUnidadMedida;
-    @Element(required=false) public int IdUbicacion;
-    @Element(required=false) public int IdPropietario;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public double Factor;
+    @Element(required=false) public String Producto="";
+    @Element(required=false) public String Presentacion="";
+    @Element(required=false) public String Estado="";
+    @Element(required=false) public String Ubicacion="";
+    @Element(required=false) public double Minimo=0;
+    @Element(required=false) public double Maximo=0;
+    @Element(required=false) public double Disponible=0;
+    @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdPresentacion=0;
+    @Element(required=false) public int IdProductoEstado=0;
+    @Element(required=false) public int IdUnidadMedida=0;
+    @Element(required=false) public int IdUbicacion=0;
+    @Element(required=false) public int IdPropietario=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public double Factor=0;
 
 
     public clsBeRevision() {

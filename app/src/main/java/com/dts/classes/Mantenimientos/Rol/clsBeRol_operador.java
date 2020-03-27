@@ -7,8 +7,8 @@ import org.simpleframework.xml.Element;
 
 public class clsBeRol_operador {
 
-    @Element(required=false) public int IdRolOperador;
-    @Element(required=false) public String Nombre;
+    @Element(required=false) public int IdRolOperador=0;
+    @Element(required=false) public String Nombre="";
     @Element(required=false) public clsBeMenu_rol_opList ListMenuRolOp=new clsBeMenu_rol_opList();
 
 

@@ -5,12 +5,12 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_re_img {
 
-    @Element(required=false) public int IdImagen;
-    @Element(required=false) public int IdRecepcionEnc;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdImagen=0;
+    @Element(required=false) public int IdRecepcionEnc=0;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String Observacion;
-    @Element(required=false) public boolean IsNew;
+    @Element(required=false) public String Observacion="";
+    @Element(required=false) public boolean IsNew=false;
 
 
     public clsBeTrans_re_img() {

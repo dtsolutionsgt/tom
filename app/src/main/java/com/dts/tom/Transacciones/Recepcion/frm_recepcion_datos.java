@@ -9,7 +9,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +55,10 @@ import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import org.kobjects.util.Util;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -380,6 +386,26 @@ public class frm_recepcion_datos extends PBase {
                         ((EditText)v).selectAll();
                 } });
 
+
+            /* cmbVenceRec .addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count,int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String valor= cmbVenceRec .getText().toString();
+                    try{
+                        du.EsFecha(valor);
+                    }catch(Exception e){
+                        if(valor.length() != 0){
+                            cmbVenceRec.getText().delete(valor.length() - 1, valor.length());
+                        }
+                    }
+                }
+            });*/
 
 
         }catch (Exception e){
@@ -1990,9 +2016,9 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
 
-                Cant_Recibida = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad_recibida).first();
-                Cant_A_Recibir = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad).first();
-                if(Cant_Recibida - Cant_Recibida<0){
+                Cant_Recibida = gl.gselitem.Cantidad_recibida;//stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad_recibida).first();
+                Cant_A_Recibir = gl.gselitem.Cantidad; //stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad).first();
+                if(Cant_A_Recibir - Cant_Recibida<0){
                     Cant_Pendiente = 0;
                 }else{
                     Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
@@ -2012,7 +2038,7 @@ public class frm_recepcion_datos extends PBase {
                         BeLoteLinea = stream(gl.gBeOrdenCompra.DetalleLotes.items)
                                 .where(c->c.No_linea == BeOcDet.No_Linea &&
                                         c.IdOrdenCompraDet == pIdOrdenCompraDet
-                                        && c.Codigo_producto == BeOcDet.Codigo_Producto).first();
+                                        && c.Codigo_producto.equals(BeOcDet.Codigo_Producto)).first();
 
                         if (BeLoteLinea!=null){
                             txtLoteRec.setText(BeLoteLinea.Lote);
@@ -2020,6 +2046,8 @@ public class frm_recepcion_datos extends PBase {
                             if (!BeLoteLinea.Fecha_vence.isEmpty()){
 
                                 VenceList.clear();
+
+                                BeLoteLinea.Fecha_vence =du.convierteFechaMostar(BeLoteLinea.Fecha_vence);
 
                                 VenceList.add(BeLoteLinea.Fecha_vence);
 
@@ -2108,6 +2136,7 @@ public class frm_recepcion_datos extends PBase {
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCostoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoUnitario.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            cmbVenceRec.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
 
             btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
             btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
@@ -2650,6 +2679,9 @@ public class frm_recepcion_datos extends PBase {
             CantRegSeries = pListBeStockSeRec.items.size();
         }
 
+        progress.setMessage("Guardando recepción");
+        progress.show();
+
         int CantRegStock=0;
         int CantRegPP=0;
         int vCont = 0;
@@ -2681,6 +2713,8 @@ public class frm_recepcion_datos extends PBase {
         clsBeTrans_re_detList auxListTransRecDet = new clsBeTrans_re_detList();
 
         try{
+
+            progress.setMessage("Llenando detalle de recepción");
 
             switch (gl.TipoOpcion){
 
@@ -2910,7 +2944,7 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Nombre_producto = BeProducto.Nombre;
 
                 if (IdPreseSelect>0){
-                    BeTransReDet.Nombre_presentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.Nombre).toString();
+                    BeTransReDet.Nombre_presentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.Nombre).first();
                 }else{
                     BeTransReDet.Nombre_presentacion = "";
                 }
@@ -2950,8 +2984,8 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_vence = cmbVenceRec.getText().toString();
-                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString();
+                        BeTransReDet.Fecha_vence =du.convierteFecha(cmbVenceRec.getText().toString().trim());
+                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
                         if (!Valida_Fecha_Vencimiento()){
                             return;
                         }else{
@@ -3041,7 +3075,7 @@ public class frm_recepcion_datos extends PBase {
                             BePP.Cantidad = (1 * Factor);
 
                             if (BeProducto.Control_vencimiento){
-                                BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                                BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
                             }else {
                                 BePP.Fecha_Vence = "";
                             }
@@ -3236,7 +3270,7 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
                         return;
                     }else{
-                        BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                        BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
                         if (!Valida_Fecha_Vencimiento()){
                             mu.msgbox("Se debe corregir la fecha de vencimiento del producto: "+BeProducto.Codigo);
                             return;
@@ -3305,7 +3339,7 @@ public class frm_recepcion_datos extends PBase {
                                 BePP.Cantidad = (1 * Factor);
 
                                 if (BeProducto.Control_vencimiento){
-                                    BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                                    BePP.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
                                 }else {
                                     BePP.Fecha_Vence = "";
                                 }
@@ -3428,7 +3462,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (BeProducto.Control_vencimiento){
-                BeStockRec.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString());
+                BeStockRec.Fecha_Vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
             }else{
                 BeStockRec.Fecha_Vence = "";
             }
@@ -3659,7 +3693,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            String FechaVence=du.convierteFecha(cmbVenceRec.getText().toString());
+            String FechaVence=du.convierteFecha(cmbVenceRec.getText().toString().trim());
 
             if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
                msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
@@ -3679,6 +3713,8 @@ public class frm_recepcion_datos extends PBase {
         double Cantidad=0;
 
         try{
+
+            progress.setMessage("Validando cantidad");
 
             if (gl.TipoOpcion==2){
                 return true;
@@ -3740,7 +3776,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox("msgValidaProductoPallet"+e.getMessage());
         }
     }
 
@@ -3771,7 +3807,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox("msgValidaFechaVence"+e.getMessage());
         }
     }
 
@@ -3802,7 +3838,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
         }
     }
 
@@ -3833,7 +3869,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox("msgValidaCantidad"+e.getMessage());
+
         }
     }
 
@@ -3913,6 +3950,7 @@ public class frm_recepcion_datos extends PBase {
                                 "pIdProducto",BeProducto.IdProducto,"UltimoPalletGenerado",vBeStockRec.Lic_plate);
                         break;
                     case 16:
+                        progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
@@ -3955,7 +3993,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }catch (Exception e){
-                mu.msgbox(e.getClass()+e.getMessage());
+                mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }
 
         }
@@ -4043,7 +4081,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
         } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "wsCallBack: " + e.getMessage());
         }
 
     }
@@ -4059,7 +4097,7 @@ public class frm_recepcion_datos extends PBase {
             Load();
 
         } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            msgbox(" processBeProducto: " + e.getMessage());
         }
 
     }
@@ -4077,7 +4115,7 @@ public class frm_recepcion_datos extends PBase {
             execws(4);
 
         }catch (Exception e){
-            mu.msgbox(e.getClass()+" "+e.getMessage());
+            mu.msgbox("processListarProductoEstado:"+e.getMessage());
         }
 
     }
@@ -4093,7 +4131,7 @@ public class frm_recepcion_datos extends PBase {
             execws(4);
 
         }catch (Exception e){
-            mu.msgbox(e.getClass()+" "+e.getMessage());
+            mu.msgbox("processListPresentaciones:"+e.getMessage());
         }
 
     }
@@ -4110,7 +4148,7 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             progress.cancel();
-            mu.msgbox(e.getClass()+" "+e.getMessage());
+            mu.msgbox("processCodigosBarra:s"+e.getMessage());
         }
 
     }
@@ -4157,12 +4195,15 @@ public class frm_recepcion_datos extends PBase {
                 PTiene_PorSeries=true;
             }
 
-//            if (BeProducto.Presentaciones!=null){
-//                if (BeProducto.Presentaciones.items!=null){
-//                    PTiene_Pres=true;
-//                }
-//            }
-//PTiene_Pres
+            if (stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega
+                    && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).first()>0){
+                if (BeProducto.Presentaciones!=null){
+                    if (BeProducto.Presentaciones.items!=null){
+                        PTiene_Pres=true;
+                    }
+                }
+            }
+
             if(Pperzonalizados|PCap_Manu|PCap_Anada|PGenera_lp|PTiene_Ctrl_Peso|PTiene_Ctrl_Temp|PTiene_PorSeries){
                 Muestra_Propiedades_Producto();
             }else{
@@ -4243,7 +4284,7 @@ public class frm_recepcion_datos extends PBase {
             plistBeReDetParametros = xobj.getresult(clsBeTrans_re_det_parametrosList.class,"Get_All_Params_By_IdRecepcionEnc_And_IdRecepcion_Det_For_HH");
 
         }catch (Exception e){
-
+            mu.msgbox("processListDetParametros"+e.getMessage());
         }
 
     }
@@ -4280,7 +4321,7 @@ public class frm_recepcion_datos extends PBase {
             ContinuaGuardandoRecepcion();
 
         }catch (Exception e){
-
+            mu.msgbox("processAuxRec:"+e.getMessage());
         }
     }
 
@@ -4337,16 +4378,21 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado="";
 
+            progress.setMessage("Finalizando proceso de guardar recepción");
+
             Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
 
             if (!Resultado.isEmpty()){
+                progress.cancel();
                 Imprime_Barra_Despues_Guardar();
             }else{
+                progress.cancel();
                 mu.msgbox("No se pudo guardar la recepción");
                 return;
             }
 
         }catch (Exception e){
+            progress.cancel();
         mu.msgbox("processGuardarRecNueva:"+e.getMessage());
         }
     }

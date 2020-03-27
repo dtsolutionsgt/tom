@@ -5,12 +5,12 @@ import org.simpleframework.xml.Element;
 
 public class clsBeConfiguracion_barra_pallet {
 
-    @Element(required=false) public int IdConfiguracionPallet;
-    @Element(required=false) public int LongCodBodegaOrigen;
-    @Element(required=false) public int LongCodProducto;
-    @Element(required=false) public int LongLP;
-    @Element(required=false) public boolean CodigoNumerico;
-    @Element(required=false) public String IdentificadorInicio;
+    @Element(required=false) public int IdConfiguracionPallet=0;
+    @Element(required=false) public int LongCodBodegaOrigen=0;
+    @Element(required=false) public int LongCodProducto=0;
+    @Element(required=false) public int LongLP=0;
+    @Element(required=false) public boolean CodigoNumerico=false;
+    @Element(required=false) public String IdentificadorInicio="";
 
 
     public clsBeConfiguracion_barra_pallet() {

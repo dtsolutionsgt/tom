@@ -6,29 +6,29 @@ import org.simpleframework.xml.Element;
 
 public class clsBeBodega_sector {
 
-    @Element(required=false) public int IdSector;
-    @Element(required=false) public int IdArea;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public boolean Sistema;
-    @Element(required=false) public String Descripcion;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdSector=0;
+    @Element(required=false) public int IdArea=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public boolean Sistema=false;
+    @Element(required=false) public String Descripcion="";
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public double Alto;
-    @Element(required=false) public double Largo;
-    @Element(required=false) public double Ancho;
-    @Element(required=false) public double Margen_izquierdo;
-    @Element(required=false) public double Margen_derecho;
-    @Element(required=false) public double Margen_superior;
-    @Element(required=false) public double Margen_inferior;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public int IdSectorIzquierda;
-    @Element(required=false) public int IdSectorDerecha;
-    @Element(required=false) public boolean Horizontal;
-    @Element(required=false) public double Pos_x;
-    @Element(required=false) public double Pos_y;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public double Alto=0;
+    @Element(required=false) public double Largo=0;
+    @Element(required=false) public double Ancho=0;
+    @Element(required=false) public double Margen_izquierdo=0;
+    @Element(required=false) public double Margen_derecho=0;
+    @Element(required=false) public double Margen_superior=0;
+    @Element(required=false) public double Margen_inferior=0;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public int IdSectorIzquierda=0;
+    @Element(required=false) public int IdSectorDerecha=0;
+    @Element(required=false) public boolean Horizontal=false;
+    @Element(required=false) public double Pos_x=0;
+    @Element(required=false) public double Pos_y=0;
 
 
     public clsBeBodega_sector() {

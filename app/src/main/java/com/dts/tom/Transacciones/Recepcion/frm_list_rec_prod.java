@@ -626,6 +626,7 @@ public class frm_list_rec_prod extends PBase {
                             btnCompletaRec.setText("DIF - (NEG)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
 
+                            progress.cancel();
                             return false;
 
                         }else if(vTipoDiferencia<0){
@@ -633,13 +634,15 @@ public class frm_list_rec_prod extends PBase {
                             btnCompletaRec.setText(" DIF - (POS)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF0399D5"));
 
+                            progress.cancel();
                             return false;
 
-                        }else if (vTipoDiferencia==0){
+                        }else if (vTipoDiferencia==0) {
 
                             btnCompletaRec.setText("COMPLETA");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF99CC00"));
 
+                            progress.cancel();
                             return true;
                         }
 

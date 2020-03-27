@@ -5,33 +5,33 @@ import org.simpleframework.xml.Element;
 
 public class clsBeEmpresa {
 
-    @Element(required=false) public int IdEmpresa;
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public String Direccion;
-    @Element(required=false) public String Telefono;
-    @Element(required=false) public String Email;
-    @Element(required=false) public String Razon_social;
-    @Element(required=false) public String Representante;
-    @Element(required=false) public int Corr_cod_barra;
-    @Element(required=false) public String Path_printer;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdEmpresa=0;
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public String Direccion="";
+    @Element(required=false) public String Telefono="";
+    @Element(required=false) public String Email="";
+    @Element(required=false) public String Razon_social="";
+    @Element(required=false) public String Representante="";
+    @Element(required=false) public int Corr_cod_barra=0;
+    @Element(required=false) public String Path_printer="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean ClienteRapido;
-    @Element(required=false) public boolean Operador_logistico;
-    @Element(required=false) public int Puerto_escaner;
-    @Element(required=false) public boolean Control_presentaciones;
-    @Element(required=false) public boolean Anulaciones_por_supervisor;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public String Clave;
-    @Element(required=false) public int Intento;
-    @Element(required=false) public int Duracionclave;
-    @Element(required=false) public int Duracionclavetemporal;
-    @Element(required=false) public boolean codigo_automatico;
-    @Element(required=false) public boolean politica_contrasenas;
-    @Element(required=false) public int IdMotivoAjusteInventario;
+    @Element(required=false) public boolean ClienteRapido=false;
+    @Element(required=false) public boolean Operador_logistico=false;
+    @Element(required=false) public int Puerto_escaner=0;
+    @Element(required=false) public boolean Control_presentaciones=false;
+    @Element(required=false) public boolean Anulaciones_por_supervisor=false;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public String Clave="";
+    @Element(required=false) public int Intento=0;
+    @Element(required=false) public int Duracionclave=0;
+    @Element(required=false) public int Duracionclavetemporal=0;
+    @Element(required=false) public boolean codigo_automatico=false;
+    @Element(required=false) public boolean politica_contrasenas=false;
+    @Element(required=false) public int IdMotivoAjusteInventario=0;
 
 
     public clsBeEmpresa()

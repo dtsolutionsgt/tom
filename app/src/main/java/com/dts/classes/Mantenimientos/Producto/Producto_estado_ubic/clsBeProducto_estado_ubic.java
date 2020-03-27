@@ -5,19 +5,19 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProducto_estado_ubic {
 
-    @Element(required=false) public int IdProductoEstadUbic;
-    @Element(required=false) public int IdEstado;
-    @Element(required=false) public int IdUbicacionDefecto;
+    @Element(required=false) public int IdProductoEstadUbic=0;
+    @Element(required=false) public int IdEstado=0;
+    @Element(required=false) public int IdUbicacionDefecto=0;
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
-    @Element(required=false) public boolean Activo;
-    @Element(required=false) public boolean IsNew;
-    @Element(required=false) public String Estado;
-    @Element(required=false) public String Ubicacion;
-    @Element(required=false) public int IdBodega;
-    @Element(required=false) public String Bodega;
+    @Element(required=false) public String User_mod="";
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String Estado="";
+    @Element(required=false) public String Ubicacion="";
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public String Bodega="";
 
 
     public clsBeProducto_estado_ubic() {

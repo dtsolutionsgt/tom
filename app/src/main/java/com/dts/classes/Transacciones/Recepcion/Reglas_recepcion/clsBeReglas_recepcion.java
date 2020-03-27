@@ -5,17 +5,17 @@ import org.simpleframework.xml.Element;
 
 public class clsBeReglas_recepcion {
 
-    @Element(required=false) public int IdReglaRecepcion;
-    @Element(required=false) public String Codigo;
-    @Element(required=false) public String Nombre;
-    @Element(required=false) public String Descripcion;
-    @Element(required=false) public boolean Rechazar;
-    @Element(required=false) public boolean StockNoDisponible;
-    @Element(required=false) public String User_agr;
+    @Element(required=false) public int IdReglaRecepcion=0;
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public String Nombre="";
+    @Element(required=false) public String Descripcion="";
+    @Element(required=false) public boolean Rechazar=false;
+    @Element(required=false) public boolean StockNoDisponible=false;
+    @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
+    @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Activo;
+    @Element(required=false) public boolean Activo=false;
 
 
     public clsBeReglas_recepcion() {
