@@ -602,7 +602,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private boolean Recepcion_Completa(){
-
+        boolean Completa=false;
         vTipoDiferencia=0;
         double Cantidad_recibida,Cantidad;
 
@@ -612,10 +612,10 @@ public class frm_list_rec_prod extends PBase {
 
             if (gBeOrdenCompra.DetalleOC.items!=null){
 
-                for (int i = gBeOrdenCompra.DetalleOC.items.size()-1; i>=0; i--) {
+                for (clsBeTrans_oc_det Obj: gBeOrdenCompra.DetalleOC.items) {
 
-                    Cantidad_recibida = gBeOrdenCompra.DetalleOC.items.get(i).Cantidad_recibida;
-                    Cantidad = gBeOrdenCompra.DetalleOC.items.get(i).Cantidad;
+                    Cantidad_recibida = Obj.Cantidad_recibida;
+                    Cantidad = Obj.Cantidad;
 
                     if (Cantidad_recibida>0){
 
@@ -626,24 +626,21 @@ public class frm_list_rec_prod extends PBase {
                             btnCompletaRec.setText("DIF - (NEG)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
 
-                            progress.cancel();
-                            return false;
+                            Completa= false;
 
                         }else if(vTipoDiferencia<0){
 
                             btnCompletaRec.setText(" DIF - (POS)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF0399D5"));
 
-                            progress.cancel();
-                            return false;
+                            Completa= false;
 
                         }else if (vTipoDiferencia==0) {
 
                             btnCompletaRec.setText("COMPLETA");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF99CC00"));
 
-                            progress.cancel();
-                            return true;
+                            Completa= true;
                         }
 
                     }else{
@@ -664,7 +661,7 @@ public class frm_list_rec_prod extends PBase {
             mu.msgbox(e.getClass()+" "+ e.getMessage());
         }
 
-        return  true;
+        return  Completa;
 
     }
 

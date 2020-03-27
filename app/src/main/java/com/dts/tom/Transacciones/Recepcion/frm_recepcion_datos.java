@@ -2817,15 +2817,18 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            progress.setMessage("Validando imprimir barra");
+
             if (gl.IdImpresora>0){
 
                 if (BeTransReDet.Presentacion.EsPallet){
 
                     //ImprimirBarra
+                    progress.cancel();
 
                 }else{
                     if (BeTransReDet.Presentacion.Imprime_barra){
-
+                        progress.cancel();
                         //ImprimirBarra
 
                     }
@@ -2836,6 +2839,7 @@ public class frm_recepcion_datos extends PBase {
             switch (gl.TipoOpcion){
 
                 case 1:
+                    progress.setMessage("Actualizando valores OCDet");
                     beTransOCDet =new clsBeTrans_oc_det();
                     beTransOCDet.IdOrdenCompraEnc = pIdOrdenCompraEnc;
                     beTransOCDet.IdOrdenCompraDet = pIdOrdenCompraDet;
@@ -2843,7 +2847,7 @@ public class frm_recepcion_datos extends PBase {
                     break;
 
                 case 2:
-
+                    progress.cancel();
                     break;
 
             }
@@ -4383,7 +4387,6 @@ public class frm_recepcion_datos extends PBase {
             Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
 
             if (!Resultado.isEmpty()){
-                progress.cancel();
                 Imprime_Barra_Despues_Guardar();
             }else{
                 progress.cancel();
@@ -4420,27 +4423,35 @@ public class frm_recepcion_datos extends PBase {
 
     private void processActualizaCantidadRecibida(){
 
-        try{
+        try {
 
-            boolean GetDetalle=false;
-            int vIndex=-1;
+            boolean GetDetalle = false;
+            int vIndex = -1;
 
-            GetDetalle = xobj.getresult(Boolean.class,"Get_Detalle_OC_By_IdOrdeCompraDet");
+            progress.setMessage("Actualizando cantidad recibida");
 
-            List AuxList  = stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet == beTransOCDet.IdOrdenCompraDet && c.IdPresentacion == beTransOCDet.IdPresentacion).select(c->c.IdOrdenCompraDet).toList();
+            GetDetalle = xobj.getresult(Boolean.class, "Get_Detalle_OC_By_IdOrdeCompraDet");
 
-            vIndex = AuxList.indexOf(beTransOCDet.IdOrdenCompraDet);
+            List AuxList = stream(gl.gpListDetalleOC.items).select(c -> c.IdOrdenCompraDet).toList();
 
-            gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida = beTransOCDet.Cantidad_recibida;
+            if (AuxList.size()>0){
 
-            gl.CantOC = beTransOCDet.Cantidad;
+                vIndex = AuxList.indexOf(beTransOCDet.IdOrdenCompraDet);
+
+                gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida = BeTransReDet.cantidad_recibida;
+
+            }
+
             gl.CantRec = beTransOCDet.Cantidad_recibida;
-
-            super.finish();
 
             gl.Carga_Producto_x_Pallet=false;
 
+            progress.cancel();
+
+            doExit();
+
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processActualizaCantidadRecibida"+e.getMessage());
         }
     }
