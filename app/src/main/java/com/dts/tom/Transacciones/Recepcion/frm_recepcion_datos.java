@@ -387,7 +387,7 @@ public class frm_recepcion_datos extends PBase {
                 } });
 
 
-            /* cmbVenceRec .addTextChangedListener(new TextWatcher() {
+             cmbVenceRec .addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
@@ -398,14 +398,20 @@ public class frm_recepcion_datos extends PBase {
                 public void afterTextChanged(Editable s) {
                     String valor= cmbVenceRec .getText().toString();
                     try{
-                        du.EsFecha(valor);
+
+                 /*       if (!du.EsFecha(valor)){
+                            toast("No es una fecha válida");
+                            cmbVenceRec.getText().delete(valor.length() - 1, valor.length());
+                        };*/
+
+                       // du.EsFecha(valor);
                     }catch(Exception e){
                         if(valor.length() != 0){
                             cmbVenceRec.getText().delete(valor.length() - 1, valor.length());
                         }
                     }
                 }
-            });*/
+            });
 
 
         }catch (Exception e){
@@ -2742,14 +2748,11 @@ public class frm_recepcion_datos extends PBase {
             auxListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == pIdRecepcionDet).toList();
 
             //Esto es el equivalente a ReDim en .net
-            if (gl.gBeRecepcion.Detalle.items!=null)
+            if (auxListTransRecDet.items!=null)
             {
                 //#EJC20200325: Aquí da error en algunas ocasiones
 
                 try{
-
-                    //System.arraycopy(gl.gBeRecepcion.Detalle.items,0,auxListTransRecDet.items,0,Math.min(gl.gBeRecepcion.Detalle.items.size(), auxListTransRecDet.items.size()));
-                    //gl.gBeRecepcion.Detalle.items = auxListTransRecDet.items;
 
                     gl.gBeRecepcion.Detalle.items = new ArrayList<>();
 
@@ -2764,13 +2767,6 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }
-
-//            for  (clsBeTrans_re_det RD: auxListTransRecDet.items)
-//            {
-//                gl.gBeRecepcion.Detalle.items = new ArrayList<clsBeTrans_re_det>();
-//                gl.gBeRecepcion.Detalle.items.add(I,RD);
-//                I += 1;
-//            }
 
             if (gl.gBeRecepcion.DetalleParametros.items!=null){
                 System.arraycopy(gl.gBeRecepcion.DetalleParametros.items,0,plistBeReDetParametros.items,0,Math.min(gl.gBeRecepcion.DetalleParametros.items.size(), plistBeReDetParametros.items.size()));

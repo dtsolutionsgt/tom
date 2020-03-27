@@ -55,7 +55,7 @@ public class DateUtils {
 		return sh+":"+sm;
 	}
 
-	public boolean EsFecha(String vFecha){
+	public boolean EsFecha(String vFecha) throws ParseException {
 
 		boolean correcta=false;
 		int cant=0;
@@ -69,9 +69,19 @@ public class DateUtils {
 
 			cant = vFecha.length();
 
-			day = vFecha.substring(0,2);
+				day = vFecha.substring(0,2);
+				mounth=vFecha.substring(4,5);
+				year = vFecha.substring(7,10);
 
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				String fechaAValidar = String.format("%d-%d-%d", day, mounth,year);
 
+				try{
+					sdf.parse(fechaAValidar);
+					correcta=true;
+				}catch (Exception e){
+					correcta=false;
+				}
 		}
 
 		return correcta;
