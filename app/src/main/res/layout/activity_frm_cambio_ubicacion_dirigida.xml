@@ -317,7 +317,7 @@
                     android:layout_marginBottom="0dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="Estado Destino:"
+                    android:text="Estado destino:"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -331,6 +331,7 @@
                     android:layout_alignEnd="@+id/lbCant"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="0dp"
+                    android:background="#E3E0E0"
                     android:inputType="textPersonName" />
 
             </RelativeLayout>

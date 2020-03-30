@@ -15,6 +15,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -79,6 +80,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         app.readOnly(txtLote);
         app.readOnly(txtVence);
         app.readOnly(txtEstado);
+        app.readOnly(txtEstadoDestino);
 
         setHandlers();
 
@@ -163,7 +165,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
             txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
-            lblUbicDestino.setText(gl.tareadet.UbicacionDestino.NombreCompleto);
+            lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto);
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
@@ -367,7 +369,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_Vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
+            gMovimientoDet.Fecha_vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
             gMovimientoDet.Fecha = gl.tareadet.HoraFin;
 
             if (gl.Escaneo_Pallet){
@@ -489,8 +491,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 return;
             }
 
-            txtUbicDestino.requestFocus();
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -558,7 +558,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gProdEstado = xobj.getresult(clsBeProducto_estado.class,"Get_Single_By_IdEstado");
 
             if (gProdEstado != null){
-                txtUbicDestino.setText(gProdEstado.Nombre);
+                txtEstadoDestino.setText(gProdEstado.Nombre);
             }
 
         } catch (Exception e) {

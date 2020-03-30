@@ -184,6 +184,8 @@ public class Mainmenu extends PBase {
 
                 case 2://Cambio de Ubicación
 
+                    gl.IdTareaUbicEnc =0;
+                    gl.modo_cambio = 1;
                     msgAskUbicNoDirigida("Ubicación no dirigida");
 
                     break;
@@ -191,7 +193,7 @@ public class Mainmenu extends PBase {
                 case 3://Cambio de Estado
 
                     gl.modo_cambio = 2;
-                    startActivity(new Intent(this, frm_tareas_cambio_ubicacion.class));
+                    msgAskUbicNoDirigida("Cambio de estado no dirigido");
 
                     break;
 
@@ -228,17 +230,15 @@ public class Mainmenu extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    gl.modo_cambio = 1;
-                    gl.IdTareaUbicEnc =0;
 
                     Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
                     startActivity(intent);
+
                 }
             });
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    gl.modo_cambio = 1;
                     startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
                 }
             });

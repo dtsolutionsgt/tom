@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_detList;
 import com.dts.ladapt.CambioUbicacion.list_adapter_detalle_cambio_ubic;
@@ -46,7 +47,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     private boolean Modo=false;
     private String eststr="";
-    private int busprodid;
+    private int BeBuscaProducto;
 
     private list_adapter_detalle_cambio_ubic adapter;
 
@@ -92,7 +93,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         ProgressDialog("Cargando forma");
 
-        //Load();
+        Load();
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     }
 
@@ -100,12 +103,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         try{
             if (gl.IdTareaUbicEnc>0){
+                progress.setMessage("Cargando detalle de tarea de cambio de ubicación");
                 execws(1);
             }
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
         }
-
     }
 
     private void setHandlers(){
@@ -124,18 +127,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 if (!txtCodigo.getText().toString().isEmpty()){
                                     //Sirve para filtrar los registros por un producto especifico.
 
-                                    if (pBeTransUbicHhDetList!=null){
-                                        if(pBeTransUbicHhDetList.items != null){
-                                            List<clsBeTrans_ubic_hh_det> BeTransUbicHhDetTmp =
-                                                    stream(pBeTransUbicHhDetList.items)
-                                                            .where(c -> c.getProducto().getCodigo().equalsIgnoreCase(txtCodigo.getText().toString()))
-                                                            .toList();
+                                    progress.setMessage("Validando existencia del producto");
 
-                                            pBeTransUbicHhDetList.items=BeTransUbicHhDetTmp;
-                                            Llena_Tarea_Detalle_Ubicacion();
-                                            txtCodigo.setText("");
-                                        }
-                                    }
+                                    execws(3);
                                 }else{
                                     Load();
                                 }
@@ -211,6 +205,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                     break;
                 case 2:
                     processCambioEstado();
+                    break;
+                case 3:
+                    processProducto();
+                    break;
             }
 
         } catch (Exception e) {
@@ -235,6 +233,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                     case 2:
                         callMethod("Actualizar_Estado_Cambio","pIdTransUbicHHEnc", gl.tareaenc,"finalizar", true);
                          break;
+                    case 3:
+                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigo.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -274,8 +276,6 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             clsBeTrans_ubic_hh_det vItem;
             pBeTransUbicHhDetListArray.clear();
 
-            progress.setMessage("Cargando detalle de tarea de cambio de ubicación");
-
             listTot=0;
             listUser=0;
             listCompUser=0;
@@ -295,8 +295,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                     List<clsBeTrans_ubic_hh_det> BeTransUbicHhDetTmp =
                             stream(pBeTransUbicHhDetList.items)
                                     .where(c -> (soperador?c.IdOperador > -1:c.IdOperador == gl.IdOperador))
-                                    .where(c -> (busprodid==1? c.getProducto().IdProducto > -1: c.getProducto().IdProducto == busprodid))
-                                    .where (c -> (ubicados?c.Cantidad == c.getRecibido(): c.getRecibido() >-1))
+                                    .where(c -> (BeBuscaProducto==0? c.getProducto().IdProducto > -1: c.getProducto().IdProducto == BeBuscaProducto))
+                                    .where (c -> (ubicados?c.getCantidad() == c.getRecibido(): c.getCantidad() - c.getRecibido() >0))
                                     .where(c -> c.getCantidad()>0)
                                     .toList();
 
@@ -324,7 +324,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                             listUser += 1;
                         }
 
-                        if (pBeTransUbicHhDetList.items.get(i).getRealizado()){
+                        if (!pBeTransUbicHhDetList.items.get(i).getRealizado()){
                             if (pBeTransUbicHhDetList.items.get(i).getIdOperador()==gl.IdOperador){
                                 listCompUser += 1;
                             }
@@ -335,52 +335,51 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                         listTot += 1;
                     }
 
-                    lblRegs.setText(""+listCompUser);
-                    lblTotal.setText(listTot + "/" + listCompTot);
+                    lblRegs.setText(""+listUser);
+                    lblTotal.setText(listCompTot + "/" + listTot);
+
+                    if (pBeTransUbicHhDetList!=null){
+                        if (pBeTransUbicHhDetList.items!=null){
+
+                            adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);
+                            listView.setAdapter(adapter);
+
+                            if (pBeTransUbicHhDetList.items.size()==1){
+
+                                if (pBeTransUbicHhDetList.items.get(0).getCantidad()-pBeTransUbicHhDetList.items.get(0).getRecibido()>0){
+                                    msgAskContinuar("Ya solo le queda este registro pendiente ¿Quiere continuar ingresando lo pendiente?");
+                                }else{
+                                    msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
+                                            (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+                                }
+
+                            }else{
+                                adapter.setSelectedIndex(-1);
+                                index = -1;
+                            }
+
+                            if (pBeTransUbicHhDetList.items.size()==0){
+
+                                msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
+                                        (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+
+                            }
+                            adapter.refreshItems();
+                        }
+                    }
                 }
             }
-
-            adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);
-            listView.setAdapter(adapter);
-
-            if (pBeTransUbicHhDetList.items.size()==1){
-
-                Object lvObj = listView.getItemAtPosition(0);
-                clsBeTrans_ubic_hh_det vItemTmp = (clsBeTrans_ubic_hh_det) lvObj;
-
-                adapter.setSelectedIndex(0);
-
-                index = 0;
-
-                Procesa_Registro(vItemTmp.IdTareaUbicacionDet);
-
-            }else{
-                adapter.setSelectedIndex(-1);
-                index = -1;
-            }
-
-            if (pBeTransUbicHhDetList.items.size()==0){
-
-                msgAskFinalizar(String.format("Ya no hay productos pendientes de {0}. ¿Quiere finalizar la tarea?",
-                        (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
-
-            }
-            adapter.refreshItems();
-
-            progress.cancel();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
-
+        progress.cancel();
     }
 
     private void processCambioEstado(){
 
         try {
-
-            progress.setMessage("Finalizando la tarea de cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
 
             int resultado = (int) xobj.getSingle("Actualizar_Estado_CambioResult",int.class);
 
@@ -388,19 +387,17 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                 msgSalir("La tarea ha sido finalizada");
             }
 
-            progress.cancel();
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
+        progress.cancel();
 
     }
 
     private void processTareaDetalleCambioUbicacion(){
 
         try {
-
-            progress.setMessage("Obteniendo detalle de la tarea de cambio de ubicación");
 
             pBeTransUbicHhDetList = xobj.getresult(clsBeTrans_ubic_hh_detList.class,"Get_All_By_IdTransUbicEnc_And_IdOperador");
 
@@ -412,14 +409,35 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                 }
             }
 
-            progress.cancel();
-
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
+        progress.cancel();
+
+    }
+
+    private void processProducto(){
+
+        try {
+
+            clsBeProducto bProd = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+
+            if (bProd != null){
+                BeBuscaProducto=bProd.getIdProducto();
+
+                progress.setMessage("Obteniendo detalle de la tarea de cambio de ubicación");
+
+                execws(1);
+            }else{
+                BeBuscaProducto=0;
+                throw new Exception("El producto no existe");
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        progress.cancel();
     }
 
     public void validacion_finalizar_tarea(View view){
@@ -452,6 +470,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             gl.tareaenc.setEstado(eststr);
             gl.tareaenc.setHoraFin( app.strFecha(currentTime));
             gl.tareaenc.setFechaFin(app.strFecha(currentTime));
+
+            progress.setMessage("Finalizando la tarea de cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
 
             execws(2);
 
@@ -554,6 +574,47 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     }
 
+    private void msgAskContinuar(String msg){
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Object lvObj = listView.getItemAtPosition(0);
+                    clsBeTrans_ubic_hh_det vItemTmp = (clsBeTrans_ubic_hh_det) lvObj;
+
+                    adapter.setSelectedIndex(0);
+
+                    index = 0;
+
+                    Procesa_Registro(vItemTmp.IdTareaUbicacionDet);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+
+    }
+
     private void msgSalir(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -582,9 +643,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     public void Regresar(View view){
       finish();
     }
-
-    @Override
-    public void onBackPressed() {}
+//
+//    @Override
+//    public void onBackPressed() {}
 
     @Override
     protected void onResume(){

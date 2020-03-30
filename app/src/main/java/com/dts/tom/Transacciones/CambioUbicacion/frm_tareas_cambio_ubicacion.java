@@ -81,7 +81,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             ProgressDialog("Cargando forma");
 
-            Load();
+            //Load();
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -237,10 +237,17 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                     }
 
                     lblRegs.setText("Regs: "+pListBeTransUbicHhEnc.items.size());
-                }
 
-                adapter=new list_view_tareas_cambio_ubic(this,pListBeTareasCambioHH);
-                listView.setAdapter(adapter);
+                    adapter=new list_view_tareas_cambio_ubic(this,pListBeTareasCambioHH);
+                    listView.setAdapter(adapter);
+
+                    if (pListBeTransUbicHhEnc.items.size()>1){
+
+                        adapter.setSelectedIndex(-1);
+                        index = -1;
+                    }
+
+                }
 
             }else{
                 adapter = null;
@@ -391,7 +398,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     protected void onResume() {
         try{
-            Llena_Tareas_Ubicacion();
+            Load();
             super.onResume();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

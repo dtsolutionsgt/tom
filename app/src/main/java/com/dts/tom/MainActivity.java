@@ -258,6 +258,9 @@ public class MainActivity extends PBase {
                     iduser=users.items.get(position).IdOperador;
                     gl.IdOperador = iduser;
 
+                    txtpass.requestFocus();
+                    showkeyb();
+
                 } catch (Exception e) { }
 
             }
@@ -435,7 +438,6 @@ public class MainActivity extends PBase {
 
     }
     //endregion
-
 
     //region Data Processing
 
@@ -619,6 +621,9 @@ public class MainActivity extends PBase {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
             }
+
+
+
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
