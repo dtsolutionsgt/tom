@@ -3,7 +3,7 @@ package com.dts.classes.Mantenimientos.Empresa;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeEmpresa {
+public class clsBeEmpresa extends clsBeEmpresaBase {
 
     @Element(required=false) public int IdEmpresa=0;
     @Element(required=false) public String Nombre="";

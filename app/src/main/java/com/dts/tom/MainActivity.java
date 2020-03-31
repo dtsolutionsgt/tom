@@ -24,9 +24,11 @@ import androidx.core.app.ActivityCompat;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAnd;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
@@ -170,10 +172,12 @@ public class MainActivity extends PBase {
 
     private void setHandlers() {
 
-        spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                try {
+                try
+                {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
                     spinlabel.setTextColor(Color.BLACK);
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
@@ -183,7 +187,8 @@ public class MainActivity extends PBase {
                     gl.IdEmpresa = idemp;
                     idbodega=0;
                     execws(2);
-                  } catch (Exception e) {
+                } catch (Exception e)
+                {
                     msgbox(e.getMessage());
                 }
             }
@@ -306,10 +311,10 @@ public class MainActivity extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Empresas_For_And");
+                        callMethod("Android_Get_All_Empresas");
                         break;
                     case 2:
-                        callMethod("Get_Bodegas_By_IdEmpresa_For_HH","IdEmpresa",idemp);
+                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);
                         break;
                     case 3:
                         callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
@@ -380,7 +385,7 @@ public class MainActivity extends PBase {
 
                     if (!txtpass.getText().toString().isEmpty()){
 
-                                List<clsBeBodega> BeBodega =
+                                List<clsBeBodegaBase> BeBodega =
                                         stream(bodegas.items)
                                                 .where(c -> c.IdBodega  == gl.IdBodega)
                                                 .toList();
@@ -441,36 +446,46 @@ public class MainActivity extends PBase {
 
     //region Data Processing
 
-    private void processEmpresas() {
-        class EmpresaSort implements Comparator<clsBeEmpresaAnd> {
-            public int compare(clsBeEmpresaAnd left, clsBeEmpresaAnd right) {
+    private void processEmpresas()
+    {
+        class EmpresaSort implements Comparator<clsBeEmpresaBase>
+        {
+            public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)
+            {
                 return left.Nombre.compareTo(right.Nombre);
             }
         }
 
-        try {
-            empresas=xobj.getresult(clsBeEmpresaAndList.class,"Get_All_Empresas_For_And");
+        try
+        {
 
+            empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
             Collections.sort(empresas.items, new EmpresaSort());
             fillSpinemp();
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
-    private void processBodegas() {
-        class BodegaSort implements Comparator<clsBeBodega> {
-            public int compare(clsBeBodega left, clsBeBodega right) {
+    private void processBodegas()
+    {
+        class BodegaSort implements Comparator<clsBeBodegaBase>
+        {
+            public int compare(clsBeBodegaBase left, clsBeBodegaBase right)
+            {
                 return left.Nombre.compareTo(right.Nombre);
             }
         }
 
-        try {
-            bodegas=xobj.getresult(clsBeBodegaList.class,"Get_Bodegas_By_IdEmpresa_For_HH");
-
+        try
+        {
+            bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
             Collections.sort(bodegas.items, new BodegaSort());
             fillSpinBod();
-        } catch (Exception e) {
+
+        } catch (Exception e)
+        {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -548,11 +563,15 @@ public class MainActivity extends PBase {
 
     //region Spinners
 
-    private void fillSpinemp() {
-        try {
+    private void fillSpinemp()
+    {
+
+        try
+        {
             emplist.clear();
 
-            for (int i = 0; i <empresas.items.size(); i++) {
+            for (int i = 0; i <empresas.items.size(); i++)
+            {
                 emplist.add(empresas.items.get(i).Nombre);
             }
 
@@ -561,7 +580,9 @@ public class MainActivity extends PBase {
             spinemp.setAdapter(dataAdapter);
 
             if (emplist.size()>0) spinemp.setSelection(0);
-        } catch (Exception e) {
+
+        } catch (Exception e)
+        {
             mu.msgbox( e.getMessage());
         }
     }
@@ -570,10 +591,12 @@ public class MainActivity extends PBase {
         String ss;
 
         try {
+
             bodlist.clear();
 
-            for (int i = 0; i <bodegas.items.size(); i++) {
-                bodlist.add(bodegas.items.get(i).Nombre_comercial);
+            for (int i = 0; i <bodegas.items.size(); i++)
+            {
+                bodlist.add(bodegas.items.get(i).Nombre);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);

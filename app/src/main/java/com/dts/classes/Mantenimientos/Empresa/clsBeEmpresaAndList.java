@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class clsBeEmpresaAndList {
+public class clsBeEmpresaAndList
+{
     @ElementList(inline=true,required = false)
-    public List<clsBeEmpresaAnd> items;
+    public List<clsBeEmpresaBase> items;
 }

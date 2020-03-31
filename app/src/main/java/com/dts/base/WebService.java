@@ -5,28 +5,21 @@ import android.util.Log;
 
 import com.dts.tom.PBase;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import static android.content.ContentValues.TAG;
 
 public class WebService {
 
@@ -72,7 +65,7 @@ public class WebService {
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
         int TIMEOUT = 150000;
-        mMethodName = methodName;mResult = "";xmlresult="";
+        mMethodName = methodName; mResult = "";xmlresult="";
 
        try{
 
@@ -98,21 +91,37 @@ public class WebService {
            body += "</" + methodName + ">" +
                    "</soap:Body>" +
                    "</soap:Envelope>";
-          // wr.write(URLEncoder.encode(body, "UTF-8"));
            wr.write(body);
            wr.flush();
 
-           // Get the response
-           BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+           int responsecode = ((HttpURLConnection) conn).getResponseCode();
 
-           while ((line = rd.readLine()) != null) mResult += line;
+           String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
-           wr.close();rd.close();
+           if (responsecode==200 || responsecode ==400 )
+           {
+               // Get the response
+               BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+               while ((line = rd.readLine()) != null) mResult += line;
+               rd.close();rd.close();
+               mResult=mResult.replace("ñ","n");
+               xmlresult=mResult;
 
-           mResult=mResult.replace("ñ","n");
-           xmlresult=mResult;
+           }else
+           {
 
-       }catch (Exception e)
+               // Get the response of customError in somehow
+               BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+               while ((line = rd.readLine()) != null) mResult += line;
+               rd.close();rd.close();
+               mResult=mResult.replace("ñ","n");
+               xmlresult=mResult;
+               throw new Exception("Error al procesar la solicitud: " + mResult);
+
+           }
+
+       }
+       catch (Exception e)
        {
            throw new Exception(" WebService callMethod : "+ e.getMessage());
        }

@@ -5,14 +5,9 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeBodega {
+public class clsBeBodega extends clsBeBodegaBase {
 
-    @Element(required=false) public int IdBodega=0;
-    @Element(required=false) public int IdPais=0;
-    @Element(required=false) public int IdEmpresa=0;
-    @Element(required=false) public String Codigo="";
     @Element(required=false) public String Codigo_barra="";
-    @Element(required=false) public String Nombre="";
     @Element(required=false) public String Nombre_comercial="";
     @Element(required=false) public String Direccion="";
     @Element(required=false) public String Telefono="";
@@ -107,42 +102,18 @@ public class clsBeBodega {
 
     }
 
-
-    public int getIdBodega() {
-        return IdBodega;
-    }
-    public void setIdBodega(int value) {
-        IdBodega=value;
-    }
     public int getIdPais() {
         return IdPais;
     }
     public void setIdPais(int value) {
         IdPais=value;
     }
-    public int getIdEmpresa() {
-        return IdEmpresa;
-    }
-    public void setIdEmpresa(int value) {
-        IdEmpresa=value;
-    }
-    public String getCodigo() {
-        return Codigo;
-    }
-    public void setCodigo(String value) {
-        Codigo=value;
-    }
+
     public String getCodigo_barra() {
         return Codigo_barra;
     }
     public void setCodigo_barra(String value) {
         Codigo_barra=value;
-    }
-    public String getNombre() {
-        return Nombre;
-    }
-    public void setNombre(String value) {
-        Nombre=value;
     }
     public String getNombre_comercial() {
         return Nombre_comercial;

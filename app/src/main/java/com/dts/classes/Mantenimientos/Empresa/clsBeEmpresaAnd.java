@@ -1,6 +1,4 @@
 package com.dts.classes.Mantenimientos.Empresa;
-
-
 import org.simpleframework.xml.Element;
 
 public class clsBeEmpresaAnd {
