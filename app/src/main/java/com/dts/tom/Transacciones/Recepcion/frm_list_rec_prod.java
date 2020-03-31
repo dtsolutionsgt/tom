@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,15 +31,16 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detLis
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
+import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.list_adapt_detalle_recepcion;
 
-import java.net.StandardProtocolFamily;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -51,6 +53,7 @@ public class frm_list_rec_prod extends PBase {
     private Button btnRegs,btnCompletaRec;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
+        private DrawingView txtFirma;
     private ProgressDialog progress;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
@@ -714,13 +717,35 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    public void BotonFinalizarRec(View view){
+
+        try{
+
+            execws(10);
+
+        }catch (Exception e){
+            mu.msgbox("BotonFinalizarRec"+e.getMessage());
+        }
+    }
+
     private void Finalizar_Recepcion(){
 
         try{
 
+            String imgSaved = MediaStore.Images.Media.insertImage(
+                    getContentResolver(), txtFirma.getDrawingCache(),
+                    UUID.randomUUID().toString()+".png", "drawing");
+
+                gl.gBeRecepcion.Firma_piloto = Byte.parseByte(imgSaved);
+
+
         }catch (Exception e){
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
         }
+    }
+
+    public void GuardarFirma(View view ){
+        Finalizar_Recepcion();
     }
 
     public class OrdenarItems implements Comparator<clsBeTrans_oc_det> {
@@ -789,6 +814,13 @@ public class frm_list_rec_prod extends PBase {
                     case 11:
                         callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+                    case  12:
+                        callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "Estado","Procesado");
+                        break;
+                    case 13:
+                        callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
+                        break;
                 }
 
             }catch (Exception e){
@@ -844,6 +876,12 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 11:
                         processGetDetalleByIdRepcionEnc();
+                        break;
+                    case 12:
+                        execws(13);
+                        break;
+                    case 13:
+                        execws(14);
                         break;
                 }
 
@@ -1102,6 +1140,8 @@ public class frm_list_rec_prod extends PBase {
 
                 if (gl.gBeRecepcion.Firma_piloto==null){
 
+                    MuestraPantallaFirma(this);
+
                 }
 
             }else{
@@ -1120,6 +1160,12 @@ public class frm_list_rec_prod extends PBase {
             dialog = new Dialog(activity);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frmfirmadig);
+
+            txtFirma = (DrawingView) dialog.findViewById(R.id.drawV);
+            txtFirma.startNew();
+            txtFirma.setErase(false);
+
+            dialog.show();
 
 
 

@@ -225,6 +225,7 @@ public class frm_recepcion_datos extends PBase {
 
     public void ProgressDialog(){
         progress=new ProgressDialog(this);
+        progress.setCancelable(false);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         progress.setProgress(0);

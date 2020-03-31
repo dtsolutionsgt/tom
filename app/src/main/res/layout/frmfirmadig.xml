@@ -14,12 +14,13 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/frame_rect">
 
-        <EditText
-            android:id="@+id/editText9"
-            android:layout_width="match_parent"
+        <com.dts.tom.DrawingView
+            android:id="@+id/drawV"
+            android:layout_width="fill_parent"
             android:layout_height="100dp"
+            android:layout_weight="1"
             android:layout_below="@id/rellogtit"
-            android:inputType="text" />
+            android:background="#FFFFFFFF"/>
 
         <RelativeLayout
             android:id="@+id/rellogtit"
@@ -49,7 +50,7 @@
             android:id="@+id/relbot"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_below="@id/editText9"
+            android:layout_below="@id/drawV"
             android:layout_marginStart="0dp"
             android:background="@drawable/color_medium">
 
@@ -71,6 +72,7 @@
                 android:layout_toStartOf="@+id/btnLimpiar"
                 android:layout_toEndOf="@+id/btnSalirFirma"
                 android:background="@drawable/color_medium"
+                android:onClick="GuardarFirma"
                 android:text="Guardar"
                 android:textColor="@android:color/background_light"
                 android:textSize="24sp"
