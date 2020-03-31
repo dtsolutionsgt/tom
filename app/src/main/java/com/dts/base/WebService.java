@@ -28,6 +28,8 @@ public class WebService {
     public int callback=-1;
     public Boolean errorflag;
 
+    public String errmsg,errcode,errmethod;
+
     private PBase parent;
 
     private java.net.URL mUrl;
@@ -511,4 +513,24 @@ public class WebService {
 
     //endregion
 
+    //region Aux
+
+    public void parseError() {
+        int p1,p2;
+
+        p1=xmlresult.indexOf("<StatusCode>")+12;
+        p2=xmlresult.indexOf("</StatusCode>");
+        errcode=xmlresult.substring(p1,p2);
+
+        p1=xmlresult.indexOf("<Method>")+8;
+        p2=xmlresult.indexOf("</Method>");
+        errmethod=xmlresult.substring(p1,p2);
+
+        p1=xmlresult.indexOf("<Error>")+7;
+        p2=xmlresult.indexOf("</Error>");
+        errmsg=xmlresult.substring(p1,p2);
+
+    }
+
+    //endregion
 }

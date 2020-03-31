@@ -86,6 +86,7 @@ public class MainActivity extends PBase {
         }
     }
 
+
     private void startApplication() {
 
         try {
