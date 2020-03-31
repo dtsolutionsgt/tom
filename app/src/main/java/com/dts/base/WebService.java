@@ -98,6 +98,7 @@ public class WebService {
 
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
+           //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
            if (responsecode==200 || responsecode ==400 )
            {
                // Get the response
@@ -110,6 +111,7 @@ public class WebService {
            }else
            {
 
+               //#EJC20200331: falta parsear el xml de error (talvez no es aquí si no en el callback)
                // Get the response of customError in somehow
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                while ((line = rd.readLine()) != null) mResult += line;
