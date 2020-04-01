@@ -12,7 +12,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
         android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="#D9F1F4">
 
         <LinearLayout
             android:id="@+id/LinearCiego"
