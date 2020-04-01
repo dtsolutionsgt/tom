@@ -110,7 +110,7 @@ public class WebService {
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
 
-           }else
+           }if (responsecode==299 ) //Something bad happend harry...
            {
 
                //#EJC20200331: falta parsear el xml de error (talvez no es aquí si no en el callback)

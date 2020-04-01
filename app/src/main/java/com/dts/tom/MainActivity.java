@@ -315,7 +315,7 @@ public class MainActivity extends PBase {
                         callMethod("Android_Get_All_Empresas");
                         break;
                     case 2:
-                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);
+                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp,"EsAndroid", "1");
                         break;
                     case 3:
                         callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
