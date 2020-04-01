@@ -28,8 +28,6 @@ public class WebService {
     public int callback=-1;
     public Boolean errorflag;
 
-    public String errmsg,errcode,errmethod;
-
     private PBase parent;
 
     private java.net.URL mUrl;
@@ -103,7 +101,6 @@ public class WebService {
            wr.flush();
 
            int responsecode = ((HttpURLConnection) conn).getResponseCode();
-
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
            //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
@@ -116,7 +113,7 @@ public class WebService {
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
 
-           }if (responsecode==299 ) //Something bad happend harry...
+           } if (responsecode==299 ) //Something bad happend harry...
            {
 
                //#EJC20200331: falta parsear el xml de error (talvez no es aquí si no en el callback)
@@ -126,14 +123,13 @@ public class WebService {
                rd.close();rd.close();
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
-               throw new Exception("Error al procesar la solicitud: " + mResult);
+
+               throw new Exception("Error al procesar la solicitud: \n" + parseError());
 
            }
 
-       }
-       catch (Exception e)
-       {
-           throw new Exception(" WebService callMethod : "+ e.getMessage());
+       } catch (Exception e)  {
+           throw new Exception(e.getMessage());
        }
     }
 
@@ -521,21 +517,14 @@ public class WebService {
 
     //region Aux
 
-    public void parseError() {
-        int p1,p2;
-
-        p1=xmlresult.indexOf("<StatusCode>")+12;
-        p2=xmlresult.indexOf("</StatusCode>");
-        errcode=xmlresult.substring(p1,p2);
-
-        p1=xmlresult.indexOf("<Method>")+8;
-        p2=xmlresult.indexOf("</Method>");
-        errmethod=xmlresult.substring(p1,p2);
-
-        p1=xmlresult.indexOf("<Error>")+7;
-        p2=xmlresult.indexOf("</Error>");
-        errmsg=xmlresult.substring(p1,p2);
-
+    public String parseError() {
+        try {
+            int p1=xmlresult.indexOf("<Error>")+7;
+            int p2=xmlresult.indexOf("</Error>");
+            return xmlresult.substring(p1,p2);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     //endregion
