@@ -5,8 +5,8 @@ import org.simpleframework.xml.Element;
 
 public class clsBeEmpresa extends clsBeEmpresaBase {
 
-    @Element(required=false) public int IdEmpresa=0;
-    @Element(required=false) public String Nombre="";
+//    @Element(required=false) public int IdEmpresa=0;
+//    @Element(required=false) public String Nombre="";
     @Element(required=false) public String Direccion="";
     @Element(required=false) public String Telefono="";
     @Element(required=false) public String Email="";
@@ -105,18 +105,18 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     }
 
 
-    public int getIdEmpresa() {
-        return IdEmpresa;
-    }
-    public void setIdEmpresa(int value) {
-        IdEmpresa=value;
-    }
-    public String getNombre() {
-        return Nombre;
-    }
-    public void setNombre(String value) {
-        Nombre=value;
-    }
+//    public int getIdEmpresa() {
+//        return IdEmpresa;
+//    }
+//    public void setIdEmpresa(int value) {
+//        IdEmpresa=value;
+//    }
+//    public String getNombre() {
+//        return Nombre;
+//    }
+//    public void setNombre(String value) {
+//        Nombre=value;
+//    }
     public String getDireccion() {
         return Direccion;
     }

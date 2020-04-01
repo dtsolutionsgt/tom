@@ -68,7 +68,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
         android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="#F8DEDE">
 
         <LinearLayout
             android:id="@+id/LinearCiego"
@@ -95,7 +96,7 @@
                     android:paddingLeft="5dp"
                     android:text="Origen:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -154,7 +155,7 @@
                     android:paddingLeft="5dp"
                     android:text="Código:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -185,7 +186,7 @@
                     android:paddingLeft="5dp"
                     android:text="Presentación:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -213,7 +214,7 @@
                     android:paddingLeft="5dp"
                     android:text="Lote:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -246,11 +247,11 @@
                     android:paddingLeft="5dp"
                     android:text="Vence:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/cmbEstadoDanado"
+                    android:id="@+id/cmbEstadoOrigen"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_below="@+id/cmbVence"
@@ -259,26 +260,26 @@
                     android:layout_marginTop="10dp" />
 
                 <TextView
-                    android:id="@+id/lblEstado"
+                    android:id="@+id/lblEstadoOrigen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/cmbEstadoDanado"
+                    android:layout_alignTop="@+id/cmbEstadoOrigen"
                     android:layout_alignEnd="@+id/lblVence"
-                    android:layout_alignBottom="@+id/cmbEstadoDanado"
+                    android:layout_alignBottom="@+id/cmbEstadoOrigen"
                     android:layout_alignParentStart="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Estado:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/txtCantidad"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/cmbEstadoDanado"
-                    android:layout_alignStart="@+id/cmbEstadoDanado"
+                    android:layout_below="@+id/cmbEstadoOrigen"
+                    android:layout_alignStart="@+id/cmbEstadoOrigen"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentBottom="false"
                     android:layout_marginTop="10dp"
@@ -291,22 +292,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lblEstado"
+                    android:layout_alignEnd="@+id/lblEstadoOrigen"
                     android:layout_alignBottom="@+id/txtCantidad"
                     android:layout_alignParentStart="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Cantidad:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/lbCant"
+                    android:id="@+id/lblCant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/cmbEstadoDanado"
+                    android:layout_alignEnd="@+id/cmbEstadoOrigen"
                     android:layout_alignBottom="@+id/txtCantidad"
                     android:layout_marginBottom="0dp"
                     android:layout_toEndOf="@+id/txtCantidad"
@@ -323,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtCantidad"
                     android:layout_alignStart="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lbCant"
+                    android:layout_alignEnd="@+id/lblCant"
                     android:layout_marginTop="10dp"
                     android:inputType="textPersonName" />
 
@@ -339,7 +340,7 @@
                     android:paddingLeft="5dp"
                     android:text="Destino:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -353,7 +354,7 @@
                     android:layout_marginTop="10dp" />
 
                 <TextView
-                    android:id="@+id/lblCambioEstado"
+                    android:id="@+id/lblEstadoDestino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/lblDestino"
@@ -362,9 +363,9 @@
                     android:layout_alignBottom="@+id/cmbEstadoDestino"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="Estado Destino:"
+                    android:text="Est. Destino:"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

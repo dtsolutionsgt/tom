@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.dts.tom.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AppMethods {
@@ -88,6 +89,21 @@ public class AppMethods {
 			Date date = dateFormat.parse(fecha);
 			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			rsltfecha=dateFormat.format(date);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+		return rsltfecha;
+	}
+
+	public Date dateFechaStr(String fecha){
+
+		Date rsltfecha= Calendar.getInstance().getTime();;
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			rsltfecha = dateFormat.parse(fecha);
 
 		}catch (Exception ex){
 			toast(ex.getMessage());
