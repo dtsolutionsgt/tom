@@ -77,6 +77,7 @@ public class WebService {
            conn.setConnectTimeout(TIMEOUT);
            conn.setDoInput(true);
            conn.setDoOutput(true);
+           conn.setRequestProperty("mArch", "Andr");
 
            OutputStream ostream = conn.getOutputStream();
 
@@ -86,6 +87,11 @@ public class WebService {
                    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
                    "xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:" +
                    "soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+                   "<soap:Header>" +
+                   "<clsArchHeader xmlns=\"http://tempuri.org/\">" +
+                   "<Tipo>Andr</Tipo>" +
+                   "</clsArchHeader>" +
+                   "</soap:Header>" +
                    "<soap:Body>" +
                    "<" + methodName + " xmlns=\"http://tempuri.org/\">";
 
