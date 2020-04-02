@@ -315,7 +315,7 @@ public class MainActivity extends PBase {
                         callMethod("Android_Get_All_Empresas");
                         break;
                     case 2:
-                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp,"EsAndroid", "1");
+                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);
                         break;
                     case 3:
                         callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
@@ -323,6 +323,13 @@ public class MainActivity extends PBase {
                         break;
                     case 4:
                         callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
+                        break;
+                    case 5:
+                        callMethod("Get_cantidad_decimales_calculo","pIdEmpresa",gl.IdEmpresa);
+                        break;
+                    case 6:
+                        callMethod("Get_Cantidad_decimales_despliegue","pIdEmpresa",gl.IdEmpresa);
+                        break;
                 }
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -350,7 +357,15 @@ public class MainActivity extends PBase {
                     break;
                 case 4:
                     progress.setMessage("Cargando usuarios");
-                    processUsers();break;
+                    processUsers();
+                    execws(5);
+                    break;
+                case 5:
+                    processGetDecimalesCalculo();
+                    break;
+                case 6:
+                    processGetDecimalesDespliegue();
+                    break;
             }
 
             progress.cancel();
@@ -556,6 +571,32 @@ public class MainActivity extends PBase {
             }
 
         } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processGetDecimalesDespliegue(){
+
+        try {
+
+            gl.gCantDecDespliegue = xobj.getresult(Integer.class,
+                    "Get_Cantidad_decimales_despliegue");
+
+            execws(6);
+
+        }catch (Exception e){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processGetDecimalesCalculo(){
+
+        try {
+
+            gl.gCantDecCalculo = xobj.getresult(Integer.class,
+                    "Get_cantidad_decimales_calculo");
+
+        }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }

@@ -37,7 +37,7 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-
+    @Element(required=false) public boolean IsNew=false;
 
     public clsBeTrans_oc_pol() {
     }
@@ -49,8 +49,7 @@ public class clsBeTrans_oc_pol {
                              double Cbm,String Dua,String Fecha_poliza,String Pais_procede,
                              double Tipo_cambio,double Total_valoraduana,int Total_lineas,int Total_bultos,
                              double Total_bultos_peso,double Total_usd,double Total_flete,double Total_seguro,
-                             String User_agr,String Fec_agr,String User_mod,String Fec_mod
-    ) {
+                             String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew) {
 
         this.IdOrdenCompraPol=IdOrdenCompraPol;
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
@@ -84,6 +83,7 @@ public class clsBeTrans_oc_pol {
         this.Fec_agr=Fec_agr;
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
+        this.IsNew=IsNew;
 
     }
 
@@ -280,6 +280,11 @@ public class clsBeTrans_oc_pol {
     public void setFec_mod(String value) {
         Fec_mod=value;
     }
-
+    public boolean getIsNew() {
+        return IsNew;
+    }
+    public void setIsNew(boolean value) {
+        IsNew=value;
+    }
 }
 

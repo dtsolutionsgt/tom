@@ -69,6 +69,8 @@ public class appGlobals extends Application {
     public String gCodigoBodega;
     public int tipoTarea;
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
+    public int gCantDecDespliegue=0;
+    public int gCantDecCalculo=0;
 
     public int mode=0;
 }

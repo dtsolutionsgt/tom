@@ -1138,7 +1138,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizar){
 
-                if (gl.gBeRecepcion.Firma_piloto==null){
+                if (gl.gBeRecepcion.Firma_piloto==0){
 
                     MuestraPantallaFirma(this);
 

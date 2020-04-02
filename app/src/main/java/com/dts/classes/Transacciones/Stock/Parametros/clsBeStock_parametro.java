@@ -10,7 +10,7 @@ public class clsBeStock_parametro {
     @Element(required=false) public String Valor_texto="";
     @Element(required=false) public double Valor_numerico=0.0;
     @Element(required=false) public String Valor_fecha="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Valor_logico=false;
+    @Element(required=false) public int Valor_logico=0;
     @Element(required=false) public String User_agr="1900-01-01T00:00:01";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo=false;
@@ -21,7 +21,7 @@ public class clsBeStock_parametro {
     }
 
     public clsBeStock_parametro(int IdStockParametro,int IdStock,int IdProductoParametro,String Valor_texto,
-                                double Valor_numerico,String Valor_fecha,boolean Valor_logico,String User_agr,
+                                double Valor_numerico,String Valor_fecha,int Valor_logico,String User_agr,
                                 String Fec_agr,boolean Activo,boolean IsNew) {
 
         this.IdStockParametro=IdStockParametro;
@@ -75,10 +75,10 @@ public class clsBeStock_parametro {
     public void setValor_fecha(String value) {
         Valor_fecha=value;
     }
-    public boolean getValor_logico() {
+    public int getValor_logico() {
         return Valor_logico;
     }
-    public void setValor_logico(boolean value) {
+    public void setValor_logico(int value) {
         Valor_logico=value;
     }
     public String getUser_agr() {

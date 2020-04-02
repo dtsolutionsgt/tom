@@ -21,37 +21,38 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public String Fecha_recepcion="1900-01-01T00:00:01";
     @Element(required=false) public String Hora_ini_pc="1900-01-01T00:00:01";
     @Element(required=false) public String Hora_fin_pc="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Muestra_precio=false;
+    @Element(required=false) public boolean Muestra_precio;
     @Element(required=false) public String Estado="";
     @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha_tarea="1900-01-01T00:00:01";
-    @Element(required=false) public boolean Tomar_fotos=false;
-    @Element(required=false) public boolean Escanear_rec_ubic=false;
-    @Element(required=false) public boolean Para_por_codigo=false;
+    @Element(required=false) public boolean Tomar_fotos;
+    @Element(required=false) public boolean Escanear_rec_ubic;
+    @Element(required=false) public boolean Para_por_codigo;
     @Element(required=false) public String Observacion="";
-    @Element(required=false) public Byte Firma_piloto;
-    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public int Firma_piloto=0;
+    @Element(required=false) public boolean Activo;
     @Element(required=false) public String NoGuia="";
-    @Element(required=false) public boolean CorreoEnviado=false;
-    @Element(required=false) public boolean Revision_Inconsistencia=false;
+    @Element(required=false) public boolean CorreoEnviado;
+    @Element(required=false) public boolean Revision_Inconsistencia;
+    @Element(required=false) public boolean bloqueada;
     @Element(required=false) public String bloqueada_por="";
     @Element(required=false) public int IdUsuarioBloqueo=0;
     @Element(required=false) public int IdMotivoAnulacionBodega=0;
-    @Element(required=false) public boolean Habilitar_Stock=false;
+    @Element(required=false) public boolean Habilitar_Stock;
     @Element(required=false) public int IdVehiculo=0;
     @Element(required=false) public int IdPiloto=0;
     @Element(required=false) public String No_Marchamo="";
-    @Element(required=false) public boolean Mostrar_Cantidad_Esperada=false;
+    @Element(required=false) public boolean Mostrar_Cantidad_Esperada;
     @Element(required=false) public clsBeTrans_re_oc OrdenCompraRec=new clsBeTrans_re_oc();
     @Element(required=false) public clsBeTrans_re_detList Detalle=new clsBeTrans_re_detList();
     @Element(required=false) public clsBeTrans_re_det_parametrosList DetalleParametros=new clsBeTrans_re_det_parametrosList();
     @Element(required=false) public clsBeTrans_re_opList DetalleOperadores=new clsBeTrans_re_opList();
     @Element(required=false) public clsBeTrans_re_imgList DetalleImagenes=new clsBeTrans_re_imgList();
     @Element(required=false) public clsBeTrans_re_factList DetalleFacturas=new clsBeTrans_re_factList();
-    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public boolean IsNew;
     @Element(required=false) public String Descripcion="";
     @Element(required=false) public String UbicacionRecepcion="";
     @Element(required=false) public String NombrePropietario="";
@@ -76,8 +77,8 @@ public class clsBeTrans_re_enc {
                              String Fecha_recepcion,String Hora_ini_pc,String Hora_fin_pc,boolean Muestra_precio,
                              String Estado,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Fecha_tarea,boolean Tomar_fotos,boolean Escanear_rec_ubic,
-                             boolean Para_por_codigo,String Observacion,Byte Firma_piloto,boolean Activo,
-                             String NoGuia,boolean CorreoEnviado,boolean Revision_Inconsistencia,String bloqueada_por,
+                             boolean Para_por_codigo,String Observacion,int Firma_piloto,boolean Activo,
+                             String NoGuia,boolean CorreoEnviado,boolean Revision_Inconsistencia,boolean bloqueada,String bloqueada_por,
                              int IdUsuarioBloqueo,int IdMotivoAnulacionBodega,boolean Habilitar_Stock,int IdVehiculo,
                              int IdPiloto,String No_Marchamo,boolean Mostrar_Cantidad_Esperada,clsBeTrans_re_oc OrdenCompraRec,
                              clsBeTrans_re_detList Detalle,clsBeTrans_re_det_parametrosList DetalleParametros,clsBeTrans_re_opList DetalleOperadores,clsBeTrans_re_imgList DetalleImagenes,
@@ -110,6 +111,7 @@ public class clsBeTrans_re_enc {
         this.NoGuia=NoGuia;
         this.CorreoEnviado=CorreoEnviado;
         this.Revision_Inconsistencia=Revision_Inconsistencia;
+        this.bloqueada = bloqueada;
         this.bloqueada_por=bloqueada_por;
         this.IdUsuarioBloqueo=IdUsuarioBloqueo;
         this.IdMotivoAnulacionBodega=IdMotivoAnulacionBodega;
@@ -252,10 +254,10 @@ public class clsBeTrans_re_enc {
     public void setObservacion(String value) {
         Observacion=value;
     }
-    public Byte getFirma_piloto() {
+    public int getFirma_piloto() {
         return Firma_piloto;
     }
-    public void setFirma_piloto(Byte value) {
+    public void setFirma_piloto(int value) {
         Firma_piloto=value;
     }
     public boolean getActivo() {
@@ -279,9 +281,19 @@ public class clsBeTrans_re_enc {
     public boolean getRevision_Inconsistencia() {
         return Revision_Inconsistencia;
     }
+
     public void setRevision_Inconsistencia(boolean value) {
         Revision_Inconsistencia=value;
     }
+
+    public boolean getbloqueada() {
+        return bloqueada;
+    }
+
+    public void setBloqueada(boolean value) {
+        bloqueada=value;
+    }
+
     public String getbloqueada_por() {
         return bloqueada_por;
     }

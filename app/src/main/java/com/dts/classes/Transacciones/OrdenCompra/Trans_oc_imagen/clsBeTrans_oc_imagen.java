@@ -8,14 +8,14 @@ public class clsBeTrans_oc_imagen {
     @Element(required=false) public int IdOrdenCompraImg;
     @Element(required=false) public int IdOrdenCompraEnc;
     @Element(required=false) public int Orden;
-    @Element(required=false) public Byte Imagen;
+    @Element(required=false) public int Imagen=0;
     @Element(required=false) public String Descripcion;
 
 
     public clsBeTrans_oc_imagen() {
     }
 
-    public clsBeTrans_oc_imagen(int IdOrdenCompraImg,int IdOrdenCompraEnc,int Orden,Byte Imagen,
+    public clsBeTrans_oc_imagen(int IdOrdenCompraImg,int IdOrdenCompraEnc,int Orden,int  Imagen,
                                 String Descripcion) {
 
         this.IdOrdenCompraImg=IdOrdenCompraImg;
@@ -45,10 +45,10 @@ public class clsBeTrans_oc_imagen {
     public void setOrden(int value) {
         Orden=value;
     }
-    public Byte getImagen() {
+    public int getImagen() {
         return Imagen;
     }
-    public void setImagen(Byte value) {
+    public void setImagen(int  value) {
         Imagen=value;
     }
     public String getDescripcion() {

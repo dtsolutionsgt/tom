@@ -17,7 +17,7 @@ public class clsBeTrans_re_oc {
     @Element(required=false) public String Hora_fin_hh="1900-01-01T00:00:01";
     @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public Byte Firma_operador;
+    @Element(required=false) public int Firma_operador=0;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeTrans_oc_enc OC=new clsBeTrans_oc_enc();
 
@@ -27,7 +27,7 @@ public class clsBeTrans_re_oc {
 
     public clsBeTrans_re_oc(int IdRecepcionOc,int IdRecepcionEnc,int IdOrdenCompraEnc,boolean Recepcion_ciega,
                             boolean Recepcion_manual,String No_docto,String Hora_ini_hh,String Hora_fin_hh,
-                            String User_agr,String Fec_agr,Byte Firma_operador,boolean IsNew,
+                            String User_agr,String Fec_agr,int Firma_operador,boolean IsNew,
                             clsBeTrans_oc_enc OC) {
 
         this.IdRecepcionOc=IdRecepcionOc;
@@ -107,10 +107,10 @@ public class clsBeTrans_re_oc {
     public void setFec_agr(String value) {
         Fec_agr=value;
     }
-    public Byte getFirma_operador() {
+    public int getFirma_operador() {
         return Firma_operador;
     }
-    public void setFirma_operador(Byte value) {
+    public void setFirma_operador(int value) {
         Firma_operador=value;
     }
     public boolean getIsNew() {
