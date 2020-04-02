@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,8 +54,9 @@ public class frm_list_rec_prod extends PBase {
     private Button btnRegs,btnCompletaRec;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
-        private DrawingView txtFirma;
+    private DrawingView txtFirma;
     private ProgressDialog progress;
+    private CheckBox chkRecepcionados;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
@@ -104,6 +106,7 @@ public class frm_list_rec_prod extends PBase {
         btnRegs = (Button) findViewById(R.id.btnRegs);
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
         listView = (ListView)findViewById(R.id.listRec);
+        chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
 
         txtCodigoProductoRecepcion = (EditText)findViewById(R.id.txtCodigoProductoRecepcion);
 
@@ -1170,7 +1173,7 @@ public class frm_list_rec_prod extends PBase {
 
 
         }catch (Exception e){
-            mu.msgbox("MuestraPantallaFirma");
+            mu.msgbox("MuestraPantallaFirma"+e.getMessage());
         }
     }
 

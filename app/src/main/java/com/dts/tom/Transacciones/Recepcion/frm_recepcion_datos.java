@@ -692,9 +692,13 @@ public class frm_recepcion_datos extends PBase {
             txtSerieFin =(EditText)dialog.findViewById(R.id.txtSerieFin);
 
             txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtTempReal.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoReal.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtTempEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtTempEsta.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoEsta.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
             cmbPresParams = (Spinner)dialog.findViewById(R.id.cmbPresParams);
 
@@ -864,13 +868,13 @@ public class frm_recepcion_datos extends PBase {
                 txtAnada.setText(pListBeStockRec.items.get(pIndexStock).Anada);
 
                 if (BeProducto.Peso_recepcion){
-                    txtPesoReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Peso, 6)+"");
+                    txtPesoReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Peso, gl.gCantDecCalculo)+"");
                 }else{
-                    txtPesoReal.setText(mu.round(0, 6)+"");
+                    txtPesoReal.setText(mu.round(0,  gl.gCantDecCalculo)+"");
                 }
 
                 if (BeProducto.Temperatura_recepcion){
-                txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura, 6)+"");
+                txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura,  gl.gCantDecCalculo)+"");
                 }
 
             }
@@ -940,7 +944,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             if (BeProducto.Temperatura_recepcion){
-                txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia, 6)+"");
+                txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia,  gl.gCantDecCalculo)+"");
             }else{
                 lblTempTit.setVisibility(View.GONE);
                 lblTempEsta.setVisibility(View.GONE);
@@ -960,7 +964,7 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.Peso_recepcion){
 
-                txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia, 6)+"");
+                txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
                 txtPesoReal.setText(BeProducto.Peso_tolerancia+"");
 
                 if (BeProducto.Presentaciones.items!=null){
@@ -1087,14 +1091,14 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                double PorcentajeToleranciaTemp = mu.round(BeProducto.Temperatura_referencia * BeProducto.Temperatura_tolerancia, 2) / 100;
-                double TemperaturaMax  = mu.round(BeProducto.Temperatura_referencia + PorcentajeToleranciaTemp, 2);
-                double TemperaturaMin  = mu.round(BeProducto.Temperatura_referencia - PorcentajeToleranciaTemp, 2);
+                double PorcentajeToleranciaTemp = mu.round(BeProducto.Temperatura_referencia * BeProducto.Temperatura_tolerancia,  gl.gCantDecCalculo) / 100;
+                double TemperaturaMax  = mu.round(BeProducto.Temperatura_referencia + PorcentajeToleranciaTemp,  gl.gCantDecCalculo);
+                double TemperaturaMin  = mu.round(BeProducto.Temperatura_referencia - PorcentajeToleranciaTemp,  gl.gCantDecCalculo);
                 double vTemp=0;
                 if (!txtTempReal.getText().toString().isEmpty()){
                     vTemp = Double.parseDouble(txtTempReal.getText().toString());
                 }
-                double ValorTemperatura  = mu.round(vTemp, 2);
+                double ValorTemperatura  = mu.round(vTemp,  gl.gCantDecCalculo);
 
                 if ((ValorTemperatura < TemperaturaMin)|(ValorTemperatura > TemperaturaMax)){
                     msgContinuarTemp("La temperatura ingresada es menor a "+TemperaturaMin + " o mayor a "+TemperaturaMax + "(tolerancia permitida en base a la temperatura estadística). ¿Desea continuar?");
@@ -1150,9 +1154,9 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 Double PorcentajeToleranciaPeso = (Double.parseDouble(txtPesoEsta.getText().toString()) * (BeProducto.Peso_tolerancia));
-                Double PesoMaximoReferencia = mu.round( Double.parseDouble(txtPesoEsta.getText().toString()) + PorcentajeToleranciaPeso, 2);
-                Double PesoMinimoReferencia = mu.round(Double.parseDouble(txtPesoEsta.getText().toString()) - PorcentajeToleranciaPeso, 2);
-                Double ValorPeso  = mu.round(Double.parseDouble(txtPesoReal.getText().toString()), 2);
+                Double PesoMaximoReferencia = mu.round( Double.parseDouble(txtPesoEsta.getText().toString()) + PorcentajeToleranciaPeso,  gl.gCantDecCalculo);
+                Double PesoMinimoReferencia = mu.round(Double.parseDouble(txtPesoEsta.getText().toString()) - PorcentajeToleranciaPeso,  gl.gCantDecCalculo);
+                Double ValorPeso  = mu.round(Double.parseDouble(txtPesoReal.getText().toString()),  gl.gCantDecCalculo);
 
                 if (!(ValorPeso >= PesoMinimoReferencia)&&(ValorPeso <= PesoMaximoReferencia)){
                     msgContinuarPeso("El peso ingresado es menor que "+PesoMinimoReferencia +" o mayor que "+ PesoMaximoReferencia+" (tolerancia permitida en base al peso estadístico). ¿Desea continuar?");
@@ -2030,7 +2034,7 @@ public class frm_recepcion_datos extends PBase {
                 if(Cant_A_Recibir - Cant_Recibida<0){
                     Cant_Pendiente = 0;
                 }else{
-                    Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
+                    Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
             txtCantidadRec.setText(Cant_Pendiente+"");
@@ -2118,17 +2122,17 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.gBeOrdenCompra!=null) {
                 if (((gl.gBeOrdenCompra.IdOrdenCompraEnc > 0) && (CostoOC > 0))) {
-                    txtCostoOC.setText(mu.round(CostoOC, 10)+"");
+                    txtCostoOC.setText(mu.round(CostoOC,  gl.gCantDecCalculo)+"");
                 }
                 else {
-                    txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+                    txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
                 }
 
             } else {
-                txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+                txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
             }
 
-            txtCostoOC.setText(mu.round(BeProducto.Costo,10)+"");
+            txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
 
             txtUmbasRec.setFocusable(false);
             txtUmbasRec.setFocusableInTouchMode(false);
@@ -2141,15 +2145,19 @@ public class frm_recepcion_datos extends PBase {
             txtBarra.setClickable(false);
 
             txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtCantidadRec.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(5)});
+            txtCantidadRec.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtCostoOC.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPeso.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtCostoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtCostoReal.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoUnitario.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoUnitario.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             cmbVenceRec.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
 
-            btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente,6));
-            btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida,6));
+            btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente, gl.gCantDecDespliegue));
+            btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida, gl.gCantDecDespliegue));
 
             if (gl.Carga_Producto_x_Pallet){
 
@@ -3731,7 +3739,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (gl.mode==2){
-                Cant_Pendiente = Cant_Pendiente + Cant_Recibida_Anterior;
+                Cant_Pendiente =mu.round(Cant_Pendiente + Cant_Recibida_Anterior,gl.gCantDecCalculo);
             }
 
             if (Cant_Pendiente > Cantidad){
@@ -4548,7 +4556,7 @@ public class frm_recepcion_datos extends PBase {
             if(Cant_Recibida - Cant_Recibida<0){
                 Cant_Pendiente = 0;
             }else{
-                Cant_Pendiente =  Cant_A_Recibir - Cant_Recibida;
+                Cant_Pendiente =mu.round( Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
             }
 
             FinalizCargaProductos();
