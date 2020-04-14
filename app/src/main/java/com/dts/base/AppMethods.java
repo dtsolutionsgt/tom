@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.dts.tom.R;
 
@@ -143,6 +144,25 @@ public class AppMethods {
         return rsltfecha;
     }
 
+	public String strFechaXMLCombo(String fecha){
+
+		String rsltfecha= "";
+
+		try{
+
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = new Date(sdf.parse(fecha).getTime());
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:00'");
+			rsltfecha=dateFormat.format(date);
+
+		}catch (Exception ex){
+			toast(ex.getMessage());
+		}
+
+		return rsltfecha;
+
+	}
+
 	public String strFechaHoraXML(Date fecha){
 
 		String rsltfecha="";
@@ -158,16 +178,25 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
-	public void readOnly(EditText txt){
+	public void enabled(Object obj, boolean valor){
 		try{
 
-			txt.setFocusable(false);
-			txt.setFocusableInTouchMode(false);
-			txt.setClickable(false);
-
+            Class<?> aClass = obj.getClass();
+            if (EditText.class.equals(aClass)) {
+                EditText et = (EditText) obj;
+                et.setFocusable(valor);
+                et.setFocusableInTouchMode(valor);
+                et.setClickable(valor);
+            } else if (Spinner.class.equals(aClass)) {
+                Spinner sp = (Spinner) obj;
+                sp.setFocusable(valor);
+                sp.setFocusableInTouchMode(valor);
+                sp.setClickable(valor);
+            }
 		}catch (Exception ex){
 
 		}
 	}
+
 	//endregion
 }

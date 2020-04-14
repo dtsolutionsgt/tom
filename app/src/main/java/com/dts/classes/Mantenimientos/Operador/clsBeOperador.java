@@ -26,7 +26,11 @@ public class clsBeOperador {
     @Element(required=false) public boolean Usa_hh=false;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
-
+    @Element(required=false) public boolean Recibe;
+    @Element(required=false) public boolean Ubica;
+    @Element(required=false) public boolean Transporta;
+    @Element(required=false) public boolean Pickea;
+    @Element(required=false) public boolean Verifica;
 
     public clsBeOperador() {
     }
@@ -175,6 +179,35 @@ public class clsBeOperador {
     public void setRolOperador(clsBeRol_operador value) {
         RolOperador=value;
     }
-
+    public boolean getRecibe() {
+        return Recibe;
+    }
+    public void setRecibe(boolean value) {
+        Recibe=value;
+    }
+    public boolean getUbica() {
+        return Ubica;
+    }
+    public void setUbica(boolean value) {
+        Ubica=value;
+    }
+    public boolean getTransporta() {
+        return Transporta;
+    }
+    public void setTransporta(boolean value) {
+        Transporta=value;
+    }
+    public boolean getPickea() {
+        return Pickea;
+    }
+    public void setPickea(boolean value) {
+        Pickea=value;
+    }
+    public boolean getVerifica() {
+        return Verifica;
+    }
+    public void setVerifica(boolean value) {
+        Verifica=value;
+    }
 }
 

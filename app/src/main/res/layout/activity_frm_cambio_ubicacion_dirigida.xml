@@ -86,7 +86,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="1dp"
                     android:layout_marginBottom="0dp"
-                    android:background="#EDEAEA"
+                    android:background="#E3E0E0"
                     android:inputType="textMultiLine|textPersonName"
                     android:maxLines="3"
                     android:minHeight="48dp"

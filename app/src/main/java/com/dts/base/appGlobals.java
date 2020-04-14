@@ -12,6 +12,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 
+import java.util.Date;
 import java.util.List;
 
 public class appGlobals extends Application {
@@ -28,9 +29,22 @@ public class appGlobals extends Application {
     //Variables para llenar el detalle del cambio de ubicación dirigida.
     public int IdOrigen;
     public int IdDestino;
-    public int IdTareaUbicEnc,IdTareaUbicDet;
+    public int IdTareaUbicEnc;
     public double gCantDisponible;
     public boolean Escaneo_Pallet;
+
+    //Clases para cambio de ubicación y estado.
+    public clsBeTrans_ubic_hh_det tareadet = new clsBeTrans_ubic_hh_det();
+    public clsBeTrans_ubic_hh_enc tareaenc;
+    public int IdTareaUbicDet;
+
+    //Variables de valores anteriores para cambio de ubicación y de estado
+    public String gCProdAnterior  = "";
+    public int gCEstadoAnterior = -1;
+    public String gCFechaAnterior = "01/01/1900";
+    public String gCLoteAnterior = "";
+    public int gCPresAnterior = -1;
+    public String gCUbicAnterior = "";
 
     //variable y listas publicas para mainActivity
     public int IdEstadoProductoNE;
@@ -38,10 +52,6 @@ public class appGlobals extends Application {
     public List<clsBeOperador_bodega> gOperadorBodega;
     public List<clsBeImpresora> gImpresora;
 
-
-    //Clases para cambio de ubicación y estado.
-    public clsBeTrans_ubic_hh_det tareadet = new clsBeTrans_ubic_hh_det();
-    public clsBeTrans_ubic_hh_enc tareaenc;
 
     public clsBeVW_stock_res BeStockPallet;
     public int gIdProductoBuenEstadoPorDefecto;

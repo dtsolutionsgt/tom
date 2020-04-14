@@ -22,7 +22,6 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
 
     private LayoutInflater l_Inflater;
 
-
     public list_adapter_detalle_cambio_ubic(Context context, ArrayList<clsBeTrans_ubic_hh_det> results) {
         pBeTransUbicHhDetListArray = results;
         l_Inflater = LayoutInflater.from(context);

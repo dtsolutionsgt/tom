@@ -34,6 +34,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="AplicarCambio"
             android:text="Procesar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
@@ -109,7 +110,7 @@
                     android:layout_marginLeft="172dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textColor="@android:color/black" />
 
                 <EditText
@@ -136,7 +137,7 @@
                     android:layout_marginTop="7dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="R0 - C0 - TA - N0 - PosA - #0"
+                    android:text="-"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
@@ -168,7 +169,7 @@
                     android:layout_marginTop="7dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="0000 - 000000000000000000"
+                    android:text="-"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
@@ -285,7 +286,7 @@
                     android:layout_marginTop="10dp"
                     android:inputType="numberDecimal"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/lblCantidad"
@@ -316,7 +317,7 @@
                     android:paddingLeft="3dp"
                     android:text="00.00"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/txtUbicDestino"
@@ -326,7 +327,7 @@
                     android:layout_alignStart="@+id/txtCantidad"
                     android:layout_alignEnd="@+id/lblCant"
                     android:layout_marginTop="10dp"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
 
                 <TextView
                     android:id="@+id/lblDestino"
