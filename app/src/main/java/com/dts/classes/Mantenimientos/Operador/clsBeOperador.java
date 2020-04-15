@@ -24,9 +24,13 @@ public class clsBeOperador {
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public double Costo_hora=0;
     @Element(required=false) public boolean Usa_hh=false;
+    @Element(required=false) public boolean Recibe=false;
+    @Element(required=false) public boolean Ubica=false;
+    @Element(required=false) public boolean Transporta=false;
+    @Element(required=false) public boolean Pickea=false;
+    @Element(required=false) public boolean Verifica=false;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
-
 
     public clsBeOperador() {
     }
@@ -35,7 +39,8 @@ public class clsBeOperador {
                          String Nombres, String Apellidos, String Direccion, String Telefono,
                          String Codigo, String Clave, boolean Activo, String User_agr,
                          String Fec_agr, String User_mod, String Fec_mod, double Costo_hora,
-                         boolean Usa_hh, boolean IsNew, clsBeRol_operador RolOperador)
+                         boolean Usa_hh,boolean Recibe,boolean Ubica,
+                         boolean Transporta,boolean Pickea,boolean Verifica, boolean IsNew, clsBeRol_operador RolOperador)
     {
 
         this.IdOperador=IdOperador;
@@ -55,9 +60,13 @@ public class clsBeOperador {
         this.Fec_mod=Fec_mod;
         this.Costo_hora=Costo_hora;
         this.Usa_hh=Usa_hh;
+        this.Recibe = Recibe;
+        this.Ubica = Ubica;
+        this.Transporta = Transporta;
+        this.Pickea = Pickea;
+        this.Verifica = Verifica;
         this.IsNew = IsNew;
         this.RolOperador=RolOperador;
-
     }
 
 
@@ -163,10 +172,40 @@ public class clsBeOperador {
     public void setUsa_hh(boolean value) {
         Usa_hh=value;
     }
-    public boolean getIsNe() {
+    public boolean getRecibe() {
+        return Recibe;
+    }
+    public void setRecibe(boolean value) {
+        Recibe=value;
+    }
+    public boolean getUbica() {
+        return Ubica;
+    }
+    public void setUbica(boolean value) {
+        Ubica=value;
+    }
+    public boolean getTransporta() {
+        return Transporta;
+    }
+    public void setTransporta(boolean value) {
+        Transporta=value;
+    }
+    public boolean getPickea() {
+        return Pickea;
+    }
+    public void setPickea(boolean value) {
+        Pickea=value;
+    }
+    public boolean getVerifica() {
+        return Verifica;
+    }
+    public void setVerifica(boolean value) {
+        Verifica=value;
+    }
+    public boolean getIsNew() {
         return IsNew;
     }
-    public void setIsNe(boolean value) {
+    public void setIsNew(boolean value) {
         IsNew =value;
     }
     public clsBeRol_operador getRolOperador() {

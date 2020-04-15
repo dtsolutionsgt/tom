@@ -9,6 +9,7 @@ import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsB
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 
@@ -63,6 +64,7 @@ public class appGlobals extends Application {
     public String gLoteAnterior="";
     public String gFechaVenceAnterior="";
     public boolean Carga_Producto_x_Pallet=false;
+    public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
@@ -71,6 +73,7 @@ public class appGlobals extends Application {
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
     public int gCantDecDespliegue=0;
     public int gCantDecCalculo=0;
+    public String deviceId="";
 
     public int mode=0;
 }

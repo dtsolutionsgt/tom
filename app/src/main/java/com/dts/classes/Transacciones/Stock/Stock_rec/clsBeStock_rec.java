@@ -27,7 +27,7 @@ public class clsBeStock_rec {
     @Element(required=false) public String Serial="";
     @Element(required=false) public double Cantidad=0;
     @Element(required=false) public String Fecha_Ingreso="1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
     @Element(required=false) public double Uds_lic_plate=0;
     @Element(required=false) public int No_bulto=0;
     @Element(required=false) public String Fecha_Manufactura="1900-01-01T00:00:01";
@@ -59,7 +59,7 @@ public class clsBeStock_rec {
                           int IdProductoEstado,int IdPresentacion,int IdUnidadMedida,int IdUbicacion,
                           int IdUbicacion_anterior,int IdRecepcionEnc,int IdRecepcionDet,int IdPedidoEnc,
                           int IdPickingEnc,int IdDespachoEnc,String Lote,String Lic_plate,
-                          String Serial,double Cantidad,String Fecha_Ingreso,String Fecha_Vence,
+                          String Serial,double Cantidad,String Fecha_Ingreso,String Fecha_vence,
                           double Uds_lic_plate,int No_bulto,String Fecha_Manufactura,int Anada,
                           String User_agr,String Fec_agr,String User_mod,String Fec_mod,
                           boolean Activo,double Peso,double Temperatura,boolean Regularizado,
@@ -86,7 +86,7 @@ public class clsBeStock_rec {
         this.Serial=Serial;
         this.Cantidad=Cantidad;
         this.Fecha_Ingreso=Fecha_Ingreso;
-        this.Fecha_Vence=Fecha_Vence;
+        this.Fecha_vence = Fecha_vence;
         this.Uds_lic_plate=Uds_lic_plate;
         this.No_bulto=No_bulto;
         this.Fecha_Manufactura=Fecha_Manufactura;
@@ -227,11 +227,11 @@ public class clsBeStock_rec {
     public void setFecha_Ingreso(String value) {
         Fecha_Ingreso=value;
     }
-    public String getFecha_Vence() {
-        return Fecha_Vence;
+    public String getFecha_vence() {
+        return Fecha_vence;
     }
-    public void setFecha_Vence(String value) {
-        Fecha_Vence=value;
+    public void setFecha_vence(String value) {
+        Fecha_vence =value;
     }
     public double getUds_lic_plate() {
         return Uds_lic_plate;

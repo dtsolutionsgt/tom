@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -310,7 +311,6 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-
     private void Guardar_Pallet(){
 
         try{
@@ -427,6 +427,7 @@ public class frm_list_rec_prod extends PBase {
                     gl.gBeOrdenCompra = gBeOrdenCompra;
 
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
+                    chkRecepcionados.setChecked(false);
 
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
 
@@ -492,6 +493,34 @@ public class frm_list_rec_prod extends PBase {
 
             });
 
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    selid = 0;
+
+                    if (position>0){
+
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                        selitem = pListDetalleOC.items.get(position-1);
+
+                        selid = sitem.No_Linea;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
+
+                        msgIngresaDetalle("Desea ver el detalle de código: " +selitem.Codigo_Producto);
+
+                    }
+
+                    return true;
+                }
+
+            });
+
+
             txtCodigoProductoRecepcion.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -504,6 +533,19 @@ public class frm_list_rec_prod extends PBase {
                     }
 
                     return false;
+                }
+            });
+
+            chkRecepcionados.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (chkRecepcionados.isChecked()==true) {
+                        //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
+                        Lista_Detalle_OC();
+                    }else{
+                        Lista_Detalle_OC();
+                    }
                 }
             });
 
@@ -607,6 +649,31 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    private void procesar_registro_detalle(){
+
+        try {
+
+
+            if (Finalizada & Anulada){
+                doExit();
+            }else{
+
+                gl.gEscaneo_Pallet = Escaneo_Pallet;
+                gl.gselitem = selitem;
+
+                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                browse=1;
+                startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
+
+            }
+        }catch (Exception e){
+            mu.msgbox(e.getClass()+" "+ e.getMessage());
+        }
+
+    }
+
     private boolean Recepcion_Completa(){
         boolean Completa=false;
         vTipoDiferencia=0;
@@ -690,19 +757,45 @@ public class frm_list_rec_prod extends PBase {
 
                     vItem = new clsBeTrans_oc_det();
 
-                    vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
-                    vItem.Producto.Codigo = pListDetalleOC.items.get(i).Producto.Codigo;
-                    vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
-                    vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
-                    vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
-                    vItem.Cantidad = pListDetalleOC.items.get(i).Cantidad;
-                    vItem.Cantidad_recibida = pListDetalleOC.items.get(i).Cantidad_recibida;
-                    vItem.Costo = pListDetalleOC.items.get(i).Costo;
-                    vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
-                    vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
-                    vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                    if (chkRecepcionados.isChecked()==true){
 
-                    BeListDetalleOC.add(vItem);
+                        if (pListDetalleOC.items.get(i).Cantidad_recibida!=0){
+
+                            vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
+                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Producto.Codigo;
+                            vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
+                            vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
+                            vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
+                            vItem.Cantidad = pListDetalleOC.items.get(i).Cantidad;
+                            vItem.Cantidad_recibida = pListDetalleOC.items.get(i).Cantidad_recibida;
+                            vItem.Costo = pListDetalleOC.items.get(i).Costo;
+                            vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
+                            vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
+                            vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+
+                            BeListDetalleOC.add(vItem);
+
+                        }
+
+                    }else{
+
+                            vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
+                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Producto.Codigo;
+                            vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
+                            vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
+                            vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
+                            vItem.Cantidad = pListDetalleOC.items.get(i).Cantidad;
+                            vItem.Cantidad_recibida = pListDetalleOC.items.get(i).Cantidad_recibida;
+                            vItem.Costo = pListDetalleOC.items.get(i).Costo;
+                            vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
+                            vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
+                            vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+
+                            BeListDetalleOC.add(vItem);
+
+
+                    }
+
 
                 }
 
@@ -728,6 +821,48 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             mu.msgbox("BotonFinalizarRec"+e.getMessage());
+        }
+    }
+
+    public void BotonDetalle(View view){
+
+        try{
+
+            browse=2;
+            startActivity(new Intent(this, frm_recepcion_datos.class));
+
+
+        }catch (Exception e){
+            mu.msgbox("BotonDetalle:"+e.getMessage());
+        }
+    }
+
+    private void msgIngresaDetalle(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿"+msg+"?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    procesar_registro_detalle();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                   return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
 

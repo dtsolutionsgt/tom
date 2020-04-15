@@ -1,7 +1,9 @@
 package com.dts.tom;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +12,8 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -109,6 +113,8 @@ public class MainActivity extends PBase {
 
             ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
             xobj= new XMLObject(ws);
+
+            gl.deviceId =androidid();
 
             // Lista de empresas
             execws(1);
@@ -330,6 +336,10 @@ public class MainActivity extends PBase {
                     case 6:
                         callMethod("Get_Cantidad_decimales_despliegue","pIdEmpresa",gl.IdEmpresa);
                         break;
+                    case 7:
+                        callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",gl.deviceId,"pEsSalida",false);
+                        break;
                 }
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -366,6 +376,9 @@ public class MainActivity extends PBase {
                 case 6:
                     processGetDecimalesDespliegue();
                     break;
+                case 7:
+                    startActivity(new Intent(this,Mainmenu.class));
+                    break;
             }
 
             progress.cancel();
@@ -384,8 +397,10 @@ public class MainActivity extends PBase {
 
         try{
 
-        }catch (Exception e){
 
+
+        }catch (Exception e){
+            mu.msgbox("Licencia Valida:"+e.getMessage());
         }
     }
 
@@ -418,6 +433,7 @@ public class MainActivity extends PBase {
                         if (BeOperadorBodega.size()>0){
 
                             gl.gOperadorBodega = BeOperadorBodega;
+                            gl.OperadorBodega = gl.gOperadorBodega.get(0);
 
                             List<clsBeImpresora> BeImpresora =
                                     stream(impres)
@@ -431,10 +447,9 @@ public class MainActivity extends PBase {
                             }else{
                                 mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
-
                             //Get_BeImpresora_By_IdImpresora(gIdImpresora)
 
-                            startActivity(new Intent(this,Mainmenu.class));
+                            execws(7);
 
                         }else{
                          mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
@@ -458,6 +473,31 @@ public class MainActivity extends PBase {
         }
 
     }
+
+    public String getLocalBluetoothName() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            return "";
+        } else {
+            return mBluetoothAdapter.getName();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private String androidid() {
+        String uniqueID="";
+        try {
+            uniqueID = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+        //    TelephonyManager tm = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
+          //  uniqueID = tm.getDeviceId();
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            uniqueID="0000000000";
+        }
+
+        return uniqueID;
+    }
+
     //endregion
 
     //region Data Processing

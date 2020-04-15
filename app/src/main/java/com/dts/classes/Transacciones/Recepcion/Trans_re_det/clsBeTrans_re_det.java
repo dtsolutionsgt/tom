@@ -133,7 +133,6 @@ public class clsBeTrans_re_det {
 
     }
 
-
     public int getIdPresentacion() {
         return IdPresentacion;
     }
