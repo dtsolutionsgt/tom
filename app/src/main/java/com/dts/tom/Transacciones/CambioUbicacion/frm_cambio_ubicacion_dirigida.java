@@ -69,13 +69,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         lblCambioEstado.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
         txtEstadoDestino.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
 
-        app.readOnly(txtCodigoPrd);
-        app.readOnly(txtPresentacion);
-        app.readOnly(txtPropietario);
-        app.readOnly(txtLote);
-        app.readOnly(txtVence);
-        app.readOnly(txtEstado);
-        app.readOnly(txtEstadoDestino);
+        app.enabled(txtCodigoPrd,true);
+        app.enabled(txtPresentacion,true);
+        app.enabled(txtPropietario,true);
+        app.enabled(txtLote,true);
+        app.enabled(txtVence,true);
+        app.enabled(txtEstado,true);
+        app.enabled(txtEstadoDestino,true);
 
         setHandlers();
 

@@ -32,6 +32,7 @@ public class clsBeOperador {
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
 
+
     public clsBeOperador() {
     }
 
@@ -67,6 +68,7 @@ public class clsBeOperador {
         this.Verifica = Verifica;
         this.IsNew = IsNew;
         this.RolOperador=RolOperador;
+
     }
 
 
@@ -205,7 +207,7 @@ public class clsBeOperador {
     public boolean getIsNew() {
         return IsNew;
     }
-    public void setIsNew(boolean value) {
+    public void setIsNe(boolean value) {
         IsNew =value;
     }
     public clsBeRol_operador getRolOperador() {

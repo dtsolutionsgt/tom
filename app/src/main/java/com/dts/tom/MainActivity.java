@@ -193,7 +193,7 @@ public class MainActivity extends PBase {
                     idemp=empresas.items.get(position).IdEmpresa;
                     gl.IdEmpresa = idemp;
                     idbodega=0;
-                    execws(2);
+                    execws(2);//Lista las bodegas
                 } catch (Exception e)
                 {
                     msgbox(e.getMessage());
