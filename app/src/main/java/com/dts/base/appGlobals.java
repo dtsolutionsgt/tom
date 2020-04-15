@@ -41,9 +41,11 @@ public class appGlobals extends Application {
     //Variables de valores anteriores para cambio de ubicación y de estado
     public String gCProdAnterior  = "";
     public int gCEstadoAnterior = -1;
+    public String gCNomEstadoAnterior = "";
     public String gCFechaAnterior = "01/01/1900";
     public String gCLoteAnterior = "";
     public int gCPresAnterior = -1;
+    public String gCNomPresAnterior = "";
     public String gCUbicAnterior = "";
 
     //variable y listas publicas para mainActivity
