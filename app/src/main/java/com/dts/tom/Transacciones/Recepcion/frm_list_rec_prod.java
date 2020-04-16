@@ -139,7 +139,7 @@ public class frm_list_rec_prod extends PBase {
                 String vStarWithParameter = "$";
 
                 if (gBeConfiguracionBarraPallet!=null){
-                    if (gBeConfiguracionBarraPallet.IdentificadorInicio!=null){
+                    if (!gBeConfiguracionBarraPallet.IdentificadorInicio.isEmpty()){
                         vStarWithParameter = gBeConfiguracionBarraPallet.IdentificadorInicio;
                     }
                 }
@@ -191,7 +191,7 @@ public class frm_list_rec_prod extends PBase {
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
 
-                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto);
+                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+2);
 
                              if (gBeConfiguracionBarraPallet!=null){
                                  if (gBeConfiguracionBarraPallet.CodigoNumerico){
@@ -205,7 +205,10 @@ public class frm_list_rec_prod extends PBase {
 
                             if ((vLongitudBodegaOrigen + vLongitudCodigoProducto + vLongitudCodigoPallet)>= vLongitudBarraPallet){
 
-                                vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
+                                int ln1 = vLongitudBodegaOrigen + vLongitudCodigoProducto;
+                                int ln2 = (vLongitudBodegaOrigen + vLongitudCodigoProducto);
+                                int ln3 = vLongitudBarraPallet - ln2;
+                                vLP = pLP.substring(ln3,ln1+2);
 
                                 if (vLP.equals("")){
                                     txtCodigoProductoRecepcion.setText("");
@@ -432,6 +435,12 @@ public class frm_list_rec_prod extends PBase {
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
 
                     gl.gpListDetalleOC = pListDetalleOC;
+
+                    if (frm_detalle_ingresos.gBeConfiguracionBarraPallet!=null){
+                        if (frm_detalle_ingresos.gBeConfiguracionBarraPallet.IdConfiguracionPallet>0){
+                            gBeConfiguracionBarraPallet = frm_detalle_ingresos.gBeConfiguracionBarraPallet;
+                        }
+                    }
 
                     if(gBeOrdenCompra.No_Documento!=null & gBeOrdenCompra.Referencia!=null){
                         lblNoDocumento.setText("No. Documento:"+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
@@ -1325,6 +1334,13 @@ public class frm_list_rec_prod extends PBase {
             super.onResume();
 
             if (browse==1){
+                browse=0;
+                pListDetalleOC.items= gl.gpListDetalleOC.items;
+                Lista_Detalle_OC();
+                Recepcion_Completa();
+            }
+
+            if (browse==2){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();

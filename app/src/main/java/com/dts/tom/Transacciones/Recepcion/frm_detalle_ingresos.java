@@ -40,7 +40,7 @@ public class frm_detalle_ingresos extends PBase {
     private  clsBeTrans_re_oc gBeReOC = new clsBeTrans_re_oc();
     private clsBeTrans_oc_detList pListDetalleOC = new clsBeTrans_oc_detList();
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
-    private clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
+    public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
 

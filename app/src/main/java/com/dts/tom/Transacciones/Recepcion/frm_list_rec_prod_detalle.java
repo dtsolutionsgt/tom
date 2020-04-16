@@ -105,6 +105,10 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     }
 
+    public void BacKList(View view) {
+    doExit();
+    }
+
     private void Procesar_registro(){
         gl.mode=2;
         gl.gListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == selid).toList();
@@ -269,6 +273,28 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void doExit(){
+        try{
+
+            //LimpiaValores();
+            super.finish();
+            gl.Carga_Producto_x_Pallet=false;
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        try{
+            doExit();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
 }
