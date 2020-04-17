@@ -337,8 +337,11 @@ public class MainActivity extends PBase {
                         callMethod("Get_Cantidad_decimales_despliegue","pIdEmpresa",gl.IdEmpresa);
                         break;
                     case 7:
+                        //#CKFK 20200416
+                        //En el paramétro pIdDispositivo debe enviarse el Id del dispositivo en base al gl.deviceId
+                        //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",gl.deviceId,"pEsSalida",false);
+                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         break;
                 }
             } catch (Exception e) {
