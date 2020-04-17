@@ -250,8 +250,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                 }
 
             }else{
-                adapter = null;
-                listView.setAdapter(adapter);
+                listView.setAdapter(null);
             }
 
         }catch (Exception e){
@@ -333,6 +332,8 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             progress.setMessage("Obteniendo Tareas de cambio de ubicación en HH");
 
             pListBeTransUbicHhEnc = xobj.getresult(clsBeTrans_ubic_hh_encList.class,"Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador");
+
+            listView.setAdapter(null);
 
             if(pListBeTransUbicHhEnc!=null){
                 if(pListBeTransUbicHhEnc.items!=null){

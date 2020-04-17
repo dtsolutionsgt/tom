@@ -102,6 +102,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private void Load(){
 
         try{
+
+            listView.setAdapter(null);
+
             if (gl.IdTareaUbicEnc>0){
                 progress.setMessage("Cargando detalle de tarea de cambio de ubicación");
                 execws(1);
