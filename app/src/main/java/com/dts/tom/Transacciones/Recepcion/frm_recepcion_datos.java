@@ -1797,7 +1797,15 @@ public class frm_recepcion_datos extends PBase {
                     if (frm_list_rec_prod.BeProducto!=null){
                         if (frm_list_rec_prod.BeProducto.IdProducto>0){
                             BeProducto = frm_list_rec_prod.BeProducto;
+                            BeProducto.Presentaciones.items = stream(BeProducto.Presentaciones.items).where(c->c.Codigo_barra.equals(BeINavBarraPallet.UM_Producto)).toList();
+                            BeProducto.Presentacion = BeProducto.Presentaciones.items.get(0);
                         }
+                    }
+
+                    if (gl.mode==1){
+                        Carga_Datos_Producto();
+                    }else{
+                        Carga_Datos_Producto_Existente();
                     }
 
                 }else{
@@ -1869,6 +1877,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Carga_Datos_Producto_Por_Pallet:"+e.getMessage());
         }
     }
@@ -2350,7 +2359,7 @@ public class frm_recepcion_datos extends PBase {
                 txtLoteRec.setFocusableInTouchMode(false);
                 txtLoteRec.setClickable(false);
 
-                cmbVenceRec.setText(gBeStockRec.Fecha_vence);
+                cmbVenceRec.setText(du.convierteFechaMostar(gBeStockRec.Fecha_vence));
 
                 cmbVenceRec.setFocusable(false);
                 cmbVenceRec.setFocusableInTouchMode(false);
@@ -2411,7 +2420,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             txtLoteRec.setText(BeINavBarraPallet.Lote);
-            cmbVenceRec.setText(BeINavBarraPallet.Fecha_Vence);
+            cmbVenceRec.setText(du.convierteFechaMostar(BeINavBarraPallet.Fecha_Vence));
 
             if (!EsTransferenciaInternaWMS){
                 txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
@@ -2546,7 +2555,7 @@ public class frm_recepcion_datos extends PBase {
                 vBeStockRecPallet.Temperatura = 0.0;
                 vBeStockRecPallet.Regularizado = false;
                 vBeStockRecPallet.IsNew = true;
-
+                vBeStockRecPallet.Lote = BeINavBarraPallet.Lote;
                 vBeStockRecPallet.ProductoEstado = new  clsBeProducto_estado();
 
                 if (IdEstadoSelect>0){
@@ -2587,9 +2596,9 @@ public class frm_recepcion_datos extends PBase {
                 vBeStockRecPallet.IdUnidadMedida = BeProducto.UnidadMedida.IdUnidadMedida;
             }
 
-            vBeStockRec.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
-            vBeStockRec.ProductoValidado = true;
-            vBeStockRec.No_linea = pLineaOC;
+            vBeStockRecPallet.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
+            vBeStockRecPallet.ProductoValidado = true;
+            vBeStockRecPallet.No_linea = pLineaOC;
 
         }catch (Exception e){
             mu.msgbox("Continua_Llenando_Stock_Pallet_Proveedor:"+e.getMessage());
@@ -2714,6 +2723,9 @@ public class frm_recepcion_datos extends PBase {
 
                     for (int i = 0; i <BeProducto.Presentaciones.items.size(); i++) {
                         PresList.add(BeProducto.Presentaciones.items.get(i).Nombre);
+                        if (Escaneo_Pallet){
+                            IdPreseSelect=BeProducto.Presentaciones.items.get(i).IdPresentacion;
+                        }
                     }
 
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
@@ -2746,12 +2758,18 @@ public class frm_recepcion_datos extends PBase {
                 EstadoList.add(LProductoEstado.items.get(i).Nombre);
             }
 
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, EstadoList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbEstadoProductoRec.setAdapter(dataAdapter);
 
-            if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(0);
+            if (Escaneo_Pallet){
+                IdEstadoSelect = gl.gIdProductoBuenEstadoPorDefecto;
+                List AuxEst = stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+                int indx = AuxEst.indexOf(IdEstadoSelect);
+                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indx);
+            }else{
+                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(0);
+            }
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());

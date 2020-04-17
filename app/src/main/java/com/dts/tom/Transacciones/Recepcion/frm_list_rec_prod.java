@@ -191,11 +191,11 @@ public class frm_list_rec_prod extends PBase {
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
 
-                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+2);
+                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+3);
 
                              if (gBeConfiguracionBarraPallet!=null){
                                  if (gBeConfiguracionBarraPallet.CodigoNumerico){
-                                     vCodigoProductoBarraPallet = vCodigoProductoBarraPallet;
+                                     vCodigoProductoBarraPallet =String.valueOf(Integer.parseInt(vCodigoProductoBarraPallet)); //vCodigoProductoBarraPallet.replaceFirst ("^0*", "");
                                  }else{
                                      vCodigoProductoBarraPallet = vCodigoProductoBarraPallet;
                                  }
@@ -206,9 +206,7 @@ public class frm_list_rec_prod extends PBase {
                             if ((vLongitudBodegaOrigen + vLongitudCodigoProducto + vLongitudCodigoPallet)>= vLongitudBarraPallet){
 
                                 int ln1 = vLongitudBodegaOrigen + vLongitudCodigoProducto;
-                                int ln2 = (vLongitudBodegaOrigen + vLongitudCodigoProducto);
-                                int ln3 = vLongitudBarraPallet - ln2;
-                                vLP = pLP.substring(ln3,ln1+2);
+                                vLP = pLP.substring(ln1,vLongitudBarraPallet);
 
                                 if (vLP.equals("")){
                                     txtCodigoProductoRecepcion.setText("");
@@ -227,34 +225,12 @@ public class frm_list_rec_prod extends PBase {
                             execws(5);
 
                             if (gBeStockRec!=null){
-                                gBeStockRec = stream(pListBeStockRecPI.items).where(c->c.Lic_plate.equals(pLP)).first();
+                                if(gBeStockRec.IdStockRec>0){
+                                    gBeStockRec = stream(pListBeStockRecPI.items).where(c->c.Lic_plate.equals(pLP)).first();
+                                }
                             }
 
                          }
-
-                         if (gBeStockRec!=null){
-
-                             mu.msgbox("El número de pallet "+ pLP+" no es válido para la recepción");
-                             txtCodigoProductoRecepcion.setText("");
-                             txtCodigoProductoRecepcion.requestFocus();
-                             return;
-
-                         }else{
-
-                             if (gBeStockRec.Uds_lic_plate == gBeStockRec.Cantidad){
-                                 mu.msgbox("El pallet ya fue recibido");
-                                 txtCodigoProductoRecepcion.setText("");
-                                 txtCodigoProductoRecepcion.requestFocus();
-                                 return;
-                             }
-
-                             if (BeProducto==null){
-                                 execws(6);
-                             }
-
-                         }
-
-                         msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
 
                      }else{
                          mu.msgbox("El código de pallet : "+pLP+" no tiene la longitud válida");
@@ -281,6 +257,33 @@ public class frm_list_rec_prod extends PBase {
             mu.msgbox("Procesa_Barra_Producto: "+e.getMessage());
         }
 
+    }
+
+    private void ValidaEstadoPallet(){
+
+        if (gBeStockRec!=null && gBeStockRec.IdStockRec>0 ){
+
+            mu.msgbox("El número de pallet "+ pLP+" no es válido para la recepción");
+            txtCodigoProductoRecepcion.setText("");
+            txtCodigoProductoRecepcion.requestFocus();
+            return;
+
+        }else{
+
+            if (gBeStockRec.Uds_lic_plate == gBeStockRec.Cantidad){
+                mu.msgbox("El pallet ya fue recibido");
+                txtCodigoProductoRecepcion.setText("");
+                txtCodigoProductoRecepcion.requestFocus();
+                return;
+            }
+
+            if (BeProducto==null){
+                execws(6);
+            }
+
+        }
+
+        msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
     }
 
     private void msgValidaProductoPallet(String msg) {
@@ -354,6 +357,7 @@ public class frm_list_rec_prod extends PBase {
                                 gl.mode=1;
                                 selitem = pListDetalleOC.items.get(Idx);
                                 gl.gselitem = selitem;
+                                gl.gEscaneo_Pallet = true;
 
                                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
                                 gl.gpListDetalleOC.items = pListDetalleOC.items;
@@ -1076,6 +1080,10 @@ public class frm_list_rec_prod extends PBase {
 
             lBeINavBarraPallet = xobj.getresult(clsBeI_nav_barras_palletList.class,"Get_All_Pallet_Ingreso_By_Barra");
 
+            BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
+
+           // ValidaEstadoPallet();
+
             if (lBeINavBarraPallet!=null){
                 if (lBeINavBarraPallet.items!=null){
 
@@ -1113,6 +1121,7 @@ public class frm_list_rec_prod extends PBase {
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
 
             msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
+
 
         }catch (Exception e){
             mu.msgbox("processProductoByLP");

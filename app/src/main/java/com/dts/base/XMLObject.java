@@ -70,6 +70,28 @@ public class XMLObject  {
         return null;
     }
 
+    public <baseClas> baseClas getresultSingle(Class<? extends baseClas> type, String source) throws Exception
+    {
+        String xnode="";
+
+        try{
+
+            xnode=getXMLRegion(source);
+
+            Serializer serializer = new Persister();
+
+            if (!xnode.isEmpty())
+            {
+                return serializer.read(type, xnode);
+            }
+
+        }catch (Exception e)
+        {
+            throw new Exception(" XMLObject Error: " + e.getMessage() + " GetResult:" +ws.xmlresult);
+        }
+        return null;
+    }
+
     public Cursor filldt() throws Exception {
         if (!parseXMLArray()) createVoidCursor();
         return data;
@@ -89,19 +111,25 @@ public class XMLObject  {
 
         if (cl.getName().toLowerCase().contains("string")) {
             return body;
-        }
-        if (cl.getName().toLowerCase().contains("double")) {
+        }else if (cl.getName().toLowerCase().contains("double")) {
             if (body.isEmpty()) return 0; else return
                     Double.parseDouble(body);
-        }
-        if (cl.getName().toLowerCase().contains("int")) {
+        }else if (cl.getName().toLowerCase().contains("int")) {
             if (body.isEmpty()) return 0; else return
                     Integer.parseInt(body);
+        }else if (cl.getName().toLowerCase().contains("boolean")) {
+            return Boolean.parseBoolean(body);
+        }else{
+
+            Serializer serializer = new Persister();
+
+            if (!body.isEmpty())
+            {
+                 serializer.read(cl, body);
+                 return  cl;
+            }
         }
 
-        if (cl.getName().toLowerCase().contains("boolean")) {
-            return Boolean.parseBoolean(body);
-        }
 
         return null;
     }
