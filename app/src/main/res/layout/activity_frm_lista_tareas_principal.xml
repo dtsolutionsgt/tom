@@ -95,7 +95,8 @@
         android:background="@drawable/color_medium"
         android:text="Nueva"
         android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnRegsList"

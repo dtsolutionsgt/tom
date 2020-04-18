@@ -71,7 +71,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Listado de tareas"
+            android:text="Detalle de productos para ingreso"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -137,7 +137,8 @@
         android:background="@drawable/color_medium"
         android:text="Detalle"
         android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnRegs"

@@ -5,169 +5,185 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
+import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import java.io.ByteArrayOutputStream;
+
+import java.util.ArrayList;
 
 public class DrawingView extends View {
 
-    private Path drawPath;
-    //drawing and canvas paint
-    private Paint drawPaint, canvasPaint;
-    //initial color
-    private int paintColor = 0xFF660000, paintAlpha = 255;
-    //canvas
-    private Canvas drawCanvas;
-    //canvas bitmap
-    private Bitmap canvasBitmap;
-    //brush sizes
-    private float brushSize, lastBrushSize;
-    //erase flag
-    private boolean erase=false;
+    public static int BRUSH_SIZE = 10;
+    public static final int DEFAULT_COLOR = Color.BLACK;
+    public static final int DEFAULT_BG_COLOR = Color.WHITE;
+    private static final float TOUCH_TOLERANCE = 4;
+    private float mX, mY;
+    private Path mPath;
+    private Paint mPaint;
+    private ArrayList<FingerPath> paths = new ArrayList<>();
+    private int currentColor;
+    private int backgroundColor = DEFAULT_BG_COLOR;
+    private int strokeWidth;
+    private boolean emboss;
+    private boolean blur;
+    private MaskFilter mEmboss;
+    private MaskFilter mBlur;
+    private Bitmap mBitmap;
+    private Canvas mCanvas;
+    private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 
-    Bitmap bg;
+    public DrawingView(Context context) {
+        this(context, null);
+    }
 
-    public DrawingView(Context context, AttributeSet attrs){
+    public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setupDrawing();
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(DEFAULT_COLOR);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setXfermode(null);
+        mPaint.setAlpha(0xff);
+
+        mEmboss = new EmbossMaskFilter(new float[] {1, 1, 1}, 0.4f, 6, 3.5f);
+        mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);
     }
 
-    private void setupDrawing(){
+    public void init(DisplayMetrics metrics) {
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
 
-        brushSize = 5;
-        lastBrushSize = brushSize;
-        drawPath = new Path();
-        drawPaint = new Paint();
-        drawPaint.setColor(paintColor);
-        drawPaint.setAntiAlias(true);
-        drawPaint.setStrokeWidth(brushSize);
-        drawPaint.setStyle(Paint.Style.STROKE);
-        drawPaint.setStrokeJoin(Paint.Join.ROUND);
-        drawPaint.setStrokeCap(Paint.Cap.ROUND);
-        canvasPaint = new Paint(Paint.DITHER_FLAG);
+        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
 
-        Resources res = getResources();
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.colortitles);
-        bg = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-
+        currentColor = DEFAULT_COLOR;
+        strokeWidth = BRUSH_SIZE;
     }
 
-    //size assigned to view
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        drawCanvas = new Canvas(bg);
+    public void normal() {
+        emboss = false;
+        blur = false;
     }
 
-    //draw the view - will be called after touch event
+    public void emboss() {
+        emboss = true;
+        blur = false;
+    }
+
+    public void blur() {
+        emboss = false;
+        blur = true;
+    }
+
+    public void clear() {
+        backgroundColor = DEFAULT_BG_COLOR;
+        paths.clear();
+        normal();
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bg, 0, 0, canvasPaint);
-        canvas.drawPath(drawPath, drawPaint);
+        canvas.save();
+        mCanvas.drawColor(backgroundColor);
+
+        for (FingerPath fp : paths) {
+            mPaint.setColor(fp.color);
+            mPaint.setStrokeWidth(fp.strokeWidth);
+            mPaint.setMaskFilter(null);
+
+            if (fp.emboss)
+                mPaint.setMaskFilter(mEmboss);
+            else if (fp.blur)
+                mPaint.setMaskFilter(mBlur);
+
+            mCanvas.drawPath(fp.path, mPaint);
+
+        }
+
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.restore();
     }
 
-    //register user touches as drawing action
+    private void touchStart(float x, float y) {
+        mPath = new Path();
+        FingerPath fp = new FingerPath(currentColor, emboss, blur, strokeWidth, mPath);
+        paths.add(fp);
+
+        mPath.reset();
+        mPath.moveTo(x, y);
+        mX = x;
+        mY = y;
+    }
+
+    private void touchMove(float x, float y) {
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
+
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mX = x;
+            mY = y;
+        }
+    }
+
+    private void touchUp() {
+        mPath.lineTo(mX, mY);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float touchX = event.getX();
-        float touchY = event.getY();
-        //respond to down, move and up events
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                drawPath.moveTo(touchX, touchY);
+        float x = event.getX();
+        float y = event.getY();
+
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN :
+                touchStart(x, y);
+                invalidate();
                 break;
-            case MotionEvent.ACTION_MOVE:
-                drawPath.lineTo(touchX, touchY);
+            case MotionEvent.ACTION_MOVE :
+                touchMove(x, y);
+                invalidate();
                 break;
-            case MotionEvent.ACTION_UP:
-                drawPath.lineTo(touchX, touchY);
-                drawCanvas.drawPath(drawPath, drawPaint);
-                drawPath.reset();
+            case MotionEvent.ACTION_UP :
+                touchUp();
+                invalidate();
                 break;
-            default:
-                return false;
         }
-        //redraw
-        invalidate();
+
         return true;
-
     }
 
-    //update color
-    public void setColor(String newColor){
-        invalidate();
-        //check whether color value or pattern name
-        if(newColor.startsWith("#")){
-            paintColor = Color.parseColor(newColor);
-            drawPaint.setColor(paintColor);
-            drawPaint.setShader(null);
-        }
-        else{
-            //pattern
-            int patternID = getResources().getIdentifier(
-                    newColor, "drawable", "com.example.drawingfun");
-            //decode
-            Bitmap patternBMP = BitmapFactory.decodeResource(getResources(), patternID);
-            //create shader
-            BitmapShader patternBMPshader = new BitmapShader(patternBMP,
-                    Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-            //color and shader
-            drawPaint.setColor(0xFFFFFFFF);
-            drawPaint.setShader(patternBMPshader);
-        }
-    }
-
-    //set brush size
-    public void setBrushSize(float newSize){
-        float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                newSize, getResources().getDisplayMetrics());
-        brushSize=pixelAmount;
-        drawPaint.setStrokeWidth(brushSize);
-    }
-
-    //get and set last brush size
-    public void setLastBrushSize(float lastSize){
-        lastBrushSize=lastSize;
-    }
-    public float getLastBrushSize(){
-        return lastBrushSize;
-    }
-
-    //set erase true or false
-    public void setErase(boolean isErase){
-        erase=isErase;
-        drawPaint.setColor(Color.parseColor("#FFFFFF"));
-        if(erase) drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        else drawPaint.setXfermode(null);
-        drawPaint.setColor(paintColor);
-    }
-
-    //start new drawing
-    public void startNew(){
-        drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+    public void ClearCanvas() {
+        mCanvas.drawColor(Color.WHITE);
+        mCanvas.drawColor(Color.argb(255, 237, 239, 250));
         invalidate();
     }
 
-    //return current alpha
-    public int getPaintAlpha(){
-        return Math.round((float)paintAlpha/255*100);
+    public byte[] getBytes() {
+        Bitmap b = getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
+    public Bitmap getBitmap() {
+        return mBitmap;
 
-    //set alpha
-    public void setPaintAlpha(int newAlpha){
-        paintAlpha=Math.round((float)newAlpha/100*255);
-        drawPaint.setColor(paintColor);
-        drawPaint.setAlpha(paintAlpha);
     }
-
-
 }

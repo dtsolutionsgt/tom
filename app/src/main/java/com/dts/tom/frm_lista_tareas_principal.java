@@ -212,32 +212,34 @@ public class frm_lista_tareas_principal extends PBase {
 
             progress.setMessage("Listando tareas");
 
-            if (pListBeTareasIngresoHH.items!=null){
-
-                vItem = new clsBeTareasIngresoHH();
-
-                BeListTareas.add(vItem);
-
-                for (int i = pListBeTareasIngresoHH.items.size()-1; i>=0; i--) {
-
-                    progress.setMessage("Listando tarea #: "+pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc);
+            if (pListBeTareasIngresoHH!=null){
+                if (pListBeTareasIngresoHH.items!=null){
 
                     vItem = new clsBeTareasIngresoHH();
 
-                    vItem.IdOrderCompraEnc=pListBeTareasIngresoHH.items.get(i).IdOrderCompraEnc;
-                    vItem.IdRecepcionEnc=pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc;
-                    vItem.NoReferenciaOC=pListBeTareasIngresoHH.items.get(i).NoReferenciaOC;
-                    vItem.NoDocumentoOc=pListBeTareasIngresoHH.items.get(i).NoDocumentoOc;
-                    vItem.NombreProveedor=pListBeTareasIngresoHH.items.get(i).NombreProveedor;
-                    vItem.NombreTipoIngresoOC=pListBeTareasIngresoHH.items.get(i).NombreTipoIngresoOC;
-                    vItem.NombreTipoRecepcion=pListBeTareasIngresoHH.items.get(i).NombreTipoRecepcion;
-
                     BeListTareas.add(vItem);
 
-                }
-                count = BeListTareas.size()-1;
-                lblRegs.setText("Regs: "+ count);
+                    for (int i = pListBeTareasIngresoHH.items.size()-1; i>=0; i--) {
 
+                        progress.setMessage("Listando tarea #: "+pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc);
+
+                        vItem = new clsBeTareasIngresoHH();
+
+                        vItem.IdOrderCompraEnc=pListBeTareasIngresoHH.items.get(i).IdOrderCompraEnc;
+                        vItem.IdRecepcionEnc=pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc;
+                        vItem.NoReferenciaOC=pListBeTareasIngresoHH.items.get(i).NoReferenciaOC;
+                        vItem.NoDocumentoOc=pListBeTareasIngresoHH.items.get(i).NoDocumentoOc;
+                        vItem.NombreProveedor=pListBeTareasIngresoHH.items.get(i).NombreProveedor;
+                        vItem.NombreTipoIngresoOC=pListBeTareasIngresoHH.items.get(i).NombreTipoIngresoOC;
+                        vItem.NombreTipoRecepcion=pListBeTareasIngresoHH.items.get(i).NombreTipoRecepcion;
+
+                        BeListTareas.add(vItem);
+
+                    }
+                    count = BeListTareas.size()-1;
+                    lblRegs.setText("Regs: "+ count);
+
+                }
             }
 
             Collections.sort(BeListTareas,new OrdenarItems());

@@ -192,10 +192,14 @@ public class frm_detalle_ingresos extends PBase {
 
             if (Finalizada){
                 mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " ya fue finalizada");
+                progress.cancel();
+                doExit();
             }
 
             if (Anulada){
                 mu.msgbox("La recepción "+ gl.gIdRecepcionEnc + " fue anulada");
+                progress.cancel();
+                doExit();
             }
 
             if (Finalizada & Anulada){
@@ -590,7 +594,7 @@ public class frm_detalle_ingresos extends PBase {
             super.onResume();
 
             if (browse==1){
-                browse=0;
+
                 doExit();
             }
 

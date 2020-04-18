@@ -861,7 +861,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 txtSerial.setText(pListBeStockRec.items.get(pIndexStock).Serial);
-                txtAnada.setText(pListBeStockRec.items.get(pIndexStock).Anada);
+                txtAnada.setText(pListBeStockRec.items.get(pIndexStock).Anada+"");
 
                 if (BeProducto.Peso_recepcion){
                     txtPesoReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Peso, gl.gCantDecCalculo)+"");

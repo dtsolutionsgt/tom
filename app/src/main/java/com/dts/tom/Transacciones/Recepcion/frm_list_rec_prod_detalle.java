@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -64,6 +65,8 @@ public class frm_list_rec_prod_detalle extends PBase {
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
         }
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         setHandles();
 
@@ -155,7 +158,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.cantidad_recibida = obj.cantidad_recibida;
                        vItem.IdProductoBodega = obj.IdProductoBodega;
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
-                       vItem.Fecha_vence = obj.Fecha_vence;
+                       vItem.Fecha_vence = du.convierteFechaMostar(obj.Fecha_vence);
                        vItem.Lic_plate = obj.Lic_plate;
 
                        BeListDetalleRec.add(vItem);
@@ -262,6 +265,8 @@ public class frm_list_rec_prod_detalle extends PBase {
             if (pListTransRecDet!=null){
                 if (pListTransRecDet.items!=null){
                     Lista_Detalle_Rec();
+                }else{
+                    doExit();
                 }
             }
 

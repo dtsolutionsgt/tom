@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -36,6 +40,7 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.frmFirma;
 import com.dts.tom.list_adapt_detalle_recepcion;
 
 import java.util.ArrayList;
@@ -52,7 +57,7 @@ public class frm_list_rec_prod extends PBase {
     private XMLObject xobj;
 
     private TextView lblNoDocumento;
-    private Button btnRegs,btnCompletaRec;
+    private Button btnRegs,btnCompletaRec,btnGuardarFirma,btnSalirFirma,btnLimpiar;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
     private DrawingView txtFirma;
@@ -85,6 +90,7 @@ public class frm_list_rec_prod extends PBase {
     private double vTipoDiferencia;
     private boolean Finalizar=false;
     private Dialog dialog;
+    private Bitmap FirmaPiloto;
 
     private int Idx = -1;
 
@@ -671,14 +677,20 @@ public class frm_list_rec_prod extends PBase {
                 doExit();
             }else{
 
+                if (selitem.Cantidad_recibida>0){
+
                 gl.gEscaneo_Pallet = Escaneo_Pallet;
                 gl.gselitem = selitem;
 
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
                 gl.gpListDetalleOC.items = pListDetalleOC.items;
 
-                browse=1;
-                startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
+
+                    browse=1;
+                    startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
+                }else{
+                    mu.msgbox("No existen recepciones de ese producto");
+                }
 
             }
         }catch (Exception e){
@@ -882,13 +894,8 @@ public class frm_list_rec_prod extends PBase {
     private void Finalizar_Recepcion(){
 
         try{
-
-            String imgSaved = MediaStore.Images.Media.insertImage(
-                    getContentResolver(), txtFirma.getDrawingCache(),
-                    UUID.randomUUID().toString()+".png", "drawing");
-
-                gl.gBeRecepcion.Firma_piloto = Byte.parseByte(imgSaved);
-
+            execws(12);
+            //gl.gBeRecepcion.Firma_piloto = Byte.parseByte(FirmaPiloto.toString());
 
         }catch (Exception e){
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
@@ -966,11 +973,16 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case  12:
-                        callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "Estado","Procesado");
+                        callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Estado","Procesado");
                         break;
                     case 13:
                         callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
+                        break;
+                    case 14:
+                        callMethod("Finalizar_Recepcion","pRecEnc",gl.gBeRecepcion,"backOrder",false,
+                                "pIdOrdenCompraEnc",vIdOrdenCompra,"pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdEmpresa",
+                                gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador,"pListObjDetR",
+                                pListTransRecDet.items,"pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                 }
 
@@ -1033,6 +1045,9 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 13:
                         execws(14);
+                        break;
+                    case 14:
+                        doExit();
                         break;
                 }
 
@@ -1200,11 +1215,11 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia>0){
 
-                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+                                msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
                             }else if(vTipoDiferencia < 0){
 
-                                msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
+                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
 
                             }
 
@@ -1288,6 +1303,35 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
+    private void msgPreguntaFinalizar(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                   execws(11);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                   return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
     private void Termina_Finalizacion_Recepcion(){
 
         try{
@@ -1317,12 +1361,42 @@ public class frm_list_rec_prod extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frmfirmadig);
 
-            txtFirma = (DrawingView) dialog.findViewById(R.id.drawV);
-            txtFirma.startNew();
-            txtFirma.setErase(false);
+            txtFirma = (DrawingView)dialog.findViewById(R.id.drawV);
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            txtFirma.init(metrics);
+
+            btnGuardarFirma = (Button)dialog.findViewById(R.id.btnGuardarFirma);
+            btnLimpiar = (Button)dialog.findViewById(R.id.btnLimpiar);
+            btnSalirFirma = (Button)dialog.findViewById(R.id.btnSalirFirma);
+
+
+            btnGuardarFirma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirmaPiloto = txtFirma.getBitmap();
+                    dialog.cancel();
+                    Finalizar_Recepcion();
+                }
+            });
+
+            btnLimpiar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    txtFirma.clear();
+                }
+            });
+
+            btnSalirFirma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
 
             dialog.show();
 
+            //startActivity(new Intent(this, frmFirma.class));
 
 
         }catch (Exception e){
@@ -1346,14 +1420,16 @@ public class frm_list_rec_prod extends PBase {
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
-                Recepcion_Completa();
+               if(Recepcion_Completa()){
+                   msgPreguntaFinalizar("La recepción esta completa,¿Desea finalizar?");
+               }
             }
 
             if (browse==2){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
-                Recepcion_Completa();
+              Recepcion_Completa();
             }
 
 
