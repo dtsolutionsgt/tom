@@ -320,8 +320,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back"
-            android:onClick="SalirPantallaParametros" />
+            android:background="@drawable/back" />
 
         <Button
             android:id="@+id/btnIr"
@@ -329,8 +328,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/arr_rnd_right"
-            android:onClick="BotonIrGuardarParametros" />
+            android:background="@drawable/arr_rnd_right" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -801,6 +801,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try {
 
+            progress.setMessage("Obteniendo la cantidad disponible del producto");
+            progress.show();
+
             if (escaneoPallet && productoList != null) {
                 if(cmbVence.getAdapter() != null){
                     cvVence = cmbVence.getSelectedItem().toString();
@@ -957,6 +960,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         }catch(Exception ex){
             msgbox("Llena cantidad " + ex.getMessage());
+        }finally {
+            progress.cancel();
         }
 
     }
@@ -1952,6 +1957,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
+            progress.setMessage("Aplicando cambio de ubicacion");
+            progress.show();
+
             btnGuardarCiega.setVisibility(View.INVISIBLE);
 
             vProcesar = true;
@@ -1961,6 +1969,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 

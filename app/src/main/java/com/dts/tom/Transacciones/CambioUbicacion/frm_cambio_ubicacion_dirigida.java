@@ -224,6 +224,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try{
 
+            progress.setMessage("Aplicando el cambio");
+            progress.show();
+
             vCantidadAUbicar=0;
             compl = false;
             double cantStock;
@@ -259,6 +262,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
+        }finally {
+            progress.cancel();
         }
 
     }

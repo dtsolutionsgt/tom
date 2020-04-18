@@ -875,6 +875,22 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
+            Button btnIr = (Button)dialog.findViewById(R.id.btnIr);
+            Button btnBack = (Button)dialog.findViewById(R.id.btnBack);
+
+            btnIr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BotonIrGuardarParametros();
+                }
+            });
+            btnBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SalirPantallaParametros();
+                }
+            });
+
             dialog.show();
 
             mu.msgbox(MensajeParam);
@@ -884,11 +900,13 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    public void BotonIrGuardarParametros(View view){
+    //View view
+    public void BotonIrGuardarParametros(){
         GuardarParametros();
     }
 
-    public void SalirPantallaParametros(View view){
+    //View view
+    public void SalirPantallaParametros(){
         dialog.cancel();
     }
 
