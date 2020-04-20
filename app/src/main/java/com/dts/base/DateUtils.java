@@ -451,6 +451,27 @@ public class DateUtils {
 		return vFecha;
 	}
 
+	public String convierteHoraMostar(String Fecha){
+		String vFecha="";
+
+		try{
+
+			long f;
+			String fechaS;
+			int cyear,cmonth,cday,ch,cm;
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
 	public String getFechaActual() throws ParseException {
 		String fechaS,vFecha;
 		int cyear,cmonth,cday,ch,cm;

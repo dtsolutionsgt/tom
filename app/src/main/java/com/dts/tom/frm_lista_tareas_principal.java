@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
+import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
 import java.util.ArrayList;
@@ -38,11 +41,16 @@ public class frm_lista_tareas_principal extends PBase {
     private XMLObject xobj;
 
     private clsBeTareasIngresoHHList pListBeTareasIngresoHH = new clsBeTareasIngresoHHList();
+    private clsBeTrans_picking_encList pListBeTareasPickingHH = new clsBeTrans_picking_encList();
 
     private ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
+    private ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
+
     private list_adapter_tareashh adapter;
+    private list_adapt_tareashh_picking adapterPicking;
     private ListView listView;
     private clsBeTareasIngresoHH selitem;
+    private clsBeTrans_picking_enc selitempicking;
     private ProgressBar pbar;
     private ObjectAnimator anim;
     private ProgressDialog progress;
@@ -78,33 +86,20 @@ public class frm_lista_tareas_principal extends PBase {
 
         try{
 
-            switch (gl.tipoTarea) {
 
-                case 1:
+            if (gl.tipoTarea==1){
 
-                    switch (gl.tipoIngreso){
+                if (gl.tipoIngreso.equals("HCOC00")){
+                    gl.TipoOpcion =1;
+                    execws(1);
+                }else if (gl.tipoIngreso.equals("HSOC00")){
+                    gl.TipoOpcion =2;
+                    execws(2);
 
-                        case "HCOC00":
-                            gl.TipoOpcion =1;
-                            execws(1);
+                }
 
-                            break;
-
-                        case "HSOC00":
-                            gl.TipoOpcion =2;
-                            execws(2);
-
-                            break;
-
-                    }
-
-                    lblTitulo.setText("Lista de tareas de recepción");
-
-                case 2:
-
-
-                case 3:
-
+            }else if(gl.tipoTarea==4){
+                execws(3);
             }
 
         }catch (Exception e){
@@ -130,8 +125,7 @@ public class frm_lista_tareas_principal extends PBase {
                         callMethod("Get_All_Rec_Ciegas_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        //callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
-                          //      "IdEmpresa",idemp,"IdBodega",idbodega);
+                        callMethod("Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega", "pIdBodega",gl.IdBodega,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
                         //callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
@@ -157,9 +151,7 @@ public class frm_lista_tareas_principal extends PBase {
                 case 2:
                     processListRecepCiega();break;
                 case 3:
-                    //processImpresoras();
-
-                    //iduser=0; execws(4); // Llama lista de usuarios
+                    processListTareasPicking();
                     break;
                 case 4:
                     //processUsers();break;
@@ -204,6 +196,72 @@ public class frm_lista_tareas_principal extends PBase {
         }
 
     }
+
+    private void processListTareasPicking(){
+
+        try{
+
+            pListBeTareasPickingHH=xobj.getresult(clsBeTrans_picking_encList.class,"Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega");
+
+            Llena_Tareas_Picking();
+
+        }catch (Exception e){
+            mu.msgbox("processListTareasPicking:"+e.getMessage());
+        }
+
+    }
+
+    private void Llena_Tareas_Picking(){
+        clsBeTrans_picking_enc vItem;
+        BeListTareasPicking.clear();
+        int count;
+
+        try{
+
+            progress.setMessage("Listando tareas");
+
+            if (pListBeTareasPickingHH!=null){
+                if (pListBeTareasPickingHH.items!=null){
+
+                    vItem = new clsBeTrans_picking_enc();
+
+                    BeListTareasPicking.add(vItem);
+
+                    for (clsBeTrans_picking_enc BePicking:pListBeTareasPickingHH.items ){
+
+                        vItem = new clsBeTrans_picking_enc();
+
+                        vItem.IdPickingEnc=BePicking.IdPickingEnc;
+                        vItem.NombreBodega=BePicking.NombreBodega;
+                        vItem.NombrePropietarioPicking=BePicking.NombrePropietarioPicking;
+                        vItem.NombreUbicacionPicking=BePicking.NombreUbicacionPicking;
+                        vItem.Estado=BePicking.Estado;
+                        vItem.Detalle_operador=BePicking.Detalle_operador;
+                        vItem.Fecha_picking=du.convierteFechaMostar(BePicking.Fecha_picking);
+                        vItem.Hora_ini=du.convierteHoraMostar(BePicking.Hora_ini);
+                        vItem.Hora_fin=du.convierteHoraMostar(BePicking.Hora_fin);
+
+                        BeListTareasPicking.add(vItem);
+
+                    }
+                    count = BeListTareasPicking.size()-1;
+                    lblRegs.setText("Regs: "+ count);
+                }
+            }
+
+            Collections.sort(BeListTareasPicking,new OrdenarItemsPicking());
+
+            adapterPicking=new list_adapt_tareashh_picking(this,BeListTareasPicking);
+            listView.setAdapter(adapterPicking);
+
+            progress.cancel();
+
+        }catch (Exception e){
+            mu.msgbox("Llena_Tareas_Picking");
+        }
+
+    }
+
 
     private void listItems(){
         clsBeTareasIngresoHH vItem;
@@ -271,6 +329,15 @@ public class frm_lista_tareas_principal extends PBase {
 
     }
 
+    public class OrdenarItemsPicking implements Comparator<clsBeTrans_picking_enc> {
+
+        public int compare(clsBeTrans_picking_enc left,clsBeTrans_picking_enc rigth){
+            return left.IdPickingEnc-rigth.IdPickingEnc;
+            //return left.Nombre.compareTo(rigth.Nombre);
+        }
+
+    }
+
     private void procesar_registro(){
 
         try{
@@ -284,6 +351,13 @@ public class frm_lista_tareas_principal extends PBase {
                     gl.gIdRecepcionEnc = selid;
                     startActivity(new Intent(this, frm_detalle_ingresos.class));
                 break;
+
+                case 4:
+                    browse=4;
+                    gl.gIdPickingEnc = selid;
+                    startActivity(new Intent(this, frm_detalle_tareas_picking.class));
+                    break;
+
             }
 
         }catch (Exception e){
@@ -361,15 +435,31 @@ public class frm_lista_tareas_principal extends PBase {
 
                     if (position > 0) {
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                        selitem = sitem;
+                        if (gl.tipoTarea==1){
 
-                        selid = sitem.IdRecepcionEnc;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
+                            Object lvObj = listView.getItemAtPosition(position);
+                            clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                            selitem = sitem;
 
-                        procesar_registro();
+                            selid = sitem.IdRecepcionEnc;
+                            selidx = position;
+                            adapter.setSelectedIndex(position);
+
+                            procesar_registro();
+
+                        }else if(gl.tipoTarea==4){
+
+                            Object lvObj = listView.getItemAtPosition(position);
+                            clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                            selitempicking = sitem;
+
+                            selid = sitem.IdPickingEnc;
+                            selidx = position;
+                            adapterPicking.setSelectedIndex(position);
+
+                            procesar_registro();
+
+                        }
 
                     }
 

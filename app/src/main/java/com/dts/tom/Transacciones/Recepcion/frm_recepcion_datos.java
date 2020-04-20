@@ -3808,14 +3808,13 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (gl.gBeRecepcion.Muestra_precio){
-                if (txtCostoReal.getText().toString().isEmpty()){
+            if (txtCostoReal.getText().toString().isEmpty()||txtCostoReal.getText().toString().equals("0")||txtCostoReal.getText().toString().equals("0.0")){
 
                     if (IdPreseSelect>0){
                         txtCostoReal.setText(Get_Costo_Presentacion()+"");
                     }
 
-                    if (Double.parseDouble(txtCostoReal.getText().toString())==0){
+                    if (txtCostoReal.getText().toString().equals("0")||txtCostoReal.getText().toString().equals("0.0")){
                         txtCostoReal.setText(txtCostoOC.getText().toString());
                     }
 
@@ -3823,7 +3822,6 @@ public class frm_recepcion_datos extends PBase {
                     mu.msgbox("El costo debe ser mayor a 0");
                     return;
                 }
-            }
 
         }catch (Exception e){
             mu.msgbox("Valida_Costo"+e.getMessage());

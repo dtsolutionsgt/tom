@@ -198,6 +198,8 @@ public class Mainmenu extends PBase {
                     break;
 
                 case 4:
+                    gl.tipoTarea = idmenu;
+                    startActivity(new Intent(this,frm_lista_tareas_principal.class));
 
                 case 5:
 

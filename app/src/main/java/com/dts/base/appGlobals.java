@@ -78,6 +78,9 @@ public class appGlobals extends Application {
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
 
+    //Variables para picking
+    public int gIdPickingEnc=0;
+
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
     public String gCodigoBodega;

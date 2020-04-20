@@ -717,21 +717,21 @@ public class frm_list_rec_prod extends PBase {
 
                     if (Cantidad_recibida>0){
 
-                        vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
+                        vTipoDiferencia = mu.round(Cantidad-Cantidad_recibida,7);
 
                         if (vTipoDiferencia>0){
 
                             btnCompletaRec.setText("DIF - (NEG)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
-
-                            Completa= false;
+                            progress.cancel();
+                            return false;
 
                         }else if(vTipoDiferencia<0){
 
                             btnCompletaRec.setText(" DIF - (POS)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF0399D5"));
-
-                            Completa= false;
+                            progress.cancel();
+                            return false;
 
                         }else if (vTipoDiferencia==0) {
 
@@ -745,7 +745,8 @@ public class frm_list_rec_prod extends PBase {
 
                         btnCompletaRec.setText("DIF - (NEG)");
                         btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
-
+                        progress.cancel();
+                        return false;
                     }
 
                 }
@@ -1217,7 +1218,7 @@ public class frm_list_rec_prod extends PBase {
 
                                 msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
-                            }else if(vTipoDiferencia < 0){
+                            }else if(vTipoDiferencia <=0){
 
                                 msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
 
@@ -1261,7 +1262,7 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
-                    Termina_Finalizacion_Recepcion();
+                    return;
                 }
             });
 
@@ -1291,8 +1292,8 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
+                    Finalizar = false;
+                    return;
                 }
             });
 
