@@ -2342,6 +2342,8 @@ public class frm_recepcion_datos extends PBase {
 
             txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
 
+            txtCostoReal.setText(CostoOC+"");
+
             txtUmbasRec.setFocusable(false);
             txtUmbasRec.setFocusableInTouchMode(false);
             txtUmbasRec.setClickable(false);
@@ -3440,7 +3442,7 @@ public class frm_recepcion_datos extends PBase {
 
             Valida_Costo();
 
-            if (gl.gBeRecepcion.Muestra_precio) {
+            if (!txtCostoReal.getText().toString().isEmpty()) {
                 BeTransReDet.Costo = Double.parseDouble(txtCostoReal.getText().toString());
                 BeTransReDet.Costo_Oc = Double.parseDouble(txtCostoOC.getText().toString());
                 BeTransReDet.Costo_Estadistico = 0;

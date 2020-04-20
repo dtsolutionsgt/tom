@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,7 +31,8 @@ import static br.com.zbra.androidlinq.Linq.stream;
 public class frm_lista_tareas_principal extends PBase {
 
     private EditText txtTarea;
-    private TextView lblTitulo, lblRegs;
+    private TextView lblTitulo;
+    private Button lblRegs,btnNueva;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -55,8 +57,8 @@ public class frm_lista_tareas_principal extends PBase {
         lblTitulo = (TextView) findViewById(R.id.lblTituloForma);
         txtTarea = (EditText) findViewById(R.id.editText8);
         listView = (ListView) findViewById(R.id.listTareas);
-        lblRegs = (TextView) findViewById(R.id.btnRegsList);
-
+        lblRegs = (Button) findViewById(R.id.btnRegsList);
+        btnNueva = (Button)findViewById(R.id.btnNuevaTarea);
         pbar = (ProgressBar) findViewById(R.id.pgrtareas);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
@@ -239,7 +241,11 @@ public class frm_lista_tareas_principal extends PBase {
                     count = BeListTareas.size()-1;
                     lblRegs.setText("Regs: "+ count);
 
+                }else{
+                    btnNueva.setVisibility(View.VISIBLE);
                 }
+            }else{
+                btnNueva.setVisibility(View.VISIBLE);
             }
 
             Collections.sort(BeListTareas,new OrdenarItems());
@@ -284,6 +290,27 @@ public class frm_lista_tareas_principal extends PBase {
             mu.msgbox(e.getMessage());
         }
 
+    }
+
+    public void BotonNueva(View view){
+
+        try{
+
+            gl.gIdRecepcionEnc=0;
+            gl.tipoIngreso = "HSOC00";
+
+            switch (gl.tipoTarea) {
+
+                case 1:
+                    browse=1;
+                    gl.gIdRecepcionEnc = selid;
+                    startActivity(new Intent(this, frm_detalle_ingresos.class));
+                    break;
+            }
+
+        }catch (Exception e){
+            mu.msgbox(e.getMessage());
+        }
     }
 
     private void GetFila(){
