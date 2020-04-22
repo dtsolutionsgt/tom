@@ -344,7 +344,7 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Llenando número de marchamo");
 
-                if (gBeOrdenCompra.No_Marchamo!=null){
+                if (gl.gBeRecepcion.No_Marchamo!=null){
                     txtMarch.setText(gl.gBeRecepcion.No_Marchamo);
                 }
 

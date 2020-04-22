@@ -129,16 +129,15 @@ public class frm_list_rec_prod_detalle extends PBase {
 
             if (mdet==1){
 
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 Map<String, Map<String, Map<String, Map<Double, List<clsBeTrans_re_det>>>>> employessGroup=
                         null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                     employessGroup = pListTransRecDet.items.stream().collect(Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,
                             Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto_estado,
                                     Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto,
                                             Collectors.groupingBy(clsBeTrans_re_det::getcantidad_recibida)))));
+                    employessGroup.size();
                 }
-
-                employessGroup.size();
 
             }else{
 

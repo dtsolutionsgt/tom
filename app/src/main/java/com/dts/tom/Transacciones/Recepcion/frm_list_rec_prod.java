@@ -87,7 +87,7 @@ public class frm_list_rec_prod extends PBase {
     public String vCodigoProductoBarraPallet= "";
     public static boolean EsTransferenciaInternaWMS=false;
     private  int vIdOrdenCompra=0;
-    private double vTipoDiferencia;
+    private double vTipoDiferencia=0;
     private boolean Finalizar=false;
     private Dialog dialog;
     private Bitmap FirmaPiloto;
@@ -1216,9 +1216,13 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia>0){
 
+                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+
+                            }else if(vTipoDiferencia <0){
+
                                 msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
-                            }else if(vTipoDiferencia <=0){
+                            }else if(vTipoDiferencia==0|vTipoDiferencia==0.0){
 
                                 msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
 

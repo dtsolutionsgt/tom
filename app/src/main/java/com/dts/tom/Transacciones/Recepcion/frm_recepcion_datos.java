@@ -4263,6 +4263,7 @@ public class frm_recepcion_datos extends PBase {
             Load();
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(" processBeProducto: " + e.getMessage());
         }
 
