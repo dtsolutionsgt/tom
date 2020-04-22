@@ -126,12 +126,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                //Metodo para filtrar la lista o llamar al WS
+                                //Metodo para filtrar la lista en base a un código de producto o llamar al WS
                                 if (!txtCodigo.getText().toString().isEmpty()){
-                                    //Sirve para filtrar los registros por un producto especifico.
-
                                     progress.setMessage("Validando existencia del producto");
-
+                                    //Llama al método del WS Get_BeProducto_By_Codigo_For_HH
                                     execws(3);
                                 }else{
                                     Load();
@@ -238,7 +236,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                          break;
                     case 3:
                         callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigo.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                                "IdBodega",gl.IdBodega);
                         break;
                 }
 
@@ -352,8 +350,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 if (pBeTransUbicHhDetList.items.get(0).getCantidad()-pBeTransUbicHhDetList.items.get(0).getRecibido()>0){
                                     msgAskContinuar("Ya solo le queda este registro pendiente ¿Quiere continuar ingresando lo pendiente?");
                                 }else{
-                                    msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
-                                            (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+                                    if(txtCodigo.getText().toString().equals("")){
+                                        msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
+                                                (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+                                    }else{
+                                        msgbox("No hay productos asociados al codigo ingresado " + txtCodigo.getText().toString());
+                                    }
                                 }
 
                             }else{
@@ -363,8 +365,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                             if (pBeTransUbicHhDetList.items.size()==0){
 
-                                msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
-                                        (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+                                if(txtCodigo.getText().toString().equals("")){
+                                    msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
+                                            (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
+                                }else{
+                                    msgbox("No hay productos asociados al codigo ingresado " + txtCodigo.getText().toString());
+                                }
 
                             }
                             adapter.refreshItems();
@@ -431,6 +437,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 progress.setMessage("Obteniendo detalle de la tarea de cambio de ubicación");
 
+                //Llama a procedimiento de WS Get_All_By_IdTransUbicEnc_And_IdOperador
                 execws(1);
             }else{
                 BeBuscaProducto=0;

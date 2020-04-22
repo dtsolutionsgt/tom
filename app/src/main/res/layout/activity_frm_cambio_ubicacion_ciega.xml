@@ -305,11 +305,12 @@
 
                 <TextView
                     android:id="@+id/lblCant"
-                    android:layout_width="match_parent"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/txtCantidad"
                     android:layout_alignEnd="@+id/cmbEstadoOrigen"
                     android:layout_alignBottom="@+id/txtCantidad"
+                    android:layout_marginStart="24dp"
                     android:layout_marginBottom="0dp"
                     android:layout_toEndOf="@+id/txtCantidad"
                     android:gravity="right|center_vertical"
@@ -317,7 +318,7 @@
                     android:paddingLeft="3dp"
                     android:text="00.00"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
 
                 <EditText
                     android:id="@+id/txtUbicDestino"

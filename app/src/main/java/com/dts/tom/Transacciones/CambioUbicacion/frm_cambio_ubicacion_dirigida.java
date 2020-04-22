@@ -105,6 +105,19 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 }
             });
 
+            txtUbicOrigen.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        if (txtUbicOrigen.getText().toString().equals("") ||
+                                txtUbicOrigen.getText().toString().isEmpty() ||
+                                txtUbicOrigen.getText().toString()==null){
+                            mu.msgbox("Debe ingresar la ubicación origen");
+                        }
+                    }
+                }
+            });
+
             txtUbicDestino.setOnKeyListener(new View.OnKeyListener(){
 
                 @Override
@@ -116,6 +129,19 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         }
                     }
                     return false;
+                }
+            });
+
+            txtUbicDestino.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        if (txtUbicDestino.getText().toString().equals("") ||
+                                txtUbicDestino.getText().toString().isEmpty() ||
+                                txtUbicDestino.getText().toString()==null){
+                            mu.msgbox("Debe ingresar la ubicación destino");
+                        }
+                    }
                 }
             });
 
@@ -160,7 +186,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
             txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
-            lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.Descripcion);
+            lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto + " - #" + gl.IdDestino);
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
@@ -233,6 +259,18 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString());
 
+            if (txtUbicOrigen.getText().toString().isEmpty()) {
+                mu.msgbox("Debe ingresar la ubicación origen");
+                txtUbicOrigen.requestFocus();
+                return;
+            }
+
+            if (txtUbicDestino.getText().toString().isEmpty()) {
+                mu.msgbox("Debe ingresar la ubicación destino");
+                txtUbicDestino.requestFocus();
+                return;
+            }
+
             if (vCantidadAUbicar<0) {
                 mu.msgbox("La cantidad no puede ser negativa");
                 txtCantidad.requestFocus();
@@ -303,6 +341,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         try{
 
+            progress.setMessage("Aplicando el cambio");
+
             Date currentTime = Calendar.getInstance().getTime();
 
             if (vCantidadAUbicar>0){
@@ -337,6 +377,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            progress.cancel();
         }
 
     }
@@ -603,9 +644,5 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
-    @Override
-    public void onBackPressed()
-    {
-    }
 
 }
