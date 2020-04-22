@@ -140,7 +140,6 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                 employessGroup.size();
 
-
             }else{
 
             }

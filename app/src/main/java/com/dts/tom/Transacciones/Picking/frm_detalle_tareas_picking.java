@@ -1,22 +1,42 @@
 package com.dts.tom.Transacciones.Picking;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.list_adapt_detalle_tareas_picking;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import br.com.zbra.androidlinq.Stream;
+
+import static br.com.zbra.androidlinq.Linq.stream;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.summingDouble;
+import static java.util.stream.Collectors.toList;
 
 public class frm_detalle_tareas_picking extends PBase {
 
@@ -26,9 +46,13 @@ public class frm_detalle_tareas_picking extends PBase {
     private ProgressDialog progress;
     private ListView listView;
     private Spinner cmbOrdenadorPor;
+    private Button btnPendientes;
 
     private clsBeTrans_picking_enc gBePicking;
     private clsBeTrans_picking_ubicList plistPickingUbi= new clsBeTrans_picking_ubicList();
+
+    private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+    private list_adapt_detalle_tareas_picking adapter;
 
     private List TipoOrden = new ArrayList();
 
@@ -45,6 +69,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         listView = (ListView) findViewById(R.id.listTareasPicking);
         cmbOrdenadorPor = (Spinner)findViewById(R.id.cmbOrdenadorPor);
+        btnPendientes = (Button)findViewById(R.id.btnPendientes);
 
         ProgressDialog("Cargando forma...");
 
@@ -114,6 +139,8 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Lista_Detalle_Picking(){
+        clsBeTrans_picking_ubic vItem;
+        BeListPickingUbic.clear();
 
         try{
 
@@ -124,18 +151,61 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (TipoLista==1){//Resumido
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                        Function<clsBeTrans_picking_ubic, List<Object>> compositKey = std ->
+                                Arrays.asList(std.IdUbicacion,std.CodigoProducto,std.NombreUbicacion,std.NombreProducto,std.ProductoUnidadMedida,
+                                            std.ProductoPresentacion,std.Lote,std.Lic_plate,std.Fecha_Vence,std.ProductoEstado,std.IdPresentacion,
+                                            std.IdProductoEstado,std.IdProductoBodega);
+
+                         plistPickingUbi.items.stream().collect(Collectors.groupingBy(compositKey, Collectors.toList()));
+
+
+                    }
 
 
                 }else if (TipoLista==2){//Detallado
 
                 }
 
+                    vItem = new  clsBeTrans_picking_ubic();
+
+                    BeListPickingUbic.add(vItem);
+
+                for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
+
+                    vItem = new  clsBeTrans_picking_ubic();
+                    obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
+                    vItem = obj;
+
+                    BeListPickingUbic.add(vItem);
+
+                }
+
+                    int count =BeListPickingUbic.size()-1;
+                    btnPendientes.setText("Regs: "+count);
+
                 }
             }
+
+            Collections.sort(BeListPickingUbic,new OrdenarItems());
+
+            adapter=new list_adapt_detalle_tareas_picking(this,BeListPickingUbic);
+            listView.setAdapter(adapter);
+
 
         }catch (Exception e){
             mu.msgbox("Lista_Detalle_Picking:"+e.getMessage());
         }
+    }
+
+    public class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
+
+        public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
+            //return left.CodigoProducto-rigth.IdRecepcionDet;
+            return left.CodigoProducto.compareTo(rigth.CodigoProducto);
+        }
+
     }
 
     public class WebServiceHandler extends WebService {
@@ -207,6 +277,8 @@ public class frm_detalle_tareas_picking extends PBase {
                 if (gBePicking.Estado.equals("Nuevo")){
                     gBePicking.Estado = "Pendiente";
                     execws(2);
+                }else{
+                    procesActualizarEstadoPicking();
                 }
 
             }else{

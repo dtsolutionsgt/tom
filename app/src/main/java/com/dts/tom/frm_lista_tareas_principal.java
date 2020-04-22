@@ -98,7 +98,7 @@ public class frm_lista_tareas_principal extends PBase {
 
                 }
 
-            }else if(gl.tipoTarea==4){
+            }else if(gl.tipoTarea==5){
                 execws(3);
             }
 
@@ -352,8 +352,8 @@ public class frm_lista_tareas_principal extends PBase {
                     startActivity(new Intent(this, frm_detalle_ingresos.class));
                 break;
 
-                case 4:
-                    browse=4;
+                case 5:
+                    browse=5;
                     gl.gIdPickingEnc = selid;
                     startActivity(new Intent(this, frm_detalle_tareas_picking.class));
                     break;
@@ -447,7 +447,7 @@ public class frm_lista_tareas_principal extends PBase {
 
                             procesar_registro();
 
-                        }else if(gl.tipoTarea==4){
+                        }else if(gl.tipoTarea==5){
 
                             Object lvObj = listView.getItemAtPosition(position);
                             clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;

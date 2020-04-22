@@ -25,7 +25,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public double Cantidad_Recibida=0;
     @Element(required=false) public double Cantidad_Verificada=0;
     @Element(required=false) public boolean Encontrado=false;
-    @Element(required=false) public boolean Dañado_verificacion=false;
+    @Element(required=false) public boolean Danado_verificacion =false;
     @Element(required=false) public String Fecha_real_vence="1900-01-01T00:00:01";
     @Element(required=false) public String No_packing="";
     @Element(required=false) public String Fecha_picking="1900-01-01T00:00:01";
@@ -38,7 +38,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo=false;
-    @Element(required=false) public boolean Dañado_picking=false;
+    @Element(required=false) public boolean Danado_picking =false;
     @Element(required=false) public int IdProducto=0;
     @Element(required=false) public int IdOperadorBodega_Pickeo=0;
     @Element(required=false) public int IdOperadorBodega_Verifico=0;
@@ -61,7 +61,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdPropietarioBodega=0;
     @Element(required=false) public int IdUbicacionAnterior=0;
     @Element(required=false) public int IdRecepcion=0;
-    @Element(required=false) public double CantidadDañada=0;
+    @Element(required=false) public double CantidadDanada =0;
     @Element(required=false) public String Lic_plate_Reemplazo="";
     @Element(required=false) public int IdUbicacion_reemplazo=0;
     @Element(required=false) public int IdStock_reemplazo=0;
@@ -71,21 +71,21 @@ public class clsBeTrans_picking_ubic {
     public clsBeTrans_picking_ubic() {
     }
 
-    public clsBeTrans_picking_ubic(int IdPickingEnc,int IdPickingUbic,int IdPickingDet,int IdUbicacion,
-                                   String Lote,String Fecha_Vence,String Fecha_minima,String Serial,
-                                   String Lic_plate,boolean Acepto,double Peso_solicitado,double Peso_recibido,
-                                   double Peso_verificado,double Peso_despachado,double Cantidad_Solicitada,double Cantidad_Recibida,
-                                   double Cantidad_Verificada,boolean Encontrado,boolean Dañado_verificacion,String Fecha_real_vence,
-                                   String No_packing,String Fecha_picking,String Fecha_verificado,String Fecha_packing,
-                                   String Fecha_despachado,double Cantidad_despachada,String User_agr,String Fec_agr,
-                                   String User_mod,String Fec_mod,boolean Activo,boolean Dañado_picking,
-                                   int IdProducto,int IdOperadorBodega_Pickeo,int IdOperadorBodega_Verifico,boolean IsNew,
-                                   String NombreUbicacion,int IdPedidoDet,int IdStockRes,int IdStock,
-                                   String CodigoProducto,String NombreProducto,String ProductoPresentacion,String ProductoUnidadMedida,
-                                   String ProductoEstado,int IdProductoBodega,int IdProductoEstado,int IdPresentacion,
-                                   int IdUnidadMedida,int IdPedidoEnc,clsBeBodega_ubicacion Ubicacion,int IdPropietarioBodega,
-                                   int IdUbicacionAnterior,int IdRecepcion,double CantidadDañada,String Lic_plate_Reemplazo,
-                                   int IdUbicacion_reemplazo,int IdStock_reemplazo,int IdBodega) {
+    public clsBeTrans_picking_ubic(int IdPickingEnc, int IdPickingUbic, int IdPickingDet, int IdUbicacion,
+                                   String Lote, String Fecha_Vence, String Fecha_minima, String Serial,
+                                   String Lic_plate, boolean Acepto, double Peso_solicitado, double Peso_recibido,
+                                   double Peso_verificado, double Peso_despachado, double Cantidad_Solicitada, double Cantidad_Recibida,
+                                   double Cantidad_Verificada, boolean Encontrado, boolean Danado_verificacion, String Fecha_real_vence,
+                                   String No_packing, String Fecha_picking, String Fecha_verificado, String Fecha_packing,
+                                   String Fecha_despachado, double Cantidad_despachada, String User_agr, String Fec_agr,
+                                   String User_mod, String Fec_mod, boolean Activo, boolean Danado_picking,
+                                   int IdProducto, int IdOperadorBodega_Pickeo, int IdOperadorBodega_Verifico, boolean IsNew,
+                                   String NombreUbicacion, int IdPedidoDet, int IdStockRes, int IdStock,
+                                   String CodigoProducto, String NombreProducto, String ProductoPresentacion, String ProductoUnidadMedida,
+                                   String ProductoEstado, int IdProductoBodega, int IdProductoEstado, int IdPresentacion,
+                                   int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
+                                   int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
+                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.IdPickingUbic=IdPickingUbic;
@@ -105,7 +105,7 @@ public class clsBeTrans_picking_ubic {
         this.Cantidad_Recibida=Cantidad_Recibida;
         this.Cantidad_Verificada=Cantidad_Verificada;
         this.Encontrado=Encontrado;
-        this.Dañado_verificacion=Dañado_verificacion;
+        this.Danado_verificacion = Danado_verificacion;
         this.Fecha_real_vence=Fecha_real_vence;
         this.No_packing=No_packing;
         this.Fecha_picking=Fecha_picking;
@@ -118,7 +118,7 @@ public class clsBeTrans_picking_ubic {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
-        this.Dañado_picking=Dañado_picking;
+        this.Danado_picking = Danado_picking;
         this.IdProducto=IdProducto;
         this.IdOperadorBodega_Pickeo=IdOperadorBodega_Pickeo;
         this.IdOperadorBodega_Verifico=IdOperadorBodega_Verifico;
@@ -141,7 +141,7 @@ public class clsBeTrans_picking_ubic {
         this.IdPropietarioBodega=IdPropietarioBodega;
         this.IdUbicacionAnterior=IdUbicacionAnterior;
         this.IdRecepcion=IdRecepcion;
-        this.CantidadDañada=CantidadDañada;
+        this.CantidadDanada = CantidadDanada;
         this.Lic_plate_Reemplazo=Lic_plate_Reemplazo;
         this.IdUbicacion_reemplazo=IdUbicacion_reemplazo;
         this.IdStock_reemplazo=IdStock_reemplazo;
@@ -258,11 +258,11 @@ public class clsBeTrans_picking_ubic {
     public void setEncontrado(boolean value) {
         Encontrado=value;
     }
-    public boolean getDañado_verificacion() {
-        return Dañado_verificacion;
+    public boolean getDanado_verificacion() {
+        return Danado_verificacion;
     }
-    public void setDañado_verificacion(boolean value) {
-        Dañado_verificacion=value;
+    public void setDanado_verificacion(boolean value) {
+        Danado_verificacion =value;
     }
     public String getFecha_real_vence() {
         return Fecha_real_vence;
@@ -336,11 +336,11 @@ public class clsBeTrans_picking_ubic {
     public void setActivo(boolean value) {
         Activo=value;
     }
-    public boolean getDañado_picking() {
-        return Dañado_picking;
+    public boolean getDanado_picking() {
+        return Danado_picking;
     }
-    public void setDañado_picking(boolean value) {
-        Dañado_picking=value;
+    public void setDanado_picking(boolean value) {
+        Danado_picking =value;
     }
     public int getIdProducto() {
         return IdProducto;
@@ -474,11 +474,11 @@ public class clsBeTrans_picking_ubic {
     public void setIdRecepcion(int value) {
         IdRecepcion=value;
     }
-    public double getCantidadDañada() {
-        return CantidadDañada;
+    public double getCantidadDanada() {
+        return CantidadDanada;
     }
-    public void setCantidadDañada(double value) {
-        CantidadDañada=value;
+    public void setCantidadDanada(double value) {
+        CantidadDanada =value;
     }
     public String getLic_plate_Reemplazo() {
         return Lic_plate_Reemplazo;
