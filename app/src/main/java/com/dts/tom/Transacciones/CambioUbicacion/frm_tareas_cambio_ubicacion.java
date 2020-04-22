@@ -103,6 +103,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
     private void Load(){
 
         try{
+            //Llama al procedimiento del WS Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador
             execws(1);
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
@@ -342,12 +343,10 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
-        progress.cancel();
-
     }
 
     private void msgAskExit(String msg) {

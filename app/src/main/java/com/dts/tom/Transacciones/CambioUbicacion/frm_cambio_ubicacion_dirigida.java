@@ -186,7 +186,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
             txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
-            lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto + " - #" + gl.IdDestino);
+
+            if (!gl.tareadet.UbicacionDestino.NombreCompleto.contains("#")){
+                lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto + " - #" + gl.IdDestino);
+            }else{
+                lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto);
+            }
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
             gl.tareadet.Estado = "En proceso";
@@ -295,13 +300,14 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 compl=true;
             }
 
+            progress.cancel();
             msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }finally {
-            progress.cancel();
         }
 
     }
@@ -342,6 +348,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         try{
 
             progress.setMessage("Aplicando el cambio");
+            progress.show();
 
             Date currentTime = Calendar.getInstance().getTime();
 
@@ -385,6 +392,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private boolean Crear_movimiento(){
 
         try{
+
+            progress.setMessage("Creando el movimiento");
 
             gMovimientoDet = new clsBeTrans_movimientos();
 
@@ -437,6 +446,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             return true;
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             return false;
         }
@@ -579,15 +589,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_DetResult",boolean.class);
 
+            progress.cancel();
+
             if (actualizar){
                 msgAskExit(String.format("Cambio de %s aplicado",(gl.modo_cambio==1?"ubicación":"estado")));
             }else{
                 msgbox("Ocurrió un error al procesar el cambio de ubicación");
             }
 
-            progress.cancel();
-
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -605,7 +616,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 txtEstadoDestino.setText(gProdEstado.Nombre);
             }
 
+            progress.cancel();
+
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 

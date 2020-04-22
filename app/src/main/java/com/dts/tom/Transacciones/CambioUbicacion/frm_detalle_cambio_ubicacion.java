@@ -107,9 +107,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             if (gl.IdTareaUbicEnc>0){
                 progress.setMessage("Cargando detalle de tarea de cambio de ubicación");
+                progress.show();
+                //Llama al método del WS Get_All_By_IdTransUbicEnc_And_IdOperador
                 execws(1);
             }
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox(e.getClass()+e.getMessage());
         }
     }
@@ -129,6 +132,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 //Metodo para filtrar la lista en base a un código de producto o llamar al WS
                                 if (!txtCodigo.getText().toString().isEmpty()){
                                     progress.setMessage("Validando existencia del producto");
+                                    progress.show();
                                     //Llama al método del WS Get_BeProducto_By_Codigo_For_HH
                                     execws(3);
                                 }else{
@@ -374,16 +378,18 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                             }
                             adapter.refreshItems();
+                            progress.cancel();
                         }
                     }
                 }
             }
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
-        progress.cancel();
+
     }
 
     private void processCambioEstado(){
@@ -397,10 +403,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
-        progress.cancel();
 
     }
 
@@ -419,10 +424,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
-        progress.cancel();
 
     }
 
@@ -436,6 +440,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                 BeBuscaProducto=bProd.getIdProducto();
 
                 progress.setMessage("Obteniendo detalle de la tarea de cambio de ubicación");
+                progress.show();
 
                 //Llama a procedimiento de WS Get_All_By_IdTransUbicEnc_And_IdOperador
                 execws(1);
@@ -445,9 +450,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-        progress.cancel();
     }
 
     public void validacion_finalizar_tarea(View view){
@@ -467,7 +472,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             msgAskFinalizar("Finalizar la tarea");
 
         }catch(Exception ex){
-
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName() + " " + ex.getMessage());
         }
     }
 
@@ -482,11 +488,14 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             gl.tareaenc.setFechaFin(app.strFecha(currentTime));
 
             progress.setMessage("Finalizando la tarea de cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+            progress.show();
 
             execws(2);
 
         }catch(Exception ex){
-
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName() + " " + ex.getMessage());
         }
     }
 
@@ -517,6 +526,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName() + " " + e.getMessage());
         }
 
     }
@@ -639,6 +649,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     frm_detalle_cambio_ubicacion.super.finish();
+                    progress.cancel();
                 }
             });
 

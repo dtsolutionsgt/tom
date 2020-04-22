@@ -1202,11 +1202,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 validaOrigen();
             }else{
                 txtUbicOrigen.setText("");
+                progress.cancel();
             }
 
-            progress.cancel();
-
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1235,6 +1235,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Validando ubicación");
+            progress.show();
 
             bodega_ubicacion_origen = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
@@ -1307,14 +1308,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (!datosCorrectos) return;
 
+                progress.cancel();
                 msgAskAplicar((gl.modo_cambio ==1? "Mover producto a ubicación: " + bodega_ubicacion_destino.Descripcion: "Aplicar cambio de estado?"));
 
             }else{
+                progress.cancel();
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.selectAll();
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
         }
@@ -1507,6 +1511,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+
         }
 
     }
@@ -1519,13 +1526,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             boolean result = (Boolean) xobj.getSingle("Set_Nuevo_Pallet_IdResult",boolean.class);
 
+            progress.cancel();
+
             if (result){
                 msgAskImpresoraLista("¿La impresora está lista y conectada?");
             }else{
+                progress.cancel();
                 msgbox("Ocurrió un error creando el Id del nuevo pallet");
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1627,11 +1638,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 inicializaTarea(true);
 
+                progress.cancel();
                 msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
 
             }
 
         }catch (Exception ex){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
@@ -2006,6 +2019,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
+            progress.setMessage("Aplicando el cambio");
+            progress.show();
+
             if (!Crear_Movimiento_Ubicacion_ND(gl.modo_cambio == 1? false: true)){
                 return;
             }
@@ -2048,6 +2064,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             execws(14);
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
@@ -2078,6 +2095,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean Crear_Movimiento_Ubicacion_ND(boolean EsCambioEstado) {
 
         try{
+
+            progress.setMessage("Creando el movimiento");
 
             // The preferred idiom for iterating over collections and arrays
             for (clsBeVW_stock_res st : stockResList.items) {
@@ -2113,6 +2132,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         }catch(Exception ex){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             mu.msgbox( ex.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
@@ -2200,6 +2220,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             return true;
 
         }catch(Exception ex){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             mu.msgbox( ex.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
