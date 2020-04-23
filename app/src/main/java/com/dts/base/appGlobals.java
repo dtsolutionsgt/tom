@@ -81,6 +81,12 @@ public class appGlobals extends Application {
     //Variables para picking
     public int gIdPickingEnc=0;
 
+    //Variables para verificación
+    public int pIdPedidoEnc;
+    public int pIdPedidoDet;
+    public int pIdPickingEnc;
+    //public clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc;
+
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
     public String gCodigoBodega;
