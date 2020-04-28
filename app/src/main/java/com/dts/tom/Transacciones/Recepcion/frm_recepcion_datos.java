@@ -615,7 +615,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if(vCant>1){
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de un pallet");
-                    txtCantidadRec.setText(1+"");
+                    txtCantidadRec.setText(mu.frmdecimal(1,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.selectAll();
                 }
 
@@ -629,7 +629,7 @@ public class frm_recepcion_datos extends PBase {
                 if (vCant>bePresentacion.CajasPorCama*bePresentacion.CamasPorTarima){
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de "+bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima
                             + " "+ bePresentacion.Nombre);
-                    txtCantidadRec.setText(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima+"");
+                    txtCantidadRec.setText(mu.frmdecimal(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.selectAll();
                 }
 
@@ -2110,7 +2110,7 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-            txtCantidadRec.setText(Cant_Pendiente+"");
+            txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.selectAll();
 
             clsBeTrans_oc_det_lote BeLoteLinea;
@@ -2265,7 +2265,7 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-                txtCantidadRec.setText(pListTransRecDet.items.get(0).cantidad_recibida+"");
+                txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.selectAll();
 
                 txtLoteRec.setText(pListTransRecDet.items.get(0).Lote);
@@ -2368,8 +2368,8 @@ public class frm_recepcion_datos extends PBase {
             txtPesoUnitario.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             cmbVenceRec.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
 
-            btnCantPendiente.setText("Pendiente: "+mu.round(Cant_Pendiente, gl.gCantDecDespliegue));
-            btnCantRecibida.setText("Recibido: "+mu.round(Cant_Recibida, gl.gCantDecDespliegue));
+            btnCantPendiente.setText("Pendiente: "+mu.frmdecimal(Cant_Pendiente, gl.gCantDecDespliegue));
+            btnCantRecibida.setText("Recibido: "+mu.frmdecimal(Cant_Recibida, gl.gCantDecDespliegue));
 
             if (gl.Carga_Producto_x_Pallet){
 
@@ -2443,10 +2443,10 @@ public class frm_recepcion_datos extends PBase {
             cmbVenceRec.setText(du.convierteFechaMostar(BeINavBarraPallet.Fecha_Vence));
 
             if (!EsTransferenciaInternaWMS){
-                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
+                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_UMP,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.selectAll();
             }else{
-                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_Presentacion+"");
+                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_Presentacion,gl.gCantDecDespliegue));
                 txtCantidadRec.selectAll();
             }
 
@@ -4665,7 +4665,7 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
+                    return;
                 }
             });
 

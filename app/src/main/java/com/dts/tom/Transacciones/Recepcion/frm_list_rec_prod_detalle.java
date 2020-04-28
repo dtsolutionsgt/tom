@@ -128,8 +128,9 @@ public class frm_list_rec_prod_detalle extends PBase {
             BeListDetalleRec.add(vItem);
 
             if (mdet==1){
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//Version de Android 7
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+                {
                 Map<String, Map<String, Map<String, Map<Double, List<clsBeTrans_re_det>>>>> employessGroup=
                         null;
                     employessGroup = pListTransRecDet.items.stream().collect(Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,

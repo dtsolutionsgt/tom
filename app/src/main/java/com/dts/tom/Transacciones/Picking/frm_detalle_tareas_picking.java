@@ -1,17 +1,22 @@
 package com.dts.tom.Transacciones.Picking;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
@@ -47,16 +52,19 @@ public class frm_detalle_tareas_picking extends PBase {
     private ListView listView;
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes;
+    private EditText txtUbicacionFiltro;
 
     private clsBeTrans_picking_enc gBePicking;
-    private clsBeTrans_picking_ubicList plistPickingUbi= new clsBeTrans_picking_ubicList();
+    public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
+    private clsBeTrans_picking_det gbePickingDet = new clsBeTrans_picking_det();
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
+    public static clsBeTrans_picking_ubic selitem;
 
     private List TipoOrden = new ArrayList();
 
-    private int TipoLista=1;
+    public static int TipoLista = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +76,9 @@ public class frm_detalle_tareas_picking extends PBase {
         xobj = new XMLObject(ws);
 
         listView = (ListView) findViewById(R.id.listTareasPicking);
-        cmbOrdenadorPor = (Spinner)findViewById(R.id.cmbOrdenadorPor);
-        btnPendientes = (Button)findViewById(R.id.btnPendientes);
+        cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
+        btnPendientes = (Button) findViewById(R.id.btnPendientes);
+        txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
 
         ProgressDialog("Cargando forma...");
 
@@ -82,7 +91,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private void setHandlers() {
 
-        try{
+        try {
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -92,20 +101,31 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     if (position > 0) {
 
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                        selitem = new clsBeTrans_picking_ubic();
+                        selitem = plistPickingUbi.items.get(position - 1);
+
+                        selid = sitem.IdPickingUbic;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
+
+                        procesar_registro();
+
                     }
 
                 }
 
             });
 
-        }catch (Exception e){
-            mu.msgbox("setHandles:"+e.getMessage());
+        } catch (Exception e) {
+            mu.msgbox("setHandles:" + e.getMessage());
         }
 
     }
 
-    public void ProgressDialog(String mensaje){
-        progress=new ProgressDialog(this);
+    public void ProgressDialog(String mensaje) {
+        progress = new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
@@ -113,6 +133,112 @@ public class frm_detalle_tareas_picking extends PBase {
         progress.show();
     }
 
+    private void procesar_registro() {
+
+        try {
+
+            clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
+
+            if (TipoLista == 1) {//Resumido
+
+                clsBeTrans_picking_ubic ubi = new clsBeTrans_picking_ubic();
+
+                txtUbicacionFiltro.setText(""+selitem.IdUbicacion);
+
+                pSubListPickingU.items = stream(plistPickingUbi.items).where(c->c.IdUbicacion == selitem.IdUbicacion).toList();
+
+                if (gBePicking.Detalle_operador) {
+
+                    if (pSubListPickingU!=null){
+
+                        if (pSubListPickingU.items!=null){
+
+                            for (clsBeTrans_picking_ubic ubicacion: pSubListPickingU.items){
+
+                                ubi = new clsBeTrans_picking_ubic();
+
+                                ubi = ubicacion;
+
+                                clsBeTrans_picking_ubic finalUbi = ubi;
+                                gbePickingDet = stream(gBePicking.ListaPickingDet.items).where(c -> c.IdPickingDet == finalUbi.IdPickingDet).first();
+
+                                if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
+                                    msgIngresaDetalle("Este picking no está asignado a este operador- ¿Quiere continuar con la tarea?");
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }else{
+                    AbreFormaDatos();
+                }
+
+            } else if (TipoLista == 2) {//Detallado
+
+                txtUbicacionFiltro.setText(""+selitem.IdUbicacion);
+
+                if (gBePicking.Detalle_operador) {
+
+                    if (gBePicking.ListaPickingDet != null) {
+
+                        if (gBePicking.ListaPickingDet.items != null) {
+
+                            gbePickingDet = stream(gBePicking.ListaPickingDet.items).where(c -> c.IdPickingDet == selitem.IdPickingDet).first();
+
+                            if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
+                                msgIngresaDetalle("Este picking no está asignado a este operador- ¿Quiere continuar con la tarea?");
+                            }
+
+                        }
+                    }
+                }else{
+                    AbreFormaDatos();
+                }
+
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("procesar_registro:" + e.getMessage());
+        }
+
+    }
+
+    private void AbreFormaDatos(){
+        browse = 1;
+        startActivity(new Intent(this, frm_picking_datos.class));
+    }
+
+    private void msgIngresaDetalle(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    AbreFormaDatos();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
 
     private void Load(){
 
@@ -128,6 +254,8 @@ public class frm_detalle_tareas_picking extends PBase {
             cmbOrdenadorPor.setAdapter(dataAdapter);
 
             if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
+
+            TipoLista = 2;
 
             if (gl.gIdPickingEnc>0){
                 execws(1);
@@ -151,7 +279,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (TipoLista==1){//Resumido
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //Version Android superior a 7.0...
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    {
 
                         Function<clsBeTrans_picking_ubic, List<Object>> compositKey = std ->
                                 Arrays.asList(std.IdUbicacion,std.CodigoProducto,std.NombreUbicacion,std.NombreProducto,std.ProductoUnidadMedida,
@@ -159,7 +289,6 @@ public class frm_detalle_tareas_picking extends PBase {
                                             std.IdProductoEstado,std.IdProductoBodega);
 
                          plistPickingUbi.items.stream().collect(Collectors.groupingBy(compositKey, Collectors.toList()));
-
 
                     }
 
@@ -307,9 +436,56 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    public void Salir(View view){
+        doExit();
+    }
+
+    private void doExit(){
+        try{
+
+            gBePicking = new clsBeTrans_picking_enc();
+            plistPickingUbi = new clsBeTrans_picking_ubicList();
+           gbePickingDet = new clsBeTrans_picking_det();
+           BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+           selitem = new clsBeTrans_picking_ubic();
+
+            super.finish();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        try{
+            doExit();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
 }
