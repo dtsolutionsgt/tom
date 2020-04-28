@@ -38,7 +38,6 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-
     public int getCount() {
         return BeListTareasHH.size();
     }

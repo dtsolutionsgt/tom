@@ -1,5 +1,11 @@
 package com.dts.classes.Mantenimientos.Cliente.clsBeCliente;
 
+import com.dts.classes.Mantenimientos.Cliente.clsBeCliente_Tipo.clsBeCliente_tipo;
+import com.dts.classes.Mantenimientos.Cliente.clsBeCliente_direccion.clsBeCliente_direccionList;
+import com.dts.classes.Mantenimientos.Cliente.clsBeCliente_tiempos.clsBeCliente_tiemposList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
+import com.dts.classes.Mantenimientos.Propietario.Propietario.clsBePropietarios;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeCliente {
@@ -29,6 +35,12 @@ public class clsBeCliente {
     @Element(required=false) public int IdUbicacionVirtual=0;
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
     @Element(required=false) public String Referencia="";
+    @Element(required=false) public clsBeCliente_tipo Tipo=new clsBeCliente_tipo();
+    @Element(required=false) public clsBeCliente_direccionList Drecciones=new clsBeCliente_direccionList();
+    @Element(required=false) public clsBeCliente_tiemposList Tiempos=new clsBeCliente_tiemposList();
+    @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
+    @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
+    @Element(required=false) public clsBeCliente_tipo ClienteTipo=new clsBeCliente_tipo();
 
 
     public clsBeCliente() {
@@ -40,7 +52,8 @@ public class clsBeCliente {
                         boolean Activo,boolean Realiza_manufactura,String User_agr,String Fec_agr,
                         String User_mod,String Fec_mod,boolean Despachar_lotes_completos,boolean Sistema,
                         boolean Es_bodega_recepcion,boolean Es_Bodega_Traslado,int IdUbicacionVirtual,boolean Control_Ultimo_Lote,
-                        String Referencia) {
+                        String Referencia,clsBeCliente_tipo Tipo,clsBeCliente_direccionList Drecciones,clsBeCliente_tiemposList Tiempos,
+                        clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo) {
 
         this.IdCliente=IdCliente;
         this.IdEmpresa=IdEmpresa;
@@ -67,6 +80,12 @@ public class clsBeCliente {
         this.IdUbicacionVirtual=IdUbicacionVirtual;
         this.Control_Ultimo_Lote=Control_Ultimo_Lote;
         this.Referencia=Referencia;
+        this.Tipo=Tipo;
+        this.Drecciones=Drecciones;
+        this.Tiempos=Tiempos;
+        this.Empresa=Empresa;
+        this.Propietario=Propietario;
+        this.ClienteTipo=ClienteTipo;
 
     }
 
@@ -221,7 +240,41 @@ public class clsBeCliente {
     public void setReferencia(String value) {
         Referencia=value;
     }
+    public clsBeCliente_tipo getTipo() {
+        return Tipo;
+    }
+    public void setTipo(clsBeCliente_tipo value) {
+        Tipo=value;
+    }
+    public clsBeCliente_direccionList getDrecciones() {
+        return Drecciones;
+    }
+    public void setDrecciones(clsBeCliente_direccionList value) {
+        Drecciones=value;
+    }
+    public clsBeCliente_tiemposList getTiempos() {
+        return Tiempos;
+    }
+    public void setTiempos(clsBeCliente_tiemposList value) {
+        Tiempos=value;
+    }
+    public clsBeEmpresa getEmpresa() {
+        return Empresa;
+    }
+    public void setEmpresa(clsBeEmpresa value) {
+        Empresa=value;
+    }
+    public clsBePropietarios getPropietario() {
+        return Propietario;
+    }
+    public void setPropietario(clsBePropietarios value) {
+        Propietario=value;
+    }
+    public clsBeCliente_tipo getClienteTipo() {
+        return ClienteTipo;
+    }
+    public void setClienteTipo(clsBeCliente_tipo value) {
+        ClienteTipo=value;
+    }
 
 }
-
-

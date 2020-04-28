@@ -2,6 +2,7 @@ package com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc;
 
 import com.dts.classes.Mantenimientos.Cliente.clsBeCliente.clsBeCliente;
 import com.dts.classes.Mantenimientos.Propietario.Propietario_bodega.clsBePropietario_bodega;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_det.clsBeTrans_pe_detList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
 
@@ -65,6 +66,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Referencia_Documento_Ingreso_Bodega_Destino="";
     @Element(required=false) public boolean Sync_MI3=false;
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public clsBeTrans_pe_detList Detalle=new clsBeTrans_pe_detList();
     @Element(required=false) public clsBeTrans_picking_enc Picking=new clsBeTrans_picking_enc();
     @Element(required=false) public clsBePropietario_bodega PropietarioBodega=new clsBePropietario_bodega();
     @Element(required=false) public clsBeCliente Cliente=new clsBeCliente();
@@ -90,7 +92,7 @@ public class clsBeTrans_pe_enc {
                              String RoadSucursal,int RoadIdDespacho,int RoadIdFacturacion,int RoadIdRuta,
                              int RoadIdVendedor,int RoadIdRutaDespacho,int RoadIdVendedorDespacho,String Observacion,
                              boolean PedidoRoad,String HoraEntregaDesde,String HoraEntregaHasta,String Referencia,
-                             boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,
+                             boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo) {
 
@@ -150,6 +152,7 @@ public class clsBeTrans_pe_enc {
         this.Referencia_Documento_Ingreso_Bodega_Destino=Referencia_Documento_Ingreso_Bodega_Destino;
         this.Sync_MI3=Sync_MI3;
         this.IsNew=IsNew;
+        this.Detalle=Detalle;
         this.Picking=Picking;
         this.PropietarioBodega=PropietarioBodega;
         this.Cliente=Cliente;
@@ -496,6 +499,12 @@ public class clsBeTrans_pe_enc {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+    public clsBeTrans_pe_detList getDetalle() {
+        return Detalle;
+    }
+    public void setDetalle(clsBeTrans_pe_detList value) {
+        Detalle=value;
     }
     public clsBeTrans_picking_enc getPicking() {
         return Picking;

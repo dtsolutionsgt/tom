@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
@@ -36,10 +39,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import br.com.zbra.androidlinq.Stream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static java.util.stream.Collectors.groupingBy;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -1194,6 +1203,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Obteniendo la ubicación por defecto de la recepción");
+            progress.show();
 
             cvUbicOrigID = (Integer) xobj.getSingle("Get_IdUbic_Ciega_Recepcion_By_IdBodegaResult",int.class);
 
@@ -1217,6 +1227,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Obteniendo el estado del producto");
+            progress.show();
 
             gProdEstado = xobj.getresult(clsBeProducto_estado.class,"Get_Single_By_IdEstado");
 
@@ -1225,6 +1236,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1330,6 +1342,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Validando ubicación");
+            progress.show();
 
             bodega_ubicacion_destino = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
@@ -1347,8 +1360,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
             }
 
-
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1359,6 +1372,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Cargando datos del producto");
+            progress.show();
 
             BeProductoUbicacion = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
 
@@ -1384,6 +1398,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1394,6 +1409,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Validando ubicación");
+            progress.show();
 
             productoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
 
@@ -1401,7 +1417,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
                 lblDescProducto.setText ("Código de LP no válido");
-                return;
             }else{
 
                 if (escaneoPallet && productoList != null){
@@ -1415,7 +1430,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;
                         lblDescProducto.setText ("LP N.E.E.U");
-                        return;
                     }else{
 
                         productoList = new clsBeProductoList();
@@ -1447,6 +1461,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1457,6 +1472,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Cargando stock de producto con License Plate");
+            progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
 
@@ -1468,6 +1484,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1478,6 +1495,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Cargando producto en esta ubicación");
+            progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
 
@@ -1490,6 +1508,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1500,6 +1519,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Obteniendo nuevo correlativo de License Plate");
+            progress.show();
 
             vNuevoPalletId = (String) xobj.getSingle("Get_Nuevo_Correlativo_LicensePlateResult",String.class);
 
@@ -1523,6 +1543,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Colocando nuevo pallet");
+            progress.show();
 
             boolean result = (Boolean) xobj.getSingle("Set_Nuevo_Pallet_IdResult",boolean.class);
 
@@ -1547,6 +1568,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Validando ubicación");
+            progress.show();
 
             productoEstadoDestinoList = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario");
 
@@ -1565,6 +1587,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -1575,6 +1598,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             progress.setMessage("Procesando cambio de ubicación");
+            progress.show();
 
             boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_DetResult",boolean.class);
 
@@ -1584,11 +1608,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 msgbox("Ocurrió un error al procesar el cambio de ubicación");
             }
 
-            progress.cancel();
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
+        progress.cancel();
 
     }
 
@@ -1598,6 +1622,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             boolean resultado = false;
 
             progress.setMessage("Procesando cambio");
+            progress.show();
 
             resultado = (Boolean) xobj.getSingle("Aplica_Cambio_Estado_Ubic_HHResult",boolean.class);
             vIdStockNuevo = (Integer) xobj.getSingle("pIdStockNuevo",int.class);
@@ -1653,6 +1678,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void inicializaTarea(boolean finalizar){
         try{
 
+            progress.setMessage("Inicializando tarea");
+            progress.show();
+
             cvUbicOrigID = 0;
             txtCodigoPrd.setText("");
             lblDescProducto.setText("");
@@ -1701,6 +1729,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         }catch (Exception ex){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
@@ -1708,6 +1737,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     private void inicializaTareaSinUbic(){
         try{
+            progress.setMessage("Inicializando tarea");
+            progress.show();
 
             txtCodigoPrd.setText("");
             lblDescProducto.setText("");
@@ -1748,6 +1779,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicOrigen.requestFocus();
 
         }catch (Exception ex){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }

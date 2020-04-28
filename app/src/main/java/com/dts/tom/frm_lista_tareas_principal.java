@@ -17,6 +17,10 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_encList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
@@ -42,12 +46,15 @@ public class frm_lista_tareas_principal extends PBase {
 
     private clsBeTareasIngresoHHList pListBeTareasIngresoHH = new clsBeTareasIngresoHHList();
     private clsBeTrans_picking_encList pListBeTareasPickingHH = new clsBeTrans_picking_encList();
+    private clsBeTrans_pe_encList pListBeTransPeEnc = new clsBeTrans_pe_encList();
 
     private ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
     private ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
+    private ArrayList<clsBeTrans_pe_enc> BeListTareasPedido = new ArrayList<clsBeTrans_pe_enc>();
 
     private list_adapter_tareashh adapter;
     private list_adapt_tareashh_picking adapterPicking;
+    private list_adapt_tareas_verificacion adapterVerificacion;
     private ListView listView;
     private clsBeTareasIngresoHH selitem;
     private clsBeTrans_picking_enc selitempicking;
@@ -95,11 +102,12 @@ public class frm_lista_tareas_principal extends PBase {
                 }else if (gl.tipoIngreso.equals("HSOC00")){
                     gl.TipoOpcion =2;
                     execws(2);
-
                 }
 
             }else if(gl.tipoTarea==5){
                 execws(3);
+            }else if(gl.tipoTarea==6){
+                execws(4);
             }
 
         }catch (Exception e){
@@ -128,7 +136,8 @@ public class frm_lista_tareas_principal extends PBase {
                         callMethod("Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega", "pIdBodega",gl.IdBodega,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
-                        //callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
+                        callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega","pIdBodega",gl.IdBodega);
+                        break;
                 }
 
                 anim.cancel();
@@ -154,7 +163,8 @@ public class frm_lista_tareas_principal extends PBase {
                     processListTareasPicking();
                     break;
                 case 4:
-                    //processUsers();break;
+                    processListTareasVerificacion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -184,7 +194,6 @@ public class frm_lista_tareas_principal extends PBase {
 
     }
 
-
     private void processListRecepCiega(){
 
         try {
@@ -207,6 +216,21 @@ public class frm_lista_tareas_principal extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processListTareasPicking:"+e.getMessage());
+        }
+
+    }
+
+    private void processListTareasVerificacion(){
+
+        try{
+
+            pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_All_Pedidos_A_Verificar_By_IdBodega");
+
+            Llena_Tareas_Verificacion();
+
+        }catch (Exception e){
+            mu.msgbox("processListTareasPicking:"+e.getMessage());
+            progress.cancel();
         }
 
     }
@@ -262,6 +286,54 @@ public class frm_lista_tareas_principal extends PBase {
 
     }
 
+    private void Llena_Tareas_Verificacion(){
+        clsBeTrans_pe_enc vItem;
+        BeListTareasPedido.clear();
+        int count;
+
+        try{
+
+            progress.setMessage("Listando tareas");
+            progress.show();
+
+            if (pListBeTransPeEnc!=null){
+                if (pListBeTransPeEnc.items!=null){
+
+                    for (clsBeTrans_pe_enc BePedEnc:pListBeTransPeEnc.items ){
+
+                        vItem = new clsBeTrans_pe_enc();
+
+                        vItem.IdPedidoEnc = BePedEnc.IdPedidoEnc;
+                        vItem.Referencia = BePedEnc.Referencia;
+                        vItem.IdMuelle = BePedEnc.IdMuelle;
+                        vItem.IdCliente = BePedEnc.getIdCliente();
+                        vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Nombre_comercial;
+                        vItem.Estado = BePedEnc.Estado;
+                        vItem.IdPickingEnc = BePedEnc.IdPickingEnc;;
+                        vItem.Hora_ini = du.convierteHoraMostar(BePedEnc.Hora_ini);
+                        vItem.Hora_fin = du.convierteHoraMostar(BePedEnc.Hora_fin);
+
+                        BeListTareasPedido.add(vItem);
+
+                    }
+                    count = BeListTareasPedido.size()-1;
+                    lblRegs.setText("Regs: "+ count);
+                }
+            }
+
+            Collections.sort(BeListTareasPedido,new OrdenarItemsPedido());
+
+            adapterVerificacion=new list_adapt_tareas_verificacion(this,BeListTareasPedido);
+            listView.setAdapter(adapterVerificacion);
+
+            progress.cancel();
+
+        }catch (Exception e){
+            mu.msgbox("Llena_Tareas_Verificacion " + e.getMessage());
+            progress.cancel();
+        }
+
+    }
 
     private void listItems(){
         clsBeTareasIngresoHH vItem;
@@ -334,6 +406,14 @@ public class frm_lista_tareas_principal extends PBase {
         public int compare(clsBeTrans_picking_enc left,clsBeTrans_picking_enc rigth){
             return left.IdPickingEnc-rigth.IdPickingEnc;
             //return left.Nombre.compareTo(rigth.Nombre);
+        }
+
+    }
+
+    public class OrdenarItemsPedido implements Comparator<clsBeTrans_pe_enc> {
+
+        public int compare(clsBeTrans_pe_enc left,clsBeTrans_pe_enc rigth){
+            return left.IdPickingEnc-rigth.IdPedidoEnc;
         }
 
     }
@@ -421,7 +501,6 @@ public class frm_lista_tareas_principal extends PBase {
         progress.show();
     }
 
-
     private void setHandlers() {
 
         try {
@@ -483,8 +562,6 @@ public class frm_lista_tareas_principal extends PBase {
             }
 
     }
-
-
 
     protected void onResume() {
 
@@ -562,6 +639,5 @@ public class frm_lista_tareas_principal extends PBase {
         }
 
     }
-
 
 }

@@ -13,6 +13,7 @@ import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
+import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 
@@ -202,8 +203,9 @@ public class Mainmenu extends PBase {
                 case 5://Picking
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this,frm_lista_tareas_principal.class));
-                case 6://Verificacion♠
-
+                case 6://Verificacion
+                    gl.tipoTarea = idmenu;
+                    startActivity(new Intent(this, frm_lista_tareas_principal.class));
                 case 7:
 
                 case 8:

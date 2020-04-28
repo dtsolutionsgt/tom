@@ -340,6 +340,9 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                 if(pListBeTransUbicHhEnc.items!=null){
                     Llena_Tareas_Ubicacion();
                 }
+            }else{
+                progress.cancel();
+                toast("No hay tareas de cambio de ubicación dirigidas");
             }
 
         } catch (Exception e) {

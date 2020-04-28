@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".list_adapt_tareas_verificacion">
+
+    <LinearLayout
+        android:id="@+id/linearEncCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/color_medium"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblEPedEnc"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Ped Enc"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEReferencia"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Referencia"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEMuelle"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Muelle"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEIdCliente"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:text="Id Cliente"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblECliente"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:text="Cliente"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEEstado"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Estado"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEIdPickingEnc"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="IdPickingEnc"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearDetalleCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearEncCB"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblPedEnc"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Ped Enc"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblReferencia"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="458796"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblMuelle"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="M1"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdCliente"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="5dp"
+            android:text="2548"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCliente"
+            android:layout_width="275dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Cliente"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Buen Estado"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdPickingEnc"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="1236"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</RelativeLayout>

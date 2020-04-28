@@ -24,7 +24,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
 
         <Button
             android:id="@+id/btnFinalizarTareaPicking"
@@ -72,7 +73,7 @@
         android:layout_alignParentEnd="true">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/txtCodProd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -139,9 +140,11 @@
         <ListView
             android:id="@+id/ListDetVeri"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="421dp"
             android:layout_above="@+id/relListVeri"
-            android:layout_below="@+id/editText" />
+            android:layout_below="@+id/txtCodProd"
+            android:layout_marginTop="23dp"
+            android:layout_marginBottom="-1dp" />
 
     </RelativeLayout>
 </RelativeLayout>
