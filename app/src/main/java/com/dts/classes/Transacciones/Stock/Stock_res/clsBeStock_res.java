@@ -37,7 +37,7 @@ public class clsBeStock_res {
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="";
     @Element(required=false) public String Host="";
-    @Element(required=false) public int añada=0;
+    @Element(required=false) public int anada=0;
     @Element(required=false) public String Fecha_manufactura="";
     @Element(required=false) public String Atributo_Variante_1="";
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
@@ -47,15 +47,15 @@ public class clsBeStock_res {
     public clsBeStock_res() {
     }
 
-    public clsBeStock_res(int IdStockRes,int IdTransaccion,String Indicador,int IdPedidoDet,
-                          int IdBodega,int IdStock,int IdPropietarioBodega,int IdProductoBodega,
-                          int IdUbicacion,int IdProductoEstado,int IdPresentacion,int IdUnidadMedida,
-                          String Lote,String Lic_plate,String Serial,double Cantidad,
-                          double Peso,String Estado,String Fecha_ingreso,String Fecha_vence,
-                          double Uds_lic_plate,String Ubicacion_ant,int No_bulto,int IdRecepcion,
-                          int IdPicking,int IdPedido,int IdDespacho,String User_agr,
-                          String Fec_agr,String User_mod,String Fec_mod,String Host,
-                          int añada,String Fecha_manufactura,String Atributo_Variante_1,boolean Control_Ultimo_Lote,
+    public clsBeStock_res(int IdStockRes, int IdTransaccion, String Indicador, int IdPedidoDet,
+                          int IdBodega, int IdStock, int IdPropietarioBodega, int IdProductoBodega,
+                          int IdUbicacion, int IdProductoEstado, int IdPresentacion, int IdUnidadMedida,
+                          String Lote, String Lic_plate, String Serial, double Cantidad,
+                          double Peso, String Estado, String Fecha_ingreso, String Fecha_vence,
+                          double Uds_lic_plate, String Ubicacion_ant, int No_bulto, int IdRecepcion,
+                          int IdPicking, int IdPedido, int IdDespacho, String User_agr,
+                          String Fec_agr, String User_mod, String Fec_mod, String Host,
+                          int anada, String Fecha_manufactura, String Atributo_Variante_1, boolean Control_Ultimo_Lote,
                           String Ultimo_Lote) {
 
         this.IdStockRes=IdStockRes;
@@ -90,7 +90,7 @@ public class clsBeStock_res {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.Host=Host;
-        this.añada=añada;
+        this.anada = anada;
         this.Fecha_manufactura=Fecha_manufactura;
         this.Atributo_Variante_1=Atributo_Variante_1;
         this.Control_Ultimo_Lote=Control_Ultimo_Lote;
@@ -292,10 +292,10 @@ public class clsBeStock_res {
         Host=value;
     }
     public int getañada() {
-        return añada;
+        return anada;
     }
     public void setañada(int value) {
-        añada=value;
+        anada =value;
     }
     public String getFecha_manufactura() {
         return Fecha_manufactura;

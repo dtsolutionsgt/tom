@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -54,7 +55,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Button btnPendientes;
     private EditText txtUbicacionFiltro;
 
-    private clsBeTrans_picking_enc gBePicking;
+    public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
     private clsBeTrans_picking_det gbePickingDet = new clsBeTrans_picking_det();
 
@@ -328,6 +329,24 @@ public class frm_detalle_tareas_picking extends PBase {
         }
     }
 
+    private void Lista_Detalle(){
+
+        try{
+
+            if (BeListPickingUbic.size()==0){
+
+                btnPendientes.setText("Completa");
+                btnPendientes.setBackgroundColor(Color.parseColor("#FF99CC00"));
+
+                //Finalizar_Picking();
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Lista_Detalle:"+e.getMessage());
+        }
+    }
+
     public class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
 
         public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
@@ -354,9 +373,10 @@ public class frm_detalle_tareas_picking extends PBase {
                         callMethod("Actualizar_Estado_Picking","oBeTrans_picking_enc",gBePicking);
                         break;
                     case 3:
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc","pIdPickingEnc",gBePicking.IdPickingEnc,
+                                "pDetalleOperador",gBePicking.Detalle_operador,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
-                        //callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
                 }
 
                 progress.cancel();
@@ -381,7 +401,7 @@ public class frm_detalle_tareas_picking extends PBase {
                     procesActualizarEstadoPicking();
                     break;
                 case 3:
-
+                    processGetAllPickingUbic();
                     break;
                 case 4:
             }
@@ -436,6 +456,21 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
+    private void processGetAllPickingUbic(){
+
+        try{
+
+            plistPickingUbi = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
+
+            Lista_Detalle_Picking();
+
+            Lista_Detalle();
+
+        }catch (Exception e){
+            mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
+        }
+    }
+
     @Override
     protected void onResume() {
 
@@ -445,6 +480,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (browse==1){
                 browse=0;
+                txtUbicacionFiltro.setText("");
+                execws(3);
             }
 
         }catch (Exception e){

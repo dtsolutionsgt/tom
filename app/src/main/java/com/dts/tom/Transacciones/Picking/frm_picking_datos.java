@@ -24,7 +24,9 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_resList;
 import com.dts.tom.PBase;
@@ -35,6 +37,7 @@ import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
+import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePicking;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selitem;
 
@@ -48,9 +51,11 @@ public class frm_picking_datos extends PBase {
     private clsBeProducto_estadoList LProductoEstadoIngreso = new clsBeProducto_estadoList();
     private clsBeProductoList ListBeStockPalletEscaneado = new clsBeProductoList();
     private clsBeProducto BeStockPallet = new clsBeProducto();
-
+    private clsBeTrans_picking_det BePickingDet = new clsBeTrans_picking_det();
+    private clsBeStock_res BeStockRes = new clsBeStock_res();
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
+    private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate;
@@ -112,6 +117,17 @@ public class frm_picking_datos extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         Procesa_Barra();
+                    }
+
+                    return false;
+                }
+            });
+
+            txtCantidadPick.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        Procesar_Registro();
                     }
 
                     return false;
@@ -906,6 +922,10 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    public void BotonGuardar(View view){
+        Procesar_Registro();
+    }
+
     private void Procesar_Registro(){
 
         try{
@@ -958,12 +978,74 @@ public class frm_picking_datos extends PBase {
 
     private void Guardar_Picking(){
 
-        try{
+        double CantPendiente = 0;
+        double Cantidad = 0;
 
+        try{
 
             if (TipoLista==2){
 
+                double vDif = gBePickingUbic.Cantidad_Solicitada - Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida;
+
+                if (vDif<0){
+                    mu.msgbox("La cantidad recibida es mayor a la cantidad solicitada, no se puede ingresar esa cantidad");
+                    return;
+                }
+
+                gBePickingUbic.Cantidad_Recibida +=Double.parseDouble(txtCantidadPick.getText().toString());
+
+                if (gBePicking.verifica_auto){
+                    gBePickingUbic.Cantidad_Verificada = gBePickingUbic.Cantidad_Recibida;
+                }
+
+                gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString());
+                gBePickingUbic.Acepto = true;
+                gBePickingUbic.Encontrado=true;
+                gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
+                gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                gBePickingUbic.Fec_mod = du.getFechaActual();
+
+                BePickingDet.IdPickingDet = gBePickingUbic.IdPickingDet;
+                execws(5);
+
             }else{
+
+                Cantidad = Double.parseDouble(txtCantidadPick.getText().toString());
+
+                pSubListPickingU = new clsBeTrans_picking_ubicList();
+
+                pSubListPickingU.items = stream(plistPickingUbi.items).where(c->c.IdUbicacion==gBePickingUbic.IdUbicacion).toList();
+
+                for (clsBeTrans_picking_ubic vBePickingUbic: pSubListPickingU.items){
+
+                    if ((vBePickingUbic.Cantidad_Recibida+Cantidad)>vBePickingUbic.Cantidad_Solicitada){
+
+                        CantPendiente = vBePickingUbic.Cantidad_Solicitada-vBePickingUbic.Cantidad_Recibida;
+
+                    }else {
+
+                        CantPendiente = Cantidad;
+
+                    }
+
+                    vBePickingUbic.Cantidad_Recibida +=CantPendiente;
+                    vBePickingUbic.Acepto = true;
+                    vBePickingUbic.Encontrado = true;
+                    vBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
+                    vBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                    vBePickingUbic.Fec_mod = du.getFechaActual();
+
+                    BePickingDet.IdPickingDet = vBePickingUbic.IdPickingDet;
+                    execws(5);
+
+                    if ((Cantidad-CantPendiente)==0){
+                        break;
+                    }else{
+                        Cantidad-=CantPendiente;
+                    }
+                }
+
+                doExit();
 
             }
 
@@ -994,6 +1076,20 @@ public class frm_picking_datos extends PBase {
                     case 4:
                         callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtBarra.getText().toString(),"IdBodega",gl.IdBodega);
                         break;
+                    case 5:
+                        callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
+                        break;
+                    case 6:
+                        callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
+                        break;
+                    case 7:
+                        callMethod("Actualizar_Picking","oBeTrans_picking_ubic",gBePickingUbic,"BeStockRes",BeStockRes,
+                                "oBeTrans_picking_det",BePickingDet,"IdBodega",gl.IdBodega);
+                        break;
+                    case 8:
+                        callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet","oBeTrans_picking_ubic",gBePickingUbic,
+                                "BeStockRes",BeStockRes,"oBeTrans_picking_det",BePickingDet,"IdBodega",gl.IdBodega,"pBeStockPalletReemplazo",BeStockPallet.Stock);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -1020,6 +1116,22 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 4:
                     processProductoForHH();
+                    break;
+                case 5:
+                    processBePickingDet();
+                    break;
+                case 6:
+                    processBeStockRes();
+                    break;
+                case 7:
+                    if (TipoLista==2){
+                        doExit();
+                    }
+                    break;
+                case 8:
+                    if (TipoLista==2){
+                        doExit();
+                    }
                     break;
             }
 
@@ -1128,6 +1240,43 @@ public class frm_picking_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processProductoForHH:"+e.getMessage());
+        }
+    }
+
+    private void processBePickingDet(){
+
+        try{
+
+            BePickingDet = xobj.getresultSingle(clsBeTrans_picking_det.class,"oBeTrans_picking_det");
+            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString());
+            BePickingDet.User_mod = du.getFechaActual();
+
+            BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
+            execws(6);
+
+        }catch (Exception e){
+            mu.msgbox("processBePickingDet:"+e.getMessage());
+        }
+    }
+
+    private void processBeStockRes(){
+
+        try{
+
+            BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"pBeStock_res");
+
+            BeStockRes.Estado = "PICKEADO";
+            BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
+            BeStockRes.Fec_mod = du.getFechaActual();
+
+            if (!ReemplazoLP){
+                execws(7);
+            }else{
+                execws(8);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processBeStockRes:"+e.getMessage());
         }
     }
 
