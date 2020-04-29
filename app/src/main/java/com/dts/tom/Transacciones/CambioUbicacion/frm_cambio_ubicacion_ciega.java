@@ -28,6 +28,8 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
+import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage1.USUbicStrucStage1List;
+import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucStage5List;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
@@ -57,7 +59,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
 
@@ -87,13 +89,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     private clsBeProducto_estadoList productoEstadoDestinoList = new clsBeProducto_estadoList();
 
+    private USUbicStrucStage5List lUbicSug = new USUbicStrucStage5List();
+
     private ArrayList<String> cmbPresentacionList = new ArrayList<String>();
     private ArrayList<String> cmbLoteList = new ArrayList<String>();
     private ArrayList<String> cmbVenceList = new ArrayList<String>();
     private ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
     private ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
 
-    String lote = "", fechaVence = "";
+    private String lote = "", fechaVence = "";
+
+    private String  fechaVenceU;
 
     private int cvUbicOrigID;
     private int cvProdID;
@@ -155,6 +161,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblEstadoDestino = (TextView) findViewById(R.id.lblEstadoDestino);
             lblCant = (TextView) findViewById(R.id.lblCant);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+            lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
 
             cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
             cmbLote = (Spinner) findViewById(R.id.cmbLote);
@@ -808,6 +815,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void llenaDatosProducto() {
         try {
 
+            progress.setMessage("Cargando datos del producto");
+            progress.show();
+
             String pbarra;
 
             pbarra = txtCodigoPrd.getText().toString();
@@ -847,6 +857,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception ex) {
+            progress.cancel();
             msgbox("Error " + ex.getMessage());
         }
     }
@@ -1019,6 +1030,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             txtCantidad.requestFocus();
 
+            fechaVenceU = app.strFechaXMLCombo(cvVence);
+            execws(15);
+
         }catch(Exception ex){
             msgbox("Llena cantidad " + ex.getMessage());
         }finally {
@@ -1088,6 +1102,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     break;
                 case 14:
                     processCambioUbicEstHH();
+                    break;
+                case 15:
+                    processUbicacionDestSugerida();
+                    break;
+                case 16:
+                    processUbicDestinoSug();
                     break;
             }
 
@@ -1174,6 +1194,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pStockRes",vStockRes,
                                 "pIdStockNuevo",vIdStockNuevo,
                                 "pIdMovimientoNuevo",vIdMovimientoNuevo);
+                        break;
+                    case 15:
+                        callMethod("ml_get_ubicacion_sugerida","pIdProducto",cvProdID,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdProductoBodega",cvProd.IdProductoBodega,
+                                "pLote",cvLote,
+                                "pFechaVence",fechaVenceU,
+                                "pIdProductoEstado",cvEstOrigen,
+                                "pIdUmBas",cvUMBID,
+                                "pIdPresentacion",cvPresID);
+                        break;
+                    case 16://Obtiene descripción de la ubicación destino sugerida
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -1353,12 +1388,39 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 throw new Exception("Ubicación destino incorrecta");
             }else{
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                lblUbicCompDestino.setText(bodega_ubicacion_destino.getNombreCompleto());
                 if(gl.modo_cambio==2 && !vProcesar){
                     cmbEstadoDestino.requestFocus();
                 }else{
                     datosOk();
                 }
             }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processUbicDestinoSug(){
+
+        try {
+
+            progress.setMessage("Obteniendo descripción de la ubicación destino sugerida");
+            progress.show();
+
+            bodega_ubicacion_destino = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if (bodega_ubicacion_destino == null){
+                throw new Exception("Ubicación destino sugerida incorrecta");
+            }else{
+                cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+            }
+
+            txtCantidad.requestFocus();
+            progress.cancel();
 
         } catch (Exception e) {
             progress.cancel();
@@ -1675,6 +1737,33 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    private void processUbicacionDestSugerida(){
+        try{
+
+            progress.setMessage("Procesando ubidacion destino sugerida");
+            progress.show();
+
+            lUbicSug = xobj.getresult(USUbicStrucStage5List.class,"ml_get_ubicacion_sugerida");
+
+            if (lUbicSug != null){
+                if(lUbicSug.items.size()>0){
+
+                    txtUbicDestino.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    validaDestinoSug();
+
+                }
+
+            }else{
+                toast("No existen ubicaciones sugeridas");
+            }
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
     private void inicializaTarea(boolean finalizar){
         try{
 
@@ -1965,6 +2054,24 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             btnGuardarCiega.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private void validaDestinoSug(){
+
+        try{
+
+            if (txtUbicDestino.getText().toString() !=""){
+
+                bodega_ubicacion_destino = new clsBeBodega_ubicacion();
+
+                //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino sugerida
+                execws(16);
+            }
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
     }
 
     private void datosOk(){

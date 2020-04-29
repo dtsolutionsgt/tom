@@ -345,11 +345,26 @@
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/lblUbicCompDestino"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lblDestino"
+                    android:layout_alignEnd="@+id/txtUbicDest"
+                    android:layout_alignParentStart="false"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="7dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="-"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
                 <Spinner
                     android:id="@+id/cmbEstadoDestino"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_below="@+id/txtUbicDestino"
+                    android:layout_below="@id/lblUbicCompDestino"
                     android:layout_alignStart="@+id/txtUbicDestino"
                     android:layout_alignEnd="@+id/txtUbicDestino"
                     android:layout_alignParentBottom="false"
@@ -359,6 +374,7 @@
                     android:id="@+id/lblEstadoDestino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/lblUbicCompDestino"
                     android:layout_alignStart="@id/lblDestino"
                     android:layout_alignTop="@+id/cmbEstadoDestino"
                     android:layout_alignEnd="@+id/lblDestino"

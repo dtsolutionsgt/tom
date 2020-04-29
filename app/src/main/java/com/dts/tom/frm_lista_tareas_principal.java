@@ -27,6 +27,7 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
+import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +59,7 @@ public class frm_lista_tareas_principal extends PBase {
     private ListView listView;
     private clsBeTareasIngresoHH selitem;
     private clsBeTrans_picking_enc selitempicking;
+    private clsBeTrans_pe_enc selitempe;
     private ProgressBar pbar;
     private ObjectAnimator anim;
     private ProgressDialog progress;
@@ -93,20 +95,23 @@ public class frm_lista_tareas_principal extends PBase {
 
         try{
 
-
             if (gl.tipoTarea==1){
 
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
+                    //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega
                     execws(1);
                 }else if (gl.tipoIngreso.equals("HSOC00")){
                     gl.TipoOpcion =2;
+                    //Llama al método del WS Get_All_Rec_Ciegas_For_HH_By_IdBodega
                     execws(2);
                 }
 
             }else if(gl.tipoTarea==5){
+                //Llama al método del WS Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega
                 execws(3);
             }else if(gl.tipoTarea==6){
+                //Llama al método del WS Get_All_Pedidos_A_Verificar_By_IdBodega
                 execws(4);
             }
 
@@ -316,7 +321,7 @@ public class frm_lista_tareas_principal extends PBase {
                         BeListTareasPedido.add(vItem);
 
                     }
-                    count = BeListTareasPedido.size()-1;
+                    count = BeListTareasPedido.size();
                     lblRegs.setText("Regs: "+ count);
                 }
             }
@@ -413,7 +418,7 @@ public class frm_lista_tareas_principal extends PBase {
     public class OrdenarItemsPedido implements Comparator<clsBeTrans_pe_enc> {
 
         public int compare(clsBeTrans_pe_enc left,clsBeTrans_pe_enc rigth){
-            return left.IdPickingEnc-rigth.IdPedidoEnc;
+            return rigth.IdPedidoEnc-left.IdPickingEnc;
         }
 
     }
@@ -438,6 +443,11 @@ public class frm_lista_tareas_principal extends PBase {
                     startActivity(new Intent(this, frm_detalle_tareas_picking.class));
                     break;
 
+                case 6:
+                    browse=6;
+                    gl.pIdPedidoEnc = selid;
+                    startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
+                    break;
             }
 
         }catch (Exception e){
@@ -477,12 +487,36 @@ public class frm_lista_tareas_principal extends PBase {
 
                 selid = Integer.parseInt(txtTarea.getText().toString());
 
-                vIdTarea = stream(pListBeTareasIngresoHH.items).where(c->c.IdRecepcionEnc == selid).select(c->c.IdRecepcionEnc).first();
+                if (gl.tipoTarea==1){
 
-                if (vIdTarea>0){
-                    procesar_registro();
-                }else{
-                    mu.msgbox("No existe la tarea "+selid);
+                    vIdTarea = stream(pListBeTareasIngresoHH.items).where(c->c.IdRecepcionEnc == selid).select(c->c.IdRecepcionEnc).first();
+
+                    if (vIdTarea>0){
+                        procesar_registro();
+                    }else{
+                        mu.msgbox("No existe la tarea "+selid);
+                    }
+
+                }else if(gl.tipoTarea==5){
+
+                    vIdTarea = stream(pListBeTareasPickingHH.items).where(c->c.IdPickingEnc == selid).select(c->c.IdPickingEnc).first();
+
+                    if (vIdTarea>0){
+                        procesar_registro();
+                    }else{
+                        mu.msgbox("No existe la tarea "+selid);
+                    }
+
+                }else if(gl.tipoTarea==6){
+
+                    vIdTarea = stream(pListBeTransPeEnc.items).where(c->c.IdPedidoEnc == selid).select(c->c.IdPedidoEnc).first();
+
+                    if (vIdTarea>0){
+                        procesar_registro();
+                    }else{
+                        mu.msgbox("No existe la tarea "+selid);
+                    }
+
                 }
 
             }
@@ -504,7 +538,6 @@ public class frm_lista_tareas_principal extends PBase {
     private void setHandlers() {
 
         try {
-
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -535,6 +568,18 @@ public class frm_lista_tareas_principal extends PBase {
                             selid = sitem.IdPickingEnc;
                             selidx = position;
                             adapterPicking.setSelectedIndex(position);
+
+                            procesar_registro();
+
+                        }else if(gl.tipoTarea==6){
+
+                            Object lvObj = listView.getItemAtPosition(position);
+                            clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
+                            selitempe = sitem;
+
+                            selid = sitem.IdPedidoEnc;
+                            selidx = position;
+                            adapterVerificacion.setSelectedIndex(position);
 
                             procesar_registro();
 

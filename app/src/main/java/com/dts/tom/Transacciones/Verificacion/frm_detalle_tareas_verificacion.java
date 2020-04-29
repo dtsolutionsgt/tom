@@ -93,6 +93,24 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
+    private void Load(){
+
+        try{
+
+            listDetVeri.setAdapter(null);
+
+            if (gl.IdTareaUbicEnc>0){
+                progress.setMessage("Cargando detalle de tarea de verificación");
+                progress.show();
+                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
+                execws(1);
+            }
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox(e.getClass()+e.getMessage());
+        }
+    }
+
     public void ProgressDialog(String mensaje){
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
