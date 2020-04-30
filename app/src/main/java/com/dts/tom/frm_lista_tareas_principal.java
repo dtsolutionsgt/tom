@@ -126,6 +126,78 @@ public class frm_lista_tareas_principal extends PBase {
 
     }
 
+    private void setHandlers() {
+
+        try {
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    selid = 0;
+
+                    if (gl.tipoTarea==1){
+
+                        if (position > 0) {
+                            Object lvObj = listView.getItemAtPosition(position);
+                            clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                            selitem = sitem;
+
+                            selid = sitem.IdRecepcionEnc;
+                            selidx = position;
+                            adapter.setSelectedIndex(position);
+
+                            procesar_registro();
+                        }
+
+                    }else if(gl.tipoTarea==5){
+
+                        if (position > 0){
+                            Object lvObj = listView.getItemAtPosition(position);
+                            clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                            selitempicking = sitem;
+
+                            selid = sitem.IdPickingEnc;
+                            selidx = position;
+                            adapterPicking.setSelectedIndex(position);
+
+                            procesar_registro();
+                        }
+
+                    }else if(gl.tipoTarea==6){
+
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
+                        selitempe = sitem;
+
+                        selid = sitem.IdPedidoEnc;
+                        selidx = position;
+                        adapterVerificacion.setSelectedIndex(position);
+
+                        procesar_registro();
+
+                    }
+                }
+
+            });
+
+            txtTarea.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        GetFila();
+                    }
+
+                    return false;
+                }
+            });
+
+        }catch (Exception e){
+
+        }
+
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -538,79 +610,6 @@ public class frm_lista_tareas_principal extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
-    }
-
-    private void setHandlers() {
-
-        try {
-
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    selid = 0;
-
-                    if (position > 0) {
-
-                        if (gl.tipoTarea==1){
-
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                            selitem = sitem;
-
-                            selid = sitem.IdRecepcionEnc;
-                            selidx = position;
-                            adapter.setSelectedIndex(position);
-
-                            procesar_registro();
-
-                        }else if(gl.tipoTarea==5){
-
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
-                            selitempicking = sitem;
-
-                            selid = sitem.IdPickingEnc;
-                            selidx = position;
-                            adapterPicking.setSelectedIndex(position);
-
-                            procesar_registro();
-
-                        }else if(gl.tipoTarea==6){
-
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
-                            selitempe = sitem;
-
-                            selid = sitem.IdPedidoEnc;
-                            selidx = position;
-                            adapterVerificacion.setSelectedIndex(position);
-
-                            procesar_registro();
-
-                        }
-
-                    }
-
-                }
-
-            });
-
-            txtTarea.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        GetFila();
-                    }
-
-                    return false;
-                }
-            });
-
-            }catch (Exception e){
-
-            }
-
     }
 
     protected void onResume() {
