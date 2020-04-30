@@ -628,6 +628,10 @@ public class frm_lista_tareas_principal extends PBase {
                 Load();
             }
 
+            if (browse==6){
+                browse=0;
+                Load();
+            }
 
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());

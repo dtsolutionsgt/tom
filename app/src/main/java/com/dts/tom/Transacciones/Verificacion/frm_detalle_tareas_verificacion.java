@@ -289,7 +289,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private void  processEncabezadoPedido(){
         try{
-            progress.setMessage("Cargando datos del encabezado del pedido");
+            progress.setMessage("Cargando datos del encabezado del pedido...");
             progress.show();
 
             gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
@@ -319,7 +319,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try {
 
-            progress.setMessage("Obteniendo Tareas de verificación en HH");
+            progress.setMessage("Obteniendo Tareas de verificación en HH...");
 
             pListaPedidoDet = xobj.getresult(clsBeDetallePedidoAVerificarList.class,"Get_Detalle_By_IdPedidoEnc");
 
@@ -349,7 +349,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo listado de Picking Ubic");
+            progress.setMessage("Obteniendo listado de Picking Ubic...");
 
             plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
 
@@ -366,7 +366,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo listado de Picking Ubic");
+            progress.setMessage("Obteniendo listado de Picking Ubic para finalizar tarea...");
 
             preguntoPorDiferencia = false;
             finalizar = true;
@@ -386,11 +386,23 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         }
                     }
 
+                    progress.cancel();
+                    if (finalizar){
+                        if (!preguntoPorDiferencia){
+                            msgAskFinalizar("Finalizar la tarea de verificación");
+                        }
+                    }
+
                 }else{
                     progress.cancel();
                 }
             }else{
                 progress.cancel();
+                if (finalizar){
+                    if (!preguntoPorDiferencia){
+                        msgAskFinalizar("Finalizar la tarea de verificación");
+                    }
+                }
             }
 
         }catch (Exception ex){
@@ -404,8 +416,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Actualizando estado de la verificacion");
-
+            progress.setMessage("Actualizando estado de la verificacion...");
+            progress.show();
             int actualizados = (Integer) xobj.getSingle("Set_Estado_Pedido_VerificadoResult",Integer.class);
 
             //Llama a método del WS Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc
@@ -469,7 +481,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Actualizando picking verificado");
+            progress.setMessage("Actualizando picking verificado...");
 
             int actualizados = (Integer) xobj.getSingle("Actualizar_PickingEnc_VerificadoResult",Integer.class);
 
@@ -488,7 +500,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try {
 
-            progress.setMessage("Listando Tareas de verificación en HH");
+            progress.setMessage("Listando detalle de pedido para verificación en HH...");
 
             List AuxList = stream(pListaPedidoDet.items)
                     .toList();
@@ -571,7 +583,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Listando Tareas de verificación en HH");
+            progress.setMessage("Listando tareas de verificación para finalizarla...");
             progress.show();
 
             //Llama a método del WS Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc
@@ -630,6 +642,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //Llamo a método del WS Set_Estado_Pedido_Verificado
+                    progress.setMessage("Finalizando la tarea de verificación...");
+                    progress.show();
                     execws(5);
                 }
             });
@@ -643,6 +657,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             dialog.show();
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 

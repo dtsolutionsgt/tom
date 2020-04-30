@@ -342,7 +342,8 @@ public class WebService {
 
                 if(fieldname!= "Tag")
                 {
-                    if (fieldname.startsWith("Fec_") || fieldname.startsWith("Fech") || fieldname.startsWith("Hora") )
+                    if ((fieldname.startsWith("Fec_") || fieldname.startsWith("Fech") || fieldname.startsWith("Hora")) &&
+                            (!fieldname.contains("especifica")) )
                     {
                         if (obj!=null)
                         {
