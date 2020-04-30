@@ -94,6 +94,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="130dp"
             android:background="@drawable/color_medium"
+            android:onClick="BotonReemplazo"
             android:text="Reemplazo"
             android:textColor="@android:color/background_light"
             android:textSize="18sp"

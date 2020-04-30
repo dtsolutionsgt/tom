@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Presentation;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -35,6 +36,8 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.zbra.androidlinq.Linq;
+
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePicking;
@@ -46,8 +49,8 @@ public class frm_picking_datos extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private clsBeTrans_picking_ubic gBePickingUbic;
-    private clsBeProducto gBeProducto = new clsBeProducto();
+    public static clsBeTrans_picking_ubic gBePickingUbic;
+    public static clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstadoIngreso = new clsBeProducto_estadoList();
     private clsBeProductoList ListBeStockPalletEscaneado = new clsBeProductoList();
     private clsBeProducto BeStockPallet = new clsBeProducto();
@@ -66,8 +69,10 @@ public class frm_picking_datos extends PBase {
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
     private int gIdUbicacion=0;
-    private double CantReemplazar=0;
-    private boolean ReemplazoLP=false;
+    public static double CantReemplazar=0;
+    public static double CantReemplazo=0;
+    public static boolean ReemplazoLP=false;
+    public static int Tipo=0;
 
     private int DifDias = 0;
 
@@ -1054,6 +1059,76 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    public void BotonReemplazo(View view){
+
+        try {
+
+            if (txtBarra.getText().toString().isEmpty()){
+                mu.msgbox("Ingrese código del producto");
+                txtBarra.setSelectAllOnFocus(true);
+                txtBarra.requestFocus();
+                return;
+            }
+
+            if (txtCantidadPick.getText().toString().equals("0")||txtCantidadPick.getText().toString().isEmpty()||txtCantidadPick.getText().toString().equals("")){
+                mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                txtCantidadPick.setSelectAllOnFocus(true);
+                txtCantidadPick.requestFocus();
+                return;
+            }
+
+            CantReemplazo = Double.parseDouble(txtCantidadPick.getText().toString());
+
+            msgReemplazo("¿Marcar producto para reemplazo?");
+
+        }catch (Exception e){
+            mu.msgbox("BotonReemplazo:"+e.getMessage());
+        }
+    }
+
+    private void Continua_reemplazo(){
+
+        try{
+
+            Tipo = 1;
+
+            browse=1;
+            startActivity(new Intent(this, frm_danado_picking.class));
+
+        }catch (Exception e){
+            mu.msgbox("Continua_reemplazo:"+e.getMessage());
+        }
+    }
+
+    private void msgReemplazo(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Continua_reemplazo();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -1316,6 +1391,7 @@ public class frm_picking_datos extends PBase {
         }
 
     }
+
     private void doExit(){
         try{
 

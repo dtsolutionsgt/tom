@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,9 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
@@ -58,6 +61,7 @@ public class frm_detalle_tareas_picking extends PBase {
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
     private clsBeTrans_picking_det gbePickingDet = new clsBeTrans_picking_det();
+    private clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc();
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
@@ -66,6 +70,9 @@ public class frm_detalle_tareas_picking extends PBase {
     private List TipoOrden = new ArrayList();
 
     public static int TipoLista = 1;
+    public static int pOrden=1;
+    private boolean PreguntoPorDiferencia=false;
+    private boolean Finalizar=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +112,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
                         selitem = new clsBeTrans_picking_ubic();
-                        selitem = plistPickingUbi.items.get(position - 1);
+                        int IndxPos= position-1;
+                        selitem = plistPickingUbi.items.get(IndxPos);
 
                         selid = sitem.IdPickingUbic;
                         selidx = position;
@@ -115,6 +123,26 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     }
 
+                }
+
+            });
+
+            cmbOrdenadorPor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTextColor(Color.BLACK);
+                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    pOrden=position+1;
+                    Lista_Detalle_Picking();
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
                 }
 
             });
@@ -256,6 +284,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
 
+            pOrden=1;
+
             TipoLista = 2;
 
             if (gl.gIdPickingEnc>0){
@@ -318,7 +348,12 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            Collections.sort(BeListPickingUbic,new OrdenarItems());
+            if (plistPickingUbi!=null){
+                if (plistPickingUbi.items!=null){
+                    Collections.sort(BeListPickingUbic,new OrdenarItems());
+                    Collections.sort(plistPickingUbi.items,new OrdenarItems());
+                }
+            }
 
             adapter=new list_adapt_detalle_tareas_picking(this,BeListPickingUbic);
             listView.setAdapter(adapter);
@@ -338,7 +373,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 btnPendientes.setText("Completa");
                 btnPendientes.setBackgroundColor(Color.parseColor("#FF99CC00"));
 
-                //Finalizar_Picking();
+                Finalizar_Picking();
 
             }
 
@@ -347,10 +382,101 @@ public class frm_detalle_tareas_picking extends PBase {
         }
     }
 
+    public void BotonFinalizar(View view){
+        Finalizar_Picking();
+    }
+
+    private void Finalizar_Picking(){
+
+        try{
+
+            Finalizar=true;
+
+            for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
+
+                if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
+
+                    PreguntoPorDiferencia = true;
+                    msgAskPicIncompleto("El picking está incompleto, Finalizar de todas formas?");
+                    break;
+                }
+
+            }
+
+            if (Finalizar&&!PreguntoPorDiferencia){
+                Continua_Finalizar_Picking();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Finalizar_Picking:"+e.getMessage());
+        }
+    }
+
+    private void Continua_Finalizar_Picking(){
+
+        try{
+
+            if (Finalizar) {
+
+                gBePicking.Estado = "Procesado";
+                gBePicking.Fec_mod = du.getFechaActual();
+                gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
+                gBePicking.Hora_fin = du.getFechaActual();
+
+                execws(4);
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Continua_Finalizar_Picking:"+e.getMessage());
+        }
+    }
+
+    private void msgAskPicIncompleto(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Continua_Finalizar_Picking();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar=false;
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     public class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
 
         public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
             //return left.CodigoProducto-rigth.IdRecepcionDet;
+            if (pOrden==1){
+               return left.IdUbicacion-rigth.IdUbicacion;
+            }else if(pOrden==2){
+                return left.CodigoProducto.compareTo(rigth.CodigoProducto);
+            }else if(pOrden==3){
+                return left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
+            }else if(pOrden==4){
+                return left.ProductoEstado.compareTo(rigth.ProductoEstado);
+            }
             return left.CodigoProducto.compareTo(rigth.CodigoProducto);
         }
 
@@ -377,6 +503,10 @@ public class frm_detalle_tareas_picking extends PBase {
                                 "pDetalleOperador",gBePicking.Detalle_operador,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
+                        callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
+                        break;
+                    case 5:
+                        callMethod("Actualizar_Estado_Pedido","oBeTrans_pe_enc",gBePedidoEnc);
                 }
 
                 progress.cancel();
@@ -404,6 +534,11 @@ public class frm_detalle_tareas_picking extends PBase {
                     processGetAllPickingUbic();
                     break;
                 case 4:
+                    processActualizarPickingEnc();
+                    break;
+                case 5:
+                    doExit();
+                    break;
             }
 
         } catch (Exception e) {
@@ -471,6 +606,27 @@ public class frm_detalle_tareas_picking extends PBase {
         }
     }
 
+    private void processActualizarPickingEnc(){
+
+        try{
+
+            int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
+
+                if (gBePicking.verifica_auto){
+                    gBePedidoEnc = new clsBeTrans_pe_enc();
+                    gBePedidoEnc.IdPedidoEnc = gBePicking.ListaPickingDet.items.get(0).IdPedidoEnc;
+                    gBePedidoEnc.Estado = "Verificado";
+                    execws(5);
+                }else{
+                    doExit();
+                }
+
+
+        }catch (Exception e){
+            mu.msgbox("processActualizarPickingEnc:"+e.getMessage());
+        }
+    }
+
     @Override
     protected void onResume() {
 
@@ -507,7 +663,7 @@ public class frm_detalle_tareas_picking extends PBase {
            gbePickingDet = new clsBeTrans_picking_det();
            BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
            selitem = new clsBeTrans_picking_ubic();
-
+            browse = 0;
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

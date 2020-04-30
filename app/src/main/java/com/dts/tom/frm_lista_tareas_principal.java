@@ -115,6 +115,11 @@ public class frm_lista_tareas_principal extends PBase {
                 execws(4);
             }
 
+            if (gl.tipoTarea==0){
+                progress.cancel();
+                doExit();
+            }
+
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -615,6 +620,11 @@ public class frm_lista_tareas_principal extends PBase {
             super.onResume();
 
             if (browse==1){
+                browse=0;
+                Load();
+            }
+
+            if (browse==5){
                 browse=0;
                 Load();
             }
