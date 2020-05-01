@@ -56,10 +56,10 @@ public class XMLObject  {
 
             xnode=getXMLRegion(source+"Result");
 
-            if (xnode.contains("USUbicStrucStage5")) {
-                xnode = xnode.replace("<int>","<clsUbic><ubic>");
-                xnode = xnode.replace("</int>","</ubic></clsUbic>");
-            }
+//            if (xnode.contains("USUbicStrucStage5")) {
+//                xnode = xnode.replace("<int>","<clsUbic><ubic>");
+//                xnode = xnode.replace("</int>","</ubic></clsUbic>");
+//            }
 
             Serializer serializer = new Persister();
 
@@ -141,7 +141,9 @@ public class XMLObject  {
 
 
     public String getXMLRegion(String nodename) throws Exception {
-        String st,ss,sv,en,sxml;
+
+        String ss ="";
+        String sxml="";
         Node xmlnode;
         int cVals=0;
 
@@ -171,14 +173,16 @@ public class XMLObject  {
                 {
                     cVals=response.item(i).getChildNodes().getLength();
 
-                    if (cVals>0){
+                    if (cVals>0)
+                    {
                         xmlnode=response.item(i);
                         sxml=nodeToString(xmlnode);
                         return sxml;
                     }
                 }
            }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             debg = e.getMessage() + "\n "+ ws.xmlresult;
             throw new Exception(" XMLObject getXMLRegion : "+ debg);
         }

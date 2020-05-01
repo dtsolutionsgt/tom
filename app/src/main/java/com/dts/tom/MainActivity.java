@@ -594,9 +594,11 @@ public class MainActivity extends PBase {
         }
 
         try {
+
             users=xobj.getresult(clsBeOperador_bodegaList.class,"Get_Operadores_By_IdBodega_For_HH");
 
             if (users!=null){
+
                 if (users.items!=null){
 
                     for (int i = users.items.size()-1; i>=0; i--) {

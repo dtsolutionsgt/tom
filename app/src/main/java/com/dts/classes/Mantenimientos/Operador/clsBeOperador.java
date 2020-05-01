@@ -30,6 +30,7 @@ public class clsBeOperador {
     @Element(required=false) public boolean Pickea=false;
     @Element(required=false) public boolean Verifica=false;
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public  String Foto;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
 
 
