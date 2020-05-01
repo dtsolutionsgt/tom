@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_adapt_tareas_verificacion"></activity>
+        <activity android:name=".list_adapt_detalle_reemplazo_picking"></activity>
+        <activity android:name=".list_adapt_tareas_verificacion" />
         <activity android:name=".list_adapt_detalle_tareas_verificacion" />
         <activity android:name=".list_adapt_detalle_tareas_picking" />
         <activity android:name=".list_adapt_tareashh_picking" />

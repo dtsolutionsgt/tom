@@ -505,8 +505,6 @@ public class frm_detalle_tareas_picking extends PBase {
                     case 4:
                         callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
                         break;
-                    case 5:
-                        callMethod("Actualizar_Estado_Pedido","oBeTrans_pe_enc",gBePedidoEnc);
                 }
 
                 progress.cancel();
@@ -612,14 +610,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
 
-                if (gBePicking.verifica_auto){
-                    gBePedidoEnc = new clsBeTrans_pe_enc();
-                    gBePedidoEnc.IdPedidoEnc = gBePicking.ListaPickingDet.items.get(0).IdPedidoEnc;
-                    gBePedidoEnc.Estado = "Verificado";
-                    execws(5);
-                }else{
-                    doExit();
-                }
+            doExit();
 
 
         }catch (Exception e){

@@ -2,7 +2,10 @@ package com.dts.tom.Transacciones.Picking;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -25,7 +28,7 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazo;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBeProducto;
 
@@ -46,6 +49,7 @@ public class frm_danado_picking extends PBase {
     private ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdEstadoDanadoSelect = 0;
+    public static String vNomUbicDestino="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,7 @@ public class frm_danado_picking extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
+                    txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto);
 
                 }
 
@@ -111,18 +116,6 @@ public class frm_danado_picking extends PBase {
         }
     }
 
-    private void Procesa_Ubicacion(){
-
-        try {
-
-
-
-        }catch (Exception e){
-            mu.msgbox("Procesa_Ubicacion:"+e.getMessage());
-        }
-
-    }
-
     private void Listar_Producto_Estado() {
 
         try {
@@ -147,6 +140,49 @@ public class frm_danado_picking extends PBase {
         }
     }
 
+    private void Valida_ubicacion(){
+
+        try{
+
+            browse=1;
+            startActivity(new Intent(this, frm_list_prod_reemplazo_picking.class));
+
+        }catch (Exception e){
+            mu.msgbox("Guardar_dañado");
+        }
+    }
+
+    private void msgMover(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Valida_ubicacion();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -163,7 +199,11 @@ public class frm_danado_picking extends PBase {
                     case 2:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",BeUbicDestino.IdUbicacion,"IdEstado",IdEstadoDanadoSelect,
                                 "IdBodega",gl.IdBodega,"pNombreUbicacion",BeUbicDestino.NombreCompleto);
-                        return;
+                        break;
+                    case 3:
+                        callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",Integer.parseInt(txtUbicDest.getText().toString()),
+                                "IdEstado",IdEstadoDanadoSelect,"IdBodega",gl.IdBodega,"pNombreUbicacion",vNomUbicDestino);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -184,6 +224,9 @@ public class frm_danado_picking extends PBase {
                 case 2:
                     processUbicacion();
                     break;
+                case 3:
+                    processUbicacionValida();
+                    break;
             }
 
         } catch (Exception e) {
@@ -202,7 +245,7 @@ public class frm_danado_picking extends PBase {
             lblProdDanado.setText(gBePickingUbic.CodigoProducto+" "+gBePickingUbic.NombreProducto+
                     "\n Cad: "+gBePickingUbic.Fecha_Vence+
                     "\n Lote: "+gBePickingUbic.Lote+
-                    "\n Reemplazar: "+CantReemplazo+" "+gBePickingUbic.ProductoUnidadMedida);
+                    "\n Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
 
             txtUbicDest.setSelectAllOnFocus(true);
             txtUbicDest.requestFocus();
@@ -218,8 +261,45 @@ public class frm_danado_picking extends PBase {
 
             BeUbicDestino.NombreCompleto = xobj.getresultSingle(String.class,"pNombreUbicacion");
 
+            lblNomUbic.setText(BeUbicDestino.NombreCompleto);
+
+            if (IdEstadoDanadoSelect==0){
+                mu.msgbox("Seleccione un estado de producto válido");
+                cmbEstadoDanado.setFocusable(true);
+                return;
+            }
+
+            execws(3);
+
+
         }catch (Exception e){
             mu.msgbox("processUbicacion:"+e.getMessage());
+        }
+    }
+
+    private void processUbicacionValida(){
+
+        try {
+
+            Boolean Valida=false;
+
+            Valida = xobj.getresult(Boolean.class,"Ubicacion_Valida_By_IdUbicacion_And_IdEstado");
+
+            if (!Valida){
+                mu.msgbox("La ubicación no es válida para el estado del producto!");
+                txtUbicDest.setSelectAllOnFocus(true);
+                txtUbicDest.requestFocus();
+                return;
+            }
+
+            msgMover("Producto: "+gBeProducto.Nombre
+                            + "\n Destino: "+lblNomUbic.getText().toString()
+                            + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                            + "\n ¿Mover?");
+
+
+        }catch (Exception e){
+            mu.msgbox("processUbicacionValida:"+e.getMessage());
         }
     }
 

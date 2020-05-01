@@ -70,7 +70,6 @@ public class frm_picking_datos extends PBase {
     private String pLP = "";
     private int gIdUbicacion=0;
     public static double CantReemplazar=0;
-    public static double CantReemplazo=0;
     public static boolean ReemplazoLP=false;
     public static int Tipo=0;
 
@@ -1077,7 +1076,7 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            CantReemplazo = Double.parseDouble(txtCantidadPick.getText().toString());
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
 
             msgReemplazo("¿Marcar producto para reemplazo?");
 
