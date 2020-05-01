@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -21,6 +23,8 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.tom.PBase;
@@ -29,6 +33,8 @@ import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.list_adapt_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -46,17 +52,23 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private ListView listDetVeri;
     private EditText txtCodProd;
-    private Button btnFinalizarTareaPicking,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
+    private TextView lblNoDocumento;
+    private Button btnFinalizarTareaVerificacion,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
 
-    private clsBeTrans_picking_ubicList plistPickingUbiList = new clsBeTrans_picking_ubicList();
+    private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
     private clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
+    private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
 
     private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
 
     private clsBeProducto_estadoList lProductoEstadoDañado = new clsBeProducto_estadoList();
 
+    private clsBeTrans_pe_enc gBePedido = new clsBeTrans_pe_enc();
+
     private double cantReemplazar = 0;
+    private boolean preguntoPorDiferencia = false;
+    private boolean finalizar = true;
 
     //private DT_Completo As New DataTable
 
@@ -75,11 +87,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             listDetVeri = (ListView)findViewById(R.id.ListDetVeri);
             txtCodProd = (EditText) findViewById(R.id.txtCodProd);
-            btnFinalizarTareaPicking = (Button) findViewById(R.id.btnFinalizarTareaPicking);
+            btnFinalizarTareaVerificacion = (Button) findViewById(R.id.btnFinalizarTareaPicking);
             btnNoVerificado = (Button) findViewById(R.id.btnNoVerificado);
             btnRegs = (Button) findViewById(R.id.btnRegs);
             btnConsultaDa = (Button) findViewById(R.id.btnConsultaDa);
             btnBack = (Button) findViewById(R.id.btnBack);
+            lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
 
             setHandlers();
 
@@ -99,12 +112,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             listDetVeri.setAdapter(null);
 
-            if (gl.IdTareaUbicEnc>0){
-                progress.setMessage("Cargando detalle de tarea de verificación");
-                progress.show();
-                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
-                execws(1);
+            if (gl.pIdPedidoEnc>0){
+                //Llama al método del WS Get_Single_By_IdPedidoEnc
+                execws(2);
+            }else{
+                progress.cancel();
             }
+
         }catch (Exception e){
             progress.cancel();
             mu.msgbox(e.getClass()+e.getMessage());
@@ -190,7 +204,39 @@ public class frm_detalle_tareas_verificacion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Detalle_By_IdPedidoEnc","pIdPedidoEnc",gl.IdBodega);
+                        callMethod("Get_Detalle_By_IdPedidoEnc",
+                                   "pIdPedidoEnc",gl.pIdPedidoEnc);
+                        break;
+                    case 2:
+                        callMethod("Get_Single_By_IdPedidoEnc",
+                                   "pIdPedidoEnc",gl.pIdPedidoEnc);
+                        break;
+                    case 3:
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc",
+                                   "pIdPickingEnc",gl.gIdPickingEnc,
+                                   "pDetalleOperador", false,
+                                   "pIdOperadorBodega",0);
+                        break;
+                    case 4:
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc",
+                                   "pIdPickingEnc", gl.gIdPickingEnc,
+                                   "pIdPedidoEnc", gl.pIdPedidoEnc);
+                        break;
+                    case 5:
+                        callMethod("Set_Estado_Pedido_Verificado",
+                                   "oBeTrans_pe_enc", gBePedido);
+                        break;
+                    case 6:
+                        callMethod("Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc",
+                                   "pIdPickingEnc", gl.gIdPickingEnc);
+                        break;
+                    case 7:
+                        callMethod("Get_Picking_By_IdPickingEnc",
+                                   "pIdPickingEnc", gl.gIdPickingEnc);
+                        break;
+                    case 8:
+                        callMethod("Actualizar_PickingEnc_Verificado",
+                                   "oBeTrans_picking_enc", gBePickingEnc);
                         break;
                 }
 
@@ -210,7 +256,29 @@ public class frm_detalle_tareas_verificacion extends PBase {
             switch (ws.callback) {
 
                 case 1:
-                    processTareasVerificacion();break;
+                    processTareasVerificacion();
+                    break;
+                case 2:
+                    processEncabezadoPedido();
+                    break;
+                case 3:
+                    processPickingUbic();
+                    break;
+                case 4:
+                    processPickingUbic2();
+                    break;
+                case 5:
+                    processSetEstado();
+                    break;
+                case 6:
+                    processPedidosSinVerificar();
+                    break;
+                case 7:
+                    processGetPicking();
+                    break;
+                case 8:
+                    processActualizarPickingVerificado();
+                    break;
             }
 
         } catch (Exception e) {
@@ -219,20 +287,25 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
-    private void processTareasVerificacion(){
+    private void  processEncabezadoPedido(){
+        try{
+            progress.setMessage("Cargando datos del encabezado del pedido...");
+            progress.show();
 
-        try {
+            gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
 
-            progress.setMessage("Obteniendo Tareas de verificación en HH");
+            gl.gIdPickingEnc = gBePedido.IdPickingEnc;
 
-            pListaPedidoDet = xobj.getresult(clsBeDetallePedidoAVerificarList.class,"Get_Detalle_By_IdPedidoEnc");
+            lblNoDocumento.setText(String.format("NoDocumento: %s-%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
+                    gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
 
-            listDetVeri.setAdapter(null);
+            progress.setMessage("Cargando detalle de tarea de verificación");
 
-            if(pListaPedidoDet!=null){
-                if(pListaPedidoDet.items!=null){
-                    Lista_Detalle_Pedido();
-                }
+            if (gl.pIdPedidoEnc>0){
+                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
+                execws(1);
+            }else{
+                progress.cancel();
             }
 
         } catch (Exception e) {
@@ -242,11 +315,192 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
+    private void processTareasVerificacion(){
+
+        try {
+
+            progress.setMessage("Obteniendo Tareas de verificación en HH...");
+
+            pListaPedidoDet = xobj.getresult(clsBeDetallePedidoAVerificarList.class,"Get_Detalle_By_IdPedidoEnc");
+
+            listDetVeri.setAdapter(null);
+
+            if(pListaPedidoDet!=null){
+                if(pListaPedidoDet.items!=null){
+                    Lista_Detalle_Pedido();
+                }
+            }else{
+                btnNoVerificado.setText("Verificado");
+                btnNoVerificado.setBackgroundColor(Color.GREEN);
+                progress.cancel();
+                toast("Este pedido ya no tiene productos pendientes de verificar");
+            }
+
+            execws(3);
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processPickingUbic(){
+
+        try{
+
+            progress.setMessage("Obteniendo listado de Picking Ubic...");
+
+            plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
+
+            progress.cancel();
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processPickingUbic2(){
+
+        try{
+
+            progress.setMessage("Obteniendo listado de Picking Ubic para finalizar tarea...");
+
+            preguntoPorDiferencia = false;
+            finalizar = true;
+
+            plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc");
+
+            if (plistPickingUbic != null){
+                if (plistPickingUbic.items != null){
+                    for (clsBeTrans_picking_ubic ubi:plistPickingUbic.items){
+
+                        if (ubi.Cantidad_Recibida != ubi.Cantidad_Verificada) {
+
+                            preguntoPorDiferencia = true;
+
+                            msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla?");
+
+                        }
+                    }
+
+                    progress.cancel();
+                    if (finalizar){
+                        if (!preguntoPorDiferencia){
+                            msgAskFinalizar("Finalizar la tarea de verificación");
+                        }
+                    }
+
+                }else{
+                    progress.cancel();
+                }
+            }else{
+                progress.cancel();
+                if (finalizar){
+                    if (!preguntoPorDiferencia){
+                        msgAskFinalizar("Finalizar la tarea de verificación");
+                    }
+                }
+            }
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processSetEstado(){
+
+        try{
+
+            progress.setMessage("Actualizando estado de la verificacion...");
+            progress.show();
+            int actualizados = (Integer) xobj.getSingle("Set_Estado_Pedido_VerificadoResult",Integer.class);
+
+            //Llama a método del WS Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc
+            execws(6);
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processPedidosSinVerificar(){
+
+        try{
+
+            progress.setMessage("Obteniendo pedidos sin verificar...");
+
+            boolean tienePedidosSV = (Boolean) xobj.getSingle("Tiene_Pedidos_Sin_Verificar_By_IdPickingEncResult",Boolean.class);
+
+            if (! tienePedidosSV){
+                //Llama a método del WS Get_Picking_By_IdPickingEnc
+                execws(7);
+            }
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processGetPicking(){
+
+        try{
+
+            progress.setMessage("Obteniendo picking...");
+
+            gBePickingEnc = xobj.getresult(clsBeTrans_picking_enc.class,"Get_Picking_By_IdPickingEnc");
+
+            Date currentTime = Calendar.getInstance().getTime();
+
+            if (gBePickingEnc != null){
+                gBePickingEnc.Estado = "Verificado";
+                gBePickingEnc.Fec_mod = app.strFecha(currentTime);
+                gBePickingEnc.User_mod = String.valueOf(gl.IdOperador);
+                gBePickingEnc.Hora_fin = app.strFecha(currentTime);
+
+                //Llama a método del WS Actualizar_PickingEnc_Verificado
+                execws(8);
+            }
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processActualizarPickingVerificado(){
+
+        try{
+
+            progress.setMessage("Actualizando picking verificado...");
+
+            int actualizados = (Integer) xobj.getSingle("Actualizar_PickingEnc_VerificadoResult",Integer.class);
+
+            progress.cancel();
+
+            frm_detalle_tareas_verificacion.super.finish();
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
     private void Lista_Detalle_Pedido(){
 
         try {
 
-            progress.setMessage("Listando Tareas de verificación en HH");
+            progress.setMessage("Listando detalle de pedido para verificación en HH...");
 
             List AuxList = stream(pListaPedidoDet.items)
                     .toList();
@@ -256,7 +510,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             try{
 
-                progress.setMessage("Cargando tareas de cambio de ubicación");
+                progress.setMessage("Cargando tareas de verificación");
 
                 if(pListaPedidoDet != null) {
 
@@ -287,7 +541,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         }
 
-                        //lblRegs.setText("Regs: "+pListaPedidoDet.items.size());
+                        btnRegs.setText("Regs: "+pListaPedidoDet.items.size());
 
                         adapter=new list_adapt_detalle_tareas_verificacion(this,pListBeTareasVerificacionHH);
 
@@ -297,8 +551,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                             adapter.setSelectedIndex(-1);
                             index = -1;
-                        }
 
+                            btnNoVerificado.setText("No Verificado");
+                            btnNoVerificado.setBackgroundColor(Color.RED);
+
+                        }else{
+                            btnNoVerificado.setText("Verificado");
+                            btnNoVerificado.setBackgroundColor(Color.GREEN);
+                        }
                     }
 
                 }else{
@@ -317,6 +577,90 @@ public class frm_detalle_tareas_verificacion extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    public void finalizarTareaVerificacion(View view){
+
+        try{
+
+            progress.setMessage("Listando tareas de verificación para finalizarla...");
+            progress.show();
+
+            //Llama a método del WS Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc
+            execws(4);
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void msgAskIncompleta(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (preguntoPorDiferencia){
+                        msgAskFinalizar("Finalizar tarea de verificación");
+                    }
+
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finalizar = false;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskFinalizar(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    //Llamo a método del WS Set_Estado_Pedido_Verificado
+                    progress.setMessage("Finalizando la tarea de verificación...");
+                    progress.show();
+                    execws(5);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     private void msgAskExit(String msg) {
@@ -368,7 +712,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     protected void onResume() {
         try{
-           // Load();
+            Load();
             super.onResume();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

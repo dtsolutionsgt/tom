@@ -28,13 +28,14 @@
             android:onClick="Regresar" />
 
         <Button
-            android:id="@+id/btnFinalizarTareaPicking"
+            android:id="@+id/btnFinalizarTareaVerificacion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="finalizarTareaVerificacion"
             android:text="Finalizar Tarea"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
@@ -56,7 +57,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Detalle de producto para verificación"
+            android:text="Detalle de productos para verificación"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -72,16 +73,25 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true">
 
+        <TextView
+            android:id="@+id/lblNoDoumento"
+            style="@style/StyleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F4C47C"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:text="No. Documento: "
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
         <EditText
             android:id="@+id/txtCodProd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="172dp"
-            android:layout_marginTop="34dp"
-            android:layout_marginEnd="10dp"
+            android:layout_below="@id/lblNoDoumento"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView2"
             android:inputType="textPersonName" />
 
         <TextView
@@ -89,9 +99,12 @@
             style="@style/StyleText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_below="@id/lblNoDoumento"
             android:layout_alignTop="@+id/editText"
             android:layout_alignBottom="@+id/editText"
             android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:text="Producto:" />
 
         <RelativeLayout
@@ -143,8 +156,7 @@
             android:layout_height="421dp"
             android:layout_above="@+id/relListVeri"
             android:layout_below="@+id/txtCodProd"
-            android:layout_marginTop="23dp"
-            android:layout_marginBottom="-1dp" />
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 </RelativeLayout>
