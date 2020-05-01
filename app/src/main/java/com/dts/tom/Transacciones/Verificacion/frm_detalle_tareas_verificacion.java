@@ -70,8 +70,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private boolean preguntoPorDiferencia = false;
     private boolean finalizar = true;
 
-    //private DT_Completo As New DataTable
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,7 +94,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             setHandlers();
 
-            ProgressDialog("Cargando forma");
+            ProgressDialog("Cargando forma...");
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 

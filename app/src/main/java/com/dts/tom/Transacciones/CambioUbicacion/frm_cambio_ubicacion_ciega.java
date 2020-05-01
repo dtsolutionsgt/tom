@@ -1020,8 +1020,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 inicializaTarea(false);
                 return;
             }else{
-                lblCant.setText(mu.frmdecimal(vCantidadDisponible, 6));
-                txtCantidad.setText(mu.frmdecimal(vCantidadAUbicar, 6));
+                lblCant.setText(mu.frmdecimal(vCantidadDisponible, gl.gCantDecDespliegue));
+                txtCantidad.setText(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue));
                 txtCantidad.selectAll();
             }
 

@@ -50,10 +50,6 @@ public class clsBeTrans_pe_det {
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
     @Element(required=false) public clsBeStock_resList ListaStockRes=new clsBeStock_resList();
     @Element(required=false) public clsBeTrans_picking_ubicList ListaPickingUbic=new clsBeTrans_picking_ubicList();
-    @Element(required=false) public String Bodega="";
-    @Element(required=false) public String Cliente="";
-    @Element(required=false) public String Propietario="";
-    @Element(required=false) public String FechaPedido="";
     @Element(required=false) public String Codigo_Producto="";
     @Element(required=false) public String NombreProducto="";
     @Element(required=false) public String ProductoPresentacion="";
@@ -80,8 +76,8 @@ public class clsBeTrans_pe_det {
                              double RoadPrecioDoc, double RoadVAL1, String RoadVAL2, double RoadCantProc,
                              int No_linea, String Atributo_Variante_1, int IdStockEspecifico, boolean EsPadre,
                              int IdPedidoDetPadre, boolean IsNew, clsBeProducto Producto, clsBeProducto_Presentacion Presentacion,
-                             clsBeUnidad_medida UnidadMedida, clsBeStock_resList ListaStockRes, clsBeTrans_picking_ubicList ListaPickingUbic, String Bodega,
-                             String Cliente, String Propietario, String FechaPedido, String Codigo_Producto,
+                             clsBeUnidad_medida UnidadMedida, clsBeStock_resList ListaStockRes,
+                             clsBeTrans_picking_ubicList ListaPickingUbic, String Codigo_Producto,
                              String NombreProducto, String ProductoPresentacion, String ProductoUnidadMedida, String ProductoEstado,
                              String BodegaUbicacion, double CantidadFisica, double Factor, double CantidadReservada,
                              double PesoReservado, String FechaIngreso, String FechaVence) {
@@ -125,10 +121,6 @@ public class clsBeTrans_pe_det {
         this.UnidadMedida=UnidadMedida;
         this.ListaStockRes=ListaStockRes;
         this.ListaPickingUbic=ListaPickingUbic;
-        this.Bodega=Bodega;
-        this.Cliente=Cliente;
-        this.Propietario=Propietario;
-        this.FechaPedido=FechaPedido;
         this.Codigo_Producto=Codigo_Producto;
         this.NombreProducto=NombreProducto;
         this.ProductoPresentacion=ProductoPresentacion;
@@ -378,30 +370,6 @@ public class clsBeTrans_pe_det {
     }
     public void setListaPickingUbic(clsBeTrans_picking_ubicList value) {
         ListaPickingUbic=value;
-    }
-    public String getBodega() {
-        return Bodega;
-    }
-    public void setBodega(String value) {
-        Bodega=value;
-    }
-    public String getCliente() {
-        return Cliente;
-    }
-    public void setCliente(String value) {
-        Cliente=value;
-    }
-    public String getPropietario() {
-        return Propietario;
-    }
-    public void setPropietario(String value) {
-        Propietario=value;
-    }
-    public String getFechaPedido() {
-        return FechaPedido;
-    }
-    public void setFechaPedido(String value) {
-        FechaPedido=value;
     }
     public String getCodigo_Producto() {
         return Codigo_Producto;
