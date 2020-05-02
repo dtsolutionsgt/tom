@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblCodigo"
@@ -26,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="420037" />
+            android:text="420037"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblProducto"
@@ -34,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="XXXXXX" />
+            android:text="XXXXXX"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblPres"
@@ -42,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Caja01" />
+            android:text="Caja01"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblUmbas"
@@ -50,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="UNIDAD" />
+            android:text="UNIDAD"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblCantidad"
@@ -58,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1.0" />
+            android:text="1.0"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblCantRec"
@@ -66,7 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="0.0" />
+            android:text="0.0"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblCosto"
@@ -74,7 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="0" />
+            android:text="0"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblFactor"
@@ -82,7 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblIdOcDet"
@@ -90,7 +99,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/lblIdOcEnc"
@@ -98,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark" />
     </LinearLayout>
 </RelativeLayout>

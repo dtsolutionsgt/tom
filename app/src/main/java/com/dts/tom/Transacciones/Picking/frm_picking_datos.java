@@ -255,6 +255,7 @@ public class frm_picking_datos extends PBase {
             cmbPresentacion.setFocusable(false);
             cmbPresentacion.setFocusableInTouchMode(false);
             cmbPresentacion.setClickable(false);
+            cmbPresentacion.setEnabled(false);
 
             txtUniBas.setFocusable(false);
             txtUniBas.setFocusableInTouchMode(false);
@@ -263,6 +264,7 @@ public class frm_picking_datos extends PBase {
             cmbEstado.setFocusable(false);
             cmbEstado.setFocusableInTouchMode(false);
             cmbEstado.setClickable(false);
+            cmbEstado.setEnabled(false);
 
             txtPesoPick.setFocusable(false);
             txtPesoPick.setFocusableInTouchMode(false);
@@ -840,9 +842,11 @@ public class frm_picking_datos extends PBase {
             txtLote.setText(gBePickingUbic.Lote);
 
             if (gBePickingUbic.IdPresentacion>0){
-                List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
-                int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
-                cmbPresentacion.setSelection(inx);
+                if (gBeProducto.Presentaciones.items!=null){
+                    List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                    int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
+                    cmbPresentacion.setSelection(inx);
+                }
             }
 
             txtUniBas.setText(gBePickingUbic.ProductoUnidadMedida);
@@ -1062,6 +1066,9 @@ public class frm_picking_datos extends PBase {
 
         try {
 
+
+            Tipo=1;
+
             if (txtBarra.getText().toString().isEmpty()){
                 mu.msgbox("Ingrese código del producto");
                 txtBarra.setSelectAllOnFocus(true);
@@ -1085,14 +1092,47 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    public void BotonNoEn(View view){
+
+        try {
+
+
+            Tipo=2;
+
+            if (txtBarra.getText().toString().isEmpty()){
+                mu.msgbox("Ingrese código del producto");
+                txtBarra.setSelectAllOnFocus(true);
+                txtBarra.requestFocus();
+                return;
+            }
+
+            if (txtCantidadPick.getText().toString().equals("0")||txtCantidadPick.getText().toString().isEmpty()||txtCantidadPick.getText().toString().equals("")){
+                mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                txtCantidadPick.setSelectAllOnFocus(true);
+                txtCantidadPick.requestFocus();
+                return;
+            }
+
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
+
+            msgReemplazo("¿Marcar producto como No Encontrado?");
+
+        }catch (Exception e){
+            mu.msgbox("BotonReemplazo:"+e.getMessage());
+        }
+    }
+
     private void Continua_reemplazo(){
 
-        try{
+        try {
 
-            Tipo = 1;
-
-            browse=1;
-            startActivity(new Intent(this, frm_danado_picking.class));
+            if (Tipo == 1) {
+                browse = 1;
+                startActivity(new Intent(this, frm_danado_picking.class));
+            }else{
+                browse = 1;
+                startActivity(new Intent(this, frm_list_prod_reemplazo_picking.class));
+            }
 
         }catch (Exception e){
             mu.msgbox("Continua_reemplazo:"+e.getMessage());
@@ -1323,7 +1363,8 @@ public class frm_picking_datos extends PBase {
 
             BePickingDet = xobj.getresultSingle(clsBeTrans_picking_det.class,"oBeTrans_picking_det");
             BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString());
-            BePickingDet.User_mod = du.getFechaActual();
+            BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
+            BePickingDet.Fec_mod =  du.getFechaActual();
 
             BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
             execws(6);
@@ -1412,6 +1453,24 @@ public class frm_picking_datos extends PBase {
             msgAskExit("Está seguro de salir");
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                super.finish();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
         }
 
     }
