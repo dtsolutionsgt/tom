@@ -92,7 +92,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
 
             holder.lblUbicDetPick.setText("Ubic");
             holder.lblUbicDetPick.setTextColor(R.style.titlestyle);
-            holder.lblNomUbicDet.setText("NombreUbic");
+            holder.lblNomUbicDet.setText("N");
             holder.lblNomUbicDet.setTextColor(R.style.titlestyle);
             holder.lblCodigoDet.setText("Código");
             holder.lblCodigoDet.setTextColor(R.style.titlestyle);

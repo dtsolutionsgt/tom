@@ -46,6 +46,8 @@ public class frm_danado_picking extends PBase {
     private clsBeProducto_estadoList LProductoEstadoDanado = new clsBeProducto_estadoList();
     private clsBeBodega_ubicacion BeUbicDestino = new clsBeBodega_ubicacion();
 
+    public static int IdUbicacionDestino=0;
+
     private ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdEstadoDanadoSelect = 0;
@@ -86,7 +88,7 @@ public class frm_danado_picking extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
-                    txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto);
+                    txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
                 }
 
@@ -102,7 +104,9 @@ public class frm_danado_picking extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicDest.getText().toString().isEmpty()){
+                            BeUbicDestino = new clsBeBodega_ubicacion();
                             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
                             execws(2);
                         }
                     }
@@ -114,6 +118,19 @@ public class frm_danado_picking extends PBase {
         }catch (Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
+    }
+
+    public void BotonGuardarDanado(View view){
+        if (!txtUbicDest.getText().toString().isEmpty()){
+            BeUbicDestino = new clsBeBodega_ubicacion();
+            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+            execws(2);
+        }
+    }
+
+    public void botonAtras(View view){
+        super.finish();
     }
 
     private void Listar_Producto_Estado() {
@@ -249,6 +266,7 @@ public class frm_danado_picking extends PBase {
 
             txtUbicDest.setSelectAllOnFocus(true);
             txtUbicDest.requestFocus();
+            txtUbicDest.selectAll();
 
         }catch (Exception e){
             mu.msgbox("processEstadoProducto:"+e.getMessage());
@@ -306,6 +324,24 @@ public class frm_danado_picking extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                super.finish();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
     }
 
 }

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -57,6 +59,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes;
     private EditText txtUbicacionFiltro;
+    private TextView lblNoDocumento;
 
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
@@ -87,6 +90,7 @@ public class frm_detalle_tareas_picking extends PBase {
         cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
         btnPendientes = (Button) findViewById(R.id.btnPendientes);
         txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
+        lblNoDocumento = (TextView)findViewById(R.id.lblNoDocumento);
 
         ProgressDialog("Cargando forma...");
 
@@ -112,8 +116,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
                         selitem = new clsBeTrans_picking_ubic();
-                        int IndxPos= position-1;
-                        selitem = plistPickingUbi.items.get(IndxPos);
+                        selitem = BeListPickingUbic.get(position);
+
 
                         selid = sitem.IdPickingUbic;
                         selidx = position;
@@ -145,6 +149,19 @@ public class frm_detalle_tareas_picking extends PBase {
                     return;
                 }
 
+            });
+
+            txtUbicacionFiltro.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (!txtUbicacionFiltro.getText().toString().isEmpty()){
+                            execws(5);
+                        }
+                    }
+
+                    return false;
+                }
             });
 
         } catch (Exception e) {
@@ -288,6 +305,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             TipoLista = 2;
 
+            lblNoDocumento.setText("NoDocumento: "+gl.gIdPickingEnc);
+
             if (gl.gIdPickingEnc>0){
                 execws(1);
             }
@@ -334,11 +353,15 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
-                    vItem = new  clsBeTrans_picking_ubic();
-                    obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
-                    vItem = obj;
+                    if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
 
-                    BeListPickingUbic.add(vItem);
+                        vItem = new  clsBeTrans_picking_ubic();
+                        obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
+                        vItem = obj;
+
+                        BeListPickingUbic.add(vItem);
+
+                    }
 
                 }
 
@@ -392,6 +415,10 @@ public class frm_detalle_tareas_picking extends PBase {
 
             Finalizar=true;
 
+            progress.show();
+
+            progress.setMessage("Finalizando picking...");
+
             for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
 
                 if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
@@ -418,6 +445,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (Finalizar) {
 
+                progress.setMessage("Actualizando estado de picking...");
+
                 gBePicking.Estado = "Procesado";
                 gBePicking.Fec_mod = du.getFechaActual();
                 gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
@@ -428,6 +457,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Continua_Finalizar_Picking:"+e.getMessage());
         }
     }
@@ -505,6 +535,9 @@ public class frm_detalle_tareas_picking extends PBase {
                     case 4:
                         callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
                         break;
+                    case 5:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicacionFiltro.getText().toString(),"pIdBodega",gl.IdBodega);
+                        break;
                 }
 
                 progress.cancel();
@@ -535,7 +568,7 @@ public class frm_detalle_tareas_picking extends PBase {
                     processActualizarPickingEnc();
                     break;
                 case 5:
-                    doExit();
+                   processGetUbicacion();
                     break;
             }
 
@@ -608,13 +641,48 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
+            progress.setMessage("Finalizando actualiación de estado...");
+
             int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
+
+            progress.cancel();
 
             doExit();
 
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processActualizarPickingEnc:"+e.getMessage());
+        }
+    }
+
+    private void processGetUbicacion(){
+
+        clsBeBodega_ubicacion beUbicacion = new clsBeBodega_ubicacion();
+
+        try{
+
+            beUbicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if (beUbicacion!=null){
+
+                for (clsBeTrans_picking_ubic r:BeListPickingUbic){
+
+                    if (beUbicacion.IdUbicacion==r.IdUbicacion){
+                        selitem = r;
+                        selid = r.IdPickingUbic;
+                        procesar_registro();
+                        break;
+                    }
+
+                }
+
+            }else{
+                mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ "no es válido para la bodega: "+gl.IdBodega);
+                return;
+            }
 
         }catch (Exception e){
-            mu.msgbox("processActualizarPickingEnc:"+e.getMessage());
+            mu.msgbox("processGetUbicacion:"+e.getMessage());
         }
     }
 
