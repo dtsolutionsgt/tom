@@ -241,9 +241,6 @@ public class frm_recepcion_datos extends PBase {
                 // set date picker as current date
                 return new DatePickerDialog(this, datePickerListener,
                         year, month,day);
-
-
-
         }
         return null;
     }

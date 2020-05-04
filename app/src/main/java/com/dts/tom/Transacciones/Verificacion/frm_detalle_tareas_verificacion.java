@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,8 +20,6 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
-import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
-import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -29,15 +28,11 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.list_adapt_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
-import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_detalle_tareas_verificacion extends PBase {
 
@@ -56,7 +51,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private Button btnFinalizarTareaVerificacion,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
-    private clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
     private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
 
@@ -108,6 +102,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
+            progress.setMessage("Actualizado detalle de tareas de verificación...");
+            progress.show();
+
             listDetVeri.setAdapter(null);
 
             if (gl.pIdPedidoEnc>0){
@@ -142,13 +139,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Object lvObj = listDetVeri.getItemAtPosition(position);
-                    clsBeTrans_picking_ubic vItem = (clsBeTrans_picking_ubic) lvObj;
+                    clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     adapter.setSelectedIndex(position);
 
                     int index = position;
 
-                    //Procesa_Registro(vItem.IdPickingEnc);
+                    Procesa_Registro(vItem);
 
                     adapter.refreshItems();
 
@@ -163,15 +160,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                //Metodo para filtrar la lista en base a un código de producto o llamar al WS
-                                if (!txtCodProd.getText().toString().isEmpty()){
-                                    progress.setMessage("Validando existencia del producto");
-                                    progress.show();
-                                    //Llama al método del WS Get_BeProducto_By_Codigo_For_HH
-                                    execws(3);
-                                }else{
-                                    //Load();
-                                }
                                 return true;
                         }
                     }
@@ -285,6 +273,24 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
+    private void Procesa_Registro(clsBeDetallePedidoAVerificar TareaDet){
+
+        try{
+
+            gl.pIdPedidoDet =TareaDet.IdPedidoDet;
+            gl.gBePedidoDetVerif=TareaDet;
+            gl.gBePickingUbicList=plistPickingUbic;
+
+            Intent intent = new Intent(this, frm_verificacion_datos.class);
+            startActivity(intent);
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
+
+    }
+
     private void  processEncabezadoPedido(){
         try{
             progress.setMessage("Cargando datos del encabezado del pedido...");
@@ -297,11 +303,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
             lblNoDocumento.setText(String.format("NoDocumento: %s-%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
 
-            progress.setMessage("Cargando detalle de tarea de verificación");
+            progress.setMessage("Cargando detalle del Picking Ubic");
 
-            if (gl.pIdPedidoEnc>0){
-                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
-                execws(1);
+            if (gl.gIdPickingEnc>0){
+                //Llama a método del WS Get_All_PickingUbic_By_IdPickingEnc
+                execws(3);
             }else{
                 progress.cancel();
             }
@@ -334,8 +340,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 toast("Este pedido ya no tiene productos pendientes de verificar");
             }
 
-            execws(3);
-
         } catch (Exception e) {
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -351,7 +355,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
 
-            progress.cancel();
+            progress.setMessage("Cargando detalle de tarea de verificación");
+
+            if (gl.pIdPedidoEnc>0){
+                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
+                execws(1);
+            }else{
+                progress.cancel();
+            }
 
         }catch (Exception ex){
             progress.cancel();
@@ -500,9 +511,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             progress.setMessage("Listando detalle de pedido para verificación en HH...");
 
-            List AuxList = stream(pListaPedidoDet.items)
-                    .toList();
-
             clsBeDetallePedidoAVerificar vItem;
             pListBeTareasVerificacionHH.clear();
 
@@ -518,12 +526,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                             vItem = new clsBeDetallePedidoAVerificar();
 
-                           vItem.IdPedidoEnc = pListaPedidoDet.items.get(i).getIdPedidoEnc();
+                            vItem.IdPedidoEnc = pListaPedidoDet.items.get(i).getIdPedidoEnc();
                             vItem.IdPedidoDet = pListaPedidoDet.items.get(i).getIdPedidoDet();
+                            vItem.IdProductoBodega = pListaPedidoDet.items.get(i).getIdProductoBodega();
                             vItem.Codigo = pListaPedidoDet.items.get(i).getCodigo();
                             vItem.Nombre_Producto = pListaPedidoDet.items.get(i).getNombre_Producto();
                             vItem.Lote =  pListaPedidoDet.items.get(i).getLote();
-                            vItem.Fecha_Vence = pListaPedidoDet.items.get(i).getFecha_Vence();
+                            vItem.Fecha_Vence = app.strFecha(pListaPedidoDet.items.get(i).getFecha_Vence());
                             vItem.LicPlate = pListaPedidoDet.items.get(i).getLicPlate();
                             vItem.Nom_Unid_Med = pListaPedidoDet.items.get(i).getNom_Unid_Med();
                             vItem.Nom_Presentacion = pListaPedidoDet.items.get(i).getNom_Presentacion();
@@ -532,7 +541,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.Cantidad_Verificada = pListaPedidoDet.items.get(i).getCantidad_Verificada();
                             vItem.Nom_Estado = pListaPedidoDet.items.get(i).getNom_Estado();
                             vItem.IdPresentacion = pListaPedidoDet.items.get(i).getIdPresentacion();
-                            vItem.IdProductoBodega = pListaPedidoDet.items.get(i).getIdProductoBodega();
+                            vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
 
                             pListBeTareasVerificacionHH.add(vItem);
@@ -693,6 +702,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     public void Regresar(View view){
         msgAskExit("Está seguro de salir de las tareas de verificación");
+    }
+
+    public void Actualizar(View view){
+        Load();
     }
 
     @Override

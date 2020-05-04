@@ -107,6 +107,20 @@
             android:layout_marginTop="5dp"
             android:text="Producto:" />
 
+        <HorizontalScrollView
+            android:id="@+id/Listado"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/relListVeri"
+            android:layout_below="@id/txtCodProd">
+
+            <ListView
+                android:id="@+id/ListDetVeri"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp" />
+        </HorizontalScrollView>
+
         <RelativeLayout
             android:id="@+id/relListVeri"
             android:layout_width="match_parent"
@@ -147,16 +161,9 @@
                 android:layout_marginEnd="50dp"
                 android:layout_marginBottom="5dp"
                 android:layout_toEndOf="@+id/btnNoVerificado"
+                android:onClick="Actualizar"
                 android:text="Regs: 0" />
         </RelativeLayout>
-
-        <ListView
-            android:id="@+id/ListDetVeri"
-            android:layout_width="match_parent"
-            android:layout_height="421dp"
-            android:layout_above="@+id/relListVeri"
-            android:layout_below="@+id/txtCodProd"
-            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 </RelativeLayout>

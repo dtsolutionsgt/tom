@@ -174,7 +174,7 @@ public class Mainmenu extends PBase {
 
             switch (idmenu) {
 
-                case 1:
+                case 1://Recepción
 
                     gl.tipoIngreso = "HCOC00";
                     gl.tipoTarea = idmenu;
@@ -206,12 +206,12 @@ public class Mainmenu extends PBase {
                 case 6://Verificacion
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_lista_tareas_principal.class));
-                case 7:
+                case 7://Inventario
 
-                case 8:
+                case 8://Existencias
 
-                case 9:
-
+                case 9://Cambio de usuario
+                    Mainmenu.super.finish();
             }
 
         }catch (Exception e){

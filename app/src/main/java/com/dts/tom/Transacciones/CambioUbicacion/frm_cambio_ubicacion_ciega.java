@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -16,19 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import androidx.annotation.RequiresApi;
-
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
-import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
-import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage1.USUbicStrucStage1List;
 import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucStage5List;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
@@ -39,18 +33,10 @@ import com.dts.base.WebService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import br.com.zbra.androidlinq.Stream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-import static java.util.stream.Collectors.groupingBy;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -174,7 +160,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino.setVisibility(gl.modo_cambio == 1 ? View.GONE : View.VISIBLE);
             lblEstadoDestino.setVisibility(gl.modo_cambio == 1 ? View.GONE : View.VISIBLE);
 
-            lblTituloForma.setText(String.format("Cambio de %s",(gl.modo_cambio==1?"ubicación ciega":"estado ciego")));
+            lblTituloForma.setText(String.format("Cambio de %s",(gl.modo_cambio==1?"ubicación N.D.":"estado N.D")));
 
             ProgressDialog("Cargando forma");
 
@@ -509,13 +495,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     int sel = cmbPresentacionList.indexOf(BeStockPallet.getIdPresentacion() + " - " +
                                                           BeStockPallet.getNombre_Presentacion());
                     cmbPresentacion.setSelection(sel);
-                    app.enabled(cmbPresentacion,false);
+                    cmbPresentacion.setEnabled(false);
                 }else{
                     cmbPresentacion.setSelection(0);
                     if (cmbPresentacionList.size() == 1){
-                        app.enabled(cmbPresentacion,false);
+                        cmbPresentacion.setEnabled(false);
                     }else{
-                        app.enabled(cmbPresentacion,true);
+                        cmbPresentacion.setEnabled(true);
                     }
                 }
 
@@ -880,7 +866,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(cmbVence.getAdapter() != null){
                     cvVence = cmbVence.getSelectedItem().toString();
                     if (cmbLote.getAdapter().getCount() == 1) {
-                        app.enabled(cmbVence,true);
+                        cmbVence.setEnabled(false);
                     }
                 } else{
                     cvVence = "01/01/1900";
@@ -888,7 +874,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else {
                 if(cmbVence.getAdapter() != null){
                     cvVence = cmbVence.getSelectedItem().toString();
-                    app.enabled(cmbVence,false);
+                    cmbVence.setEnabled(true);
                 }  else{
                     cvVence = "01/01/1900";
                 }
@@ -903,7 +889,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(cmbEstadoOrigen.getAdapter() != null){
                     cvEstOrigen = BeStockPallet.IdProductoEstado;
                     if (cmbEstadoOrigen.getAdapter().getCount() == 1) {
-                        app.enabled(cmbEstadoOrigen,true);
+                        cmbEstadoOrigen.setEnabled(false);
                     }
                 }else{
                     cvEstOrigen =0;
@@ -919,7 +905,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         cvEstOrigen =0;
                     }
 
-                    app.enabled(cmbEstadoOrigen,false);
+                    cmbEstadoOrigen.setEnabled(true);
                 }else{
                     cvEstOrigen =0;
                 }
@@ -971,7 +957,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             AuxList = stream(stockResList.items)
                     .where(c -> c.IdProducto == cvProdID)
                     .where(c -> c.IdPresentacion == cvPresID)
-                    .where(c -> c.Lote == cvLote)
+                    .where(c -> c.Lote.equals(cvLote))
                     .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
                     .where(c -> (cvEstOrigen > 0 ? c.IdProductoEstado == cvEstOrigen : c.IdProductoEstado >= 0))
                     .where(c -> (BeProductoUbicacion.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
@@ -1025,8 +1011,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtCantidad.selectAll();
             }
 
-            app.enabled(txtUbicDestino,true);
-            app.enabled(txtCantidad, true);
+            txtUbicDestino.setEnabled(true);
+            txtCantidad.setEnabled(true);
 
             txtCantidad.requestFocus();
 
@@ -1797,14 +1783,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtCantidad.setText("");
             txtCodigoPrd.setText("");
 
-            app.enabled(cmbPresentacion,false);
-            app.enabled(cmbLote,true);
-            app.enabled(cmbVence,true);
-            app.enabled(cmbEstadoDestino,true);
+            cmbPresentacion.setEnabled(false);
+            cmbLote.setEnabled(true);
+            cmbVence.setEnabled(true);
+            cmbEstadoDestino.setEnabled(true);
 
-            app.enabled(txtUbicDestino,true);
-            app.enabled(txtCantidad,true);
-            app.enabled(txtCodigoPrd,true);
+            txtUbicDestino.setEnabled(true);
+            txtCantidad.setEnabled(true);
+            txtCodigoPrd.setEnabled(true);
 
             validarDatos = false;
             vProcesar = false;
@@ -1853,14 +1839,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtCantidad.setText("");
             txtCodigoPrd.setText("");
 
-            app.enabled(cmbPresentacion,false);
-            app.enabled(cmbLote,true);
-            app.enabled(cmbVence,true);
-            app.enabled(cmbEstadoDestino,true);
+            cmbPresentacion.setEnabled(false);
+            cmbLote.setEnabled(true);
+            cmbVence.setEnabled(true);
+            cmbEstadoDestino.setEnabled(true);
 
-            app.enabled(txtUbicDestino,true);
-            app.enabled(txtCantidad,true);
-            app.enabled(txtCodigoPrd,true);
+            txtUbicDestino.setEnabled(true);
+            txtCantidad.setEnabled(true);
+            txtCodigoPrd.setEnabled(true);
 
             validarDatos = false;
             vProcesar = false;

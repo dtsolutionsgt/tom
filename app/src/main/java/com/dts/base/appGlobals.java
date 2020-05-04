@@ -9,6 +9,9 @@ import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsB
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
@@ -85,7 +88,9 @@ public class appGlobals extends Application {
     public int pIdPedidoEnc;
     public int pIdPedidoDet;
     public int pIdPickingEnc;
-    //public clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc;
+    public clsBeDetallePedidoAVerificar gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
+    public clsBeTrans_picking_ubicList gBePickingUbicList = new clsBeTrans_picking_ubicList();
+    //gBePedidoEnc = new clsBeTrans_pe_enc;
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;

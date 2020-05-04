@@ -3,6 +3,7 @@ package com.dts.base;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -178,20 +179,15 @@ public class AppMethods {
 		return rsltfecha;
 	}
 
-	public void enabled(Object obj, boolean valor){
+	public void readOnly(Object obj, boolean valor){
 		try{
 
             Class<?> aClass = obj.getClass();
             if (EditText.class.equals(aClass)) {
                 EditText et = (EditText) obj;
-                et.setFocusable(valor);
-                et.setFocusableInTouchMode(valor);
-                et.setClickable(valor);
-            } else if (Spinner.class.equals(aClass)) {
-                Spinner sp = (Spinner) obj;
-                sp.setFocusable(valor);
-                sp.setFocusableInTouchMode(valor);
-                sp.setClickable(valor);
+                et.setFocusable(!valor);
+                et.setFocusableInTouchMode(!valor);
+                et.setClickable(!valor);
             }
 		}catch (Exception ex){
 

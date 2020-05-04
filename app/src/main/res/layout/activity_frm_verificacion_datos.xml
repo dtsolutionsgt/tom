@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Verificacion.frm_verificacion_datos">
 
+    <DatePicker
+        android:id="@+id/datePicker2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:headerBackground="@drawable/color_medium"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/lblLicPlate2"
         android:layout_width="wrap_content"
@@ -15,7 +22,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/color_medium"
         android:gravity="center"
-        android:text="0EN0405140000717"
+        android:text="-"
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -37,7 +44,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
 
         <Button
             android:id="@+id/btnConfirmarV"
@@ -47,6 +55,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="Actualizar"
             android:text="Confirmar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
@@ -68,7 +77,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:text="- - -"
             android:textColor="@color/medium"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -77,24 +86,25 @@
 
     <EditText
         android:id="@+id/txtVenceVeri"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="163dp"
+        android:layout_height="56dp"
         android:layout_below="@+id/lblLicPlate2"
-        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="172dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
         android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/imgDate3"
         android:inputType="date" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/lblVenceVeri"
         style="@style/StyleText"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="149dp"
+        android:layout_height="60dp"
         android:layout_alignTop="@+id/txtVenceVeri"
         android:layout_alignBottom="@+id/txtVenceVeri"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="-4dp"
         android:text="Cad:" />
 
     <EditText
@@ -102,18 +112,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtVenceVeri"
-        android:layout_alignStart="@+id/txtVenceVeri"
+        android:layout_alignStart="@id/imgDate3"
         android:layout_alignEnd="@+id/txtVenceVeri"
-        android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/lblLoteVeri"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtLoteVeri"
-        android:layout_alignEnd="@+id/textView20"
+        android:layout_alignEnd="@+id/lblVenceVeri"
         android:layout_alignBottom="@+id/txtLoteVeri"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
@@ -129,12 +138,12 @@
         android:layout_marginTop="10dp" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/lblPresVeri"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/cmbPresVeri"
-        android:layout_alignEnd="@+id/textView21"
+        android:layout_alignEnd="@+id/lblLoteVeri"
         android:layout_alignBottom="@+id/cmbPresVeri"
         android:layout_alignParentStart="true"
         android:text="Presentación:" />
@@ -146,16 +155,15 @@
         android:layout_below="@+id/cmbPresVeri"
         android:layout_alignStart="@+id/cmbPresVeri"
         android:layout_alignEnd="@+id/cmbPresVeri"
-        android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/lblUmbasVeri"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtUmbasVeri"
-        android:layout_alignEnd="@+id/textView22"
+        android:layout_alignEnd="@+id/lblPresVeri"
         android:layout_alignBottom="@+id/txtUmbasVeri"
         android:layout_alignParentStart="true"
         android:text="Uni. bas.:" />
@@ -171,12 +179,12 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/lblCantVeri"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtCantVeri"
-        android:layout_alignEnd="@+id/textView23"
+        android:layout_alignEnd="@+id/lblUmbasVeri"
         android:layout_alignBottom="@+id/txtCantVeri"
         android:layout_alignParentStart="true"
         android:text="Cantidad:" />
@@ -192,12 +200,12 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textView25"
+        android:id="@+id/lblPesoVeri"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtPesoVeri"
-        android:layout_alignEnd="@+id/textView24"
+        android:layout_alignEnd="@+id/lblCantVeri"
         android:layout_alignBottom="@+id/txtPesoVeri"
         android:layout_alignParentStart="true"
         android:text="Peso:" />
@@ -211,4 +219,15 @@
         android:layout_alignEnd="@+id/txtPesoVeri"
         android:layout_marginTop="50dp"
         android:text="Marcar reemplazo" />
+
+    <ImageView
+        android:id="@+id/imgDate3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@id/lblVenceVeri"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/lblVenceVeri"
+        android:onClick="ChangeDate"
+        android:src="@drawable/calendar" />
+
 </RelativeLayout>

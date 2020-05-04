@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -116,12 +117,46 @@ public class MainActivity extends PBase {
 
             gl.deviceId =androidid();
 
-            // Lista de empresas
-            execws(1);
+            //Load();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+    }
+
+    private void Load(){
+
+        try{
+
+            progress.setMessage("Cargando empresas...");
+            progress.show();
+
+            LimpiarControles();
+
+            // Lista de empresas
+            execws(1);
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
+        }
+    }
+
+    private void LimpiarControles(){
+
+        try{
+            txtpass.setText("");
+            spinemp.setAdapter(null);
+            spinbod.setAdapter(null);
+            spinprint.setAdapter(null);
+            spinuser.setAdapter(null);
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
+        }
+    }
+
+    public void recargar(View view){
+        Load();
     }
 
     //region Grant permissions
@@ -371,6 +406,8 @@ public class MainActivity extends PBase {
                 case 4:
                     progress.setMessage("Cargando usuarios");
                     processUsers();
+
+                    //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
                     break;
                 case 5:
@@ -624,10 +661,7 @@ public class MainActivity extends PBase {
 
         try {
 
-            gl.gCantDecDespliegue = xobj.getresult(Integer.class,
-                    "Get_Cantidad_decimales_despliegue");
-
-            execws(6);
+            gl.gCantDecDespliegue = (Integer) xobj.getSingle("Get_Cantidad_decimales_despliegueResult",Integer.class);
 
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -638,8 +672,10 @@ public class MainActivity extends PBase {
 
         try {
 
-            gl.gCantDecCalculo = xobj.getresult(Integer.class,
-                    "Get_cantidad_decimales_calculo");
+            gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
+
+            //Llama al metodo del WS Get_cantidad_decimales_calculo
+            execws(6);
 
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -775,6 +811,15 @@ public class MainActivity extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    protected void onResume() {
+        try{
+            Load();
+            super.onResume();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
     }
 
     //endregion

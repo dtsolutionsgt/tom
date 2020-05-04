@@ -17,9 +17,11 @@
             android:id="@+id/lblEPedEnc"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Ped Enc"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEPedDet"
@@ -28,7 +30,8 @@
             android:gravity="center"
             android:text="Ped Det"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblECodigo"
@@ -37,7 +40,8 @@
             android:gravity="center"
             android:text="Codigo"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEProducto"
@@ -45,7 +49,8 @@
             android:layout_height="wrap_content"
             android:text="Producto"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblELote"
@@ -53,7 +58,8 @@
             android:layout_height="wrap_content"
             android:text="Lote"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEVence"
@@ -61,84 +67,107 @@
             android:layout_height="wrap_content"
             android:text="Vence"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/lblEDestino"
+            android:id="@+id/lblELicPlate"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="License Plate"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEUmBas"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="left"
             android:text="UM BAS"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEPresentacion"
-            android:layout_width="100dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:gravity="left"
             android:text="Presentación"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblESolicitado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="Solicitada"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEPickeado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="Pickeado"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEVerificado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="Verficada"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEEstado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Estado"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEIdPresentacion"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Id Pres"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEIdProductoBodega"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Id Prod Bod"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblENDias"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:gravity="right"
+            android:text="N Días"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
     </LinearLayout>
 
@@ -155,7 +184,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="Ped Enc"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblPedDet"
@@ -163,7 +193,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="Ped Det"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblCodigo"
@@ -171,7 +202,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="40037"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblProducto"
@@ -180,7 +212,8 @@
             android:gravity="center_vertical"
             android:paddingStart="5dp"
             android:text="42.9 Producto"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblLote"
@@ -188,7 +221,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Lote"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblVence"
@@ -196,7 +230,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="01/01/1900"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblLicPlate"
@@ -204,79 +239,89 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Lic Plate"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblUmBas"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="left"
             android:text="UM Bas"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblPresentacion"
-            android:layout_width="100dp"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="left"
             android:text="CAJA 12"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblSolicitado"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="right"
             android:text="10.000000"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblPickeado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="0.00"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblVerificado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="0.00"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblEstado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Buen estado"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblIdPresentacion"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="90"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblIdProductoBodega"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="4838"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/lblNDias"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="0"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
     </LinearLayout>
 </RelativeLayout>
