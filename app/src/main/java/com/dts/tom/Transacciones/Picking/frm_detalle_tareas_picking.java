@@ -327,6 +327,7 @@ public class frm_detalle_tareas_picking extends PBase {
             progress.setMessage("Listando detalle de picking");
 
             if (plistPickingUbi!=null){
+
                 if (plistPickingUbi.items!=null){
 
                     vItem = new  clsBeTrans_picking_ubic();

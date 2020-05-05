@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,9 +39,11 @@ import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,7 +146,8 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void LimpiarControles(){
+    private void LimpiarControles()
+    {
 
         try{
             txtpass.setText("");
@@ -161,39 +166,43 @@ public class MainActivity extends PBase {
 
     //region Grant permissions
 
-    private void grantPermissions() {
+    private void grantPermissions()
+    {
         try {
-            if (Build.VERSION.SDK_INT >= 20) {
+            if (Build.VERSION.SDK_INT >= 20)
+            {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     startApplication();
-                } else {
+                } else
+                {
                     ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        try {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        try
+        {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            {
                 startApplication();
-            } else {
+            } else
+            {
                 super.finish();
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
-    //endregion
-
-    //region Events
-
-    public void doLogin(View view) {
-
+    public void doLogin(View view)
+    {
         try{
 
             imgIngresar.setVisibility(View.INVISIBLE);
@@ -203,7 +212,8 @@ public class MainActivity extends PBase {
 
             imgIngresar.setVisibility(View.VISIBLE);
 
-        }catch (Exception e){
+        }catch (Exception e)
+        {
 
         }
     }
@@ -217,7 +227,8 @@ public class MainActivity extends PBase {
         spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
@@ -244,8 +255,10 @@ public class MainActivity extends PBase {
 
         spinbod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                try {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                try
+                {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
                     spinlabel.setTextColor(Color.BLACK);
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
@@ -256,7 +269,8 @@ public class MainActivity extends PBase {
                     idimpres=0;
                     execws(3);
 
-                } catch (Exception e) {
+                } catch (Exception e)
+                {
                     msgbox(e.getMessage());
                 }
 
@@ -269,10 +283,13 @@ public class MainActivity extends PBase {
 
         });
 
-        spinprint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinprint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                try {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                try
+                {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
                     spinlabel.setTextColor(Color.BLACK);
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
@@ -292,10 +309,13 @@ public class MainActivity extends PBase {
 
         });
 
-        spinuser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinuser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                try {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                try
+                {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
                     spinlabel.setTextColor(Color.BLACK);
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
@@ -319,10 +339,13 @@ public class MainActivity extends PBase {
 
         });
 
-        txtpass.setOnKeyListener(new View.OnKeyListener() {
+        txtpass.setOnKeyListener(new View.OnKeyListener()
+        {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
 
                     imgIngresar.setVisibility(View.INVISIBLE);
 
@@ -342,7 +365,8 @@ public class MainActivity extends PBase {
 
     //region WebService handler
 
-    public class WebServiceHandler extends WebService {
+    public class WebServiceHandler extends WebService
+    {
 
         public WebServiceHandler(PBase Parent,String Url) {
             super(Parent,Url);
@@ -350,8 +374,10 @@ public class MainActivity extends PBase {
 
         @Override
         public void wsExecute(){
-            try {
-                switch (ws.callback) {
+            try
+            {
+                switch (ws.callback)
+                {
                     case 1:
                         callMethod("Android_Get_All_Empresas");
                         break;
@@ -379,18 +405,22 @@ public class MainActivity extends PBase {
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         break;
                 }
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
         }
     }
 
     @Override
-    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
-        try {
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel)
+    {
+        try
+        {
             if (throwing) throw new Exception(errmsg);
 
-            switch (ws.callback) {
+            switch (ws.callback)
+            {
                 case 1:
                     progress.setMessage("Cargando empresas");
                     processEmpresas();break;
@@ -423,39 +453,35 @@ public class MainActivity extends PBase {
 
             progress.cancel();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
-    //endregion
-
-    //region MetodosGeneral
-
-    private void Licencia_Valida(){
+    private void Licencia_Valida()
+    {
 
         try{
-
-
 
         }catch (Exception e){
             mu.msgbox("Licencia Valida:"+e.getMessage());
         }
     }
 
-    private void Valida_Ingreso(){
-
+    private void Valida_Ingreso()
+    {
         try{
 
-            if (gl.IdEmpresa>0){
-
-                if (gl.IdBodega>0){
-
-                    if (gl.IdOperador>0){
-
-                    if (!txtpass.getText().toString().isEmpty()){
-
+            if (gl.IdEmpresa>0)
+            {
+                if (gl.IdBodega>0)
+                {
+                    if (gl.IdOperador>0)
+                    {
+                    if (!txtpass.getText().toString().isEmpty())
+                    {
                                 List<clsBeBodegaBase> BeBodega =
                                         stream(bodegas.items)
                                                 .where(c -> c.IdBodega  == gl.IdBodega)
@@ -470,7 +496,8 @@ public class MainActivity extends PBase {
                                         .orderBy(c-> c.Operador.IdOperador)
                                         .toList();
 
-                        if (BeOperadorBodega.size()>0){
+                        if (BeOperadorBodega.size()>0)
+                        {
 
                             gl.gOperadorBodega = BeOperadorBodega;
                             gl.OperadorBodega = gl.gOperadorBodega.get(0);
@@ -479,32 +506,40 @@ public class MainActivity extends PBase {
                                     stream(impres)
                                     .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                            if (BeImpresora.size()>0){
+                            if (BeImpresora.size()>0)
+                            {
                                 gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip ==""){
+                                if (gl.gImpresora.get(0).Direccion_Ip =="")
+                                {
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 }
-                            }else{
+                            }else
+                            {
                                 mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
                             //Get_BeImpresora_By_IdImpresora(gIdImpresora)
 
                             execws(7);
 
-                        }else{
+                        }else
+                        {
                          mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
                         }
 
-                        }else{
+                        }else
+                        {
                         mu.msgbox("Ingrese clave");
-                    }
-                    }else{
+                        }
+                    }else
+                    {
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
-                }else{
+                }else
+                {
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
-            }else{
+            }else
+            {
                 mu.msgbox("No se ha seleccionado una empresa válida");
             }
 
@@ -514,17 +549,21 @@ public class MainActivity extends PBase {
 
     }
 
-    public String getLocalBluetoothName() {
+    public String getLocalBluetoothName()
+    {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
+        if (mBluetoothAdapter == null)
+        {
             return "";
-        } else {
+        } else
+        {
             return mBluetoothAdapter.getName();
         }
     }
 
     @SuppressLint("MissingPermission")
-    private String androidid() {
+    private String androidid()
+    {
         String uniqueID="";
         try {
             uniqueID = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -624,9 +663,14 @@ public class MainActivity extends PBase {
     }
 
     private void processUsers() {
-        class UserSort implements Comparator<clsBeOperador_bodega> {
-            public int compare(clsBeOperador_bodega left, clsBeOperador_bodega right) {
-                return left.Fec_agr.compareTo(right.Fec_agr);
+
+        String rootdir=Environment.getExternalStorageDirectory()+"/WMSFotos/";
+
+        class UserSort implements Comparator<clsBeOperador_bodega>
+        {
+            public int compare(clsBeOperador_bodega left, clsBeOperador_bodega right)
+            {
+                return left.Nombre_Completo.compareTo(right.Nombre_Completo);
             }
         }
 
@@ -634,22 +678,24 @@ public class MainActivity extends PBase {
 
             users=xobj.getresult(clsBeOperador_bodegaList.class,"Get_Operadores_By_IdBodega_For_HH");
 
-            if (users!=null){
+            if (users!=null)
+            {
+                if (users.items!=null)
+                {
+                    for (int i = users.items.size()-1; i>=0; i--)
+                    {
+                        if (users.items.get(i).Operador.Activo)
+                        {
+                            users.items.get(i).Nombre_Completo=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
 
-                if (users.items!=null){
-
-                    for (int i = users.items.size()-1; i>=0; i--) {
-                        if (users.items.get(i).Operador.Activo) {
-                            users.items.get(i).Fec_agr=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
-                        } else {
+                        } else
+                        {
                             users.items.remove(i);
                         }
                     }
 
-                    //if (users.items.size()>0) Collections.sort(users.items, new UserSort());
                     fillSpinUser();
                 }
-
             }
 
         } catch (Exception e) {
@@ -657,27 +703,31 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processGetDecimalesDespliegue(){
-
-        try {
+    private void processGetDecimalesDespliegue()
+    {
+        try
+        {
 
             gl.gCantDecDespliegue = (Integer) xobj.getSingle("Get_Cantidad_decimales_despliegueResult",Integer.class);
 
-        }catch (Exception e){
+        }catch (Exception e)
+        {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
     private void processGetDecimalesCalculo(){
 
-        try {
+        try
+        {
 
             gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
 
             //Llama al metodo del WS Get_cantidad_decimales_calculo
             execws(6);
 
-        }catch (Exception e){
+        }catch (Exception e)
+        {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -710,7 +760,8 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void fillSpinBod() {
+    private void fillSpinBod()
+    {
         String ss;
 
         try {
@@ -727,16 +778,20 @@ public class MainActivity extends PBase {
             spinbod.setAdapter(dataAdapter);
 
             if (bodlist.size()>0) spinbod.setSelection(0);
+
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
     }
 
-    private void fillSpinImpres() {
-        try {
+    private void fillSpinImpres()
+    {
+        try
+        {
             prnlist.clear();
 
-            for (int i = 0; i < impres.size(); i++) {
+            for (int i = 0; i < impres.size(); i++)
+            {
                 prnlist.add(impres.get(i).Nombre);
             }
 
@@ -745,32 +800,35 @@ public class MainActivity extends PBase {
             spinprint.setAdapter(dataAdapter);
 
             if (prnlist.size()>0) spinprint.setSelection(0);
+
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
     }
 
-    private void fillSpinUser() {
-        try {
+    private void fillSpinUser()
+    {
+        try
+        {
             userlist.clear();
 
-            for (int i = 0; i <users.items.size(); i++) {
-                //userlist.add(users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres);
-                userlist.add(users.items.get(i).Fec_agr);
+            for (int i = 0; i <users.items.size(); i++)
+            {
+                userlist.add(users.items.get(i).Nombre_Completo);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, userlist);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinuser.setAdapter(dataAdapter);
 
-            if (userlist.size()>0) {
+            if (userlist.size()>0)
+            {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
             }
 
-
-
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             mu.msgbox( e.getMessage());
         }
     }
@@ -779,27 +837,34 @@ public class MainActivity extends PBase {
 
     //region Aux
 
-    private void getURL() {
+    private void getURL()
+    {
+
         gl.wsurl = "http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx";
         gl.wsurl="";
 
         try {
+
             File file1 = new File(Environment.getExternalStorageDirectory(), "/tomws.txt");
-            if (file1.exists()) {
+
+            if (file1.exists())
+            {
                 FileInputStream fIn = new FileInputStream(file1);
                 BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
                 gl.wsurl = myReader.readLine();
                 myReader.close();
             }
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             gl.wsurl ="";
         }
 
         if (!gl.wsurl.isEmpty()) lblurl.setText(gl.wsurl);else lblurl.setText("Falta archivo con URL");
     }
 
-    public void ProgressDialog(String mensaje){
+    public void ProgressDialog(String mensaje)
+    {
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -808,20 +873,21 @@ public class MainActivity extends PBase {
         progress.show();
     }
 
-    private void execws(int callbackvalue) {
+    private void execws(int callbackvalue)
+    {
         ws.callback=callbackvalue;
         ws.execute();
     }
 
-    protected void onResume() {
-        try{
+    protected void onResume()
+    {
+        try
+        {
             Load();
             super.onResume();
-        }catch (Exception e){
+        }catch (Exception e)
+        {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
-
-    //endregion
-
 }

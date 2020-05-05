@@ -14,7 +14,7 @@ public class clsBeOperador_bodega {
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeOperador Operador=new clsBeOperador();
-
+    @Element(required=false) public String Nombre_Completo="";
 
     public clsBeOperador_bodega() {
     }
@@ -96,6 +96,15 @@ public class clsBeOperador_bodega {
     }
     public void setOperador(clsBeOperador value) {
         Operador=value;
+    }
+
+    public String getNombre_Completo()
+    {
+        return Nombre_Completo;
+    }
+    public void setNombre_Completo(String value)
+    {
+        Nombre_Completo=value;
     }
 
 }

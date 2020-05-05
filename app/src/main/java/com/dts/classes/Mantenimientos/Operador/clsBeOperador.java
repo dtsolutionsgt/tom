@@ -42,7 +42,9 @@ public class clsBeOperador {
                          String Codigo, String Clave, boolean Activo, String User_agr,
                          String Fec_agr, String User_mod, String Fec_mod, double Costo_hora,
                          boolean Usa_hh,boolean Recibe,boolean Ubica,
-                         boolean Transporta,boolean Pickea,boolean Verifica, boolean IsNew, clsBeRol_operador RolOperador)
+                         boolean Transporta,boolean Pickea,boolean Verifica,
+                         boolean IsNew, clsBeRol_operador RolOperador,
+                         String Foto)
     {
 
         this.IdOperador=IdOperador;
@@ -69,7 +71,7 @@ public class clsBeOperador {
         this.Verifica = Verifica;
         this.IsNew = IsNew;
         this.RolOperador=RolOperador;
-
+        this.Foto = Foto;
     }
 
 
@@ -216,6 +218,13 @@ public class clsBeOperador {
     }
     public void setRolOperador(clsBeRol_operador value) {
         RolOperador=value;
+    }
+
+    public String getFoto() {
+        return Foto;
+    }
+    public void setFoto(String value) {
+        Foto=value;
     }
 
 }
