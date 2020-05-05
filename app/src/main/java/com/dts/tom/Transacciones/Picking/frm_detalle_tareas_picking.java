@@ -57,7 +57,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private ProgressDialog progress;
     private ListView listView;
     private Spinner cmbOrdenadorPor;
-    private Button btnPendientes;
+    private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro;
     private TextView lblNoDocumento;
 
@@ -89,6 +89,7 @@ public class frm_detalle_tareas_picking extends PBase {
         listView = (ListView) findViewById(R.id.listTareasPicking);
         cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
         btnPendientes = (Button) findViewById(R.id.btnPendientes);
+        btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
         txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
         lblNoDocumento = (TextView)findViewById(R.id.lblNoDocumento);
 
@@ -304,6 +305,7 @@ public class frm_detalle_tareas_picking extends PBase {
             pOrden=1;
 
             TipoLista = 2;
+            btnRes_Det.setText("D.");
 
             lblNoDocumento.setText("NoDocumento: "+gl.gIdPickingEnc);
 
@@ -326,26 +328,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (plistPickingUbi!=null){
                 if (plistPickingUbi.items!=null){
-
-                if (TipoLista==1){//Resumido
-
-                    //Version Android superior a 7.0...
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    {
-
-                        Function<clsBeTrans_picking_ubic, List<Object>> compositKey = std ->
-                                Arrays.asList(std.IdUbicacion,std.CodigoProducto,std.NombreUbicacion,std.NombreProducto,std.ProductoUnidadMedida,
-                                            std.ProductoPresentacion,std.Lote,std.Lic_plate,std.Fecha_Vence,std.ProductoEstado,std.IdPresentacion,
-                                            std.IdProductoEstado,std.IdProductoBodega);
-
-                         plistPickingUbi.items.stream().collect(Collectors.groupingBy(compositKey, Collectors.toList()));
-
-                    }
-
-
-                }else if (TipoLista==2){//Detallado
-
-                }
 
                     vItem = new  clsBeTrans_picking_ubic();
 
@@ -407,6 +389,21 @@ public class frm_detalle_tareas_picking extends PBase {
 
     public void BotonFinalizar(View view){
         Finalizar_Picking();
+    }
+
+    public void BotonR(View view){
+
+        try{
+
+            btnRes_Det.setText("R.");
+
+            TipoLista=1;
+
+            execws(3);
+
+        }catch (Exception e) {
+
+        }
     }
 
     private void Finalizar_Picking(){
@@ -529,8 +526,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         callMethod("Actualizar_Estado_Picking","oBeTrans_picking_enc",gBePicking);
                         break;
                     case 3:
-                        callMethod("Get_All_PickingUbic_By_IdPickingEnc","pIdPickingEnc",gBePicking.IdPickingEnc,
-                                "pDetalleOperador",gBePicking.Detalle_operador,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc_Tipo","pIdPickingEnc",gBePicking.IdPickingEnc,
+                                "pDetalleOperador",gBePicking.Detalle_operador,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,"Tipo",TipoLista);
                         break;
                     case 4:
                         callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);

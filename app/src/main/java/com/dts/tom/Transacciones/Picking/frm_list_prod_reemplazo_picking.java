@@ -255,20 +255,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             lblTituloForma.setText("Picking List No: "+ gBePickingUbic.IdPickingEnc+
                     "\n Lista de Productos");
 
-            for (clsBeStock_res StockRes:BeListStockRes.items){
 
-                if (!Completo){
-
-                    StockResC=new clsBeStock_res();
-
-                    StockResC = StockRes;
-
-                    execws(2);
-
-                }else{
-                    break;
-                }
-            }
+            Lista_Inventario_Disponible();
 
         }catch (Exception e){
             mu.msgbox("Load:"+e.getMessage());
@@ -343,11 +331,12 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Stock_Res_By_IdPedidoDet","pIdPedidoDet",gBePickingUbic.IdPedidoDet);
+                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet","pIdPedidoDet",gBePickingUbic.IdPedidoDet,
+                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,"gIdBodega",gl.IdBodega,"CantReemplazar",CantReemplazar,"vCant",vCant);
                         break;
                     case 2:
-                        callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
-                                "pStockRes",StockResC);
+                        //callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
+                          //      "pStockRes",StockResC);
                         break;
                     case 3:
                         callMethod("Reservar_Stock_By_IdStock","IdStock",selitem.IdStock,"CantSol",CantReemplazar,
@@ -457,15 +446,12 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
 
-            BeListStockRes = xobj.getresult(clsBeStock_resList.class,"Get_All_Stock_Res_By_IdPedidoDet");
+            DT = xobj.filldt();
 
-            if (BeListStockRes!=null){
-                if (BeListStockRes.items!=null){
-                    Completo=false;
+            vCant = xobj.getresultSingle(Double.class,"vCant");
+
+            if (DT.getCount()>0){
                     Load();
-                }else{
-                    progress.cancel();
-                }
             }else{
                 progress.cancel();
             }
