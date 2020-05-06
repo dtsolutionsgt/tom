@@ -129,7 +129,7 @@ public class frm_list_inventario extends PBase {
                 vItem.Hora_ini = du.convierteHoraMostar(vItem.Hora_ini);
                 vItem.Transcurrido = String.valueOf(du.DateDiff(BeInv.Hora_ini));
 
-                BeListInv.add(vItem);
+                BeListInv.add(vItem);//cambios
 
             }
 
