@@ -1024,36 +1024,7 @@ public class frm_picking_datos extends PBase {
 
                 pSubListPickingU.items = stream(plistPickingUbi.items).where(c->c.IdUbicacion==gBePickingUbic.IdUbicacion).toList();
 
-                for (clsBeTrans_picking_ubic vBePickingUbic: pSubListPickingU.items){
-
-                    if ((vBePickingUbic.Cantidad_Recibida+Cantidad)>vBePickingUbic.Cantidad_Solicitada){
-
-                        CantPendiente = vBePickingUbic.Cantidad_Solicitada-vBePickingUbic.Cantidad_Recibida;
-
-                    }else {
-
-                        CantPendiente = Cantidad;
-
-                    }
-
-                    vBePickingUbic.Cantidad_Recibida +=CantPendiente;
-                    vBePickingUbic.Acepto = true;
-                    vBePickingUbic.Encontrado = true;
-                    vBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
-                    vBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
-                    vBePickingUbic.Fec_mod = du.getFechaActual();
-
-                    BePickingDet.IdPickingDet = vBePickingUbic.IdPickingDet;
-                    execws(5);
-
-                    if ((Cantidad-CantPendiente)==0){
-                        break;
-                    }else{
-                        Cantidad-=CantPendiente;
-                    }
-                }
-
-                doExit();
+                execws(9);
 
             }
 
@@ -1204,6 +1175,11 @@ public class frm_picking_datos extends PBase {
                         callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet","oBeTrans_picking_ubic",gBePickingUbic,
                                 "BeStockRes",BeStockRes,"oBeTrans_picking_det",BePickingDet,"IdBodega",gl.IdBodega,"pBeStockPalletReemplazo",BeStockPallet.Stock);
                         break;
+                    case 9:
+                        callMethod("Actualiza_Picking_Consolidado","pBePickingUbicList",pSubListPickingU.items,
+                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString()),
+                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet.Stock);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -1247,6 +1223,8 @@ public class frm_picking_datos extends PBase {
                         doExit();
                     }
                     break;
+                case 9:
+                    doExit();
             }
 
         } catch (Exception e) {
