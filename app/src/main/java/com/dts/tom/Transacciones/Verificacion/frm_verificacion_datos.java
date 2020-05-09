@@ -5,17 +5,17 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +23,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.zbra.androidlinq.delegate.Selector;
 import br.com.zbra.androidlinq.delegate.SelectorDouble;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -48,14 +48,19 @@ public class frm_verificacion_datos extends PBase {
     private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
+    private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
 
-    private clsBeProducto gBeProducto = new clsBeProducto();
+    public static clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
+    public static clsBeProducto gBeProducto = new clsBeProducto();
+    public static clsBeDetallePedidoAVerificar BePedidoDetVerif = new clsBeDetallePedidoAVerificar();
+
     private clsBeStock_res BeStockRes = new clsBeStock_res();
-    private clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
-    private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
+    private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private int IdProductoBodega;
     private String Lp;
+
+    public static double CantReemplazar=0;
 
     private ArrayList<String> PresList = new ArrayList<String>();
 
@@ -68,6 +73,8 @@ public class frm_verificacion_datos extends PBase {
     private double Rec = 0;
     private double Ver = 0;
     private String UM = "";
+    private double pPeso;
+    private double pCantidad;
 
     // Fecha
     private int anno;
@@ -103,9 +110,14 @@ public class frm_verificacion_datos extends PBase {
         btnConfirmarV = (Button) findViewById(R.id.btnConfirmarV);
         btnBack = (Button) findViewById(R.id.btnBack);
         cmbPresVeri = (Spinner) findViewById(R.id.cmbPresVeri);
-
+        llFechaVence = (LinearLayout) findViewById(R.id.llFechaVence);
+        llLote = (LinearLayout) findViewById(R.id.llLote);
+        llPresentacion = (LinearLayout) findViewById(R.id.llPresentacion);
+        llCantidad = (LinearLayout) findViewById(R.id.llCantidad);
+        llPeso = (LinearLayout) findViewById(R.id.llPeso);
+        llUMBas = (LinearLayout) findViewById(R.id.llUMBas);
+        llReemplazo = (LinearLayout) findViewById(R.id.llReemplazo);
         dpResult = (DatePicker) findViewById(R.id.datePicker2);
-
         imgDate = (ImageView)findViewById(R.id.imgDate3);
 
         BePickingUbicList = gl.gBePickingUbicList;
@@ -124,7 +136,10 @@ public class frm_verificacion_datos extends PBase {
 
         try {
 
-            IdProductoBodega = gl.gBePedidoDetVerif.getIdProductoBodega();
+            BePedidoDetVerif = gl.gBePedidoDetVerif;
+            gl.gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
+
+            IdProductoBodega = BePedidoDetVerif.getIdProductoBodega();
 
             //Llama a método del WS Get_Producto_By_IdProductoBodega
             execws(1);
@@ -159,7 +174,7 @@ public class frm_verificacion_datos extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                if (!txtVenceVeri.getText().equals(gl.gBePedidoDetVerif.getFecha_Vence())){
+                                if (!txtVenceVeri.getText().equals(BePedidoDetVerif.getFecha_Vence())){
                                     msgAskCambioFecha("Está seguro de modificar la fecha de vencimiento del producto");
                                 }
 
@@ -182,13 +197,13 @@ public class frm_verificacion_datos extends PBase {
 
                                 if (valida_Valor(txtCantVeri)){
 
-                                    vDif = gl.gBePedidoDetVerif.Cantidad_Recibida - gl.gBePedidoDetVerif.Cantidad_Verificada + Double.valueOf(txtCantVeri.getText().toString());
+                                    vDif = BePedidoDetVerif.Cantidad_Recibida - BePedidoDetVerif.Cantidad_Verificada + Double.valueOf(txtCantVeri.getText().toString());
 
                                     if (vDif < 0 && Math.abs(vDif) > 0.000000001) {
                                         msgbox("La cantidad recibida es mayor a la cantidad solicitada, no se puede ingresar esa cantidad");
                                         txtCantVeri.selectAll();
                                         txtCantVeri.requestFocus();
-                                        //showkeyb();
+                                        showkeyb();
                                     }else {
                                         Guardar_Verificacion();
                                     }
@@ -235,19 +250,19 @@ public class frm_verificacion_datos extends PBase {
 
         try{
 
-            Codigo = gl.gBePedidoDetVerif.getCodigo();
-            Nombre = gl.gBePedidoDetVerif.getNombre_Producto();
-            Expira = gl.gBePedidoDetVerif.getFecha_Vence();
-            Lote = gl.gBePedidoDetVerif.getLote();
-            Sol = gl.gBePedidoDetVerif.getCantidad_Solicitada();
-            Rec = gl.gBePedidoDetVerif.getCantidad_Recibida();
-            Ver = gl.gBePedidoDetVerif.getCantidad_Verificada();
-            UM = gl.gBePedidoDetVerif.getNom_Unid_Med();
+            Codigo = BePedidoDetVerif.getCodigo();
+            Nombre = BePedidoDetVerif.getNombre_Producto();
+            Expira = BePedidoDetVerif.getFecha_Vence();
+            Lote = BePedidoDetVerif.getLote();
+            Sol = BePedidoDetVerif.getCantidad_Solicitada();
+            Rec = BePedidoDetVerif.getCantidad_Recibida();
+            Ver = BePedidoDetVerif.getCantidad_Verificada();
+            UM = BePedidoDetVerif.getNom_Unid_Med();
 
-            int IdPedidoDet = gl.gBePedidoDetVerif.getIdPedidoDet();
-            int IdPresentacion = gl.gBePedidoDetVerif.getIdPresentacion();
+            int IdPedidoDet = BePedidoDetVerif.getIdPedidoDet();
+            int IdPresentacion = BePedidoDetVerif.getIdPresentacion();
 
-            Lp = gl.gBePedidoDetVerif.getLicPlate();
+            Lp = BePedidoDetVerif.getLicPlate();
 
             lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s Sol: %s Pick: %s Veri: %s",
                     Codigo, Nombre, Expira, Lote,String.valueOf(Sol), String.valueOf(Rec), String.valueOf(Ver)));
@@ -269,10 +284,10 @@ public class frm_verificacion_datos extends PBase {
             txtCantVeri.setText(String.valueOf(Rec-Ver));
 
             txtUmbasVeri.setText(UM);
-            txtLoteVeri.setText(gl.gBePedidoDetVerif.getLote());
+            txtLoteVeri.setText(BePedidoDetVerif.getLote());
 
-            int sel = PresList.indexOf(gl.gBePedidoDetVerif.getIdPresentacion()+ " - " +
-                                       gl.gBePedidoDetVerif.getNom_Presentacion());
+            int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
+                                       BePedidoDetVerif.getNom_Presentacion());
             cmbPresVeri.setSelection(sel);
 
             if (Lp != ""){
@@ -295,7 +310,7 @@ public class frm_verificacion_datos extends PBase {
 
             txtCantVeri.selectAll();
             txtCantVeri.requestFocus();
-            //showkeyb();
+            showkeyb();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -372,12 +387,6 @@ public class frm_verificacion_datos extends PBase {
 
     private boolean Guardar_Verificacion() {
 
-        clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
-        double CantPendiente  = 0;
-        double PesoPendiente  = 0;
-        double Cantidad  = 0;
-        double Peso  = 0;
-        String resultado = "";
         boolean result = false;
         List AuxList;
 
@@ -393,14 +402,16 @@ public class frm_verificacion_datos extends PBase {
                 }
             }
 
-            Cantidad = Double.parseDouble(txtCantVeri.getText().toString());
-            Peso =  Double.parseDouble(txtPesoVeri.getText().toString());
+            pCantidad = Double.parseDouble(txtCantVeri.getText().toString());
+            pPeso =  Double.parseDouble(txtPesoVeri.getText().toString());
+
+            pSubListPickingU = new clsBeTrans_picking_ubicList();
 
             if (Lp.equals("")){
                 AuxList = stream(BePickingUbicList.items)
-                        .where (z -> z.CodigoProducto.equals(gl.gBePedidoDetVerif.Codigo))
-                        .where(z -> z.Lote.equals(gl.gBePedidoDetVerif.Lote))
-                        .where(z -> app.strFecha(z.Fecha_Vence).equals(gl.gBePedidoDetVerif.Fecha_Vence))
+                        .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                        .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
+                        .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
                         .toList();
             }else{
                 AuxList = stream(BePickingUbicList.items)
@@ -414,46 +425,8 @@ public class frm_verificacion_datos extends PBase {
 
             pSubListPickingU.items = AuxList;
 
-            for (clsBeTrans_picking_ubic vBePickingUbic:pSubListPickingU.items ) {
-
-                if ((vBePickingUbic.Cantidad_Verificada + Cantidad) > vBePickingUbic.Cantidad_Recibida) {
-                    CantPendiente = vBePickingUbic.Cantidad_Recibida - vBePickingUbic.Cantidad_Verificada;
-                } else {
-                    CantPendiente = Cantidad;
-                }
-
-                if ((vBePickingUbic.Peso_verificado + Peso) > vBePickingUbic.Peso_recibido) {
-                    PesoPendiente = vBePickingUbic.Peso_recibido - vBePickingUbic.Peso_verificado;
-                } else {
-                    PesoPendiente = Peso;
-                }
-
-                vBePickingUbic.Cantidad_Verificada += CantPendiente;
-                vBePickingUbic.Peso_verificado += PesoPendiente;
-                vBePickingUbic.IdOperadorBodega_Verifico = gl.IdOperador;
-                vBePickingUbic.Fecha_verificado = du.getFechaActual();
-
-                BeStockRes.IdStockRes = vBePickingUbic.IdStockRes;
-                BePickingUbic = vBePickingUbic;
-
-                //Llama al método del WS Get_Single_StockRes
-                final Handler cbhandler = new Handler();
-                cbhandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        execws(3);
-                    }
-                }, 1000);
-
-                if (Cantidad - CantPendiente == 0){
-                    break;
-                }else {
-                    Cantidad -= CantPendiente;
-                }
-
-            }
-
-            result = true;
+            //Llama al método del WS Actualiza_Cant_Peso_Verificacion
+            execws(3);
 
         }catch (Exception ex){
             result = false;
@@ -487,13 +460,11 @@ public class frm_verificacion_datos extends PBase {
                                    "pActivo",true);
                         break;
                     case 3:
-                        callMethod("Get_Single_StockRes",
-                                   "pBeStock_res", BeStockRes);
-                        break;
-                    case 4:
-                        callMethod("Actualizar_PickingUbic_Por_Verificacion",
-                                "oBeTrans_picking_ubic",BePickingUbic,
-                                "BeStockRes", BeStockRes);
+                        callMethod("Actualiza_Cant_Peso_Verificacion",
+                                   "pBePickingUbicList",pSubListPickingU,
+                                   "pIdOperador",gl.OperadorBodega.getIdOperador(),
+                                   "pCantidad",pCantidad,
+                                   "pPeso",pPeso);
                         break;
                 }
 
@@ -519,12 +490,8 @@ public class frm_verificacion_datos extends PBase {
                     processPresentacionesProducto();
                     break;
                 case 3:
-                    processStockRes();
+                    processActualizaCantPesoVerif();
                     break;
-                case 4:
-                    processActualizarPicking();
-                    break;
-
             }
 
         } catch (Exception e) {
@@ -538,16 +505,12 @@ public class frm_verificacion_datos extends PBase {
         try {
 
             if (!gBeProducto.Control_lote && !gBeProducto.Control_vencimiento){
-                lblVenceVeri.setVisibility(View.GONE);
-                txtVenceVeri.setVisibility(View.GONE);
-                lblLoteVeri.setVisibility(View.GONE);
-                txtLoteVeri.setVisibility(View.GONE);
+                llFechaVence.setVisibility(View.GONE);
+                llLote.setVisibility(View.GONE);
             }else if (!gBeProducto.Control_lote){
-                lblLoteVeri.setVisibility(View.GONE);
-                txtLoteVeri.setVisibility(View.GONE);
+                llLote.setVisibility(View.GONE);
             }else if (!gBeProducto.Control_vencimiento){
-                txtVenceVeri.setVisibility(View.GONE);
-                lblVenceVeri.setVisibility(View.GONE);
+                llFechaVence.setVisibility(View.GONE);
             }else{
                 txtVenceVeri.setVisibility(View.VISIBLE);
                 lblVenceVeri.setVisibility(View.VISIBLE);
@@ -612,39 +575,13 @@ public class frm_verificacion_datos extends PBase {
         }
     }
 
-    private void processStockRes(){
+    private void processActualizaCantPesoVerif(){
 
         try {
 
-            progress.setMessage("Obteniendo el Stock Reservado");
-            progress.show();
+            progress.setMessage("Actualizando cantidad y peso de la verificación...");
 
-            Boolean resultado = (Boolean) xobj.getSingle("Get_Single_StockResResult",Boolean.class);
-            BeStockRes =  xobj.get(clsBeStock_res.class,"pBeStock_res");
-
-            BeStockRes.Estado = "VERIFICADO";
-            BeStockRes.User_mod = String.valueOf(gl.IdOperador);
-            BeStockRes.Fec_mod = du.getFechaActual();
-
-            if (resultado){
-                //Llama al método del WS Actualizar_PickingUbic_Por_Verificacion
-                execws(4);
-            }
-
-
-        }catch (Exception e){
-            progress.cancel();
-            mu.msgbox("processPresentacionesProducto:"+e.getMessage());
-        }
-    }
-
-    private void processActualizarPicking(){
-
-        try {
-
-            progress.setMessage("Actualizando picking por verificación...");
-
-            String resultado = (String)xobj.getSingle("Actualizar_PickingUbic_Por_VerificacionResult",String.class);
+            Boolean resultado = (Boolean)xobj.getSingle("Actualiza_Cant_Peso_VerificacionResult",Boolean.class);
 
             progress.cancel();
 
@@ -706,7 +643,7 @@ public class frm_verificacion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                   txtVenceVeri.setText(gl.gBePedidoDetVerif.getFecha_Vence());
+                   txtVenceVeri.setText(BePedidoDetVerif.getFecha_Vence());
                     txtCantVeri.requestFocus();
                     txtCantVeri.selectAll();
                     //showkeyb();
@@ -721,6 +658,46 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    private void Reemplazar(){
+
+        try {
+
+            startActivity(new Intent(this, frm_danado_verificacion.class));
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName() + " " + e.getMessage());
+        }
+    }
+
+    private void msgAskReemplazar(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Reemplazar();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
 
     public void ChangeDate(View view){
         showDialog(DATE_DIALOG_ID);
@@ -790,6 +767,28 @@ public class frm_verificacion_datos extends PBase {
 
     public void Regresar(View view){
         msgAskExit("Está seguro de salir");
+    }
+
+    public void MarcarReemplazo(View view){
+
+        try {
+
+            Double valor = Double.valueOf(txtCantVeri.getText().toString());
+
+            if (valor == 0){
+                mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                txtCantVeri.setSelectAllOnFocus(true);
+                txtCantVeri.requestFocus();
+                return;
+            }
+
+            CantReemplazar = valor;
+
+            msgAskReemplazar("¿Marcar producto para reemplazo?");
+
+        }catch (Exception e){
+            mu.msgbox("BotonReemplazo:"+e.getMessage());
+        }
     }
 
     @Override

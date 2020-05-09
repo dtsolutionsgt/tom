@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.ladapt.Verificacion;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 

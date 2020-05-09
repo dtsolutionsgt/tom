@@ -14,7 +14,6 @@ import com.dts.base.clsClasses;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
-import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 
@@ -202,14 +201,26 @@ public class Mainmenu extends PBase {
                 case 4://Packing
 
                 case 5://Picking
+
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this,frm_lista_tareas_principal.class));
+                    
+                    break;
+
                 case 6://Verificacion
+
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_lista_tareas_principal.class));
+
+                    break;
+
                 case 7://Inventario
+
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_list_inventario.class));
+
+                    break;
+
                 case 8://Existencias
 
                 case 9://Cambio de usuario

@@ -17,11 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_adapt_tareas_inventario"></activity>
+        <activity android:name="com.dts.ladapt.Verificacion.list_adapt_detalle_reemplazo_verif"></activity>
+        <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazo_verif" />
+        <activity android:name=".list_adapt_tareas_inventario" />
         <activity android:name=".Transacciones.Inventario.frm_list_inventario" />
         <activity android:name=".list_adapt_detalle_reemplazo_picking" />
-        <activity android:name=".list_adapt_tareas_verificacion" />
-        <activity android:name=".list_adapt_detalle_tareas_verificacion" />
+        <activity android:name="com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion" />
+        <activity android:name="com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion" />
         <activity android:name=".list_adapt_detalle_tareas_picking" />
         <activity android:name=".list_adapt_tareashh_picking" />
         <activity android:name=".frmFirma" />

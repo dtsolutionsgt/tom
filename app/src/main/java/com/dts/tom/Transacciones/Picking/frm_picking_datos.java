@@ -1,9 +1,6 @@
 package com.dts.tom.Transacciones.Picking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.app.Presentation;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,8 +32,6 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import br.com.zbra.androidlinq.Linq;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
