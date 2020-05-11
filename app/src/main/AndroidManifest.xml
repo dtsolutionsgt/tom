@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_adapt_tareas_inventario"></activity>
+        <activity android:name=".list_adapt_tramos_inv_ini"></activity>
+        <activity android:name=".list_adapt_tareas_inventario" />
         <activity android:name=".Transacciones.Inventario.frm_list_inventario" />
         <activity android:name=".list_adapt_detalle_reemplazo_picking" />
         <activity android:name=".list_adapt_tareas_verificacion" />

@@ -119,7 +119,6 @@ public class frm_detalle_tareas_picking extends PBase {
                         selitem = new clsBeTrans_picking_ubic();
                         selitem = BeListPickingUbic.get(position);
 
-
                         selid = sitem.IdPickingUbic;
                         selidx = position;
                         adapter.setSelectedIndex(position);
@@ -396,14 +395,24 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            btnRes_Det.setText("R.");
+            if (btnRes_Det.getText().toString().equals("R")){
 
-            TipoLista=1;
+                btnRes_Det.setText("D.");
 
-            execws(3);
+                TipoLista=2;
+
+                execws(3);
+
+            }else{
+                btnRes_Det.setText("R.");
+
+                TipoLista=1;
+
+                execws(3);
+            }
 
         }catch (Exception e) {
-
+            mu.msgbox("BotonR:"+e.getMessage());
         }
     }
 
@@ -624,7 +633,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            plistPickingUbi = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
+            plistPickingUbi = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_Tipo");
 
             Lista_Detalle_Picking();
 

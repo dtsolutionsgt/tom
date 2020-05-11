@@ -1,8 +1,7 @@
 package com.dts.tom.Transacciones.Inventario;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +15,7 @@ import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_enc;
 import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_encList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 import com.dts.tom.list_adapt_tareas_inventario;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class frm_list_inventario extends PBase {
 
     private ArrayList<clsBeTrans_inv_enc> BeListInv = new ArrayList<clsBeTrans_inv_enc>();
     private list_adapt_tareas_inventario adapter;
-    public static clsBeTrans_inv_enc selitem;
+    public static clsBeTrans_inv_enc BeInvEnc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +75,15 @@ public class frm_list_inventario extends PBase {
 
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_inv_enc sitem = (clsBeTrans_inv_enc) lvObj;
-                        selitem = new clsBeTrans_inv_enc();
-                        selitem = BeListInv.get(position);
+                        BeInvEnc = new clsBeTrans_inv_enc();
+                        BeInvEnc = BeListInv.get(position);
 
 
                         selid = sitem.Idinventarioenc;
                         selidx = position;
                         adapter.setSelectedIndex(position);
 
-                       // procesar_registro();
+                       procesar_registro();
 
                     }
 
@@ -93,6 +93,23 @@ public class frm_list_inventario extends PBase {
 
         }catch (Exception e){
             mu.msgbox("setHandlers:"+e.getMessage());
+        }
+    }
+
+    private void procesar_registro(){
+
+        try{
+
+            if (BeInvEnc.Inicial){
+                browse=1;
+                startActivity(new Intent(this, frm_inv_ini_tramos.class));
+            }else{
+                browse=2;
+                startActivity(new Intent(this, frm_list_inventario.class));
+            }
+
+        }catch (Exception e){
+            mu.msgbox("procesar_registro:"+e.getMessage());
         }
     }
 
@@ -136,6 +153,8 @@ public class frm_list_inventario extends PBase {
             int count = BeListInv.size()-1;
             btnRegs.setText("Regs:"+count);
 
+            adapter=new list_adapt_tareas_inventario(this,BeListInv);
+            listView.setAdapter(adapter);
 
         }catch (Exception e){
             mu.msgbox("Llena_Lista_Tareas:"+e.getMessage());
@@ -153,6 +172,10 @@ public class frm_list_inventario extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+    public void BotonSalir(View view){
+        doExit();
     }
 
     public class WebServiceHandler extends WebService {
@@ -221,6 +244,19 @@ public class frm_list_inventario extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void doExit(){
+        try{
+
+            BeListInv = new ArrayList<clsBeTrans_inv_enc>();
+            BeInvEnc = new clsBeTrans_inv_enc();
+            browse = 0;
+            super.finish();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
 }

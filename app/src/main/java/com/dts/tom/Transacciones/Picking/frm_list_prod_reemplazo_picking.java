@@ -290,9 +290,23 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.UMBas = DT.getString(15);
                     vItem.Cant = DT.getDouble(22);
                     vItem.IdUbicacion = DT.getInt(30);
-                    vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
-                    vItem.LicPlate = DT.getString(31);
-                    vItem.Lote = DT.getString(17);
+
+                    if (DT.getString(19)!=null){
+                        vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
+                    }else{
+                        vItem.FechaVence = "";
+                    }
+
+                    if (DT.getString(31)!=null){
+                        vItem.LicPlate = DT.getString(31);
+                    }else{
+                        vItem.LicPlate = "";
+                    }
+                    if (DT.getString(17)!=null){
+                        vItem.Lote = DT.getString(17);
+                    }else{
+                        vItem.Lote = "";
+                    }
                     vItem.CodigoProducto = DT.getString(12);
                     vItem.Peso = DT.getDouble(23);
                     vItem.Estado = DT.getString(25);

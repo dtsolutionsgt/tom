@@ -214,9 +214,6 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 Load();
             }
-
-
-
     }
 
     //region Events

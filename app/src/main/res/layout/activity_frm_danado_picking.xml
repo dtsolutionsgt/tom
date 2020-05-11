@@ -7,6 +7,77 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Picking.frm_danado_picking">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblProdDanado"
+                style="@style/StyleText"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="100dp"
+                android:gravity="center"
+                android:text="Producto: 1000100250 - Kellogs 4grs Expira: 31-03-2011 Lote: 1 Dañado: 1 Caja" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Estado:" />
+
+                <Spinner
+                    android:id="@+id/cmbEstadoDanado"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Destino:" />
+
+                <EditText
+                    android:id="@+id/txtUbicDest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </TableRow>
+
+            <TextView
+                android:id="@+id/lblNomUbic"
+                style="@style/StyleText"
+                android:layout_width="match_parent"
+                android:layout_height="123dp"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Nombre completo de ubicación"
+                android:textColor="#0119A2"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
     <RelativeLayout
         android:id="@+id/relbot"
         android:layout_width="match_parent"
@@ -64,70 +135,4 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/lblProdDanado"
-        style="@style/StyleText"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_below="@+id/reltop"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
-        android:gravity="center"
-        android:text="Producto: 1000100250 - Kellogs 4grs Expira: 31-03-2011 Lote: 1 Dañado: 1 Caja" />
-
-    <TextView
-        android:id="@+id/textView12"
-        style="@style/StyleText"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cmbEstadoDanado"
-        android:layout_alignBottom="@+id/cmbEstadoDanado"
-        android:layout_alignParentStart="true"
-        android:text="Estado:" />
-
-    <Spinner
-        android:id="@+id/cmbEstadoDanado"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/lblProdDanado"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="172dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="10dp" />
-
-    <EditText
-        android:id="@+id/txtUbicDest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cmbEstadoDanado"
-        android:layout_alignStart="@+id/cmbEstadoDanado"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView19"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtUbicDest"
-        android:layout_alignEnd="@+id/textView12"
-        android:layout_alignBottom="@+id/txtUbicDest"
-        android:layout_alignParentStart="true"
-        android:text="Destino:" />
-
-    <TextView
-        android:id="@+id/lblNomUbic"
-        style="@style/StyleText"
-        android:layout_width="246dp"
-        android:layout_height="123dp"
-        android:layout_below="@+id/txtUbicDest"
-        android:layout_alignStart="@+id/txtUbicDest"
-        android:layout_alignEnd="@+id/txtUbicDest"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="Nombre completo de ubicación"
-        android:textColor="#0119A2"
-        android:textStyle="bold" />
 </RelativeLayout>

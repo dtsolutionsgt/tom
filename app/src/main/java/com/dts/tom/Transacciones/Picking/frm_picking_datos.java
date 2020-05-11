@@ -1037,7 +1037,6 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-
             Tipo=1;
 
             if (txtBarra.getText().toString().isEmpty()){
@@ -1066,7 +1065,6 @@ public class frm_picking_datos extends PBase {
     public void BotonNoEn(View view){
 
         try {
-
 
             Tipo=2;
 

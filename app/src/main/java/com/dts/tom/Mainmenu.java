@@ -204,12 +204,15 @@ public class Mainmenu extends PBase {
                 case 5://Picking
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this,frm_lista_tareas_principal.class));
+                    break;
                 case 6://Verificacion
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_lista_tareas_principal.class));
+                    break;
                 case 7://Inventario
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_list_inventario.class));
+                    break;
                 case 8://Existencias
 
                 case 9://Cambio de usuario
