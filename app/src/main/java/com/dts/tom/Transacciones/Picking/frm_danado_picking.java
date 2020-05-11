@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.Picking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;

@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.Verificacion;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -28,7 +26,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_detalle_tareas_verificacion;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;

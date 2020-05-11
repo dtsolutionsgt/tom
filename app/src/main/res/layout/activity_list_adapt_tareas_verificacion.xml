@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".list_adapt_tareas_verificacion">
+    tools:context="com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion">
 
     <LinearLayout
         android:id="@+id/linearEncCB"

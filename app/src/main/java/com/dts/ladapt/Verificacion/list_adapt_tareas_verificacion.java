@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.ladapt.Verificacion;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 

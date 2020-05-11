@@ -1,12 +1,9 @@
 package com.dts.tom.Transacciones.Picking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,7 +23,6 @@ import com.dts.tom.R;
 import com.dts.tom.list_adapt_detalle_reemplazo_picking;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_danado_picking.IdEstadoDanadoSelect;
@@ -64,7 +60,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private boolean Distinto=false;
     private String resultado="";
     private double CantidadPendiente=0;
-
 
     private Cursor DT;
 
@@ -364,10 +359,19 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "pIdPedidoEnc",gBePickingUbic.IdPedidoEnc);
                         break;
                     case 5:
-                        callMethod("Reemplazo_Producto_En_Picking","IdStockCambioEst",gBePickingUbic.IdStock,
-                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,"IdPickingDet",gBePickingUbic.IdPickingDet,"CantSol",CantReemplazar,
-                                "MaquinaQueSolicita","1","UsuarioHH",gl.OperadorBodega.IdOperador,"lBeStockRes",lBeStockResAux.items,"IdBodega",gl.IdBodega,
-                                "IdEmpresa",gl.IdEmpresa,"IdUbicDestino",IdUbicacionDestino,"IdEstDestino",IdEstadoDanadoSelect,"IdStockResCambioEst",gBePickingUbic.IdStockRes,
+                        callMethod("Reemplazo_Producto_En_Picking",
+                                "IdStockCambioEst",gBePickingUbic.IdStock,
+                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
+                                "IdPickingDet",gBePickingUbic.IdPickingDet,
+                                "CantSol",CantReemplazar,
+                                "MaquinaQueSolicita","1",
+                                "UsuarioHH",gl.OperadorBodega.IdOperador,
+                                "lBeStockRes",lBeStockResAux.items,
+                                "IdBodega",gl.IdBodega,
+                                "IdEmpresa",gl.IdEmpresa,
+                                "IdUbicDestino",IdUbicacionDestino,
+                                "IdEstDestino",IdEstadoDanadoSelect,
+                                "IdStockResCambioEst",gBePickingUbic.IdStockRes,
                                 "EsPicking",true);
                         break;
                     case 6:
