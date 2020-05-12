@@ -241,6 +241,72 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         }
     }
 
+    private void msgMarcarDanado(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Marcar_Danado();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgMarcarNoEncontrado(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Marcar_No_Encontrado();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void Marcar_Danado(){
+        execws(7);
+    }
+
+    private void Marcar_No_Encontrado(){
+        execws(8);
+    }
+
     private void Load(){
 
         try{
@@ -469,9 +535,23 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             vCant = xobj.getresultSingle(Double.class,"vCant");
 
             if (DT.getCount()>0){
-                    Load();
+                Load();
             }else{
                 progress.cancel();
+            }
+
+            if (vCant == 0) {
+
+                if (Tipo==1){
+                    msgMarcarDanado("No hay existencia de este producto en otra ubicación"+
+                                    "\n¿Marcar como producto para reemplazo de todas formas?");
+                    return;
+                }else{
+                    msgMarcarNoEncontrado("No hay existencia de este producto en otra ubicación"+
+                                           "\n¿Marcar como producto No Encontrado de todas formas?");
+                    return;
+                }
+
             }
 
         }catch (Exception e){
