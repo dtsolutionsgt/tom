@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/lblNomUbicDet"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="40dp"
             android:gravity="center"
             android:text="1"
