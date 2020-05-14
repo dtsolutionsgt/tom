@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd"></activity>
+        <activity android:name=".Transacciones.InventarioInicial.frm_inv_nuevo_reg"></activity>
+        <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd" />
         <activity android:name=".list_adapt_tramos_inv_ini" />
         <activity android:name=".list_adapt_tareas_inventario" />
         <activity android:name=".Transacciones.Inventario.frm_list_inventario" />

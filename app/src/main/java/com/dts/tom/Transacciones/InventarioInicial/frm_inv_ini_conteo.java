@@ -3,18 +3,23 @@ package com.dts.tom.Transacciones.InventarioInicial;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.transition.Visibility;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -33,6 +38,7 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -45,6 +51,8 @@ public class frm_inv_ini_conteo extends PBase {
     private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote, lblPeso, lblTituloForma, lblVence;
     private Button btnGuardarConteo, btnCompletar, btnBack;
     private Spinner cmbPresInvIni, cmbEstadoInvIni;
+    private DatePicker dpResult;
+    private ImageView imgDate;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -53,6 +61,12 @@ public class frm_inv_ini_conteo extends PBase {
     private int codestmalo = 0;
     private int IdEstadoSelect=0;
     private int IdPresSelect=0;
+    public static String CodBarra="";
+
+    // date
+    private int year;
+    private int month;
+    private int day;
 
     private clsBeTrans_inv_tramo utramo = new clsBeTrans_inv_tramo();
     private clsBeProducto BeProducto = new clsBeProducto();
@@ -64,6 +78,8 @@ public class frm_inv_ini_conteo extends PBase {
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
+
+    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +112,13 @@ public class frm_inv_ini_conteo extends PBase {
         btnCompletar = (Button) findViewById(R.id.btnCompletar);
         btnBack = (Button) findViewById(R.id.btnBack);
 
+        dpResult = (DatePicker)findViewById(R.id.datePicker3);
+
+        imgDate = (ImageView)findViewById(R.id.imgDate);
+
         setHandles();
+
+        setCurrentDateOnView();
 
         Load();
 
@@ -191,6 +213,59 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    public void setCurrentDateOnView() {
+
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH)+1;
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+        // set current date into textview
+        txtVenceInvIni.setText(new StringBuilder()
+                // Month is 0 based, just add 1
+                .append(day).append("-").append(month).append("-")
+                .append(year).append(" "));
+
+        // set current date into datepicker
+        dpResult.init(year, month, day, null);
+
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+
+            year = selectedYear;
+            month = selectedMonth+1;
+            day = selectedDay;
+            // set selected date into textview
+            txtVenceInvIni.setText(new StringBuilder().append(day)
+                    .append("-").append(month).append("-").append(year)
+                    .append(" "));
+
+            // set selected date into datepicker also
+            dpResult.init(year, month, day, null);
+
+        }
+    };
+
+    public void ChangeDate(View view){
+        showDialog(DATE_DIALOG_ID);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                return new DatePickerDialog(this, datePickerListener,
+                        year, month,day);
+        }
+        return null;
+    }
+
     private void Load() {
 
         try {
@@ -219,7 +294,10 @@ public class frm_inv_ini_conteo extends PBase {
                 lblUbicDesc.setText(BeUbic.NombreCompleto);
             }
 
-            lblTituloForma.setText("TRAMO :" + BeUbic.Tramo.Descripcion);
+            lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+
+            txtCantInvIni.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtPesoInvIni.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
             execws(1);
 
@@ -242,7 +320,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             }
 
-            lblUbicDesc.setText("" + BeUbic.NombreCompleto);
+            lblUbicDesc.setText("" + BeUbic.Descripcion);
 
             txtCodBarra.setSelectAllOnFocus(true);
             txtCodBarra.requestFocus();
@@ -304,7 +382,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, EstadoList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbPresInvIni.setAdapter(dataAdapter);
+            cmbEstadoInvIni.setAdapter(dataAdapter);
 
             if (EstadoList.size() > 0) cmbEstadoInvIni.setSelection(0);
 
@@ -419,6 +497,8 @@ public class frm_inv_ini_conteo extends PBase {
         try{
 
             browse=1;
+            CodBarra = txtCodBarra.getText().toString();
+            txtCodBarra.setText("");
             startActivity(new Intent(this, frm_inv_agrega_prd.class));
 
         }catch (Exception e){
@@ -453,11 +533,32 @@ public class frm_inv_ini_conteo extends PBase {
                 return;
             }
 
+            Crea_Item();
 
-
+            if (ditem.IdPresentacion>0){
+                execws(9);
+            }else{
+                Continua_Guardando_Item();
+            }
 
         }catch (Exception e){
             mu.msgbox("Guardar_Item:"+e.getMessage());
+        }
+    }
+
+    private void Continua_Guardando_Item(){
+
+        try{
+
+            if (ditem.Idunidadmedida==0){
+                mu.msgbox("Unidad de medida básica es 0");
+                return;
+            }else{
+                execws(10);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Continua_Guardando_Item:"+e.getMessage());
         }
     }
 
@@ -478,9 +579,27 @@ public class frm_inv_ini_conteo extends PBase {
             if (ditem.Idunidadmedida==0){
                 ditem.Idunidadmedida = -1;
             }
+            if (BeProducto.Control_lote){
+                ditem.Lote = txtLoteInvIni.getText().toString();
+            }else{
+                ditem.Lote="";
+            }
 
+            if (BeProducto.Control_vencimiento){
+                ditem.Fecha_vence = du.convierteFecha(txtVenceInvIni.getText().toString());
+            }else{
+                ditem.Fecha_vence="1900-01-01T00:00:01";
+            }
 
-
+            ditem.Serie="";
+            ditem.Idproductoestado = ""+IdEstadoSelect;
+            ditem.Cantidad = Double.parseDouble(txtCantInvIni.getText().toString());
+            ditem.Fecha_captura = du.getFechaActual();
+            ditem.Host = "1";
+            ditem.Nom_producto = BeProducto.Nombre;
+            ditem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
+            ditem.Carga = 0;
+            ditem.Peso = Double.parseDouble(txtPesoInvIni.getText().toString());
 
         }catch (Exception e){
             mu.msgbox("Crea_Item:"+e.getMessage());
@@ -541,6 +660,49 @@ public class frm_inv_ini_conteo extends PBase {
         }
 
         return  true;
+    }
+
+    private void Limpiar_Campos(){
+
+        try{
+
+            txtUbicInv.setText("");
+            lblUbicDesc.setText("");
+            txtCodBarra.setText("");
+            lblDescProd.setText("");
+            txtCantInvIni.setText("");
+            lblUbicDesc.setText("");
+            txtVenceInvIni.setText("");
+            txtLoteInvIni.setText("");
+            txtPesoInvIni.setText("");
+            lblPeso.setVisibility(View.VISIBLE);
+            txtPesoInvIni.setVisibility(View.VISIBLE);
+
+           BeProducto = new clsBeProducto();
+           BeListPres = new clsBeProducto_PresentacionList();
+           BeListEstado = new clsBeProducto_estadoList();
+           InvTeorico = new clsBeTrans_inv_stock_prodList();
+           InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
+           ditem = new clsBeTrans_inv_detalle();
+
+            EstadoList = new ArrayList<String>();
+            PresList = new ArrayList<String>();
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PresList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbPresInvIni.setAdapter(dataAdapter);
+
+            ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, EstadoList);
+            dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbEstadoInvIni.setAdapter(dataAdapter1);
+
+            codestmalo = 0;
+            IdPresSelect = 0;
+            IdEstadoSelect = 0;
+
+        }catch (Exception e){
+            mu.msgbox("Limpiar_Campos:"+e.getMessage());
+        }
     }
 
     private void msgNoExistente(String msg) {
@@ -605,6 +767,37 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    private void msgRegPallet(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Continua_Guardando_Item();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent, String Url) {
@@ -645,6 +838,16 @@ public class frm_inv_ini_conteo extends PBase {
                         break;
                     case 8:
                         callMethod("Inventario_Inicial_Acepta_Mal_Estado_By_IdUbicacion","pIdUbicacion",BeUbic.IdUbicacion,"pEstMalo",codestmalo);
+                        break;
+                    case 9:
+                        callMethod("validaUbicacionPalet","pidinvenc",ditem.Idinventarioenc,"pidubicacion",BeUbic.IdUbicacion,
+                                "pidpresentacion",IdPresSelect);
+                        break;
+                    case 10:
+                        callMethod("Agregar_Inventario_Inicial","pItem",ditem);
+                        break;
+                    case 11:
+                        callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",BeInvTramo);
                         break;
                 }
 
@@ -687,6 +890,15 @@ public class frm_inv_ini_conteo extends PBase {
                     break;
                 case 8:
                     processAceptaMalo();
+                    break;
+                case 9:
+                    processValidaUbicPallet();
+                    break;
+                case 10:
+                    processAgInventario();
+                    break;
+                case 11:
+                    Limpiar_Campos();
                     break;
             }
 
@@ -742,6 +954,8 @@ public class frm_inv_ini_conteo extends PBase {
 
                 if (BeInvEnc.Capturar_no_existente) {
                     execws(7);
+                }else{
+                    mu.msgbox("No se puede agregar productos nuevos");
                 }
 
             }
@@ -844,6 +1058,75 @@ public class frm_inv_ini_conteo extends PBase {
         }catch (Exception e){
             mu.msgbox("processAceptaMalo:"+e.getMessage());
         }
+    }
+
+    private void processValidaUbicPallet(){
+
+        try{
+
+            int ubPallet=0;
+
+            ubPallet = xobj.getresult(Integer.class,"validaUbicacionPalet");
+
+            if (ubPallet==1){
+                msgRegPallet("Ya se contó un pallet en esta ubicación."
+                            +"\n¿Registrar el pallet en esta ubicación de todas formas?");
+            }else{
+                Continua_Guardando_Item();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processValidaUbicPallet:"+e.getMessage());
+        }
+    }
+
+    private void processAgInventario(){
+
+        try{
+
+            BeInvTramo.Det_estado="En proceso";
+            BeInvTramo.Det_inicio = du.getFechaActual();
+            BeInvTramo.Det_idoperador = gl.IdOperador;
+            BeInvTramo.IdBodega = gl.IdBodega;
+
+            BeInvEnc.Estado = "En proceso";
+            BeInvEnc.Fec_mod = du.getFechaActual();
+            BeInvEnc.User_mod = gl.OperadorBodega.Operador.Nombres;
+
+            execws(11);
+
+        }catch (Exception e){
+            mu.msgbox("processAgInventario:"+e.getMessage());
+        }
+    }
+
+    private void doExit(){
+        BeProducto = new clsBeProducto();
+        BeListPres = new clsBeProducto_PresentacionList();
+        BeListEstado = new clsBeProducto_estadoList();
+        InvTeorico = new clsBeTrans_inv_stock_prodList();
+        InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
+        ditem = new clsBeTrans_inv_detalle();
+        CodBarra = "";
+        super.finish();
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                doExit();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
     }
 
     private void execws(int callbackvalue) {

@@ -344,4 +344,38 @@ public class frm_inv_ini_tramos extends PBase {
         ws.execute();
     }
 
+    private void doExit(){
+
+        BeInvTramo = new clsBeTrans_inv_tramo();
+        BeUbic = new clsBeBodega_ubicacion();
+        Listtramos = new clsBeTrans_inv_tramoList();
+        BeListTramos = new ArrayList<clsBeTrans_inv_tramo>();
+        TipoConteo = 0;
+
+        super.finish();
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                BeInvTramo = new clsBeTrans_inv_tramo();
+                BeUbic = new clsBeBodega_ubicacion();
+                Listtramos = new clsBeTrans_inv_tramoList();
+                BeListTramos = new ArrayList<clsBeTrans_inv_tramo>();
+                TipoConteo = 0;
+                execws(1);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
+    }
+
 }

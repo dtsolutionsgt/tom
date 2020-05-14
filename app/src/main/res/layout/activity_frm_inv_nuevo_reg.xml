@@ -4,24 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.InventarioInicial.frm_inv_ini_conteo">
+    tools:context=".Transacciones.InventarioInicial.frm_inv_nuevo_reg">
+
+    <DatePicker
+        android:id="@+id/datePicker4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:headerBackground="@drawable/color_medium"
+        android:visibility="invisible" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/relbot"
         android:layout_below="@+id/reltop"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp">
+        android:layout_marginTop="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView27"
@@ -31,14 +36,14 @@
                     android:text="Ubicación:" />
 
                 <EditText
-                    android:id="@+id/txtUbicInv"
+                    android:id="@+id/txtUbicInvN"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number|textPersonName" />
             </TableRow>
 
             <TextView
-                android:id="@+id/lblUbicDesc"
+                android:id="@+id/lblUbicDescN"
                 style="@style/StyleText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -47,7 +52,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView31"
@@ -57,14 +62,14 @@
                     android:text="Barra:" />
 
                 <EditText
-                    android:id="@+id/txtCodBarra"
+                    android:id="@+id/txtCodBarraN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
             </TableRow>
 
             <TextView
-                android:id="@+id/lblDescProd"
+                android:id="@+id/lblDescProdN"
                 style="@style/StyleText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -77,24 +82,24 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView33"
+                    android:id="@+id/lblPresN"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Presentación:" />
 
                 <Spinner
-                    android:id="@+id/cmbPresInvIni"
+                    android:id="@+id/cmbPresInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView34"
@@ -104,7 +109,7 @@
                     android:text="Estado:" />
 
                 <Spinner
-                    android:id="@+id/cmbEstadoInvIni"
+                    android:id="@+id/cmbEstadoInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="10dp" />
@@ -112,17 +117,17 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView35"
+                    android:id="@+id/lblLoteN"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Lote:" />
 
                 <EditText
-                    android:id="@+id/txtLoteInvIni"
+                    android:id="@+id/txtLoteInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -131,24 +136,24 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView36"
+                    android:id="@+id/lblVenceN"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Vence:" />
 
                 <ImageView
-                    android:id="@+id/imgDate2"
+                    android:id="@+id/imgDateN"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:onClick="ChangeDate"
                     android:src="@drawable/calendar" />
 
                 <EditText
-                    android:id="@+id/txtVenceInvIni"
+                    android:id="@+id/txtVenceInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date|number" />
@@ -157,7 +162,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView37"
@@ -167,7 +172,7 @@
                     android:text="Cantidad:" />
 
                 <EditText
-                    android:id="@+id/txtCantInvIni"
+                    android:id="@+id/txtCantInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -175,17 +180,17 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView38"
+                    android:id="@+id/lblPesoN"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Peso:" />
 
                 <EditText
-                    android:id="@+id/txtPesoInvIni"
+                    android:id="@+id/txtPesoInvIniN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -193,37 +198,9 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/lblUnidadInv"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="UNI"
-                    android:textColor="#00C2FD"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnGuardarConteo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="0dp"
-                    android:background="@drawable/color_medium"
-                    android:text="Guardar"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="18sp" />
-            </TableRow>
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </ScrollView>
-
-    <DatePicker
-        android:id="@+id/datePicker3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:headerBackground="@drawable/color_medium"
-        android:visibility="invisible" />
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -245,14 +222,15 @@
             android:background="@drawable/back" />
 
         <Button
-            android:id="@+id/btnCompletar"
+            android:id="@+id/btnGuardarReg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
-            android:text="Completar"
+            android:onClick="BotonGuardarN"
+            android:text="Guardar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -273,11 +251,10 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Tramo"
+            android:text="Nuevo registro"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
     </RelativeLayout>
-
 </RelativeLayout>
