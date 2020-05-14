@@ -28,6 +28,12 @@ public class frm_inv_ini_verificacion extends PBase {
         ws = new WebServiceHandler(frm_inv_ini_verificacion.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
+        Load();
+
+    }
+
+    private void Load(){
+
     }
 
     public class WebServiceHandler extends WebService {
