@@ -39,7 +39,7 @@ public class frm_danado_verificacion extends PBase {
     private boolean aplicarReemplazo = false;
 
     private Spinner cmbEstadoDanadoVeri;
-    private TextView lblProdDanadoVeri,lblUbicDestVeri,lblNomUbicVeri;
+    private TextView lblProdDanadoVeri,lblUbicDestVeri,lblNomUbicVeri, lblTituloForma;
     private EditText txtUbicDestVeri;
     private Button btnGuardarDanadoVeri,btnBackVeri;
 
@@ -49,12 +49,8 @@ public class frm_danado_verificacion extends PBase {
     private ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdUbicacionDestino=0;
-    public static int IdEstadoDanadoSelect = 0;
+    public static int IdEstadoDanado = 0;
     public static String vNomUbicDestino="";
-
-   // public static clsBeTrans_picking_ubic BePickingUbic;
-    //public static clsBeProducto gBeProducto = new clsBeProducto();
-    //public static clsBeDetallePedidoAVerificar BePedidoDetVerif = new clsBeDetallePedidoAVerificar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +66,7 @@ public class frm_danado_verificacion extends PBase {
         txtUbicDestVeri = (EditText) findViewById(R.id.txtUbicDestVeri);
         btnGuardarDanadoVeri = (Button)findViewById(R.id.btnGuardarDanadoVeri);
         btnBackVeri = (Button)findViewById(R.id.btnBackVeri);
+        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
 
         ws = new WebServiceHandler(frm_danado_verificacion.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -86,7 +83,7 @@ public class frm_danado_verificacion extends PBase {
 
         try {
 
-            //Llama a método del WS Get_Producto_By_IdProductoBodega
+            //Llama a método del WS Get_Estados_By_IdPropietario_And_IdBodega
             execws(1);
 
         } catch (Exception ex) {
@@ -119,7 +116,7 @@ public class frm_danado_verificacion extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
+                    IdEstadoDanado=LProductoEstadoDanado.items.get(position).IdEstado;
                     txtUbicDestVeri.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
                     aplicarReemplazo= false;
@@ -150,6 +147,13 @@ public class frm_danado_verificacion extends PBase {
                 }
             });
 
+            lblTituloForma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Load();
+                }
+            });
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
@@ -163,8 +167,6 @@ public class frm_danado_verificacion extends PBase {
 
             browse=1;
             startActivity(new Intent(this, frm_list_prod_reemplazo_verif.class));
-
-            finish();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -252,14 +254,14 @@ public class frm_danado_verificacion extends PBase {
                     case 2:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado",
                                    "IdUbicacion",BeUbicDestino.IdUbicacion,
-                                   "IdEstado",IdEstadoDanadoSelect,
+                                   "IdEstado",IdEstadoDanado,
                                    "IdBodega",gl.IdBodega,
                                    "pNombreUbicacion",BeUbicDestino.NombreCompleto);
                         break;
                     case 3:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado",
                                    "IdUbicacion",Integer.parseInt(txtUbicDestVeri.getText().toString()),
-                                   "IdEstado",IdEstadoDanadoSelect,
+                                   "IdEstado",IdEstadoDanado,
                                    "IdBodega",gl.IdBodega,
                                    "pNombreUbicacion",vNomUbicDestino);
                         break;
@@ -325,7 +327,7 @@ public class frm_danado_verificacion extends PBase {
 
             lblNomUbicVeri.setText(BeUbicDestino.NombreCompleto);
 
-            if (IdEstadoDanadoSelect==0){
+            if (IdEstadoDanado==0){
                 mu.msgbox("Seleccione un estado de producto válido");
                 cmbEstadoDanadoVeri.setFocusable(true);
                 return;
@@ -372,7 +374,7 @@ public class frm_danado_verificacion extends PBase {
 
             msgMover("Producto: "+gBeProducto.Nombre
                     + "\n Destino: "+lblNomUbicVeri.getText().toString()
-                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanado).select(c->c.Nombre).first()
                     + "\n ¿Mover?");
 
 
@@ -466,7 +468,10 @@ public class frm_danado_verificacion extends PBase {
         try{
 
             super.onResume();
-           // super.finish();
+
+            if (browse==1){
+                super.finish();
+            }
 
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());

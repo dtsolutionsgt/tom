@@ -93,6 +93,9 @@ public class frm_lista_tareas_principal extends PBase {
 
         try{
 
+            progress.setMessage("Cargando tareas...");
+            progress.show();
+
             if (gl.tipoTarea==1){
 
                 if (gl.tipoIngreso.equals("HCOC00")){
@@ -187,6 +190,13 @@ public class frm_lista_tareas_principal extends PBase {
                     }
 
                     return false;
+                }
+            });
+
+            lblRegs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Load();
                 }
             });
 
@@ -520,6 +530,7 @@ public class frm_lista_tareas_principal extends PBase {
 
                 case 6:
                     browse=6;
+                    txtTarea.setText("");
                     gl.pIdPedidoEnc = selid;
                     startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
                     break;
@@ -597,7 +608,13 @@ public class frm_lista_tareas_principal extends PBase {
             }
 
         }catch (Exception e){
-         mu.msgbox("GetFila:"+e.getMessage());
+            if (e.getMessage() !=null){
+                mu.msgbox("Error obteniendo la tarea: "+e.getMessage());
+            }else{
+                mu.msgbox("El número de tarea ingresado no es válido");
+                txtTarea.setText("");
+                txtTarea.requestFocus();
+            }
         }
     }
 

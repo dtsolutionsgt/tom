@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -40,14 +37,12 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.frmFirma;
 import com.dts.tom.list_adapt_detalle_recepcion;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -1374,7 +1369,6 @@ public class frm_list_rec_prod extends PBase {
             btnGuardarFirma = (Button)dialog.findViewById(R.id.btnGuardarFirma);
             btnLimpiar = (Button)dialog.findViewById(R.id.btnLimpiar);
             btnSalirFirma = (Button)dialog.findViewById(R.id.btnSalirFirma);
-
 
             btnGuardarFirma.setOnClickListener(new View.OnClickListener() {
                 @Override

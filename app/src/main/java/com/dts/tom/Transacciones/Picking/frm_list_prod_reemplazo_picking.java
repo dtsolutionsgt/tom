@@ -316,7 +316,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             lblTituloForma.setText("Picking List No: "+ gBePickingUbic.IdPickingEnc+
                     "\n Lista de Productos");
 
-
             Lista_Inventario_Disponible();
 
         }catch (Exception e){

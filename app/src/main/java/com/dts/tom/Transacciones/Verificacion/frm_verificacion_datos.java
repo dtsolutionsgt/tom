@@ -26,7 +26,6 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
-import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -37,6 +36,7 @@ import java.util.List;
 import br.com.zbra.androidlinq.delegate.SelectorDouble;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.Verificacion.frm_list_prod_reemplazo_verif.reemplazoCorrecto;
 
 public class frm_verificacion_datos extends PBase {
 
@@ -50,12 +50,11 @@ public class frm_verificacion_datos extends PBase {
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
 
-    public static clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
+    private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
+
     public static clsBeProducto gBeProducto = new clsBeProducto();
     public static clsBeDetallePedidoAVerificar BePedidoDetVerif = new clsBeDetallePedidoAVerificar();
-
-    private clsBeStock_res BeStockRes = new clsBeStock_res();
-    private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
+    public static clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private int IdProductoBodega;
     private String Lp;
@@ -235,6 +234,14 @@ public class frm_verificacion_datos extends PBase {
                 }
             });
 
+            lblTituloForma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Llama a método del WS Get_Producto_By_IdProductoBodega
+                    execws(1);
+                }
+            });
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
@@ -245,7 +252,6 @@ public class frm_verificacion_datos extends PBase {
     public void Inicia_Tarea_Detalle(){
 
         double suma=0;
-        clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
         List AuxList;
 
         try{
@@ -412,6 +418,7 @@ public class frm_verificacion_datos extends PBase {
                         .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
                         .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
                         .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
+                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
                         .toList();
             }else{
                 AuxList = stream(BePickingUbicList.items)
@@ -419,6 +426,7 @@ public class frm_verificacion_datos extends PBase {
                         .where(c -> c.Lote.equals(Lote))
                         .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
                         .where(c -> c.Lic_plate.equals(Lp))
+                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
                         .toList();
 
             }
@@ -461,7 +469,7 @@ public class frm_verificacion_datos extends PBase {
                         break;
                     case 3:
                         callMethod("Actualiza_Cant_Peso_Verificacion",
-                                   "pBePickingUbicList",pSubListPickingU,
+                                   "pBePickingUbicList",pSubListPickingU.items,
                                    "pIdOperador",gl.OperadorBodega.getIdOperador(),
                                    "pCantidad",pCantidad,
                                    "pPeso",pPeso);
@@ -662,6 +670,7 @@ public class frm_verificacion_datos extends PBase {
 
         try {
 
+            browse = 1;
             startActivity(new Intent(this, frm_danado_verificacion.class));
 
         }catch (Exception e){
@@ -804,9 +813,17 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    @Override
     protected void onResume() {
         try{
+
             super.onResume();
+
+            if (browse==1 && reemplazoCorrecto){
+                browse=0;
+                super.finish();
+            }
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
