@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.Verificacion.frm_list_prod_reemplazo_verif">
+    tools:context=".Transacciones.Verificacion.frm_list_prod_reemplazados">
 
     <RelativeLayout
         android:id="@+id/relCenter"
@@ -16,7 +16,7 @@
         android:layout_alignParentEnd="true">
 
         <HorizontalScrollView
-            android:id="@+id/hrPicking"
+            android:id="@+id/hrReemplazados"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/lblCantRegs"
@@ -24,7 +24,7 @@
             android:layout_marginBottom="10dp">
 
             <ListView
-                android:id="@+id/listDispProd"
+                android:id="@+id/listReemplazados"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
         </HorizontalScrollView>
@@ -56,7 +56,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Lista de Productos"
+            android:text="Lista de Productos Reemplazados"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -82,7 +82,7 @@
             android:onClick="Regresar" />
 
         <Button
-            android:id="@+id/btnActualizaPickingDet"
+            android:id="@+id/btnActReemplazados"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"

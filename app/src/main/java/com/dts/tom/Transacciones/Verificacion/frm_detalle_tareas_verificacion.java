@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 public class frm_detalle_tareas_verificacion extends PBase {
 
     private frm_detalle_tareas_verificacion.WebServiceHandler ws;
@@ -87,6 +89,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
             setHandlers();
 
             ProgressDialog("Cargando forma...");
+
+            Load();
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -158,10 +162,21 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
+                                GetFila();
+
                                 return true;
                         }
                     }
                     return false;
+                }
+            });
+
+            btnConsultaDa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mostrar_Reemplazados();
+
                 }
             });
 
@@ -170,6 +185,34 @@ public class frm_detalle_tareas_verificacion extends PBase {
             mu.msgbox( e.getMessage());
         }
 
+    }
+
+    private void GetFila(){
+
+        try{
+
+            if (!txtCodProd.getText().toString().isEmpty()) {
+
+                String selProd = txtCodProd.getText().toString();
+
+                clsBeDetallePedidoAVerificar vPedidoVerif  = stream(pListaPedidoDet.items)
+                                                        .where(c -> c.getCodigo().equals(selProd) || c.getLicPlate().equals(selProd))
+                                                        .first();
+
+                if (vPedidoVerif != null) {
+                    Procesa_Registro(vPedidoVerif);
+                } else {
+                    mu.msgbox(String.format("No existe el producto %s en esta Verificación",selProd));
+                }
+            }
+
+        }catch (Exception e){
+            if (e.getMessage() !=null){
+                mu.msgbox("Error obteniendo el producto a verificar : "+e.getMessage());
+            }else{
+                mu.msgbox("El código de producto ingresado no es válido");
+            }
+        }
     }
 
     private void execws(int callbackvalue) {
@@ -221,6 +264,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     case 8:
                         callMethod("Actualizar_PickingEnc_Verificado",
                                    "oBeTrans_picking_enc", gBePickingEnc);
+                        break;
+                    case 9:
+                        callMethod("Get_Reemplazo_Producto_By_IdPedidoEnc",
+                                   "pIdPedidoEnc", gl.pIdPedidoEnc);
                         break;
                 }
 
@@ -279,12 +326,28 @@ public class frm_detalle_tareas_verificacion extends PBase {
             gl.gBePedidoDetVerif=TareaDet;
             gl.gBePickingUbicList=plistPickingUbic;
 
+            browse = 1;
+
             Intent intent = new Intent(this, frm_verificacion_datos.class);
             startActivity(intent);
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
+        }
+
+    }
+
+    private void mostrar_Reemplazados(){
+
+        try{
+
+            Intent intent = new Intent(this, frm_list_prod_reemplazados.class);
+            startActivity(intent);
+
+        }catch (Exception ex){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            mu.msgbox( ex.getMessage());
         }
 
     }
@@ -552,7 +615,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         listDetVeri.setAdapter(adapter);
 
-                        if (pListaPedidoDet.items.size()>1){
+                        if (pListaPedidoDet.items.size()>0){
 
                             adapter.setSelectedIndex(-1);
                             index = -1;
@@ -721,8 +784,21 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     protected void onResume() {
         try{
-            Load();
+
             super.onResume();
+
+            if (browse==1) {
+                browse = 0;
+
+                txtCodProd.setText("");
+
+                progress.setMessage("Actualizando detalle verificación...");
+                progress.show();
+
+                //Llama al método del WS Get_Detalle_By_IdPedidoEnc
+                execws(1);
+            }
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }

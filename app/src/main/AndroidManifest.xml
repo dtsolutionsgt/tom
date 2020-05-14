@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd"></activity>
+        <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazados"></activity>
+        <activity android:name="com.dts.ladapt.Verificacion.list_adapt_reemplazos" />
+        <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd" />
         <activity android:name=".list_adapt_tramos_inv_ini" />
         <activity android:name=".list_adapt_tareas_inventario" />
         <activity android:name=".Transacciones.Inventario.frm_list_inventario" />
@@ -44,6 +46,7 @@
         <activity android:name=".Transacciones.Verificacion.frm_danado_verificacion" />
         <activity android:name=".Transacciones.Verificacion.frm_verificacion_datos" />
         <activity android:name=".Transacciones.Verificacion.frm_detalle_tareas_verificacion" />
+        <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazo_verif" />
         <activity android:name=".Transacciones.Picking.frm_list_prod_reemplazo_picking" />
         <activity android:name=".Transacciones.Picking.frm_danado_picking" />
         <activity android:name=".Transacciones.Picking.frm_picking_datos" />

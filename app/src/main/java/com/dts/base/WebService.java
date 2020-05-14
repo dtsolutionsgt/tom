@@ -419,7 +419,7 @@ public class WebService {
                                 Log.i("islist","vojb");
 
                                 try{
-
+                                    result="";
                                     for (Object vItem: ((ArrayList) vobj).toArray())
                                     {
                                         System.out.println(vItem);
@@ -429,7 +429,7 @@ public class WebService {
                                         try
                                         {
                                             //#EJC20200325: No colocar inicio, hasta no definir el objeto completo
-                                            result="";
+                                            //result=""; #CKFK 20200512 tuve que poner esto en comentario para poder enviar la lista completa
                                             String ClassNamechild = vItem.getClass().getSimpleName();
                                             System.out.println(ClassNamechild);
                                             result+=buildArgs(ClassNamechild,vItem);
