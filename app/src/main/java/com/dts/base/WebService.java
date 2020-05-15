@@ -104,28 +104,32 @@ public class WebService {
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
            //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
-           if (responsecode==200 || responsecode ==400 )
-           {
-               // Get the response
+           //#EJC20200514: Actualizado
+           if (responsecode!=299 && responsecode!=404) {
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                while ((line = rd.readLine()) != null) mResult += line;
                rd.close();rd.close();
+
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
 
-           } if (responsecode==299 ) //Something bad happend harry...
-           {
+               if(xmlresult.isEmpty()){
+                   Log.i("vacio","no creo");
+               }
 
-               //#EJC20200331: falta parsear el xml de error (talvez no es aquí si no en el callback)
-               // Get the response of customError in somehow
+           } if (responsecode==299) {
+
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                while ((line = rd.readLine()) != null) mResult += line;
                rd.close();rd.close();
+
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
 
-               throw new Exception("Error al procesar la solicitud: \n" + parseError());
+               throw new Exception("Error al procesar la solicitud :\n " + parseError());
 
+           } if (responsecode==404) {
+               throw new Exception("Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.");
            }
 
        } catch (Exception e)  {
