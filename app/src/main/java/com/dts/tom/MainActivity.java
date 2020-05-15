@@ -257,9 +257,12 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if(spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     idbodega=bodegas.items.get(position).IdBodega;
                     gl.IdBodega = idbodega;
@@ -288,14 +291,19 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if (spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     idimpres=impres.get(position).IdImpresora;
                     gl.IdImpresora = idimpres;
 
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                    msgbox(e.getMessage());
+                }
 
             }
 
@@ -314,9 +322,12 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if (spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
@@ -325,7 +336,9 @@ public class MainActivity extends PBase {
                     txtpass.requestFocus();
                     showkeyb();
 
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                    msgbox(e.getMessage());
+                }
 
             }
 
