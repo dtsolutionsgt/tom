@@ -2,6 +2,7 @@ package com.dts.base;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.util.Log;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -66,6 +67,9 @@ public class XMLObject  {
             if (!xnode.isEmpty())
             {
                 return serializer.read(type, xnode);
+            }else
+            {
+                Log.i("porque","vacio");
             }
 
         }catch (Exception e)
@@ -140,52 +144,99 @@ public class XMLObject  {
     }
 
 
+    private boolean isParsing=false;
+
     public String getXMLRegion(String nodename) throws Exception {
 
         String ss ="";
         String sxml="";
         Node xmlnode;
         int cVals=0;
+        double mequedeaqui=0;
 
-        try {
+        InputStream istream=null;
+        DocumentBuilder docBuilder;
+        DocumentBuilderFactory builderFactory;
 
-            InputStream istream = new ByteArrayInputStream( ws.xmlresult.getBytes() );
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse(istream);
+        if (!isParsing)
+        {
+            isParsing =true;
 
-            Element root=doc.getDocumentElement();
+            try {
 
-            NodeList children=root.getChildNodes();
-            Node bodyroot=children.item(0);
-            NodeList body=bodyroot.getChildNodes();
-            Node responseroot=body.item(0);
-            NodeList response=responseroot.getChildNodes();
+                mequedeaqui=1;
 
-            ss="";
+                try{
 
-            for(int i =0;i<response.getLength();i++)
-            {
+                    istream = new ByteArrayInputStream( ws.xmlresult.getBytes() );
 
-                ss+=response.item(i).getNodeName()+",\n";
+                }catch (Exception ex){
+                    Log.i("A","B");
+                }
 
-                if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
+                builderFactory = DocumentBuilderFactory.newInstance();
+                mequedeaqui=-1;
+                docBuilder = builderFactory.newDocumentBuilder();
+                mequedeaqui=-2;
+
+                if(istream.available()==0)
                 {
-                    cVals=response.item(i).getChildNodes().getLength();
+                    Log.i("notfound","nimershhere");
+                    mequedeaqui=-2.5;
+                    istream = new ByteArrayInputStream( ws.xmlresult.getBytes());
+                    mequedeaqui=-2.6;
+                }
 
-                    if (cVals>0)
+                if(istream.available()==0)
+                {
+                    Log.i("try2","de todas formas no se pudo asignar el result.. sospecho problema en la memoria *del dispositivo no la m[ia, la mia anda bien");
+                    return  "";
+
+                }
+
+                mequedeaqui=-2.7;
+                Document doc = docBuilder.parse(istream);
+
+                mequedeaqui=2;
+                Element root=doc.getDocumentElement();
+                mequedeaqui=3;
+                NodeList children=root.getChildNodes();
+                Node bodyroot=children.item(0);
+                NodeList body=bodyroot.getChildNodes();
+                Node responseroot=body.item(0);
+                NodeList response=responseroot.getChildNodes();
+                mequedeaqui=4;
+                ss="";
+
+                for(int i =0;i<response.getLength();i++)
+                {
+                    mequedeaqui=5;
+                    ss+=response.item(i).getNodeName()+",\n";
+
+                    if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
                     {
-                        xmlnode=response.item(i);
-                        sxml=nodeToString(xmlnode);
-                        return sxml;
+                        cVals=response.item(i).getChildNodes().getLength();
+                        mequedeaqui=6;
+                        if (cVals>0)
+                        {
+                            mequedeaqui+=7;
+                            xmlnode=response.item(i);
+                            sxml=nodeToString(xmlnode);
+                            return sxml;
+                        }
                     }
                 }
-           }
-        } catch (Exception e)
-        {
-            debg = e.getMessage() + "\n "+ ws.xmlresult;
-            throw new Exception(" XMLObject getXMLRegion : "+ debg);
+            } catch (Exception e)
+            {
+                debg = e.getMessage() + "\n "+ ws.xmlresult;
+                throw new Exception(" XMLObject getXMLRegion : "+ debg);
+            } finally {
+                isParsing =false;
+            }
+        }else{
+            Log.e("imbussy","telodije");
         }
+
         return "";
     }
 

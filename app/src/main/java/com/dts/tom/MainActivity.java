@@ -13,9 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
-import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,27 +26,22 @@ import androidx.core.app.ActivityCompat;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
-import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAnd;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.LongSummaryStatistics;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -232,14 +224,19 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if(spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     idemp=empresas.items.get(position).IdEmpresa;
                     gl.IdEmpresa = idemp;
                     idbodega=0;
+
                     execws(2);//Lista las bodegas
+
                 } catch (Exception e)
                 {
                     msgbox(e.getMessage());
@@ -260,9 +257,12 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if(spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     idbodega=bodegas.items.get(position).IdBodega;
                     gl.IdBodega = idbodega;
@@ -291,14 +291,19 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if (spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     idimpres=impres.get(position).IdImpresora;
                     gl.IdImpresora = idimpres;
 
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                    msgbox(e.getMessage());
+                }
 
             }
 
@@ -317,9 +322,12 @@ public class MainActivity extends PBase {
                 try
                 {
                     TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    if (spinlabel != null){
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                    }
 
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
@@ -328,7 +336,9 @@ public class MainActivity extends PBase {
                     txtpass.requestFocus();
                     showkeyb();
 
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                    msgbox(e.getMessage());
+                }
 
             }
 
@@ -583,20 +593,26 @@ public class MainActivity extends PBase {
 
     private void processEmpresas()
     {
-        class EmpresaSort implements Comparator<clsBeEmpresaBase>
-        {
-            public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)
-            {
-                return left.Nombre.compareTo(right.Nombre);
-            }
-        }
 
         try
         {
-
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
-            Collections.sort(empresas.items, new EmpresaSort());
-            fillSpinemp();
+
+            if(empresas != null){
+
+                class EmpresaSort implements Comparator<clsBeEmpresaBase>
+                {
+                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)
+                    {
+                        return left.Nombre.compareTo(right.Nombre);
+                    }
+                }
+
+                Collections.sort(empresas.items, new EmpresaSort());
+
+                fillSpinemp();
+
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
