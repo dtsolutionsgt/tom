@@ -705,6 +705,81 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    public void BotonCompletar(View view){
+
+        try{
+
+            msgCompletar("¿Completar conteo de tramo  ?");
+
+        }catch (Exception e){
+            mu.msgbox("BotonCompletar:"+e.getMessage());
+        }
+    }
+
+    public void BotonDetalle(View view){
+
+        try{
+
+            browse=1;
+            startActivity(new Intent(this, frm_inv_ini_contados.class));
+
+        }catch (Exception e){
+            mu.msgbox("BotonDetalle"+e.getMessage());
+        }
+    }
+
+    public void BotonExit(View view){
+        Limpiar_Campos();
+        super.finish();
+    }
+
+    private void Completar_tramo(){
+
+        try{
+
+            utramo.Det_estado = "Finalizado";
+            utramo.Det_fin = du.getFechaActual();
+            utramo.Det_idoperador = gl.OperadorBodega.IdOperador;
+            utramo.IdBodega = gl.IdBodega;
+
+            execws(12);
+
+        }catch (Exception e){
+            mu.msgbox("Completar_tramo:"+e.getMessage());
+        }
+    }
+
+    private void msgCompletar(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Completar_tramo();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgValidaProductoPallet"+e.getMessage());
+        }
+    }
+
     private void msgNoExistente(String msg) {
 
         try{
@@ -847,8 +922,10 @@ public class frm_inv_ini_conteo extends PBase {
                         callMethod("Agregar_Inventario_Inicial","pItem",ditem);
                         break;
                     case 11:
-                        callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",BeInvTramo);
+                        callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",utramo);
                         break;
+                    case 12:
+                        callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",utramo);
                 }
 
             } catch (Exception e) {
@@ -900,6 +977,9 @@ public class frm_inv_ini_conteo extends PBase {
                 case 11:
                     Limpiar_Campos();
                     break;
+                case 12:
+                    Limpiar_Campos();
+                    super.finish();
             }
 
         } catch (Exception e) {
@@ -1084,10 +1164,10 @@ public class frm_inv_ini_conteo extends PBase {
 
         try{
 
-            BeInvTramo.Det_estado="En proceso";
-            BeInvTramo.Det_inicio = du.getFechaActual();
-            BeInvTramo.Det_idoperador = gl.IdOperador;
-            BeInvTramo.IdBodega = gl.IdBodega;
+            utramo.Det_estado="En proceso";
+            utramo.Det_inicio = du.getFechaActual();
+            utramo.Det_idoperador = gl.IdOperador;
+            utramo.IdBodega = gl.IdBodega;
 
             BeInvEnc.Estado = "En proceso";
             BeInvEnc.Fec_mod = du.getFechaActual();
