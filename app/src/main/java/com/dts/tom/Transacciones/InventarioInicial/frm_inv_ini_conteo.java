@@ -208,6 +208,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             });
 
+
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }

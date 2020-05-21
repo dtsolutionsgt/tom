@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ public class frm_inv_ini_verificacion extends PBase {
     private EditText txtUbicVer, txtBarraVer, txtUmbasVeri, txtCantVer;
     private Spinner cmbPresVeri, cmbEstadoVeri;
     private TextView lblDescVer, lblTituloForma, lblUbicDes;
+    private Button btnDetVeri;
 
     private int IdPresSelect, IdEstadoSelect;
 
@@ -411,6 +414,11 @@ public class frm_inv_ini_verificacion extends PBase {
         }catch (Exception e){
             mu.msgbox("BotonCompletar:"+e.getMessage());
         }
+    }
+
+    public void BotonDetalle(View view){
+        browse=1;
+        startActivity(new Intent(this, frm_inv_ini_verificados.class));
     }
 
     public void BotonExit(View view){

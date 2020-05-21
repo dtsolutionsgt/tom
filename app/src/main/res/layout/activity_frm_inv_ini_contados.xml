@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtCodProd"
         android:layout_alignBottom="@+id/txtCodProd"
-        android:text="Producto:" />
+        android:text="Barra:" />
 
     <EditText
         android:id="@+id/txtUbicConts"

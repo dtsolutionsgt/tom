@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".list_adapt_contados"></activity>
+        <activity android:name=".list_adapt_verificados"></activity>
+        <activity android:name=".list_adapt_contados" />
         <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazados" />
         <activity android:name="com.dts.ladapt.Verificacion.list_adapt_reemplazos" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd" />

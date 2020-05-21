@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.InventarioInicial.frm_inv_ini_verificados">
 
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@+id/lblPrdContVeri">
+
+        <ListView
+            android:id="@+id/listContVeri"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </HorizontalScrollView>
+
     <TextView
         android:id="@+id/lblPrdContVeri"
         style="@style/StyleText"
@@ -31,11 +43,11 @@
         android:id="@+id/txtCodProdVeri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="172dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:inputType="textPersonName" />
 
@@ -91,24 +103,6 @@
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btnCambiar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/btnRegs"
-            android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:text="Cambiar"
-            android:textColor="@android:color/background_light"
-            android:textSize="18sp" />
-
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listContVeri"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/relbot"
-        android:layout_below="@id/lblPrdContVeri" />
 </RelativeLayout>
