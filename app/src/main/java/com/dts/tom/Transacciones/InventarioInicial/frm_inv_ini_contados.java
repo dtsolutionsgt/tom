@@ -543,6 +543,14 @@ public class frm_inv_ini_contados extends PBase {
         }
     }
 
+    public void BotonExit(View view) {
+        txtCodProd.setText("");
+        lblPrdCont.setText("");
+        txtUbicConts.setText("");
+        lblUniDetalle.setText("");
+        super.finish();
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent, String Url) {
@@ -582,7 +590,7 @@ public class frm_inv_ini_contados extends PBase {
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BBeProducto.IdPropietario);
                         break;
                     case 8:
-                        callMethod("InventarioInicialDetActualizar",dditem);
+                        callMethod("InventarioInicialDetActualizar","pItem",dditem);
                         break;
                 }
 

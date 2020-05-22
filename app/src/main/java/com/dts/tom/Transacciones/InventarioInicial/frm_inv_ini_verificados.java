@@ -392,6 +392,11 @@ public class frm_inv_ini_verificados extends PBase {
         }
     }
 
+    public void BotonExit(View view){
+        txtCodProdVeri.setText("");
+        super.finish();
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -476,7 +481,12 @@ public class frm_inv_ini_verificados extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
 
-            execws(2);
+            if (BeProducto!=null){
+                lblPrdContVeri.setText(BeProducto.Nombre);
+                execws(2);
+            }else{
+                mu.msgbox("El producto no existe en el maestro de articulos verificados");
+            }
 
         }catch (Exception e){
             mu.msgbox("processBeProducto:"+e.getMessage());

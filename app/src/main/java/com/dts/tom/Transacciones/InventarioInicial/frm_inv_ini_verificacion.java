@@ -81,6 +81,7 @@ public class frm_inv_ini_verificacion extends PBase {
         lblDescVer = (TextView)findViewById(R.id.lblDescVer);
         lblUbicDes = (TextView)findViewById(R.id.lblUbicDes);
 
+        setHandles();
 
         Load();
 
@@ -242,7 +243,11 @@ public class frm_inv_ini_verificacion extends PBase {
 
             lblDescVer.setText(BeProducto.Nombre);
 
-            lblDescVer.setText(BeProducto.UnidadMedida.Nombre);
+            txtUmbasVeri.setText(BeProducto.UnidadMedida.Nombre);
+
+            txtUmbasVeri.setFocusable(false);
+
+            txtCantVer.requestFocus();
 
             execws(4);
 
