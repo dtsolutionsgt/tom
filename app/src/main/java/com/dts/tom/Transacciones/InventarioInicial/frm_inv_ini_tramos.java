@@ -217,6 +217,7 @@ public class frm_inv_ini_tramos extends PBase {
                 @Override
                 public void onClick(View v) {
                     TipoConteo = 1;
+                    dialog.cancel();
                     Procesar_Registro();
                 }
             });
@@ -225,6 +226,7 @@ public class frm_inv_ini_tramos extends PBase {
                 @Override
                 public void onClick(View v) {
                     TipoConteo = 2;
+                    dialog.cancel();
                     Procesar_Registro();
                 }
             });

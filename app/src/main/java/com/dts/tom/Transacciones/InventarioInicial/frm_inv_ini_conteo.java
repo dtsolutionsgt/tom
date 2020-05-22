@@ -114,7 +114,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         dpResult = (DatePicker)findViewById(R.id.datePicker3);
 
-        imgDate = (ImageView)findViewById(R.id.imgDate);
+        imgDate = (ImageView)findViewById(R.id.imgDate2);
 
         setHandles();
 
@@ -292,10 +292,8 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeUbic.IdUbicacion > 0) {
                 txtUbicInv.setText("" + BeUbic.IdTramo);
-                lblUbicDesc.setText(BeUbic.NombreCompleto);
+                lblUbicDesc.setText(BeUbic.Descripcion);
             }
-
-            lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
 
             txtCantInvIni.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoInvIni.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -437,9 +435,11 @@ public class frm_inv_ini_conteo extends PBase {
             if (Control_vence){
                 lblVence.setVisibility(View.VISIBLE);
                 txtVenceInvIni.setVisibility(View.VISIBLE);
+                imgDate.setVisibility(View.VISIBLE);
             }else{
                 lblVence.setVisibility(View.GONE);
                 txtVenceInvIni.setVisibility(View.GONE);
+                imgDate.setVisibility(View.GONE);
             }
 
 
@@ -701,6 +701,8 @@ public class frm_inv_ini_conteo extends PBase {
             IdPresSelect = 0;
             IdEstadoSelect = 0;
 
+            setCurrentDateOnView();
+
         }catch (Exception e){
             mu.msgbox("Limpiar_Campos:"+e.getMessage());
         }
@@ -732,6 +734,10 @@ public class frm_inv_ini_conteo extends PBase {
     public void BotonExit(View view){
         Limpiar_Campos();
         super.finish();
+    }
+
+    public void BotonGuardar(View view){
+        Guardar_Inventario_Conteo();
     }
 
     private void Completar_tramo(){
@@ -996,6 +1002,11 @@ public class frm_inv_ini_conteo extends PBase {
 
             utramo = xobj.getresult(clsBeTrans_inv_tramo.class, "Get_Inventario_Inicial_By_IdInventarioEnc_And_IdTramo");
 
+            if (BeInvTramo==null){
+                BeInvTramo = utramo;
+            }
+
+            lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
             txtUbicInv.setSelectAllOnFocus(true);
             txtUbicInv.requestFocus();
 

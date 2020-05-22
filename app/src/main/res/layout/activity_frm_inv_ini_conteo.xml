@@ -211,6 +211,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
                     android:background="@drawable/color_medium"
+                    android:onClick="BotonGuardar"
                     android:text="Guardar"
                     android:textColor="@android:color/background_light"
                     android:textSize="18sp" />
