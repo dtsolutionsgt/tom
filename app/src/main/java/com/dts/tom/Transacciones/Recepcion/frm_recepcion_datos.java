@@ -4017,6 +4017,7 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    progress.cancel();
                     return;
                 }
             });
