@@ -122,7 +122,8 @@
         android:layout_marginBottom="5dp"
         android:background="@android:color/holo_red_light"
         android:text="Borra todas"
-        android:textColor="#FAF9F9" />
+        android:textColor="#FAF9F9"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnCorregir"
@@ -136,7 +137,8 @@
         android:layout_toEndOf="@+id/btnBorrarTd"
         android:background="@color/colorPrimary"
         android:text="Corregir"
-        android:textColor="#FBF9F9" />
+        android:textColor="#FBF9F9"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnRegs"

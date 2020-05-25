@@ -115,6 +115,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void Procesar_registro(){
         gl.mode=2;
         gl.gListTransRecDet.items = stream(pListTransRecDet.items).where(c->c.IdRecepcionDet == selid).toList();
+        browse=1;
         startActivity(new Intent(this, frm_recepcion_datos.class));
     }
 
@@ -287,6 +288,24 @@ public class frm_list_rec_prod_detalle extends PBase {
             gl.Carga_Producto_x_Pallet=false;
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                execws(2);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
         }
 
     }

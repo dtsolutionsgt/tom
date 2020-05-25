@@ -1741,6 +1741,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }else{
                 toast("No existen ubicaciones sugeridas");
+                progress.cancel();
             }
 
         }catch (Exception ex){

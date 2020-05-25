@@ -715,9 +715,11 @@ public class frm_recepcion_datos extends PBase {
 
             lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
 
-            if (pListBeStockRec.items!=null){
-                List AuxStock=stream(pListBeStockRec.items).select(c->c.IdRecepcionDet).toList();
-                pIndexStock =AuxStock.indexOf(pIdRecepcionDet);
+            if (pListBeStockRec!=null){
+                if (pListBeStockRec.items!=null){
+                    List AuxStock=stream(pListBeStockRec.items).select(c->c.IdRecepcionDet).toList();
+                    pIndexStock =AuxStock.indexOf(pIdRecepcionDet);
+                }
             }
 
             IndexPresentacion = IndexPresSelected;
@@ -749,9 +751,13 @@ public class frm_recepcion_datos extends PBase {
                     } else if (!bePresentacion.EsPallet || bePresentacion.Permitir_paletizar||chkPaletizar.isChecked()) {
 
                         if (Cant_Recibida==0){
-                            execws(6);
+                            if (pIndexStock<0){
+                                execws(6);
+                            }
                         }else if(Cant_Recibida_Actual>bePresentacion.Factor){
-                            execws(7);
+                            if (pIndexStock<0){
+                                execws(7);
+                            }
 
                             pNumeroLP = "";
 
@@ -838,6 +844,8 @@ public class frm_recepcion_datos extends PBase {
             if  (pIndexStock>=0){
 
                 txtLicPlate.setText(pListBeStockRec.items.get(pIndexStock).Lic_plate);
+
+                pNumeroLP = pListBeStockRec.items.get(pIndexStock).Lic_plate;
 
                 if (pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso!=null){
                     if (pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso.isEmpty()){
@@ -1206,7 +1214,11 @@ public class frm_recepcion_datos extends PBase {
                     if(IdPreseSelect>0){
                         BeStock_rec.Presentacion = new clsBeProducto_Presentacion();
                     }
-                    BeStock_rec.IsNew = true;
+                    if (gl.mode==1){
+                        BeStock_rec.IsNew = true;
+                    }else{
+                        BeStock_rec.IsNew = false;
+                    }
 
                    pListBeStockRec.items.add(BeStock_rec);
                    pIndexStock = pListBeStockRec.items.size()-1;
@@ -1290,7 +1302,11 @@ public class frm_recepcion_datos extends PBase {
                         ObjNS.User_mod = gl.IdOperador+"";
                         ObjNS.Fec_mod = String.valueOf(du.getFechaActual());
                         ObjNS.Activo = true;
-                        ObjNS.IsNew = true;
+                        if (gl.mode==1){
+                            ObjNS.IsNew = true;
+                        }else{
+                            ObjNS.IsNew = false;
+                        }
 
                         if (pListBeStockSeRec.items!=null){
                             pListBeStockSeRec.items.add(ObjNS);
@@ -1395,7 +1411,6 @@ public class frm_recepcion_datos extends PBase {
                                 Obj.User_agr = gl.IdOperador+"";
                                 Obj.Fec_agr = String.valueOf(du.getFechaActual());
                                 Obj.IsNew = true;
-
 
                             }
 
@@ -1568,6 +1583,7 @@ public class frm_recepcion_datos extends PBase {
                 ObjNS.Fec_mod = String.valueOf(du.getFechaActual());
                 ObjNS.Activo = true;
                 ObjNS.IsNew = true;
+
                 pListBeStockSeRec.items.add(ObjNS);
 
             }
@@ -1603,6 +1619,7 @@ public class frm_recepcion_datos extends PBase {
             ObjS.Fec_mod = String.valueOf(du.getFechaActual());
             ObjS.User_mod = gl.IdOperador+"";
             ObjS.IsNew = true;
+
             ObjS.Activo = true;
             ObjS.IdRecepcionDet = pIdRecepcionDet;
 
@@ -2423,7 +2440,6 @@ public class frm_recepcion_datos extends PBase {
             gBeStockAnt.IdRecepcionEnc = pListTransRecDet.items.get(0).IdRecepcionEnc;
             gBeStockAnt.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
 
-
         }catch (Exception e){
             mu.msgbox("Llena_beStock_Anterior:"+e.getMessage());
         }
@@ -2569,6 +2585,7 @@ public class frm_recepcion_datos extends PBase {
                 vBeStockRecPallet.Temperatura = 0.0;
                 vBeStockRecPallet.Regularizado = false;
                 vBeStockRecPallet.IsNew = true;
+
                 vBeStockRecPallet.Lote = BeINavBarraPallet.Lote;
                 vBeStockRecPallet.ProductoEstado = new  clsBeProducto_estado();
 
@@ -2904,6 +2921,7 @@ public class frm_recepcion_datos extends PBase {
                 pListBeStockRec.items.get(pIndiceListaStock).Fec_mod = String.valueOf(du.getFechaActual());
                 pListBeStockRec.items.get(pIndiceListaStock).User_mod = gl.IdOperador+"";
                 pListBeStockRec.items.get(pIndiceListaStock).IsNew = true;
+
                 pListBeStockRec.items.get(pIndiceListaStock).Activo = true;
                 pListBeStockRec.items.get(pIndiceListaStock).IdRecepcionDet = pIdRecepcionDet;
                 pListBeStockRec.items.get(pIndiceListaStock).IdRecepcionEnc = gl.gIdRecepcionEnc;
@@ -3325,7 +3343,6 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.IdProductoEstado = IdEstadoSelect;
 
                 BeTransReDet.IsNew = true;
-
                 BeTransReDet.User_agr = gl.IdOperador+"";
                 BeTransReDet.Fec_agr = String.valueOf(du.getFechaActual());
 
@@ -3539,7 +3556,9 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
-                    pListTransRecDet.items.add(BeTransReDet);
+                    if (gl.mode==1){
+                        pListTransRecDet.items.add(BeTransReDet);
+                    }
                 }
 
                 if (listaStockPalletsNuevos!=null){
@@ -3712,7 +3731,11 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.Lote = BeStockRec.Lote;
                         BeProdPallet.User_agr = gl.OperadorBodega.IdOperadorBodega+"";
                         BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
-                        BeProdPallet.IsNew = true;
+                        if (gl.mode==1){
+                            BeProdPallet.IsNew = true;
+                        }else{
+                            BeProdPallet.IsNew = false;
+                        }
 
                         if (listaProdPalletsNuevos.items!=null){
                             listaProdPalletsNuevos.items.add(BeProdPallet);
@@ -3767,7 +3790,11 @@ public class frm_recepcion_datos extends PBase {
                 BeProdPallet.Lote = vBeStockRec.Lote;
                 BeProdPallet.User_agr = gl.OperadorBodega+"";
                 BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
-                BeProdPallet.IsNew = true;
+                if (gl.mode==1){
+                    BeProdPallet.IsNew = true;
+                }else{
+                    BeProdPallet.IsNew = false;
+                }
 
                 if (listaProdPalletsNuevos.items!=null){
                     listaProdPalletsNuevos.items.add(BeProdPallet);
@@ -4389,7 +4416,9 @@ public class frm_recepcion_datos extends PBase {
 
             pNumeroLP = xobj.getresult(String.class,"Get_Nuevo_Correlativo_LicensePlate");
 
-            txtLicPlate.setText(pNumeroLP);
+            if (gl.mode==1){
+                txtLicPlate.setText(pNumeroLP);
+            }
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP: "+e.getMessage());

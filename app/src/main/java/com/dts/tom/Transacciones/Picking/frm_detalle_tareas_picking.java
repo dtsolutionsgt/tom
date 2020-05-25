@@ -489,6 +489,7 @@ public class frm_detalle_tareas_picking extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar=false;
+                    progress.cancel();
                     return;
                 }
             });
