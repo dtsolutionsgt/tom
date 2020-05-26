@@ -195,8 +195,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 String selProd = txtCodProd.getText().toString();
 
+                if (selProd.startsWith("$")) {
+                    selProd = selProd.replace("$", "");
+                }
+
+                String finalSelProd = selProd;
                 clsBeDetallePedidoAVerificar vPedidoVerif  = stream(pListaPedidoDet.items)
-                                                        .where(c -> c.getCodigo().equals(selProd) || c.getLicPlate().equals(selProd))
+                                                        .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
                                                         .first();
 
                 if (vPedidoVerif != null) {

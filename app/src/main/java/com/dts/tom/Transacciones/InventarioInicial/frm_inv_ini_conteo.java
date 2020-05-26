@@ -44,6 +44,7 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeInvTramo;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
+import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.IngUbic;
 
 public class frm_inv_ini_conteo extends PBase {
 
@@ -80,6 +81,8 @@ public class frm_inv_ini_conteo extends PBase {
     private ArrayList<String> PresList = new ArrayList<String>();
 
     static final int DATE_DIALOG_ID = 999;
+
+    private int pIdTramo=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,9 +293,17 @@ public class frm_inv_ini_conteo extends PBase {
 
             txtVenceInvIni.setText(du.convierteFechaMostar(du.getFechaActual()));
 
+            pIdTramo=0;
+
             if (BeUbic.IdUbicacion > 0) {
-                txtUbicInv.setText("" + BeUbic.IdTramo);
+                txtUbicInv.setText("" + BeUbic.IdUbicacion);
                 lblUbicDesc.setText(BeUbic.Descripcion);
+            }
+
+            if (IngUbic){
+               pIdTramo = BeUbic.IdTramo;
+            }else{
+                pIdTramo = BeInvTramo.Idtramo;
             }
 
             txtCantInvIni.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -703,6 +714,8 @@ public class frm_inv_ini_conteo extends PBase {
 
             setCurrentDateOnView();
 
+            IngUbic = false;
+
         }catch (Exception e){
             mu.msgbox("Limpiar_Campos:"+e.getMessage());
         }
@@ -895,7 +908,7 @@ public class frm_inv_ini_conteo extends PBase {
 
                     case 1:
                         callMethod("Get_Inventario_Inicial_By_IdInventarioEnc_And_IdTramo",
-                                "pidinventario", BeInvEnc.Idinventarioenc, "pidtramo", BeInvTramo.Idtramo);
+                                "pidinventario", BeInvEnc.Idinventarioenc, "pidtramo", pIdTramo);
                         break;
                     case 2:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega", "pBarra", txtUbicInv.getText().toString(),
@@ -983,6 +996,8 @@ public class frm_inv_ini_conteo extends PBase {
                     break;
                 case 11:
                     Limpiar_Campos();
+                    txtUbicInv.requestFocus();
+                    txtUbicInv.selectAll();
                     break;
                 case 12:
                     Limpiar_Campos();
@@ -1002,9 +1017,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             utramo = xobj.getresult(clsBeTrans_inv_tramo.class, "Get_Inventario_Inicial_By_IdInventarioEnc_And_IdTramo");
 
-            if (BeInvTramo==null){
-                BeInvTramo = utramo;
-            }
+            BeInvTramo = utramo;
 
             lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
             txtUbicInv.setSelectAllOnFocus(true);

@@ -37,6 +37,7 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeInvTramo;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
+import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.IngUbic;
 
 public class frm_inv_ini_verificacion extends PBase {
 
@@ -59,6 +60,8 @@ public class frm_inv_ini_verificacion extends PBase {
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
+
+    private int pIdTramo=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,9 +185,17 @@ public class frm_inv_ini_verificacion extends PBase {
 
             txtCantVer.setText("");
 
+            pIdTramo=0;
+
             if (BeUbic.IdUbicacion!=0){
-                txtUbicVer.setText(BeInvTramo.Idtramo+"");
+                txtUbicVer.setText(BeUbic.IdUbicacion+"");
                 lblUbicDes.setText(BeUbic.Descripcion);
+            }
+
+            if (!IngUbic){
+                pIdTramo=BeInvTramo.Idtramo;
+            }else{
+                pIdTramo=BeUbic.IdTramo;
             }
 
             execws(1);
@@ -312,7 +323,6 @@ public class frm_inv_ini_verificacion extends PBase {
 
             execws(6);
 
-
         }catch (Exception e){
             mu.msgbox("Guardar_Verificacion:"+e.getMessage());
         }
@@ -405,6 +415,8 @@ public class frm_inv_ini_verificacion extends PBase {
             IdPresSelect = 0;
             IdEstadoSelect = 0;
 
+            IngUbic = false;
+
         }catch (Exception e){
             mu.msgbox("");
         }
@@ -490,7 +502,7 @@ public class frm_inv_ini_verificacion extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Inventario_Inicial_By_IdInventarioEnc_And_IdTramo","pidinventario",BeInvEnc.Idinventarioenc,
-                                "pidtramo",BeInvTramo.Idtramo);
+                                "pidtramo",pIdTramo);
                         break;
                     case 2:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega", "pBarra", txtUbicVer.getText().toString(),
@@ -551,6 +563,8 @@ public class frm_inv_ini_verificacion extends PBase {
                     break;
                 case 7:
                     Limpia_Valores();
+                    txtUbicVer.requestFocus();
+                    txtUbicVer.selectAll();
                     break;
                 case 8:
                     Limpia_Valores();
@@ -568,6 +582,8 @@ public class frm_inv_ini_verificacion extends PBase {
         try{
 
             utramo = xobj.getresult(clsBeTrans_inv_tramo.class, "Get_Inventario_Inicial_By_IdInventarioEnc_And_IdTramo");
+
+            BeInvTramo = utramo;
 
             txtUbicVer.setSelectAllOnFocus(true);
             txtUbicVer.requestFocus();
@@ -670,6 +686,11 @@ public class frm_inv_ini_verificacion extends PBase {
         }catch (Exception e){
             mu.msgbox(" processInventarioVerificacion():"+e.getMessage());
         }
+    }
+
+    public void BotonSalir(View view){
+        Limpia_Valores();
+        super.finish();
     }
 
     private void execws(int callbackvalue) {

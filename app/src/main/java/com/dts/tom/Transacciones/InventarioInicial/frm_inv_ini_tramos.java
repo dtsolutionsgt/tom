@@ -40,6 +40,8 @@ public class frm_inv_ini_tramos extends PBase {
     private ProgressDialog progress;
     private Dialog dialog;
 
+    public static boolean IngUbic=false;
+
     private clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
     private ArrayList<clsBeTrans_inv_tramo> BeListTramos = new ArrayList<clsBeTrans_inv_tramo>();
     private list_adapt_tramos_inv_ini adapter;
@@ -110,6 +112,7 @@ public class frm_inv_ini_tramos extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                         if (!txtTramUbic.getText().toString().isEmpty()){
+                            IngUbic=true;
                             execws(2);
                         }
                     }
@@ -181,7 +184,7 @@ public class frm_inv_ini_tramos extends PBase {
             }
 
             int Count = BeListTramos.size()-1;
-            cmdTraRec.setText("Regs:"+Count);
+            cmdTraRec.setText("Regs: "+Count);
 
             cmdTraDet.setText("Det: "+cnt_det);
             cmdTraVer.setText("Ver: "+cnt_ver);

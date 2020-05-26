@@ -59,6 +59,7 @@
         <activity android:name=".Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega" />
         <activity android:name=".Transacciones.CambioUbicacion.frm_detalle_cambio_ubicacion" />
         <activity android:name=".Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion" />
+        <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazo_verif" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
