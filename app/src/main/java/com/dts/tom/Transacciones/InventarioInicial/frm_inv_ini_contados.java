@@ -544,11 +544,17 @@ public class frm_inv_ini_contados extends PBase {
     }
 
     public void BotonExit(View view) {
-        txtCodProd.setText("");
-        lblPrdCont.setText("");
-        txtUbicConts.setText("");
-        lblUniDetalle.setText("");
-        super.finish();
+
+        try{
+
+            txtCodProd.setText("");
+            lblPrdCont.setText("");
+            txtUbicConts.setText("");
+            super.finish();
+        }catch (Exception e){
+            mu.msgbox("BotonExit:"+e.getMessage());
+        }
+
     }
 
     public class WebServiceHandler extends WebService {
