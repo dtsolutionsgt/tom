@@ -106,12 +106,17 @@ public class MainActivity extends PBase {
 
             getURL();
 
-            setHandlers();
+            if (!gl.wsurl.isEmpty()){
+                ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
+                xobj= new XMLObject(ws);
 
-            ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
-            xobj= new XMLObject(ws);
+                setHandlers();
 
-            gl.deviceId =androidid();
+                gl.deviceId =androidid();
+
+            }else{
+                msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
+            }
 
             //Load();
 
@@ -130,7 +135,11 @@ public class MainActivity extends PBase {
             LimpiarControles();
 
             // Lista de empresas
-            execws(1);
+            if (!gl.wsurl.isEmpty()){
+                execws(1);
+            }else{
+                progress.cancel();
+            }
 
         } catch (Exception e) {
             progress.cancel();
@@ -198,6 +207,9 @@ public class MainActivity extends PBase {
         try{
 
             imgIngresar.setVisibility(View.INVISIBLE);
+
+            progress.show();
+            progress.setMessage("Ingresando....");
 
             Valida_Ingreso();
             //startActivity(new Intent(this,Mainmenu.class));
@@ -521,10 +533,12 @@ public class MainActivity extends PBase {
                                 gl.gImpresora = BeImpresora;
                                 if (gl.gImpresora.get(0).Direccion_Ip =="")
                                 {
+                                    progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 }
                             }else
                             {
+                                progress.cancel();
                                 mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
                             //Get_BeImpresora_By_IdImpresora(gIdImpresora)
@@ -533,27 +547,33 @@ public class MainActivity extends PBase {
 
                         }else
                         {
-                         mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
+                            progress.cancel();
+                            mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
                         }
 
                         }else
                         {
-                        mu.msgbox("Ingrese clave");
+                            progress.cancel();
+                            mu.msgbox("Ingrese clave");
                         }
                     }else
                     {
+                        progress.cancel();
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
                 }else
                 {
+                    progress.cancel();
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
             }else
             {
+                progress.cancel();
                 mu.msgbox("No se ha seleccionado una empresa válida");
             }
 
         }catch (Exception e){
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -876,7 +896,11 @@ public class MainActivity extends PBase {
             gl.wsurl ="";
         }
 
-        if (!gl.wsurl.isEmpty()) lblurl.setText(gl.wsurl);else lblurl.setText("Falta archivo con URL");
+        if (!gl.wsurl.isEmpty()) {
+            lblurl.setText(gl.wsurl);
+        }else {
+            lblurl.setText("Falta archivo con URL");
+        }
     }
 
     public void ProgressDialog(String mensaje)
