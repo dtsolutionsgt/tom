@@ -450,8 +450,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_ENTER:
-                            if(Double.valueOf(txtCantidad.getText().toString())>0) {
-                                txtUbicDestino.requestFocus();
+
+                            try {
+
+                                String Cantwithformat =txtCantidad.getText().toString();
+                                Cantwithformat = Cantwithformat.replace(",","");
+
+                                if(Double.valueOf(Cantwithformat)>0) {
+                                    txtUbicDestino.requestFocus();
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
                             }
                     }
                 }
@@ -2119,17 +2128,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setMessage("¿" + msg + "?");
             dialog.setIcon(R.drawable.ic_quest);
 
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which)
+                {btnGuardarCiega.setVisibility(View.VISIBLE); }
+            });
+
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //Llamar método para aplicar el cambio de estado
                     aplicarCambio();
 
                 }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which)
-                {btnGuardarCiega.setVisibility(View.VISIBLE); }
             });
 
             dialog.show();
