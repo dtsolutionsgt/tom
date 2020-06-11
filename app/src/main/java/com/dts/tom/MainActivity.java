@@ -2,8 +2,10 @@ package com.dts.tom;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,8 +38,10 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,7 +120,8 @@ public class MainActivity extends PBase {
                 gl.deviceId =androidid();
 
             }else{
-                msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
+                //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
+                setURL();
             }
 
             //Load();
@@ -159,6 +165,91 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+    }
+
+    private void setURL(){
+        String url="http://192.168.0.12/WSTOMHH_QA/TOMHHWS.asmx";
+
+        try{
+            final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Conexión");
+            alert.setMessage("Ingrese la URL:");
+
+            alert.setIcon(R.drawable.ic_quest);
+
+            final EditText input = new EditText(this);
+            input.setText(url);
+            input.setInputType(InputType.TYPE_CLASS_TEXT |
+                    InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+            alert.setView(input);
+
+            alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    msgbox("");
+                }
+            });
+
+            alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    gl.wsurl=input.getText().toString();
+
+                    if(!gl.wsurl.isEmpty()){
+                        guardaDatosConexion();
+                    }else{
+                        toast("Debe ingresar la URL");
+                        setURL();
+                    }
+                }
+            });
+
+            final AlertDialog dialog = alert.create();
+            dialog.show();
+
+            showkeyb();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    protected void guardaDatosConexion() {
+
+        BufferedWriter writer = null;
+        FileWriter wfile;
+
+        try {
+
+            String fname = Environment.getExternalStorageDirectory()+"/tomws.txt";
+            File archivo= new File(fname);
+
+            if (archivo.exists()){
+                archivo.delete();
+            }
+
+            wfile=new FileWriter(fname,true);
+            writer = new BufferedWriter(wfile);
+
+            writer.write(gl.wsurl + "\n");
+
+            writer.close();
+
+            getURL();
+
+            ws = new WebServiceHandler(MainActivity.this, gl.wsurl);
+            xobj = new XMLObject(ws);
+
+            setHandlers();
+
+            gl.deviceId =androidid();
+
+            Load();
+
+        } catch (Exception e) {
+            msgbox("Error " + e.getMessage());
+        }
+
     }
 
     public void recargar(View view){
