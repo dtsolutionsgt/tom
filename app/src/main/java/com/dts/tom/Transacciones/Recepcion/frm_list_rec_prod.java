@@ -525,7 +525,7 @@ public class frm_list_rec_prod extends PBase {
                         selidx = position;
                         adapter.setSelectedIndex(position);
 
-                        msgIngresaDetalle("Desea ver el detalle de código: " +selitem.Codigo_Producto);
+                        msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
                     }
 

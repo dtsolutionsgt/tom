@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -13,6 +14,7 @@ import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
+import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public class Mainmenu extends PBase {
     private int selId,selIdx,menuid,iicon;
     private String sdoc;
     private boolean horizpos;
+
+    private boolean listo=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +176,19 @@ public class Mainmenu extends PBase {
 
         try{
 
+            //#CKFK 20200813
+            if (!listo) return;
+
+            listo=false;
+            Handler mtimer = new Handler();
+            Runnable mrunner=new Runnable() {
+                @Override
+                public void run() {
+                    listo=true;
+                }
+            };
+            mtimer.postDelayed(mrunner,1000);
+
             switch (idmenu) {
 
                 case 1://Recepción
@@ -222,6 +239,11 @@ public class Mainmenu extends PBase {
                     break;
 
                 case 8://Existencias
+
+                    gl.tipoTarea = idmenu;
+                    startActivity(new Intent(this, frm_consulta_stock.class));
+
+                    break;
 
                 case 9://Cambio de usuario
                     Mainmenu.super.finish();

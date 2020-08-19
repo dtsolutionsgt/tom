@@ -219,7 +219,6 @@ public class frm_list_inventario extends PBase {
         }
     }
 
-
     private void processListTareas(){
 
         try {

@@ -1,9 +1,7 @@
 package com.dts.tom.Transacciones.Recepcion;
 
-import androidx.annotation.RequiresApi;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +47,8 @@ public class frm_list_rec_prod_detalle extends PBase {
     private list_adapt_detalle_rec_prod adapter;
     private static ArrayList<clsBeTrans_re_det> BeListDetalleRec= new ArrayList<clsBeTrans_re_det>() ;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +68,22 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        ProgressDialog();
+
+        progress.setMessage("Cargando detalle");
+
         setHandles();
 
         execws(1);
 
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void setHandles(){
@@ -109,7 +121,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     }
 
     public void BacKList(View view) {
-    doExit();
+        doExit();
     }
 
     private void Procesar_registro(){
@@ -260,17 +272,23 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         try{
 
+            progress.setMessage("Obteniendo detalle");
+
             pListTransRecDet = xobj.getresult(clsBeTrans_re_detList.class,"Get_Detalle_By_IdRecepcionDet_HH");
 
             if (pListTransRecDet!=null){
                 if (pListTransRecDet.items!=null){
                     Lista_Detalle_Rec();
+
+                    progress.cancel();
+
                 }else{
                     doExit();
                 }
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processDetRec:"+e.getMessage());
         }
     }

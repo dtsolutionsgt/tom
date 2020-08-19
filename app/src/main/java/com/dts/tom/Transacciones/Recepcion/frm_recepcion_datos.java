@@ -90,7 +90,7 @@ public class frm_recepcion_datos extends PBase {
 
     private boolean Mostro_Propiedades,Escaneo_Pallet;
     private boolean Mostrar_Propiedades_Parametros = false;
-    private double Cant_Recibida_Anterior,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
+    private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;
     private String pNumeroLP = "";
@@ -207,8 +207,6 @@ public class frm_recepcion_datos extends PBase {
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
         }
-
-
             if(!gl.Escaneo_Pallet){
                 execws(1);
             }else{
@@ -429,10 +427,11 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto!=null){
                 if (ValidaDatosIngresados()){
-                    if (Cant_Recibida_Anterior!=Cant_Recibida && Cant_Recibida_Anterior!=0){
+                    //#CKFK20200816 Quité esta validacion porque no estó correcta
+                   /* if (Cant_Recibida_Anterior!=Cant_Recibida && Cant_Recibida_Anterior!=0){
                         Mostro_Propiedades = false;
                         return;
-                    }
+                    }*/
                     Mostrar_Propiedades_Parametros();
                 }
             }
@@ -2278,6 +2277,8 @@ public class frm_recepcion_datos extends PBase {
 
                 txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.selectAll();
+
+                Cant_Recibida_Anterior = pListTransRecDet.items.get(0).cantidad_recibida;
 
                 txtLoteRec.setText(pListTransRecDet.items.get(0).Lote);
 
