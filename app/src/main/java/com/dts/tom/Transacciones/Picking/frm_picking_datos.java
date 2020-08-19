@@ -836,11 +836,21 @@ public class frm_picking_datos extends PBase {
             txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
             txtLote.setText(gBePickingUbic.Lote);
 
+            if (gBeProducto==null){
+
+                //#EJC20200610: No me gusta como se ve esto, pero tengo demo ma;ana
+                gBeProducto = new clsBeProducto();
+                execws(4);
+                return;
+            }
+
             if (gBePickingUbic.IdPresentacion>0){
-                if (gBeProducto.Presentaciones.items!=null){
-                    List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
-                    int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
-                    cmbPresentacion.setSelection(inx);
+                if (gBeProducto.Presentaciones!=null){
+                    if (gBeProducto.Presentaciones.items!=null){
+                        List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
+                        cmbPresentacion.setSelection(inx);
+                    }
                 }
             }
 
@@ -852,9 +862,11 @@ public class frm_picking_datos extends PBase {
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
-                List Aux = stream(LProductoEstadoIngreso.items).select(c->c.IdEstado).toList();
-                int inx= Aux.indexOf(gBePickingUbic.IdProductoEstado);
-                cmbEstado.setSelection(inx);
+                if (LProductoEstadoIngreso!=null){
+                    List Aux = stream(LProductoEstadoIngreso.items).select(c->c.IdEstado).toList();
+                    int inx= Aux.indexOf(gBePickingUbic.IdProductoEstado);
+                    cmbEstado.setSelection(inx);
+                }
             }
 
             if (gBePickingUbic.Peso_solicitado>0){
