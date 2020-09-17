@@ -630,8 +630,6 @@ public class frm_recepcion_datos extends PBase {
 
             MuestraParametros1(this );
 
-
-
         }catch (Exception e){
             mu.msgbox("Muestra_Propiedades_Producto: "+e.getMessage());
         }
