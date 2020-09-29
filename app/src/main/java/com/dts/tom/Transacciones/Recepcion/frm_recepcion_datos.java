@@ -4145,7 +4145,8 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
                     case  2:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega","pIdPropietario",gl.IdPropietario,
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
+                                "pIdPropietario",gl.IdPropietario,
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
