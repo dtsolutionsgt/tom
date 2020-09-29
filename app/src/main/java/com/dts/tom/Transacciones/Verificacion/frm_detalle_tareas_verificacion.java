@@ -244,7 +244,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                    "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 3:
-                        callMethod("Get_All_PickingUbic_By_IdPickingEnc",
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion",
                                    "pIdPickingEnc",gl.gIdPickingEnc,
                                    "pDetalleOperador", false,
                                    "pIdOperadorBodega",0);
@@ -419,7 +419,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             progress.setMessage("Obteniendo listado de Picking Ubic...");
 
-            plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc");
+            plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion");
 
             progress.setMessage("Cargando detalle de tarea de verificación");
 
