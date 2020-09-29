@@ -1,9 +1,8 @@
 package com.dts.tom.Transacciones.Recepcion;
 
-import androidx.annotation.RequiresApi;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,7 +35,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private Button btnRegs;
+    private Button btnRegs, btnCompletaRec2;
     private ListView listView;
 
     private clsBeTrans_oc_det BeOcDet;
@@ -49,6 +48,8 @@ public class frm_list_rec_prod_detalle extends PBase {
     private list_adapt_detalle_rec_prod adapter;
     private static ArrayList<clsBeTrans_re_det> BeListDetalleRec= new ArrayList<clsBeTrans_re_det>() ;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +61,35 @@ public class frm_list_rec_prod_detalle extends PBase {
         xobj = new XMLObject(ws);
 
         btnRegs = (Button) findViewById(R.id.btnRegs);
+        btnCompletaRec2 = (Button) findViewById(R.id.btnCompletaRec2);
+
         listView = (ListView)findViewById(R.id.listRecDet);
 
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
+
+            valida_producto_completo();
         }
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        ProgressDialog();
+
+        progress.setMessage("Cargando detalle");
+
         setHandles();
 
+        //Llama a processBeProducto
         execws(1);
 
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void setHandles(){
@@ -93,8 +111,11 @@ public class frm_list_rec_prod_detalle extends PBase {
                             selidx = position;
                             adapter.setSelectedIndex(position);
 
-                            Procesar_registro();
-
+                            if (!gl.gBeRecepcion.Habilitar_Stock) {
+                                Procesar_registro();
+                            }else{
+                                msgbox("El detalle no se puede modificar porque ya el Stock está habilitado");
+                            }
                     }
 
                 }
@@ -109,7 +130,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     }
 
     public void BacKList(View view) {
-    doExit();
+        doExit();
     }
 
     private void Procesar_registro(){
@@ -178,6 +199,52 @@ public class frm_list_rec_prod_detalle extends PBase {
             mu.msgbox("Lista_Detalle_Rec:"+e.getMessage());
         }
     }
+    void valida_producto_completo(){
+
+        double CantRec = 0;
+        double CantOC  = 0;
+
+        try{
+
+           CantOC = BeOcDet.getCantidad();
+           CantRec = BeOcDet.getCantidad_recibida();
+
+            if (CantRec >= CantOC){
+
+                if (CantRec == CantOC){
+                    btnCompletaRec2.setText("COMPLETA");
+                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF99CC00"));
+                }else if (CantRec > CantOC) {
+                    btnCompletaRec2.setText(" DIF - (POS)");
+                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF0399D5"));
+                }
+            }else{
+                btnCompletaRec2.setText("DIF - (NEG)");
+                btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFCC0000"));
+            }
+        }catch (Exception ex){
+            msgbox(ex.getMessage());
+        }
+    }
+
+
+    /*Private Sub Valida_Producto_Completo(ByVal CantRec As Double, ByVal CantOC As Double)
+
+    Try
+
+    If CantRec >= CantOC Then
+    cmdCompletaProd.Text = "COMPLETA"
+    cmdCompletaProd.BackColor = Color.Green
+            Else
+    cmdCompletaProd.Text = "INCOMPLETA"
+    cmdCompletaProd.BackColor = Color.Firebrick
+    End If
+
+    Catch ex As Exception
+    MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+    End Try
+
+    End Sub*/
 
     public class OrdenarItems implements Comparator<clsBeTrans_re_det> {
 
@@ -247,6 +314,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
+            //Llama a processDetRec
             execws(2);
             //Load();
 
@@ -260,17 +328,23 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         try{
 
+            progress.setMessage("Obteniendo detalle");
+
             pListTransRecDet = xobj.getresult(clsBeTrans_re_detList.class,"Get_Detalle_By_IdRecepcionDet_HH");
 
             if (pListTransRecDet!=null){
                 if (pListTransRecDet.items!=null){
                     Lista_Detalle_Rec();
+
+                    progress.cancel();
+
                 }else{
                     doExit();
                 }
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processDetRec:"+e.getMessage());
         }
     }
@@ -301,6 +375,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
             if (browse==1){
                 browse=0;
+                //Llama a processDetRec
                 execws(2);
             }
 

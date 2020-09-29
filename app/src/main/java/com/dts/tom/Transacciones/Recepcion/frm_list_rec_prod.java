@@ -525,7 +525,7 @@ public class frm_list_rec_prod extends PBase {
                         selidx = position;
                         adapter.setSelectedIndex(position);
 
-                        msgIngresaDetalle("Desea ver el detalle de código: " +selitem.Codigo_Producto);
+                        msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
                     }
 
@@ -674,15 +674,15 @@ public class frm_list_rec_prod extends PBase {
 
                 if (selitem.Cantidad_recibida>0){
 
-                gl.gEscaneo_Pallet = Escaneo_Pallet;
-                gl.gselitem = selitem;
+                    gl.gEscaneo_Pallet = Escaneo_Pallet;
+                    gl.gselitem = selitem;
 
-                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                gl.gpListDetalleOC.items = pListDetalleOC.items;
-
+                    gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                    gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                     browse=1;
                     startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
+
                 }else{
                     mu.msgbox("No existen recepciones de ese producto");
                 }
@@ -851,7 +851,6 @@ public class frm_list_rec_prod extends PBase {
 
             browse=2;
             startActivity(new Intent(this, frm_recepcion_datos.class));
-
 
         }catch (Exception e){
             mu.msgbox("BotonDetalle:"+e.getMessage());
