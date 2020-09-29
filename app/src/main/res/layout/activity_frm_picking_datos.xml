@@ -78,216 +78,213 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <ScrollView
-        android:id="@+id/scrollDatos"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relEnc"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView10"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Barra:" />
+
+            <EditText
+                android:id="@+id/txtBarra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/lblCad"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Cad:" />
+
+            <EditText
+                android:id="@+id/txtFechaCad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView13"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Lote:" />
+
+            <EditText
+                android:id="@+id/txtLote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView14"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Presentación:" />
+
+            <Spinner
+                android:id="@+id/cmbPresentacion"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView15"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Uni. bas.:" />
+
+            <EditText
+                android:id="@+id/txtUniBas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textPersonName" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView16"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Cantidad:" />
+
+            <EditText
+                android:id="@+id/txtCantidadPick"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView17"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Peso:" />
+
+            <EditText
+                android:id="@+id/txtPesoPick"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/textView18"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Estado:" />
+
+            <Spinner
+                android:id="@+id/cmbEstado"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+        </TableRow>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relEnc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblLicPlate"
+        android:layout_marginTop="5dp">
 
         <Button
-            android:id="@+id/btnFechaVence"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
+            android:id="@+id/btnDanado"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="130dp"
             android:background="@drawable/color_medium"
-            android:text="Vence en: 0 días"
+            android:onClick="BotonReemplazo"
+            android:text="Reemplazo"
             android:textColor="@android:color/background_light"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <RelativeLayout
-            android:id="@+id/relEnc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+        <Button
+            android:id="@+id/btNE"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="24dp"
+            android:layout_toEndOf="@+id/btnDanado"
+            android:background="@color/colorPrimary"
+            android:onClick="BotonNoEn"
+            android:text="N.E."
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/btnDanado"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="130dp"
-                android:background="@drawable/color_medium"
-                android:onClick="BotonReemplazo"
-                android:text="Reemplazo"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btNE"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="24dp"
-                android:layout_toEndOf="@+id/btnDanado"
-                android:background="@color/colorPrimary"
-                android:onClick="BotonNoEn"
-                android:text="N.E."
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView10"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Barra:" />
-
-                <EditText
-                    android:id="@+id/txtBarra"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/lblCad"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Cad:" />
-
-                <EditText
-                    android:id="@+id/txtFechaCad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="date" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView13"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Lote:" />
-
-                <EditText
-                    android:id="@+id/txtLote"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textPersonName" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView14"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Presentación:" />
-
-                <Spinner
-                    android:id="@+id/cmbPresentacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView15"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Uni. bas.:" />
-
-                <EditText
-                    android:id="@+id/txtUniBas"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textPersonName" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView16"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Cantidad:" />
-
-                <EditText
-                    android:id="@+id/txtCantidadPick"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="number" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView17"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Peso:" />
-
-                <EditText
-                    android:id="@+id/txtPesoPick"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="number" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/textView18"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Estado:" />
-
-                <Spinner
-                    android:id="@+id/cmbEstado"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-            </TableRow>
-        </LinearLayout>
-    </ScrollView>
+    <Button
+        android:id="@+id/btnFechaVence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/relbot"
+        android:layout_marginStart="150dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_medium"
+        android:text="Vence en: 0 días"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
 
 </RelativeLayout>
