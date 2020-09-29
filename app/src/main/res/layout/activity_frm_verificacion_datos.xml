@@ -6,171 +6,179 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Verificacion.frm_verificacion_datos">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollDatosV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblLicPlate2"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_above="@id/relbot"
+        android:layout_below="@id/lblLicPlate2">
 
         <LinearLayout
-            android:id="@+id/llFechaVence"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/lblVenceVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
+            <LinearLayout
+                android:id="@+id/llFechaVence"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Caducidad:" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgDate3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:onClick="ChangeDate"
-                android:src="@drawable/calendar" />
+                <TextView
+                    android:id="@+id/lblVenceVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:text="Caducidad:" />
 
-            <EditText
-                android:id="@+id/txtVenceVeri"
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:text="01/01/1900" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgDate3"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:onClick="ChangeDate"
+                    android:src="@drawable/calendar" />
 
-        <LinearLayout
-            android:id="@+id/llLote"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/txtVenceVeri"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:text="01/01/1900" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/lblLoteVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:text="Lote:" />
-
-            <EditText
-                android:id="@+id/txtLoteVeri"
+            <LinearLayout
+                android:id="@+id/llLote"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llPresentacion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lblLoteVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:text="Lote:" />
 
-            <TextView
-                android:id="@+id/lblPresVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="Presentación:" />
+                <EditText
+                    android:id="@+id/txtLoteVeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
 
-            <Spinner
-                android:id="@+id/cmbPresVeri"
+            <LinearLayout
+                android:id="@+id/llPresentacion"
                 android:layout_width="match_parent"
-                android:layout_height="45dp" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llUMBas"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lblPresVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:text="Presentación:" />
 
-            <TextView
-                android:id="@+id/lblUmbasVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="Uni. bas.:" />
+                <Spinner
+                    android:id="@+id/cmbPresVeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/txtUmbasVeri"
+            <LinearLayout
+                android:id="@+id/llUMBas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llCantidad"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lblUmbasVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:text="Uni. bas.:" />
 
-            <TextView
-                android:id="@+id/lblCantVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="Cantidad:" />
+                <EditText
+                    android:id="@+id/txtUmbasVeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/txtCantVeri"
+            <LinearLayout
+                android:id="@+id/llCantidad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="0" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/llPeso"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lblCantVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:text="Cantidad:" />
 
-            <TextView
-                android:id="@+id/lblPesoVeri"
-                style="@style/StyleText"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="Peso:" />
+                <EditText
+                    android:id="@+id/txtCantVeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="0" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/txtPesoVeri"
+            <LinearLayout
+                android:id="@+id/llPeso"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="0" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lblPesoVeri"
+                    style="@style/StyleText"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:text="Peso:" />
+
+                <EditText
+                    android:id="@+id/txtPesoVeri"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llReemplazo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btMarcarReemplazoVeri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:onClick="MarcarReemplazo"
+                    android:text="Marcar reemplazo" />
+            </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llReemplazo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_height="0dp"
-                android:layout_weight="1" android:layout_width="0dp"/>
-
-            <Button
-                android:id="@+id/btMarcarReemplazoVeri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:onClick="MarcarReemplazo"
-                android:text="Marcar reemplazo" />
-        </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <DatePicker
         android:id="@+id/datePicker2"

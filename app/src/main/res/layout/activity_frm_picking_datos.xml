@@ -7,128 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Picking.frm_picking_datos">
 
-    <RelativeLayout
-        android:id="@+id/relbot"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/color_medium">
-
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="61dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/back"
-            android:onClick="ExitFormPick" />
-
-        <Button
-            android:id="@+id/btnConfirmarPk"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="BotonGuardar"
-            android:text="Confirmar"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/reltop"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/background_light">
-
-        <TextView
-            android:id="@+id/lblTituloForma"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
-            android:textColor="@color/medium"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/lblLicPlate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/color_medium"
-        android:gravity="center"
-        android:text="0EN0405140000717"
-        android:textColor="@android:color/background_light"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
     <ScrollView
         android:id="@+id/scrollDatos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/btnFechaVence"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/color_medium"
-            android:text="Vence en: 0 días"
-            android:textColor="@android:color/background_light"
-            android:textSize="18sp" />
-
-        <RelativeLayout
-            android:id="@+id/relEnc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
-
-            <Button
-                android:id="@+id/btnDanado"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="130dp"
-                android:background="@drawable/color_medium"
-                android:onClick="BotonReemplazo"
-                android:text="Reemplazo"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btNE"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="24dp"
-                android:layout_toEndOf="@+id/btnDanado"
-                android:background="@color/colorPrimary"
-                android:onClick="BotonNoEn"
-                android:text="N.E."
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@id/btnFechaVence"
+        android:layout_below="@id/relEnc">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -289,5 +173,125 @@
             </TableRow>
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="ExitFormPick" />
+
+        <Button
+            android:id="@+id/btnConfirmarPk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:onClick="BotonGuardar"
+            android:text="Confirmar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/background_light">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:textColor="@color/medium"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lblLicPlate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/color_medium"
+        android:gravity="center"
+        android:text="0EN0405140000717"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/relEnc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblLicPlate"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/btnDanado"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="130dp"
+            android:background="@drawable/color_medium"
+            android:onClick="BotonReemplazo"
+            android:text="Reemplazo"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btNE"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="24dp"
+            android:layout_toEndOf="@+id/btnDanado"
+            android:background="@color/colorPrimary"
+            android:onClick="BotonNoEn"
+            android:text="N.E."
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnFechaVence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/relbot"
+        android:layout_marginStart="150dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_medium"
+        android:text="Vence en: 0 días"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
 
 </RelativeLayout>
