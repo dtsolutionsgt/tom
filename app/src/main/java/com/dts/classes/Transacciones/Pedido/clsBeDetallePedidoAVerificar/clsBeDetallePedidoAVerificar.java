@@ -21,16 +21,30 @@ public class clsBeDetallePedidoAVerificar {
     @Element(required=false) public int IdUnidadMedidaBasica=0;
     @Element(required=false) public String Codigo="";
     @Element(required=false) public int NDias=0;
+    @Element(required=false) public int IdProductoEstado=0;
 
 
     public clsBeDetallePedidoAVerificar() {
     }
 
-    public clsBeDetallePedidoAVerificar(int IdPedidoEnc,int IdPedidoDet,int IdProductoBodega,String Lote,
-                                        String LicPlate,String Fecha_Vence,String Nom_Presentacion,String Nom_Unid_Med,
-                                        String Nombre_Producto,String Nom_Estado,double Cantidad_Solicitada,double Cantidad_Recibida,
-                                        double Cantidad_Verificada,int IdPresentacion,int IdUnidadMedidaBasica,String Codigo,
-                                        int NDias) {
+    public clsBeDetallePedidoAVerificar(int IdPedidoEnc,
+                                        int IdPedidoDet,
+                                        int IdProductoBodega,
+                                        String Lote,
+                                        String LicPlate,
+                                        String Fecha_Vence,
+                                        String Nom_Presentacion,
+                                        String Nom_Unid_Med,
+                                        String Nombre_Producto,
+                                        String Nom_Estado,
+                                        double Cantidad_Solicitada,
+                                        double Cantidad_Recibida,
+                                        double Cantidad_Verificada,
+                                        int IdPresentacion,
+                                        int IdUnidadMedidaBasica,
+                                        String Codigo,
+                                        int NDias,
+                                        int IdProductoEstado) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdPedidoDet=IdPedidoDet;
@@ -49,6 +63,7 @@ public class clsBeDetallePedidoAVerificar {
         this.IdUnidadMedidaBasica=IdUnidadMedidaBasica;
         this.Codigo=Codigo;
         this.NDias=NDias;
+        this.IdProductoEstado = IdProductoEstado;
 
     }
 
@@ -155,6 +170,14 @@ public class clsBeDetallePedidoAVerificar {
     public void setNDias(int value) {
         NDias=value;
     }
+
+    public int getIdProductoEstado() {
+        return IdProductoEstado;
+    }
+    public void setIdProductoEstado(int value) {
+        IdProductoEstado=value;
+    }
+
 
 }
 

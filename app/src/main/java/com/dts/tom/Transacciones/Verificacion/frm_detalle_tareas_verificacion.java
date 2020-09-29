@@ -609,7 +609,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdPresentacion = pListaPedidoDet.items.get(i).getIdPresentacion();
                             vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
-
+                            vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
                             pListBeTareasVerificacionHH.add(vItem);
 
                         }
