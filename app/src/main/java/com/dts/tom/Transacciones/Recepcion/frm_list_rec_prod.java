@@ -1419,7 +1419,7 @@ public class frm_list_rec_prod extends PBase {
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
                if(Recepcion_Completa()){
-                   msgPreguntaFinalizar("La recepción esta completa,¿Desea finalizar?");
+                   msgPreguntaFinalizar("La recepción esta completa. ¿Finalizar?");
                }
             }
 
