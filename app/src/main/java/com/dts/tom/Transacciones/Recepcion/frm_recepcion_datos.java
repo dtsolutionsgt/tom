@@ -57,8 +57,10 @@ import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -3000,12 +3002,22 @@ public class frm_recepcion_datos extends PBase {
                     gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
 
                     String FechaVence=BeTransReDet.Fecha_vence;
+                    String FechaActual=du.getFechaActual();
 
-                    if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date strDate = sdf.parse(FechaVence);
+                    Date strDateNow = sdf.parse(FechaActual);
+
+                    if (strDate.getTime()  <=  strDateNow.getTime() ) {
                         msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
                     }else{
                         DespuesDeValidarCantidad();
                     }
+
+                    //#CKFK 20201007 quité esta validacion de fecha porque no era correcta
+                   /* if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
+
+                    }*/
 
                     //#CKFK 20200917 Puse esto en comentario porque la validación no se hacía correctamente
                        /* if (!Valida_Fecha_Vencimiento()){
@@ -4070,7 +4082,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    DespuesDeValidarCantidad();
+                    //DespuesDeValidarCantidad();
+                    valida_fecha_vencimiento();
                 }
             });
 
@@ -4101,7 +4114,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    DespuesDeValidarCantidad();
+                    valida_fecha_vencimiento();
+                    //DespuesDeValidarCantidad();
                 }
             });
 
