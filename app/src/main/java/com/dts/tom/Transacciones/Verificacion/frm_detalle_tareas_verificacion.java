@@ -244,6 +244,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                    "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 3:
+                        //#EJC20201008: Lllamada a método específico para verificación!
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion",
                                    "pIdPickingEnc",gl.gIdPickingEnc,
                                    "pDetalleOperador", false,

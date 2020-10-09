@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
@@ -2064,7 +2065,18 @@ public class frm_recepcion_datos extends PBase {
             if (vPresentacion>0){
 
                 Factor =Get_Factor_Presentacion(vPresentacion);
-                EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.EsPallet).first();
+
+                //#EJC20201008: Da error de NoSuchElementException cuando no encuntra la presentación por el ID,
+                //Por eso agregué este try catch así.
+
+                clsBeProducto_Presentacion a= new clsBeProducto_Presentacion();
+
+                try {
+                    EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.EsPallet).first();
+                } catch (NoSuchElementException e) {
+                    e.printStackTrace();
+                }
+
 
                 if (EsPallet){
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
