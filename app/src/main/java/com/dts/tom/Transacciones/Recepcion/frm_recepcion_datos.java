@@ -210,11 +210,12 @@ public class frm_recepcion_datos extends PBase {
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
         }
-            if(!gl.Escaneo_Pallet){
-                execws(1);
-            }else{
-                Load();
-            }
+
+        if(!gl.Escaneo_Pallet){
+            execws(1);
+        }else{
+            Load();
+        }
     }
 
     //region Events
@@ -338,17 +339,6 @@ public class frm_recepcion_datos extends PBase {
 
             });
 
-            txtCantidadRec.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        ValidaCampos();
-                    }
-
-                    return false;
-                }
-            });
-
             txtBarra.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -364,8 +354,7 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                         if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
-                            txtCantidadRec.setSelectAllOnFocus(true);
-                            txtCantidadRec.requestFocus();
+                           txtCantidadRec.requestFocus();
                         }
 
                     }
@@ -374,12 +363,16 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
-            txtCantidadRec.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-                public void onFocusChange(View v, boolean hasFocus){
-                    if (hasFocus)
-                        ((EditText)v).selectAll();
-                } });
+            txtCantidadRec.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        ValidaCampos();
+                    }
 
+                    return false;
+                }
+            });
 
              cmbVenceRec .addTextChangedListener(new TextWatcher() {
                 @Override
@@ -475,15 +468,11 @@ public class frm_recepcion_datos extends PBase {
             if (txtCantidadRec.getText().toString().isEmpty()){
                 mu.msgbox("La cantidad no puede estar vacía");
                 txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
-                txtCantidadRec.setSelectAllOnFocus(true);
                 return false;
             }else{
                 if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
                     mu.msgbox("La cantidad debe ser mayor a 0");
                     txtCantidadRec.requestFocus();
-                    txtCantidadRec.selectAll();
-                    txtCantidadRec.setSelectAllOnFocus(true);
                     return false;
                 }
             }
@@ -611,8 +600,9 @@ public class frm_recepcion_datos extends PBase {
 
                 if(vCant>1){
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de un pallet");
-                    txtCantidadRec.setText(mu.frmdecimal(1,gl.gCantDecDespliegue)+"");
-                    txtCantidadRec.selectAll();
+//                    txtCantidadRec.setText(mu.frmdecimal(1,gl.gCantDecDespliegue)+"");
+                    txtCantidadRec.setText(1+"");
+                    txtCantidadRec.requestFocus();
                 }
 
             }else if (bePresentacion.Permitir_paletizar && chkPaletizar.isChecked() &&!bePresentacion.Genera_lp_auto){
@@ -625,8 +615,9 @@ public class frm_recepcion_datos extends PBase {
                 if (vCant>bePresentacion.CajasPorCama*bePresentacion.CamasPorTarima){
                     mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de "+bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima
                             + " "+ bePresentacion.Nombre);
-                    txtCantidadRec.setText(mu.frmdecimal(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima,gl.gCantDecDespliegue)+"");
-                    txtCantidadRec.selectAll();
+//                    txtCantidadRec.setText(mu.frmdecimal(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima,gl.gCantDecDespliegue)+"");
+                    txtCantidadRec.setText(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima+"");
+                    txtCantidadRec.requestFocus();
                 }
 
             }
@@ -1851,9 +1842,6 @@ public class frm_recepcion_datos extends PBase {
 
                     }else{
                         txtCantidadRec.requestFocus();
-                        txtCantidadRec.selectAll();
-                        txtCantidadRec.setSelectAllOnFocus(true);
-
                         if (gl.mode==1){
                             Carga_Datos_Producto();
                         }else{
@@ -2132,12 +2120,14 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-            txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
+//                txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
+                txtCantidadRec.setText(Cant_Pendiente+"");
+                txtCantidadRec.requestFocus();
                 txtCantidadRec.selectAll();
 
-            clsBeTrans_oc_det_lote BeLoteLinea;
+                clsBeTrans_oc_det_lote BeLoteLinea;
 
-            if (BeOcDet!=null){
+                if (BeOcDet!=null){
 
                 if (gl.gBeOrdenCompra.DetalleLotes.items!=null){
 
@@ -2287,8 +2277,9 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-                txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
-                txtCantidadRec.selectAll();
+//                txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
+                txtCantidadRec.setText(pListTransRecDet.items.get(0).cantidad_recibida+"");
+                txtCantidadRec.requestFocus();
 
                 Cant_Recibida_Anterior = pListTransRecDet.items.get(0).cantidad_recibida;
 
@@ -2466,11 +2457,13 @@ public class frm_recepcion_datos extends PBase {
             cmbVenceRec.setText(du.convierteFechaMostar(BeINavBarraPallet.Fecha_Vence));
 
             if (!EsTransferenciaInternaWMS){
-                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_UMP,gl.gCantDecDespliegue)+"");
-                txtCantidadRec.selectAll();
+//                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_UMP,gl.gCantDecDespliegue)+"");
+                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
+                txtCantidadRec.requestFocus();
             }else{
-                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_Presentacion,gl.gCantDecDespliegue));
-                txtCantidadRec.selectAll();
+//                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_Presentacion,gl.gCantDecDespliegue));
+                txtCantidadRec.setText(BeINavBarraPallet.Cantidad_Presentacion+"");
+                txtCantidadRec.requestFocus();
             }
 
             List AuxList = stream(BeProducto.Presentaciones.items).select(c->c.Codigo_barra).toList();

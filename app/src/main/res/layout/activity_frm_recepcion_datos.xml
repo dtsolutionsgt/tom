@@ -215,10 +215,11 @@
 
                 <EditText
                     android:id="@+id/txtCantidadRec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="259dp"
+                    android:layout_height="match_parent"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number|numberDecimal"
+                    android:selectAllOnFocus="true" />
 
             </TableRow>
 

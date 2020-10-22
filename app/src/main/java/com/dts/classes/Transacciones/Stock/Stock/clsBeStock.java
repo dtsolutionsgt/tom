@@ -52,6 +52,7 @@ public class clsBeStock {
     @Element(required=false) public clsBeProducto Producto=new clsBeProducto();
     @Element(required=false) public int IdStockOrigen=0;
     @Element(required=false) public clsBeRevision Revision=new clsBeRevision();
+    @Element(required=false) public boolean IsReportStockEnFecha = false;
 
     public clsBeStock()
     {
@@ -96,6 +97,7 @@ public class clsBeStock {
         this.Producto=Producto;
         this.IdStockOrigen=IdStockOrigen;
         this.Revision=Revision;
+        this.IsReportStockEnFecha=IsReportStockEnFecha;
     }
 
     public clsBeStock(int IdBodega,int IdStock,int IdPropietarioBodega,int IdProductoBodega,
@@ -108,7 +110,7 @@ public class clsBeStock {
                       boolean Activo,double Peso,double Temperatura,String Atributo_Variante_1,
                       boolean IsNew,boolean ProductoValidado,String UbicacionAnterior,clsBeProducto_Presentacion Presentacion,
                       clsBeProducto_estado ProductoEstado,clsBeStock_parametroList Parametros,clsBeProducto Producto,
-                      int IdStockOrigen,clsBeRevision Revision
+                      int IdStockOrigen,clsBeRevision Revision,boolean IsReportStockEnFecha
     ) {
 
         this.IdBodega=IdBodega;
@@ -152,6 +154,7 @@ public class clsBeStock {
         this.Producto=Producto;
         this.IdStockOrigen=IdStockOrigen;
         this.Revision=Revision;
+        this.IsReportStockEnFecha=IsReportStockEnFecha;
     }
 
 
@@ -400,6 +403,12 @@ public class clsBeStock {
     }
     public void setRevision(clsBeRevision value) {
         Revision=value;
+    }
+    public boolean getIsReportStockEnFecha() {
+        return IsReportStockEnFecha;
+    }
+    public void setIsReportStockEnFecha(boolean value) {
+        IsReportStockEnFecha=value;
     }
 }
 

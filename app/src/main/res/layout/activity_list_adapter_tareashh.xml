@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/lblIdOC"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="1"
@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/lblRecepcionEnc"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
@@ -38,7 +38,7 @@
         <TextView
             android:id="@+id/lblNDocOc"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="00000"
@@ -48,7 +48,7 @@
         <TextView
             android:id="@+id/lblNoRefOC"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="00000"
@@ -58,7 +58,7 @@
         <TextView
             android:id="@+id/lblProvee"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="IDEALSA"
@@ -68,7 +68,7 @@
         <TextView
             android:id="@+id/lblTipoIng"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Con OC"
@@ -78,7 +78,7 @@
         <TextView
             android:id="@+id/lblTipoRece"
             android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="HCOC00"

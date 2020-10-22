@@ -626,15 +626,19 @@ public class MainActivity extends PBase {
                                 {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                }else{
+                                    execws(7);
                                 }
                             }else
                             {
                                 progress.cancel();
-                                mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
+                                //CKFK 20201021 Cambié mensaje para que sea un si o no
+                                msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
+                                //mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
                             //Get_BeImpresora_By_IdImpresora(gIdImpresora)
 
-                            execws(7);
+                            //execws(7);
 
                         }else
                         {
@@ -666,6 +670,37 @@ public class MainActivity extends PBase {
         }catch (Exception e){
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void msgAsk_continuar_sin_impresora(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setCancelable(false);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.printicon);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(7);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }
@@ -897,7 +932,7 @@ public class MainActivity extends PBase {
 
             for (int i = 0; i <bodegas.items.size(); i++)
             {
-                bodlist.add(bodegas.items.get(i).Nombre);
+                bodlist.add(bodegas.items.get(i).Codigo + " - " + bodegas.items.get(i).Nombre);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
