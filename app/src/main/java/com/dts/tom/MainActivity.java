@@ -627,6 +627,7 @@ public class MainActivity extends PBase {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 }else{
+                                    //#CKFK 20201021 Agregué este else
                                     execws(7);
                                 }
                             }else
