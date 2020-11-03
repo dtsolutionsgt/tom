@@ -168,7 +168,7 @@ public class MainActivity extends PBase {
     }
 
     private void setURL(){
-        String url="http://192.168.0.12/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -1003,7 +1003,7 @@ public class MainActivity extends PBase {
     private void getURL()
     {
 
-        gl.wsurl = "http://192.168.1.94/WSTOMHH_QA/TOMHHWS.asmx";
+        gl.wsurl = "http://192.168.0.100/WSTOMHH_QA/TOMHHWS.asmx";
         gl.wsurl="";
 
         try {
