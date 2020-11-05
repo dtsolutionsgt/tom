@@ -40,6 +40,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeProductoList ListBeStockPallet;
     private String pLicensePlate;
     private clsBeProducto BeProducto;
+    private boolean Escaneo_Pallet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class frm_consulta_stock extends PBase {
 
         ws = new WebServiceHandler(frm_consulta_stock.this, gl.wsurl);
         xobj = new XMLObject(ws);
+        Escaneo_Pallet = false;
 
         listView = (ListView) findViewById(R.id.listInventario);
         btnBack = (Button) findViewById(R.id.btnBack);
@@ -74,7 +76,12 @@ public class frm_consulta_stock extends PBase {
                                     toast("Debe definir una ubicacion o producto");
                                 } else{
 
+                                    if(txtUbic.getText().toString().isEmpty()){
+                                        idubic = 0;
+                                    }
+                                    else{
                                         execws(1);
+                                    }
                                 }
                         }
                     }
@@ -92,22 +99,27 @@ public class frm_consulta_stock extends PBase {
                                 ) {
                                     toast("Debe definir una ubicacion o producto");
                                 } else {
-                                    String vStarWithParameter = "$";
-                                    //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                                    if (txtCodigo.getText().toString().startsWith("$") ||
-                                            txtCodigo.getText().toString().startsWith("(01)") ||
-                                            txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                                        //Es una barra de pallet válida por tamaño
-                                        int vLengthBarra = txtCodigo.getText().toString().length();
 
-                                        if (vLengthBarra >= 16) {
-                                            pLicensePlate = txtCodigo.getText().toString().replace("$", "");
-                                            execws(2);
-                                        }
-                                    } else {
-                                        execws(3);
+                                    if(txtCodigo.getText().toString().isEmpty()){
+                                        idprod = 0;
                                     }
+                                    else{
 
+                                        String vStarWithParameter = "$";
+                                        //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+                                        if (txtCodigo.getText().toString().startsWith("$") ||
+                                                txtCodigo.getText().toString().startsWith("(01)") ||
+                                                txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
+                                            //Es una barra de pallet válida por tamaño
+                                            int vLengthBarra = txtCodigo.getText().toString().length();
+                                            if (vLengthBarra >= 16) {
+                                                pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+                                                execws(2);
+                                            }
+                                        } else {
+                                            execws(3);
+                                        }
+                                    }
                                 }
                         }
                     }
@@ -181,8 +193,8 @@ public class frm_consulta_stock extends PBase {
             ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
 
             if (ListBeStockPallet != null){
-                idubic = cUbic.IdUbicacion;
-                toast("bodega encontrada por LIC_PLATE");
+                Escaneo_Pallet = true;
+                toast("Pallet si existe en la bodega");
             }else {
                 idubic = 0;
                 throw new Exception("Pallet no existe en la bodega: " + gl.IdBodega);
@@ -192,15 +204,10 @@ public class frm_consulta_stock extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
-        } /*else {
-            //escaneoPallet = false;
-            //Llama al método del WS Get_BeProducto_By_Codigo_For_HH
-           // execws(3);
-            toast("metodo 3");
-            execws(3);
-        }*/
+        }
 
     private void processUbicacion3(){
+        idubic = 0;
         try {
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
 
@@ -208,8 +215,7 @@ public class frm_consulta_stock extends PBase {
                 idprod = BeProducto.IdProducto;
                 toast("ubicación encontrada por HH");
             }else{
-                idubic = 0;
-                throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
+                throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
             }
 
         } catch (Exception e) {
