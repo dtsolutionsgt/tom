@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -44,6 +45,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
     private clsBeVW_stock_res pListStock;
+    private TextView lbldescripcion;
 
 
 
@@ -62,6 +64,7 @@ public class frm_consulta_stock extends PBase {
         btnBack = (Button) findViewById(R.id.btnBack);
         txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
+        lbldescripcion = findViewById(R.id.lblDescripcion);
 
         setHandlers();
     }
@@ -75,6 +78,9 @@ public class frm_consulta_stock extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
+
+                                lbldescripcion.setTextColor(Color.WHITE);
+                                lbldescripcion.setText("");
 
                                 if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
                                        ){
@@ -166,10 +172,16 @@ public class frm_consulta_stock extends PBase {
 
                 if (cUbic != null){
                     idubic = cUbic.IdUbicacion;
-                    toast("ubicación encontrada " +  cUbic.getDescripcion());
+
+                    lbldescripcion.setTextColor(Color.BLUE);
+                    lbldescripcion.setText(cUbic.getDescripcion());
+
+                    //toast("ubicación encontrada " +  cUbic.getDescripcion());
                 }else{
                     idubic = 0;
-                    throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
+                    lbldescripcion.setTextColor(Color.RED);
+                    lbldescripcion.setText("Ubicación no existe en la bodega" + gl.IdBodega);
+                    //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
                 }
 
             Listar_Existencias();
