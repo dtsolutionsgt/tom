@@ -4,18 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="BacKList"
     tools:context=".Transacciones.ConsultaStock.frm_consulta_stock">
+
+    <TextView
+        android:id="@+id/lblNombreProducto"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/txtCodigo1"
+        android:layout_alignParentStart="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:text="-"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/btnRegs2"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/relbot"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="50dp"
+        android:layout_alignEnd="@+id/listExist"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="5dp"
         android:background="@android:color/holo_blue_dark"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:text="Registros: 0"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
@@ -48,7 +63,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
-            android:text="Buscar"
+            android:text="@string/buscar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -69,7 +84,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Consulta de Existencia - TRX8"
+            android:text="@string/consulta_de_existencia_trx8"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -86,10 +101,11 @@
         android:layout_marginStart="172dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
+        android:autofillHints=""
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView47"
+        android:id="@+id/lblUbicacionT"
         style="@style/StyleText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
@@ -101,28 +117,31 @@
         android:id="@+id/txtCodigo1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtUbic1"
+        android:layout_below="@+id/lblNombreUbicacion"
         android:layout_alignStart="@+id/txtUbic1"
         android:layout_alignEnd="@+id/txtUbic1"
         android:layout_marginTop="10dp"
+        android:autofillHints=""
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView52"
+        android:id="@+id/lblCodigoProductoT"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtCodigo1"
-        android:layout_alignEnd="@+id/textView47"
+        android:layout_below="@+id/lblNombreUbicacion"
+        android:layout_alignEnd="@+id/lblUbicacionT"
         android:layout_alignBottom="@+id/txtCodigo1"
         android:layout_alignParentStart="true"
-        android:text="Código:" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/c_digo" />
 
     <Spinner
         android:id="@+id/cmbEstadoExist"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/txtCodigo1"
+        android:layout_below="@+id/lblNombreProducto"
         android:layout_alignStart="@+id/txtCodigo1"
         android:layout_alignEnd="@+id/txtCodigo1"
         android:layout_alignParentBottom="false"
@@ -130,64 +149,51 @@
         android:layout_marginBottom="0dp" />
 
     <TextView
-        android:id="@+id/textView53"
+        android:id="@+id/lblEstadoT"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cmbEstadoExist"
-        android:layout_alignEnd="@+id/textView52"
+        android:layout_below="@+id/lblNombreProducto"
+        android:layout_alignEnd="@+id/lblCodigoProductoT"
         android:layout_alignBottom="@+id/cmbEstadoExist"
         android:layout_alignParentStart="true"
-        android:text="Estado:" />
+        android:layout_marginTop="10dp"
+        android:text="@string/estado" />
 
 
     <TextView
-        android:id="@+id/lblDescripcion"
+        android:id="@+id/lblNombreUbicacion"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_below="@+id/cmbEstadoExist"
+        android:layout_below="@+id/txtUbic1"
         android:layout_alignParentStart="false"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
-        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="-"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
-
 
     <ImageView
         android:id="@+id/imgPrint"
         android:layout_width="65dp"
         android:layout_height="45dp"
-        android:layout_below="@+id/lblDescripcion"
+        android:layout_below="@+id/cmbEstadoExist"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:contentDescription="@string/todo"
         android:src="@drawable/printimg" />
-
-    <TextView
-        android:id="@+id/lblUbicCompleta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lblOrigen"
-        android:layout_alignEnd="@+id/txtUbicOrigen"
-        android:layout_alignParentStart="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="7dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
-        android:text="-"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
 
     <ListView
         android:id="@+id/listExist"
         android:layout_width="wrap_content"
         android:layout_height="315dp"
         android:layout_above="@+id/relbot"
-        android:layout_below="@id/imgPrint"
+        android:layout_below="@+id/imgPrint"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="60dp" />
 </RelativeLayout>

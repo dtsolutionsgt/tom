@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Tom Ims</string>
+    <string name="buscar">Buscar</string>
+    <string name="consulta_de_existencia_trx8">Consulta de Existencia - TRX8</string>
+    <string name="estado">Estado:</string>
+    <string name="todo">TODO</string>
+    <string name="c_digo">Código:</string>
 </resources>
