@@ -82,7 +82,7 @@ public class frm_consulta_stock extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                lbldescripcion.setTextColor(Color.WHITE);
+                                //lbldescripcion.setTextColor(Color.WHITE);
                                 lbldescripcion.setText("");
 
                                 if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
@@ -110,7 +110,7 @@ public class frm_consulta_stock extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                lbldescripcion.setTextColor(Color.WHITE);
+                                //lbldescripcion.setTextColor(Color.WHITE);
                                 lbldescripcion.setText("");
 
                                 if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
@@ -180,16 +180,16 @@ public class frm_consulta_stock extends PBase {
                 if (cUbic != null){
                     idubic = cUbic.IdUbicacion;
 
-                    /*lbldescripcion.setTextColor(Color.BLUE);
-                    lbldescripcion.setText(cUbic.getDescripcion());*/
+                    lbldescripcion.setTextColor(Color.BLUE);
+                    lbldescripcion.setText(cUbic.getDescripcion());
 
-                    toast("ubicación encontrada " +  cUbic.getDescripcion());
+                    //toast("ubicación encontrada " +  cUbic.getDescripcion());
                 }else{
                     idubic = 0;
-                    /*lbldescripcion.setTextColor(Color.RED);
-                    lbldescripcion.setText("Ubicación no existe en la bodega" + gl.IdBodega);*/
+                    lbldescripcion.setTextColor(Color.RED);
+                    lbldescripcion.setText("Ubicación no existe en la bodega" + gl.IdBodega);
 
-                    throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
+                    //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
                 }
 
             Listar_Existencias();
@@ -256,7 +256,7 @@ public class frm_consulta_stock extends PBase {
             }
             else{
 
-                lbldescripcion.setText("");
+               // lbldescripcion.setText("");
             }
 
             /*If (pListStock.Count = 0) Or (pListStock Is Nothing) Then
@@ -291,7 +291,7 @@ public class frm_consulta_stock extends PBase {
             }
             else{
 
-                lbldescripcion.setText("");
+                //lbldescripcion.setText("");
             }
 
             List AuxList;
