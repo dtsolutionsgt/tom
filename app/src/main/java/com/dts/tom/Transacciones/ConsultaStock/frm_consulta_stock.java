@@ -45,6 +45,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
     private clsBeVW_stock_res pListStock;
+    private clsBeVW_stock_resList pListStock2;
     private TextView lbldescripcion;
 
 
@@ -106,6 +107,10 @@ public class frm_consulta_stock extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
+
+                                lbldescripcion.setTextColor(Color.WHITE);
+                                lbldescripcion.setText("");
+
                                 if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
                                 ) {
                                     toast("Debe definir una ubicacion o producto");
@@ -173,15 +178,16 @@ public class frm_consulta_stock extends PBase {
                 if (cUbic != null){
                     idubic = cUbic.IdUbicacion;
 
-                    lbldescripcion.setTextColor(Color.BLUE);
-                    lbldescripcion.setText(cUbic.getDescripcion());
+                    /*lbldescripcion.setTextColor(Color.BLUE);
+                    lbldescripcion.setText(cUbic.getDescripcion());*/
 
-                    //toast("ubicación encontrada " +  cUbic.getDescripcion());
+                    toast("ubicación encontrada " +  cUbic.getDescripcion());
                 }else{
                     idubic = 0;
-                    lbldescripcion.setTextColor(Color.RED);
-                    lbldescripcion.setText("Ubicación no existe en la bodega" + gl.IdBodega);
-                    //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
+                    /*lbldescripcion.setTextColor(Color.RED);
+                    lbldescripcion.setText("Ubicación no existe en la bodega" + gl.IdBodega);*/
+
+                    throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
                 }
 
             Listar_Existencias();
@@ -235,8 +241,33 @@ public class frm_consulta_stock extends PBase {
 
     private void listaStock() {
         try {
-            pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
-            toast("stock por producto/ubicacion");
+            //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
+            pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
+            //toast("stock por producto/ubicacion");
+
+            int conteo = pListStock2.items.size();
+
+            if(conteo == 0 || pListStock2.items.isEmpty()){
+
+                lbldescripcion.setText("U.S.P");
+            }
+            else{
+
+                lbldescripcion.setText("");
+            }
+
+            /*If (pListStock.Count = 0) Or (pListStock Is Nothing) Then
+            If pListStock.Count = 0 Then
+            lblMensaje.ForeColor = Color.Firebrick
+            lblMensaje.Text = "U.S.P"
+            End If
+            DefCur() : idle = True : Return
+                    Else
+            lblMensaje.ForeColor = Color.SteelBlue
+            lblMensaje.Text = ""
+            End If*/
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,8 +275,21 @@ public class frm_consulta_stock extends PBase {
 
     private void listaStock2() {
         try {
-            pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
-            toast("stock por pallet");
+            //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
+            pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
+            //toast("stock por pallet");
+
+            int conteo = pListStock2.items.size();
+
+            if(conteo == 0 || pListStock2.items.isEmpty()){
+
+                lbldescripcion.setText("U.S.P");
+            }
+            else{
+
+                lbldescripcion.setText("");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
