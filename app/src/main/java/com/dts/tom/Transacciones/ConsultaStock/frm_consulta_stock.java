@@ -23,8 +23,6 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
-import java.util.List;
-
 import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_consulta_stock extends PBase {
@@ -47,7 +45,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeVW_stock_res pListStock;
     private clsBeVW_stock_resList pListStock2;
     private TextView lbldescripcion;
-
+    private Boolean idle = false;
 
 
     @Override
@@ -60,6 +58,7 @@ public class frm_consulta_stock extends PBase {
         ws = new WebServiceHandler(frm_consulta_stock.this, gl.wsurl);
         xobj = new XMLObject(ws);
         Escaneo_Pallet = false;
+        idle = false;
 
         listView = (ListView) findViewById(R.id.listInventario);
         btnBack = (Button) findViewById(R.id.btnBack);
@@ -250,6 +249,7 @@ public class frm_consulta_stock extends PBase {
             if(conteo == 0 || pListStock2.items.isEmpty()){
 
                 lbldescripcion.setText("U.S.P");
+                idle = true;
             }
             else{
 
@@ -284,6 +284,7 @@ public class frm_consulta_stock extends PBase {
             if(conteo == 0 || pListStock2.items.isEmpty()){
 
                 lbldescripcion.setText("U.S.P");
+                idle = true;
             }
             else{
 
