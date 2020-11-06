@@ -23,6 +23,8 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.util.List;
+
 import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_consulta_stock extends PBase {
@@ -46,6 +48,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeVW_stock_resList pListStock2;
     private TextView lbldescripcion;
     private Boolean idle = false;
+    private Integer selest  = 0;
 
 
     @Override
@@ -290,6 +293,33 @@ public class frm_consulta_stock extends PBase {
 
                 lbldescripcion.setText("");
             }
+
+            List AuxList;
+
+            if(selest > 0){
+                AuxList = stream(pListStock2.items)
+                        .where(c ->c.IdProductoEstado == selest)
+                        .orderBy(c ->c.Nombre_Producto)
+                        .groupBy(c ->c.Codigo_Producto)
+                        .toList();
+            }
+            else {
+                AuxList = stream(pListStock2.items)
+                        .where(c ->c.IdProductoEstado > 0)
+                        .orderBy(c ->c.Nombre_Producto)
+                        .groupBy(c ->c.Codigo_Producto)
+                        .toList();
+            }
+
+
+
+
+/*            AuxList = stream(stockResList.items)
+                    .where(c -> c.IdProducto == cvProdID)
+                    .where(c -> c.getIdPresentacion() == cvPresID)
+                    .toList();*/
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
