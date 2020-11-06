@@ -13,17 +13,19 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
-import com.dts.classes.Transacciones.Stock.Stock.clsBeStockList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Collections;
+
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -259,16 +261,20 @@ public class frm_consulta_stock extends PBase {
                // lbldescripcion.setText("");
             }
 
-            /*If (pListStock.Count = 0) Or (pListStock Is Nothing) Then
-            If pListStock.Count = 0 Then
-            lblMensaje.ForeColor = Color.Firebrick
-            lblMensaje.Text = "U.S.P"
-            End If
-            DefCur() : idle = True : Return
-                    Else
-            lblMensaje.ForeColor = Color.SteelBlue
-            lblMensaje.Text = ""
-            End If*/
+            List AuxList;
+
+            if(selest > 0){
+                AuxList = stream(pListStock2.items)
+                        .where(c ->c.IdProductoEstado == selest)
+                        .orderBy(c ->c.Nombre_Producto)
+                        .toList();
+            }
+            else {
+                AuxList = stream(pListStock2.items)
+                        .where(c ->c.IdProductoEstado > 0)
+                        .orderBy(c ->c.Nombre_Producto)
+                        .toList();
+            }
 
 
         } catch (Exception e) {
@@ -300,25 +306,14 @@ public class frm_consulta_stock extends PBase {
                 AuxList = stream(pListStock2.items)
                         .where(c ->c.IdProductoEstado == selest)
                         .orderBy(c ->c.Nombre_Producto)
-                        .groupBy(c ->c.Codigo_Producto)
                         .toList();
             }
             else {
                 AuxList = stream(pListStock2.items)
                         .where(c ->c.IdProductoEstado > 0)
                         .orderBy(c ->c.Nombre_Producto)
-                        .groupBy(c ->c.Codigo_Producto)
                         .toList();
             }
-
-
-
-
-/*            AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == cvProdID)
-                    .where(c -> c.getIdPresentacion() == cvPresID)
-                    .toList();*/
-
 
 
         } catch (Exception e) {
