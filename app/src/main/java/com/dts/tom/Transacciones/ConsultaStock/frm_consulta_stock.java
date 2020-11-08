@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.ConsultaStock;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,8 +24,12 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.Collections;
 
@@ -67,7 +73,7 @@ public class frm_consulta_stock extends PBase {
         Escaneo_Pallet = false;
         idle = false;
 
-        listView = (ListView) findViewById(R.id.listInventario);
+        listView = (ListView) findViewById(R.id.listExist);
         btnBack = (Button) findViewById(R.id.btnBack);
         txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
@@ -266,8 +272,6 @@ public class frm_consulta_stock extends PBase {
         try {
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
             pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
-            //toast("stock por producto/ubicacion");
-
             int conteo = pListStock2.items.size();
 
             if(conteo == 0 || pListStock2.items.isEmpty()){
@@ -296,6 +300,58 @@ public class frm_consulta_stock extends PBase {
             }
 
 
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            {
+
+
+                Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
+                        null;
+
+                employessGroup = pListStock2.items.stream().collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
+                        Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
+                                Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
+                                        Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
+                                                Collectors.groupingBy(clsBeVW_stock_res::getLote,
+                                                        Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
+                                                                Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
+                                                                        Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
+                                                                                Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
+                                                                                                Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
+                                                                                                        Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
+                                        Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega)))))))))))));
+
+                if (employessGroup != null){
+
+
+
+                }
+
+     /*           If Not Data Is Nothing Then
+
+                DTStock = EQToDataTable(Data)
+
+                DgridList.DataSource = DTStock
+
+                cmdRegs.Text = "Regs: " & DTStock.Rows.Count.ToString()
+
+                If DTStock.Rows.Count = 0 Then
+                lblMensaje.ForeColor = Color.Blue
+                lblMensaje.Text = "No hay registros."
+                End If
+
+                Else
+
+                lblMensaje.ForeColor = Color.Firebrick
+                lblMensaje.Text = "No hay registros."
+
+                End If*/
+
+
+
+
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -305,8 +361,6 @@ public class frm_consulta_stock extends PBase {
         try {
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
             pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
-            //toast("stock por pallet");
-
             int conteo = pListStock2.items.size();
 
             if(conteo == 0 || pListStock2.items.isEmpty()){
@@ -335,11 +389,34 @@ public class frm_consulta_stock extends PBase {
             }
 
 
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            {
+
+
+                Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
+                        null;
+
+                employessGroup = pListStock2.items.stream().collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
+                        Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
+                                Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
+                                        Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
+                                                Collectors.groupingBy(clsBeVW_stock_res::getLote,
+                                                        Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
+                                                                Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
+                                                                        Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
+                                                                                Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
+                                                                                        Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
+                                                                                                Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
+                                                                                                        Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega)))))))))))));
+
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public class WebServiceHandler extends WebService {
 
@@ -403,6 +480,51 @@ public class frm_consulta_stock extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+
+    private void msgAskExit(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    //frm_verificacion_datos.super.finish();
+                    frm_consulta_stock.super.finish();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        try{
+
+            msgAskExit("Está seguro de salir de existencia iventarios");
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
 }

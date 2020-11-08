@@ -53,7 +53,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
-            android:onClick="BacKList" />
+            />
 
         <Button
             android:id="@+id/btnBuscar"
