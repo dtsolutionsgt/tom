@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 
+import java.security.KeyStore;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -340,8 +342,9 @@ public class frm_consulta_stock extends PBase {
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
                 {
-                    Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
-                            null;
+
+                   Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=null;
+
 
                     employessGroup = pListStock2.items.stream().filter(c ->c.IdProductoEstado>0).collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
                             Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
@@ -359,10 +362,12 @@ public class frm_consulta_stock extends PBase {
 
                     if (employessGroup != null){
 
-                        item = new clsBeVW_stock_res();
+                        employessGroup.entrySet().stream().forEach((entry) ->
+                        {
+                            Log.i("Thevalue",entry.getValue().toString());
+                            String a = entry.getKey();
+                        });
 
-                        //item.IdProductoEstado = employessGroup.values("codigo");
-                        //item.Nombre_Producto = employessGroup.values("key");
 
                         int count =employessGroup.size();
                         registros.setText("Regs: "+count);
