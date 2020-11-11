@@ -22,23 +22,17 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
-
-import java.security.KeyStore;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.Collections;
 
-
-import static br.com.zbra.androidlinq.Linq.stream;
-import static java.util.stream.Collectors.toSet;
 
 public class frm_consulta_stock extends PBase {
 
@@ -57,14 +51,13 @@ public class frm_consulta_stock extends PBase {
     private String pLicensePlate;
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
-    private clsBeVW_stock_res pListStock;
-    private clsBeVW_stock_resList pListStock2;
+    private clsBeVW_stock_res_CI_List pListStock2;
     private TextView lblNombreUbicacion;
     private TextView lblNombreProducto;
     private Boolean idle = false;
     private Integer selest  = 0;
     private list_adapt_consulta_stock adapter_stock;
-    private ArrayList<clsBeVW_stock_res> items_stock = new ArrayList<clsBeVW_stock_res>();
+    private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
 
 
 
@@ -283,7 +276,8 @@ public class frm_consulta_stock extends PBase {
             clsBeVW_stock_res item;
 
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
-            pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
+            //pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
+            pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
             int conteo = pListStock2.items.size();
 
             if(conteo == 0 || pListStock2.items.isEmpty()){
@@ -296,42 +290,12 @@ public class frm_consulta_stock extends PBase {
                // lbldescripcion.setText("");
             }
 
-            //List AuxList;
+            List AuxList;
 
             if(selest > 0){
-                        /* AuxList = stream(pListStock2.items)
-                        .where(c ->c.IdProductoEstado == selest)
-                        .orderBy(c ->c.Nombre_Producto)
-                        .toList();*/
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                {
-                    Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
-                            null;
-
-                    employessGroup = pListStock2.items.stream().filter(c ->c.IdProductoEstado == selest).collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
-                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
-                                    Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
-                                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
-                                                    Collectors.groupingBy(clsBeVW_stock_res::getLote,
-                                                            Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
-                                                                    Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
-                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
-                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
-                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
-                                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
-                                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega
-                                                                                                            )))))))))))));
-
-                    if (employessGroup != null){
-
-                        int count =employessGroup.size();
-                        registros.setText("Regs: "+count);
-                    }
-                    else{
-                        registros.setText("Regs: "+ 0);
-                    }
-                }
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
 
             }
             else {
@@ -339,43 +303,9 @@ public class frm_consulta_stock extends PBase {
                         .where(c ->c.IdProductoEstado > 0)
                         .orderBy(c ->c.Nombre_Producto)
                         .toList();*/
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                {
-
-                   Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=null;
-
-
-                    employessGroup = pListStock2.items.stream().filter(c ->c.IdProductoEstado>0).collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
-                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
-                                    Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
-                                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
-                                                    Collectors.groupingBy(clsBeVW_stock_res::getLote,
-                                                            Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
-                                                                    Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
-                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
-                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
-                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
-                                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
-                                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega
-                                                                                                            )))))))))))));
-
-                    if (employessGroup != null){
-
-                        employessGroup.entrySet().stream().forEach((entry) ->
-                        {
-                            Log.i("Thevalue",entry.getValue().toString());
-                            String a = entry.getKey();
-                        });
-
-
-                        int count =employessGroup.size();
-                        registros.setText("Regs: "+count);
-                    }
-                    else{
-                        registros.setText("Regs: "+ 0);
-                    }
-                }
             }
 
         } catch (Exception e) {
@@ -385,8 +315,13 @@ public class frm_consulta_stock extends PBase {
 
     private void listaStock2() {
         try {
+
+            items_stock.clear();
+            clsBeVW_stock_res item;
+
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
-            pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
+            //pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
+            pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
             int conteo = pListStock2.items.size();
 
             if(conteo == 0 || pListStock2.items.isEmpty()){
@@ -406,36 +341,8 @@ public class frm_consulta_stock extends PBase {
                         .where(c ->c.IdProductoEstado == selest)
                         .orderBy(c ->c.Nombre_Producto)
                         .toList();*/
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                {
-                    Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
-                            null;
-
-                    employessGroup = pListStock2.items.stream().filter(c ->c.IdProductoEstado == selest).collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
-                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
-                                    Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
-                                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
-                                                    Collectors.groupingBy(clsBeVW_stock_res::getLote,
-                                                            Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
-                                                                    Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
-                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
-                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
-                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
-                                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
-                                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega
-                                                                                                            )))))))))))));
-
-                    if (employessGroup != null){
-
-                        int count =employessGroup.size();
-                        registros.setText("Regs: "+count);
-                    }
-                    else{
-                        registros.setText("Regs: "+ 0);
-                    }
-                }
-
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
 
             }
             else {
@@ -444,35 +351,8 @@ public class frm_consulta_stock extends PBase {
                         .orderBy(c ->c.Nombre_Producto)
                         .toList();*/
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                {
-                    Map<String, Map<String, Map<String, Map<String, Map<String, Map<String,Map<String, Map<Integer,Map<Integer, Map<Integer, Map<String, Map<Integer, List<clsBeVW_stock_res>>>>>>>>>>>>> employessGroup=
-                            null;
-
-                    employessGroup = pListStock2.items.stream().filter(c ->c.IdProductoEstado>0).collect(Collectors.groupingBy(clsBeVW_stock_res::getCodigo_Producto,
-                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Producto,
-                                    Collectors.groupingBy(clsBeVW_stock_res::getUMBas,
-                                            Collectors.groupingBy(clsBeVW_stock_res::getNombre_Presentacion,
-                                                    Collectors.groupingBy(clsBeVW_stock_res::getLote,
-                                                            Collectors.groupingBy(clsBeVW_stock_res::getFecha_Vence,
-                                                                    Collectors.groupingBy(clsBeVW_stock_res::getNomEstado,
-                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdUbicacion,
-                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getIdPedido,
-                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdPicking,
-                                                                                                    Collectors.groupingBy(clsBeVW_stock_res::getLic_plate,
-                                                                                                            Collectors.groupingBy(clsBeVW_stock_res::getIdProductoBodega
-                                                                                                            )))))))))))));
-
-                    if (employessGroup != null){
-
-                        int count =employessGroup.size()-1;
-                        registros.setText("Regs: "+count);
-                    }
-                    else{
-                        registros.setText("Regs: "+ 0);
-                    }
-                }
-
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
             }
 
         } catch (Exception e) {
@@ -506,12 +386,12 @@ public class frm_consulta_stock extends PBase {
                         break;
 
                     case 4:
-                        callMethod("Get_Stock_Por_Producto_Ubicacion","pidProducto",idprod,
+                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","pidProducto",idprod,
                                 "pIdUbicacion",idubic, "pIdBodega",gl.IdBodega);
                         break;
 
                     case 5:
-                        callMethod("Get_Stock_Por_Pallet","pLicPlate",pLicensePlate, "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Stock_Por_Pallet_CI","pLicPlate",pLicensePlate, "pIdBodega",gl.IdBodega);
                         break;
                 }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.tom.R;
 
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 
 public class list_adapt_consulta_stock extends BaseAdapter {
 
-    private ArrayList<clsBeVW_stock_res> BeListStock;
+    private ArrayList<clsBeVW_stock_res_CI> BeListStock;
     private Context cCont;
     private int selectedIndex;
     private LayoutInflater l_Inflater;
 
-    public list_adapt_consulta_stock(Context context, ArrayList<clsBeVW_stock_res> results){
+    public list_adapt_consulta_stock(Context context, ArrayList<clsBeVW_stock_res_CI> results){
         BeListStock = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
@@ -63,21 +64,67 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 convertView = l_Inflater.inflate(R.layout.activity_frm_consulta_stock, null);
                 holder = new ViewHolder();
 
-                /*holder = new list_adapt_tareas_verificacion.ViewHolder();
-                holder.lblPedEnc = (TextView) convertView.findViewById(R.id.lblPedEnc);
-                holder.lblReferencia = (TextView) convertView.findViewById(R.id.lblReferencia);
-                holder.lblMuelle = (TextView) convertView.findViewById(R.id.lblMuelle);
-                holder.lblIdCliente = (TextView) convertView.findViewById(R.id.lblIdCliente);
-                holder.lblCliente = (TextView) convertView.findViewById(R.id.lblCliente);
-                holder.lblEstado = (TextView) convertView.findViewById(R.id.lblEstado);
-                holder.lblIdPickingEnc = (TextView) convertView.findViewById(R.id.lblIdPickingEnc);*/
-
+                holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
+                holder.lblNombre = convertView.findViewById(R.id.lblNombre);
+                holder.lblUM = convertView.findViewById(R.id.lblUM);
+                holder.lblExistUMBAs = convertView.findViewById(R.id.lblExistUMBAs);
+                        holder.lblPres = convertView.findViewById(R.id.lblPres);
+                        holder.lblExistPres = convertView.findViewById(R.id.lblExistPres);
+                        holder.lblReservadoUMBAs = convertView.findViewById(R.id.lblReservadoUMBAs);
+                        holder.lblDisponibleUMBas = convertView.findViewById(R.id.lblDisponibleUMBas);
+                        holder.lblLote = convertView.findViewById(R.id.lblLote);
+                        holder.lblVence = convertView.findViewById(R.id.lblVence);
+                        holder.lblEstado = convertView.findViewById(R.id.lblEstado);
+                        holder.lblUbic = convertView.findViewById(R.id.lblUbic);
+                        holder.lblidUbic = convertView.findViewById(R.id.lblidUbic);
+                        holder.lblPedido = convertView.findViewById(R.id.lblPedido);
+                        holder.lblPick = convertView.findViewById(R.id.lblPick);
+                        holder.lbLicPlate = convertView.findViewById(R.id.lblLicPlate_ci);
+                        holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                 convertView.setTag(holder);
 
             }else {
-                holder = (list_adapt_consulta_stock.ViewHolder) convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
 
+            if (position==0) {
+                holder.lblCodigo.setText("Código");
+                holder.lblNombre.setText("Nombre");
+                holder.lblUM.setText("UM");
+                holder.lblExistUMBAs.setText("ExistUMBAs");
+                holder.lblPres.setText("Pres");
+                holder.lblExistPres.setText("ExistPres");
+                holder.lblReservadoUMBAs.setText("ReservadoUMBAs");
+                holder.lblDisponibleUMBas.setText("DisponibleUMBas");
+                holder.lblLote.setText("Lote");
+                holder.lblVence.setText("Vence");
+                holder.lblEstado.setText("Estado");
+                holder.lblUbic.setText("Ubic");
+                holder.lblidUbic.setText("idUbic");
+                holder.lblPedido.setText("Pedido");
+                holder.lblPick.setText("Pick");
+                holder.lbLicPlate.setText("LicPlate");
+                holder.lblIdProductoBodega.setText("IdProdBodega");
+
+            }else{
+                holder.lblCodigo.setText(BeListStock.get(position).Codigo);
+                holder.lblNombre.setText(BeListStock.get(position).Nombre);
+                holder.lblUM.setText(BeListStock.get(position).UM);
+                holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs);
+                holder.lblPres.setText(BeListStock.get(position).Pres);
+                holder.lblExistPres.setText(BeListStock.get(position).ExistPres);
+                holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs);
+                holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas);
+                holder.lblLote.setText(BeListStock.get(position).Lote);
+                holder.lblVence.setText(BeListStock.get(position).Vence);
+                holder.lblEstado.setText(BeListStock.get(position).Estado);
+                holder.lblUbic.setText(BeListStock.get(position).Ubic);
+                holder.lblidUbic.setText(BeListStock.get(position).idUbic);
+                holder.lblPedido.setText(BeListStock.get(position).Pedido);
+                holder.lblPick.setText(BeListStock.get(position).Pick);
+                holder.lbLicPlate.setText(BeListStock.get(position).LicPlate);
+                holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega);
+            }
         }
         catch (Exception ex){
             toast(ex.getMessage());
@@ -88,9 +135,10 @@ public class list_adapt_consulta_stock extends BaseAdapter {
     public void toast(String msg) {
         Toast.makeText(cCont, msg, Toast.LENGTH_SHORT).show();
     }
-
     static class ViewHolder {
-        TextView lblPedEnc,lblReferencia,lblMuelle,lblIdCliente,lblCliente,lblEstado,lblIdPickingEnc;
+        TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
+                lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
+                lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
+                lblPick,lbLicPlate,lblIdProductoBodega;
     }
-
 }
