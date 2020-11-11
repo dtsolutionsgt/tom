@@ -24,6 +24,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Pedido="";
   @Element(required=false) public String Pick="";
   @Element(required=false) public String LicPlate="";
+  @Element(required=false) public String IdProductoEstado="";
   @Element(required=false) public int IdProductoBodega=0;
 
   /*@Element(required=false) public clsBeProducto_Presentacion BePresentacionProductoEnStock=new clsBeProducto_Presentacion();
@@ -34,7 +35,7 @@ public class clsBeVW_stock_res_CI {
   public clsBeVW_stock_res_CI(int Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
                               String Vence,String Estado,String Ubic,int idUbic,String Pedido,String Pick,String LicPlate,
-                              int IdProductoBodega) {
+                              String IdProductoEstado,int IdProductoBodega) {
                               }
 
   public clsBeVW_stock_res_CI() {
@@ -55,6 +56,7 @@ public class clsBeVW_stock_res_CI {
     this.Pedido=Pedido;
     this.Pick=Pick;
     this.LicPlate=LicPlate;
+    this.IdProductoEstado= IdProductoEstado;
     this.IdProductoBodega=IdProductoBodega;
   }
 
@@ -134,16 +136,16 @@ public class clsBeVW_stock_res_CI {
     return idUbic;
   }
   public void setIdUbic(String value){ idUbic=value; }
+  public String getIdUbic() {
+    return idUbic;
+  }
+  public void setPedido(String value){ Pedido=value; }
   public String getPedido() {
     return Pedido;
   }
-  public void setPedido(String value){ Pedido=value; }
-  public String getPick() {
-    return Pick;
-  }
 
   public void setPick(String value){ Pick=value; }
-  public String setPick() {
+  public String getPick() {
     return Pick;
   }
 
@@ -153,10 +155,16 @@ public class clsBeVW_stock_res_CI {
     return LicPlate;
   }
 
+  public void setProductoEstado(String value){ IdProductoEstado=value; }
+  public String getIdProductoEstado() {
+    return IdProductoEstado;
+  }
+
+  public void setIdProductoBodega(int value){ IdProductoBodega=value; }
   public int getIdProductoBodega() {
     return IdProductoBodega;
   }
-  public void setIdProductoBodega(int value){ IdProductoBodega=value; }
+
 
 
 /*  public clsBeProducto_Presentacion getBePresentacionProductoEnStock() {
