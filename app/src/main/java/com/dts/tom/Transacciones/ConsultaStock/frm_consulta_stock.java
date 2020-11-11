@@ -17,9 +17,11 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
@@ -45,17 +47,17 @@ public class frm_consulta_stock extends PBase {
     private Button btnBack, registros;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic;
-    private int idubic, idprod;
+    private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
     private String pLicensePlate;
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
-    private clsBeVW_stock_res_CI_List pListStock2;
     private TextView lblNombreUbicacion;
     private TextView lblNombreProducto;
     private Boolean idle = false;
     private Integer selest  = 0;
+    private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
 
@@ -91,6 +93,7 @@ public class frm_consulta_stock extends PBase {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     lblNombreUbicacion.setText("");
+                    registros.setText("REGISTROS: "+ 0);
                 }
             });
 
@@ -99,6 +102,7 @@ public class frm_consulta_stock extends PBase {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     lblNombreProducto.setText("");
+                    registros.setText("REGISTROS: "+ 0);
                 }
             });
 
@@ -270,43 +274,104 @@ public class frm_consulta_stock extends PBase {
 
 
     private void listaStock() {
+
+        clsBeVW_stock_res_CI vItem;
+
         try {
 
             items_stock.clear();
-            clsBeVW_stock_res item;
+            //clsBeVW_stock_res item;
+            clsBeVW_stock_res_CI item;
+
+
 
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
             //pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
             pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
-            int conteo = pListStock2.items.size();
 
-            if(conteo == 0 || pListStock2.items.isEmpty()){
+            if(pListStock2 != null){
 
-                lblNombreUbicacion.setText("U.S.P");
-                idle = true;
+                vItem = new clsBeVW_stock_res_CI();
+                items_stock.add(vItem);
+
+                conteo = pListStock2.items.size();
+
+                if(conteo == 0 || pListStock2.items.isEmpty()){
+
+                    lblNombreUbicacion.setText("U.S.P");
+                    idle = true;
+                }
+                else{
+
+                    // lbldescripcion.setText("");
+                }
+
+                registros.setText("REGISTROS: "+ conteo);
+
+                if(selest > 0){
+
+                    for (int i = 0; i < pListStock2.items.size(); i++) {
+
+                        item = new clsBeVW_stock_res_CI();
+                        item.Codigo = pListStock2.items.get(i).Codigo;
+                        item.Nombre = pListStock2.items.get(i).Nombre;
+                        item.UM = pListStock2.items.get(i).UM;
+                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                        item.Pres = pListStock2.items.get(i).Pres;
+                        item.ExistPres = pListStock2.items.get(i).ExistPres;
+                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                        item.Lote = pListStock2.items.get(i).Lote;
+                        item.Vence = pListStock2.items.get(i).Vence;
+                        item.Estado = pListStock2.items.get(i).Estado;
+                        item.Ubic = pListStock2.items.get(i).Ubic;
+                        item.idUbic = pListStock2.items.get(i).idUbic;
+                        item.Pedido = pListStock2.items.get(i).Pedido;
+                        item.Pick = pListStock2.items.get(i).Pick;
+                        item.LicPlate = pListStock2.items.get(i).LicPlate;
+                        item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+
+                        items_stock.add(item);
+                    }
+
+                    adapter_stock = new list_adapt_consulta_stock(this,items_stock);
+                    listView.setAdapter(adapter_stock);
+
+
+                }
+                else {
+                    for (int i = 0; i < pListStock2.items.size(); i++) {
+
+                        item = new clsBeVW_stock_res_CI();
+                        item.Codigo = pListStock2.items.get(i).Codigo;
+                        item.Nombre = pListStock2.items.get(i).Nombre;
+                        item.UM = pListStock2.items.get(i).UM;
+                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                        item.Pres = pListStock2.items.get(i).Pres;
+                        item.ExistPres = pListStock2.items.get(i).ExistPres;
+                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                        item.Lote = pListStock2.items.get(i).Lote;
+                        item.Vence = pListStock2.items.get(i).Vence;
+                        item.Estado = pListStock2.items.get(i).Estado;
+                        item.Ubic = pListStock2.items.get(i).Ubic;
+                        item.idUbic = pListStock2.items.get(i).idUbic;
+                        item.Pedido = pListStock2.items.get(i).Pedido;
+                        item.Pick = pListStock2.items.get(i).Pick;
+                        item.LicPlate = pListStock2.items.get(i).LicPlate;
+                        item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+
+                        items_stock.add(item);
+                    }
+
+                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock);
+
+                }
+
             }
-            else{
 
-               // lbldescripcion.setText("");
-            }
 
-            List AuxList;
-
-            if(selest > 0){
-
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
-
-            }
-            else {
-                        /* AuxList = stream(pListStock2.items)
-                        .where(c ->c.IdProductoEstado > 0)
-                        .orderBy(c ->c.Nombre_Producto)
-                        .toList();*/
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
-
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -317,12 +382,12 @@ public class frm_consulta_stock extends PBase {
         try {
 
             items_stock.clear();
-            clsBeVW_stock_res item;
+            clsBeVW_stock_res_CI item;
 
             //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
             //pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
             pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
-            int conteo = pListStock2.items.size();
+            conteo = pListStock2.items.size();
 
             if(conteo == 0 || pListStock2.items.isEmpty()){
 
@@ -334,22 +399,67 @@ public class frm_consulta_stock extends PBase {
                 //lbldescripcion.setText("");
             }
 
-            List AuxList;
+
+            registros.setText("REGISTROS: "+ conteo);
+
 
             if(selest > 0){
-                /*AuxList = stream(pListStock2.items)
-                        .where(c ->c.IdProductoEstado == selest)
-                        .orderBy(c ->c.Nombre_Producto)
-                        .toList();*/
+
+                for (int i = 0; i < pListStock2.items.size(); i++) {
+
+                    item = new clsBeVW_stock_res_CI();
+                    item.Codigo = pListStock2.items.get(i).Codigo;
+                    item.Nombre = pListStock2.items.get(i).Nombre;
+                    item.UM = pListStock2.items.get(i).UM;
+                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                    item.Pres = pListStock2.items.get(i).Pres;
+                    item.ExistPres = pListStock2.items.get(i).ExistPres;
+                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                    item.Lote = pListStock2.items.get(i).Lote;
+                    item.Vence = pListStock2.items.get(i).Vence;
+                    item.Estado = pListStock2.items.get(i).Estado;
+                    item.Ubic = pListStock2.items.get(i).Ubic;
+                    item.idUbic = pListStock2.items.get(i).idUbic;
+                    item.Pedido = pListStock2.items.get(i).Pedido;
+                    item.Pick = pListStock2.items.get(i).Pick;
+                    item.LicPlate = pListStock2.items.get(i).LicPlate;
+                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+
+                    items_stock.add(item);
+                }
+
                 adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock);
 
+
+
             }
             else {
-                /*AuxList = stream(pListStock2.items)
-                        .where(c ->c.IdProductoEstado > 0)
-                        .orderBy(c ->c.Nombre_Producto)
-                        .toList();*/
+
+                for (int i = 0; i < pListStock2.items.size(); i++) {
+
+                    item = new clsBeVW_stock_res_CI();
+                    item.Codigo = pListStock2.items.get(i).Codigo;
+                    item.Nombre = pListStock2.items.get(i).Nombre;
+                    item.UM = pListStock2.items.get(i).UM;
+                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                    item.Pres = pListStock2.items.get(i).Pres;
+                    item.ExistPres = pListStock2.items.get(i).ExistPres;
+                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                    item.Lote = pListStock2.items.get(i).Lote;
+                    item.Vence = pListStock2.items.get(i).Vence;
+                    item.Estado = pListStock2.items.get(i).Estado;
+                    item.Ubic = pListStock2.items.get(i).Ubic;
+                    item.idUbic = pListStock2.items.get(i).idUbic;
+                    item.Pedido = pListStock2.items.get(i).Pedido;
+                    item.Pick = pListStock2.items.get(i).Pick;
+                    item.LicPlate = pListStock2.items.get(i).LicPlate;
+                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+
+                    items_stock.add(item);
+                }
 
                 adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock);

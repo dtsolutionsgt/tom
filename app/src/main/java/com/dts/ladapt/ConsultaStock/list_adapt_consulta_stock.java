@@ -61,7 +61,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
 
             if (convertView == null) {
 
-                convertView = l_Inflater.inflate(R.layout.activity_frm_consulta_stock, null);
+                convertView = l_Inflater.inflate(R.layout.activity_list_adapt_consulta_stock, null);
                 holder = new ViewHolder();
 
                 holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
@@ -84,10 +84,13 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 convertView.setTag(holder);
 
             }else {
+
                 holder = (ViewHolder) convertView.getTag();
+
             }
 
             if (position==0) {
+
                 holder.lblCodigo.setText("Código");
                 holder.lblNombre.setText("Nombre");
                 holder.lblUM.setText("UM");
@@ -107,23 +110,23 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblIdProductoBodega.setText("IdProdBodega");
 
             }else{
-                holder.lblCodigo.setText(BeListStock.get(position).Codigo);
-                holder.lblNombre.setText(BeListStock.get(position).Nombre);
-                holder.lblUM.setText(BeListStock.get(position).UM);
-                holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs);
-                holder.lblPres.setText(BeListStock.get(position).Pres);
-                holder.lblExistPres.setText(BeListStock.get(position).ExistPres);
-                holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs);
-                holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas);
-                holder.lblLote.setText(BeListStock.get(position).Lote);
-                holder.lblVence.setText(BeListStock.get(position).Vence);
-                holder.lblEstado.setText(BeListStock.get(position).Estado);
-                holder.lblUbic.setText(BeListStock.get(position).Ubic);
-                holder.lblidUbic.setText(BeListStock.get(position).idUbic);
-                holder.lblPedido.setText(BeListStock.get(position).Pedido);
-                holder.lblPick.setText(BeListStock.get(position).Pick);
-                holder.lbLicPlate.setText(BeListStock.get(position).LicPlate);
-                holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega);
+                holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
+                holder.lblNombre.setText(BeListStock.get(position).Nombre  +"");
+                holder.lblUM.setText(BeListStock.get(position).UM  +"");
+                holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
+                holder.lblPres.setText(BeListStock.get(position).Pres  +"");
+                holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
+                holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
+                holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
+                holder.lblLote.setText(BeListStock.get(position).Lote  +"");
+                holder.lblVence.setText(BeListStock.get(position).Vence  +"");
+                holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
+                holder.lblUbic.setText(BeListStock.get(position).Ubic  +"");
+                holder.lblidUbic.setText(BeListStock.get(position).idUbic  +"");
+                holder.lblPedido.setText(BeListStock.get(position).Pedido  +"");
+                holder.lblPick.setText(BeListStock.get(position).Pick  +"");
+                holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
+                holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
             }
         }
         catch (Exception ex){
