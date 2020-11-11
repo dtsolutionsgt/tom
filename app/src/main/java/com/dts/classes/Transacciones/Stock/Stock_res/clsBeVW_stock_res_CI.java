@@ -20,9 +20,9 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Vence="1900-01-01T00:00:01";
   @Element(required=false) public String Estado="";
   @Element(required=false) public String Ubic="";
-  @Element(required=false) public int idUbic=0;
-  @Element(required=false) public int Pedido=0;
-  @Element(required=false) public int Pick=0;
+  @Element(required=false) public String idUbic="";
+  @Element(required=false) public String Pedido="";
+  @Element(required=false) public String Pick="";
   @Element(required=false) public String LicPlate="";
   @Element(required=false) public int IdProductoBodega=0;
 
@@ -33,7 +33,7 @@ public class clsBeVW_stock_res_CI {
 
   public clsBeVW_stock_res_CI(int Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
-                              String Vence,String Estado,String Ubic,int idUbic,int Pedido,int Pick,String LicPlate,
+                              String Vence,String Estado,String Ubic,int idUbic,String Pedido,String Pick,String LicPlate,
                               int IdProductoBodega) {
                               }
 
@@ -130,26 +130,34 @@ public class clsBeVW_stock_res_CI {
   public void setIdPropietario(String value) {
     Ubic=value;
   }
-  public int getidUbic() {
+  public String getidUbic() {
     return idUbic;
   }
-  public void setIdUbic(int value){ idUbic=value; }
-  public int getPedido() {
+  public void setIdUbic(String value){ idUbic=value; }
+  public String getPedido() {
     return Pedido;
   }
-  public void setPedido(int value){ Pedido=value; }
-  public int getPick() {
+  public void setPedido(String value){ Pedido=value; }
+  public String getPick() {
     return Pick;
   }
-  public void setPick(int value){ Pick=value; }
+
+  public void setPick(String value){ Pick=value; }
+  public String setPick() {
+    return Pick;
+  }
+
+
+  public void setLicPlate(String value){ LicPlate=value; }
   public String getLicPlate() {
     return LicPlate;
   }
-  public void setLicPlate(String value){ LicPlate=value; }
+
   public int getIdProductoBodega() {
     return IdProductoBodega;
   }
   public void setIdProductoBodega(int value){ IdProductoBodega=value; }
+
 
 /*  public clsBeProducto_Presentacion getBePresentacionProductoEnStock() {
     return BePresentacionProductoEnStock;
