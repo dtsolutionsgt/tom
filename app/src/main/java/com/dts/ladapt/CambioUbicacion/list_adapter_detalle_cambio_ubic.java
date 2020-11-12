@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.content.Context;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,14 +14,14 @@ import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsB
 import com.dts.tom.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
 
     private ArrayList<clsBeTrans_ubic_hh_det> pBeTransUbicHhDetListArray;
-
     private int selectedIndex;
-
     private LayoutInflater l_Inflater;
+    private Filter filter;
 
     public list_adapter_detalle_cambio_ubic(Context context, ArrayList<clsBeTrans_ubic_hh_det> results) {
         pBeTransUbicHhDetListArray = results;
@@ -32,6 +33,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
         selectedIndex = ind;
         notifyDataSetChanged();
     }
+
 
     public void refreshItems() {
         notifyDataSetChanged();
@@ -109,5 +111,8 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
     static class ViewHolder {
         TextView lblTareaDet,lblIdStock,lblCodigo,lblProducto,lblPresentacion,lblOrigen,lblDestino,lblCantidad,lblRecibido,lblOperador;
     }
+
+
+
 
 }

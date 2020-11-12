@@ -67,6 +67,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
+    private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
 
     private Spinner cmbEstadoExist;
 
@@ -190,11 +191,52 @@ public class frm_consulta_stock extends PBase {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     //showData(scod);
                     String estado = cmbEstadoExist.getSelectedItem().toString();
+                    toast("estado "+ estado);
+
+
+                    if(estado.isEmpty()){
+                    }
+                    else {
+
+                        items_stock2.clear();
+                        clsBeVW_stock_res_CI items;
+
+                        for (int i = 1; i < pListStock2.items.size(); i++) {
+
+                            String estado_ = pListStock2.items.get(i).Estado;
+
+                            if (estado_.equals(estado)) {
+                                items = new clsBeVW_stock_res_CI();
+                                items.Codigo = pListStock2.items.get(i).Codigo;
+                                items.Nombre = pListStock2.items.get(i).Nombre;
+                                items.UM = pListStock2.items.get(i).UM;
+                                items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                                items.Pres = pListStock2.items.get(i).Pres;
+                                items.ExistPres = pListStock2.items.get(i).ExistPres;
+                                items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                                items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                                items.Lote = pListStock2.items.get(i).Lote;
+                                items.Vence = pListStock2.items.get(i).Vence;
+                                items.Estado = pListStock2.items.get(i).Estado;
+                                items.Ubic = pListStock2.items.get(i).Ubic;
+                                items.idUbic = pListStock2.items.get(i).idUbic;
+                                items.Pedido = pListStock2.items.get(i).Pedido;
+                                items.Pick = pListStock2.items.get(i).Pick;
+                                items.LicPlate = pListStock2.items.get(i).LicPlate;
+                                items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                                items_stock2.add(items);
+                            }
+                        }
+                        adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
+                        listView.setAdapter(adapter_stock);
+                    }
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
                     //showData(scod);
+                    toast("No hay estado");
                 }
 
             });
@@ -204,44 +246,6 @@ public class frm_consulta_stock extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
-
-    public void spinner(){
-        try{
-
-            List<String> categories = new ArrayList<String>();
-            categories.add(" ");
-            categories.add("Automobile");
-            categories.add("Business Services");
-            categories.add("Computers");
-            categories.add("Education");
-            categories.add("Personal");
-            categories.add("Travel");
-
-            // Creating adapter for spinner
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-            // Drop down layout style - list view with radio button
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            // attaching data adapter to spinner
-            cmbEstadoExist.setAdapter(dataAdapter);
-
-          /*  List<String> list = new ArrayList<String>();
-            list.add("Todos");
-            list.add("Contados");
-            list.add("No Contados");
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbEstadoExist.setAdapter(dataAdapter);
-
-            cmbEstadoExist.setAdapter(dataAdapter);*/
-        }catch (Exception e){}
-
-    }
-
-//    public void BacKList(View view) {
-//        finish();
-//    }
 
     public void Listar_Existencias(){
         try{
