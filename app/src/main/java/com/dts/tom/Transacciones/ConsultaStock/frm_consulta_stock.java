@@ -151,7 +151,6 @@ public class frm_consulta_stock extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                //lbldescripcion.setTextColor(Color.WHITE);
                                 lblNombreProducto.setText("");
 
                                 if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
@@ -192,7 +191,8 @@ public class frm_consulta_stock extends PBase {
 
                     String estado = cmbEstadoExist.getSelectedItem().toString();
 
-                    if(estado.isEmpty()){
+                    if(estado.isEmpty() && selest ==0){
+
                     }
                     else {
 
@@ -333,101 +333,58 @@ public class frm_consulta_stock extends PBase {
 
                 registros.setText("REGISTROS: "+ conteo);
 
-                if(selest > 0){
+                for (int i = 0; i < pListStock2.items.size(); i++) {
 
-                    for (int i = 0; i < pListStock2.items.size(); i++) {
+                    item = new clsBeVW_stock_res_CI();
+                    item.Codigo = pListStock2.items.get(i).Codigo;
+                    item.Nombre = pListStock2.items.get(i).Nombre;
+                    item.UM = pListStock2.items.get(i).UM;
+                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                    item.Pres = pListStock2.items.get(i).Pres;
+                    item.ExistPres = pListStock2.items.get(i).ExistPres;
+                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                    item.Lote = pListStock2.items.get(i).Lote;
+                    item.Vence = pListStock2.items.get(i).Vence;
+                    item.Estado = pListStock2.items.get(i).Estado;
+                    item.Ubic = pListStock2.items.get(i).Ubic;
+                    item.idUbic = pListStock2.items.get(i).idUbic;
+                    item.Pedido = pListStock2.items.get(i).Pedido;
+                    item.Pick = pListStock2.items.get(i).Pick;
+                    item.LicPlate = pListStock2.items.get(i).LicPlate;
+                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
 
-                        item = new clsBeVW_stock_res_CI();
-                        item.Codigo = pListStock2.items.get(i).Codigo;
-                        item.Nombre = pListStock2.items.get(i).Nombre;
-                        item.UM = pListStock2.items.get(i).UM;
-                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                        item.Pres = pListStock2.items.get(i).Pres;
-                        item.ExistPres = pListStock2.items.get(i).ExistPres;
-                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                        item.Lote = pListStock2.items.get(i).Lote;
-                        item.Vence = pListStock2.items.get(i).Vence;
-                        item.Estado = pListStock2.items.get(i).Estado;
-                        item.Ubic = pListStock2.items.get(i).Ubic;
-                        item.idUbic = pListStock2.items.get(i).idUbic;
-                        item.Pedido = pListStock2.items.get(i).Pedido;
-                        item.Pick = pListStock2.items.get(i).Pick;
-                        item.LicPlate = pListStock2.items.get(i).LicPlate;
-                        item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                    items_stock.add(item);
+                }
 
-                        items_stock.add(item);
+                adapter_stock = new list_adapt_consulta_stock(this,items_stock);
+                listView.setAdapter(adapter_stock);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
+
+                    List<String> categories = new ArrayList<String>();
+                    categories.add("");
+
+                    ListaEstados.forEach((k, v) -> {
+                        //System.out.printf("%s : %d%n", k, v);
+                        categories.add(k);
+                    });
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbEstadoExist.setAdapter(dataAdapter);
+
+                    if(categories.size() <= 1){
+                        selest = 0;
+                    }else{
+                        selest = 1;
                     }
 
-                    adapter_stock = new list_adapt_consulta_stock(this,items_stock);
-                    listView.setAdapter(adapter_stock);
-
-                    /***************************LLENAR COMBOBOX *******************************/
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                                .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
-
-                        List<String> categories = new ArrayList<String>();
-                        categories.add("");
-
-                        ListaEstados.forEach((k, v) -> {
-                            //System.out.printf("%s : %d%n", k, v);
-                            categories.add(k);
-                        });
-
-                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        cmbEstadoExist.setAdapter(dataAdapter);
-
-                    }
 
                 }
-                else {
-                    for (int i = 0; i < pListStock2.items.size(); i++) {
 
-                        item = new clsBeVW_stock_res_CI();
-                        item.Codigo = pListStock2.items.get(i).Codigo;
-                        item.Nombre = pListStock2.items.get(i).Nombre;
-                        item.UM = pListStock2.items.get(i).UM;
-                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                        item.Pres = pListStock2.items.get(i).Pres;
-                        item.ExistPres = pListStock2.items.get(i).ExistPres;
-                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                        item.Lote = pListStock2.items.get(i).Lote;
-                        item.Vence = pListStock2.items.get(i).Vence;
-                        item.Estado = pListStock2.items.get(i).Estado;
-                        item.Ubic = pListStock2.items.get(i).Ubic;
-                        item.idUbic = pListStock2.items.get(i).idUbic;
-                        item.Pedido = pListStock2.items.get(i).Pedido;
-                        item.Pick = pListStock2.items.get(i).Pick;
-                        item.LicPlate = pListStock2.items.get(i).LicPlate;
-                        item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-
-                        items_stock.add(item);
-                    }
-
-                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock);
-
-                    /***************************LLENAR COMBOBOX *******************************/
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                                .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
-
-                        List<String> categories = new ArrayList<String>();
-                        categories.add("");
-
-                        ListaEstados.forEach((k, v) -> {
-                            //System.out.printf("%s : %d%n", k, v);
-                            categories.add(k);
-                        });
-
-                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        cmbEstadoExist.setAdapter(dataAdapter);
-                    }
-                }
             }
 
         } catch (Exception e) {
@@ -436,29 +393,35 @@ public class frm_consulta_stock extends PBase {
     }
 
     private void listaStock2() {
+
+        clsBeVW_stock_res_CI vItem;
+
         try {
 
             items_stock.clear();
             clsBeVW_stock_res_CI item;
 
             pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
-            conteo = pListStock2.items.size();
 
-            if(conteo == 0 || pListStock2.items.isEmpty()){
+            if(pListStock2 != null){
 
-                lblNombreUbicacion.setText("U.S.P");
-                idle = true;
-            }
-            else{
+                vItem = new clsBeVW_stock_res_CI();
+                items_stock.add(vItem);
 
-                //lbldescripcion.setText("");
-            }
+                conteo = pListStock2.items.size();
 
+                if(conteo == 0 || pListStock2.items.isEmpty()){
 
-            registros.setText("REGISTROS: "+ conteo);
+                    lblNombreUbicacion.setText("U.S.P");
+                    idle = true;
+                }
+                else{
 
+                    //lbldescripcion.setText("");
 
-            if(selest > 0){
+                }
+
+                registros.setText("REGISTROS: "+ conteo);
 
                 for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -505,53 +468,6 @@ public class frm_consulta_stock extends PBase {
                     cmbEstadoExist.setAdapter(dataAdapter);
                 }
 
-            }
-            else {
-
-                for (int i = 0; i < pListStock2.items.size(); i++) {
-
-                    item = new clsBeVW_stock_res_CI();
-                    item.Codigo = pListStock2.items.get(i).Codigo;
-                    item.Nombre = pListStock2.items.get(i).Nombre;
-                    item.UM = pListStock2.items.get(i).UM;
-                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                    item.Pres = pListStock2.items.get(i).Pres;
-                    item.ExistPres = pListStock2.items.get(i).ExistPres;
-                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                    item.Lote = pListStock2.items.get(i).Lote;
-                    item.Vence = pListStock2.items.get(i).Vence;
-                    item.Estado = pListStock2.items.get(i).Estado;
-                    item.Ubic = pListStock2.items.get(i).Ubic;
-                    item.idUbic = pListStock2.items.get(i).idUbic;
-                    item.Pedido = pListStock2.items.get(i).Pedido;
-                    item.Pick = pListStock2.items.get(i).Pick;
-                    item.LicPlate = pListStock2.items.get(i).LicPlate;
-                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-
-                    items_stock.add(item);
-                }
-
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
-
-                /***************************LLENAR COMBOBOX *******************************/
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
-
-                    List<String> categories = new ArrayList<String>();
-                    categories.add("");
-
-                    ListaEstados.forEach((k, v) -> {
-                        //System.out.printf("%s : %d%n", k, v);
-                        categories.add(k);
-                    });
-
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    cmbEstadoExist.setAdapter(dataAdapter);
-                }
             }
 
         } catch (Exception e) {
@@ -597,7 +513,6 @@ public class frm_consulta_stock extends PBase {
         registros.setText("REGISTROS: "+ conteo);
 
     }
-
 
     public class WebServiceHandler extends WebService {
 
