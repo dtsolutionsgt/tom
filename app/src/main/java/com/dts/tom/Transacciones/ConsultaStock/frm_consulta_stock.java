@@ -189,10 +189,8 @@ public class frm_consulta_stock extends PBase {
             cmbEstadoExist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    //showData(scod);
-                    String estado = cmbEstadoExist.getSelectedItem().toString();
-                    toast("estado "+ estado);
 
+                    String estado = cmbEstadoExist.getSelectedItem().toString();
 
                     if(estado.isEmpty()){
                     }
