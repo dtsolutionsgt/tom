@@ -196,37 +196,8 @@ public class frm_consulta_stock extends PBase {
                     }
                     else {
 
-                        items_stock2.clear();
-                        clsBeVW_stock_res_CI items;
+                        Spinner(estado);
 
-                        for (int i = 1; i < pListStock2.items.size(); i++) {
-
-                            String estado_ = pListStock2.items.get(i).Estado;
-
-                            if (estado_.equals(estado)) {
-                                items = new clsBeVW_stock_res_CI();
-                                items.Codigo = pListStock2.items.get(i).Codigo;
-                                items.Nombre = pListStock2.items.get(i).Nombre;
-                                items.UM = pListStock2.items.get(i).UM;
-                                items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                                items.Pres = pListStock2.items.get(i).Pres;
-                                items.ExistPres = pListStock2.items.get(i).ExistPres;
-                                items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                                items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                                items.Lote = pListStock2.items.get(i).Lote;
-                                items.Vence = pListStock2.items.get(i).Vence;
-                                items.Estado = pListStock2.items.get(i).Estado;
-                                items.Ubic = pListStock2.items.get(i).Ubic;
-                                items.idUbic = pListStock2.items.get(i).idUbic;
-                                items.Pedido = pListStock2.items.get(i).Pedido;
-                                items.Pick = pListStock2.items.get(i).Pick;
-                                items.LicPlate = pListStock2.items.get(i).LicPlate;
-                                items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                                items_stock2.add(items);
-                            }
-                        }
-                        adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
-                        listView.setAdapter(adapter_stock);
                     }
 
                 }
@@ -234,7 +205,7 @@ public class frm_consulta_stock extends PBase {
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
                     //showData(scod);
-                    toast("No hay estado");
+                    toast("No hay estado seleccionado");
                 }
 
             });
@@ -588,9 +559,45 @@ public class frm_consulta_stock extends PBase {
         }
     }
 
-    public void Exit(View view) {
-        msgAskExit("Está seguro de salir");
+    private void Spinner(String estado){
+
+        items_stock2.clear();
+        clsBeVW_stock_res_CI items;
+
+        for (int i = 0; i < pListStock2.items.size(); i++) {
+
+            String estado_ = pListStock2.items.get(i).Estado;
+
+            if (estado_.equals(estado)) {
+                items = new clsBeVW_stock_res_CI();
+                items.Codigo = pListStock2.items.get(i).Codigo;
+                items.Nombre = pListStock2.items.get(i).Nombre;
+                items.UM = pListStock2.items.get(i).UM;
+                items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                items.Pres = pListStock2.items.get(i).Pres;
+                items.ExistPres = pListStock2.items.get(i).ExistPres;
+                items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                items.Lote = pListStock2.items.get(i).Lote;
+                items.Vence = pListStock2.items.get(i).Vence;
+                items.Estado = pListStock2.items.get(i).Estado;
+                items.Ubic = pListStock2.items.get(i).Ubic;
+                items.idUbic = pListStock2.items.get(i).idUbic;
+                items.Pedido = pListStock2.items.get(i).Pedido;
+                items.Pick = pListStock2.items.get(i).Pick;
+                items.LicPlate = pListStock2.items.get(i).LicPlate;
+                items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                items_stock2.add(items);
+            }
+        }
+        adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
+        listView.setAdapter(adapter_stock);
+
+        conteo = items_stock2.size()-1;
+        registros.setText("REGISTROS: "+ conteo);
+
     }
+
 
     public class WebServiceHandler extends WebService {
 
@@ -698,6 +705,10 @@ public class frm_consulta_stock extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    public void Exit(View view) {
+        msgAskExit("Está seguro de salir");
     }
 
 }
