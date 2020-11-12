@@ -4,16 +4,23 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Printer;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -21,9 +28,6 @@ import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
-import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
-import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
-import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
@@ -33,7 +37,10 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 
 public class frm_consulta_stock extends PBase {
@@ -61,7 +68,7 @@ public class frm_consulta_stock extends PBase {
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
 
-
+    private Spinner cmbEstadoExist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,8 @@ public class frm_consulta_stock extends PBase {
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
         lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
+        cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
+
         setHandlers();
     }
 
@@ -176,10 +185,58 @@ public class frm_consulta_stock extends PBase {
                 }
             });
 
+            cmbEstadoExist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    //showData(scod);
+                    String estado = cmbEstadoExist.getSelectedItem().toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    //showData(scod);
+                }
+
+            });
+
         }
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    public void spinner(){
+        try{
+
+            List<String> categories = new ArrayList<String>();
+            categories.add(" ");
+            categories.add("Automobile");
+            categories.add("Business Services");
+            categories.add("Computers");
+            categories.add("Education");
+            categories.add("Personal");
+            categories.add("Travel");
+
+            // Creating adapter for spinner
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+            // Drop down layout style - list view with radio button
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // attaching data adapter to spinner
+            cmbEstadoExist.setAdapter(dataAdapter);
+
+          /*  List<String> list = new ArrayList<String>();
+            list.add("Todos");
+            list.add("Contados");
+            list.add("No Contados");
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbEstadoExist.setAdapter(dataAdapter);
+
+            cmbEstadoExist.setAdapter(dataAdapter);*/
+        }catch (Exception e){}
+
     }
 
 //    public void BacKList(View view) {
@@ -272,7 +329,6 @@ public class frm_consulta_stock extends PBase {
         }
     }
 
-
     private void listaStock() {
 
         clsBeVW_stock_res_CI vItem;
@@ -280,13 +336,9 @@ public class frm_consulta_stock extends PBase {
         try {
 
             items_stock.clear();
-            //clsBeVW_stock_res item;
             clsBeVW_stock_res_CI item;
 
-
-
-            //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Producto_Ubicacion");
-            //pListStock2= xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Producto_Ubicacion");
+            
             pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
 
             if(pListStock2 != null){
@@ -337,6 +389,24 @@ public class frm_consulta_stock extends PBase {
                     adapter_stock = new list_adapt_consulta_stock(this,items_stock);
                     listView.setAdapter(adapter_stock);
 
+                    /***************************LLENAR COMBOBOX *******************************/
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                                .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
+
+                        List<String> categories = new ArrayList<String>();
+                        categories.add("");
+
+                        ListaEstados.forEach((k, v) -> {
+                            //System.out.printf("%s : %d%n", k, v);
+                            categories.add(k);
+                        });
+
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cmbEstadoExist.setAdapter(dataAdapter);
+
+                    }
 
                 }
                 else {
@@ -367,11 +437,25 @@ public class frm_consulta_stock extends PBase {
                     adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                     listView.setAdapter(adapter_stock);
 
+                    /***************************LLENAR COMBOBOX *******************************/
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                                .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
+
+                        List<String> categories = new ArrayList<String>();
+                        categories.add("");
+
+                        ListaEstados.forEach((k, v) -> {
+                            //System.out.printf("%s : %d%n", k, v);
+                            categories.add(k);
+                        });
+
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cmbEstadoExist.setAdapter(dataAdapter);
+                    }
                 }
-
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -384,8 +468,6 @@ public class frm_consulta_stock extends PBase {
             items_stock.clear();
             clsBeVW_stock_res_CI item;
 
-            //pListStock = xobj.getresult(clsBeVW_stock_res.class,"Get_Stock_Por_Pallet");
-            //pListStock2 = xobj.getresult(clsBeVW_stock_resList.class,"Get_Stock_Por_Pallet");
             pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
             conteo = pListStock2.items.size();
 
@@ -432,7 +514,23 @@ public class frm_consulta_stock extends PBase {
                 adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock);
 
+                /***************************LLENAR COMBOBOX *******************************/
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
 
+                    List<String> categories = new ArrayList<String>();
+                    categories.add("");
+
+                    ListaEstados.forEach((k, v) -> {
+                        //System.out.printf("%s : %d%n", k, v);
+                        categories.add(k);
+                    });
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbEstadoExist.setAdapter(dataAdapter);
+                }
 
             }
             else {
@@ -463,11 +561,33 @@ public class frm_consulta_stock extends PBase {
 
                 adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock);
+
+                /***************************LLENAR COMBOBOX *******************************/
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
+
+                    List<String> categories = new ArrayList<String>();
+                    categories.add("");
+
+                    ListaEstados.forEach((k, v) -> {
+                        //System.out.printf("%s : %d%n", k, v);
+                        categories.add(k);
+                    });
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbEstadoExist.setAdapter(dataAdapter);
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void Exit(View view) {
+        msgAskExit("Está seguro de salir");
     }
 
     public class WebServiceHandler extends WebService {
@@ -533,7 +653,6 @@ public class frm_consulta_stock extends PBase {
         ws.callback=callbackvalue;
         ws.execute();
     }
-
 
     private void msgAskExit(String msg) {
         try{
