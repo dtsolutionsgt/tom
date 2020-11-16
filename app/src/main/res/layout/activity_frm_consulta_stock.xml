@@ -77,7 +77,7 @@
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/editText6"
+        android:id="@+id/txtUbicacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
@@ -93,17 +93,17 @@
         style="@style/StyleText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText6"
-        android:layout_alignBottom="@+id/editText6"
+        android:layout_alignTop="@+id/txtUbicacion"
+        android:layout_alignBottom="@+id/txtUbicacion"
         android:text="Ubicación:" />
 
     <EditText
-        android:id="@+id/editText7"
+        android:id="@+id/txtProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText6"
-        android:layout_alignStart="@+id/editText6"
-        android:layout_alignEnd="@+id/editText6"
+        android:layout_below="@+id/txtUbicacion"
+        android:layout_alignStart="@+id/txtUbicacion"
+        android:layout_alignEnd="@+id/txtUbicacion"
         android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
@@ -112,9 +112,9 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText7"
+        android:layout_alignTop="@+id/txtProducto"
         android:layout_alignEnd="@+id/textView47"
-        android:layout_alignBottom="@+id/editText7"
+        android:layout_alignBottom="@+id/txtProducto"
         android:layout_alignParentStart="true"
         android:text="Código:" />
 
@@ -122,9 +122,9 @@
         android:id="@+id/cmbEstadoExist"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/editText7"
-        android:layout_alignStart="@+id/editText7"
-        android:layout_alignEnd="@+id/editText7"
+        android:layout_below="@+id/txtProducto"
+        android:layout_alignStart="@+id/txtProducto"
+        android:layout_alignEnd="@+id/txtProducto"
         android:layout_alignParentBottom="false"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp" />
