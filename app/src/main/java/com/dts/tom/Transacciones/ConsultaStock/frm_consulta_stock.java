@@ -3,13 +3,14 @@ package com.dts.tom.Transacciones.ConsultaStock;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Printer;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,11 +21,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
-
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
@@ -33,12 +31,12 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -63,11 +61,12 @@ public class frm_consulta_stock extends PBase {
     private TextView lblNombreUbicacion;
     private TextView lblNombreProducto;
     private Boolean idle = false;
-    private Integer selest  = 0;
+    private Integer selest;
     private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
+    clsBeVW_stock_res_CI  ItemSelected;
 
     private Spinner cmbEstadoExist;
 
@@ -82,6 +81,7 @@ public class frm_consulta_stock extends PBase {
         xobj = new XMLObject(ws);
         Escaneo_Pallet = false;
         idle = false;
+        selest = 0;
 
         listView = (ListView) findViewById(R.id.listExist);
         btnBack = (Button) findViewById(R.id.btnBack);
@@ -104,6 +104,8 @@ public class frm_consulta_stock extends PBase {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     lblNombreUbicacion.setText("");
                     registros.setText("REGISTROS: "+ 0);
+                    selest = 0;
+                    items_stock2.clear();
                 }
             });
 
@@ -113,6 +115,8 @@ public class frm_consulta_stock extends PBase {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     lblNombreProducto.setText("");
                     registros.setText("REGISTROS: "+ 0);
+                    selest = 0;
+                    items_stock2.clear();
                 }
             });
 
@@ -210,10 +214,35 @@ public class frm_consulta_stock extends PBase {
 
             });
 
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    selid = 0;
+
+                    if (position > 0) {
+
+                        ItemSelected = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+                        //procesar_registro();
+
+                    }
+
+                }
+
+            });
+
         }
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    private void procesar_registro() {
+
+        Intent intent = new Intent(this,frm_detalle_consulta_stock_CI.class);
+        intent.putExtra("ItemSelected", (Parcelable) ItemSelected); //where user is an instance of User object
+        startActivity(intent);
+
     }
 
     public void Listar_Existencias(){
@@ -480,37 +509,71 @@ public class frm_consulta_stock extends PBase {
         items_stock2.clear();
         clsBeVW_stock_res_CI items;
 
-        for (int i = 0; i < pListStock2.items.size(); i++) {
+        if(estado == "" && selest>0){
 
-            String estado_ = pListStock2.items.get(i).Estado;
+            for (int i = 0; i < pListStock2.items.size(); i++) {
 
-            if (estado_.equals(estado)) {
-                items = new clsBeVW_stock_res_CI();
-                items.Codigo = pListStock2.items.get(i).Codigo;
-                items.Nombre = pListStock2.items.get(i).Nombre;
-                items.UM = pListStock2.items.get(i).UM;
-                items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                items.Pres = pListStock2.items.get(i).Pres;
-                items.ExistPres = pListStock2.items.get(i).ExistPres;
-                items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                items.Lote = pListStock2.items.get(i).Lote;
-                items.Vence = pListStock2.items.get(i).Vence;
-                items.Estado = pListStock2.items.get(i).Estado;
-                items.Ubic = pListStock2.items.get(i).Ubic;
-                items.idUbic = pListStock2.items.get(i).idUbic;
-                items.Pedido = pListStock2.items.get(i).Pedido;
-                items.Pick = pListStock2.items.get(i).Pick;
-                items.LicPlate = pListStock2.items.get(i).LicPlate;
-                items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                items_stock2.add(items);
+                    items = new clsBeVW_stock_res_CI();
+                    items.Codigo = pListStock2.items.get(i).Codigo;
+                    items.Nombre = pListStock2.items.get(i).Nombre;
+                    items.UM = pListStock2.items.get(i).UM;
+                    items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                    items.Pres = pListStock2.items.get(i).Pres;
+                    items.ExistPres = pListStock2.items.get(i).ExistPres;
+                    items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                    items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                    items.Lote = pListStock2.items.get(i).Lote;
+                    items.Vence = pListStock2.items.get(i).Vence;
+                    items.Estado = pListStock2.items.get(i).Estado;
+                    items.Ubic = pListStock2.items.get(i).Ubic;
+                    items.idUbic = pListStock2.items.get(i).idUbic;
+                    items.Pedido = pListStock2.items.get(i).Pedido;
+                    items.Pick = pListStock2.items.get(i).Pick;
+                    items.LicPlate = pListStock2.items.get(i).LicPlate;
+                    items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                    items_stock2.add(items);
+
             }
-        }
-        adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
-        listView.setAdapter(adapter_stock);
+            adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
+            listView.setAdapter(adapter_stock);
+            conteo = items_stock2.size()-1;
+            registros.setText("REGISTROS: "+ conteo);
 
-        conteo = items_stock2.size()-1;
-        registros.setText("REGISTROS: "+ conteo);
+        }
+        else{
+
+            for (int i = 0; i < pListStock2.items.size(); i++) {
+
+                String estado_ = pListStock2.items.get(i).Estado;
+
+                if (estado_.equals(estado)) {
+                    items = new clsBeVW_stock_res_CI();
+                    items.Codigo = pListStock2.items.get(i).Codigo;
+                    items.Nombre = pListStock2.items.get(i).Nombre;
+                    items.UM = pListStock2.items.get(i).UM;
+                    items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                    items.Pres = pListStock2.items.get(i).Pres;
+                    items.ExistPres = pListStock2.items.get(i).ExistPres;
+                    items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                    items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                    items.Lote = pListStock2.items.get(i).Lote;
+                    items.Vence = pListStock2.items.get(i).Vence;
+                    items.Estado = pListStock2.items.get(i).Estado;
+                    items.Ubic = pListStock2.items.get(i).Ubic;
+                    items.idUbic = pListStock2.items.get(i).idUbic;
+                    items.Pedido = pListStock2.items.get(i).Pedido;
+                    items.Pick = pListStock2.items.get(i).Pick;
+                    items.LicPlate = pListStock2.items.get(i).LicPlate;
+                    items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                    items_stock2.add(items);
+                }
+            }
+            adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
+            listView.setAdapter(adapter_stock);
+            conteo = items_stock2.size()-1;
+            registros.setText("REGISTROS: "+ conteo);
+
+        }
 
     }
 

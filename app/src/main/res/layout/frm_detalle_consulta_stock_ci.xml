@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <ScrollView
+        android:id="@+id/scrol"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/lndato"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <TextView
+                    android:id="@+id/textView47"
+                    android:layout_height="match_parent"
+                    android:layout_width="150dp"
+                    android:text="Código"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="31dp" />
+
+                <TextView
+                    android:id="@+id/lblcodigo"
+                    android:layout_width="259dp"
+                    android:layout_height="match_parent"
+                    android:text="123"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="60dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/lbldescripcion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView53"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Exist Unidad"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="88dp" />
+
+                <TextView
+                    android:id="@+id/lblexUnidad"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="0"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="107dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView103"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Exist Docena"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="130dp" />
+
+                <TextView
+                    android:id="@+id/lblexPres"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="0"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="163dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView107"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Estado"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="195dp" />
+
+                <TextView
+                    android:id="@+id/lblestado"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Bueno"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="230dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView109"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Pedido"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="264dp" />
+
+                <TextView
+                    android:id="@+id/lblpedido"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="0"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="301dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView111"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Picking"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="336dp" />
+
+                <TextView
+                    android:id="@+id/lblpicking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView114"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vence" />
+
+                <TextView
+                    android:id="@+id/lblvence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11/11/2020" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView116"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lote" />
+
+                <TextView
+                    android:id="@+id/lbllote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView119"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="idUbic" />
+
+                <TextView
+                    android:id="@+id/lblubic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView120"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ubic" />
+
+                <TextView
+                    android:id="@+id/lblnomUbic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" />
+            </TableRow>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -1,6 +1,9 @@
 package com.dts.classes.Transacciones.Stock.Stock_res;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 
