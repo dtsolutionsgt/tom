@@ -47,7 +47,6 @@ public class frm_consulta_stock extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-
     private ListView listView;
     private Button btnBack, registros;
     private int pIdTarea=0;
@@ -139,6 +138,8 @@ public class frm_consulta_stock extends PBase {
                                         idubic = 0;
                                     }
                                     else{
+                                        ProgressDialog("Cargando existencias");
+
                                         execws(1);
                                     }
                                 }
@@ -176,9 +177,13 @@ public class frm_consulta_stock extends PBase {
                                             int vLengthBarra = txtCodigo.getText().toString().length();
                                             if (vLengthBarra >= 16) {
                                                 pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+
+                                                ProgressDialog("Cargando existencias");
                                                 execws(2);
                                             }
                                         } else {
+
+                                            ProgressDialog("Cargando existencias");
                                             execws(3);
                                         }
                                     }
@@ -297,7 +302,7 @@ public class frm_consulta_stock extends PBase {
 
             if (ListBeStockPallet != null){
                 Escaneo_Pallet = true;
-                toast("Pallet si existe en la bodega");
+                //toast("Pallet si existe en la bodega");
             }else {
                 idubic = 0;
                 throw new Exception("Pallet no existe en la bodega: " + gl.IdBodega);
@@ -319,7 +324,7 @@ public class frm_consulta_stock extends PBase {
             if (BeProducto != null){
                 idprod = BeProducto.IdProducto;
                 lblNombreProducto.setText(BeProducto.getNombre());
-                toast("ubicación encontrada por HH");
+                //toast("ubicación encontrada por HH");
             }else{
                 throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
             }
@@ -417,6 +422,7 @@ public class frm_consulta_stock extends PBase {
             }
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
@@ -500,6 +506,7 @@ public class frm_consulta_stock extends PBase {
             }
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
@@ -577,6 +584,16 @@ public class frm_consulta_stock extends PBase {
 
     }
 
+    public void ProgressDialog(String mensaje) {
+        progress = new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
+    }
+
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -586,6 +603,9 @@ public class frm_consulta_stock extends PBase {
         @Override
         public void wsExecute(){
             try {
+
+
+
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbic.getText().toString(),
@@ -688,5 +708,7 @@ public class frm_consulta_stock extends PBase {
     public void Exit(View view) {
         msgAskExit("Está seguro de salir");
     }
+
+
 
 }

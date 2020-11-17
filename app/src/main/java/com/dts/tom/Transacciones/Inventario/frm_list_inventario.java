@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.Inventario;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -91,9 +92,69 @@ public class frm_list_inventario extends PBase {
 
             });
 
+
+            txtIdTareaInv.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        switch (keyCode) {
+                            case KeyEvent.KEYCODE_ENTER:
+
+                                if (txtIdTareaInv.getText().toString().isEmpty()){
+
+                                    toast("Id tarea no ingresada!");
+
+                                } else{
+                                    String IdTarea = String.valueOf(txtIdTareaInv.getText());
+                                    filtrarTarea(IdTarea);
+                                }
+                        }
+                    }
+                    return false;
+                }
+            });
+
+
+
         }catch (Exception e){
             mu.msgbox("setHandlers:"+e.getMessage());
         }
+    }
+
+    private void filtrarTarea(String IdTarea) {
+
+        BeListInv.clear();
+        clsBeTrans_inv_enc vItem;
+
+        try{
+            vItem = new clsBeTrans_inv_enc();
+            BeListInv.add(vItem);
+
+            for (clsBeTrans_inv_enc BeInv: pListTareas.items){
+
+                vItem = new clsBeTrans_inv_enc();
+
+                String idtarea_ = String.valueOf(BeInv.Idinventarioenc);
+
+                if(idtarea_.equals(IdTarea)){
+                    vItem= BeInv;
+                    vItem.Hora_ini = du.convierteHoraMostar(vItem.Hora_ini);
+                    vItem.Transcurrido = String.valueOf(du.DateDiff(BeInv.Hora_ini));
+                    BeListInv.add(vItem);
+                }
+            }
+
+            int count = BeListInv.size()-1;
+            btnRegs.setText("Regs:"+count);
+
+            adapter=new list_adapt_tareas_inventario(this,BeListInv);
+            listView.setAdapter(adapter);
+
+        }
+        catch (Exception e) {
+            mu.msgbox("Llena_Lista_Tareas:" + e.getMessage());
+        }
+
     }
 
     private void procesar_registro(){
@@ -131,6 +192,7 @@ public class frm_list_inventario extends PBase {
     }
 
     private void Llena_Lista_Tareas(){
+
         clsBeTrans_inv_enc vItem;
 
         try{
