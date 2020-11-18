@@ -16,6 +16,8 @@ import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_enc;
 import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_encList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_conteo;
+import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_conteo;
 import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 import com.dts.tom.list_adapt_tareas_inventario;
 
@@ -166,7 +168,7 @@ public class frm_list_inventario extends PBase {
                 startActivity(new Intent(this, frm_inv_ini_tramos.class));
             }else{
                 browse=2;
-                startActivity(new Intent(this, frm_list_inventario.class));
+                startActivity(new Intent(this, frm_inv_cic_conteo.class));
             }
 
         }catch (Exception e){
