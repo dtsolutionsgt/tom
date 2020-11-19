@@ -73,7 +73,7 @@
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/textView26"
+            android:id="@+id/lblubicacion"
             style="@style/StyleText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"

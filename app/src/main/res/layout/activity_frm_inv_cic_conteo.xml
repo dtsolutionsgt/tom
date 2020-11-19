@@ -30,23 +30,32 @@
 
     <EditText
         android:id="@+id/txtBuscFiltro"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/reltope"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="false"
-        android:layout_marginStart="172dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:paddingBottom="10dp" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="54dp"
+        android:layout_height="38dp"
+        android:layout_below="@id/reltope"
+        android:layout_marginStart="330dp"
+        android:layout_marginTop="20dp"
+        android:text="X" />
+
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/lblubicacion"
         style="@style/StyleText"
-        android:layout_width="150dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/reltope"
         android:layout_alignTop="@+id/txtBuscFiltro"
@@ -54,15 +63,16 @@
         android:text="Ubic #" />
 
     <HorizontalScrollView
+        android:id="@+id/scrollCiclico"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relbuton"
-        android:layout_below="@+id/textView26"
+        android:layout_below="@+id/lblubicacion"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
         <ListView
-            android:id="@+id/listConts"
+            android:id="@+id/listCiclico"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </HorizontalScrollView>
