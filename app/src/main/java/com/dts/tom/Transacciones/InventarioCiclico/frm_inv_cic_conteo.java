@@ -4,11 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.MaskFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -21,7 +25,10 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 
+import org.simpleframework.xml.Element;
+
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
+import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
 
 
 public class frm_inv_cic_conteo extends PBase {
@@ -36,7 +43,13 @@ public class frm_inv_cic_conteo extends PBase {
     private boolean esconteo, lic_plate, noubicflag, nostockflag, ProductosMultiples;
     private String lplate, LoteSel,FechaVencSel,PresSel,ProdSel;
     private Integer ubicid, nubicid,IdUbicacionSel;
+    private TextView cmdList;
+    CheckBox checkbox;
+    boolean chkPendientes;
+    private Integer Idx;
 
+
+    Existe_producto existeProducto = new Existe_producto();
     private clsBeProducto prod = new clsBeProducto();
     private clsBeProducto pprod = new clsBeProducto();
     private clsBeProducto nprod = new clsBeProducto();
@@ -51,6 +64,8 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
 
+    private Object item;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +76,8 @@ public class frm_inv_cic_conteo extends PBase {
 
         txtBuscFiltro = findViewById(R.id.txtBuscFiltro);
         listCiclico = findViewById(R.id.listCiclico);
+        checkbox = findViewById(R.id.chkPendientes);
+        cmdList = findViewById(R.id.cmdList);
         idreconteo =0;
         tareapos= 0;
         esconteo = true;
@@ -70,6 +87,7 @@ public class frm_inv_cic_conteo extends PBase {
         PresSel="";
         IdUbicacionSel=0;
         ProdSel="";
+        Idx = 0;
 
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -105,6 +123,224 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
+    private void processReConteos() {
+        try{
+
+            reconteos = xobj.getresult(clsBeTrans_inv_enc_reconteoList.class,"Inventario_Ciclico_ReConteos");
+
+            if (reconteos != null){
+
+                if(reconteos.items != null){
+                    if(reconteos.items.size()>0){
+                        idreconteo = reconteos.items.size();
+                        checkbox.setChecked(true);
+                        checkbox.setText("Pendientes");
+                        chkPendientes = true;
+
+                    }else{
+                        idreconteo = 0;
+                    }
+
+                    //set lbllblConteo ?
+                }
+            }else{
+
+                checkbox.setChecked(false);
+                checkbox.setText("Contados");
+                chkPendientes = false;
+
+                esconteo = false;
+                idreconteo = 0;
+            }
+
+
+            ListaTareas();
+
+        }
+        catch (Exception e){
+            mu.msgbox("processReConteos:"+e.getMessage());
+        }
+    }
+
+    private void Existe_Producto() {
+
+        try{
+            existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
+        }
+        catch (Exception e){
+            mu.msgbox("Existe_Producto:"+e.getMessage());
+        }
+
+    }
+
+    private void processCiclico_Listar_Conteo() {
+
+    }
+
+
+    private void ListaTareas() {
+
+        if(BeInvEnc.Idinventarioenc != 0){
+
+            Integer idprodbod = 0;
+            ubicid = 0;
+            lic_plate = false;
+            lplate = "";
+
+            if(txtBuscFiltro.getText().toString() !=""){
+                SubTarea1();
+            }else{
+                SubTarea2();
+            }
+
+
+        }
+
+    }
+
+    private void SubTarea1(){
+
+        clsBeProducto tProd;
+
+        try{
+
+                if(checkbox.isChecked()){
+                    //filtrar data de items
+                    // item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
+                    item = 0;
+
+                }else{
+                    //filtrar data de items
+                    //item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") > 0).FirstOrDefault()
+                    item = 1;
+                }
+
+                if(item != null){
+
+                    tareapos = Idx;
+                    txtBuscFiltro.setText("");
+                    //Tarea_Conteo()
+                    //Valida_Ubicacion_Orig();
+                }
+                else{
+
+                    if(BeInvEnc.Capturar_no_existente){
+
+                        execws(2);
+
+                        if(!(existeProducto.respuesta)){
+
+                            msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
+
+                        }else{
+
+                            Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
+                        }
+
+                    }else{
+
+                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
+                    }
+                }
+
+            //items = m_proxy.Inventario_Ciclico_Listar_Conteo(tarea.Idinventarioenc, _ gOperador, _ Not chkPend.Checked)
+            SubTarea3();
+
+        }
+        catch (Exception e){
+            lic_plate = false;
+            lplate = "";
+            mu.msgbox("processReConteos:"+e.getMessage());
+        }
+    }
+
+    private void SubTarea2(){
+
+        if(LoteSel !="" && FechaVencSel !="" && ProdSel != "0" && IdUbicacionSel != 0){
+            if(checkbox.isChecked()){
+
+                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
+                                    AndAlso x.Item("Cantidad") = 0 AndAlso x.Item("Lote_stock") = LoteSel _
+                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
+                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
+
+            }else{
+                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
+                                    AndAlso x.Item("Cantidad") > 0 AndAlso x.Item("Lote_stock") = LoteSel _
+                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
+                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
+            }
+
+            FechaVencSel = "";
+            LoteSel = "";
+            PresSel = "";
+            IdUbicacionSel = 0;
+            ProdSel = "";
+
+            if(item != null ){
+                tareapos = Idx;
+                txtBuscFiltro.setText("");
+                //Tarea_Conteo();
+                //txtUbic.Text = item.Item("IdUbicacion");
+                //Valida_Ubicacion_Orig();
+                //txtProd.Focus();
+            }
+            else{
+                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
+            }
+
+        }
+        else if(LoteSel != "" && FechaVencSel != "" && ProdSel != "" && IdUbicacionSel != 0){
+
+            if(checkbox.isChecked()){
+
+                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
+                                    AndAlso x.Item("Cantidad") = 0 _
+                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
+                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
+
+            }else{
+
+                           /* item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
+                                    AndAlso x.Item("Cantidad") > 0 _
+                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
+                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
+            }
+
+            FechaVencSel = "";
+            LoteSel = "";
+            PresSel = "";
+            IdUbicacionSel = 0;
+            ProdSel = "";
+
+            if(item != null ){
+                tareapos = Idx;
+                txtBuscFiltro.setText("");
+                //Tarea_Conteo();
+                //txtUbic.Text = item.Item("IdUbicacion");
+                //Valida_Ubicacion_Orig();
+                //txtProd.Focus();
+            }
+            else{
+                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
+            }
+        }
+
+        SubTarea3();
+
+    }
+
+    private void SubTarea3() {
+        cmdList.setText("0/0");
+
+        if(!lic_plate){
+
+            execws(3);
+        }
+
+    }
+
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -119,12 +355,15 @@ public class frm_inv_cic_conteo extends PBase {
                         callMethod("Inventario_Ciclico_ReConteos","pIdenc",BeInvEnc.Idinventarioenc);
                         break;
                     case 2:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtBuscFiltro.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                        callMethod("Existe_Producto","pCodigo",txtBuscFiltro.getText().toString().trim());
+                        break;
+                    case 3:
+                        callMethod("Inventario_Ciclico_Listar_Conteo","pIdInventarioEnc",BeInvEnc.Idinventarioenc,
+                                "pIdOperador",gl.IdOperador,"pPendientes",chkPendientes);
                         break;
                 }
 
-               progress.cancel();
+                progress.cancel();
 
             } catch (Exception e) {
                 //progress.cancel();
@@ -143,7 +382,10 @@ public class frm_inv_cic_conteo extends PBase {
                     processReConteos();
                     break;
                 case 2:
-                    //processUbic();
+                    Existe_Producto();
+                    break;
+                case 3:
+                    processCiclico_Listar_Conteo();
                     break;
 
             }
@@ -153,64 +395,6 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
-    private void processReConteos() {
-        try{
-
-            reconteos = xobj.getresult(clsBeTrans_inv_enc_reconteoList.class,"Inventario_Ciclico_ReConteos");
-
-            if (reconteos != null){
-
-                if(reconteos.items != null){
-                    if(reconteos.items.size()>0){
-
-                    }else{
-                        idreconteo = 0;
-                    }
-
-                    esconteo = false;
-                    idreconteo = 0;
-
-                    //set lbllblConteo ?
-                }
-
-            }
-
-            ListaTareas();
-
-        }
-        catch (Exception e){
-            mu.msgbox("processReConteos:"+e.getMessage());
-        }
-    }
-
-    private void ListaTareas() {
-
-        if(BeInvEnc.Idinventarioenc != 0){
-
-            Integer idprodbod = 0;
-            ubicid = 0;
-            lic_plate = false;
-            lplate = "";
-
-            clsBeProducto tProd;
-
-            try{
-
-                Integer Idx = 0;
-
-                if(txtBuscFiltro.getText().toString() !=""){
-
-                }
-
-
-            }
-            catch (Exception e){
-                mu.msgbox("processReConteos:"+e.getMessage());
-            }
-
-        }
-
-    }
 
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
@@ -271,6 +455,37 @@ public class frm_inv_cic_conteo extends PBase {
 
     }
 
+    private void msgCompletar(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    //Tarea_Producto_Nuevo();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgTarea_Producto_Nuevo"+e.getMessage());
+        }
+    }
+
     public void ProgressDialog(String mensaje) {
         progress = new ProgressDialog(this);
         progress.setMessage(mensaje);
@@ -278,6 +493,24 @@ public class frm_inv_cic_conteo extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+    public static class Existe_producto{
+        @Element(required=false) public boolean respuesta=false;
+
+        public Existe_producto() {
+        }
+
+        public Existe_producto(boolean respuesta){
+            this.respuesta=respuesta;
+        }
+
+        public boolean getrespuesta() {
+            return respuesta;
+        }
+        public void setrespuesta(boolean value) {
+            respuesta=value;
+        }
     }
 
 }
