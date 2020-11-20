@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.MaskFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -16,16 +17,22 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteo;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteoList;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_dataList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
+import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 
 import org.simpleframework.xml.Element;
+
+import java.util.ArrayList;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
@@ -35,6 +42,7 @@ public class frm_inv_cic_conteo extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
+    private list_adapt_consulta_ciclico adapter_ciclico;
 
     private EditText txtBuscFiltro;
     private ListView listCiclico;
@@ -47,9 +55,12 @@ public class frm_inv_cic_conteo extends PBase {
     CheckBox checkbox;
     boolean chkPendientes;
     private Integer Idx;
+    private Cursor DT;
 
 
     Existe_producto existeProducto = new Existe_producto();
+    private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
+    private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeProducto prod = new clsBeProducto();
     private clsBeProducto pprod = new clsBeProducto();
     private clsBeProducto nprod = new clsBeProducto();
@@ -65,6 +76,7 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
 
     private Object item;
+
 
 
     @Override
@@ -88,6 +100,7 @@ public class frm_inv_cic_conteo extends PBase {
         IdUbicacionSel=0;
         ProdSel="";
         Idx = 0;
+        chkPendientes = true;
 
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -165,7 +178,9 @@ public class frm_inv_cic_conteo extends PBase {
     private void Existe_Producto() {
 
         try{
+
             existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
+
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
@@ -175,8 +190,56 @@ public class frm_inv_cic_conteo extends PBase {
 
     private void processCiclico_Listar_Conteo() {
 
-    }
+        try{
+            DT = xobj.filldt();
+            data_list.clear();
 
+            if(!txtBuscFiltro.equals("")){
+
+                if(DT !=null){
+                    if(DT.getCount()>0){
+                        DT.moveToFirst();
+
+                        while (!DT.isAfterLast()) {
+
+                            data_rec.NoUbic = Integer.parseInt(DT.getString(4));
+                            data_rec.Codigo = DT.getString(30);
+                            data_rec.Producto_nombre = DT.getString(20);
+                            data_rec.UMBas = DT.getString(24);
+                            data_rec.Pres = DT.getString(23);
+
+                            /*data_rec.Cant_Conteo = Double.valueOf(DT.getString(5));
+                            data_rec.Peso_Conteo = Double.valueOf(DT.getString(6));
+                            data_rec.Cant_Stock = Double.valueOf(DT.getString(7));
+                            data_rec.Peso_Stock = Double.valueOf(DT.getString(8));*/
+                            data_rec.Lote = DT.getString(7);
+                            data_rec.Fecha_Vence = DT.getString(9);
+                            data_rec.Conteo = Integer.parseInt(DT.getString(11));
+                            data_rec.Ubic_nombre = DT.getString(34);
+                           /* data_rec.IdProductoBodega = Integer.parseInt(DT.getString(13));
+                            data_rec.Tramo = DT.getString(14);
+                            data_rec.IndiceX = Integer.parseInt(DT.getString(15));
+                            data_rec.Nivel = Integer.parseInt(DT.getString(16));
+                            data_rec.Pos = DT.getString(17);
+                            data_rec.Factor = Double.valueOf(DT.getString(18));*/
+
+                            data_list.add(data_rec);
+                            DT.moveToNext();
+
+                        }
+                        if (DT!=null) DT.close();
+
+                        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                        listCiclico.setAdapter(adapter_ciclico);
+
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processReConteos:"+e.getMessage());
+        }
+    }
 
     private void ListaTareas() {
 
@@ -331,11 +394,15 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void SubTarea3() {
+
         cmdList.setText("0/0");
 
         if(!lic_plate){
 
             execws(3);
+
+            //Toast.makeText(getApplicationContext(),"datatable " + DT.getCount() ,Toast.LENGTH_SHORT);
+
         }
 
     }
@@ -359,7 +426,9 @@ public class frm_inv_cic_conteo extends PBase {
                         break;
                     case 3:
                         callMethod("Inventario_Ciclico_Listar_Conteo","pIdInventarioEnc",BeInvEnc.Idinventarioenc,
-                                "pIdOperador",gl.IdOperador,"pPendientes",chkPendientes);
+                                "pIdOperador",gl.IdOperador,"pPendientes",true);
+
+                        //chkPendientes
                         break;
                 }
 
