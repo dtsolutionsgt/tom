@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.MaskFilter;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
 import com.dts.base.DateUtils;
-
+import com.dts.tom.frm_lista_tareas_principal;
 
 
 public class frm_inv_cic_conteo extends PBase {
@@ -156,8 +157,10 @@ public class frm_inv_cic_conteo extends PBase {
                     selid = 0;
 
                     if (position > 0) {
+                        //data_rec = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                        gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
 
-                       // ItemSelected = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+                        startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
                     }
 

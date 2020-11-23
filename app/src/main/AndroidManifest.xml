@@ -16,15 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
- <!--       <uses-library
+        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add"></activity>
+        <!--
+               <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" />-->
-
+            android:required="true" />
+        -->
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-<!--        <activity
+        <!--
+        <activity
             android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo"
             android:label="@string/title_activity_frm_inv_cic_conteo">
             <intent-filter>
@@ -32,7 +35,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
+        </activity>
+        -->
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
         <activity android:name=".list_adapt_verificados" />
         <activity android:name=".list_adapt_contados" />
