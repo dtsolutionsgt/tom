@@ -23,19 +23,16 @@ import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_st
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteo;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteoList;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
-import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_dataList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
 import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
-
 import org.simpleframework.xml.Element;
-
 import java.util.ArrayList;
-
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
-import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
+
+import com.dts.base.DateUtils;
+
 
 
 public class frm_inv_cic_conteo extends PBase {
@@ -56,7 +53,6 @@ public class frm_inv_cic_conteo extends PBase {
     boolean chkPendientes;
     private Integer Idx;
     private Cursor DT;
-
 
     Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
@@ -190,6 +186,8 @@ public class frm_inv_cic_conteo extends PBase {
 
     private void processCiclico_Listar_Conteo() {
 
+        clsBe_inv_reconteo_data rec;
+
         try{
             DT = xobj.filldt();
             data_list.clear();
@@ -198,35 +196,46 @@ public class frm_inv_cic_conteo extends PBase {
 
                 if(DT !=null){
                     if(DT.getCount()>0){
+
+                        rec = new clsBe_inv_reconteo_data();
+                        data_list.add(rec);
+
                         DT.moveToFirst();
 
                         while (!DT.isAfterLast()) {
 
+                            data_rec = new clsBe_inv_reconteo_data();
                             data_rec.NoUbic = Integer.parseInt(DT.getString(4));
                             data_rec.Codigo = DT.getString(30);
                             data_rec.Producto_nombre = DT.getString(20);
-                            data_rec.UMBas = DT.getString(24);
-                            data_rec.Pres = DT.getString(23);
+                            data_rec.Pres = DT.getString(22);
+                            data_rec.UMBas = DT.getString(23);
 
-                            /*data_rec.Cant_Conteo = Double.valueOf(DT.getString(5));
-                            data_rec.Peso_Conteo = Double.valueOf(DT.getString(6));
-                            data_rec.Cant_Stock = Double.valueOf(DT.getString(7));
-                            data_rec.Peso_Stock = Double.valueOf(DT.getString(8));*/
-                            data_rec.Lote = DT.getString(7);
-                            data_rec.Fecha_Vence = DT.getString(9);
+                            if(DT.getString(7)!=null){
+                                data_rec.Lote = DT.getString(7);
+                            }else{
+                                data_rec.Lote = "";
+                            }
+
+                            if (DT.getString(9)!=null){
+                                //vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
+                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
+                            }else{
+                                data_rec.Fecha_Vence = "";
+                            }
+
                             data_rec.Conteo = Integer.parseInt(DT.getString(11));
-                            data_rec.Ubic_nombre = DT.getString(34);
-                           /* data_rec.IdProductoBodega = Integer.parseInt(DT.getString(13));
-                            data_rec.Tramo = DT.getString(14);
-                            data_rec.IndiceX = Integer.parseInt(DT.getString(15));
-                            data_rec.Nivel = Integer.parseInt(DT.getString(16));
-                            data_rec.Pos = DT.getString(17);
-                            data_rec.Factor = Double.valueOf(DT.getString(18));*/
-
+                            data_rec.Ubic_nombre = DT.getString(21);
+                            data_rec.Factor = Double.valueOf(DT.getString(35));
                             data_list.add(data_rec);
                             DT.moveToNext();
 
                         }
+
+                        int count =data_list.size()-1;
+                        //cmdList.setText("No.Reg: "+count);
+                        cmdList.setText( count+ "/" + count);
+
                         if (DT!=null) DT.close();
 
                         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
