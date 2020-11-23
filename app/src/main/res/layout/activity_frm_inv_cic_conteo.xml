@@ -68,7 +68,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relbuton"
         android:layout_below="@+id/lblubicacion"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp">
 
         <ListView
@@ -103,6 +103,9 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_toEndOf="@id/btnBack"
+            android:buttonTint="#FFFFFF"
+            android:checked="false"
+
             android:paddingStart="10dp"
             android:text="CheckBox"
             android:textSize="24sp" />

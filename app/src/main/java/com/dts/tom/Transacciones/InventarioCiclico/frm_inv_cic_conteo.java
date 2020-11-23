@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -97,6 +98,8 @@ public class frm_inv_cic_conteo extends PBase {
         ProdSel="";
         Idx = 0;
         chkPendientes = true;
+        checkbox.setChecked(true);
+        checkbox.setText("Pendientes");
 
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -127,6 +130,24 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             });
 
+            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    tareapos = 0;
+
+                    if (isChecked) {
+                        toastcent("verdadero");
+                        chkPendientes = true;
+                        ListaTareas();
+                    } else {
+                        toastcent("falso");
+                        chkPendientes = false;
+                        ListaTareas();
+                    }
+                }
+            });
+
+
         }catch(Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
@@ -141,27 +162,19 @@ public class frm_inv_cic_conteo extends PBase {
 
                 if(reconteos.items != null){
                     if(reconteos.items.size()>0){
+
                         idreconteo = reconteos.items.size();
-                        checkbox.setChecked(true);
-                        checkbox.setText("Pendientes");
-                        chkPendientes = true;
 
                     }else{
+
                         idreconteo = 0;
                     }
 
-                    //set lbllblConteo ?
                 }
-            }else{
-
-                checkbox.setChecked(false);
-                checkbox.setText("Contados");
-                chkPendientes = false;
-
-                esconteo = false;
-                idreconteo = 0;
             }
 
+            esconteo = false;
+            idreconteo = 0;
 
             ListaTareas();
 
@@ -241,7 +254,17 @@ public class frm_inv_cic_conteo extends PBase {
                         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
                         listCiclico.setAdapter(adapter_ciclico);
 
+                    }else{
+                        rec = new clsBe_inv_reconteo_data();
+                        data_list.add(rec);
+
+                        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                        listCiclico.setAdapter(adapter_ciclico);
+                        cmdList.setText( "0/0");
                     }
+
+
+
                 }
             }
 
@@ -279,6 +302,8 @@ public class frm_inv_cic_conteo extends PBase {
                 if(checkbox.isChecked()){
                     //filtrar data de items
                     // item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
+
+
                     item = 0;
 
                 }else{
@@ -327,6 +352,8 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void SubTarea2(){
+
+        execws(3);
 
         if(LoteSel !="" && FechaVencSel !="" && ProdSel != "0" && IdUbicacionSel != 0){
             if(checkbox.isChecked()){
@@ -435,7 +462,7 @@ public class frm_inv_cic_conteo extends PBase {
                         break;
                     case 3:
                         callMethod("Inventario_Ciclico_Listar_Conteo","pIdInventarioEnc",BeInvEnc.Idinventarioenc,
-                                "pIdOperador",gl.IdOperador,"pPendientes",true);
+                                "pIdOperador",gl.IdOperador,"pPendientes",chkPendientes);
 
                         //chkPendientes
                         break;
