@@ -17,6 +17,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public int Conteo=0;
     @Element(required=false) public String Ubic_nombre="";
+    @Element(required=false) public String Estado="";
     @Element(required=false) public int IdProductoBodega=0;
     @Element(required=false) public String Tramo="";
     @Element(required=false) public int IndiceX=0;
@@ -30,7 +31,7 @@ public class clsBe_inv_reconteo_data {
     public clsBe_inv_reconteo_data(int NoUbic,String Codigo,String Producto_nombre,String UMBas,
                                    String Pres,Double Cant_Conteo,Double Peso_Conteo,Double Cant_Stock,
                                    Double Peso_Stock,String Lote,String Fecha_Vence,int Conteo,
-                                   String Ubic_nombre,int IdProductoBodega,String Tramo,int IndiceX,
+                                   String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,
                                    int Nivel,String Pos,Double Factor){
 
         this.NoUbic = NoUbic;
@@ -46,6 +47,7 @@ public class clsBe_inv_reconteo_data {
         this.Fecha_Vence = Fecha_Vence;
         this.Conteo = Conteo;
         this.Ubic_nombre = Ubic_nombre;
+        this.Estado = Estado;
         this.IdProductoBodega = IdProductoBodega;
         this.Tramo = Tramo;
         this.IndiceX = IndiceX;

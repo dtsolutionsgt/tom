@@ -77,6 +77,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblFecha_Vence = convertView.findViewById(R.id.lblFecha_Vence);
                 holder.lblConteo = convertView.findViewById(R.id.lblConteo);
                 holder.lblUbic_nombre = convertView.findViewById(R.id.lblUbic_nombre);
+                holder.lblEstado = convertView.findViewById(R.id.lblEstado);
                 holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                 holder.lblTramo = convertView.findViewById(R.id.lblTramo);
                 holder.lblIndiceX = convertView.findViewById(R.id.lblIndiceX);
@@ -103,6 +104,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblFecha_Vence.setText("Fecha_Vence");
                 holder.lblConteo.setText("Conteo");
                 holder.lblUbic_nombre.setText("Ubic_nombre");
+                holder.lblEstado.setText("Estado");
                 holder.lblIdProductoBodega.setText("IdProductoBodega");
                 holder.lblTramo.setText("Tramo");
                 holder.lblIndiceX.setText("IndiceX");
@@ -125,6 +127,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblFecha_Vence.setText(data_list.get(position).Fecha_Vence  +"");
                 holder.lblConteo.setText(data_list.get(position).Conteo  +"");
                 holder.lblUbic_nombre.setText(data_list.get(position).Ubic_nombre  +"");
+                holder.lblEstado.setText(data_list.get(position).Estado  +"");
                 holder.lblIdProductoBodega.setText(data_list.get(position).IdProductoBodega  +"");
                 holder.lblTramo.setText(data_list.get(position).Tramo  +"");
                 holder.lblIndiceX.setText(data_list.get(position).IndiceX  +"");
@@ -146,7 +149,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblNoUbic,lblCodigo,lblProducto_nombre,lblUMBas,lblPres,lblCant_Conteo,lblPeso_Conteo,lblCant_Stock,
-                lblPeso_Stock,lblLote,lblFecha_Vence,lblConteo,lblUbic_nombre,lblIdProductoBodega,lblTramo,
+                lblPeso_Stock,lblLote,lblFecha_Vence,lblConteo,lblUbic_nombre,lblEstado,lblIdProductoBodega,lblTramo,
                 lblIndiceX,lblNivel,lblPos,lblFactor;
     }
 }

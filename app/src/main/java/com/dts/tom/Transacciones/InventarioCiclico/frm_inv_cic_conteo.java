@@ -9,6 +9,7 @@ import android.graphics.MaskFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_in
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteoList;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -147,6 +149,21 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             });
 
+            listCiclico.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    selid = 0;
+
+                    if (position > 0) {
+
+                       // ItemSelected = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+
+                    }
+
+                }
+
+            });
 
         }catch(Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
@@ -239,6 +256,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                             data_rec.Conteo = Integer.parseInt(DT.getString(11));
                             data_rec.Ubic_nombre = DT.getString(21);
+                            data_rec.Estado = DT.getString(19);
                             data_rec.Factor = Double.valueOf(DT.getString(35));
                             data_list.add(data_rec);
                             DT.moveToNext();

@@ -121,6 +121,14 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="BUen estado"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/lblIdProductoBodega"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
