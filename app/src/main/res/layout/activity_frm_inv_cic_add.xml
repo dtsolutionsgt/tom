@@ -13,9 +13,132 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:background="@drawable/color_medium"
-        >
+        android:paddingStart="15dp"></RelativeLayout>
 
-    </RelativeLayout>
+    <ScrollView
+        android:id="@+id/scroldATOS"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/relbuton_cic"
+        android:layout_below="@id/reltope_ci">
+
+        <LinearLayout
+            android:id="@+id/lnDatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:id="@+id/tblBarra"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtubicacion_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Ubicación:" />
+
+                <EditText
+                    android:id="@+id/etubicacion_cic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:inputType="textPersonName" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblmsg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView81"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="msg" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tbl2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtProducto"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Producto:" />
+
+                <EditText
+                    android:id="@+id/etproducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblPres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView83"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Presentación:" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblUmbas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView84"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="U.M.Bas:" />
+
+                <EditText
+                    android:id="@+id/txtUmbasRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView85"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Cantidad:" />
+
+                <EditText
+                    android:id="@+id/txtCantidadRec"
+                    android:layout_width="259dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:inputType="number|numberDecimal"
+                    android:selectAllOnFocus="true" />
+
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <RelativeLayout
         android:id="@+id/relbuton_cic"
