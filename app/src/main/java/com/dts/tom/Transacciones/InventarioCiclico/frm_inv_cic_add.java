@@ -39,7 +39,6 @@ public class frm_inv_cic_add extends PBase {
         setContentView(R.layout.activity_frm_inv_cic_add);
         super.InitBase();
 
-
         imgDate = (ImageView)findViewById(R.id.imgDate);
         dpResult = (DatePicker) findViewById(R.id.datePicker);
         cmbVence_cic = (EditText) findViewById(R.id.cmbVence_cic);
@@ -54,59 +53,6 @@ public class frm_inv_cic_add extends PBase {
         }
         catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
-        }
-    }
-
-
-    public void setCurrentDateOnView() {
-
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH)+1;
-        day = c.get(Calendar.DAY_OF_MONTH);
-
-
-        /*cmbVence_cic.setText(new StringBuilder()
-                .append(day).append("-").append(month).append("-")
-                .append(year).append(" "));
-        dpResult.init(year, month, day, null);*/
-
-
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
-        Date d = new Date(year, month, day);
-        String strDate = dateFormatter.format(d);
-        cmbVence_cic.setText(strDate);
-
-    }
-
-
-    public void Exit(View view) {
-    }
-
-    public void msgboxValidaFechaVence(String msg) {
-
-        try{
-
-            if (!(msg.isEmpty())){
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-                dialog.setTitle(R.string.app_name);
-                dialog.setMessage(msg);
-                dialog.setCancelable(false);
-
-                dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        cmbVence_cic.requestFocus();
-                        cmbVence_cic.selectAll();
-                        cmbVence_cic.setSelectAllOnFocus(true);
-                    }
-                });
-                dialog.show();
-
-            }
-
-        } catch (Exception ex) {
         }
     }
 
@@ -130,7 +76,23 @@ public class frm_inv_cic_add extends PBase {
                     }
                 }, year, month, day);
         datePickerDialog.show();
+    }
 
+    public void Exit(View view) {
+        frm_inv_cic_add.super.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        try{
+
+            frm_inv_cic_add.super.finish();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
 
     }
+
 }

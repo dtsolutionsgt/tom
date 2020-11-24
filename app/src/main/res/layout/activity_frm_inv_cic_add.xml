@@ -13,7 +13,22 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:background="@drawable/color_medium"
-        android:paddingStart="15dp"></RelativeLayout>
+        android:paddingStart="15dp">
+
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Ubic # 000"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scroldATOS"
@@ -249,6 +264,19 @@
 
             </TableRow>
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                >
+                <TextView
+                    android:id="@+id/lblUM"
+                    style="@style/StyleText"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:text="0" />
+            </TableRow>
+
 
 
         </LinearLayout>
@@ -275,6 +303,26 @@
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
             android:onClick="Exit" />
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:textSize="14sp"
+            android:text="<< Anterior"
+            android:layout_marginStart="120dp">
+        </Button>
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:textSize="14sp"
+            android:text="Siguiente >>"
+            android:layout_marginStart="270dp"
+            >
+        </Button>
+
 
     </RelativeLayout>
 
