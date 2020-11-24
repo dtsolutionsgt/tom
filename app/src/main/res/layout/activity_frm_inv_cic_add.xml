@@ -58,7 +58,7 @@
                     android:id="@+id/textView81"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="10dp"
                     android:text="msg" />
 
@@ -93,7 +93,7 @@
                     android:id="@+id/textView83"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="5dp"
                     android:text="Presentación:" />
             </TableRow>
@@ -136,6 +136,79 @@
                     android:layout_height="45dp" />
 
             </TableRow>
+
+
+            <TableRow
+                android:id="@+id/tblote_cic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtlote_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Lote:" />
+
+                <EditText
+                    android:id="@+id/etlote_cic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+
+            <TableRow
+                android:id="@+id/tblVence"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtFecha_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Vence:" />
+
+                <ImageView
+                    android:id="@+id/imgDate"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:onClick="ChangeDate"
+                    android:src="@drawable/calendar" />
+
+                <EditText
+                    android:id="@+id/cmbVence_cic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txtcantidad_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Cantidad:" />
+
+                <TextView
+                    android:id="@+id/txtpeso_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Peso:" />
+
+
+            </TableRow>
+
+
 
         </LinearLayout>
     </ScrollView>
