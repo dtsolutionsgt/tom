@@ -59,6 +59,7 @@
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
                     android:text="msg" />
 
             </TableRow>
@@ -66,7 +67,8 @@
             <TableRow
                 android:id="@+id/tbl2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:id="@+id/txtProducto"
@@ -92,47 +94,46 @@
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
                     android:text="Presentación:" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/tblUmbas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:id="@+id/textView84"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="U.M.Bas:" />
+                    android:text="Estado:" />
 
-                <EditText
-                    android:id="@+id/txtUmbasRec"
+                <Spinner
+                    android:id="@+id/cmbEstado_cic"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:layout_height="45dp" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/tblCantidad"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/textView85"
+                    android:id="@+id/txtpresent_cic"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Cantidad:" />
+                    android:text="Presentación:" />
 
-                <EditText
-                    android:id="@+id/txtCantidadRec"
-                    android:layout_width="259dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:inputType="number|numberDecimal"
-                    android:selectAllOnFocus="true" />
+                <Spinner
+                    android:id="@+id/cmbPresent_cic"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
 
             </TableRow>
 
