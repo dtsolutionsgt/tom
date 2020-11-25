@@ -64,10 +64,10 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 convertView = l_Inflater.inflate(R.layout.activity_list_adapt_consulta_stock, null);
                 holder = new ViewHolder();
 
-                holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
-                holder.lblNombre = convertView.findViewById(R.id.lblNombre);
-                holder.lblUM = convertView.findViewById(R.id.lblUM);
-                holder.lblExistUMBAs = convertView.findViewById(R.id.lblExistUMBAs);
+                        holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
+                        holder.lblNombre = convertView.findViewById(R.id.lblNombre);
+                        holder.lblUM = convertView.findViewById(R.id.lblUM);
+                        holder.lblExistUMBAs = convertView.findViewById(R.id.lblExistUMBAs);
                         holder.lblPres = convertView.findViewById(R.id.lblPres);
                         holder.lblExistPres = convertView.findViewById(R.id.lblExistPres);
                         holder.lblReservadoUMBAs = convertView.findViewById(R.id.lblReservadoUMBAs);
@@ -138,6 +138,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
     public void toast(String msg) {
         Toast.makeText(cCont, msg, Toast.LENGTH_SHORT).show();
     }
+
     static class ViewHolder {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,

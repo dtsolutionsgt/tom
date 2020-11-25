@@ -4,11 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.MaskFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,25 +20,30 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteo;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteoList;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
-
 import org.simpleframework.xml.Element;
-
+import java.util.ArrayList;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
-import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
+
+import com.dts.base.DateUtils;
+import com.dts.tom.frm_lista_tareas_principal;
 
 
 public class frm_inv_cic_conteo extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
+    private list_adapt_consulta_ciclico adapter_ciclico;
 
     private EditText txtBuscFiltro;
     private ListView listCiclico;
@@ -47,9 +56,11 @@ public class frm_inv_cic_conteo extends PBase {
     CheckBox checkbox;
     boolean chkPendientes;
     private Integer Idx;
-
+    private Cursor DT;
 
     Existe_producto existeProducto = new Existe_producto();
+    private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
+    private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeProducto prod = new clsBeProducto();
     private clsBeProducto pprod = new clsBeProducto();
     private clsBeProducto nprod = new clsBeProducto();
@@ -65,6 +76,7 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
 
     private Object item;
+
 
 
     @Override
@@ -88,6 +100,9 @@ public class frm_inv_cic_conteo extends PBase {
         IdUbicacionSel=0;
         ProdSel="";
         Idx = 0;
+        chkPendientes = true;
+        checkbox.setChecked(true);
+        checkbox.setText("Pendientes");
 
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -118,6 +133,41 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             });
 
+            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    tareapos = 0;
+
+                    if (isChecked) {
+                        toastcent("verdadero");
+                        chkPendientes = true;
+                        ListaTareas();
+                    } else {
+                        toastcent("falso");
+                        chkPendientes = false;
+                        ListaTareas();
+                    }
+                }
+            });
+
+            listCiclico.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    selid = 0;
+
+                    if (position > 0) {
+                        //data_rec = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                        gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+
+                        startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
+                    }
+
+                }
+
+            });
+
         }catch(Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
@@ -132,27 +182,19 @@ public class frm_inv_cic_conteo extends PBase {
 
                 if(reconteos.items != null){
                     if(reconteos.items.size()>0){
+
                         idreconteo = reconteos.items.size();
-                        checkbox.setChecked(true);
-                        checkbox.setText("Pendientes");
-                        chkPendientes = true;
 
                     }else{
+
                         idreconteo = 0;
                     }
 
-                    //set lbllblConteo ?
                 }
-            }else{
-
-                checkbox.setChecked(false);
-                checkbox.setText("Contados");
-                chkPendientes = false;
-
-                esconteo = false;
-                idreconteo = 0;
             }
 
+            esconteo = false;
+            idreconteo = 0;
 
             ListaTareas();
 
@@ -165,7 +207,9 @@ public class frm_inv_cic_conteo extends PBase {
     private void Existe_Producto() {
 
         try{
+
             existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
+
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
@@ -175,8 +219,80 @@ public class frm_inv_cic_conteo extends PBase {
 
     private void processCiclico_Listar_Conteo() {
 
-    }
+        clsBe_inv_reconteo_data rec;
 
+        try{
+            DT = xobj.filldt();
+            data_list.clear();
+
+            if(!txtBuscFiltro.equals("")){
+
+                if(DT !=null){
+                    if(DT.getCount()>0){
+
+                        rec = new clsBe_inv_reconteo_data();
+                        data_list.add(rec);
+
+                        DT.moveToFirst();
+
+                        while (!DT.isAfterLast()) {
+
+                            data_rec = new clsBe_inv_reconteo_data();
+                            data_rec.NoUbic = Integer.parseInt(DT.getString(4));
+                            data_rec.Codigo = DT.getString(30);
+                            data_rec.Producto_nombre = DT.getString(20);
+                            data_rec.Pres = DT.getString(22);
+                            data_rec.UMBas = DT.getString(23);
+
+                            if(DT.getString(7)!=null){
+                                data_rec.Lote = DT.getString(7);
+                            }else{
+                                data_rec.Lote = "";
+                            }
+
+                            if (DT.getString(9)!=null){
+                                //vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
+                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
+                            }else{
+                                data_rec.Fecha_Vence = "";
+                            }
+
+                            data_rec.Conteo = Integer.parseInt(DT.getString(11));
+                            data_rec.Ubic_nombre = DT.getString(21);
+                            data_rec.Estado = DT.getString(19);
+                            data_rec.Factor = Double.valueOf(DT.getString(35));
+                            data_list.add(data_rec);
+                            DT.moveToNext();
+
+                        }
+
+                        int count =data_list.size()-1;
+                        //cmdList.setText("No.Reg: "+count);
+                        cmdList.setText( count+ "/" + count);
+
+                        if (DT!=null) DT.close();
+
+                        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                        listCiclico.setAdapter(adapter_ciclico);
+
+                    }else{
+                        rec = new clsBe_inv_reconteo_data();
+                        data_list.add(rec);
+
+                        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                        listCiclico.setAdapter(adapter_ciclico);
+                        cmdList.setText( "0/0");
+                    }
+
+
+
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processReConteos:"+e.getMessage());
+        }
+    }
 
     private void ListaTareas() {
 
@@ -207,6 +323,8 @@ public class frm_inv_cic_conteo extends PBase {
                 if(checkbox.isChecked()){
                     //filtrar data de items
                     // item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
+
+
                     item = 0;
 
                 }else{
@@ -255,6 +373,8 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void SubTarea2(){
+
+        execws(3);
 
         if(LoteSel !="" && FechaVencSel !="" && ProdSel != "0" && IdUbicacionSel != 0){
             if(checkbox.isChecked()){
@@ -331,11 +451,15 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void SubTarea3() {
+
         cmdList.setText("0/0");
 
         if(!lic_plate){
 
             execws(3);
+
+            //Toast.makeText(getApplicationContext(),"datatable " + DT.getCount() ,Toast.LENGTH_SHORT);
+
         }
 
     }
@@ -360,6 +484,8 @@ public class frm_inv_cic_conteo extends PBase {
                     case 3:
                         callMethod("Inventario_Ciclico_Listar_Conteo","pIdInventarioEnc",BeInvEnc.Idinventarioenc,
                                 "pIdOperador",gl.IdOperador,"pPendientes",chkPendientes);
+
+                        //chkPendientes
                         break;
                 }
 

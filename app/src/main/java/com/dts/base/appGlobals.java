@@ -6,6 +6,7 @@ import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
@@ -81,6 +82,7 @@ public class appGlobals extends Application {
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
 
+
     //Variables para picking
     public int gIdPickingEnc=0;
 
@@ -91,6 +93,9 @@ public class appGlobals extends Application {
     public clsBeDetallePedidoAVerificar gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
     public clsBeTrans_picking_ubicList gBePickingUbicList = new clsBeTrans_picking_ubicList();
     //gBePedidoEnc = new clsBeTrans_pe_enc;
+
+    //variable para row seleccionado del inventario ciclico
+    public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
