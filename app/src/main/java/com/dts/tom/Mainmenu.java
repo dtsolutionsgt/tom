@@ -16,6 +16,7 @@ import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
+import com.dts.tom.Transacciones.Packing.frm_Packing;
 
 import java.util.ArrayList;
 
@@ -216,7 +217,10 @@ public class Mainmenu extends PBase {
                     break;
 
                 case 4://Packing
+                    gl.tipoTarea = idmenu;
+                    startActivity(new Intent(this, frm_Packing.class));
 
+                    break;
                 case 5://Picking
 
                     gl.tipoTarea = idmenu;
