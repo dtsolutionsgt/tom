@@ -199,6 +199,7 @@ public class frm_list_inventario extends PBase {
 
         try{
 
+            BeListInv.clear();
             vItem = new clsBeTrans_inv_enc();
             BeListInv.add(vItem);
 

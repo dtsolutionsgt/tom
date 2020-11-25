@@ -38,7 +38,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
-            android:text="Ubicar"
+            android:text="Asociar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -121,7 +121,7 @@
         android:text="Producto:" />
 
     <TextView
-        android:id="@+id/textView57"
+        android:id="@+id/lblDesProducto"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
@@ -133,10 +133,10 @@
         android:text="TextView" />
 
     <Spinner
-        android:id="@+id/spinner5"
+        android:id="@+id/cmbPres"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/textView57"
+        android:layout_below="@+id/lblDesProducto"
         android:layout_alignStart="@+id/txtPrd"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
@@ -148,40 +148,41 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/spinner5"
+        android:layout_alignTop="@+id/cmbPres"
         android:layout_alignEnd="@+id/textView56"
-        android:layout_alignBottom="@+id/spinner5"
+        android:layout_alignBottom="@+id/cmbPres"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="0dp"
         android:text="Presentación:" />
 
     <Spinner
-        android:id="@+id/spinner6"
+        android:id="@+id/cmbLote"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/spinner5"
-        android:layout_alignStart="@+id/spinner5"
-        android:layout_alignEnd="@+id/spinner5"
+        android:layout_below="@+id/cmbPres"
+        android:layout_alignStart="@+id/cmbPres"
+        android:layout_alignEnd="@+id/cmbPres"
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/textView59"
         style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner5"
+        android:layout_width="156dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/cmbLote"
         android:layout_alignEnd="@+id/textView58"
-        android:layout_alignBottom="@+id/spinner6"
+        android:layout_alignBottom="@+id/cmbLote"
         android:layout_alignParentStart="true"
         android:text="Lote:" />
 
     <Spinner
-        android:id="@+id/spinner8"
+        android:id="@+id/cmbVence"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/spinner6"
-        android:layout_alignStart="@+id/spinner6"
-        android:layout_alignEnd="@+id/spinner6"
+        android:layout_below="@+id/cmbLote"
+        android:layout_alignStart="@+id/cmbLote"
+        android:layout_alignEnd="@+id/cmbLote"
         android:layout_marginTop="10dp" />
 
     <TextView
@@ -189,19 +190,22 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner6"
+        android:layout_alignTop="@+id/cmbVence"
         android:layout_alignEnd="@+id/textView59"
-        android:layout_alignBottom="@+id/spinner8"
+        android:layout_alignBottom="@+id/cmbVence"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
         android:text="Vence:" />
 
     <Spinner
-        android:id="@+id/spinner9"
+        android:id="@+id/cmbEstado"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/spinner8"
-        android:layout_alignStart="@+id/spinner8"
-        android:layout_alignEnd="@+id/spinner8"
+        android:layout_below="@+id/cmbVence"
+        android:layout_alignStart="@+id/cmbVence"
+        android:layout_alignEnd="@+id/cmbVence"
         android:layout_marginTop="10dp" />
 
     <TextView
@@ -209,19 +213,19 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/spinner9"
+        android:layout_alignTop="@+id/cmbEstado"
         android:layout_alignEnd="@+id/textView60"
-        android:layout_alignBottom="@+id/spinner9"
+        android:layout_alignBottom="@+id/cmbEstado"
         android:layout_alignParentStart="true"
         android:text="Estado:" />
 
     <EditText
-        android:id="@+id/editText11"
+        android:id="@+id/txtCantidad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner9"
-        android:layout_alignStart="@+id/spinner9"
-        android:layout_alignEnd="@+id/spinner9"
+        android:layout_below="@+id/cmbEstado"
+        android:layout_alignStart="@+id/cmbEstado"
+        android:layout_alignEnd="@+id/cmbEstado"
         android:layout_marginTop="10dp"
         android:inputType="number" />
 
@@ -230,19 +234,19 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText11"
+        android:layout_alignTop="@+id/txtCantidad"
         android:layout_alignEnd="@+id/textView61"
-        android:layout_alignBottom="@+id/editText11"
+        android:layout_alignBottom="@+id/txtCantidad"
         android:layout_alignParentStart="true"
         android:text="Cantidad:" />
 
     <EditText
-        android:id="@+id/editText12"
+        android:id="@+id/txtNuevoLp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText11"
-        android:layout_alignStart="@+id/editText11"
-        android:layout_alignEnd="@+id/editText11"
+        android:layout_below="@+id/txtCantidad"
+        android:layout_alignStart="@+id/txtCantidad"
+        android:layout_alignEnd="@+id/txtCantidad"
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="textPersonName" />
@@ -252,19 +256,19 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText12"
+        android:layout_alignTop="@+id/txtNuevoLp"
         android:layout_alignEnd="@+id/textView62"
-        android:layout_alignBottom="@+id/editText12"
+        android:layout_alignBottom="@+id/txtNuevoLp"
         android:layout_alignParentStart="true"
         android:text="Nuevo LP:" />
 
     <EditText
-        android:id="@+id/editText13"
+        android:id="@+id/txtLpAnt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText12"
-        android:layout_alignStart="@+id/editText12"
-        android:layout_alignEnd="@+id/editText12"
+        android:layout_below="@+id/txtNuevoLp"
+        android:layout_alignStart="@+id/txtNuevoLp"
+        android:layout_alignEnd="@+id/txtNuevoLp"
         android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
@@ -273,9 +277,9 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editText13"
+        android:layout_alignTop="@+id/txtLpAnt"
         android:layout_alignEnd="@+id/textView63"
-        android:layout_alignBottom="@+id/editText13"
+        android:layout_alignBottom="@+id/txtLpAnt"
         android:layout_alignParentStart="true"
         android:text="Lp Anterior:" />
 
@@ -283,8 +287,8 @@
         android:id="@+id/textView65"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText13"
-        android:layout_alignStart="@+id/editText13"
+        android:layout_below="@+id/txtLpAnt"
+        android:layout_alignStart="@+id/txtLpAnt"
         android:layout_marginTop="5dp"
         android:text="IdStock: 0" />
 
@@ -292,8 +296,8 @@
         android:id="@+id/textView66"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText13"
-        android:layout_alignEnd="@+id/editText13"
+        android:layout_below="@+id/txtLpAnt"
+        android:layout_alignEnd="@+id/txtLpAnt"
         android:layout_marginStart="50dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/textView65"
