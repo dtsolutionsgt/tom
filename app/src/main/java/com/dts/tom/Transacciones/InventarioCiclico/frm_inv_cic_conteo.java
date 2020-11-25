@@ -139,11 +139,11 @@ public class frm_inv_cic_conteo extends PBase {
                     tareapos = 0;
 
                     if (isChecked) {
-                        toastcent("verdadero");
+                        //toastcent("verdadero");
                         chkPendientes = true;
                         ListaTareas();
                     } else {
-                        toastcent("falso");
+                        //toastcent("falso");
                         chkPendientes = false;
                         ListaTareas();
                     }
@@ -283,13 +283,13 @@ public class frm_inv_cic_conteo extends PBase {
                         listCiclico.setAdapter(adapter_ciclico);
                         cmdList.setText( "0/0");
                     }
-
-
-
                 }
             }
 
+            progress.cancel();
+
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processReConteos:"+e.getMessage());
         }
     }
