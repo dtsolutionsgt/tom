@@ -318,16 +318,78 @@ public class frm_Packing extends PBase {
             }
 
             if (txtNuevoLp.getText().toString().isEmpty()){
-                String vCodigoBodega =  String.format("000",gl.CodigoBodega);
-                String vCodigoProducto = String.format("00000",txtPrd.getText().toString());
-                //Dim vCorrelativo As String = (Now.Year - 2000) & Strings.Right("00" & Now.Month, 2) & Strings.Right("00" & Now.Day, 2) & Strings.Right("00" & Now.Hour, 2) & Strings.Right("00" & Now.Minute, 2)
+                int cyear,cmonth,cday,ch,cm;
+                final Calendar c = Calendar.getInstance();
+                cyear = c.get(Calendar.YEAR);
+                cmonth = c.get(Calendar.MONTH)+1;
+                cday = c.get(Calendar.DAY_OF_MONTH);
+                ch= c.get(Calendar.HOUR_OF_DAY);
+                cm= c.get(Calendar.MINUTE);
 
-                txtNuevoLp.setText(vCodigoBodega + vCodigoProducto + "W"); // & vCorrelativo
+                String vCodigoBodega =  FormatBodega(gl.CodigoBodega);
+                String vCodigoProducto = FormatProducto(txtPrd.getText().toString());
+                String vCorrelativo = (cyear-2000) + String.format("%2d",cmonth) + String.format("%2d",cday) + String.format("%2d",ch) + String.format("%2d",cm);
+
+                txtNuevoLp.setText(vCodigoBodega + vCodigoProducto + "W"+vCorrelativo); // & vCorrelativo
             }
 
         }catch (Exception e){
-            mu.msgbox("setHandles:"+e.getMessage());
+            mu.msgbox("Busca_Producto:"+e.getMessage());
         }
+    }
+
+    private String FormatBodega(String pCodigo){
+
+        String cdBodega="";
+
+        try{
+
+            int Lengthindex = pCodigo.length()-1;
+
+            if (Lengthindex==2){
+                cdBodega = pCodigo;
+            }else if (Lengthindex==1){
+                cdBodega = "0"+pCodigo;
+            }else if (Lengthindex==0){
+                cdBodega = "00"+pCodigo;
+            }else{
+                mu.msgbox("Formato de bodega incorrecto");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("FormatBodega:"+e.getMessage());
+        }
+
+        return  cdBodega;
+    }
+
+    private String FormatProducto(String pCodigo){
+
+        String cdBodega="";
+
+        try{
+
+            int Lengthindex = pCodigo.length()-1;
+
+            if (Lengthindex==4){
+                cdBodega = pCodigo;
+            }else if (Lengthindex==3){
+                cdBodega = "0"+pCodigo;
+            }else if (Lengthindex==2){
+                cdBodega = "00"+pCodigo;
+            }else if (Lengthindex==1){
+                cdBodega = "000"+pCodigo;
+            }else if (Lengthindex==0){
+                cdBodega = "0000"+pCodigo;
+            }else{
+                mu.msgbox("Formato de producto incorrecto");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("FormatProducto:"+e.getMessage());
+        }
+
+        return  cdBodega;
     }
 
     public void ProgressDialog(String mensaje) {
