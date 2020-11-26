@@ -2,8 +2,10 @@ package com.dts.tom.Transacciones.Packing;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -23,10 +25,14 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
+import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
+import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +68,8 @@ public class frm_Packing extends PBase {
     private String cvAtrib;
     private double vFactorPres;
     private String  fechaVenceU;
+    private String Lic_Plate_Ant="";
+    private String NuevoLp="";
 
 
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
@@ -69,6 +77,7 @@ public class frm_Packing extends PBase {
     private clsBeProductoList ListBeStockPallet = new clsBeProductoList();
     private clsBeProducto BeProductoUbicacionOrigen;
     private clsBeVW_stock_res BeStockPallet;
+    private clsBeVW_stock_res cvStockItem;
     private clsBeProducto cvProd = new clsBeProducto();
     private clsBeVW_stock_resList stockResList = new clsBeVW_stock_resList();
 
@@ -77,6 +86,9 @@ public class frm_Packing extends PBase {
     private clsBeVW_stock_resList lotesList = new clsBeVW_stock_resList();
     private clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
     private clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
+    private clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
+
+    private clsBeTrans_movimientos gMovimientoDet;
 
     private ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
     private ArrayList<String> cmbPresentacionList = new ArrayList<String>();
@@ -110,6 +122,7 @@ public class frm_Packing extends PBase {
         cmbVence = (Spinner) findViewById(R.id.cmbVence);
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
+        btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
 
         ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -911,9 +924,19 @@ public class frm_Packing extends PBase {
                 cvStockID = tmpStockResList.items.get(0).getIdStock();
                 vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
                 vFactorPres = (tmpStockResList.items.get(0).getFactor()==0?1:tmpStockResList.items.get(0).getFactor());
+                Lic_Plate_Ant = (tmpStockResList.items.get(0).getLic_plate()==""?"":tmpStockResList.items.get(0).getLic_plate());
             }else{
                 vCantidadAUbicar = 0;
                 cvStockID =0;
+            }
+
+            if (Lic_Plate_Ant!=""){
+                lblLpAnt.setVisibility(View.VISIBLE);
+                txtLpAnt.setText(Lic_Plate_Ant);
+                txtLpAnt.setVisibility(View.VISIBLE);
+            }else{
+                lblLpAnt.setVisibility(View.GONE);
+                txtLpAnt.setVisibility(View.GONE);
             }
 
             if( Escaneo_Pallet && ListBeStockPallet != null) {
@@ -940,8 +963,8 @@ public class frm_Packing extends PBase {
                 txtCantidad.selectAll();
             }
 
+            txtNuevoLp.setEnabled(true);
             txtCantidad.setEnabled(true);
-
             txtCantidad.requestFocus();
 
             fechaVenceU = app.strFechaXMLCombo(cvVence);
@@ -950,6 +973,289 @@ public class frm_Packing extends PBase {
             msgbox("Llena cantidad " + ex.getMessage());
         }finally {
             progress.cancel();
+        }
+
+    }
+
+    private boolean ValidaDatos(){
+
+        boolean datosCorrectos=true;
+
+        try{
+
+            vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString().replace(",",""));
+            vCantidadDisponible = Double.parseDouble(lblCCant.getText().toString().replace(",",""));
+
+            if (vCantidadAUbicar<0) {
+                mu.msgbox("La cantidad no puede ser negativa");
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (vCantidadAUbicar==0) {
+                msgbox("La cantidad debe ser mayor que 0");
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (vCantidadAUbicar> vCantidadDisponible) {
+                msgbox("Cantidad incorrecta") ;
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+
+        }catch (Exception e){
+
+        }
+        return datosCorrectos;
+    }
+
+    private void aplicarCambio() {
+
+        try{
+
+            progress.setMessage("Aplicando el cambio");
+            progress.show();
+
+            if (!ValidaDatos())return;
+
+            NuevoLp = txtNuevoLp.getText().toString();
+
+            if (!Crear_Movimiento_Ubicacion_ND(true)){
+                return;
+            }
+
+            vStockRes.IdProductoBodega = cvProd.IdProductoBodega;
+            vStockRes.IdUbicacion = cvUbicOrigID;
+
+            if( BeProductoUbicacionOrigen.Control_lote){
+                vStockRes.Lote = cmbLote.getSelectedItem().toString();
+            }else{
+                vStockRes.Lote = "";
+            }
+
+            if( BeProductoUbicacionOrigen.Control_vencimiento){
+                vStockRes.Fecha_Vence = app.strFechaXMLCombo(cmbVence.getSelectedItem().toString());
+            }else{
+                vStockRes.Fecha_Vence = "01/01/1900";
+            }
+
+            vStockRes.CantidadUmBas = vCantidadAUbicar;
+            vStockRes.Peso = cvStockItem.Peso;
+            vStockRes.IdPresentacion =cvPresID;
+            vStockRes.IdProductoEstado = cvEstEst;
+            vStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
+            vStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
+            vStockRes.Lic_plate =NuevoLp;
+            vStockRes.Lic_plate_Anterior = Lic_Plate_Ant;
+
+            if( Escaneo_Pallet && ListBeStockPallet != null){
+
+                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
+
+                if( BeStockPallet.Factor > 0){
+                    vStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
+                }
+
+            }else if ( cvPresID != 0){
+                vStockRes.CantidadUmBas = vCantidadAUbicar * vFactorPres;
+            }
+
+            //Set_LP_Stock(gMovimientoDet, vStockRes);
+            execws(8);
+
+        }catch (Exception e){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private boolean Crear_Movimiento_Ubicacion_ND(boolean EsCambioEstado) {
+
+        try{
+
+            progress.setMessage("Creando el movimiento");
+
+            // The preferred idiom for iterating over collections and arrays
+            for (clsBeVW_stock_res st : stockResList.items) {
+
+                if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
+                    if (st.IdStock == cvStockID && st.Lic_plate.equals(BeStockPallet.Lic_plate)) {
+                        cvStockItem = st;
+                        break;}
+                }else{
+                    if(BeProductoUbicacionOrigen.Control_lote && BeProductoUbicacionOrigen.Control_vencimiento ) {
+                        if (st.IdStock == cvStockID && st.Lote.equals(gLoteOrigen) && app.strFecha(st.Fecha_Vence).equals(cvVence) &&
+                                st.IdPresentacion == cvPresID && st.IdProductoEstado == cvEstEst && st.IdUnidadMedida == cvUMBID) {
+                            cvStockItem = st;
+                            break;
+                        }
+                    }else if( !BeProductoUbicacionOrigen.Control_lote && BeProductoUbicacionOrigen.Control_vencimiento ) {
+                        if (st.IdStock == cvStockID && app.strFecha(st.Fecha_Vence).equals(cvVence) &&
+                                st.IdPresentacion == cvPresID && st.IdProductoEstado == cvEstEst) {
+                            cvStockItem = st;
+                            break;
+                        }
+                    }else if(BeProductoUbicacionOrigen.Control_lote &&  !BeProductoUbicacionOrigen.Control_vencimiento ) {
+                        if (st.IdStock == cvStockID && st.Lote.equals(gLoteOrigen) && st.IdPresentacion == cvPresID &&
+                                st.IdProductoEstado == cvEstEst && st.IdUnidadMedida == cvUMBID) {
+                            cvStockItem = st;
+                            break;
+                        }
+                    }else if(st.IdStock == cvStockID && st.IdPresentacion == cvPresID &&
+                            st.IdProductoEstado == cvEstEst && st.IdUnidadMedida == cvUMBID ){
+                        cvStockItem = st;
+                        break;}
+                }
+            }
+
+        }catch(Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            mu.msgbox( ex.getMessage());
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
+            return false;
+        }
+
+        try{
+
+            gMovimientoDet = new clsBeTrans_movimientos();
+
+            gMovimientoDet.IdMovimiento = 0;
+            gMovimientoDet.IdEmpresa = gl.IdEmpresa;
+            gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
+            gMovimientoDet.IdTransaccion = 1;
+            gMovimientoDet.IdPropietarioBodega = cvPropID;
+            gMovimientoDet.IdProductoBodega = cvProd.IdProductoBodega;
+            gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
+            gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
+
+            if(cmbPres.getAdapter()!=null  && cmbPres.getAdapter().getCount()>0){
+                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()));
+            }else{
+                gMovimientoDet.IdPresentacion = 0;
+            }
+            if(cmbEstado.getAdapter()!=null && cmbEstado.getAdapter().getCount()>0){
+                gMovimientoDet.IdEstadoOrigen = Integer.valueOf( cmbEstado.getSelectedItem().toString().split(" - ")[0].toString());
+            }else{
+                gMovimientoDet.IdEstadoOrigen = 0;
+            }
+
+            gMovimientoDet.IdEstadoDestino = cvEstEst;
+
+            if(gl.modo_cambio == 1 ){
+                gMovimientoDet.IdEstadoDestino = gMovimientoDet.IdEstadoOrigen;}
+
+            gMovimientoDet.IdUnidadMedida = cvStockItem.IdUnidadMedida;
+
+            if(EsCambioEstado ) {
+                gMovimientoDet.IdTipoTarea = 3;
+            }else{
+                gMovimientoDet.IdTipoTarea = 2;
+            }
+
+            gMovimientoDet.IdBodegaDestino = gl.IdBodega;
+            gMovimientoDet.IdRecepcion = cvStockItem.IdRecepcionEnc;
+            gMovimientoDet.Cantidad = vCantidadAUbicar;
+            gMovimientoDet.Serie = cvStockItem.Serial;
+            gMovimientoDet.Peso = 0;
+
+            if(cmbLote.getAdapter()!=null  && cmbLote.getAdapter().getCount()>0){
+                gMovimientoDet.Lote = cmbLote.getSelectedItem().toString();
+            }else{
+                gMovimientoDet.Lote = "";
+            }
+
+            clsBeProducto bprod = new clsBeProducto();
+
+            bprod = BeProductoUbicacionOrigen;
+
+            if(bprod.Control_vencimiento ){
+                if(cmbVence.getAdapter()!=null && cmbVence.getAdapter().getCount()>0){
+                    gMovimientoDet.Fecha_vence = app.strFechaXMLCombo(cmbVence.getSelectedItem().toString());
+                }else{
+                    gMovimientoDet.Fecha_vence = app.strFechaXMLCombo("01/01/1900");
+                }
+
+            }
+
+            gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+
+            if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
+                gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
+            }else{
+                gMovimientoDet.Barra_pallet = "";
+            }
+
+            gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
+            gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
+            gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
+            gMovimientoDet.setIsNew(true);
+
+            return true;
+
+        }catch(Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            mu.msgbox( ex.getMessage());
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
+            return false;
+        }
+
+    }
+
+    public void Asociar(View view){
+
+        try{
+
+            progress.setMessage("Aplicando cambio de ubicacion");
+            progress.show();
+
+            btnGuardarDirigida.setVisibility(View.INVISIBLE);
+
+            msgAskAsociar("Asociar producto al número de pallet: "+txtNuevoLp.getText().toString());
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void msgAskAsociar(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.packing1);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    aplicarCambio();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    btnGuardarDirigida.setVisibility(View.VISIBLE);
+                    progress.cancel();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }
@@ -994,6 +1300,11 @@ public class frm_Packing extends PBase {
                                 "pIdUbicacion", txtUbicOr.getText().toString(),
                                 "pIdProductoBodega",BeProductoUbicacionOrigen.IdProductoBodega);
                         break;
+                    case 8:
+                        callMethod("Set_LP_Stock",
+                                "pMovimiento", gMovimientoDet,
+                                "pStockRes",vStockRes);
+                        break;
                 }
 
                 progress.cancel();
@@ -1032,6 +1343,9 @@ public class frm_Packing extends PBase {
                 case 7:
                     processProductoUbic();
                     break;
+                case 8:
+                    processSetStockLp();
+                    break;
 
             }
 
@@ -1047,7 +1361,7 @@ public class frm_Packing extends PBase {
             idUbicRecep = xobj.getresult(Integer.class,"Get_IdUbic_Ciega_Recepcion_By_IdBodega");
 
             if (idUbicRecep>0){
-                txtUbicOr.setText(idUbicRecep);
+                txtUbicOr.setText(idUbicRecep+"");
                 cvUbicOrigID = idUbicRecep;
                 Scan_Ubic_Origen();
             }
@@ -1218,11 +1532,11 @@ public class frm_Packing extends PBase {
                 execws(4);
 
             }else{
-                Inicializa_Valores();
                 lblDesProducto.setTextColor(Color.RED);
                 gIdProductoOrigen = 0;
                 lblDesProducto.setText ("Código no válido");
-                throw new Exception("Producto no existe");
+                mu.msgbox("Producto no existe");
+                Inicializa_Valores();
             }
 
         } catch (Exception e) {
@@ -1254,6 +1568,61 @@ public class frm_Packing extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
+    }
+
+    private void processSetStockLp(){
+
+        try{
+
+            String pResultado= "";
+
+            pResultado =xobj.getresult(String.class,"Set_LP_Stock");
+
+            if (pResultado!=""){
+                mu.msgbox("Cambio Aplicado");
+
+                txtPrd.setText(gl.gCProdAnterior);
+                txtUbicOr.setText(gl.gCUbicAnterior);
+
+                if (cmbEstado.getAdapter()!=null  && cmbEstado.getAdapter().getCount()>0){
+                    gl.gCEstadoAnterior = Integer.valueOf( cmbEstado.getSelectedItem().toString().split(" - ")[0]);
+                    gl.gCNomEstadoAnterior = cmbEstado.getSelectedItem().toString().split(" - ")[1];
+                }else{
+                    gl.gCEstadoAnterior = -1;
+                    gl.gCNomEstadoAnterior = "";
+                }
+
+                if (cmbVence.getAdapter()!=null && cmbVence.getAdapter().getCount()>0){
+                    gl.gCFechaAnterior = cmbVence.getSelectedItem().toString();
+                }else{
+                    gl.gCFechaAnterior="01/01/1900";
+                }
+
+                if (cmbLote.getAdapter()!=null  && cmbLote.getAdapter().getCount()>0){
+                    gl.gCLoteAnterior = cmbLote.getSelectedItem().toString();
+                }else{
+                    gl.gCLoteAnterior = "";
+                }
+
+                if (cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0){
+                    gl.gCPresAnterior = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
+                    gl.gCNomPresAnterior = cmbPres.getSelectedItem().toString().split(" - ")[1];
+                }else{
+                    gl.gCPresAnterior = -1;
+                    gl.gCNomPresAnterior = "";
+                }
+
+                Inicializa_Valores();
+
+                Scan_Ubic_Origen();
+
+
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
     }
 
     private void execws(int callbackvalue) {
