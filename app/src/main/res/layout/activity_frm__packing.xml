@@ -38,6 +38,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="Asociar"
             android:text="Asociar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
