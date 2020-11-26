@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,15 +23,18 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class frm_inv_cic_add extends PBase {
 
+    private ImageView imgDate;
     private EditText cmbVence_cic;
     private EditText etubicacion_cic,etproducto,etlote_cic,txtCantContada,txtPesoContado;
     private Spinner cmbEstado_cic,cmbPresent_cic;
-    private TextView txtlote_cic,lblCantStock,lblUM,txtmsg,txtprentacion_cic;
+    private TextView txtlote_cic,lblCantStock,lblUM,txtmsg,txtprentacion_cic,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
     private int year;
     private int month;
     private int day;
@@ -55,6 +59,10 @@ public class frm_inv_cic_add extends PBase {
         lblUM = findViewById(R.id.lblUM);
         txtmsg = findViewById(R.id.txtmsg);
         txtprentacion_cic = findViewById(R.id.txtprentacion_cic);
+        txtFecha_cic = findViewById(R.id.txtFecha_cic);
+        imgDate = findViewById(R.id.imgDate);
+        txtpeso_cic = findViewById(R.id.txtpeso_cic);
+        lbltitulo_cic = findViewById(R.id.lbltitulo_cic);
 
         setHandlers();
         Load();
@@ -72,22 +80,38 @@ public class frm_inv_cic_add extends PBase {
 
     private void Load() {
 
-        etubicacion_cic.setText(gl.inv_ciclico.NoUbic +"");
-        txtmsg.setTypeface(null, Typeface.BOLD);
-        txtmsg.setText(gl.inv_ciclico.Ubic_nombre +"");
-        txtprentacion_cic.setTypeface(null, Typeface.BOLD);
-        txtprentacion_cic.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-        //spinner Estado
-        //spinner Presentacion
+        if(gl.inv_ciclico !=null){
 
-        txtlote_cic.setVisibility(TextView.INVISIBLE);
-        etlote_cic.setText(gl.inv_ciclico.Lote+"");
-        etlote_cic.setVisibility(TextView.INVISIBLE);
+            List<String> spinnerArray =  new ArrayList<String>();
+            spinnerArray.add(gl.inv_ciclico.Pres);
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
+            etubicacion_cic.setText(gl.inv_ciclico.NoUbic +"");
+            txtmsg.setTypeface(null, Typeface.BOLD);
+            txtmsg.setText(gl.inv_ciclico.Ubic_nombre +"");
+            txtprentacion_cic.setTypeface(null, Typeface.BOLD);
+            txtprentacion_cic.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
+            //spinner Estado
+            //spinner Presentacion
+            cmbPresent_cic.setAdapter(dataAdapter);
+            txtlote_cic.setVisibility(TextView.INVISIBLE);
+            etlote_cic.setText(gl.inv_ciclico.Lote+"");
+            etlote_cic.setVisibility(TextView.INVISIBLE);
 
+            txtFecha_cic.setVisibility(TextView.INVISIBLE);
+            imgDate.setVisibility(TextView.INVISIBLE);
+            cmbVence_cic.setVisibility(TextView.INVISIBLE);
 
-
+            txtpeso_cic.setVisibility(TextView.INVISIBLE);
+            lblCantStock.setVisibility(TextView.INVISIBLE);
+            //lblUM.setVisibility(TextView.INVISIBLE);
+            lblUM.setText(gl.inv_ciclico.Pres);
+            txtPesoContado.setVisibility(TextView.INVISIBLE);
+            lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
+        }
 
     }
 
