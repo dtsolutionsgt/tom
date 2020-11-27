@@ -114,7 +114,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         selitem = new clsBeStockReemplazo();
                         selitem = BeListStock.get(position);
 
-
                         selid = sitem.IdStock;
                         selidx = position;
                         adapter.setSelectedIndex(position);
@@ -131,6 +130,40 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             mu.msgbox("setHandles:"+e.getMessage());
         }
 
+    }
+
+    private void msgAskExit(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    frm_list_prod_reemplazo_picking.super.finish();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void Regresar(View view){
+        msgAskExit("Está seguro de salir del picking");
     }
 
     private void procesar_registro(){
@@ -164,7 +197,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                     progress.show();
                     progress.setMessage("Reservando el stock seleccionado...");
-
+                    //Reservar_Stock_By_IdStock
                     execws(3);
 
                 }else{
@@ -483,34 +516,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     procesStockResAux();
                     break;
                 case 5:
-                    if (!Distinto){
-                        progress.cancel();
-                        doExit();
-                    }else{
-                        BeListStock = (ArrayList<clsBeStockReemplazo>) stream(BeListStock).where(c->c.IdStock==selitem.IdStock).toList();
-                        Lista_Inventario_Disponible();
-                    }
-                    break;
                 case 6:
-                    if (!Distinto){
-                        progress.cancel();
-                        doExit();
-                    }else{
-                        BeListStock = (ArrayList<clsBeStockReemplazo>) stream(BeListStock).where(c->c.IdStock==selitem.IdStock).toList();
-                        Lista_Inventario_Disponible();
-                    }
-                    break;
                 case 7:
-                    if (!Distinto){
-                        progress.cancel();
-                        doExit();
-                    }else{
-                        BeListStock = (ArrayList<clsBeStockReemplazo>) stream(BeListStock).where(c->c.IdStock==selitem.IdStock).toList();
-                        Lista_Inventario_Disponible();
-                    }
-                    break;
                 case 8:
                     if (!Distinto){
+                        processNoEncontrado();
                         progress.cancel();
                         doExit();
                     }else{
@@ -643,6 +653,19 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         }catch (Exception e){
 
+        }
+    }
+
+    private void processNoEncontrado(){
+
+        try{
+
+            String resultado = xobj.getresultSingle(String.class,"resultado");
+
+            msgbox(resultado);
+
+        }catch (Exception e){
+            mu.msgbox("processUbicacion:"+e.getMessage());
         }
     }
 
