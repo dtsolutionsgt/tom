@@ -70,11 +70,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView81"
+                    android:id="@+id/txtmsg"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
+                    android:textSize="14sp"
                     android:text="msg" />
 
             </TableRow>
@@ -105,11 +106,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView83"
+                    android:id="@+id/txtprentacion_cic"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
+                    android:textSize="14sp"
                     android:text="Presentación:" />
             </TableRow>
 
@@ -310,7 +312,8 @@
             android:layout_alignParentStart="true"
             android:textSize="14sp"
             android:text="Anterior"
-            android:layout_marginStart="120dp">
+            android:layout_marginStart="120dp"
+            android:onClick="backward">
         </Button>
 
         <Button
@@ -320,6 +323,7 @@
             android:textSize="14sp"
             android:text="Siguiente"
             android:layout_marginStart="270dp"
+            android:onClick="forward"
             >
         </Button>
 
