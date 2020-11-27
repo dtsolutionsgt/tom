@@ -55,7 +55,8 @@ public class frm_Packing extends PBase {
     private Dialog dialog;
 
     private int idUbicRecep = 0;
-    private int cvUbicOrigID=0;
+    private int cvUbicOrigID=
+            0;
     private int gIdProductoOrigen=0,cvPresID=0,gIdEstadoProductoOrigen=0,cvUbicDestID=0,cvEstEst=0;
     private int cvStockID;
     private int cvPropID=0,cvUMBID=0;
@@ -296,6 +297,19 @@ public class frm_Packing extends PBase {
                 }
             });
 
+            txtNuevoLp.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        if (!txtPrd.getText().equals("")){
+                            AplicaPacking();
+                        }
+                    }
+
+                    return false;
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
@@ -423,6 +437,50 @@ public class frm_Packing extends PBase {
             cmbEstado.setSelection(0);
             cmbVence.setSelection(0);
             cmbLote.setSelection(0);
+            gIdProductoOrigen = 0;
+            cvPresID = 0;
+            gLoteOrigen = "";
+            gIdEstadoProductoOrigen = 0;
+            cvUbicDestID = 0;
+            cvCant = 0;
+            cvCantMax = 0;
+            cvEstEst = 0;
+
+            if (BorrarUbicOrigen){
+                lblUbicOrigen.setText("");
+            }
+
+            lblCCant.setText("");
+
+            txtNuevoLp.setText("");
+            txtNuevoLp.setEnabled(false);
+
+            txtLpAnt.setText("");
+            txtLpAnt.setVisibility(View.INVISIBLE);
+
+            lblLpAnt.setVisibility(View.INVISIBLE);
+
+            lblIdStock.setText("");
+
+            txtCantidad.setText("");
+            txtCantidad.setEnabled(false);
+            txtPrd.setText("");
+            txtPrd.setEnabled(false);
+
+        }catch (Exception e){
+
+        }
+    }
+
+    private void Limpiar_Valores(){
+
+        try{
+
+            idle=false;
+            cmbPres.setAdapter(null);
+            cmbEstado.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbLote.setAdapter(null);
             gIdProductoOrigen = 0;
             cvPresID = 0;
             gLoteOrigen = "";
@@ -1214,6 +1272,19 @@ public class frm_Packing extends PBase {
 
         try{
 
+            AplicaPacking();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void AplicaPacking(){
+        try{
+
             progress.setMessage("Aplicando cambio de ubicacion");
             progress.show();
 
@@ -1536,7 +1607,11 @@ public class frm_Packing extends PBase {
                 gIdProductoOrigen = 0;
                 lblDesProducto.setText ("Código no válido");
                 mu.msgbox("Producto no existe");
-                Inicializa_Valores();
+                Limpiar_Valores();
+                progress.cancel();
+                txtPrd.setEnabled(true);
+                txtPrd.requestFocus();
+                txtPrd.selectAll();
             }
 
         } catch (Exception e) {
@@ -1612,7 +1687,7 @@ public class frm_Packing extends PBase {
                     gl.gCNomPresAnterior = "";
                 }
 
-                Inicializa_Valores();
+                Limpiar_Valores();
 
                 Scan_Ubic_Origen();
 
