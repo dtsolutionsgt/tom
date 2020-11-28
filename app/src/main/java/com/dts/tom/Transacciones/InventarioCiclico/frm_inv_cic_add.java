@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,10 +36,11 @@ public class frm_inv_cic_add extends PBase {
     private EditText etubicacion_cic,etproducto,etlote_cic,txtCantContada,txtPesoContado;
     private Spinner cmbEstado_cic,cmbPresent_cic;
     private TextView txtlote_cic,lblCantStock,lblUM,txtmsg,txtprentacion_cic,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
+    private int idPresentacion;
     private int year;
     private int month;
     private int day;
-    static final int DATE_DIALOG_ID = 999;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class frm_inv_cic_add extends PBase {
         imgDate = findViewById(R.id.imgDate);
         txtpeso_cic = findViewById(R.id.txtpeso_cic);
         lbltitulo_cic = findViewById(R.id.lbltitulo_cic);
+
+        idPresentacion =0;
 
         setHandlers();
         Load();
@@ -94,22 +98,59 @@ public class frm_inv_cic_add extends PBase {
             txtmsg.setText(gl.inv_ciclico.Ubic_nombre +"");
             txtprentacion_cic.setTypeface(null, Typeface.BOLD);
             txtprentacion_cic.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-            //spinner Estado
-            //spinner Presentacion
-            cmbPresent_cic.setAdapter(dataAdapter);
-            txtlote_cic.setVisibility(TextView.INVISIBLE);
             etlote_cic.setText(gl.inv_ciclico.Lote+"");
-            etlote_cic.setVisibility(TextView.INVISIBLE);
+            cmbVence_cic.setText(gl.inv_ciclico.Fecha_Vence);
+            //spinner Estado
 
-            txtFecha_cic.setVisibility(TextView.INVISIBLE);
-            imgDate.setVisibility(TextView.INVISIBLE);
-            cmbVence_cic.setVisibility(TextView.INVISIBLE);
 
-            txtpeso_cic.setVisibility(TextView.INVISIBLE);
-            lblCantStock.setVisibility(TextView.INVISIBLE);
-            //lblUM.setVisibility(TextView.INVISIBLE);
-            lblUM.setText(gl.inv_ciclico.Pres);
-            txtPesoContado.setVisibility(TextView.INVISIBLE);
+
+            cmbPresent_cic.setAdapter(dataAdapter);
+
+
+            if(gl.inv_ciclico.IdPresentacion == 0){
+
+                lblUM.setText(gl.inv_ciclico.Pres);
+            }else{
+
+                Double vFactor = new Double("1.000000");
+                vFactor *= gl.inv_ciclico.Factor;
+
+                lblUM.setText(gl.inv_ciclico.Pres + "->" + vFactor);
+            }
+
+
+            if( gl.pprod.Control_lote){
+                txtlote_cic.setVisibility(TextView.VISIBLE);
+                etlote_cic.setVisibility(TextView.VISIBLE);
+            }else{
+                txtlote_cic.setVisibility(TextView.INVISIBLE);
+                etlote_cic.setVisibility(TextView.INVISIBLE);
+            }
+
+
+            if(gl.pprod.Control_vencimiento){
+                txtFecha_cic.setVisibility(TextView.VISIBLE);
+                imgDate.setVisibility(TextView.VISIBLE);
+                cmbVence_cic.setVisibility(TextView.VISIBLE);
+            }else{
+                txtFecha_cic.setVisibility(TextView.INVISIBLE);
+                imgDate.setVisibility(TextView.INVISIBLE);
+                cmbVence_cic.setVisibility(TextView.INVISIBLE);
+            }
+
+
+            if(gl.inv_ciclico.control_peso){
+
+                txtpeso_cic.setVisibility(TextView.VISIBLE);
+                lblCantStock.setVisibility(TextView.VISIBLE);
+                txtPesoContado.setVisibility(TextView.VISIBLE);
+
+            }else{
+                txtpeso_cic.setVisibility(TextView.INVISIBLE);
+                lblCantStock.setVisibility(TextView.INVISIBLE);
+                txtPesoContado.setVisibility(TextView.INVISIBLE);
+            }
+
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
         }
 
