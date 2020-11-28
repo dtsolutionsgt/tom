@@ -31,6 +31,7 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_add;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 
 import java.io.Serializable;
@@ -65,7 +66,7 @@ public class frm_consulta_stock extends PBase {
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
-    clsBeVW_stock_res_CI  ItemSelected;
+    //clsBeVW_stock_res_CI  ItemSelected;
 
     private Spinner cmbEstadoExist;
 
@@ -227,8 +228,9 @@ public class frm_consulta_stock extends PBase {
 
                     if (position > 0) {
 
-                        ItemSelected = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
-                        //procesar_registro();
+                        gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+
+                        startActivity(new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class));
 
                     }
 
@@ -240,14 +242,6 @@ public class frm_consulta_stock extends PBase {
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-    }
-
-    private void procesar_registro() {
-
-        Intent intent = new Intent(this,frm_detalle_consulta_stock_CI.class);
-        intent.putExtra("ItemSelected", (Parcelable) ItemSelected); //where user is an instance of User object
-        startActivity(intent);
-
     }
 
     public void Listar_Existencias(){

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".Transacciones.ConsultaStock.frm_consulta_stock_detalleCI"
+    >
 
     <ScrollView
         android:id="@+id/scrol"
@@ -30,7 +33,7 @@
                     tools:layout_editor_absoluteY="31dp" />
 
                 <TextView
-                    android:id="@+id/lblcodigo"
+                    android:id="@+id/lblcodigoCI"
                     android:layout_width="259dp"
                     android:layout_height="match_parent"
                     android:text="123"
@@ -45,7 +48,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/lbldescripcion"
+                    android:id="@+id/lbldescripcionCI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Descripción" />
@@ -65,7 +68,7 @@
                     tools:layout_editor_absoluteY="88dp" />
 
                 <TextView
-                    android:id="@+id/lblexUnidad"
+                    android:id="@+id/lblexUnidadCI"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="0"
@@ -87,7 +90,7 @@
                     tools:layout_editor_absoluteY="130dp" />
 
                 <TextView
-                    android:id="@+id/lblexPres"
+                    android:id="@+id/lblexPresCI"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="0"
@@ -109,7 +112,7 @@
                     tools:layout_editor_absoluteY="195dp" />
 
                 <TextView
-                    android:id="@+id/lblestado"
+                    android:id="@+id/lblestadoCI"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Bueno"
@@ -131,7 +134,7 @@
                     tools:layout_editor_absoluteY="264dp" />
 
                 <TextView
-                    android:id="@+id/lblpedido"
+                    android:id="@+id/lblpedidoCI"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="0"
@@ -154,8 +157,8 @@
                     tools:layout_editor_absoluteY="336dp" />
 
                 <TextView
-                    android:id="@+id/lblpicking"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/lblpickingCI"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="0" />
             </TableRow>
@@ -172,7 +175,7 @@
                     android:text="Vence" />
 
                 <TextView
-                    android:id="@+id/lblvence"
+                    android:id="@+id/lblvenceCI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="11/11/2020" />
@@ -190,8 +193,8 @@
                     android:text="Lote" />
 
                 <TextView
-                    android:id="@+id/lbllote"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/lblloteCI"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="0" />
             </TableRow>
@@ -208,8 +211,8 @@
                     android:text="idUbic" />
 
                 <TextView
-                    android:id="@+id/lblubic"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/lblubicCI"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="0" />
             </TableRow>
@@ -226,8 +229,8 @@
                     android:text="Ubic" />
 
                 <TextView
-                    android:id="@+id/lblnomUbic"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/lblnomUbicCI"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="0" />
             </TableRow>

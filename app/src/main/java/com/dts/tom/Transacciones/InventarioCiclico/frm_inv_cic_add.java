@@ -105,6 +105,7 @@ public class frm_inv_cic_add extends PBase {
             //spinner Estado
 
 
+            cmbEstado_cic.setSelection(1);
 
             cmbPresent_cic.setAdapter(dataAdapter);
 

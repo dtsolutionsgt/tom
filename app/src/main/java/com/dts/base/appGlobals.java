@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
@@ -18,6 +20,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 
 import java.util.Date;
 import java.util.List;
@@ -98,8 +101,12 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
-    //public clsBe_inv_ciclico_bool bandera_ciclico = new clsBe_inv_ciclico_bool();
     public clsBeProducto pprod = new clsBeProducto();
+    public clsBeProducto_estadoList producto_estado = new clsBeProducto_estadoList();
+
+    //variable para Existencias //
+    public clsBeVW_stock_res_CI existencia = new clsBeVW_stock_res_CI();
+
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
