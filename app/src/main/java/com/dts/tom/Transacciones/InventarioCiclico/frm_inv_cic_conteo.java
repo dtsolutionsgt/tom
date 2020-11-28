@@ -62,11 +62,8 @@ public class frm_inv_cic_conteo extends PBase {
     Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
-    private clsBe_inv_reconteo_dataList data_list2 = new clsBe_inv_reconteo_dataList();
-
 
     private clsBeProducto prod = new clsBeProducto();
-    //private clsBeProducto pprod = new clsBeProducto();
     private clsBeProducto nprod = new clsBeProducto();
     private clsBeProducto npprod = new clsBeProducto();
     private clsBeProducto pBeProductoNuevo = new clsBeProducto();
@@ -111,6 +108,11 @@ public class frm_inv_cic_conteo extends PBase {
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
+
+        gl.pprod.IdProducto = 0;
+        gl.pprod.Control_lote= false;
+        gl.pprod.Control_vencimiento = false;
+
         ProgressDialog("Cargando conteo ciclico.");
 
         setHandles();
@@ -138,25 +140,12 @@ public class frm_inv_cic_conteo extends PBase {
                                 }else{
 
                                     if(chkPendientes){
-                                        //item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
 
-                                        Integer registros = 0;
-
-                                        String evaluar = txtBuscFiltro.getText().toString().trim();
-
-                                        for (int i = 0; i < data_list.size(); i++) {
-
-                                            String ubicacion = String.valueOf(data_list.get(i).NoUbic);
-
-                                            if (ubicacion.equals(evaluar))
-
-                                                registros = registros+1;
-
-                                        }
-
-                                        msgbox("coincidencias" + registros);
+                                        BuscarFiltro();
 
                                     }else {
+
+                                        BuscarFiltro2();
 
                                     }
 
@@ -196,10 +185,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                         execws(4);
 
-                        Integer valor1 = gl.bandera_ciclico.idproducto;
-                        Boolean valor2 = gl.bandera_ciclico.Control_lote;
-                        Boolean valor3 = gl.bandera_ciclico.Control_vencimiento;
-
                         startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
                     }
@@ -210,6 +195,52 @@ public class frm_inv_cic_conteo extends PBase {
         }catch(Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
+    }
+
+    private void BuscarFiltro2() {
+
+
+
+
+    }
+
+    private void BuscarFiltro() {
+
+        Integer registros = 0;
+        String evaluar = txtBuscFiltro.getText().toString().trim();
+
+        for (int i = 0; i < data_list.size(); i++) {
+
+            String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+
+            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0))
+                registros = registros+1;
+        }
+
+        if(registros>1){
+
+            msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
+        }
+        else if(registros == 0){
+
+            for (int i = 0; i < data_list.size(); i++) {
+
+                String codigo_producto = data_list.get(i).Codigo;
+
+                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad.equals(0.0))
+
+                    registros = registros+1;
+            }
+            if(registros >= 1){
+
+                msgbox("cargar 1er registro de la lista.");
+            }
+            else if(registros ==0){
+                msgbox("código de ubicación no existe en UBICACIONES asignadas de inventario.");
+            }
+
+        }
+
     }
 
     private void processReConteos() {
@@ -279,11 +310,11 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.NoUbic = Integer.parseInt(DT.getString(4));
                             data_rec.IdProductoBodega = Integer.parseInt(DT.getString(1));
                             data_rec.IdPresentacion = Integer.parseInt(DT.getString(3));
-
                             data_rec.Codigo = DT.getString(30);
                             data_rec.Producto_nombre = DT.getString(20);
                             data_rec.Pres = DT.getString(22);
                             data_rec.UMBas = DT.getString(23);
+                            data_rec.cantidad = Double.valueOf(DT.getString(11));
 
                             if(DT.getString(7)!=null){
                                 data_rec.Lote = DT.getString(7);
@@ -299,11 +330,11 @@ public class frm_inv_cic_conteo extends PBase {
                             }
 
                             data_rec.control_peso = Boolean.valueOf(DT.getString(24));
-
                             data_rec.Conteo = Integer.parseInt(DT.getString(11));
                             data_rec.Ubic_nombre = DT.getString(21);
                             data_rec.Estado = DT.getString(19);
                             data_rec.Factor = Double.valueOf(DT.getString(35));
+
                             data_list.add(data_rec);
                             DT.moveToNext();
 
@@ -523,11 +554,6 @@ public class frm_inv_cic_conteo extends PBase {
             gl.pprod.Control_lote= xobj.getresultSingle(Boolean.class,"Control_lote");
             gl.pprod.Control_vencimiento = xobj.getresultSingle(Boolean.class,"Control_vencimiento");
 
-          /*  gl.bandera_ciclico.idproducto =Integer.valueOf( xobj.getresultSingle(String.class,"IdProducto"));
-            gl.bandera_ciclico.Control_lote =xobj.getresultSingle(Boolean.class,"Control_lote");
-            gl.bandera_ciclico.Control_vencimiento = xobj.getresultSingle(Boolean.class,"Control_vencimiento");*/
-
-
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
@@ -565,7 +591,7 @@ public class frm_inv_cic_conteo extends PBase {
                 progress.cancel();
 
             } catch (Exception e) {
-                //progress.cancel();
+                progress.cancel();
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
         }
@@ -595,8 +621,6 @@ public class frm_inv_cic_conteo extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
-
-
 
 
     private void execws(int callbackvalue) {

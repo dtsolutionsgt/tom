@@ -98,7 +98,7 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
-    public clsBe_inv_ciclico_bool bandera_ciclico = new clsBe_inv_ciclico_bool();
+    //public clsBe_inv_ciclico_bool bandera_ciclico = new clsBe_inv_ciclico_bool();
     public clsBeProducto pprod = new clsBeProducto();
 
     //Variables globales generales.
