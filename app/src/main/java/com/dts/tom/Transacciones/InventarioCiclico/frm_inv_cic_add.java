@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -112,10 +114,10 @@ public class frm_inv_cic_add extends PBase {
                 lblUM.setText(gl.inv_ciclico.Pres);
             }else{
 
-                Double vFactor = new Double("1.000000");
-                vFactor *= gl.inv_ciclico.Factor;
 
-                lblUM.setText(gl.inv_ciclico.Pres + "->" + vFactor);
+                String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
+
+                lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
             }
 
 
@@ -187,6 +189,9 @@ public class frm_inv_cic_add extends PBase {
     public void onBackPressed() {
 
         try{
+
+            gl.inv_ciclico = new clsBe_inv_reconteo_data();
+            gl.pprod = new clsBeProducto();
 
             frm_inv_cic_add.super.finish();
 

@@ -11,6 +11,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public String UMBas="";
     @Element(required=false) public String Pres ="";
     @Element(required=false) public Double Cant_Conteo=0.0;
+    @Element(required=false) public Double cantidad=0.0;
     @Element(required=false) public Double Peso_Conteo=0.0;
     @Element(required=false) public Double Cant_Stock=0.0;
     @Element(required=false) public Double Peso_Stock=0.0;
@@ -23,6 +24,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public int IdProductoBodega=0;
     @Element(required=false) public String Tramo="";
     @Element(required=false) public int IndiceX=0;
+    @Element(required=false) public String codigo_producto="";
     @Element(required=false) public int Nivel=0;
     @Element(required=false) public String Pos="";
     @Element(required=false) public Double Factor=0.0;
@@ -31,9 +33,9 @@ public class clsBe_inv_reconteo_data {
     public clsBe_inv_reconteo_data(){}
 
     public clsBe_inv_reconteo_data(int NoUbic,String Codigo,String Producto_nombre,int IdPresentacion,String UMBas,
-                                   String Pres,Double Cant_Conteo,Double Peso_Conteo,Double Cant_Stock,
+                                   String Pres,Double Cant_Conteo,Double cantidad,Double Peso_Conteo,Double Cant_Stock,
                                    Double Peso_Stock,String Lote,String Fecha_Vence, boolean control_peso,int Conteo,
-                                   String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,
+                                   String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,String codigo_producto,
                                    int Nivel,String Pos,Double Factor){
 
         this.NoUbic = NoUbic;
@@ -43,6 +45,7 @@ public class clsBe_inv_reconteo_data {
         this.UMBas = UMBas;
         this.Pres = Pres;
         this.Cant_Conteo = Cant_Conteo;
+        this.cantidad = cantidad;
         this.Peso_Conteo = Peso_Conteo;
         this.Cant_Stock = Cant_Stock;
         this.Peso_Stock = Peso_Stock;
@@ -55,6 +58,7 @@ public class clsBe_inv_reconteo_data {
         this.IdProductoBodega = IdProductoBodega;
         this.Tramo = Tramo;
         this.IndiceX = IndiceX;
+        this.codigo_producto = codigo_producto;
         this.Nivel = Nivel;
         this.Pos = Pos;
         this.Factor = Factor;
@@ -110,6 +114,14 @@ public class clsBe_inv_reconteo_data {
     }
     public void setCant_Conteo(Double value) {
         Cant_Conteo=value;
+    }
+
+
+    public Double getcantidad() {
+        return cantidad;
+    }
+    public void setcantidad(Double value) {
+        cantidad=value;
     }
 
     public Double getPeso_Conteo() {
@@ -200,6 +212,13 @@ public class clsBe_inv_reconteo_data {
     }
     public void setIndiceX(Integer value) {
         IndiceX=value;
+    }
+
+    public String getcodigo_producto() {
+        return codigo_producto;
+    }
+    public void setcodigo_producto(String value) {
+        codigo_producto=value;
     }
 
     public Integer getNivel() {
