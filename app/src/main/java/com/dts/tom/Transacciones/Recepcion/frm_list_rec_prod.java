@@ -889,8 +889,8 @@ public class frm_list_rec_prod extends PBase {
     private void Finalizar_Recepcion(){
 
         try{
+            gl.gBeRecepcion.Firma_piloto = Byte.parseByte(FirmaPiloto.toString());
             execws(12);
-            //gl.gBeRecepcion.Firma_piloto = Byte.parseByte(FirmaPiloto.toString());
 
         }catch (Exception e){
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());

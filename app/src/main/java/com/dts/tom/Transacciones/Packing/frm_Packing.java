@@ -433,10 +433,10 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setSelection(0);
-            cmbEstado.setSelection(0);
-            cmbVence.setSelection(0);
-            cmbLote.setSelection(0);
+            cmbPres.setAdapter(null);
+            cmbEstado.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbLote.setAdapter(null);
             gIdProductoOrigen = 0;
             cvPresID = 0;
             gLoteOrigen = "";
@@ -528,7 +528,8 @@ public class frm_Packing extends PBase {
             txtPrd.requestFocus();
             lblDesProducto.setText("");
 
-            if (txtUbicOr.getText().equals("")){
+            if (txtUbicOr.getText().toString().equals("")){
+                txtUbicOr.requestFocus();
                 return;
             }
 
@@ -1633,7 +1634,7 @@ public class frm_Packing extends PBase {
             if (stockResList != null){
                 LlenaPresentaciones();
             }else{
-                msgbox("El producto en la ubicación origen");
+                msgbox("El producto no existe en la ubicación origen");
                 txtPrd.requestFocus();
                 txtPrd.selectAll();
             }
@@ -1688,6 +1689,8 @@ public class frm_Packing extends PBase {
                 }
 
                 Limpiar_Valores();
+
+                lblDesProducto.setText("");
 
                 Scan_Ubic_Origen();
 

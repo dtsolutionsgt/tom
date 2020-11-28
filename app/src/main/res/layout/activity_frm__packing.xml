@@ -6,10 +6,228 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Packing.frm_Packing">
 
-    <Spinner
-        android:id="@+id/spinner7"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView54"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Origen:" />
+
+                <EditText
+                    android:id="@+id/txtUbicOr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblUbicOrigen"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView56"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Producto:" />
+
+                <EditText
+                    android:id="@+id/txtPrd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblDesProducto"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="0dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView58"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="0dp"
+                    android:text="Presentación:" />
+
+                <Spinner
+                    android:id="@+id/cmbPres"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView59"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Lote:" />
+
+                <Spinner
+                    android:id="@+id/cmbLote"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView60"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Vence:" />
+
+                <Spinner
+                    android:id="@+id/cmbVence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView61"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Estado:" />
+
+                <Spinner
+                    android:id="@+id/cmbEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView62"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Cantidad:" />
+
+                <EditText
+                    android:id="@+id/txtCantidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView63"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Nuevo LP:" />
+
+                <EditText
+                    android:id="@+id/txtNuevoLp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView64"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Lp Anterior:" />
+
+                <EditText
+                    android:id="@+id/txtLpAnt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView65"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="IdStock: 0" />
+
+                <TextView
+                    android:id="@+id/textView66"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="0"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+        </LinearLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -43,6 +261,7 @@
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,243 +285,5 @@
             android:textStyle="bold" />
 
     </RelativeLayout>
-
-    <EditText
-        android:id="@+id/txtUbicOr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="172dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView54"
-        style="@style/StyleText"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtUbicOr"
-        android:layout_alignBottom="@+id/txtUbicOr"
-        android:text="Origen:" />
-
-    <TextView
-        android:id="@+id/lblUbicOrigen"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_below="@+id/txtUbicOr"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
-
-    <EditText
-        android:id="@+id/txtPrd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lblUbicOrigen"
-        android:layout_alignStart="@+id/txtUbicOr"
-        android:layout_alignEnd="@+id/txtUbicOr"
-        android:layout_marginTop="10dp"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView56"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtPrd"
-        android:layout_alignEnd="@+id/textView54"
-        android:layout_alignBottom="@+id/txtPrd"
-        android:layout_alignParentStart="true"
-        android:text="Producto:" />
-
-    <TextView
-        android:id="@+id/lblDesProducto"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_below="@+id/txtPrd"
-        android:layout_alignEnd="@+id/txtPrd"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp"
-        android:text="TextView" />
-
-    <Spinner
-        android:id="@+id/cmbPres"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/lblDesProducto"
-        android:layout_alignStart="@+id/txtPrd"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp" />
-
-    <TextView
-        android:id="@+id/textView58"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cmbPres"
-        android:layout_alignEnd="@+id/textView56"
-        android:layout_alignBottom="@+id/cmbPres"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="0dp"
-        android:text="Presentación:" />
-
-    <Spinner
-        android:id="@+id/cmbLote"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/cmbPres"
-        android:layout_alignStart="@+id/cmbPres"
-        android:layout_alignEnd="@+id/cmbPres"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:id="@+id/textView59"
-        style="@style/StyleText"
-        android:layout_width="156dp"
-        android:layout_height="60dp"
-        android:layout_alignTop="@+id/cmbLote"
-        android:layout_alignEnd="@+id/textView58"
-        android:layout_alignBottom="@+id/cmbLote"
-        android:layout_alignParentStart="true"
-        android:text="Lote:" />
-
-    <Spinner
-        android:id="@+id/cmbVence"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/cmbLote"
-        android:layout_alignStart="@+id/cmbLote"
-        android:layout_alignEnd="@+id/cmbLote"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:id="@+id/textView60"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cmbVence"
-        android:layout_alignEnd="@+id/textView59"
-        android:layout_alignBottom="@+id/cmbVence"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:text="Vence:" />
-
-    <Spinner
-        android:id="@+id/cmbEstado"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/cmbVence"
-        android:layout_alignStart="@+id/cmbVence"
-        android:layout_alignEnd="@+id/cmbVence"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:id="@+id/textView61"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/cmbEstado"
-        android:layout_alignEnd="@+id/textView60"
-        android:layout_alignBottom="@+id/cmbEstado"
-        android:layout_alignParentStart="true"
-        android:text="Estado:" />
-
-    <EditText
-        android:id="@+id/txtCantidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cmbEstado"
-        android:layout_alignStart="@+id/cmbEstado"
-        android:layout_alignEnd="@+id/cmbEstado"
-        android:layout_marginTop="10dp"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/textView62"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtCantidad"
-        android:layout_alignEnd="@+id/textView61"
-        android:layout_alignBottom="@+id/txtCantidad"
-        android:layout_alignParentStart="true"
-        android:text="Cantidad:" />
-
-    <EditText
-        android:id="@+id/txtNuevoLp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCantidad"
-        android:layout_alignStart="@+id/txtCantidad"
-        android:layout_alignEnd="@+id/txtCantidad"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView63"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtNuevoLp"
-        android:layout_alignEnd="@+id/textView62"
-        android:layout_alignBottom="@+id/txtNuevoLp"
-        android:layout_alignParentStart="true"
-        android:text="Nuevo LP:" />
-
-    <EditText
-        android:id="@+id/txtLpAnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtNuevoLp"
-        android:layout_alignStart="@+id/txtNuevoLp"
-        android:layout_alignEnd="@+id/txtNuevoLp"
-        android:layout_marginTop="10dp"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView64"
-        style="@style/StyleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtLpAnt"
-        android:layout_alignEnd="@+id/textView63"
-        android:layout_alignBottom="@+id/txtLpAnt"
-        android:layout_alignParentStart="true"
-        android:text="Lp Anterior:" />
-
-    <TextView
-        android:id="@+id/textView65"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtLpAnt"
-        android:layout_alignStart="@+id/txtLpAnt"
-        android:layout_marginTop="5dp"
-        android:text="IdStock: 0" />
-
-    <TextView
-        android:id="@+id/textView66"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtLpAnt"
-        android:layout_alignEnd="@+id/txtLpAnt"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/textView65"
-        android:paddingLeft="100dp"
-        android:text="0" />
 
 </RelativeLayout>
