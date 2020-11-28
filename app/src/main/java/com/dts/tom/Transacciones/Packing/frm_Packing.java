@@ -428,10 +428,10 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setSelection(0);
-            cmbEstado.setSelection(0);
-            cmbVence.setSelection(0);
-            cmbLote.setSelection(0);
+            cmbPres.setAdapter(null);
+            cmbEstado.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbLote.setAdapter(null);
             gIdProductoOrigen = 0;
             cvPresID = 0;
             gLoteOrigen = "";
@@ -523,7 +523,8 @@ public class frm_Packing extends PBase {
             txtPrd.requestFocus();
             lblDesProducto.setText("");
 
-            if (txtUbicOr.getText().equals("")){
+            if (txtUbicOr.getText().toString().equals("")){
+                txtUbicOr.requestFocus();
                 return;
             }
 
@@ -1326,6 +1327,63 @@ public class frm_Packing extends PBase {
 
     }
 
+    public void SalirForm(View view){
+        msgAskExit("Está seguro de salir");
+    }
+
+    private void msgAskExit(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    doExit();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void doExit(){
+        try{
+
+            //LimpiaValores();
+            super.finish();
+
+            gl.gCEstadoAnterior = -1;
+            gl.gCNomEstadoAnterior = "";
+
+            gl.gCFechaAnterior="01/01/1900";
+
+            gl.gCLoteAnterior = "";
+
+            gl.gCPresAnterior = -1;
+            gl.gCNomPresAnterior = "";
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -1628,7 +1686,8 @@ public class frm_Packing extends PBase {
             if (stockResList != null){
                 LlenaPresentaciones();
             }else{
-                msgbox("El producto en la ubicación origen");
+                msgbox("El producto no existe en la ubicación origen");
+                progress.cancel();
                 txtPrd.requestFocus();
                 txtPrd.selectAll();
             }
@@ -1682,6 +1741,7 @@ public class frm_Packing extends PBase {
                     gl.gCNomPresAnterior = "";
                 }
 
+                //CM_20201128: correcciones al iniciar valores después de asociar lp nuevo.
                 Limpiar_Valores();
 
                 lblDesProducto.setText("");
