@@ -16,6 +16,5 @@ public class frmFirma extends PBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_firma);
         txtFirma = new DrawingView(this, null);
-
     }
 }
