@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.Packing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,7 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,14 +22,11 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
-import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
-import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +49,8 @@ public class frm_Packing extends PBase {
     private Dialog dialog;
 
     private int idUbicRecep = 0;
-    private int cvUbicOrigID=0;
+    private int cvUbicOrigID=
+            0;
     private int gIdProductoOrigen=0,cvPresID=0,gIdEstadoProductoOrigen=0,cvUbicDestID=0,cvEstEst=0;
     private int cvStockID;
     private int cvPropID=0,cvUMBID=0;
@@ -296,6 +291,19 @@ public class frm_Packing extends PBase {
                 }
             });
 
+            txtNuevoLp.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        if (!txtPrd.getText().equals("")){
+                            AplicaPacking();
+                        }
+                    }
+
+                    return false;
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
@@ -423,6 +431,50 @@ public class frm_Packing extends PBase {
             cmbEstado.setSelection(0);
             cmbVence.setSelection(0);
             cmbLote.setSelection(0);
+            gIdProductoOrigen = 0;
+            cvPresID = 0;
+            gLoteOrigen = "";
+            gIdEstadoProductoOrigen = 0;
+            cvUbicDestID = 0;
+            cvCant = 0;
+            cvCantMax = 0;
+            cvEstEst = 0;
+
+            if (BorrarUbicOrigen){
+                lblUbicOrigen.setText("");
+            }
+
+            lblCCant.setText("");
+
+            txtNuevoLp.setText("");
+            txtNuevoLp.setEnabled(false);
+
+            txtLpAnt.setText("");
+            txtLpAnt.setVisibility(View.INVISIBLE);
+
+            lblLpAnt.setVisibility(View.INVISIBLE);
+
+            lblIdStock.setText("");
+
+            txtCantidad.setText("");
+            txtCantidad.setEnabled(false);
+            txtPrd.setText("");
+            txtPrd.setEnabled(false);
+
+        }catch (Exception e){
+
+        }
+    }
+
+    private void Limpiar_Valores(){
+
+        try{
+
+            idle=false;
+            cmbPres.setAdapter(null);
+            cmbEstado.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbLote.setAdapter(null);
             gIdProductoOrigen = 0;
             cvPresID = 0;
             gLoteOrigen = "";
@@ -1214,6 +1266,19 @@ public class frm_Packing extends PBase {
 
         try{
 
+            AplicaPacking();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void AplicaPacking(){
+        try{
+
             progress.setMessage("Aplicando cambio de ubicacion");
             progress.show();
 
@@ -1536,7 +1601,11 @@ public class frm_Packing extends PBase {
                 gIdProductoOrigen = 0;
                 lblDesProducto.setText ("Código no válido");
                 mu.msgbox("Producto no existe");
-                Inicializa_Valores();
+                Limpiar_Valores();
+                progress.cancel();
+                txtPrd.setEnabled(true);
+                txtPrd.requestFocus();
+                txtPrd.selectAll();
             }
 
         } catch (Exception e) {
@@ -1612,11 +1681,10 @@ public class frm_Packing extends PBase {
                     gl.gCNomPresAnterior = "";
                 }
 
-                Inicializa_Valores();
+                Limpiar_Valores();
 
+                //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
                 Scan_Ubic_Origen();
-
-
             }
 
         } catch (Exception e) {
