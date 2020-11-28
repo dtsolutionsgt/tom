@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.Packing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,14 +23,11 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
-import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
-import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -433,10 +428,10 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setAdapter(null);
-            cmbEstado.setAdapter(null);
-            cmbVence.setAdapter(null);
-            cmbLote.setAdapter(null);
+            cmbPres.setSelection(0);
+            cmbEstado.setSelection(0);
+            cmbVence.setSelection(0);
+            cmbLote.setSelection(0);
             gIdProductoOrigen = 0;
             cvPresID = 0;
             gLoteOrigen = "";
@@ -528,8 +523,7 @@ public class frm_Packing extends PBase {
             txtPrd.requestFocus();
             lblDesProducto.setText("");
 
-            if (txtUbicOr.getText().toString().equals("")){
-                txtUbicOr.requestFocus();
+            if (txtUbicOr.getText().equals("")){
                 return;
             }
 
@@ -1634,7 +1628,7 @@ public class frm_Packing extends PBase {
             if (stockResList != null){
                 LlenaPresentaciones();
             }else{
-                msgbox("El producto no existe en la ubicación origen");
+                msgbox("El producto en la ubicación origen");
                 txtPrd.requestFocus();
                 txtPrd.selectAll();
             }
@@ -1692,6 +1686,7 @@ public class frm_Packing extends PBase {
 
                 lblDesProducto.setText("");
 
+                //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
                 Scan_Ubic_Origen();
 
 

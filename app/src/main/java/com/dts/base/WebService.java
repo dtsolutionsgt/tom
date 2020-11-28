@@ -81,7 +81,7 @@ public class WebService {
 
            OutputStreamWriter wr = new OutputStreamWriter(ostream);
 
-           String body = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+           String body = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
                    "xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:" +
                    "soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +

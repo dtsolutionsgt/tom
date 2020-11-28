@@ -4,8 +4,10 @@ import android.app.Application;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_ciclico_bool;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
@@ -96,6 +98,8 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
+    public clsBe_inv_ciclico_bool bandera_ciclico = new clsBe_inv_ciclico_bool();
+    public clsBeProducto pprod = new clsBeProducto();
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
