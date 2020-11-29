@@ -52,7 +52,16 @@ public class frm_consulta_stock_detalleCI extends PBase {
             lbllote.setText( gl.existencia.Lote+"");
             lblubic.setText( gl.existencia.idUbic+"");
             lblnomUbic.setText( gl.existencia.Ubic+"");
-            lblLicPlate.setText(gl.existencia.LicPlate);
+
+            //lblLicPlate.Text = "LicPlate : " & sval(IIf(sList.Lic_plate = "0", "", sList.Lic_plate))
+
+            if(gl.existencia.LicPlate.equals(0)){
+                lblLicPlate.setText( "LicPlate : " + "");
+            }else{
+                lblLicPlate.setText( "LicPlate : " + gl.existencia.LicPlate);
+            }
+
+
 
         }
 
