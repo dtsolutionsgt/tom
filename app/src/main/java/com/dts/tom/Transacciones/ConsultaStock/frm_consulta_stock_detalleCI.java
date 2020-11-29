@@ -1,15 +1,17 @@
 package com.dts.tom.Transacciones.ConsultaStock;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_add;
 
 public class frm_consulta_stock_detalleCI extends PBase {
 
 
-    private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic;
+    private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lbllote = findViewById(R.id.lblloteCI);
         lblubic = findViewById(R.id.lblubicCI);
         lblnomUbic = findViewById(R.id.lblnomUbicCI);
+        lblLicPlate= findViewById(R.id.lblLicPlate);
 
         asignarDatos();
 
@@ -39,7 +42,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         if(gl.existencia !=null){
 
             lblcodigo.setText( gl.existencia.Codigo +"");
-            lbldescripcion.setText(""+0);
+            lbldescripcion.setText(gl.existencia.Nombre + "");
             lblexUnidad.setText(""+0);
             lblexPres.setText("");
             lblestado.setText( gl.existencia.Estado+"");
@@ -49,9 +52,13 @@ public class frm_consulta_stock_detalleCI extends PBase {
             lbllote.setText( gl.existencia.Lote+"");
             lblubic.setText( gl.existencia.idUbic+"");
             lblnomUbic.setText( gl.existencia.Ubic+"");
+            lblLicPlate.setText(gl.existencia.LicPlate);
 
         }
 
     }
 
+    public void Backto(View view) {
+        frm_consulta_stock_detalleCI.super.finish();
+    }
 }
