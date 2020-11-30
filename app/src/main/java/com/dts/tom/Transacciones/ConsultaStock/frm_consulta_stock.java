@@ -379,7 +379,7 @@ public class frm_consulta_stock extends PBase {
                         item.Pick = pListStock2.items.get(i).Pick;
                         item.LicPlate = pListStock2.items.get(i).LicPlate;
                         item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                        item.Factor = pListStock2.items.get(i).Factor;
+                        item.factor = pListStock2.items.get(i).factor;
 
                         items_stock.add(item);
                     }
@@ -471,7 +471,7 @@ public class frm_consulta_stock extends PBase {
                     item.Pick = pListStock2.items.get(i).Pick;
                     item.LicPlate = pListStock2.items.get(i).LicPlate;
                     item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-
+                    item.factor = pListStock2.items.get(i).factor;
                     items_stock.add(item);
                 }
 
@@ -541,6 +541,7 @@ public class frm_consulta_stock extends PBase {
                 items.Pick = pListStock2.items.get(i).Pick;
                 items.LicPlate = pListStock2.items.get(i).LicPlate;
                 items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                items.factor = pListStock2.items.get(i).factor;
                 items_stock2.add(items);
 
             }

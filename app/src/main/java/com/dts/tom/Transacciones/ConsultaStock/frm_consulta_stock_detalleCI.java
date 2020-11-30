@@ -55,9 +55,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
             }
 
 
-            if(gl.existencia.ExistUMBAs != "" && gl.existencia.Factor !=0){
+            if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
-                Double factor= Double.valueOf(gl.existencia.ExistUMBAs)/Double.valueOf(gl.existencia.Factor);
+                Double factor= Double.valueOf(gl.existencia.ExistUMBAs)/Double.valueOf(gl.existencia.factor);
                 String stringDecimal = String.format("%.6f", factor);
 
                 lblexPres.setText( "EXIST: " + gl.existencia.Pres +": "+ stringDecimal);
@@ -72,8 +72,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
             lbllote.setText( gl.existencia.Lote+"");
             lblubic.setText( gl.existencia.idUbic+"");
             lblnomUbic.setText( gl.existencia.Ubic+"");
-
-            //lblLicPlate.Text = "LicPlate : " & sval(IIf(sList.Lic_plate = "0", "", sList.Lic_plate))
 
             if(gl.existencia.LicPlate.equals(0)){
                 lblLicPlate.setText( "LP : " + "");
