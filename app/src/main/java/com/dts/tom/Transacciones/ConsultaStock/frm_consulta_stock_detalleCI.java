@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_add;
 
 public class frm_consulta_stock_detalleCI extends PBase {
 
