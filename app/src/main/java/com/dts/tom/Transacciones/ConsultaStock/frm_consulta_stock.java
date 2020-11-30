@@ -379,6 +379,7 @@ public class frm_consulta_stock extends PBase {
                         item.Pick = pListStock2.items.get(i).Pick;
                         item.LicPlate = pListStock2.items.get(i).LicPlate;
                         item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                        item.Factor = pListStock2.items.get(i).Factor;
 
                         items_stock.add(item);
                     }

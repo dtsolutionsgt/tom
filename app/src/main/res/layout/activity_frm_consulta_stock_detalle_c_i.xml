@@ -68,7 +68,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
-                    android:text="Exist Unidad"
+                    android:text="Existencia"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="88dp" />
 
@@ -92,7 +92,7 @@
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Exist Docena"
+                    android:text="Existencia"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="130dp" />
 

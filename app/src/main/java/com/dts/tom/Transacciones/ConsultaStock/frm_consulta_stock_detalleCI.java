@@ -42,8 +42,29 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             lblcodigo.setText( gl.existencia.Codigo +"");
             lbldescripcion.setText(gl.existencia.Nombre + "");
-            lblexUnidad.setText(""+0);
-            lblexPres.setText("");
+            //lblexUnidad.setText(""+0);
+
+            if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
+
+                Double existencia = Double.valueOf(gl.existencia.ExistUMBAs);
+                String stringDecimal = String.format("%.6f", existencia);
+                lblexUnidad.setText(gl.existencia.UM +" "+ stringDecimal);
+
+            }else {
+                lblexUnidad.setText(gl.existencia.UM +" 0.00");
+            }
+
+
+            if(gl.existencia.ExistUMBAs != "" && gl.existencia.Factor !=0){
+
+                Double factor= Double.valueOf(gl.existencia.ExistUMBAs)/Double.valueOf(gl.existencia.Factor);
+                String stringDecimal = String.format("%.6f", factor);
+
+                lblexPres.setText( "EXIST: " + gl.existencia.Pres +": "+ stringDecimal);
+            }else {
+                lblexPres.setText( "EXIST: " + gl.existencia.Pres);
+            }
+
             lblestado.setText( gl.existencia.Estado+"");
             lblpedido.setText( gl.existencia.Pedido+"");
             lblpicking.setText( gl.existencia.Pick+"");
@@ -55,9 +76,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
             //lblLicPlate.Text = "LicPlate : " & sval(IIf(sList.Lic_plate = "0", "", sList.Lic_plate))
 
             if(gl.existencia.LicPlate.equals(0)){
-                lblLicPlate.setText( "LicPlate : " + "");
+                lblLicPlate.setText( "LP : " + "");
             }else{
-                lblLicPlate.setText( "LicPlate : " + gl.existencia.LicPlate);
+                lblLicPlate.setText( "LP : " + gl.existencia.LicPlate);
             }
 
 
