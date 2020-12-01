@@ -405,8 +405,12 @@ public class frm_inv_cic_conteo extends PBase {
 
                     if(!(existeProducto.respuesta)){
 
-                        msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
+                        //msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
+                        msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
 
+                    }else{
+
+                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
                     }
 
                 }else{
@@ -428,7 +432,7 @@ public class frm_inv_cic_conteo extends PBase {
 
             String ubicacion = String.valueOf(data_list.get(i).NoUbic);
 
-            if (ubicacion.equals(evaluar) && !data_list.get(i).cantidad.equals(0.0)){
+            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
 
                 registros = registros+1;
 
@@ -456,9 +460,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                 String codigo_producto = data_list.get(i).Codigo;
 
-                if (codigo_producto.equals(evaluar) && !data_list.get(i).cantidad.equals(0.0))
+                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
 
                     registros = registros+1;
+
+                    if (registros==1){
+                        gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                    }
+                }
             }
             if(registros > 1){
 
@@ -466,48 +475,41 @@ public class frm_inv_cic_conteo extends PBase {
                 msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
+
+            } else if (registros ==1){
+                Busqueda = true;
+                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
             else if(registros ==0){
-                msgbox("código de ubicación no existe en UBICACIONES asignadas de inventario.");
-                Busqueda = false;
-            }
-        }
 
-    }
+                if(BeInvEnc.Capturar_no_existente){
 
+                    execws(2);
 
+                    if(!(existeProducto.respuesta)){
 
-
-
-
-
-    private void processReConteos() {
-        try{
-
-            reconteos = xobj.getresult(clsBeTrans_inv_enc_reconteoList.class,"Inventario_Ciclico_ReConteos");
-
-            if (reconteos != null){
-
-                if(reconteos.items != null){
-                    if(reconteos.items.size()>0){
-
-                        idreconteo = reconteos.items.size();
+                        msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
 
                     }else{
 
-                        idreconteo = 0;
+                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
                     }
+
+                }else{
+
+                    Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
                 }
             }
-
-            esconteo = false;
-            idreconteo = 0;
-
         }
-        catch (Exception e){
-            mu.msgbox("processReConteos:"+e.getMessage());
-        }
+
     }
+
+
+
+
+
+
+
 
     private void Existe_Producto() {
 
@@ -520,9 +522,6 @@ public class frm_inv_cic_conteo extends PBase {
             mu.msgbox("Existe_Producto:"+e.getMessage());
         }
 
-    }
-
-    private void ListaTareas() {
     }
 
     private void SubTarea1(){
@@ -876,6 +875,36 @@ public class frm_inv_cic_conteo extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+
+    private void msgNuevoRegistro(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
     }
 
     public static class Existe_producto{
