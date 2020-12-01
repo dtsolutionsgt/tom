@@ -12,6 +12,8 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_muelles;
 
 import org.simpleframework.xml.Element;
 
+import java.util.Base64;
+
 public class clsBeTrans_re_enc {
 
     @Element(required=false) public int IdRecepcionEnc=0;
@@ -32,7 +34,7 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public boolean Escanear_rec_ubic;
     @Element(required=false) public boolean Para_por_codigo;
     @Element(required=false) public String Observacion="";
-    @Element(required=false) public int Firma_piloto=0;
+    @Element(required=false) public String Firma_piloto="";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String NoGuia="";
     @Element(required=false) public boolean CorreoEnviado;
@@ -77,7 +79,7 @@ public class clsBeTrans_re_enc {
                              String Fecha_recepcion,String Hora_ini_pc,String Hora_fin_pc,boolean Muestra_precio,
                              String Estado,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Fecha_tarea,boolean Tomar_fotos,boolean Escanear_rec_ubic,
-                             boolean Para_por_codigo,String Observacion,int Firma_piloto,boolean Activo,
+                             boolean Para_por_codigo,String Observacion,String Firma_piloto,boolean Activo,
                              String NoGuia,boolean CorreoEnviado,boolean Revision_Inconsistencia,boolean bloqueada,String bloqueada_por,
                              int IdUsuarioBloqueo,int IdMotivoAnulacionBodega,boolean Habilitar_Stock,int IdVehiculo,
                              int IdPiloto,String No_Marchamo,boolean Mostrar_Cantidad_Esperada,clsBeTrans_re_oc OrdenCompraRec,
@@ -254,10 +256,10 @@ public class clsBeTrans_re_enc {
     public void setObservacion(String value) {
         Observacion=value;
     }
-    public int getFirma_piloto() {
+    public String getFirma_piloto() {
         return Firma_piloto;
     }
-    public void setFirma_piloto(int value) {
+    public void setFirma_piloto(String value) {
         Firma_piloto=value;
     }
     public boolean getActivo() {
