@@ -42,6 +42,7 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
+    private ArrayList<String> bodlist= new ArrayList<String>();
 
 
     @Override
@@ -86,14 +87,34 @@ public class frm_inv_cic_add extends PBase {
 
     private void Load() {
 
+        int index = 0;
+
         if(gl.inv_ciclico !=null){
 
-            List<String> spinnerArray =  new ArrayList<String>();
-            spinnerArray.add(gl.inv_ciclico.Pres);
+         //validaciones para obtener lista de estados por idPropietario
+            if(gl.lista_estados != null){
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                if(gl.lista_estados.items != null){
 
+                    bodlist.clear();
+                    for (int i = 0; i <gl.lista_estados.items.size(); i++)
+                    {
+                        bodlist.add(gl.lista_estados.items.get(i).IdEstado + " - " + gl.lista_estados.items.get(i).Nombre);
+                    }
+
+                    //se busca el IdEstado según el estado del registro, para setear el spinner
+                    for (int j = 0; j <gl.lista_estados.items.size(); j++)
+                    {
+                        if(gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
+                        index= gl.lista_estados.items.get(j).IdEstado;
+                    }
+                }
+            }
+
+            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+            EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbEstado_cic.setAdapter(EstadosAdapter);
+            if (bodlist.size()>0) cmbEstado_cic.setSelection(index-1);
 
             etubicacion_cic.setText(gl.inv_ciclico.NoUbic +"");
             txtmsg.setTypeface(null, Typeface.BOLD);
@@ -102,12 +123,13 @@ public class frm_inv_cic_add extends PBase {
             txtprentacion_cic.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
             etlote_cic.setText(gl.inv_ciclico.Lote+"");
             cmbVence_cic.setText(gl.inv_ciclico.Fecha_Vence);
-            //spinner Estado
 
-
-
+            //GT30112020 se llena spinner con presentación del producto
+            List<String> spinnerArray =  new ArrayList<String>();
+            spinnerArray.add(gl.inv_ciclico.Pres);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbPresent_cic.setAdapter(dataAdapter);
-
 
             if(gl.inv_ciclico.IdPresentacion == 0){
 

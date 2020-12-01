@@ -29,19 +29,16 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String LicPlate="";
   @Element(required=false) public String IdProductoEstado="";
   @Element(required=false) public int IdProductoBodega=0;
-
-  /*@Element(required=false) public clsBeProducto_Presentacion BePresentacionProductoEnStock=new clsBeProducto_Presentacion();
-  @Element(required=false) public clsBeBodega_ubicacion UbicacionActual=new clsBeBodega_ubicacion();*/
+  @Element(required=false) public int factor=0;
 
 
+  public clsBeVW_stock_res_CI() {
+  }
 
   public clsBeVW_stock_res_CI(int Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
-                              String Vence,String Estado,String Ubic,int idUbic,String Pedido,String Pick,String LicPlate,
-                              String IdProductoEstado,int IdProductoBodega) {
-                              }
-
-  public clsBeVW_stock_res_CI() {
+                              String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,String LicPlate,
+                              String IdProductoEstado,int IdProductoBodega, int factor) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -61,6 +58,7 @@ public class clsBeVW_stock_res_CI {
     this.LicPlate=LicPlate;
     this.IdProductoEstado= IdProductoEstado;
     this.IdProductoBodega=IdProductoBodega;
+    this.factor = factor;
   }
 
   public int getCodigo() {
@@ -169,14 +167,10 @@ public class clsBeVW_stock_res_CI {
   }
 
 
-
-/*  public clsBeProducto_Presentacion getBePresentacionProductoEnStock() {
-    return BePresentacionProductoEnStock;
+  public void setfactor(int value){ factor =value; }
+  public int getfactor() {
+    return factor;
   }
-  public void setBePresentacionProductoEnStock(clsBeProducto_Presentacion value) {
-    BePresentacionProductoEnStock=value;
-  }*/
-
 
 
 }

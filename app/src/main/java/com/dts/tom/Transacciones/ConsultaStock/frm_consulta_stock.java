@@ -31,6 +31,7 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_add;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 
 import java.io.Serializable;
@@ -65,7 +66,7 @@ public class frm_consulta_stock extends PBase {
     private list_adapt_consulta_stock adapter_stock;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
-    clsBeVW_stock_res_CI  ItemSelected;
+    //clsBeVW_stock_res_CI  ItemSelected;
 
     private Spinner cmbEstadoExist;
 
@@ -213,7 +214,7 @@ public class frm_consulta_stock extends PBase {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
-                    //showData(scod);
+
                     toast("No hay estado seleccionado");
                 }
 
@@ -227,8 +228,9 @@ public class frm_consulta_stock extends PBase {
 
                     if (position > 0) {
 
-                        ItemSelected = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
-                        //procesar_registro();
+                        gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+
+                        startActivity(new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class));
 
                     }
 
@@ -240,14 +242,6 @@ public class frm_consulta_stock extends PBase {
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-    }
-
-    private void procesar_registro() {
-
-        Intent intent = new Intent(this,frm_detalle_consulta_stock_CI.class);
-        intent.putExtra("ItemSelected", (Parcelable) ItemSelected); //where user is an instance of User object
-        startActivity(intent);
-
     }
 
     public void Listar_Existencias(){
@@ -339,19 +333,15 @@ public class frm_consulta_stock extends PBase {
     private void listaStock() {
 
         clsBeVW_stock_res_CI vItem;
+        clsBeVW_stock_res_CI item;
 
         try {
 
             items_stock.clear();
-            clsBeVW_stock_res_CI item;
 
-            
             pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
 
             if(pListStock2 != null){
-
-                vItem = new clsBeVW_stock_res_CI();
-                items_stock.add(vItem);
 
                 conteo = pListStock2.items.size();
 
@@ -363,57 +353,61 @@ public class frm_consulta_stock extends PBase {
                 else{
 
                     // lbldescripcion.setText("");
-                }
 
-                registros.setText("REGISTROS: "+ conteo);
+                    vItem = new clsBeVW_stock_res_CI();
+                    items_stock.add(vItem);
 
-                for (int i = 0; i < pListStock2.items.size(); i++) {
+                    registros.setText("REGISTROS: "+ conteo);
 
-                    item = new clsBeVW_stock_res_CI();
-                    item.Codigo = pListStock2.items.get(i).Codigo;
-                    item.Nombre = pListStock2.items.get(i).Nombre;
-                    item.UM = pListStock2.items.get(i).UM;
-                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                    item.Pres = pListStock2.items.get(i).Pres;
-                    item.ExistPres = pListStock2.items.get(i).ExistPres;
-                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                    item.Lote = pListStock2.items.get(i).Lote;
-                    item.Vence = pListStock2.items.get(i).Vence;
-                    item.Estado = pListStock2.items.get(i).Estado;
-                    item.Ubic = pListStock2.items.get(i).Ubic;
-                    item.idUbic = pListStock2.items.get(i).idUbic;
-                    item.Pedido = pListStock2.items.get(i).Pedido;
-                    item.Pick = pListStock2.items.get(i).Pick;
-                    item.LicPlate = pListStock2.items.get(i).LicPlate;
-                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                    for (int i = 0; i < pListStock2.items.size(); i++) {
 
-                    items_stock.add(item);
-                }
+                        item = new clsBeVW_stock_res_CI();
+                        item.Codigo = pListStock2.items.get(i).Codigo;
+                        item.Nombre = pListStock2.items.get(i).Nombre;
+                        item.UM = pListStock2.items.get(i).UM;
+                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                        item.Pres = pListStock2.items.get(i).Pres;
+                        item.ExistPres = pListStock2.items.get(i).ExistPres;
+                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                        item.Lote = pListStock2.items.get(i).Lote;
+                        item.Vence = pListStock2.items.get(i).Vence;
+                        item.Estado = pListStock2.items.get(i).Estado;
+                        item.Ubic = pListStock2.items.get(i).Ubic;
+                        item.idUbic = pListStock2.items.get(i).idUbic;
+                        item.Pedido = pListStock2.items.get(i).Pedido;
+                        item.Pick = pListStock2.items.get(i).Pick;
+                        item.LicPlate = pListStock2.items.get(i).LicPlate;
+                        item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                        item.factor = pListStock2.items.get(i).factor;
 
-                adapter_stock = new list_adapt_consulta_stock(this,items_stock);
-                listView.setAdapter(adapter_stock);
+                        items_stock.add(item);
+                    }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
+                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock);
 
-                    List<String> categories = new ArrayList<String>();
-                    categories.add("");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
+                                .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
 
-                    ListaEstados.forEach((k, v) -> {
-                        //System.out.printf("%s : %d%n", k, v);
-                        categories.add(k);
-                    });
+                        List<String> categories = new ArrayList<String>();
+                        categories.add("");
 
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    cmbEstadoExist.setAdapter(dataAdapter);
+                        ListaEstados.forEach((k, v) -> {
+                            //System.out.printf("%s : %d%n", k, v);
+                            categories.add(k);
+                        });
 
-                    if(categories.size() <= 1){
-                        selest = 0;
-                    }else{
-                        selest = 1;
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cmbEstadoExist.setAdapter(dataAdapter);
+
+                        if(categories.size() <= 1){
+                            selest = 0;
+                        }else{
+                            selest = 1;
+                        }
                     }
 
 
@@ -422,7 +416,6 @@ public class frm_consulta_stock extends PBase {
             }
 
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
@@ -478,7 +471,7 @@ public class frm_consulta_stock extends PBase {
                     item.Pick = pListStock2.items.get(i).Pick;
                     item.LicPlate = pListStock2.items.get(i).LicPlate;
                     item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-
+                    item.factor = pListStock2.items.get(i).factor;
                     items_stock.add(item);
                 }
 
@@ -513,41 +506,58 @@ public class frm_consulta_stock extends PBase {
 
     private void Spinner(String estado){
 
+        FiltroSpinner(estado);
+
+    }
+
+    private void FiltroSpinner(String estado){
+
         items_stock2.clear();
         clsBeVW_stock_res_CI items;
+        clsBeVW_stock_res_CI vItem;
 
         if(estado == "" && selest>0){
 
+            vItem = new clsBeVW_stock_res_CI();
+            items_stock2.add(vItem);
+
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
-                    items = new clsBeVW_stock_res_CI();
-                    items.Codigo = pListStock2.items.get(i).Codigo;
-                    items.Nombre = pListStock2.items.get(i).Nombre;
-                    items.UM = pListStock2.items.get(i).UM;
-                    items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                    items.Pres = pListStock2.items.get(i).Pres;
-                    items.ExistPres = pListStock2.items.get(i).ExistPres;
-                    items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                    items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                    items.Lote = pListStock2.items.get(i).Lote;
-                    items.Vence = pListStock2.items.get(i).Vence;
-                    items.Estado = pListStock2.items.get(i).Estado;
-                    items.Ubic = pListStock2.items.get(i).Ubic;
-                    items.idUbic = pListStock2.items.get(i).idUbic;
-                    items.Pedido = pListStock2.items.get(i).Pedido;
-                    items.Pick = pListStock2.items.get(i).Pick;
-                    items.LicPlate = pListStock2.items.get(i).LicPlate;
-                    items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                    items_stock2.add(items);
+                items = new clsBeVW_stock_res_CI();
+                items.Codigo = pListStock2.items.get(i).Codigo;
+                items.Nombre = pListStock2.items.get(i).Nombre;
+                items.UM = pListStock2.items.get(i).UM;
+                items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                items.Pres = pListStock2.items.get(i).Pres;
+                items.ExistPres = pListStock2.items.get(i).ExistPres;
+                items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
+                items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                items.Lote = pListStock2.items.get(i).Lote;
+                items.Vence = pListStock2.items.get(i).Vence;
+                items.Estado = pListStock2.items.get(i).Estado;
+                items.Ubic = pListStock2.items.get(i).Ubic;
+                items.idUbic = pListStock2.items.get(i).idUbic;
+                items.Pedido = pListStock2.items.get(i).Pedido;
+                items.Pick = pListStock2.items.get(i).Pick;
+                items.LicPlate = pListStock2.items.get(i).LicPlate;
+                items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                items.factor = pListStock2.items.get(i).factor;
+                items_stock2.add(items);
 
             }
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
+
             conteo = items_stock2.size()-1;
             registros.setText("REGISTROS: "+ conteo);
 
         }
         else{
+
+            vItem = new clsBeVW_stock_res_CI();
+            items_stock2.add(vItem);
+
+
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -577,6 +587,7 @@ public class frm_consulta_stock extends PBase {
             }
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
+
             conteo = items_stock2.size()-1;
             registros.setText("REGISTROS: "+ conteo);
 
@@ -603,8 +614,6 @@ public class frm_consulta_stock extends PBase {
         @Override
         public void wsExecute(){
             try {
-
-
 
                 switch (ws.callback) {
                     case 1:
@@ -645,11 +654,24 @@ public class frm_consulta_stock extends PBase {
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
             if (throwing) throw new Exception(errmsg);
-            if (ws.callback==1) processUbicacion();
-            if (ws.callback==2) processUbicacion2();
-            if (ws.callback==3) processScanProducto();
-            if (ws.callback==4) listaStock();
-            if (ws.callback==5) listaStock2();
+
+            switch (ws.callback) {
+                case 1:
+                    processUbicacion();
+                    break;
+                case 2:
+                    processUbicacion2();
+                    break;
+                case 3:
+                    processScanProducto();
+                    break;
+                case 4:
+                    listaStock();
+                    break;
+                case 5:
+                    listaStock2();
+                    break;
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

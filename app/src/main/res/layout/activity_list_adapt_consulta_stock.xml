@@ -100,7 +100,7 @@
 
         <TextView
             android:id="@+id/lblEstado"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="BUENO"
@@ -108,7 +108,7 @@
 
         <TextView
             android:id="@+id/lblUbic"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="UBICACION #3514"
@@ -140,7 +140,7 @@
 
         <TextView
             android:id="@+id/lblLicPlate_ci"
-            android:layout_width="70dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="0"
@@ -148,7 +148,7 @@
 
         <TextView
             android:id="@+id/lblIdProductoBodega"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="10"

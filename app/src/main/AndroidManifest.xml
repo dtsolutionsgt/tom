@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dts.tom">
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,28 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add"></activity>
-        <!--
-               <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
-        -->
+
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-        <!--
-        <activity
-            android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo"
-            android:label="@string/title_activity_frm_inv_cic_conteo">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
+
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
+        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add" />
         <activity android:name=".list_adapt_verificados" />
         <activity android:name=".list_adapt_contados" />
         <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazados" />
@@ -62,6 +49,7 @@
         <activity android:name=".frm_lista_tareas_principal" />
         <activity android:name=".Transacciones.Packing.frm_Packing" />
         <activity android:name=".Transacciones.ConsultaStock.frm_consulta_stock" />
+        <activity android:name=".Transacciones.ConsultaStock.frm_consulta_stock_detalleCI" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_ini_verificados" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_ini_verificacion" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_ini_contados" />
