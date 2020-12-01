@@ -176,6 +176,10 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    public Canvas getmCanvas(){
+        return  mCanvas;
+    }
+
     public byte[] getBytes() {
         Bitmap b = getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

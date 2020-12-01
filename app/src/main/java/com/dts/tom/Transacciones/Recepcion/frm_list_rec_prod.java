@@ -7,8 +7,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,6 +40,8 @@ import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.list_adapt_detalle_recepcion;
+
+import org.simpleframework.xml.convert.Convert;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,6 +90,8 @@ public class frm_list_rec_prod extends PBase {
     private boolean Finalizar=false;
     private Dialog dialog;
     private Bitmap FirmaPiloto;
+    private byte[] firmByte;
+    private String encodedImage;
 
     private int Idx = -1;
 
@@ -889,7 +895,7 @@ public class frm_list_rec_prod extends PBase {
     private void Finalizar_Recepcion(){
 
         try{
-            gl.gBeRecepcion.Firma_piloto = Byte.parseByte(FirmaPiloto.toString());
+            gl.gBeRecepcion.Firma_piloto = encodedImage;//Byte.parseByte(FirmaPiloto.toString());
             execws(12);
 
         }catch (Exception e){
@@ -1337,7 +1343,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizar){
 
-                if (gl.gBeRecepcion.Firma_piloto==0){
+                if (gl.gBeRecepcion.Firma_piloto.equals("")){
 
                     MuestraPantallaFirma(this);
 
@@ -1372,7 +1378,11 @@ public class frm_list_rec_prod extends PBase {
             btnGuardarFirma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     FirmaPiloto = txtFirma.getBitmap();
+                    //CM_20201130: Se obtienen los bytes de la firma para convertirlos y guardarlos.
+                    firmByte = txtFirma.getBytes();
+                    encodedImage = Base64.encodeToString(firmByte, Base64.DEFAULT);
                     dialog.cancel();
                     Finalizar_Recepcion();
                 }
