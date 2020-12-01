@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -187,10 +188,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                         execws(4);
 
-                        execws(5);
-
-                        startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
-
                     }
                 }
 
@@ -281,6 +278,9 @@ public class frm_inv_cic_conteo extends PBase {
     private void processReConteos() {
         try{
 
+            progress.setMessage("Cargando conteo.");
+            progress.show();
+
             reconteos = xobj.getresult(clsBeTrans_inv_enc_reconteoList.class,"Inventario_Ciclico_ReConteos");
 
             if (reconteos != null){
@@ -301,10 +301,13 @@ public class frm_inv_cic_conteo extends PBase {
             esconteo = false;
             idreconteo = 0;
 
+
+
             ListaTareas();
 
         }
         catch (Exception e){
+            progress.cancel();
             mu.msgbox("processReConteos:"+e.getMessage());
         }
     }
@@ -589,6 +592,8 @@ public class frm_inv_cic_conteo extends PBase {
             gl.pprod.Control_lote= xobj.getresultSingle(Boolean.class,"Control_lote");
             gl.pprod.Control_vencimiento = xobj.getresultSingle(Boolean.class,"Control_vencimiento");
 
+            execws(5);
+
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
@@ -599,10 +604,16 @@ public class frm_inv_cic_conteo extends PBase {
     private void Llena_Estado() {
 
         try {
-            gl.producto_estado = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
+
+            gl.lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
+
+            if(gl.lista_estados !=null){
+                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+            }
+
 
         } catch (Exception e) {
-            e.printStackTrace();
+            mu.msgbox( e.getMessage());
         }
     }
 
@@ -633,7 +644,7 @@ public class frm_inv_cic_conteo extends PBase {
                         break;
 
                     case 5:
-                        callMethod("Get_Estados_By_IdPropietario","IdPropietario",gl.pprod.IdPropietario);
+                        callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
 
                 }

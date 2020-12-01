@@ -42,6 +42,7 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
+    private ArrayList<String> bodlist= new ArrayList<String>();
 
 
     @Override
@@ -88,11 +89,23 @@ public class frm_inv_cic_add extends PBase {
 
         if(gl.inv_ciclico !=null){
 
-            List<String> spinnerArray =  new ArrayList<String>();
-            spinnerArray.add(gl.inv_ciclico.Pres);
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            if(gl.lista_estados != null){
+
+                if(gl.lista_estados.items != null){
+
+                    bodlist.clear();
+                    for (int i = 0; i <gl.lista_estados.items.size(); i++)
+                    {
+                        bodlist.add(gl.lista_estados.items.get(i).IdEstado + " - " + gl.lista_estados.items.get(i).Nombre);
+                    }
+                }
+            }
+
+            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+            EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbEstado_cic.setAdapter(EstadosAdapter);
+            if (bodlist.size()>0) cmbEstado_cic.setSelection(0);
 
 
             etubicacion_cic.setText(gl.inv_ciclico.NoUbic +"");
@@ -105,10 +118,13 @@ public class frm_inv_cic_add extends PBase {
             //spinner Estado
 
 
+            //GT30112020 se llena spinner con presentación del producto
+            List<String> spinnerArray =  new ArrayList<String>();
+            spinnerArray.add(gl.inv_ciclico.Pres);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbEstado_cic.setSelection(1);
-
             cmbPresent_cic.setAdapter(dataAdapter);
-
 
             if(gl.inv_ciclico.IdPresentacion == 0){
 

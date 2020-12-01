@@ -22,7 +22,9 @@
                app to run.
         -->
 
+
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
+        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add" />
         <activity android:name=".list_adapt_verificados" />
         <activity android:name=".list_adapt_contados" />
         <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazados" />
