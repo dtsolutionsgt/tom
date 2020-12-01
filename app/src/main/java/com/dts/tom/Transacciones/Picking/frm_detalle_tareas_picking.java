@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,23 +30,11 @@ import com.dts.tom.R;
 import com.dts.tom.list_adapt_detalle_tareas_picking;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import br.com.zbra.androidlinq.Stream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.summingDouble;
-import static java.util.stream.Collectors.toList;
 
 public class frm_detalle_tareas_picking extends PBase {
 
@@ -98,7 +85,6 @@ public class frm_detalle_tareas_picking extends PBase {
         setHandlers();
 
         Load();
-
 
     }
 
