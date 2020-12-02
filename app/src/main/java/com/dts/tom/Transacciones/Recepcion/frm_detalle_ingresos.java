@@ -122,7 +122,7 @@ public class frm_detalle_ingresos extends PBase {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
-    //
+    //COMENTARIO PARA COMMIT
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
