@@ -201,7 +201,7 @@
                     android:text="Control vence:" />
 
                 <CheckBox
-                    android:id="@+id/chkvence"
+                    android:id="@+id/chkControlVence"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -218,7 +218,7 @@
 
 
                 <CheckBox
-                    android:id="@+id/chklote"
+                    android:id="@+id/chkControlLote"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -242,7 +242,7 @@
         >
 
         <Button
-            android:id="@+id/btGuardar"
+            android:id="@+id/cmdAddProd"
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"

@@ -342,6 +342,60 @@ public class XMLObject  {
         }
     }
 
+    private boolean parseXMLArray(String nombreArray) throws Exception {
+        String sv,en;
+
+        try {
+            InputStream istream = new ByteArrayInputStream(ws.xmlresult.getBytes() );
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(istream);
+
+            NodeList nList = null;
+            try {
+                nList = doc.getElementsByTagName("DocumentElement");
+                NodeList ccList=nList.item(0).getChildNodes();
+                adimy=ccList.getLength();
+                NodeList vvList=ccList.item(0).getChildNodes();
+                adimx=vvList.getLength();
+            } catch (Exception e) {
+                return false;
+            }
+
+            String[] crow = new String[adimx];
+            MatrixCursor cursor = new MatrixCursor(crow);
+
+            for (int i =0;i<nList.getLength();i++){
+
+                NodeList cList=nList.item(i).getChildNodes();
+
+                for (int ii =0;ii<cList.getLength();ii++){
+
+                    Element elm = (Element) cList.item(ii);
+                    NodeList vList=cList.item(ii).getChildNodes();
+
+                    for (int vv =0;vv<vList.getLength();vv++){
+                        en=vList.item(vv).getNodeName();
+                        sv=getNodeValue(en,elm);
+                        try{
+                            crow[vv]=sv;
+                        }catch (Exception ex){
+                            String error = ex.getMessage();
+                        }
+
+                    }
+
+                    cursor.addRow(crow);
+                }
+            }
+
+            data=cursor;
+            return true;
+        } catch (Exception e) {
+            throw new Exception("XMLObject parseXMLArray : "+e.getMessage());
+        }
+    }
+
     private void createVoidCursor() {
         String[] crow = new String[adimx];
         MatrixCursor cursor = new MatrixCursor(crow);

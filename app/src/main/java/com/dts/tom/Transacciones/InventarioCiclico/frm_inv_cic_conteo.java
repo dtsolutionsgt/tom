@@ -405,7 +405,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                     if(!(existeProducto.respuesta)){
 
-                        //msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
                         msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
 
                     }else{
@@ -488,7 +487,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                     if(!(existeProducto.respuesta)){
 
-                        msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
+                        msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
 
                     }else{
 
@@ -558,7 +557,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                         if(!(existeProducto.respuesta)){
 
-                            msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
+                            //msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
 
                         }else{
 
@@ -837,37 +836,6 @@ public class frm_inv_cic_conteo extends PBase {
 
     }
 
-    private void msgCompletar(String msg) {
-
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
-
-            dialog.setCancelable(false);
-
-            dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    //Tarea_Producto_Nuevo();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            mu.msgbox("msgTarea_Producto_Nuevo"+e.getMessage());
-        }
-    }
-
     public void ProgressDialog(String mensaje) {
         progress = new ProgressDialog(this);
         progress.setMessage(mensaje);
@@ -876,7 +844,6 @@ public class frm_inv_cic_conteo extends PBase {
         progress.setProgress(0);
         progress.show();
     }
-
 
     private void msgNuevoRegistro(String msg) {
 
@@ -890,6 +857,8 @@ public class frm_inv_cic_conteo extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+
+                    gl.nuevo_producto_cic = txtBuscFiltro.getText().toString().trim();
                     startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
                 }
             });
