@@ -20,7 +20,7 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_detalle_reemplazo_picking;
+import com.dts.ladapt.list_adapt_detalle_reemplazo_picking;
 
 import java.util.ArrayList;
 

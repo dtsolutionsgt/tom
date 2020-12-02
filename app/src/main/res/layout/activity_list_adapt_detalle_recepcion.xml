@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".list_adapt_detalle_recepcion">
+    tools:context="com.dts.ladapt.list_adapt_detalle_recepcion">
 
     <LinearLayout
         android:id="@+id/linDetalleRec"

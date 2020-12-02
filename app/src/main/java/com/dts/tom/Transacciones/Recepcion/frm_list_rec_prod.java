@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
@@ -39,9 +38,7 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_detalle_recepcion;
-
-import org.simpleframework.xml.convert.Convert;
+import com.dts.ladapt.list_adapt_detalle_recepcion;
 
 import java.util.ArrayList;
 import java.util.Collections;

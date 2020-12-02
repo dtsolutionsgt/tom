@@ -5,7 +5,7 @@
     android:id="@+id/relListPicking"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".list_adapt_tareashh_picking">
+    tools:context="com.dts.ladapt.list_adapt_tareashh_picking">
 
     <LinearLayout
         android:id="@+id/relView"

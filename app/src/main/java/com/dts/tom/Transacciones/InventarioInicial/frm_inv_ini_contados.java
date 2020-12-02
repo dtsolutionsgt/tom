@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.InventarioInicial;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -36,7 +34,7 @@ import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_in
 import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalle_gridList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_contados;
+import com.dts.ladapt.list_adapt_contados;
 
 import java.util.ArrayList;
 import java.util.Calendar;

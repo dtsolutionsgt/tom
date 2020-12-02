@@ -24,23 +24,23 @@
         -->
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add" />
-        <activity android:name=".list_adapt_verificados" />
-        <activity android:name=".list_adapt_contados" />
+        <activity android:name="com.dts.ladapt.list_adapt_verificados" />
+        <activity android:name="com.dts.ladapt.list_adapt_contados" />
         <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazados" />
         <activity android:name="com.dts.ladapt.Verificacion.list_adapt_reemplazos" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_agrega_prd" />
         <activity android:name=".Transacciones.InventarioInicial.frm_inv_nuevo_reg" />
-        <activity android:name=".list_adapt_tramos_inv_ini" />
-        <activity android:name=".list_adapt_tareas_inventario" />
+        <activity android:name="com.dts.ladapt.list_adapt_tramos_inv_ini" />
+        <activity android:name="com.dts.ladapt.list_adapt_tareas_inventario" />
         <activity android:name=".Transacciones.Inventario.frm_list_inventario" />
-        <activity android:name=".list_adapt_detalle_reemplazo_picking" />
-        <activity android:name=".list_adapt_detalle_tareas_picking" />
-        <activity android:name=".list_adapt_tareashh_picking" />
+        <activity android:name="com.dts.ladapt.list_adapt_detalle_reemplazo_picking" />
+        <activity android:name="com.dts.ladapt.list_adapt_detalle_tareas_picking" />
+        <activity android:name="com.dts.ladapt.list_adapt_tareashh_picking" />
         <activity android:name=".frmFirma" />
-        <activity android:name=".list_adapt_detalle_rec_prod" />
+        <activity android:name="com.dts.ladapt.list_adapt_detalle_rec_prod" />
         <activity android:name=".Transacciones.Recepcion.frm_list_rec_prod_detalle" />
-        <activity android:name=".list_adapt_detalle_recepcion" />
-        <activity android:name=".list_adapter_tareashh" />
+        <activity android:name="com.dts.ladapt.list_adapt_detalle_recepcion" />
+        <activity android:name="com.dts.ladapt.list_adapter_tareashh" />
         <activity android:name=".list_view_menu" />
         <activity android:name=".Transacciones.Recepcion.frm_recepcion_datos" />
         <activity android:name=".Transacciones.Recepcion.frm_list_rec_prod" />
@@ -86,6 +86,7 @@
             android:name=".Mainmenu"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
     </application>
 
 </manifest>

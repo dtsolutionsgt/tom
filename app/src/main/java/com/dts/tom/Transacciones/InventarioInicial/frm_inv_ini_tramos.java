@@ -21,8 +21,7 @@ import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_t
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramoList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
-import com.dts.tom.list_adapt_tramos_inv_ini;
+import com.dts.ladapt.list_adapt_tramos_inv_ini;
 
 import java.util.ArrayList;
 import java.util.Collections;
