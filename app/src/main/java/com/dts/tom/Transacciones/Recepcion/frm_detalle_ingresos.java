@@ -4,12 +4,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+
+import androidx.core.content.FileProvider;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -24,7 +32,12 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -48,6 +61,9 @@ public class frm_detalle_ingresos extends PBase {
     private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec;
     private ProgressBar pbar;
     private ProgressDialog progress;
+    private ImageView btnCamara;
+
+    String encoded="";
 
     private ArrayList<String> proplist= new ArrayList<String>();
     private ArrayList<String> provlist= new ArrayList<String>();
@@ -76,6 +92,8 @@ public class frm_detalle_ingresos extends PBase {
         cmbTipoDoc = (Spinner) findViewById(R.id.cmbTipoDoc);
         cmbFechaRec = (Spinner) findViewById(R.id.cmbFechaRec);
 
+        btnCamara = (ImageView)findViewById(R.id.imageView12);
+
         ProgressDialog("Cargando forma");
 
         Load();
@@ -93,6 +111,88 @@ public class frm_detalle_ingresos extends PBase {
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
         }
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    //CM_20201201: Guarda fotos tomadas con la camara del dispositivo en la bd.
+    public void abrirCamara (){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
+            //imageView.setImageBitmap(imageBitmap);
+        }
+    }
+
+    //CM_20201201: Esta es la forma en la que estaba intentando guardar la imagen en el dispositivo, pero al agregar los varloes siguientes en el
+    //manifest me da un error y no he logrado ver en dónde está mi error porque la aplicación solo se cierra.
+    /*<provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+*/
+
+/*    private void abrirCamara() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }*/
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public void cCamara(View view){
+        abrirCamara();
     }
 
     public class WebServiceHandler extends WebService {
@@ -120,6 +220,9 @@ public class frm_detalle_ingresos extends PBase {
                     case 5:
                         callMethod("Get_Stock_Rec_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+                    case 6:
+                        callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
+                        break;
 
                 }
 
@@ -145,6 +248,9 @@ public class frm_detalle_ingresos extends PBase {
                     processConfiguracionPallet();break;
                 case 5:
                     processStockRec();
+                    break;
+                case 6:
+                    encoded="";
                     break;
 
             }
@@ -581,6 +687,37 @@ public class frm_detalle_ingresos extends PBase {
         }
 
     }
+
+    private void msgAsGuardaFotos(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                  execws(6);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    encoded="";
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
 
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;

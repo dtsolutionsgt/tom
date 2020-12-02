@@ -30,7 +30,7 @@ import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_in
 import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen_gridList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_verificados;
+import com.dts.ladapt.list_adapt_verificados;
 
 import java.util.ArrayList;
 import java.util.List;

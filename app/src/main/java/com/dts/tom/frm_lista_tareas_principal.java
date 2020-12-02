@@ -24,6 +24,8 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
+import com.dts.ladapt.list_adapt_tareashh_picking;
+import com.dts.ladapt.list_adapter_tareashh;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;

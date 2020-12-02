@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.ladapt;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 

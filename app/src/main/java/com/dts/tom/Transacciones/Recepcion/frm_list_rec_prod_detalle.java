@@ -18,7 +18,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.list_adapt_detalle_rec_prod;
+import com.dts.ladapt.list_adapt_detalle_rec_prod;
 
 import java.util.ArrayList;
 import java.util.Collections;

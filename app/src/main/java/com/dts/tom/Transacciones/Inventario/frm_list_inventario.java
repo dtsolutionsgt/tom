@@ -17,9 +17,8 @@ import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_encList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_conteo;
-import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_conteo;
 import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
-import com.dts.tom.list_adapt_tareas_inventario;
+import com.dts.ladapt.list_adapt_tareas_inventario;
 
 import java.util.ArrayList;
 

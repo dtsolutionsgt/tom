@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".list_adapt_tramos_inv_ini">
+    tools:context="com.dts.ladapt.list_adapt_tramos_inv_ini">
 
     <LinearLayout
         android:id="@+id/relView"

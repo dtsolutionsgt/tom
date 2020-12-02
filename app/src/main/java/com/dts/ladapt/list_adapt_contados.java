@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.ladapt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalle_grid;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 
