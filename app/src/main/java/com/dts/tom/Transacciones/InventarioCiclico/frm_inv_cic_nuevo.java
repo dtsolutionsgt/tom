@@ -82,7 +82,6 @@ public class frm_inv_cic_nuevo extends PBase {
 
     }
 
-
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -94,8 +93,24 @@ public class frm_inv_cic_nuevo extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Datos_Maestros_Inv","pIdenc",BeInvEnc.Idpropietario,
-                                "pListFamilia",ctableFamilia,"pListClasificacion",ctableClasi,"pListMarca",ctableMarca,"pListTipo",ctableTipo,"pListUMBas",ctableUMB);
+                        callMethod("Get_Datos_Maestros_Inv_Fam","pIdenc",BeInvEnc.Idpropietario,
+                                "pListFamilia",ctableFamilia);
+                        break;
+                    case 2:
+                        callMethod("Get_Datos_Maestros_Inv_Clas","pIdenc",BeInvEnc.Idpropietario,
+                                "pListClasificacion",ctableClasi);
+                        break;
+                    case 3:
+                        callMethod("Get_Datos_Maestros_Inv_Marc","pIdenc",BeInvEnc.Idpropietario,
+                                "pListMarca",ctableMarca);
+                        break;
+                    case 4:
+                        callMethod("Get_Datos_Maestros_Inv_Tip","pIdenc",BeInvEnc.Idpropietario,
+                                "pListTipo",ctableTipo);
+                        break;
+                    case 5:
+                        callMethod("Get_Datos_Maestros_Inv_UmBas","pIdenc",BeInvEnc.Idpropietario,
+                                "pListUMBas",ctableUMB);
                         break;
                 }
 
@@ -115,7 +130,19 @@ public class frm_inv_cic_nuevo extends PBase {
 
             switch (ws.callback) {
                 case 1:
-                    Llena_Combos_Producto_Nuevo();
+                    Llena_Combos_Familia();
+                    break;
+                case 2:
+                    Llena_Combos_Clase();
+                    break;
+                case 3:
+                    Llena_Combos_Marca();
+                    break;
+                case 4:
+                    Llena_Combos_Tipo();
+                    break;
+                case 5:
+                    Llena_Combos_UmBas();
                     break;
             }
 
@@ -124,33 +151,101 @@ public class frm_inv_cic_nuevo extends PBase {
         }
     }
 
-    private void Llena_Combos_Producto_Nuevo() {
+    private void Llena_Combos_UmBas() {
 
         try {
 
-            //String respuesta = String.valueOf(xobj.getSingle("Get_Datos_Maestros_Inv",String.class));
+            ctableUMB = xobj.filldt();
 
+            if(ctableUMB !=null) {
 
-
-           /* ctableClasi = xobj.filldt(Boolean.class,"ctableClasi");
-            ctableMarca = xobj.filldt(Boolean.class,"ctableMarca");
-            ctableTipo= xobj.filldt(Boolean.class,"ctableTipo");
-            ctableUMB = xobj.filldt(Boolean.class,"ctableUMB");*/
-
-
-            DT = xobj.filldt();
-
-            if(DT !=null) {
-
-                if (DT.getCount() > 0) {
+                if (ctableUMB.getCount() > 0) {
 
                 }
-
             }
 
         } catch (Exception e) {
             progress.cancel();
-            mu.msgbox("inv_cic_nuevo:"+e.getMessage());
+            mu.msgbox("inv_cic_marca:"+e.getMessage());
+        }
+
+    }
+
+    private void Llena_Combos_Tipo() {
+
+        try {
+
+            ctableTipo = xobj.filldt();
+
+            if(ctableTipo !=null) {
+
+                if (ctableTipo.getCount() > 0) {
+
+                }
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("inv_cic_marca:"+e.getMessage());
+        }
+
+    }
+
+    private void Llena_Combos_Marca() {
+
+        try {
+
+            ctableMarca = xobj.filldt();
+
+            if(ctableMarca !=null) {
+
+                if (ctableMarca.getCount() > 0) {
+
+                }
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("inv_cic_marca:"+e.getMessage());
+        }
+
+    }
+
+    private void Llena_Combos_Clase() {
+
+        try {
+
+            ctableClasi = xobj.filldt();
+
+            if(ctableClasi !=null) {
+
+                if (ctableClasi.getCount() > 0) {
+
+                }
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("inv_cic_clase:"+e.getMessage());
+        }
+    }
+
+    private void Llena_Combos_Familia() {
+
+        try {
+
+            ctableFamilia = xobj.filldt();
+
+            if(ctableFamilia !=null) {
+
+                if (ctableFamilia.getCount() > 0) {
+
+                }
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("inv_cic_familia:"+e.getMessage());
         }
 
     }
