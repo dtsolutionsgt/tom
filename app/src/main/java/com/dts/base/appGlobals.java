@@ -9,7 +9,6 @@ import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_est
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
-import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_ciclico_bool;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;

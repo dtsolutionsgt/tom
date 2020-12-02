@@ -13,8 +13,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_ciclico_spinner;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+
+import java.util.ArrayList;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -24,6 +27,9 @@ public class frm_inv_cic_nuevo extends PBase {
     private XMLObject xobj;
     private Cursor DT;
     private Cursor ctableFamilia,ctableClasi,ctableMarca,ctableTipo,ctableUMB;
+
+    private clsBe_inv_ciclico_spinner item_spinner;
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner= new ArrayList<clsBe_inv_ciclico_spinner>();
 
     private ProgressDialog progress;
 
@@ -234,11 +240,24 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
+            list_spinner.clear();
+
             ctableFamilia = xobj.filldt();
 
             if(ctableFamilia !=null) {
 
                 if (ctableFamilia.getCount() > 0) {
+
+                    ctableFamilia.moveToFirst();
+                    while (!ctableFamilia.isAfterLast()) {
+
+                        item_spinner = new clsBe_inv_ciclico_spinner();
+                        item_spinner.Id = Integer.parseInt(ctableFamilia.getString(0));
+                        item_spinner.Descripcion = ctableFamilia.getString(1);
+                        list_spinner.add(item_spinner);
+                        ctableFamilia.moveToNext();
+
+                    }
 
                 }
             }
