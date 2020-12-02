@@ -11,13 +11,14 @@ public class clsBeTrans_re_img {
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String Observacion="";
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String Imagen="";
 
 
     public clsBeTrans_re_img() {
     }
 
     public clsBeTrans_re_img(int IdImagen,int IdRecepcionEnc,String User_agr,String Fec_agr,
-                             String Observacion,boolean IsNew) {
+                             String Observacion,boolean IsNew, String Imagen) {
 
         this.IdImagen=IdImagen;
         this.IdRecepcionEnc=IdRecepcionEnc;
@@ -25,6 +26,7 @@ public class clsBeTrans_re_img {
         this.Fec_agr=Fec_agr;
         this.Observacion=Observacion;
         this.IsNew=IsNew;
+        this.Imagen= Imagen;
 
     }
 
@@ -64,6 +66,12 @@ public class clsBeTrans_re_img {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+    public String getImagen() {
+        return Imagen;
+    }
+    public void setImagen(String value) {
+        Imagen=value;
     }
 
 }
