@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dts.tom">
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,13 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo"></activity>
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-
-
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add" />
         <activity android:name="com.dts.ladapt.list_adapt_verificados" />

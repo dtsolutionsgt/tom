@@ -35,7 +35,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-import static java.util.stream.Collectors.groupingBy;
 
 public class frm_detalle_tareas_picking extends PBase {
 

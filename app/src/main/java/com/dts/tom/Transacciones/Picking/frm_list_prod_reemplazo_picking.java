@@ -191,16 +191,26 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             if (selitem.Cant>=CantReemplazar){
 
-                if (selitem.IdStock!=gBePickingUbic.IdStock){
+                //if (selitem.IdStock!=gBePickingUbic.IdStock){
 
                     Distinto =false;
 
-                    progress.show();
-                    progress.setMessage("Reservando el stock seleccionado...");
-                    //Reservar_Stock_By_IdStock
-                    execws(3);
+                    if (Tipo == 1) {
+                        if (selitem.IdStock!=gBePickingUbic.IdStock){
+                            progress.show();
+                            progress.setMessage("Reservando el stock seleccionado...");
+                            //Reservar_Stock_By_IdStock
+                            execws(3);
+                        }
+                    }else{
+                        progress.show();
+                        progress.setMessage("Reservando el stock seleccionado...");
+                        //Reservar_Stock_By_IdStock
+                        execws(3);
+                    }
 
-                }else{
+
+                //}else{
 
                     progress.show();
 
@@ -213,7 +223,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                         progress.setMessage("Marcando el producto no encontrado...");
                         execws(8);
-                    }
+                    //}
                 }
 
             }else{
@@ -449,7 +459,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         callMethod("Reservar_Stock_By_IdStock","IdStock",selitem.IdStock,"CantSol",CantReemplazar,
                                 "MaquinaQueSolicita","1","IdPickingEnc",gBePickingUbic.IdPickingEnc,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
                                 "IdUsuarioHH",gl.OperadorBodega.IdOperador,"IdPedidoDet",gBePickingUbic.IdPedidoDet,"IdPickingUbic",gBePickingUbic.IdPickingUbic,
-                                "EsPicking",true,"IdPresentacionPedido",gBePickingUbic.IdPresentacion);
+                                "EsPicking",true,"IdPresentacionPedido",gBePickingUbic.IdPresentacion, "Tipo", Tipo);
                         break;
                     case 4:
                         callMethod("Get_All_Reemplazo_By_IdPedidoDet","pIdPedidoDet",gBePickingUbic.IdPedidoDet,

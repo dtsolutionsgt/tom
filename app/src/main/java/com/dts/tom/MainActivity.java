@@ -1003,7 +1003,7 @@ public class MainActivity extends PBase {
     private void getURL()
     {
 
-        gl.wsurl = "http://192.168.0.100/WSTOMHH_QA/TOMHHWS.asmx";
+        gl.wsurl = "http://192.168.0.102/WSTOMHH_QA/TOMHHWS.asmx";
         gl.wsurl="";
 
         try {
