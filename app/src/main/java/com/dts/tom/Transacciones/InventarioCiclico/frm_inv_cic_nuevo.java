@@ -7,6 +7,7 @@ import com.dts.base.XMLObject;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -29,7 +32,15 @@ public class frm_inv_cic_nuevo extends PBase {
     private Cursor ctableFamilia,ctableClasi,ctableMarca,ctableTipo,ctableUMB;
 
     private clsBe_inv_ciclico_spinner item_spinner;
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner= new ArrayList<clsBe_inv_ciclico_spinner>();
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner4 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner5 = new ArrayList<clsBe_inv_ciclico_spinner>();
+
+    private ArrayList<String> bodlist= new ArrayList<String>();
+    private ArrayList<String> bodlist2= new ArrayList<String>();
+    private ArrayList<String> bodlist3= new ArrayList<String>();
+    private ArrayList<String> bodlist4= new ArrayList<String>();
+    private ArrayList<String> bodlist5= new ArrayList<String>();
 
     private ProgressDialog progress;
 
@@ -47,11 +58,13 @@ public class frm_inv_cic_nuevo extends PBase {
 
         etcodigo = findViewById(R.id.etcodigo);
         etdescripcion = findViewById(R.id.etdescripcion);
+
         cmbFamilia_nv = findViewById(R.id.cmbFamilia_nv);
         cmbClasificacion_nv = findViewById(R.id.cmbClasificacion_nv);
         cmbMarca_nv = findViewById(R.id.cmbMarca_nv);
         cmbTipo_nv = findViewById(R.id.cmbTipo_nv);
         cmbUmbas_nv = findViewById(R.id.cmbUmbas_nv);
+
         chkControlVence = findViewById(R.id.chkControlVence);
         chkControlLote = findViewById(R.id.chkControlLote);
         cmdAddProd = findViewById(R.id.cmdAddProd);
@@ -161,11 +174,34 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
+            list_spinner5.clear();
             ctableUMB = xobj.filldt();
 
             if(ctableUMB !=null) {
 
                 if (ctableUMB.getCount() > 0) {
+
+                    ctableUMB.moveToFirst();
+                    while (!ctableUMB.isAfterLast()) {
+
+                        item_spinner = new clsBe_inv_ciclico_spinner();
+                        item_spinner.Id = Integer.parseInt(ctableUMB.getString(0));
+                        item_spinner.Descripcion = ctableUMB.getString(1);
+                        list_spinner5.add(item_spinner);
+                        ctableUMB.moveToNext();
+                    }
+
+                    if (ctableUMB!=null) ctableUMB.close();
+
+                    bodlist5.clear();
+                    for (int i = 0; i <list_spinner5.size(); i++)
+                    {
+                        bodlist5.add(list_spinner5.get(i).Id + " - " + list_spinner5.get(i).Descripcion);
+                    }
+
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist5);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbUmbas_nv.setAdapter(EstadosAdapter);
 
                 }
             }
@@ -181,11 +217,36 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
+            list_spinner4.clear();
             ctableTipo = xobj.filldt();
 
             if(ctableTipo !=null) {
 
                 if (ctableTipo.getCount() > 0) {
+
+                    ctableTipo.moveToFirst();
+                    while (!ctableTipo.isAfterLast()) {
+
+                        item_spinner = new clsBe_inv_ciclico_spinner();
+                        item_spinner.Id = Integer.parseInt(ctableTipo.getString(0));
+                        item_spinner.Descripcion = ctableTipo.getString(1);
+                        list_spinner4.add(item_spinner);
+                        ctableTipo.moveToNext();
+                    }
+
+                    if (ctableTipo!=null) ctableTipo.close();
+
+                    bodlist4.clear();
+                    for (int i = 0; i <list_spinner4.size(); i++)
+                    {
+                        bodlist4.add(list_spinner4.get(i).Id + " - " + list_spinner4.get(i).Descripcion);
+                    }
+
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist4);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbTipo_nv.setAdapter(EstadosAdapter);
+
+                    execws(5);
 
                 }
             }
@@ -201,12 +262,36 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
+            list_spinner.clear();
             ctableMarca = xobj.filldt();
 
             if(ctableMarca !=null) {
 
                 if (ctableMarca.getCount() > 0) {
 
+                    ctableMarca.moveToFirst();
+                    while (!ctableMarca.isAfterLast()) {
+
+                        item_spinner = new clsBe_inv_ciclico_spinner();
+                        item_spinner.Id = Integer.parseInt(ctableMarca.getString(0));
+                        item_spinner.Descripcion = ctableMarca.getString(1);
+                        list_spinner.add(item_spinner);
+                        ctableMarca.moveToNext();
+                    }
+
+                    if (ctableMarca!=null) ctableMarca.close();
+
+                    bodlist2.clear();
+                    for (int i = 0; i <list_spinner.size(); i++)
+                    {
+                        bodlist2.add(list_spinner.get(i).Id + " - " + list_spinner.get(i).Descripcion);
+                    }
+
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist2);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbMarca_nv.setAdapter(EstadosAdapter);
+
+                    execws(4);
                 }
             }
 
@@ -221,12 +306,37 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
+            list_spinner.clear();
+
             ctableClasi = xobj.filldt();
 
             if(ctableClasi !=null) {
 
                 if (ctableClasi.getCount() > 0) {
 
+                    ctableClasi.moveToFirst();
+                    while (!ctableClasi.isAfterLast()) {
+
+                        item_spinner = new clsBe_inv_ciclico_spinner();
+                        item_spinner.Id = Integer.parseInt(ctableClasi.getString(0));
+                        item_spinner.Descripcion = ctableClasi.getString(1);
+                        list_spinner.add(item_spinner);
+                        ctableClasi.moveToNext();
+                    }
+
+                    if (ctableClasi!=null) ctableClasi.close();
+
+                    bodlist2.clear();
+                    for (int i = 0; i <list_spinner.size(); i++)
+                    {
+                        bodlist2.add(list_spinner.get(i).Id + " - " + list_spinner.get(i).Descripcion);
+                    }
+
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist2);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbClasificacion_nv.setAdapter(EstadosAdapter);
+
+                    execws(3);
                 }
             }
 
@@ -256,9 +366,21 @@ public class frm_inv_cic_nuevo extends PBase {
                         item_spinner.Descripcion = ctableFamilia.getString(1);
                         list_spinner.add(item_spinner);
                         ctableFamilia.moveToNext();
-
                     }
 
+                    if (ctableFamilia!=null) ctableFamilia.close();
+
+                    bodlist.clear();
+                    for (int i = 0; i <list_spinner.size(); i++)
+                    {
+                        bodlist.add(list_spinner.get(i).Id + " - " + list_spinner.get(i).Descripcion);
+                    }
+
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbFamilia_nv.setAdapter(EstadosAdapter);
+
+                    execws(2);
                 }
             }
 
