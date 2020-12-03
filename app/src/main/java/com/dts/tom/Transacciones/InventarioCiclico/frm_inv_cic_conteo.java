@@ -859,6 +859,7 @@ public class frm_inv_cic_conteo extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
 
                     gl.nuevo_producto_cic = txtBuscFiltro.getText().toString().trim();
+                    txtBuscFiltro.setText("");
                     startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
                 }
             });

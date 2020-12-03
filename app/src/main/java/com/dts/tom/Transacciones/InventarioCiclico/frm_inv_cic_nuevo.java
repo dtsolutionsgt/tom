@@ -7,19 +7,26 @@ import com.dts.base.XMLObject;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_ciclico_spinner;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -28,11 +35,13 @@ public class frm_inv_cic_nuevo extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
-    private Cursor DT;
     private Cursor ctableFamilia,ctableClasi,ctableMarca,ctableTipo,ctableUMB;
+    private clsBeProducto pBeProductoNuevo;
 
     private clsBe_inv_ciclico_spinner item_spinner;
     private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner2 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner3 = new ArrayList<clsBe_inv_ciclico_spinner>();
     private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner4 = new ArrayList<clsBe_inv_ciclico_spinner>();
     private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner5 = new ArrayList<clsBe_inv_ciclico_spinner>();
 
@@ -49,6 +58,10 @@ public class frm_inv_cic_nuevo extends PBase {
     private CheckBox chkControlVence,chkControlLote;
     private Button cmdAddProd;
     boolean chkcvence, chkclote;
+    private String fecha_reg;
+
+    Integer IdClasificacion,IdFamilia,IdMarca,IdTipo,IdUmBas;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +95,8 @@ public class frm_inv_cic_nuevo extends PBase {
 
         Load();
 
+        setHandlers();
+
     }
 
     private void Load() {
@@ -100,6 +115,155 @@ public class frm_inv_cic_nuevo extends PBase {
 
 
     }
+
+
+    private void setHandlers() {
+        try{
+
+            cmbFamilia_nv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    IdFamilia = position +1;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                    toast("No hay estado seleccionado");
+                }
+            });
+
+            cmbClasificacion_nv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    IdClasificacion = position +1;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                    toast("No hay estado seleccionado");
+                }
+            });
+
+            cmbMarca_nv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    IdMarca = position +1;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                    toast("No hay estado seleccionado");
+                }
+            });
+
+            cmbTipo_nv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    IdTipo = position +1;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                    toast("No hay estado seleccionado");
+                }
+            });
+
+            cmbUmbas_nv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    IdUmBas = position +1;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                    toast("No hay estado seleccionado");
+                }
+            });
+
+            chkControlVence.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked) {
+
+                        chkcvence = true;
+                        //execws(1);
+
+                    } else {
+
+                        chkcvence = false;
+                        //execws(1);
+
+                    }
+                }
+            });
+
+            chkControlLote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked) {
+
+                        chkclote = true;
+
+                    } else {
+
+                        chkclote = false;
+                    }
+                }
+            });
+
+        }
+        catch (Exception e){
+            mu.msgbox(e.getClass()+" "+e.getMessage());
+        }
+    }
+
+    public void GuardarNuevo(View view) {
+
+        try{
+
+            pBeProductoNuevo =  new clsBeProducto();
+
+            try {
+                fecha_reg = String.valueOf(du.getFechaActual());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            pBeProductoNuevo.IdPropietario = BeInvEnc.Idpropietario;
+            pBeProductoNuevo.IdClasificacion = IdClasificacion;
+            pBeProductoNuevo.IdFamilia = IdFamilia;
+            pBeProductoNuevo.IdMarca = IdMarca;
+            pBeProductoNuevo.IdTipoProducto = IdTipo;
+            pBeProductoNuevo.IdUnidadMedidaBasica = IdUmBas;
+            pBeProductoNuevo.Codigo = etcodigo.getText().toString().trim();
+            pBeProductoNuevo.Nombre = etdescripcion.getText().toString().trim();
+            pBeProductoNuevo.Codigo_barra = etcodigo.getText().toString().trim();
+            pBeProductoNuevo.Activo = true;
+            pBeProductoNuevo.User_agr = BeInvEnc.User_agr;
+            pBeProductoNuevo.Fec_agr = fecha_reg;
+            pBeProductoNuevo.User_mod = BeInvEnc.User_agr;
+            pBeProductoNuevo.Fec_mod = fecha_reg;
+            pBeProductoNuevo.Control_vencimiento = chkcvence;
+            pBeProductoNuevo.Control_lote = chkclote;
+
+            toast("Registro agregado");
+
+        }catch (Exception e) {
+            mu.msgbox(e.getMessage());
+        }
+
+    }
+
 
     public class WebServiceHandler extends WebService {
 
@@ -262,7 +426,7 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
-            list_spinner.clear();
+            list_spinner3.clear();
             ctableMarca = xobj.filldt();
 
             if(ctableMarca !=null) {
@@ -275,19 +439,19 @@ public class frm_inv_cic_nuevo extends PBase {
                         item_spinner = new clsBe_inv_ciclico_spinner();
                         item_spinner.Id = Integer.parseInt(ctableMarca.getString(0));
                         item_spinner.Descripcion = ctableMarca.getString(1);
-                        list_spinner.add(item_spinner);
+                        list_spinner3.add(item_spinner);
                         ctableMarca.moveToNext();
                     }
 
                     if (ctableMarca!=null) ctableMarca.close();
 
-                    bodlist2.clear();
-                    for (int i = 0; i <list_spinner.size(); i++)
+                    bodlist3.clear();
+                    for (int i = 0; i <list_spinner3.size(); i++)
                     {
-                        bodlist2.add(list_spinner.get(i).Id + " - " + list_spinner.get(i).Descripcion);
+                        bodlist3.add(list_spinner3.get(i).Id + " - " + list_spinner3.get(i).Descripcion);
                     }
 
-                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist2);
+                    ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist3);
                     EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     cmbMarca_nv.setAdapter(EstadosAdapter);
 
@@ -306,7 +470,7 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try {
 
-            list_spinner.clear();
+            list_spinner2.clear();
 
             ctableClasi = xobj.filldt();
 
@@ -320,16 +484,16 @@ public class frm_inv_cic_nuevo extends PBase {
                         item_spinner = new clsBe_inv_ciclico_spinner();
                         item_spinner.Id = Integer.parseInt(ctableClasi.getString(0));
                         item_spinner.Descripcion = ctableClasi.getString(1);
-                        list_spinner.add(item_spinner);
+                        list_spinner2.add(item_spinner);
                         ctableClasi.moveToNext();
                     }
 
                     if (ctableClasi!=null) ctableClasi.close();
 
                     bodlist2.clear();
-                    for (int i = 0; i <list_spinner.size(); i++)
+                    for (int i = 0; i <list_spinner2.size(); i++)
                     {
-                        bodlist2.add(list_spinner.get(i).Id + " - " + list_spinner.get(i).Descripcion);
+                        bodlist2.add(list_spinner2.get(i).Id + " - " + list_spinner2.get(i).Descripcion);
                     }
 
                     ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist2);
