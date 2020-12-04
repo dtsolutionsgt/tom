@@ -5,6 +5,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_ciclico_spinner;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -256,7 +259,12 @@ public class frm_inv_cic_nuevo extends PBase {
             pBeProductoNuevo.Control_vencimiento = chkcvence;
             pBeProductoNuevo.Control_lote = chkclote;
 
-            toast("Registro agregado");
+            if(pBeProductoNuevo != null){
+
+                startActivity(new Intent(getApplicationContext(),frm_inv_cic_guardar.class));
+            }
+
+            //toast("Registro agregado");
 
         }catch (Exception e) {
             mu.msgbox(e.getMessage());

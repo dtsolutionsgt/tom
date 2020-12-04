@@ -476,6 +476,8 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda= false;
 
             } else if (registros ==1){
+
+                //Se encontró una coincidencia en la busqueda y la clase global se ha llenado, solo se carga el activity con la data
                 Busqueda = true;
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
@@ -502,9 +504,6 @@ public class frm_inv_cic_conteo extends PBase {
         }
 
     }
-
-
-
 
 
 

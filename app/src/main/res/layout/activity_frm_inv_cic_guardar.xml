@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo">
+    tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_guardar">
 
     <RelativeLayout
         android:id="@+id/reltope_ci"
@@ -17,24 +17,25 @@
 
 
         <TextView
-            android:id="@+id/lbltitulo_nv"
+            android:id="@+id/lbltitulo_cic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Agregar Producto"
+            android:text="Nuevo Registro"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
     </RelativeLayout>
 
+
     <ScrollView
         android:id="@+id/scroldATOS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/relbuton_nv"
+        android:layout_above="@id/relbuton_cic"
         android:layout_below="@id/reltope_ci">
 
         <LinearLayout
@@ -42,6 +43,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TableRow
+                android:id="@+id/tblBarra"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtubicacion_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Ubicación:" />
+
+                <EditText
+                    android:id="@+id/txtNUbic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:inputType="textPersonName" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblmsg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblNUbic"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:text="ubicacion"
+                    android:textSize="14sp" />
+
+            </TableRow>
 
             <TableRow
                 android:id="@+id/tbl2"
@@ -54,10 +92,10 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Codigo:" />
+                    android:text="Producto:" />
 
                 <EditText
-                    android:id="@+id/etcodigo"
+                    android:id="@+id/txtNProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -71,22 +109,12 @@
                 <TextView
                     android:id="@+id/lblNProd"
                     style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Descripción:" />
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:text="producto"
+                    android:textSize="14sp" />
             </TableRow>
-
-            <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <EditText
-                android:id="@+id/etdescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </TableRow>
 
             <TableRow
                 android:id="@+id/tblUmbas"
@@ -99,10 +127,10 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Familia:" />
+                    android:text="Estado:" />
 
                 <Spinner
-                    android:id="@+id/cmbFamilia_nv"
+                    android:id="@+id/cboNEstado"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
             </TableRow>
@@ -118,10 +146,10 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Clasificación:" />
+                    android:text="Presentación:" />
 
                 <Spinner
-                    android:id="@+id/cmbClasificacion_nv"
+                    android:id="@+id/cboNPresN"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
@@ -134,96 +162,92 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/txtMarca"
+                    android:id="@+id/txtlote_cic"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Marca:" />
+                    android:text="Lote:" />
 
                 <Spinner
-                    android:id="@+id/cmbMarca_nv"
+                    android:id="@+id/cmbLoteN"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
             </TableRow>
 
             <TableRow
-                android:id="@+id/tblTipo"
+                android:id="@+id/tblVence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/txttipo"
+                    android:id="@+id/txtFecha_cic"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Tipo:" />
+                    android:text="Vence:" />
 
-                <Spinner
-                    android:id="@+id/cmbTipo_nv"
+                <ImageView
+                    android:id="@+id/imgDate"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:onClick="ChangeDate"
+                    android:src="@drawable/calendar" />
+
+                <EditText
+                    android:id="@+id/dtpNVence"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="wrap_content"
+                    android:inputType="date" />
 
             </TableRow>
 
             <TableRow
-                android:id="@+id/tblumBas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="15dp">
 
                 <TextView
-                    android:id="@+id/txtumBas"
+                    android:id="@+id/txtcantidad_cic"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="U.M.Bas:" />
+                    android:text="Cantidad:" />
 
-                <Spinner
-                    android:id="@+id/cmbUmbas_nv"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                <TextView
+                    android:id="@+id/txtpeso_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Peso:" />
+
 
             </TableRow>
 
             <TableRow
-                android:id="@+id/tblcontrol"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 >
-                <TextView
-                    android:id="@+id/txtcvence"
-                    style="@style/StyleText"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:text="Control vence:" />
 
-                <CheckBox
-                    android:id="@+id/chkControlVence"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:buttonTint="@android:color/darker_gray"
-                    android:textSize="24sp" />
+                <EditText
+                    android:id="@+id/txtCantContada"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/txtPesoContado"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
 
-                <TextView
-                    android:id="@+id/txtclote"
-                    style="@style/StyleText"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:text="Control lote:" />
-
-
-                <CheckBox
-                    android:id="@+id/chkControlLote"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:buttonTint="@android:color/darker_gray"
-                    android:textSize="24sp" />
+                <Button
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar"
+                    android:textSize="14sp" />
 
             </TableRow>
 
@@ -231,7 +255,7 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/relbuton_nv"
+        android:id="@+id/relbuton_cic"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentStart="true"
@@ -242,14 +266,14 @@
         >
 
         <Button
-            android:id="@+id/cmdAddProd"
-            android:layout_width="200dp"
+            android:id="@+id/btnBack_cic"
+            android:layout_width="61dp"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:text="Guardar"
-            android:onClick="GuardarNuevo"
-            android:textSize="14sp"></Button>
-
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="Exit" />
 
     </RelativeLayout>
 

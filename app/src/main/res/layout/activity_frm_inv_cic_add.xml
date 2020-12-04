@@ -56,7 +56,7 @@
                     android:text="Ubicación:" />
 
                 <EditText
-                    android:id="@+id/etubicacion_cic"
+                    android:id="@+id/txtNUbic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -70,7 +70,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtmsg"
+                    android:id="@+id/lblNUbic"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -94,7 +94,7 @@
                     android:text="Producto:" />
 
                 <EditText
-                    android:id="@+id/etproducto"
+                    android:id="@+id/txtNProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -106,7 +106,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtprentacion_cic"
+                    android:id="@+id/lblNProd"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -129,7 +129,7 @@
                     android:text="Estado:" />
 
                 <Spinner
-                    android:id="@+id/cmbEstado_cic"
+                    android:id="@+id/cboNEstado"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
             </TableRow>
@@ -148,7 +148,7 @@
                     android:text="Presentación:" />
 
                 <Spinner
-                    android:id="@+id/cmbPresent_cic"
+                    android:id="@+id/cboNPres"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
@@ -196,7 +196,7 @@
                     android:src="@drawable/calendar" />
 
                 <EditText
-                    android:id="@+id/cmbVence_cic"
+                    android:id="@+id/dtpNVence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date" />
