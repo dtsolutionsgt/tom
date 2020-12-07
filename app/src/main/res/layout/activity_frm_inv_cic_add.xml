@@ -162,7 +162,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/txtlote_cic"
+                    android:id="@+id/lblNLote"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
@@ -182,7 +182,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtFecha_cic"
+                    android:id="@+id/lblNVence"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
@@ -247,12 +247,12 @@
                 >
 
                 <EditText
-                    android:id="@+id/txtCantContada"
+                    android:id="@+id/txtNCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
                 <EditText
-                    android:id="@+id/txtPesoContado"
+                    android:id="@+id/txtNPesoContado"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />

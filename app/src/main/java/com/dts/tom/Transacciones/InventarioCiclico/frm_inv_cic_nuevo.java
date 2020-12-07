@@ -39,7 +39,7 @@ public class frm_inv_cic_nuevo extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
     private Cursor ctableFamilia,ctableClasi,ctableMarca,ctableTipo,ctableUMB;
-    private clsBeProducto pBeProductoNuevo;
+    //private clsBeProducto pBeProductoNuevo;
 
     private clsBe_inv_ciclico_spinner item_spinner;
     private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner = new ArrayList<clsBe_inv_ciclico_spinner>();
@@ -234,7 +234,7 @@ public class frm_inv_cic_nuevo extends PBase {
 
         try{
 
-            pBeProductoNuevo =  new clsBeProducto();
+            gl.pBeProductoNuevo =  new clsBeProducto();
 
             try {
                 fecha_reg = String.valueOf(du.getFechaActual());
@@ -242,24 +242,24 @@ public class frm_inv_cic_nuevo extends PBase {
                 e.printStackTrace();
             }
 
-            pBeProductoNuevo.IdPropietario = BeInvEnc.Idpropietario;
-            pBeProductoNuevo.IdClasificacion = IdClasificacion;
-            pBeProductoNuevo.IdFamilia = IdFamilia;
-            pBeProductoNuevo.IdMarca = IdMarca;
-            pBeProductoNuevo.IdTipoProducto = IdTipo;
-            pBeProductoNuevo.IdUnidadMedidaBasica = IdUmBas;
-            pBeProductoNuevo.Codigo = etcodigo.getText().toString().trim();
-            pBeProductoNuevo.Nombre = etdescripcion.getText().toString().trim();
-            pBeProductoNuevo.Codigo_barra = etcodigo.getText().toString().trim();
-            pBeProductoNuevo.Activo = true;
-            pBeProductoNuevo.User_agr = BeInvEnc.User_agr;
-            pBeProductoNuevo.Fec_agr = fecha_reg;
-            pBeProductoNuevo.User_mod = BeInvEnc.User_agr;
-            pBeProductoNuevo.Fec_mod = fecha_reg;
-            pBeProductoNuevo.Control_vencimiento = chkcvence;
-            pBeProductoNuevo.Control_lote = chkclote;
+            gl.pBeProductoNuevo.IdPropietario = BeInvEnc.Idpropietario;
+            gl.pBeProductoNuevo.IdClasificacion = IdClasificacion;
+            gl.pBeProductoNuevo.IdFamilia = IdFamilia;
+            gl.pBeProductoNuevo.IdMarca = IdMarca;
+            gl.pBeProductoNuevo.IdTipoProducto = IdTipo;
+            gl.pBeProductoNuevo.IdUnidadMedidaBasica = IdUmBas;
+            gl.pBeProductoNuevo.Codigo = etcodigo.getText().toString().trim();
+            gl.pBeProductoNuevo.Nombre = etdescripcion.getText().toString().trim();
+            gl.pBeProductoNuevo.Codigo_barra = etcodigo.getText().toString().trim();
+            gl.pBeProductoNuevo.Activo = true;
+            gl.pBeProductoNuevo.User_agr = BeInvEnc.User_agr;
+            gl.pBeProductoNuevo.Fec_agr = fecha_reg;
+            gl.pBeProductoNuevo.User_mod = BeInvEnc.User_agr;
+            gl.pBeProductoNuevo.Fec_mod = fecha_reg;
+            gl.pBeProductoNuevo.Control_vencimiento = chkcvence;
+            gl.pBeProductoNuevo.Control_lote = chkclote;
 
-            if(pBeProductoNuevo != null){
+            if(gl.pBeProductoNuevo != null){
 
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_guardar.class));
             }
