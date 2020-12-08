@@ -132,6 +132,7 @@ public class frm_detalle_ingresos extends PBase {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
+            //aquí la convierto a base 64
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
             msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
@@ -226,6 +227,7 @@ public class frm_detalle_ingresos extends PBase {
                         callMethod("Get_Stock_Rec_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 6:
+                        //aquí mando la imagen ya convertida, así como se hizo con la firma.
                         callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
                         break;
 
