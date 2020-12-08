@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_guardar"></activity>
+        <activity android:name=".frm_rec_ftos"></activity>
+        <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_guardar" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
