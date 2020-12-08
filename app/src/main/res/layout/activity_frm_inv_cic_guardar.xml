@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_add">
+    tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_guardar">
 
     <RelativeLayout
         android:id="@+id/reltope_ci"
@@ -23,12 +23,13 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Ubic # 000"
+            android:text="Nuevo Registro"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
     </RelativeLayout>
+
 
     <ScrollView
         android:id="@+id/scroldATOS"
@@ -75,8 +76,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
-                    android:textSize="14sp"
-                    android:text="msg" />
+                    android:text="ubicacion"
+                    android:textSize="14sp" />
 
             </TableRow>
 
@@ -111,8 +112,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
-                    android:textSize="14sp"
-                    android:text="Presentación:" />
+                    android:text="producto"
+                    android:textSize="14sp" />
             </TableRow>
 
             <TableRow
@@ -148,12 +149,11 @@
                     android:text="Presentación:" />
 
                 <Spinner
-                    android:id="@+id/cboNPres"
+                    android:id="@+id/cboNPresN"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
             </TableRow>
-
 
             <TableRow
                 android:id="@+id/tblote_cic"
@@ -168,18 +168,18 @@
                     android:layout_height="match_parent"
                     android:text="Lote:" />
 
-                <EditText
-                    android:id="@+id/etlote_cic"
+                <Spinner
+                    android:id="@+id/cmbLoteN"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
-            </TableRow>
+                    android:layout_height="45dp" />
 
+            </TableRow>
 
             <TableRow
                 android:id="@+id/tblVence"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:id="@+id/lblNVence"
@@ -216,27 +216,12 @@
                     android:text="Cantidad:" />
 
                 <TextView
-                    android:id="@+id/txtpeso_cic"
+                    android:id="@+id/lblNPeso"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:text="Peso:" />
 
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                >
-
-                <TextView
-                    android:id="@+id/lblCantStock"
-                    style="@style/StyleText"
-                    android:layout_width="250dp"
-                    android:layout_height="match_parent"
-                    android:text="0" />
 
             </TableRow>
 
@@ -266,24 +251,8 @@
 
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                >
-                <TextView
-                    android:id="@+id/lblUM"
-                    style="@style/StyleText"
-                    android:layout_width="250dp"
-                    android:layout_height="match_parent"
-                    android:text="0" />
-            </TableRow>
-
-
-
         </LinearLayout>
     </ScrollView>
-
 
     <RelativeLayout
         android:id="@+id/relbuton_cic"
@@ -305,28 +274,6 @@
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
             android:onClick="Exit" />
-
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:textSize="14sp"
-            android:text="Anterior"
-            android:layout_marginStart="120dp"
-            android:onClick="backward">
-        </Button>
-
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:textSize="14sp"
-            android:text="Siguiente"
-            android:layout_marginStart="270dp"
-            android:onClick="forward"
-            >
-        </Button>
-
 
     </RelativeLayout>
 

@@ -103,6 +103,7 @@ public class appGlobals extends Application {
     public clsBeProducto pprod = new clsBeProducto();
     public clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     public String nuevo_producto_cic;
+    public clsBeProducto pBeProductoNuevo;
 
     //variable para Existencias //
     public clsBeVW_stock_res_CI existencia = new clsBeVW_stock_res_CI();

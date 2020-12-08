@@ -1,16 +1,8 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -24,11 +16,8 @@ import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_rec
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class frm_inv_cic_add extends PBase {
@@ -51,20 +40,20 @@ public class frm_inv_cic_add extends PBase {
         setContentView(R.layout.activity_frm_inv_cic_add);
         super.InitBase();
 
-        cmbVence_cic = (EditText) findViewById(R.id.cmbVence_cic);
-        etubicacion_cic = findViewById(R.id.etubicacion_cic);
-        etproducto = findViewById(R.id.etproducto);
-        txtlote_cic = findViewById(R.id.txtlote_cic);
+        cmbVence_cic = (EditText) findViewById(R.id.dtpNVence);
+        etubicacion_cic = findViewById(R.id.txtNUbic);
+        etproducto = findViewById(R.id.txtNProd);
+        txtlote_cic = findViewById(R.id.lblNLote);
         etlote_cic = findViewById(R.id.etlote_cic);
-        txtCantContada = findViewById(R.id.txtCantContada);
-        txtPesoContado = findViewById(R.id.txtPesoContado);
-        cmbEstado_cic = findViewById(R.id.cmbEstado_cic);
-        cmbPresent_cic = findViewById(R.id.cmbPresent_cic);
+        txtCantContada = findViewById(R.id.txtNCantContada);
+        txtPesoContado = findViewById(R.id.txtNPesoContado);
+        cmbEstado_cic = findViewById(R.id.cboNEstado);
+        cmbPresent_cic = findViewById(R.id.cboNPres);
         lblCantStock = findViewById(R.id.lblCantStock);
         lblUM = findViewById(R.id.lblUM);
-        txtmsg = findViewById(R.id.txtmsg);
-        txtprentacion_cic = findViewById(R.id.txtprentacion_cic);
-        txtFecha_cic = findViewById(R.id.txtFecha_cic);
+        txtmsg = findViewById(R.id.lblNUbic);
+        txtprentacion_cic = findViewById(R.id.lblNProd);
+        txtFecha_cic = findViewById(R.id.lblNVence);
         imgDate = findViewById(R.id.imgDate);
         txtpeso_cic = findViewById(R.id.txtpeso_cic);
         lbltitulo_cic = findViewById(R.id.lbltitulo_cic);
