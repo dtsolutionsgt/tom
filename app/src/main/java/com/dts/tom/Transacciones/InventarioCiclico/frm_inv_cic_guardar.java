@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
@@ -44,13 +46,13 @@ public class frm_inv_cic_guardar extends PBase {
     private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado;
     private Spinner cboNEstado,cboNPresN,cmbLoteN;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
-    private int idprodbod;
+    private int idprodbod,nidubic;
     private ProgressDialog progress;
     String Estado,Presentacion,Lote, fecha_vence;
 
     private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
-
     private ArrayList<String> bodlist= new ArrayList<String>();
+    private clsBeBodega_ubicacion nubic = new clsBeBodega_ubicacion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,9 +163,11 @@ public class frm_inv_cic_guardar extends PBase {
         if(gl.pBeProductoNuevo.Control_vencimiento){
             lblNVence.setVisibility(View.VISIBLE);
             dtpNVence.setVisibility(View.VISIBLE);
+            imgDate.setVisibility(ImageView.VISIBLE);
         }else{
             lblNVence.setVisibility(View.INVISIBLE);
             dtpNVence.setVisibility(View.INVISIBLE);
+            imgDate.setVisibility(ImageView.INVISIBLE);
         }
     }
 
@@ -207,6 +211,26 @@ public class frm_inv_cic_guardar extends PBase {
 
         } catch (Exception e)
         {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+    private void valida_ubicacion() {
+        int vIdUbic;
+
+        try{
+            nubic = xobj.getresult(clsBeBodega_ubicacion.class, "Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if(nubic != null){
+                vIdUbic = nubic.IdUbicacion;
+                nidubic = nubic.IdUbicacion;
+                lblNUbic.setText(nubic.NombreCompleto);
+                txtNProd.requestFocus();
+            }else{
+                toast("¡Ubicacion no existe!");
+            }
+
+        }catch (Exception e){
             mu.msgbox( e.getMessage());
         }
     }
@@ -256,9 +280,31 @@ public class frm_inv_cic_guardar extends PBase {
             }
         });
 
+        txtNUbic.setOnKeyListener(new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+
+                   if(txtNUbic.getText().toString().trim().isEmpty()){
+
+                       toast("Ingrese una ubicación");
+
+                   }else {
+
+                       //valida úbicación nueva
+                       execws(2);
 
 
+                   }
 
+                }
+
+                return false;
+            }
+        });
     }
 
     public void guardar_cic(View view) {
@@ -287,6 +333,9 @@ public class frm_inv_cic_guardar extends PBase {
                     case 1:
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
+                    case 2:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtNUbic.getText().toString().trim(),"pIdBodega",idprodbod);
+                        break;
                 }
 
                 progress.cancel();
@@ -307,12 +356,16 @@ public class frm_inv_cic_guardar extends PBase {
                 case 1:
                     Llena_Estado();
                     break;
+                case 2:
+                    valida_ubicacion();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
+
 
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
