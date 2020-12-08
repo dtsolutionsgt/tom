@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -116,20 +117,18 @@ public class frm_detalle_ingresos extends PBase {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     //CM_20201201: Guarda fotos tomadas con la camara del dispositivo en la bd.
-    public void abrirCamara (){
+    /*public void abrirCamara (){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
-    }
+    }*/
     //COMENTARIO PARA COMMIT
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-
+            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
@@ -142,41 +141,46 @@ public class frm_detalle_ingresos extends PBase {
 
     //CM_20201201: Esta es la forma en la que estaba intentando guardar la imagen en el dispositivo, pero al agregar los varloes siguientes en el
     //manifest me da un error y no he logrado ver en dónde está mi error porque la aplicación solo se cierra.
-    /*<provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.android.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>
+    /*
 */
 
-/*    private void abrirCamara() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }*/
+   private void abrirCamara() {
+       try{
+           Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+           // Ensure that there's a camera activity to handle the intent
+           if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+               // Create the File where the photo should go
+               File photoFile = null;
+               try {
+                   photoFile = createImageFile();
+               } catch (IOException ex) {
+               }
+               // Continue only if the File was successfully created
+               if (photoFile != null) {
+                   Uri photoURI = FileProvider.getUriForFile(this,
+                           "com.dts.tom.fileprovider",
+                           photoFile);
+                   takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                   startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+               }
+           }
+       }catch (Exception ee){
+           mu.msgbox(ee.getMessage());
+       }
+
+    }
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
 
     String currentPhotoPath;
 
-    private File createImageFile() throws IOException {
+    private File  createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
