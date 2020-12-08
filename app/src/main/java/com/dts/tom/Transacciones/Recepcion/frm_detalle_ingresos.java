@@ -140,7 +140,7 @@ public class frm_detalle_ingresos extends PBase {
     }
 
     //CM_20201201: Esta es la forma en la que estaba intentando guardar la imagen en el dispositivo, pero al agregar los varloes siguientes en el
-    //manifest me da un error y no he logrado ver en dónde está mi error porque la aplicación solo se cierra.
+    //-manifest me da un error y no he logrado ver en dónde está mi error porque la aplicación solo se cierra.
     /*
 */
 
