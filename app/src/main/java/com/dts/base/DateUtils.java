@@ -521,6 +521,24 @@ public class DateUtils {
 		return vFecha;
 	}
 
+	public String getFecha() throws ParseException{
+		 String Fecha,vFecha;
+		Date date;
+		int year,month,day;
+
+		final Calendar c = Calendar.getInstance();
+		year = c.get(Calendar.YEAR);
+		month = c.get(Calendar.MONTH);
+		day = c.get(Calendar.DAY_OF_MONTH);
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+		Fecha = day + "-" + (month + 1) + "-" + year;
+		date = dateFormat.parse(Fecha);
+		vFecha=dateFormat.format(date);
+		 return vFecha;
+	}
+
 	public long getFechaActualReport(){
 		long f,fecha;
 		int cyear,cmonth,cday,ch,cm;
