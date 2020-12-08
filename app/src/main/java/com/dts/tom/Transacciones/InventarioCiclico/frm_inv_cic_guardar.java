@@ -7,6 +7,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,12 +16,18 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -33,13 +40,17 @@ public class frm_inv_cic_guardar extends PBase {
     private int year;
     private int month;
     private int day;
-    private TextView lblNUbic,lblNProd,lblNPeso,lblNLote,lblNVence;
+    private TextView lblNUbic,lblNProd,lblNPeso,lblNLote,lblNVence,txtpresent_cic;
     private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado;
     private Spinner cboNEstado,cboNPresN,cmbLoteN;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
     private int idprodbod;
     private ProgressDialog progress;
     String Estado,Presentacion,Lote, fecha_vence;
+
+    private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
+
+    private ArrayList<String> bodlist= new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class frm_inv_cic_guardar extends PBase {
         lblNPeso= findViewById(R.id.lblNPeso);
         lblNLote = findViewById(R.id.lblNLote);
         lblNVence = findViewById(R.id.lblNVence);
+        txtpresent_cic = findViewById(R.id.txtpresent_cic);
 
         txtNUbic = findViewById(R.id.txtNUbic);
         txtNProd = findViewById(R.id.txtNProd);
@@ -73,27 +85,36 @@ public class frm_inv_cic_guardar extends PBase {
     }
 
     private void Load() {
-
+    //Private Sub conteoNuevo()
         try{
 
             if(gl.pBeProductoNuevo != null){
 
-                txtNProd.setText(gl.pBeProductoNuevo.Nombre);
-                lblNProd.setText(gl.pBeProductoNuevo.Codigo + " " + gl.pBeProductoNuevo.Nombre);
-
-                txtNUbic.requestFocus();
 
                 LlenaCampos_Producto_Nuevo();
+
+                txtNProd.setText(gl.pBeProductoNuevo.Nombre);
+                lblNProd.setText(gl.pBeProductoNuevo.Codigo + " " + gl.pBeProductoNuevo.Nombre);
+                txtNUbic.requestFocus();
+
+                  try {
+                    fecha_vence = du.getFecha();
+                    dtpNVence.setText(fecha_vence);
+                  } catch (ParseException e) {
+                        e.printStackTrace();
+                  }
+
+
 
             }else{
 
                 try {
-                    fecha_vence = String.valueOf(du.getFechaActual());
+                    fecha_vence = du.getFecha();
+                    dtpNVence.setText(fecha_vence);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                dtpNVence.setText(fecha_vence);
 
                 lblNPeso.setVisibility(TextView.INVISIBLE);
                 lblNLote.setVisibility(TextView.INVISIBLE);
@@ -101,7 +122,6 @@ public class frm_inv_cic_guardar extends PBase {
                 txtNPesoContado.setVisibility(EditText.INVISIBLE);
                 dtpNVence.setVisibility(EditText.INVISIBLE);
                 imgDate.setVisibility(ImageView.INVISIBLE);
-
                 txtNUbic.requestFocus();
             }
 
@@ -113,12 +133,84 @@ public class frm_inv_cic_guardar extends PBase {
 
     private void LlenaCampos_Producto_Nuevo() {
 
-        nllenaEstado();
+        //Llena Estado
+        execws(1);
 
+        cboNPresN.setVisibility(View.INVISIBLE);
+        txtpresent_cic.setVisibility(View.INVISIBLE);
+        txtNProd.setEnabled(false);
+        cmbLoteN.setVisibility(View.INVISIBLE);
+
+
+        if(gl.pBeProductoNuevo.Control_peso){
+            lblNPeso.setVisibility(View.VISIBLE);
+            txtNPesoContado.setVisibility(View.VISIBLE);
+        }else{
+            lblNPeso.setVisibility(View.INVISIBLE);
+            txtNPesoContado.setVisibility(View.INVISIBLE);
+        }
+
+        if(gl.pBeProductoNuevo.Control_lote){
+            lblNLote.setVisibility(View.VISIBLE);
+
+
+        }else{
+            lblNLote.setVisibility(View.INVISIBLE);
+        }
+
+        if(gl.pBeProductoNuevo.Control_vencimiento){
+            lblNVence.setVisibility(View.VISIBLE);
+            dtpNVence.setVisibility(View.VISIBLE);
+        }else{
+            lblNVence.setVisibility(View.INVISIBLE);
+            dtpNVence.setVisibility(View.INVISIBLE);
+        }
     }
 
-    private void nllenaEstado() {
+    private void Llena_Estado() {
+
+        class BodegaSort implements Comparator<clsBeProducto_estado>
+        {
+            public int compare(clsBeProducto_estado left, clsBeProducto_estado right)
+            {
+                return left.Nombre.compareTo(right.Nombre);
+            }
+        }
+
+        try {
+
+            lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
+
+                Collections.sort(lista_estados.items, new BodegaSort());
+                fillSpinEstado();
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
     }
+
+    private void fillSpinEstado() {
+        try
+        {
+            bodlist.clear();
+
+            for (int i = 0; i <lista_estados.items.size(); i++)
+            {
+                bodlist.add(lista_estados.items.get(i).Nombre);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cboNEstado.setAdapter(dataAdapter);
+
+            if (bodlist.size()>0) cboNEstado.setSelection(0);
+
+        } catch (Exception e)
+        {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
 
     private void setHandlers() {
 
@@ -164,6 +256,21 @@ public class frm_inv_cic_guardar extends PBase {
             }
         });
 
+
+
+
+    }
+
+    public void guardar_cic(View view) {
+
+        if(txtNUbic.getText().toString().trim().isEmpty()){
+            toast("Ubicación no valida!");
+        }else
+        if(txtNCantContada.getText().toString().trim().isEmpty()){
+            toast("Cantidad incorrecta!");
+        }
+
+
     }
 
 
@@ -178,7 +285,7 @@ public class frm_inv_cic_guardar extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        //callMethod("Get_Datos_Maestros_Inv_Fam","pIdenc",BeInvEnc.Idpropietario, "pListFamilia",ctableFamilia);
+                        callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
                 }
 
@@ -198,7 +305,7 @@ public class frm_inv_cic_guardar extends PBase {
 
             switch (ws.callback) {
                 case 1:
-                    //Llena_Combos_Familia();
+                    Llena_Estado();
                     break;
             }
 
