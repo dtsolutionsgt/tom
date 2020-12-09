@@ -19,6 +19,8 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
@@ -45,13 +47,21 @@ public class frm_inv_cic_guardar extends PBase {
     private TextView lblNUbic,lblNProd,lblNPeso,lblNLote,lblNVence,txtpresent_cic;
     private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado;
     private Spinner cboNEstado,cboNPresN,cmbLoteN;
+
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
+    private clsBeProducto_Presentacion BeProducto_Presentacion;
+    private clsBeProducto_PresentacionList BeProducto_PresentacionList = new clsBeProducto_PresentacionList();
+
     private int idprodbod,nidubic;
     private ProgressDialog progress;
-    String Estado,Presentacion,Lote, fecha_vence;
+    int Estado;
+    int Presentacion;
+    String Lote;
+    String fecha_vence;
 
     private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     private ArrayList<String> bodlist= new ArrayList<String>();
+    private ArrayList<String> Preslist= new ArrayList<String>();
     private clsBeBodega_ubicacion nubic = new clsBeBodega_ubicacion();
 
     @Override
@@ -154,10 +164,12 @@ public class frm_inv_cic_guardar extends PBase {
 
         if(gl.pBeProductoNuevo.Control_lote){
             lblNLote.setVisibility(View.VISIBLE);
+            cmbLoteN.setVisibility(View.VISIBLE);
 
 
         }else{
             lblNLote.setVisibility(View.INVISIBLE);
+            cmbLoteN.setVisibility(View.INVISIBLE);
         }
 
         if(gl.pBeProductoNuevo.Control_vencimiento){
@@ -171,6 +183,7 @@ public class frm_inv_cic_guardar extends PBase {
         }
     }
 
+    //llena combobox
     private void Llena_Estado() {
 
         class BodegaSort implements Comparator<clsBeProducto_estado>
@@ -180,7 +193,6 @@ public class frm_inv_cic_guardar extends PBase {
                 return left.Nombre.compareTo(right.Nombre);
             }
         }
-
         try {
 
             lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
@@ -189,7 +201,7 @@ public class frm_inv_cic_guardar extends PBase {
                 fillSpinEstado();
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox( "spinner_Estados:"+ e.getMessage());
         }
     }
 
@@ -208,6 +220,51 @@ public class frm_inv_cic_guardar extends PBase {
             cboNEstado.setAdapter(dataAdapter);
 
             if (bodlist.size()>0) cboNEstado.setSelection(0);
+
+            //Llama a spinner Presentación
+            execws(3);
+
+        } catch (Exception e)
+        {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+    private void LlenaDetPresentacion(){
+
+        class PresentacionSort implements Comparator<clsBeProducto_Presentacion>
+        {
+            public int compare(clsBeProducto_Presentacion left, clsBeProducto_Presentacion right)
+            {
+                return left.Nombre.compareTo(right.Nombre);
+            }
+        }
+        try{
+            BeProducto_PresentacionList = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
+            Collections.sort(BeProducto_PresentacionList.items, new PresentacionSort());
+            fillSpinPresentacion();
+
+        }catch (Exception e){
+            mu.msgbox("spinner_Presentacion:"+e.getMessage());
+        }
+
+    }
+
+    private void fillSpinPresentacion() {
+        try
+        {
+            Preslist.clear();
+
+            for (int i = 0; i <BeProducto_PresentacionList.items.size(); i++)
+            {
+                Preslist.add(BeProducto_PresentacionList.items.get(i).Nombre);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, Preslist);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cboNPresN.setAdapter(dataAdapter);
+
+            if (Preslist.size()>0) cboNPresN.setSelection(0);
 
         } catch (Exception e)
         {
@@ -235,6 +292,15 @@ public class frm_inv_cic_guardar extends PBase {
         }
     }
 
+    private void Get_IdProdBodega() {
+
+        try {
+            idprodbod = xobj.getresult(Integer.class,"Get_IdProductoBodega_By_IdProducto_And_IdBodega");
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
 
     private void setHandlers() {
 
@@ -242,7 +308,7 @@ public class frm_inv_cic_guardar extends PBase {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                Estado = String.valueOf(position);
+                Estado= lista_estados.items.get(position).IdEstado;
             }
 
             @Override
@@ -256,7 +322,8 @@ public class frm_inv_cic_guardar extends PBase {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                Presentacion = String.valueOf(position);
+                //Presentacion = String.valueOf(position);
+                Presentacion = BeProducto_PresentacionList.items.get(position).IdPresentacion;
             }
 
             @Override
@@ -297,7 +364,6 @@ public class frm_inv_cic_guardar extends PBase {
                        //valida úbicación nueva
                        execws(2);
 
-
                    }
 
                 }
@@ -311,9 +377,29 @@ public class frm_inv_cic_guardar extends PBase {
 
         if(txtNUbic.getText().toString().trim().isEmpty()){
             toast("Ubicación no valida!");
-        }else
-        if(txtNCantContada.getText().toString().trim().isEmpty()){
+        }else if(txtNCantContada.getText().toString().trim().isEmpty()){
             toast("Cantidad incorrecta!");
+        }else {
+
+            //Get_IdProdBodega
+            execws(4);
+
+            if(gl.pBeProductoNuevo == null){
+
+                BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+                BeTrans_inv_ciclico.idinvciclico = 0;
+                BeTrans_inv_ciclico.idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdStock = 0;
+                BeTrans_inv_ciclico.IdProductoBodega = idprodbod;
+                BeTrans_inv_ciclico.IdProductoEstado = Estado;
+                BeTrans_inv_ciclico.IdProductoEst_nuevo = Estado;
+                BeTrans_inv_ciclico.IdPresentacion = Presentacion;
+                BeTrans_inv_ciclico.IdPresentacion_nuevo = Presentacion;
+                BeTrans_inv_ciclico.IdUbicacion = nidubic;
+                BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
+                BeTrans_inv_ciclico.EsNuevo = true;
+            }
+
         }
 
 
@@ -334,8 +420,15 @@ public class frm_inv_cic_guardar extends PBase {
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
                     case 2:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtNUbic.getText().toString().trim(),"pIdBodega",idprodbod);
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtNUbic.getText().toString().trim(),"pIdBodega",gl.IdBodega);
                         break;
+                    case 3:
+                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gl.pprod.IdProducto,"pActivo",true);
+                        break;
+                    case 4:
+                        callMethod("Get_IdProductoBodega_By_IdProducto_And_IdBodega","pIdProducto",gl.pprod.IdProducto,"pIdBodega",gl.IdBodega);
+                        break;
+
                 }
 
                 progress.cancel();
@@ -358,6 +451,12 @@ public class frm_inv_cic_guardar extends PBase {
                     break;
                 case 2:
                     valida_ubicacion();
+                    break;
+                case 3:
+                    LlenaDetPresentacion();
+                    break;
+                case 4:
+                    Get_IdProdBodega();
                     break;
             }
 
