@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,6 +24,9 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
+import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -32,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import android.widget.RelativeLayout.LayoutParams;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -39,18 +44,24 @@ public class frm_inv_cic_guardar extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
+    //private LayoutParams layoutparams;
+
 
     private ImageView imgDate;
     private int year;
     private int month;
     private int day;
     private TextView lblNUbic,lblNProd,lblNPeso,lblNLote,lblNVence,txtpresent_cic;
-    private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado;
+    private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado,txtNLote;
     private Spinner cboNEstado,cboNPresN,cmbLoteN;
 
+    private clsBeProducto nprod = new clsBeProducto();
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
     private clsBeProducto_Presentacion BeProducto_Presentacion;
     private clsBeProducto_PresentacionList BeProducto_PresentacionList = new clsBeProducto_PresentacionList();
+
+    private clsBeTrans_inv_stock_prod InvTeoricoPorProducto = new clsBeTrans_inv_stock_prod();
+    private clsBeTrans_inv_stock_prodList InvTeoricoPorProductoList = new clsBeTrans_inv_stock_prodList();
 
     private int idprodbod,nidubic;
     private ProgressDialog progress;
@@ -58,6 +69,7 @@ public class frm_inv_cic_guardar extends PBase {
     int Presentacion;
     String Lote;
     String fecha_vence;
+    int nidprod;
 
     private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     private ArrayList<String> bodlist= new ArrayList<String>();
@@ -70,6 +82,8 @@ public class frm_inv_cic_guardar extends PBase {
         setContentView(R.layout.activity_frm_inv_cic_guardar);
         super.InitBase();
 
+        nidprod =0;
+
         lblNUbic = findViewById(R.id.lblNUbic);
         lblNProd = findViewById(R.id.lblNProd);
         lblNPeso= findViewById(R.id.lblNPeso);
@@ -79,6 +93,7 @@ public class frm_inv_cic_guardar extends PBase {
 
         txtNUbic = findViewById(R.id.txtNUbic);
         txtNProd = findViewById(R.id.txtNProd);
+        txtNLote = findViewById(R.id.txtNLote);
         cboNEstado = findViewById(R.id.cboNEstado);
         cboNPresN = findViewById(R.id.cboNPresN);
         cmbLoteN = findViewById(R.id.cmbLoteN);
@@ -86,6 +101,8 @@ public class frm_inv_cic_guardar extends PBase {
         dtpNVence= findViewById(R.id.dtpNVence);
         txtNCantContada = findViewById(R.id.txtNCantContada);
         txtNPesoContado = findViewById(R.id.txtNPesoContado);
+
+        //layoutparams = (RelativeLayout.LayoutParams) txtNLote.getLayoutParams();
 
         ws = new WebServiceHandler(frm_inv_cic_guardar.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -164,12 +181,12 @@ public class frm_inv_cic_guardar extends PBase {
 
         if(gl.pBeProductoNuevo.Control_lote){
             lblNLote.setVisibility(View.VISIBLE);
-            cmbLoteN.setVisibility(View.VISIBLE);
-
+            txtNLote.setVisibility(View.VISIBLE);
 
         }else{
             lblNLote.setVisibility(View.INVISIBLE);
-            cmbLoteN.setVisibility(View.INVISIBLE);
+            txtNLote.setVisibility(View.INVISIBLE);
+            //cmbLoteN.setVisibility(View.INVISIBLE);
         }
 
         if(gl.pBeProductoNuevo.Control_vencimiento){
@@ -197,8 +214,10 @@ public class frm_inv_cic_guardar extends PBase {
 
             lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
 
+            if(lista_estados != null){
                 Collections.sort(lista_estados.items, new BodegaSort());
                 fillSpinEstado();
+            }
 
         } catch (Exception e) {
             mu.msgbox( "spinner_Estados:"+ e.getMessage());
@@ -222,7 +241,7 @@ public class frm_inv_cic_guardar extends PBase {
             if (bodlist.size()>0) cboNEstado.setSelection(0);
 
             //Llama a spinner Presentación
-            execws(3);
+            //execws(3);
 
         } catch (Exception e)
         {
@@ -241,8 +260,12 @@ public class frm_inv_cic_guardar extends PBase {
         }
         try{
             BeProducto_PresentacionList = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
-            Collections.sort(BeProducto_PresentacionList.items, new PresentacionSort());
-            fillSpinPresentacion();
+
+            if(BeProducto_PresentacionList != null){
+
+                Collections.sort(BeProducto_PresentacionList.items, new PresentacionSort());
+                fillSpinPresentacion();
+            }
 
         }catch (Exception e){
             mu.msgbox("spinner_Presentacion:"+e.getMessage());
@@ -270,6 +293,22 @@ public class frm_inv_cic_guardar extends PBase {
         {
             mu.msgbox( e.getMessage());
         }
+    }
+
+    private void Llena_Lote() {
+
+        class LoteSort implements Comparator<clsBeTrans_inv_stock_prod>
+        {
+            public int compare(clsBeTrans_inv_stock_prod left, clsBeTrans_inv_stock_prod right)
+            {
+                return left.Lote.compareTo(right.Lote);
+            }
+        }
+
+    }
+
+    private void fillSpinLote(){
+
     }
 
     private void valida_ubicacion() {
@@ -301,6 +340,27 @@ public class frm_inv_cic_guardar extends PBase {
         }
     }
 
+    private void Get_Producto() {
+
+        try {
+            nprod = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+
+            if(nprod == null){
+
+                toast("El producto no existe");
+            }else {
+                lblNProd.setText(nprod.Nombre);
+            }
+
+            nidprod = nprod.IdProductoBodega;
+            txtNCantContada.requestFocus();
+
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+
+    }
 
     private void setHandlers() {
 
@@ -354,37 +414,54 @@ public class frm_inv_cic_guardar extends PBase {
             {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                 {
-
                    if(txtNUbic.getText().toString().trim().isEmpty()){
 
                        toast("Ingrese una ubicación");
 
                    }else {
-
                        //valida úbicación nueva
                        execws(2);
-
                    }
-
                 }
-
                 return false;
             }
         });
-    }
 
+        txtNProd.setOnKeyListener(new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+
+                    LlenaCampos_Producto_Nuevo();
+
+                }
+                return false;
+            }
+        });
+
+    }
+    
     public void guardar_cic(View view) {
 
         if(txtNUbic.getText().toString().trim().isEmpty()){
+
             toast("Ubicación no valida!");
+            txtNUbic.requestFocus();
+
         }else if(txtNCantContada.getText().toString().trim().isEmpty()){
+
             toast("Cantidad incorrecta!");
+            txtNCantContada.requestFocus();
+
         }else {
 
-            //Get_IdProdBodega
-            execws(4);
-
             if(gl.pBeProductoNuevo == null){
+
+                //Get_IdProdBodega
+                execws(4);
 
                 BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
                 BeTrans_inv_ciclico.idinvciclico = 0;
@@ -398,11 +475,67 @@ public class frm_inv_cic_guardar extends PBase {
                 BeTrans_inv_ciclico.IdUbicacion = nidubic;
                 BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
                 BeTrans_inv_ciclico.EsNuevo = true;
+
+            } else {
+
+                BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+
+                BeTrans_inv_ciclico.idinvciclico = 0;
+                BeTrans_inv_ciclico.idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdStock = 0;
+                BeTrans_inv_ciclico.IdProductoBodega = 0;
+                BeTrans_inv_ciclico.IdProductoEstado = Estado;
+                BeTrans_inv_ciclico.IdProductoEst_nuevo = Estado;
+                //BeTrans_inv_ciclico.IdPresentacion = Presentacion;
+                //BeTrans_inv_ciclico.IdPresentacion_nuevo = Presentacion;
+                //IdPresentacion/IdPresentacion_nuevo es igual a 0, porque no se hace carga del spinner presentación
+                BeTrans_inv_ciclico.IdPresentacion = 0;
+                BeTrans_inv_ciclico.IdPresentacion_nuevo = 0;
+                BeTrans_inv_ciclico.IdUbicacion = nidubic;
+                BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
+                BeTrans_inv_ciclico.EsNuevo = true;
+
+                BeTrans_inv_ciclico.lote = txtNLote.getText().toString().trim();
+                BeTrans_inv_ciclico.lote_stock = txtNLote.getText().toString().trim();
+
+                BeTrans_inv_ciclico.fecha_vence = dtpNVence.getText().toString().trim();
+                BeTrans_inv_ciclico.fecha_vence_stock = dtpNVence.getText().toString().trim();
+
+
+                BeTrans_inv_ciclico.cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
+                BeTrans_inv_ciclico.cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());
+                BeTrans_inv_ciclico.cant_reconteo = 0;
+
+                if(gl.pBeProductoNuevo.Control_peso){
+
+                    BeTrans_inv_ciclico.peso = Double.parseDouble(txtNPesoContado.getText().toString().trim());
+                    BeTrans_inv_ciclico.peso_stock = Double.parseDouble(txtNPesoContado.getText().toString().trim());
+                    BeTrans_inv_ciclico.peso_reconteo = 0;
+
+                }
+
+                BeTrans_inv_ciclico.idoperador =  gl.IdOperador;
+                BeTrans_inv_ciclico.user_agr = gl.gNomOperador;
+
+                try {
+                    fecha_vence = du.getFechaActual();
+                    BeTrans_inv_ciclico.fec_agr = fecha_vence;
+                } catch (ParseException e) {
+                    mu.msgbox("Guardar_obtieneFechaActual:"+e.getMessage());
+                }
+
+                //Guardar Inventario
+
+
             }
 
         }
 
 
+    }
+
+    public void Exit(View view) {
+        frm_inv_cic_guardar.super.finish();
     }
 
 
@@ -428,7 +561,15 @@ public class frm_inv_cic_guardar extends PBase {
                     case 4:
                         callMethod("Get_IdProductoBodega_By_IdProducto_And_IdBodega","pIdProducto",gl.pprod.IdProducto,"pIdBodega",gl.IdBodega);
                         break;
-
+                    case 5:
+                        callMethod("Get_Inventario_Teorico_By_Codigo","IdInventarioEnc",BeInvEnc.Idinventarioenc,"IdProducto",gl.pprod.IdProducto);
+                        break;
+                    case 6:
+                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtNProd.getText().toString().trim(),"IdBodega",gl.IdBodega);
+                        break;
+                    case 7:
+                        callMethod("Guardar_Producto_Nuevo_Inventario","pCodigo",txtNProd.getText().toString().trim(),"IdBodega",gl.IdBodega);
+                        break;
                 }
 
                 progress.cancel();
@@ -457,6 +598,12 @@ public class frm_inv_cic_guardar extends PBase {
                     break;
                 case 4:
                     Get_IdProdBodega();
+                    break;
+                case 5:
+                    Llena_Lote();
+                    break;
+                case 6:
+                    Get_Producto();
                     break;
             }
 

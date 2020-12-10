@@ -68,7 +68,7 @@ public class frm_inv_cic_conteo extends PBase {
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
 
     private clsBeProducto prod = new clsBeProducto();
-    private clsBeProducto nprod = new clsBeProducto();
+
     private clsBeProducto npprod = new clsBeProducto();
     private clsBeProducto pBeProductoNuevo = new clsBeProducto();
 

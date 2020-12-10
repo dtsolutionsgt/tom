@@ -74,6 +74,7 @@ public class MainActivity extends PBase {
     private ArrayList<String> userlist= new ArrayList<String>();
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
+    private String NomOperador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -434,7 +435,9 @@ public class MainActivity extends PBase {
 
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
+                    NomOperador = users.items.get(position).Nombre_Completo;
                     gl.IdOperador = iduser;
+                    gl.gNomOperador = NomOperador;
 
                     txtpass.requestFocus();
                     showkeyb();
