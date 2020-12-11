@@ -4,234 +4,248 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_inv_enc_reconteo {
 
-    @Element(required=false) public int idinvencreconteoField=0;
-    @Element(required=false) public int idinventarioencField=0;
-    @Element(required=false) public int reconteoField=0;
-    @Element(required=false) public String estadoField="";
-    @Element(required=false) public String hora_iniField ="00:00:01";
-    @Element(required=false) public String hora_finField="00:00:01";
-    @Element(required=false) public String user_agrField="";
-    @Element(required=false) public String fec_agrField="1900-01-01T00:00:01";
-    @Element(required=false) public String user_modField="";
-    @Element(required=false) public String fec_modField="1900-01-01T00:00:01";
-    @Element(required=false) public String ubicacionField="";
-    @Element(required=false) public String codigoField="";
-    @Element(required=false) public String productoField="";
-    @Element(required=false) public String presentacionField="";
-    @Element(required=false) public String estadoProdField="";
-    @Element(required=false) public int idStockField=0;
-    @Element(required=false) public String loteField="";
-    @Element(required=false) public Double cantidadAnteriorField=0.0;
-    @Element(required=false) public Double cantidadField=0.0;
-    @Element(required=false) public Double pesoAnteriorField=0.0;
-    @Element(required=false) public Double pesoField=0.0;
-    @Element(required=false) public String operadorField="";
-    @Element(required=false) public String fecha_VenceField="1900-01-01T00:00:01";
-    @Element(required=false) public int idInvReconteoField=0;
+    @Element(required=false) public int Idinvencreconteo=0;
+    @Element(required=false) public int Idinventarioenc=0;
+    @Element(required=false) public int Reconteo=0;
+    @Element(required=false) public String Estado="";
+    @Element(required=false) public String Hora_ini ="00:00:01";
+    @Element(required=false) public String Hora_fin="00:00:01";
+    @Element(required=false) public String User_agr="";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String User_mod="";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Ubicacion="";
+    @Element(required=false) public String Codigo="";
+    @Element(required=false) public String Producto="";
+    @Element(required=false) public String Presentacion="";
+    @Element(required=false) public String EstadoProd="";
+    @Element(required=false) public int IdStock=0;
+    @Element(required=false) public String Lote="";
+    @Element(required=false) public Double cantidadAnterior=0.0;
+    @Element(required=false) public Double Cantidad=0.0;
+    @Element(required=false) public Double pesoAnterior=0.0;
+    @Element(required=false) public Double Peso=0.0;
+    @Element(required=false) public String Operador="";
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public int IdInvReconteo=0;
 
 
     public clsBeTrans_inv_enc_reconteo() {
     }
 
-    public clsBeTrans_inv_enc_reconteo(int idinvencreconteoField, int idinventarioencField, int reconteoField,
-                                       String estadoField,String hora_iniField, String hora_finField,String user_agrField,
-                                       String fec_agrField,String user_modField,String fec_modField,String ubicacionField,
-                                       String codigoField,String productoField,String presentacionField,String estadoProdField,
-                                       int idStockField,String loteField,Double cantidadAnteriorField,Double cantidadField,
-                                       Double pesoAnteriorField,Double pesoField,String operadorField,String fecha_VenceField,int idInvReconteoField) {
+    public clsBeTrans_inv_enc_reconteo(int Idinvencreconteo, int Idinventarioenc, int Reconteo,
+                                       String Estado,String Hora_ini, String Hora_fin,String User_agr,
+                                       String Fec_agr,String User_mod,String Fec_mod,String Ubicacion,
+                                       String Codigo,String Producto,String Presentacion,String EstadoProd,
+                                       int IdStock,String Lote,Double cantidadAnterior,Double Cantidad,
+                                       Double pesoAnterior,Double Peso,String Operador,String Fecha_Vence,int IdInvReconteo
+                                       ) {
 
-        this.idinvencreconteoField = idinvencreconteoField;
-        this.idinventarioencField = idinventarioencField;
-        this.reconteoField = reconteoField;
-        this.estadoField = estadoField;
-        this.hora_iniField = hora_iniField;
-        this.hora_finField = hora_finField;
-        this.user_agrField = user_agrField;
-        this.fec_agrField = fec_agrField;
-        this.user_modField = user_modField;
-        this.fec_modField = fec_modField;
-        this.ubicacionField = ubicacionField;
-        this.codigoField = codigoField;
-        this.productoField = productoField;
-        this.presentacionField = presentacionField;
-        this.estadoProdField = estadoProdField;
-        this.idStockField = idStockField;
-        this.loteField = loteField;
-        this.cantidadAnteriorField = cantidadAnteriorField;
-        this.cantidadField = cantidadField;
-        this.pesoAnteriorField = pesoAnteriorField;
-        this.pesoField = pesoField;
-        this.operadorField = operadorField;
-        this.fecha_VenceField = fecha_VenceField;
-        this.idInvReconteoField = idInvReconteoField;
+        this.Idinvencreconteo = Idinvencreconteo;
+        this.Idinventarioenc = Idinventarioenc;
+        this.Reconteo = Reconteo;
+        this.Estado = Estado;
+        this.Hora_ini = Hora_ini;
+        this.Hora_fin = Hora_fin;
+        this.User_agr = User_agr;
+        this.Fec_agr = Fec_agr;
+        this.User_mod = User_mod;
+        this.Fec_mod = Fec_mod;
+        this.Ubicacion = Ubicacion;
+        this.Codigo = Codigo;
+        this.Producto = Producto;
+        this.Presentacion = Presentacion;
+        this.EstadoProd = EstadoProd;
+        this.IdStock = IdStock;
+        this.Lote = Lote;
+        this.cantidadAnterior = cantidadAnterior;
+        this.Cantidad = Cantidad;
+        this.pesoAnterior = pesoAnterior;
+        this.Peso = Peso;
+        this.Operador = Operador;
+        this.Fecha_Vence = Fecha_Vence;
+        this.IdInvReconteo = IdInvReconteo;
+
+       // this.Idinvencreconteo = Idinvencreconteo;
 
     }
 
     public int getidinvencreconteoField() {
-        return idinvencreconteoField;
+        return Idinvencreconteo;
     }
     public void setidinvencreconteoField(int value) {
-        idinvencreconteoField=value;
+        Idinvencreconteo=value;
     }
 
-    public int getidinventarioencField() {
-        return idinventarioencField;
+    public int getIdinventarioenc() {
+        return Idinventarioenc;
     }
-    public void setidinventarioencField(int value) {
-        idinventarioencField=value;
+    public void setIdinventarioenc(int value) {
+        Idinventarioenc=value;
     }
 
     public int getreconteoField() {
-        return reconteoField;
+        return Reconteo;
     }
     public void setreconteoField(int value) {
-        reconteoField=value;
+        Reconteo=value;
     }
 
-    public String getestadoField() {
-        return estadoField;
+    public String getEstado() {
+        return Estado;
     }
-    public void setestadoField(String value) {
-        estadoField=value;
-    }
-
-    public String gethora_iniField() {
-        return hora_iniField;
-    }
-    public void sethora_iniField(String value) {
-        hora_iniField=value;
+    public void setEstado(String value) {
+        Estado=value;
     }
 
-    public String gethora_finField() {
-        return hora_finField;
+    public String getHora_ini() {
+        return Hora_ini;
     }
-    public void sethora_finField(String value) {
-        hora_finField=value;
-    }
-
-    public String getuser_agrField() {
-        return user_agrField;
-    }
-    public void setuser_agrField(String value) {
-        user_agrField=value;
+    public void setHora_ini(String value) {
+        Hora_ini=value;
     }
 
-    public String getfec_agrField() {
-        return fec_agrField;
+    public String getHora_fin() {
+        return Hora_fin;
     }
-    public void setfec_agrField(String value) {
-        fec_agrField=value;
-    }
-
-    public String getuser_modField() {
-        return user_modField;
-    }
-    public void setuser_modField(String value) {
-        user_modField=value;
+    public void setHora_fin(String value) {
+        Hora_fin=value;
     }
 
-    public String getfec_modField() {
-        return fec_modField;
+    public String getUser_agr() {
+        return User_agr;
     }
-    public void setfec_modField(String value) {
-        fec_modField=value;
-    }
-
-    public String getubicacionField() {
-        return ubicacionField;
-    }
-    public void setubicacionField(String value) {
-        ubicacionField=value;
+    public void setUser_agr(String value) {
+        User_agr=value;
     }
 
-    public String getcodigoField() {
-        return codigoField;
+    public String getFec_agr() {
+        return Fec_agr;
     }
-    public void setcodigoField(String value) {
-        codigoField=value;
-    }
-
-    public String getproductoField() {
-        return productoField;
-    }
-    public void setproductoField(String value) {
-        productoField=value;
+    public void setFec_agr(String value) {
+        Fec_agr=value;
     }
 
-    public String getpresentacionField() {
-        return presentacionField;
+    public String getUser_mod() {
+        return User_mod;
     }
-    public void setpresentacionField(String value) {
-        presentacionField=value;
+    public void setUser_mod(String value) {
+        User_mod=value;
+    }
+
+    public String getFec_mod() {
+        return Fec_mod;
+    }
+    public void setFec_mod(String value) {
+        Fec_mod=value;
+    }
+
+    public String getUbicacion() {
+        return Ubicacion;
+    }
+    public void setUbicacion(String value) {
+        Ubicacion=value;
+    }
+
+    public String getCodigo() {
+        return Codigo;
+    }
+    public void setCodigo(String value) {
+        Codigo=value;
+    }
+
+    public String getProducto() {
+        return Producto;
+    }
+    public void setProducto(String value) {
+        Producto=value;
+    }
+
+    public String getPresentacion() {
+        return Presentacion;
+    }
+    public void setPresentacion(String value) {
+        Presentacion=value;
     }
 
     public String getestadoProdField() {
-        return estadoProdField;
+        return EstadoProd;
     }
     public void setestadoProdField(String value) {
-        estadoProdField=value;
+        EstadoProd=value;
     }
 
-    public int getidStockField() {
-        return idStockField;
+    public int getIdStock() {
+        return IdStock;
     }
-    public void setidStockField(int value) {
-        idStockField=value;
-    }
-
-    public String getloteField() {
-        return loteField;
-    }
-    public void setloteField(String value) {
-        loteField=value;
+    public void setIdStock(int value) {
+        IdStock=value;
     }
 
-    public double getcantidadAnteriorField() {
-        return cantidadAnteriorField;
+    public String getLote() {
+        return Lote;
     }
-    public void setcantidadAnteriorField(double value) {
-        cantidadAnteriorField=value;
-    }
-
-    public double getcantidadField() {
-        return cantidadField;
-    }
-    public void setcantidadField(double value) {
-        cantidadField=value;
+    public void setLote(String value) {
+        Lote=value;
     }
 
-    public double getpesoAnteriorField() {
-        return pesoAnteriorField;
+    public double getcantidadAnterior() {
+        return cantidadAnterior;
     }
-    public void setpesoAnteriorField(double value) {
-        pesoAnteriorField=value;
-    }
-
-    public double getpesoField() {
-        return pesoField;
-    }
-    public void setpesoField(double value) {
-        pesoField=value;
+    public void setcantidadAnterior(double value) {
+        cantidadAnterior=value;
     }
 
-    public String getoperadorField() {
-        return operadorField;
+    public double getCantidad() {
+        return Cantidad;
     }
-    public void setoperadorField(String value) {
-        operadorField=value;
-    }
-
-    public String getfecha_VenceField() {
-        return fecha_VenceField;
-    }
-    public void setfecha_VenceField(String value) {
-        fecha_VenceField=value;
+    public void setCantidad(double value) {
+        Cantidad=value;
     }
 
-    public int getidInvReconteoField() {
-        return idInvReconteoField;
+    public double getpesoAnterior() {
+        return pesoAnterior;
     }
-    public void setidInvReconteoField(int value) {
-        idInvReconteoField=value;
+    public void setpesoAnterior(double value) {
+        pesoAnterior=value;
     }
+
+    public double getPeso() {
+        return Peso;
+    }
+    public void setPeso(double value) {
+        Peso=value;
+    }
+
+    public String getOperador() {
+        return Operador;
+    }
+    public void setOperador(String value) {
+        Operador=value;
+    }
+
+    public String getFecha_Vence() {
+        return Fecha_Vence;
+    }
+    public void setFecha_Vence(String value) {
+        Fecha_Vence=value;
+    }
+
+    public int getIdInvReconteo() {
+        return IdInvReconteo;
+    }
+    public void setIdInvReconteo(int value) {
+        IdInvReconteo=value;
+    }
+
+
+
+    public int getIdinvencreconteo() {
+        return Idinvencreconteo;
+    }
+    public void setIdinvencreconteo(int value) {
+        Idinvencreconteo=value;
+    }
+
+
 }

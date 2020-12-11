@@ -84,7 +84,7 @@ public class list_adapt_tareas_inventario extends BaseAdapter {
             holder.lblTranscurrido.setText("Transcurrido");
             holder.lblTranscurrido.setTextColor(R.style.titlestyle);
 
-        }else{
+        }else {
 
             holder.lblIdTarea.setText("0");
             holder.lblTipo.setText("--");
@@ -92,18 +92,27 @@ public class list_adapt_tareas_inventario extends BaseAdapter {
             holder.lblInicio.setText("--");
             holder.lblTranscurrido.setText("--");
 
-            if (pListInv.get(position).Idinventarioenc>0){
-                holder.lblIdTarea.setText(""+pListInv.get(position).Idinventarioenc);
+            if (pListInv.get(position).Idinventarioenc > 0) {
+                holder.lblIdTarea.setText("" + pListInv.get(position).Idinventarioenc);
             }
 
-            if (pListInv.get(position).Inicial){
+            if (pListInv.get(position).Inicial) {
                 holder.lblTipo.setText("Inicial");
-            }else{
+            } else {
                 holder.lblTipo.setText("Ciclico");
             }
 
-            if (!pListInv.get(position).Estado.isEmpty()){
+            if (!pListInv.get(position).Estado.isEmpty()) {
                 holder.lblEstadoInv.setText(pListInv.get(position).Estado);
+            }
+
+            if (!pListInv.get(position).Hora_ini.isEmpty()) {
+
+                holder.lblInicio.setText(pListInv.get(position).Hora_ini);
+
+            } else {
+
+                holder.lblInicio.setText("");
             }
 
             if (!pListInv.get(position).Transcurrido.isEmpty()){

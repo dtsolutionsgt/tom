@@ -25,8 +25,6 @@ import java.util.ArrayList;
 public class frm_list_inventario extends PBase {
 
     private clsBeTrans_inv_encList pListTareas = new clsBeTrans_inv_encList();
-    private clsBeTrans_inv_enc Tarea;
-
     private int idtarea=0;
 
     private WebServiceHandler ws;
@@ -207,8 +205,9 @@ public class frm_list_inventario extends PBase {
                 vItem = new clsBeTrans_inv_enc();
 
                 vItem= BeInv;
-                vItem.Hora_ini = du.convierteHoraMostar(vItem.Hora_ini);
-                vItem.Transcurrido = String.valueOf(du.DateDiff(BeInv.Hora_ini));
+                vItem.Hora_ini = du.convierteFechaMostar(BeInv.Hora_ini);
+                //vItem.Hora_ini = vItem.Hora_ini;
+                vItem.Transcurrido = String.valueOf((du.DateDiffPos(BeInv.Hora_ini)*24*60));
 
                 BeListInv.add(vItem);
 

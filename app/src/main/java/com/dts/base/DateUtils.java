@@ -481,6 +481,37 @@ public class DateUtils {
 		return Dif;
 	}
 
+	public int DateDiffPos(String pFecha) throws ParseException{
+		int Dif=0;
+		String fechaS,vFecha;
+		int cyear,cmonth,cday,ch,cm;
+
+		try{
+
+			String format = "dd-MM-yyyy";
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+
+			final Calendar c = Calendar.getInstance();
+			cyear = c.get(Calendar.YEAR);
+			cmonth = c.get(Calendar.MONTH)+1;
+			cday = c.get(Calendar.DAY_OF_MONTH);
+
+			fechaS=cday+"-"+cmonth+"-"+cyear+"";
+
+			Date dateObj1 = sdf.parse(fechaS);
+			Date dateObj2 = sdf.parse(pFecha);
+
+			long diff = dateObj1.getTime() - dateObj2.getTime();
+
+			Dif = (int) (diff / (24 * 60 * 60 * 1000));
+
+		}catch (Exception e){
+		}
+
+		return Dif;
+	}
+
+
 	public String convierteHoraMostar(String Fecha){
 		String vFecha="";
 

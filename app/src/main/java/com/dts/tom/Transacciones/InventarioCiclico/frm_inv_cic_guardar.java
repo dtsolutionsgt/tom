@@ -105,8 +105,6 @@ public class frm_inv_cic_guardar extends PBase {
         txtNCantContada = findViewById(R.id.txtNCantContada);
         txtNPesoContado = findViewById(R.id.txtNPesoContado);
 
-        //layoutparams = (RelativeLayout.LayoutParams) txtNLote.getLayoutParams();
-
         ws = new WebServiceHandler(frm_inv_cic_guardar.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
