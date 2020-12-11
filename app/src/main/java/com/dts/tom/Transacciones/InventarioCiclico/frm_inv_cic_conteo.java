@@ -67,21 +67,11 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
 
-    private clsBeProducto prod = new clsBeProducto();
-
-    private clsBeProducto npprod = new clsBeProducto();
-    private clsBeProducto pBeProductoNuevo = new clsBeProducto();
-
-    private clsBeProducto tProd = new clsBeProducto();
     private clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
     private clsBeTrans_inv_enc_reconteo reconteo = new clsBeTrans_inv_enc_reconteo();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
 
-    private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
-    private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
-
     private Object item;
-
 
 
     @Override

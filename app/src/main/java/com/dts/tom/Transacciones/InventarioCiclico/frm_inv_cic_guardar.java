@@ -28,6 +28,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -37,6 +38,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import android.widget.RelativeLayout.LayoutParams;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -464,8 +467,8 @@ public class frm_inv_cic_guardar extends PBase {
                 execws(4);
 
                 BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
-                BeTrans_inv_ciclico.idinvciclico = 0;
-                BeTrans_inv_ciclico.idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdInvCiclico = 0;
+                BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
                 BeTrans_inv_ciclico.IdStock = 0;
                 BeTrans_inv_ciclico.IdProductoBodega = idprodbod;
                 BeTrans_inv_ciclico.IdProductoEstado = Estado;
@@ -480,8 +483,8 @@ public class frm_inv_cic_guardar extends PBase {
 
                 BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
 
-                BeTrans_inv_ciclico.idinvciclico = 0;
-                BeTrans_inv_ciclico.idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdInvCiclico = 0;
+                BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
                 BeTrans_inv_ciclico.IdStock = 0;
                 BeTrans_inv_ciclico.IdProductoBodega = 0;
                 BeTrans_inv_ciclico.IdProductoEstado = Estado;
@@ -495,36 +498,40 @@ public class frm_inv_cic_guardar extends PBase {
                 BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
                 BeTrans_inv_ciclico.EsNuevo = true;
 
-                BeTrans_inv_ciclico.lote = txtNLote.getText().toString().trim();
-                BeTrans_inv_ciclico.lote_stock = txtNLote.getText().toString().trim();
+                BeTrans_inv_ciclico.Lote = txtNLote.getText().toString().trim();
+                BeTrans_inv_ciclico.Lote_stock = txtNLote.getText().toString().trim();
 
-                BeTrans_inv_ciclico.fecha_vence = dtpNVence.getText().toString().trim();
-                BeTrans_inv_ciclico.fecha_vence_stock = dtpNVence.getText().toString().trim();
+                //BeTrans_inv_ciclico.fecha_vence = dtpNVence.getText().toString().trim();
 
+                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(dtpNVence.getText().toString().trim());
 
-                BeTrans_inv_ciclico.cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
-                BeTrans_inv_ciclico.cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());
-                BeTrans_inv_ciclico.cant_reconteo = 0;
+                //BeTrans_inv_ciclico.fecha_vence_stock = dtpNVence.getText().toString().trim();
+                BeTrans_inv_ciclico.Fecha_vence_stock = du.convierteFecha(dtpNVence.getText().toString().trim());
+
+                BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
+                BeTrans_inv_ciclico.Cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());
+                BeTrans_inv_ciclico.Cant_reconteo = 0.00;
 
                 if(gl.pBeProductoNuevo.Control_peso){
 
-                    BeTrans_inv_ciclico.peso = Double.parseDouble(txtNPesoContado.getText().toString().trim());
-                    BeTrans_inv_ciclico.peso_stock = Double.parseDouble(txtNPesoContado.getText().toString().trim());
-                    BeTrans_inv_ciclico.peso_reconteo = 0;
+                    BeTrans_inv_ciclico.Peso = Double.parseDouble(txtNPesoContado.getText().toString().trim());
+                    BeTrans_inv_ciclico.Peso_stock = Double.parseDouble(txtNPesoContado.getText().toString().trim());
+                    BeTrans_inv_ciclico.Peso_reconteo = 0.00;
 
                 }
 
-                BeTrans_inv_ciclico.idoperador =  gl.IdOperador;
-                BeTrans_inv_ciclico.user_agr = gl.gNomOperador;
+                BeTrans_inv_ciclico.Idoperador =  gl.IdOperador;
+                BeTrans_inv_ciclico.User_agr = gl.gNomOperador;
 
                 try {
                     fecha_vence = du.getFechaActual();
-                    BeTrans_inv_ciclico.fec_agr = fecha_vence;
+                    BeTrans_inv_ciclico.Fec_agr = fecha_vence;
                 } catch (ParseException e) {
                     mu.msgbox("Guardar_obtieneFechaActual:"+e.getMessage());
                 }
 
-                //Guardar Inventario
+                //GuardarProductoNuevo
+                execws(7);
 
 
             }
@@ -534,10 +541,31 @@ public class frm_inv_cic_guardar extends PBase {
 
     }
 
-    public void Exit(View view) {
-        frm_inv_cic_guardar.super.finish();
-    }
+    private void GuardarProductoNuevo() {
 
+        boolean resultado;
+        try {
+
+            resultado= xobj.getresultSingle(Boolean.class,"Guardar_Producto_Nuevo_Inventario");
+
+            if(resultado){
+
+                toast("Registro guardado");
+
+
+            }else{
+
+                toast("Error al registrar " + resultado);
+                startActivity(new Intent(this, frm_inv_cic_conteo.class));
+            }
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+
+
+
+    }
 
     public class WebServiceHandler extends WebService {
 
@@ -568,7 +596,7 @@ public class frm_inv_cic_guardar extends PBase {
                         callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtNProd.getText().toString().trim(),"IdBodega",gl.IdBodega);
                         break;
                     case 7:
-                        callMethod("Guardar_Producto_Nuevo_Inventario","pCodigo",txtNProd.getText().toString().trim(),"IdBodega",gl.IdBodega);
+                        callMethod("Guardar_Producto_Nuevo_Inventario","pBeProducto",gl.pBeProductoNuevo, "IdBodega",gl.IdBodega,"IdInventario",BeInvEnc.Idinventarioenc,"EsCiclico",true,"BeInvCiclico",BeTrans_inv_ciclico,"BeInvInicial",null);
                         break;
                 }
 
@@ -605,6 +633,8 @@ public class frm_inv_cic_guardar extends PBase {
                 case 6:
                     Get_Producto();
                     break;
+                case 7:
+                    GuardarProductoNuevo();
             }
 
         } catch (Exception e) {
@@ -647,6 +677,10 @@ public class frm_inv_cic_guardar extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+    public void Exit(View view) {
+        frm_inv_cic_guardar.super.finish();
     }
 
 }
