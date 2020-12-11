@@ -833,7 +833,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //Es una barra de pallet válida por tamaño
                 int vLengthBarra = txtCodigoPrd.getText().toString().length();
 
-                if (vLengthBarra >= 16) {
+               // if (vLengthBarra >= 16) {
 
                     escaneoPallet = true;
 
@@ -842,7 +842,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     //Llama al método del WS Get_Stock_By_Lic_Plate
                     execws(5);
 
-                }
+                //}
 
             } else {
                 escaneoPallet = false;
@@ -1474,6 +1474,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
                 lblDescProducto.setText ("Código de LP no válido");
+                progress.cancel();
             }else{
 
                 if (escaneoPallet && productoList != null){
@@ -1487,6 +1488,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;
                         lblDescProducto.setText ("LP N.E.E.U");
+                        progress.cancel();
                     }else{
 
                         productoList = new clsBeProductoList();
@@ -1559,7 +1561,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (stockResList != null){
                 LlenaPresentaciones();
             }else{
-                msgbox("El producto en la ubicación origen");
+                msgbox("El producto no existe en la ubicación origen");
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.selectAll();
             }
@@ -1712,7 +1714,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0){
                     gl.gCPresAnterior = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
-                    gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
+                    if (cmbPresentacion.getSelectedItem().toString().split(" - ").length>1){
+                        gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
+                    }
                 }else{
                     gl.gCPresAnterior = -1;
                     gl.gCNomPresAnterior = "";
