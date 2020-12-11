@@ -68,6 +68,9 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public String Transcurrido="";
 
 
+
+
+
     public clsBeTrans_inv_enc() {
     }
 
@@ -140,6 +143,7 @@ public class clsBeTrans_inv_enc {
         this.FechaVerifica=FechaVerifica;
         this.Lote=Lote;
         this.UMBas=UMBas;
+
 
     }
 

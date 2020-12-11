@@ -543,28 +543,25 @@ public class frm_inv_cic_guardar extends PBase {
 
     private void GuardarProductoNuevo() {
 
-        boolean resultado;
         try {
 
-            resultado= xobj.getresultSingle(Boolean.class,"Guardar_Producto_Nuevo_Inventario");
+            Boolean Valida=false;
 
-            if(resultado){
+            Valida = xobj.getresult(Boolean.class,"Guardar_Producto_Nuevo_Inventario");
+
+            if(Valida){
 
                 toast("Registro guardado");
-
+                startActivity(new Intent(this, frm_inv_cic_conteo.class));
 
             }else{
 
-                toast("Error al registrar " + resultado);
-                startActivity(new Intent(this, frm_inv_cic_conteo.class));
+                toast("Error al registrar " + Valida);
             }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
-
-
-
     }
 
     public class WebServiceHandler extends WebService {

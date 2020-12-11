@@ -43,6 +43,9 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public clsBeBodega_ubicacionList Ubicaciones=new clsBeBodega_ubicacionList();
     @Element(required=false) public clsBeBodega_muellesList Muelles=new clsBeBodega_muellesList();
 
+    @Element(required=false) public String Cuenta_Ingreso_Mercancias="0";
+    @Element(required=false) public String Cuenta_Egreso_Mercancias="0";
+
 
     public clsBeBodega() {
     }
@@ -56,7 +59,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        double Alto,boolean Reservar_stocks_por_linea,boolean Rechazar_pedido_por_stock,String IdTipoTransaccion,
                        double Zoom,int IdMotivoUbicacionDanadoPicking,boolean cambio_ubicacion_auto,String codigo_bodega_erp,
                        int ubic_producto_ne,int IdProductoEstadoNE,clsBeEmpresa Empresa,clsBeBodega_areaList Areas,
-                       clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,clsBeBodega_muellesList Muelles
+                       clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,clsBeBodega_muellesList Muelles,
+            String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias
     ) {
 
         this.IdBodega=IdBodega;
@@ -99,6 +103,9 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Tramos=Tramos;
         this.Ubicaciones=Ubicaciones;
         this.Muelles=Muelles;
+
+        this.Cuenta_Ingreso_Mercancias= Cuenta_Ingreso_Mercancias;
+        this.Cuenta_Egreso_Mercancias = Cuenta_Egreso_Mercancias;
 
     }
 
@@ -318,6 +325,20 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setMuelles(clsBeBodega_muellesList value) {
         Muelles=value;
+    }
+
+    public String getCuenta_Ingreso_Mercancias() {
+        return Cuenta_Ingreso_Mercancias;
+    }
+    public void setCuenta_Ingreso_Mercancias(String value) {
+        Cuenta_Ingreso_Mercancias=value;
+    }
+
+    public String getCuenta_Egreso_Mercancias() {
+        return Cuenta_Egreso_Mercancias;
+    }
+    public void setCuenta_Egreso_Mercancias(String value) {
+        Cuenta_Egreso_Mercancias=value;
     }
 
 }

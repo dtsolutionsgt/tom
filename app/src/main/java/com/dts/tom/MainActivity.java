@@ -169,7 +169,7 @@ public class MainActivity extends PBase {
     }
 
     private void setURL(){
-        String url="http://192.168.0.102/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
