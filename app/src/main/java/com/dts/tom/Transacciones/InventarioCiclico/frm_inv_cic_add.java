@@ -97,9 +97,6 @@ public class frm_inv_cic_add extends PBase {
                     vFactor = gl.inv_ciclico.Factor;
                 }
 
-
-
-
                 if(gl.lista_estados.items != null){
 
                     bodlist.clear();
@@ -185,6 +182,8 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
+            txtCantContada.setText("");
+
             if(gl.inv_ciclico.cantidad > 0 || gl.inv_ciclico.cantidad != null){
 
                 if(idPresentacion == 0){
@@ -269,6 +268,12 @@ public class frm_inv_cic_add extends PBase {
                 toast("¡Peso incorrecto!");
             }
         }else{
+
+            if( gl.pprod.Control_lote){
+
+              String lote= txtLote1.getText().toString().trim();
+
+            }
             toast("¡Todo bien, guardar!");
         }
     }
