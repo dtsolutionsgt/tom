@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
+import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -33,6 +34,7 @@ public class frm_inv_cic_add extends PBase {
     private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
+    private  clsBeTrans_inv_ciclico_vw pitem;
 
 
     @Override
@@ -270,10 +272,16 @@ public class frm_inv_cic_add extends PBase {
         }else{
 
             if( gl.pprod.Control_lote){
-
               String lote= txtLote1.getText().toString().trim();
-
             }
+
+            if(gl.pprod.Control_vencimiento){
+
+               String fecha_vence =  dtpVence.getText().toString().trim();
+            }
+
+            pitem= new clsBeTrans_inv_ciclico_vw();
+
             toast("¡Todo bien, guardar!");
         }
     }
