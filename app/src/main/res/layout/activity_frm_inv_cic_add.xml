@@ -56,7 +56,7 @@
                     android:text="Ubicación:" />
 
                 <EditText
-                    android:id="@+id/txtNUbic"
+                    android:id="@+id/txtUbic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -70,7 +70,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/lblNUbic"
+                    android:id="@+id/lblUbic1"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -94,7 +94,7 @@
                     android:text="Producto:" />
 
                 <EditText
-                    android:id="@+id/txtNProd"
+                    android:id="@+id/txtProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -106,13 +106,13 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/lblNProd"
+                    android:id="@+id/lblProd"
                     style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
-                    android:textSize="14sp"
-                    android:text="Presentación:" />
+                    android:text="producto"
+                    android:textSize="14sp" />
             </TableRow>
 
             <TableRow
@@ -129,7 +129,7 @@
                     android:text="Estado:" />
 
                 <Spinner
-                    android:id="@+id/cboNEstado"
+                    android:id="@+id/cboEstado"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
             </TableRow>
@@ -148,7 +148,7 @@
                     android:text="Presentación:" />
 
                 <Spinner
-                    android:id="@+id/cboNPres"
+                    android:id="@+id/cboPres"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
@@ -169,7 +169,7 @@
                     android:text="Lote:" />
 
                 <EditText
-                    android:id="@+id/etlote_cic"
+                    android:id="@+id/txtLote1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -196,7 +196,7 @@
                     android:src="@drawable/calendar" />
 
                 <EditText
-                    android:id="@+id/dtpNVence"
+                    android:id="@+id/dtpVence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date" />
@@ -247,12 +247,12 @@
                 >
 
                 <EditText
-                    android:id="@+id/txtNCantContada"
+                    android:id="@+id/txtCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
                 <EditText
-                    android:id="@+id/txtNPesoContado"
+                    android:id="@+id/txtPesoContado"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -262,6 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guardar"
+                    android:onClick="btnGuardar"
                     android:textSize="14sp" />
 
             </TableRow>

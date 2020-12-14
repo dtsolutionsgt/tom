@@ -23,14 +23,15 @@ import java.util.List;
 public class frm_inv_cic_add extends PBase {
 
     private ImageView imgDate;
-    private EditText cmbVence_cic;
-    private EditText etubicacion_cic,etproducto,etlote_cic,txtCantContada,txtPesoContado;
-    private Spinner cmbEstado_cic,cmbPresent_cic;
-    private TextView txtlote_cic,lblCantStock,lblUM,txtmsg,txtprentacion_cic,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
+    private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
+    private Spinner cboEstado,cboPres;
+    private TextView txtlote_cic,lblCantStock,lblUM,lblUbic1,lblProd,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
     private int idPresentacion;
     private int year;
     private int month;
     private int day;
+    private double ocant, opeso;
+    private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
 
 
@@ -40,19 +41,25 @@ public class frm_inv_cic_add extends PBase {
         setContentView(R.layout.activity_frm_inv_cic_add);
         super.InitBase();
 
-        cmbVence_cic = (EditText) findViewById(R.id.dtpNVence);
-        etubicacion_cic = findViewById(R.id.txtNUbic);
-        etproducto = findViewById(R.id.txtNProd);
-        txtlote_cic = findViewById(R.id.lblNLote);
-        etlote_cic = findViewById(R.id.etlote_cic);
-        txtCantContada = findViewById(R.id.txtNCantContada);
-        txtPesoContado = findViewById(R.id.txtNPesoContado);
-        cmbEstado_cic = findViewById(R.id.cboNEstado);
-        cmbPresent_cic = findViewById(R.id.cboNPres);
+
+        txtUbic = findViewById(R.id.txtUbic);
+        txtProd = findViewById(R.id.txtProd);
+        lblUbic1 = findViewById(R.id.lblUbic1);
+        lblProd = findViewById(R.id.lblProd);
+
+
+        cboEstado = findViewById(R.id.cboEstado);
+        cboPres = findViewById(R.id.cboPres);
+        txtLote1 = findViewById(R.id.txtLote1);
+        dtpVence = (EditText) findViewById(R.id.dtpVence);
+
         lblCantStock = findViewById(R.id.lblCantStock);
+        txtCantContada = findViewById(R.id.txtCantContada);
+        txtPesoContado = findViewById(R.id.txtPesoContado);
         lblUM = findViewById(R.id.lblUM);
-        txtmsg = findViewById(R.id.lblNUbic);
-        txtprentacion_cic = findViewById(R.id.lblNProd);
+
+
+        txtlote_cic = findViewById(R.id.lblNLote);
         txtFecha_cic = findViewById(R.id.lblNVence);
         imgDate = findViewById(R.id.imgDate);
         txtpeso_cic = findViewById(R.id.txtpeso_cic);
@@ -102,23 +109,24 @@ public class frm_inv_cic_add extends PBase {
 
             ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
             EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbEstado_cic.setAdapter(EstadosAdapter);
-            if (bodlist.size()>0) cmbEstado_cic.setSelection(index-1);
+            cboEstado.setAdapter(EstadosAdapter);
+            if (bodlist.size()>0) cboEstado.setSelection(index-1);
 
-            etubicacion_cic.setText(gl.inv_ciclico.NoUbic +"");
-            txtmsg.setTypeface(null, Typeface.BOLD);
-            txtmsg.setText(gl.inv_ciclico.Ubic_nombre +"");
-            txtprentacion_cic.setTypeface(null, Typeface.BOLD);
-            txtprentacion_cic.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-            etlote_cic.setText(gl.inv_ciclico.Lote+"");
-            cmbVence_cic.setText(gl.inv_ciclico.Fecha_Vence);
+            txtUbic.setText(gl.inv_ciclico.NoUbic +"");
+
+            lblUbic1.setTypeface(null, Typeface.BOLD);
+            lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
+            lblProd.setTypeface(null, Typeface.BOLD);
+            lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
+            txtLote1.setText(gl.inv_ciclico.Lote+"");
+            dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
 
             //GT30112020 se llena spinner con presentación del producto
             List<String> spinnerArray =  new ArrayList<String>();
             spinnerArray.add(gl.inv_ciclico.Pres);
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbPresent_cic.setAdapter(dataAdapter);
+            cboPres.setAdapter(dataAdapter);
 
             if(gl.inv_ciclico.IdPresentacion == 0){
 
@@ -134,21 +142,21 @@ public class frm_inv_cic_add extends PBase {
 
             if( gl.pprod.Control_lote){
                 txtlote_cic.setVisibility(TextView.VISIBLE);
-                etlote_cic.setVisibility(TextView.VISIBLE);
+                txtLote1.setVisibility(TextView.VISIBLE);
             }else{
                 txtlote_cic.setVisibility(TextView.INVISIBLE);
-                etlote_cic.setVisibility(TextView.INVISIBLE);
+                txtLote1.setVisibility(TextView.INVISIBLE);
             }
 
 
             if(gl.pprod.Control_vencimiento){
                 txtFecha_cic.setVisibility(TextView.VISIBLE);
                 imgDate.setVisibility(TextView.VISIBLE);
-                cmbVence_cic.setVisibility(TextView.VISIBLE);
+                dtpVence.setVisibility(TextView.VISIBLE);
             }else{
                 txtFecha_cic.setVisibility(TextView.INVISIBLE);
                 imgDate.setVisibility(TextView.INVISIBLE);
-                cmbVence_cic.setVisibility(TextView.INVISIBLE);
+                dtpVence.setVisibility(TextView.INVISIBLE);
             }
 
 
@@ -185,7 +193,7 @@ public class frm_inv_cic_add extends PBase {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        cmbVence_cic.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        dtpVence.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                     }
                 }, year, month, day);
@@ -216,5 +224,26 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void forward(View view) {
+    }
+
+    public void btnGuardar(View view) {
+
+        if(txtUbic.getText().toString().trim().isEmpty()){
+            toast("¡Ubicacion incorrecta!");
+        }else if(txtProd.getText().toString().trim().isEmpty()){
+            toast("¡Producto incorrecto!");
+        }else if(txtCantContada.getText().toString().trim().isEmpty()){
+            toast("¡Cantidad incorrecta!");
+        }else if (gl.pprod.Control_lote){
+            if(txtLote1.getText().toString().trim().isEmpty()){
+                toast("¡Lote incorrecto!");
+            }
+        }else if(gl.inv_ciclico.control_peso){
+            if(txtPesoContado.getText().toString().trim().isEmpty()){
+                toast("¡Peso incorrecto!");
+            }
+        }else{
+            toast("¡Todo bien, guardar!");
+        }
     }
 }

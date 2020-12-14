@@ -3,7 +3,6 @@ package com.dts.tom.Transacciones.InventarioCiclico;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,13 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
@@ -28,7 +25,6 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -37,9 +33,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import android.widget.RelativeLayout.LayoutParams;
-
-import org.apache.commons.lang.ObjectUtils;
 
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
@@ -87,23 +80,23 @@ public class frm_inv_cic_guardar extends PBase {
 
         nidprod =0;
 
-        lblNUbic = findViewById(R.id.lblNUbic);
-        lblNProd = findViewById(R.id.lblNProd);
+        lblNUbic = findViewById(R.id.lblUbic1);
+        lblNProd = findViewById(R.id.lblProd);
         lblNPeso= findViewById(R.id.lblNPeso);
         lblNLote = findViewById(R.id.lblNLote);
         lblNVence = findViewById(R.id.lblNVence);
         txtpresent_cic = findViewById(R.id.txtpresent_cic);
 
         txtNUbic = findViewById(R.id.txtNUbic);
-        txtNProd = findViewById(R.id.txtNProd);
+        txtNProd = findViewById(R.id.txtProd);
         txtNLote = findViewById(R.id.txtNLote);
-        cboNEstado = findViewById(R.id.cboNEstado);
+        cboNEstado = findViewById(R.id.cboEstado);
         cboNPresN = findViewById(R.id.cboNPresN);
         cmbLoteN = findViewById(R.id.cmbLoteN);
         imgDate = findViewById(R.id.imgDate);
-        dtpNVence= findViewById(R.id.dtpNVence);
-        txtNCantContada = findViewById(R.id.txtNCantContada);
-        txtNPesoContado = findViewById(R.id.txtNPesoContado);
+        dtpNVence= findViewById(R.id.dtpVence);
+        txtNCantContada = findViewById(R.id.txtCantContada);
+        txtNPesoContado = findViewById(R.id.txtPesoContado);
 
         ws = new WebServiceHandler(frm_inv_cic_guardar.this,gl.wsurl);
         xobj = new XMLObject(ws);
