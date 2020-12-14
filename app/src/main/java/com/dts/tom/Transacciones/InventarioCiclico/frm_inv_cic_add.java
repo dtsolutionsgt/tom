@@ -30,7 +30,7 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
-    private double ocant, opeso;
+    private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
 
@@ -66,6 +66,7 @@ public class frm_inv_cic_add extends PBase {
         lbltitulo_cic = findViewById(R.id.lbltitulo_cic);
 
         idPresentacion =0;
+        vFactor = 0.00;
 
         setHandlers();
         Load();
@@ -89,6 +90,15 @@ public class frm_inv_cic_add extends PBase {
 
          //validaciones para obtener lista de estados por idPropietario
             if(gl.lista_estados != null){
+
+                if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
+                    vFactor = 0;
+                }else {
+                    vFactor = gl.inv_ciclico.Factor;
+                }
+
+
+
 
                 if(gl.lista_estados.items != null){
 
@@ -173,6 +183,22 @@ public class frm_inv_cic_add extends PBase {
             }
 
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
+
+
+            if(gl.inv_ciclico.cantidad > 0 || gl.inv_ciclico.cantidad != null){
+
+                if(idPresentacion == 0){
+
+                    String stringDecimal = String.format("%.6f", gl.inv_ciclico.cantidad);
+                    txtCantContada.setText(stringDecimal);
+
+                }else{
+
+                    double resultado = gl.inv_ciclico.cantidad / vFactor;
+                    String stringDecimal = String.format("%.6f", resultado);
+                    txtCantContada.setText(stringDecimal);
+                }
+            }
         }
 
     }

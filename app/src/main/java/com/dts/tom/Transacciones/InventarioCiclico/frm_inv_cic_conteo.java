@@ -598,7 +598,8 @@ public class frm_inv_cic_conteo extends PBase {
             if(item != null ){
                 tareapos = Idx;
                 txtBuscFiltro.setText("");
-                //Tarea_Conteo();
+                //Tarea_Conteo();Get_Control_Lote_And_Vencimiento_By_IdProductoBodega
+
                 //txtUbic.Text = item.Item("IdUbicacion");
                 //Valida_Ubicacion_Orig();
                 //txtProd.Focus();
