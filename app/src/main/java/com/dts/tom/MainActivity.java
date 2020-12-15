@@ -74,6 +74,7 @@ public class MainActivity extends PBase {
     private ArrayList<String> userlist= new ArrayList<String>();
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
+    private String NomOperador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +169,7 @@ public class MainActivity extends PBase {
     }
 
     private void setURL(){
-        String url="http://192.168.0.102/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -434,7 +435,9 @@ public class MainActivity extends PBase {
 
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
+                    NomOperador = users.items.get(position).Nombre_Completo;
                     gl.IdOperador = iduser;
+                    gl.gNomOperador = NomOperador;
 
                     txtpass.requestFocus();
                     showkeyb();
@@ -1003,7 +1006,8 @@ public class MainActivity extends PBase {
     private void getURL()
     {
 
-        gl.wsurl = "http://192.168.0.102/WSTOMHH_QA/TOMHHWS.asmx";
+        gl.wsurl = "http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
+
         gl.wsurl="";
 
         try {

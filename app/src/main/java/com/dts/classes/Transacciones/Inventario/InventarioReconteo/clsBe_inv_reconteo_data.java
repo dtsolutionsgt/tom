@@ -4,6 +4,11 @@ import org.simpleframework.xml.Element;
 
 public class clsBe_inv_reconteo_data {
 
+
+    @Element(required=false) public int idinventarioenc = 0;
+    @Element(required=false) public int IdUbicacion = 0;
+
+
     @Element(required=false) public int NoUbic=0;
     @Element(required=false) public String Codigo="";
     @Element(required=false) public String Producto_nombre="";
