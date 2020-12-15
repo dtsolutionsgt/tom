@@ -107,7 +107,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Barra:" />
+                    android:text="Lp:" />
 
                 <EditText
                     android:id="@+id/txtBarra"
