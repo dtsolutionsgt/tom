@@ -250,6 +250,7 @@
                     android:id="@+id/txtCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:text="0"
                     android:inputType="textPersonName" />
                 <EditText
                     android:id="@+id/txtPesoContado"

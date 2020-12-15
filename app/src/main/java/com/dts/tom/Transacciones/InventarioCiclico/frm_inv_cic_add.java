@@ -32,7 +32,7 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
-    private int idprod,IdProductoBodega,idubic;
+    private int IdProductoBodega,idubic;
     private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
@@ -71,12 +71,13 @@ public class frm_inv_cic_add extends PBase {
 
         idPresentacion =0;
         vFactor = 0.00;
-        idprod=0;
+        //idprod=0;
         IdProductoBodega = 0;
         idubic = 0;
 
-        setHandlers();
         Load();
+
+        setHandlers();
 
     }
 
@@ -211,9 +212,9 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
-            txtCantContada.setText("");
+            txtCantContada.setText("0");
 
-            if(gl.inv_ciclico.cantidad > 0 || gl.inv_ciclico.cantidad != null){
+            if(!gl.inv_ciclico.cantidad.equals(0.00)){
 
                 if(idPresentacion == 0){
 
@@ -233,43 +234,51 @@ public class frm_inv_cic_add extends PBase {
 
     private void Scan_Codigo_Producto() {
 
-
         if(gl.inv_ciclico.codigo_producto == null){
             toast("¡Producto no existe!");
         }else{
 
-            if(txtProd.getText().toString().trim() != gl.inv_ciclico.codigo_producto){
+            if(!gl.inv_ciclico.Codigo.equals(txtProd.getText().toString().trim())){
 
                 toast("El código de producto no es válido");
                 txtProd.requestFocus();
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
             }
         }
 
 
-        if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
+        if(IdProductoBodega == gl.inv_ciclico.IdProductoBodega){
 
-            buscaproducto(IdProductoBodega, txtProd.getText().toString().trim());
+           }
+        else{
+            if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
+
+                toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
+
+            }
         }
 
     }
 
-    private boolean buscaproducto(int idProductoBodega, String trim) {
+    private boolean buscaproducto(int idprod, String prodtxt) {
 
+        boolean respuesta = false;
         int ii, idu, idp;
 
-        for ( ii = 0; ii < gl.reconteo_list.size(); ii++){
+        for (ii = 0; ii < gl.reconteo_list.size() - 1; ii++) {
 
-            if(gl.reconteo_list.get(ii).IdUbicacion == idubic){
+            if (gl.reconteo_list.get(ii).IdUbicacion == idubic && gl.reconteo_list.get(ii).IdProductoBodega == idprod) {
 
+                txtUbic.setText(idubic + "");
+                respuesta = true;
+                break;
             }
-
         }
 
-
-        return  true;
+        return respuesta;
     }
 
 
@@ -327,7 +336,7 @@ public class frm_inv_cic_add extends PBase {
             toast("¡Ubicacion incorrecta!");
         }else if(txtProd.getText().toString().trim().isEmpty()){
             toast("¡Producto incorrecto!");
-        }else if(txtCantContada.getText().toString().trim().isEmpty()){
+        }else if(txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")){
             toast("¡Cantidad incorrecta!");
         }else if (gl.pprod.Control_lote){
             if(txtLote1.getText().toString().trim().isEmpty()){
