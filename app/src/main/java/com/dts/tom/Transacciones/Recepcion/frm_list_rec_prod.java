@@ -64,7 +64,7 @@ public class frm_list_rec_prod extends PBase {
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
     private  clsBeTrans_re_oc gBeReOC = new clsBeTrans_re_oc();
     private clsBeTrans_oc_detList pListDetalleOC = new clsBeTrans_oc_detList();
-    private clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
+    public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private static clsBeI_nav_barras_palletList lBeINavBarraPallet = new clsBeI_nav_barras_palletList();
     public static clsBeI_nav_barras_pallet BeINavBarraPallet= new clsBeI_nav_barras_pallet();
     private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();

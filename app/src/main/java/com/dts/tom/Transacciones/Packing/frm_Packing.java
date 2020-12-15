@@ -1205,11 +1205,8 @@ public class frm_Packing extends PBase {
 
             gMovimientoDet.IdUnidadMedida = cvStockItem.IdUnidadMedida;
 
-            if(EsCambioEstado ) {
-                gMovimientoDet.IdTipoTarea = 3;
-            }else{
-                gMovimientoDet.IdTipoTarea = 2;
-            }
+
+            gMovimientoDet.IdTipoTarea = 12;
 
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = cvStockItem.IdRecepcionEnc;
