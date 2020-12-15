@@ -67,6 +67,9 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
 
+
+
+
     private clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
     private clsBeTrans_inv_enc_reconteo reconteo = new clsBeTrans_inv_enc_reconteo();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
@@ -217,6 +220,9 @@ public class frm_inv_cic_conteo extends PBase {
     private void processCiclico_Listar_Conteo() {
 
         clsBe_inv_reconteo_data rec;
+
+
+
         try{
             DT = xobj.filldt();
             data_list.clear();
@@ -234,6 +240,7 @@ public class frm_inv_cic_conteo extends PBase {
                         while (!DT.isAfterLast()) {
 
                             data_rec = new clsBe_inv_reconteo_data();
+
                             data_rec.NoUbic = Integer.parseInt(DT.getString(4));
                             data_rec.IdProductoBodega = Integer.parseInt(DT.getString(1));
                             data_rec.IdPresentacion = Integer.parseInt(DT.getString(3));
@@ -263,6 +270,8 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.Factor = Double.valueOf(DT.getString(35));
 
                             data_list.add(data_rec);
+                            gl.reconteo_list.add(data_rec);
+
                             DT.moveToNext();
 
                         }

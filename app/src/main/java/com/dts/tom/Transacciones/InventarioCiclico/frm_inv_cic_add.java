@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.InventarioCiclico;
 import android.app.DatePickerDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -31,6 +32,7 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
+    private int idprod,IdProductoBodega,idubic;
     private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
@@ -69,6 +71,9 @@ public class frm_inv_cic_add extends PBase {
 
         idPresentacion =0;
         vFactor = 0.00;
+        idprod=0;
+        IdProductoBodega = 0;
+        idubic = 0;
 
         setHandlers();
         Load();
@@ -77,6 +82,27 @@ public class frm_inv_cic_add extends PBase {
 
     private void setHandlers() {
         try{
+
+            txtProd.setOnKeyListener(new View.OnKeyListener()
+            {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event)
+                {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                    {
+                        if(txtProd.getText().toString().trim().isEmpty()){
+
+                            toast("Ingrese código de producto");
+
+                        }else {
+
+                            Scan_Codigo_Producto();
+                        }
+                    }
+                    return false;
+                }
+
+            });
 
         }
         catch (Exception e){
@@ -122,6 +148,7 @@ public class frm_inv_cic_add extends PBase {
             if (bodlist.size()>0) cboEstado.setSelection(index-1);
 
             txtUbic.setText(gl.inv_ciclico.NoUbic +"");
+            idubic = gl.inv_ciclico.NoUbic;
 
             lblUbic1.setTypeface(null, Typeface.BOLD);
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
@@ -204,6 +231,47 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
+    private void Scan_Codigo_Producto() {
+
+
+        if(gl.inv_ciclico.codigo_producto == null){
+            toast("¡Producto no existe!");
+        }else{
+
+            if(txtProd.getText().toString().trim() != gl.inv_ciclico.codigo_producto){
+
+                toast("El código de producto no es válido");
+                txtProd.requestFocus();
+            }else{
+
+                IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+            }
+        }
+
+
+        if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
+
+            buscaproducto(IdProductoBodega, txtProd.getText().toString().trim());
+        }
+
+    }
+
+    private boolean buscaproducto(int idProductoBodega, String trim) {
+
+        int ii, idu, idp;
+
+        for ( ii = 0; ii < gl.reconteo_list.size(); ii++){
+
+            if(gl.reconteo_list.get(ii).IdUbicacion == idubic){
+
+            }
+
+        }
+
+
+        return  true;
+    }
+
 
     public void ChangeDate(View view) {
 
@@ -277,7 +345,7 @@ public class frm_inv_cic_add extends PBase {
 
             if(gl.pprod.Control_vencimiento){
 
-               String fecha_vence =  dtpVence.getText().toString().trim();
+                String fecha_vence = du.convierteFecha(dtpVence.getText().toString().trim());
             }
 
             pitem= new clsBeTrans_inv_ciclico_vw();

@@ -10,6 +10,8 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
+import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
+import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vwList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
@@ -21,6 +23,7 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,6 +103,13 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
+    public clsBeTrans_inv_ciclico_vw inv_ciclico_vw = new clsBeTrans_inv_ciclico_vw();
+    //public clsBeTrans_inv_ciclico_vwList inv_ciclico_vwList = new clsBeTrans_inv_ciclico_vwList();
+    public ArrayList<clsBeTrans_inv_ciclico_vw> inv_ciclico_vwList = new ArrayList<clsBeTrans_inv_ciclico_vw>();
+    public ArrayList<clsBe_inv_reconteo_data> reconteo_list = new ArrayList<clsBe_inv_reconteo_data>();
+
+
+
     public clsBeProducto pprod = new clsBeProducto();
     public clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     public String nuevo_producto_cic;
