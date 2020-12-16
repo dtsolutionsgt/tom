@@ -426,10 +426,8 @@ public class frm_inv_cic_add extends PBase {
             if(txtLote1.getText().toString().trim().isEmpty()){
                 toast("¡Lote incorrecto!");
             }
-        }else if(gl.inv_ciclico.control_peso){
-            if(txtPesoContado.getText().toString().trim().isEmpty()){
+        }else if(gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()){
                 toast("¡Peso incorrecto!");
-            }
         }else{
 
             Guardar();
