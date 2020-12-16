@@ -422,10 +422,8 @@ public class frm_inv_cic_add extends PBase {
             toast("¡Producto incorrecto!");
         }else if(txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")){
             toast("¡Cantidad incorrecta!");
-        }else if (gl.pprod.Control_lote){
-            if(txtLote1.getText().toString().trim().isEmpty()){
+        }else if (gl.pprod.Control_lote && txtLote1.getText().toString().trim().isEmpty() ){
                 toast("¡Lote incorrecto!");
-            }
         }else if(gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()){
                 toast("¡Peso incorrecto!");
         }else{
@@ -602,7 +600,7 @@ public class frm_inv_cic_add extends PBase {
                     Inv_Ciclico_Actualiza_Conteo();
                     break;
                 case 2:
-                    MaxIDInventarioCiclico();
+                    MaxIDInventarioCiclico_();
                     break;
             }
 
@@ -623,11 +621,11 @@ public class frm_inv_cic_add extends PBase {
         }
     }
 
-    private void MaxIDInventarioCiclico() {
+    private void MaxIDInventarioCiclico_() {
 
         try {
 
-            IDInventarioCiclico = xobj.getresult(Integer.class,"MaxIDInventarioCiclico");
+            IDInventarioCiclico = xobj.getresultSingle(Integer.class,"MaxIDInventarioCiclico");
             IDInventarioCiclico = IDInventarioCiclico +1;
 
         } catch (Exception e) {
