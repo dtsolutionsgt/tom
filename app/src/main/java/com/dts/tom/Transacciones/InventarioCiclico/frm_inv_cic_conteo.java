@@ -241,9 +241,18 @@ public class frm_inv_cic_conteo extends PBase {
 
                             data_rec = new clsBe_inv_reconteo_data();
 
+                            data_rec.idinventarioenc = Integer.parseInt(DT.getString(0));
                             data_rec.NoUbic = Integer.parseInt(DT.getString(4));
                             data_rec.IdProductoBodega = Integer.parseInt(DT.getString(1));
-                            data_rec.IdPresentacion = Integer.parseInt(DT.getString(3));
+                            data_rec.IdProductoEstado = Integer.parseInt(DT.getString(2));
+
+                            if(DT.getString(3) != null){
+                                data_rec.IdPresentacion = Integer.parseInt(DT.getString(3));
+                            }else{
+                                data_rec.IdPresentacion = 0;
+                            }
+
+
                             data_rec.Codigo = DT.getString(30);
                             data_rec.Producto_nombre = DT.getString(20);
                             data_rec.Pres = DT.getString(22);
@@ -255,6 +264,9 @@ public class frm_inv_cic_conteo extends PBase {
                             }else{
                                 data_rec.Lote = "";
                             }
+
+                            data_rec.Lote_stock = DT.getString(6);
+                            data_rec.Peso = Double.valueOf(DT.getString(14));
 
                             if (DT.getString(9)!=null){
                                 //vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
@@ -268,6 +280,8 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.Ubic_nombre = DT.getString(21);
                             data_rec.Estado = DT.getString(19);
                             data_rec.Factor = Double.valueOf(DT.getString(35));
+                            data_rec.idPresentacion_nuevo = Integer.parseInt(DT.getString(27));
+                            data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(29));
 
                             data_list.add(data_rec);
                             gl.reconteo_list.add(data_rec);

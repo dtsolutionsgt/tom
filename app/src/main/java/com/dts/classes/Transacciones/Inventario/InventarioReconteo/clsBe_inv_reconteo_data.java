@@ -11,6 +11,7 @@ public class clsBe_inv_reconteo_data {
 
     @Element(required=false) public int NoUbic=0;
     @Element(required=false) public String Codigo="";
+    @Element(required=false) public int IdProductoEstado=0;
     @Element(required=false) public String Producto_nombre="";
     @Element(required=false) public int IdPresentacion=0;
     @Element(required=false) public String UMBas="";
@@ -20,7 +21,9 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public Double Peso_Conteo=0.0;
     @Element(required=false) public Double Cant_Stock=0.0;
     @Element(required=false) public Double Peso_Stock=0.0;
+    @Element(required=false) public Double Peso=0.0;
     @Element(required=false) public String Lote="";
+    @Element(required=false) public String Lote_stock="";
     @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
     @Element(required=false) public Boolean control_peso=false;
     @Element(required=false) public int Conteo=0;
@@ -29,6 +32,9 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public int IdProductoBodega=0;
     @Element(required=false) public String Tramo="";
     @Element(required=false) public int IndiceX=0;
+    @Element(required=false) public int idPresentacion_nuevo=0;
+    @Element(required=false) public int IdProductoEst_nuevo=0;
+
     @Element(required=false) public String codigo_producto="";
     @Element(required=false) public int Nivel=0;
     @Element(required=false) public String Pos="";
@@ -37,14 +43,16 @@ public class clsBe_inv_reconteo_data {
 
     public clsBe_inv_reconteo_data(){}
 
-    public clsBe_inv_reconteo_data(int NoUbic,String Codigo,String Producto_nombre,int IdPresentacion,String UMBas,
+    public clsBe_inv_reconteo_data(int NoUbic,String Codigo,String Producto_nombre,int IdProductoEstado,int IdPresentacion,String UMBas,
                                    String Pres,Double Cant_Conteo,Double cantidad,Double Peso_Conteo,Double Cant_Stock,
-                                   Double Peso_Stock,String Lote,String Fecha_Vence, boolean control_peso,int Conteo,
-                                   String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,String codigo_producto,
+                                   Double Peso_Stock,Double Peso,String Lote,String Lote_stock,String Fecha_Vence, boolean control_peso,int Conteo,
+                                   String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,int idPresentacion_nuevo,
+                                   int IdProductoEst_nuevo,String codigo_producto,
                                    int Nivel,String Pos,Double Factor){
 
         this.NoUbic = NoUbic;
         this.Codigo = Codigo;
+        this.IdProductoEstado = IdProductoEstado;
         this.Producto_nombre = Producto_nombre;
         this.IdPresentacion = IdPresentacion;
         this.UMBas = UMBas;
@@ -54,7 +62,9 @@ public class clsBe_inv_reconteo_data {
         this.Peso_Conteo = Peso_Conteo;
         this.Cant_Stock = Cant_Stock;
         this.Peso_Stock = Peso_Stock;
+        this.Peso = Peso;
         this.Lote = Lote;
+        this.Lote_stock = Lote_stock;
         this.Fecha_Vence = Fecha_Vence;
         this.control_peso = control_peso;
         this.Conteo = Conteo;
@@ -63,6 +73,8 @@ public class clsBe_inv_reconteo_data {
         this.IdProductoBodega = IdProductoBodega;
         this.Tramo = Tramo;
         this.IndiceX = IndiceX;
+        this.idPresentacion_nuevo = idPresentacion_nuevo;
+        this.IdProductoEst_nuevo = IdProductoEst_nuevo;
         this.codigo_producto = codigo_producto;
         this.Nivel = Nivel;
         this.Pos = Pos;
@@ -81,6 +93,13 @@ public class clsBe_inv_reconteo_data {
     }
     public void setCodigo(String value) {
         Codigo=value;
+    }
+
+    public int getIdProductoEstado() {
+        return IdProductoEstado;
+    }
+    public void setIdProductoEstado(int value) {
+        IdProductoEstado=value;
     }
 
     public int getIdPresentacion() {
@@ -150,6 +169,20 @@ public class clsBe_inv_reconteo_data {
         Peso_Stock=value;
     }
 
+    public Double getPeso() {
+        return Peso;
+    }
+    public void setPeso(Double value) {
+        Peso=value;
+    }
+
+    public String getLote_stock() {
+        return Lote_stock;
+    }
+    public void setLote_stock(String value) {
+        Lote_stock=value;
+    }
+
     public String getLote() {
         return Lote;
     }
@@ -164,15 +197,12 @@ public class clsBe_inv_reconteo_data {
         control_peso=value;
     }
 
-
     public String getFecha_Vence() {
         return Fecha_Vence;
     }
     public void setFecha_Vence(String value) {
         Fecha_Vence=value;
     }
-
-
 
     public Integer getConteo() {
         return Conteo;
@@ -211,12 +241,25 @@ public class clsBe_inv_reconteo_data {
         Tramo=value;
     }
 
-
     public Integer getIndiceX() {
         return IndiceX;
     }
     public void setIndiceX(Integer value) {
         IndiceX=value;
+    }
+
+    public Integer getidPresentacion_nuevo() {
+        return idPresentacion_nuevo;
+    }
+    public void setidPresentacion_nuevo(Integer value) {
+        idPresentacion_nuevo=value;
+    }
+
+    public Integer getIdProductoEst_nuevo() {
+        return IdProductoEst_nuevo;
+    }
+    public void setIdProductoEst_nuevo(Integer value) {
+        IdProductoEst_nuevo=value;
     }
 
     public String getcodigo_producto() {
