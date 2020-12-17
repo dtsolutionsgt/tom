@@ -42,13 +42,13 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
-    private int IdProductoBodega,idubic;
+    private int IdProductoBodega,idubic, idstock;
     private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
     private  clsBeTrans_inv_ciclico_vw pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
-
+    private boolean nuevoRegistro;
     //variables para obtener id de los combobox
     private int IdEstadoselected, IdPresentacionselected;
 
@@ -464,11 +464,16 @@ public class frm_inv_cic_add extends PBase {
 
             if(noubicflag){
 
+                if(!AgregaNuevoRegistro(0)){
+                    //return;
+                    toast("Nuevo registro ok, id = 0!");
+                }
+
             }else if(txtLote1.getText().toString().trim() !=  gl.inv_ciclico.Lote_stock){
 
-                // If Not AgregaNuevoRegistro(1) Then Return
                 if(!AgregaNuevoRegistro(1)){
-                    return;
+                    //return;
+                    toast("Nuevo registro ok, nuevo correlativo!");
                 }
 
             }else{
@@ -500,7 +505,11 @@ public class frm_inv_cic_add extends PBase {
 
             if(noubicflag){
 
-                //If Not AgregaNuevoRegistro(0) Then Return
+                if(!AgregaNuevoRegistro(0)){
+
+                    toast("Nuevo registro ok, idstock = 0!");
+                }
+
                 //Tarea_Conteo()
             }else{
 
@@ -538,44 +547,48 @@ public class frm_inv_cic_add extends PBase {
 
             if(IdStock > 0){
 
+                idstock = IdStock;
                 //obtener el MaxIDInventarioCiclico
                 execws(2);
-            }
 
-
-            BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
-
-            BeTrans_inv_ciclico.IdInvCiclico = 0;
-            BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
-            BeTrans_inv_ciclico.IdStock = IDInventarioCiclico;
-            BeTrans_inv_ciclico.IdProductoBodega =  gl.inv_ciclico.IdProductoBodega;
-            BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
-            BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
-            BeTrans_inv_ciclico.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-            BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
-            BeTrans_inv_ciclico.IdUbicacion = idubic;
-            BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
-            BeTrans_inv_ciclico.EsNuevo = true;
-
-
-            if( gl.pprod.Control_lote){
-                BeTrans_inv_ciclico.Lote = gl.inv_ciclico.Lote;
-                if(IdStock > 0){
-                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote_stock;
-                }else {
-                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote;
-                }
-            }
-
-            if(gl.pprod.Control_vencimiento){
-                BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
-                BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
             }else {
-                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
-                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+
+
+                BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+                BeTrans_inv_ciclico.IdInvCiclico = 0;
+                BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdStock = IDInventarioCiclico;
+                BeTrans_inv_ciclico.IdProductoBodega =  gl.inv_ciclico.IdProductoBodega;
+                BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
+                BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
+                BeTrans_inv_ciclico.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                BeTrans_inv_ciclico.IdUbicacion = idubic;
+                BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
+                BeTrans_inv_ciclico.EsNuevo = true;
+
+                if( gl.pprod.Control_lote){
+                    BeTrans_inv_ciclico.Lote = gl.inv_ciclico.Lote;
+                    if(idstock > 0){
+                        BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote_stock;
+                    }else {
+                        BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote;
+                    }
+                }
+
+                if(gl.pprod.Control_vencimiento){
+                    BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                    BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+                }else {
+                    BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                    BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                }
+
+                nuevoRegistro = true;
+
             }
 
-            return  true;
+            return  nuevoRegistro;
         }
         catch (Exception e){
             mu.msgbox("inv_cic_AgregarNuevoRegistro:"+e.getMessage());
@@ -643,7 +656,41 @@ public class frm_inv_cic_add extends PBase {
 
         try {
 
-            IDInventarioCiclico = xobj.getresultSingle(Integer.class,"MaxIDInventarioCiclico");
+            IDInventarioCiclico = xobj.getresult(Integer.class,"MaxIDInventarioCiclico");
+
+            BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+            BeTrans_inv_ciclico.IdInvCiclico = 0;
+            BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
+            BeTrans_inv_ciclico.IdStock = IDInventarioCiclico;
+            BeTrans_inv_ciclico.IdProductoBodega =  gl.inv_ciclico.IdProductoBodega;
+            BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
+            BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
+            BeTrans_inv_ciclico.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+            BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+            BeTrans_inv_ciclico.IdUbicacion = idubic;
+            BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
+            BeTrans_inv_ciclico.EsNuevo = true;
+
+            if( gl.pprod.Control_lote){
+                BeTrans_inv_ciclico.Lote = gl.inv_ciclico.Lote;
+                if(idstock > 0){
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote_stock;
+                }else {
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote;
+                }
+            }
+
+            if(gl.pprod.Control_vencimiento){
+                BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+            }else {
+                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+            }
+
+
+            nuevoRegistro = true;
+
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
