@@ -532,13 +532,13 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
-    private boolean AgregaNuevoRegistro(int i){
+    private boolean AgregaNuevoRegistro(int IdStock){
 
         try{
 
-            if(i > 0){
+            if(IdStock > 0){
 
-                //obtener el MaxIdInventario Ciclico
+                //obtener el MaxIDInventarioCiclico
                 execws(2);
             }
 
@@ -556,6 +556,24 @@ public class frm_inv_cic_add extends PBase {
             BeTrans_inv_ciclico.IdUbicacion = idubic;
             BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
             BeTrans_inv_ciclico.EsNuevo = true;
+
+
+            if( gl.pprod.Control_lote){
+                BeTrans_inv_ciclico.Lote = gl.inv_ciclico.Lote;
+                if(IdStock > 0){
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote_stock;
+                }else {
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote;
+                }
+            }
+
+            if(gl.pprod.Control_vencimiento){
+                BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+            }else {
+                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+            }
 
             return  true;
         }
@@ -626,7 +644,6 @@ public class frm_inv_cic_add extends PBase {
         try {
 
             IDInventarioCiclico = xobj.getresultSingle(Integer.class,"MaxIDInventarioCiclico");
-            IDInventarioCiclico = IDInventarioCiclico +1;
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());

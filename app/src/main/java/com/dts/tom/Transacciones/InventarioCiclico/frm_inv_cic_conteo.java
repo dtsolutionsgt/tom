@@ -268,7 +268,9 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.Lote_stock = DT.getString(6);
                             data_rec.Peso = Double.valueOf(DT.getString(14));
 
-                            if (DT.getString(9)!=null){
+
+                            //fecha_vence_stock = index 8, fecha_vence = index 9
+                            if (DT.getString(8)!=null){
                                 //vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
                                 data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
                             }else{
