@@ -44,7 +44,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino;
+    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate;
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
@@ -139,6 +139,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
             txtCantidad = (EditText) findViewById(R.id.txtCantidad);
             txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
+            txtLicPlate = (EditText)findViewById(R.id.txtLipPlate);
 
             lblUbicCompleta = (TextView) findViewById(R.id.lblUbicCompleta);
             lblDescProducto = (TextView) findViewById(R.id.lblDescProducto);
@@ -359,6 +360,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     llenaDatosProducto();
+                }
+
+                return false;
+            }
+        });
+
+        txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
                 }
 
                 return false;
@@ -826,21 +838,22 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             String vStarWithParameter = "$";
 
             //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-            if (txtCodigoPrd.getText().toString().startsWith("$") ||
-                    txtCodigoPrd.getText().toString().startsWith("(01)") ||
-                    txtCodigoPrd.getText().toString().startsWith(vStarWithParameter)) {
+            if (txtLicPlate.getText().toString().startsWith("$") ||
+                    txtLicPlate.getText().toString().startsWith("(01)") ||
+                    txtLicPlate.getText().toString().startsWith(vStarWithParameter)) {
 
                 //Es una barra de pallet válida por tamaño
-                int vLengthBarra = txtCodigoPrd.getText().toString().length();
+                int vLengthBarra = txtLicPlate.getText().toString().length();
 
                // if (vLengthBarra >= 16) {
 
                     escaneoPallet = true;
 
-                    pLicensePlate = txtCodigoPrd.getText().toString().replace("$", "");
+                    pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
                     //Llama al método del WS Get_Stock_By_Lic_Plate
-                    execws(5);
+
+                    execws(17);
 
                 //}
 
@@ -1104,6 +1117,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 16:
                     processUbicDestinoSug();
                     break;
+                case 17:
+                    processStockLP_AndCodigo();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1203,6 +1219,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     case 16://Obtiene descripción de la ubicación destino sugerida
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
+                        break;
+                    case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo","pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
+                                "pIdBodega", gl.IdBodega);
                         break;
                 }
 
@@ -1355,8 +1375,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }else{
                 progress.cancel();
-                txtCodigoPrd.requestFocus();
-                txtCodigoPrd.selectAll();
+                txtLicPlate.requestFocus();
+                txtLicPlate.selectAll();
             }
 
         } catch (Exception e) {
@@ -1764,6 +1784,71 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    private void processStockLP_AndCodigo(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            productoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_Codigo");
+
+            if (escaneoPallet && productoList == null) {
+                lblDescProducto.setTextColor(Color.RED);
+                cvProdID = 0;
+                lblDescProducto.setText ("Código de LP no válido");
+                progress.cancel();
+            }else{
+
+                if (escaneoPallet && productoList != null){
+
+                    List AuxList = stream(productoList.items)
+                            .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                            .toList();
+
+                    if (AuxList.size() == 0){
+                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDescProducto.setTextColor(Color.RED);
+                        cvProdID = 0;
+                        lblDescProducto.setText ("LP N.E.E.U");
+                        progress.cancel();
+                    }else{
+
+                        productoList = new clsBeProductoList();
+                        productoList.items = AuxList;
+
+                        BeProductoUbicacion = productoList.items.get(0);
+                        BeStockPallet = productoList.items.get(0).Stock;
+
+                        lblDescProducto.setTextColor(Color.BLUE);
+                        lblDescProducto.setText(BeProductoUbicacion.getNombre());
+
+                        cvProd = BeProductoUbicacion;
+                        cvProdID = BeProductoUbicacion.getIdProducto();
+                        cvPropID = BeProductoUbicacion.getIdPropietario();
+                        cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+
+                        cvLote = BeStockPallet.Lote;
+                        cvPresID = BeStockPallet.IdPresentacion;
+                        cvEstOrigen = BeStockPallet.IdProductoEstado;
+                        cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                        //Llama al método del WS Get_Estados_By_IdPropietario
+                        execws(10);
+                    }
+                }else{
+                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    execws(3);
+                }
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
     private void inicializaTarea(boolean finalizar){
         try{
 
@@ -1772,6 +1857,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             cvUbicOrigID = 0;
             txtCodigoPrd.setText("");
+            txtLicPlate.setText("");
             lblDescProducto.setText("");
             cmbPresentacion.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -1805,6 +1891,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
             txtCodigoPrd.setEnabled(true);
+            txtLicPlate.setEnabled(true);
 
             validarDatos = false;
             vProcesar = false;
@@ -1830,6 +1917,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.show();
 
             txtCodigoPrd.setText("");
+            txtLicPlate.setText("");
             lblDescProducto.setText("");
             cmbPresentacion.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -1861,6 +1949,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
             txtCodigoPrd.setEnabled(true);
+            txtLicPlate.setEnabled(true);
 
             validarDatos = false;
             vProcesar = false;
