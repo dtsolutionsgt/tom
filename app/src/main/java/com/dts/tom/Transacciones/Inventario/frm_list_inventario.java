@@ -257,7 +257,7 @@ public class frm_list_inventario extends PBase {
                         break;
                 }
 
-                progress.cancel();
+                //progress.cancel();
 
             } catch (Exception e) {
                 progress.cancel();
@@ -291,14 +291,20 @@ public class frm_list_inventario extends PBase {
             if (pListTareas!=null){
                 if (pListTareas.items!=null){
                     Llena_Lista_Tareas();
+
+                    progress.cancel();
+
                 }else{
+                    progress.cancel();
                     mu.msgbox("No hay tareas de inventario disponibles");
                 }
             }else{
+                progress.cancel();
                 mu.msgbox("No hay tareas de inventario disponibles");
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processListTareas:"+e.getMessage());
         }
     }

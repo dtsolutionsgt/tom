@@ -311,8 +311,8 @@ public class frm_inv_cic_add extends PBase {
 
                 }else{
 
-                    double resultado = gl.inv_ciclico.cantidad / vFactor;
-                    String stringDecimal = String.format("%.6f", resultado);
+                    double resultado_ = gl.inv_ciclico.cantidad / vFactor;
+                    String stringDecimal = String.format("%.6f", resultado_);
                     txtCantContada.setText(stringDecimal);
                 }
             }
@@ -333,6 +333,7 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+                txtCantContada.requestFocus();
 
             }
         }
@@ -466,14 +467,14 @@ public class frm_inv_cic_add extends PBase {
 
                 if(!AgregaNuevoRegistro(0)){
                     //return;
-                    toast("Nuevo registro ok, id = 0!");
+                    toast("errror con correlativo =0");
                 }
 
             }else if(txtLote1.getText().toString().trim() !=  gl.inv_ciclico.Lote_stock){
 
                 if(!AgregaNuevoRegistro(1)){
                     //return;
-                    toast("Nuevo registro ok, nuevo correlativo!");
+                    toast("errror con nuevo correlativo!");
                 }
 
             }else{
@@ -529,8 +530,9 @@ public class frm_inv_cic_add extends PBase {
 
                 if(pitem.IdPresentacion > 0){
 
-                    String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                    //String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
+                    //pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                    pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
                 //ejecutar proceso actualización
                 execws(1);
@@ -587,7 +589,7 @@ public class frm_inv_cic_add extends PBase {
                // m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
                 execws(3);
 
-                nuevoRegistro = true;
+                //nuevoRegistro = true;
 
             }
 
@@ -653,7 +655,10 @@ public class frm_inv_cic_add extends PBase {
         try {
             int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo");
 
-            toast("¡Todo bien, guardado!");
+            if(respuesta !=0){
+
+                toast("¡Todo bien, guardado!");
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());

@@ -165,12 +165,16 @@ public class frm_inv_cic_conteo extends PBase {
 
                         chkPendientes = true;
                         //ListaTareas();
+                        checkbox.setText("Pendientes");
+                        ProgressDialog("Cargando pendientes.");
                         execws(1);
 
                     } else {
 
                         chkPendientes = false;
                         //ListaTareas();
+                        checkbox.setText("Contados");
+                        ProgressDialog("Cargando contados.");
                         execws(1);
 
                     }
@@ -220,8 +224,6 @@ public class frm_inv_cic_conteo extends PBase {
     private void processCiclico_Listar_Conteo() {
 
         clsBe_inv_reconteo_data rec;
-
-
 
         try{
             DT = xobj.filldt();
@@ -753,7 +755,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                 }
 
-                progress.cancel();
+                //progress.cancel();
 
             } catch (Exception e) {
                 progress.cancel();
