@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 
 public class frm_inv_cic_add extends PBase {
@@ -45,9 +48,14 @@ public class frm_inv_cic_add extends PBase {
     private int IdProductoBodega,idubic, idstock;
     private double ocant, opeso,vFactor;
     private String Resultado;
+
     private ArrayList<String> bodlist= new ArrayList<String>();
+    private ArrayList<String> PresList= new ArrayList<String>();
+
     private  clsBeTrans_inv_ciclico_vw pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
+    private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
+
     private boolean nuevoRegistro;
     //variables para obtener id de los combobox
     private int IdEstadoselected, IdPresentacionselected;
@@ -205,14 +213,14 @@ public class frm_inv_cic_add extends PBase {
 
         if(gl.inv_ciclico !=null){
 
+            if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
+                vFactor = 0;
+            }else {
+                vFactor = gl.inv_ciclico.Factor;
+            }
+
          //validaciones para obtener lista de estados por idPropietario
             if(gl.lista_estados != null){
-
-                if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
-                    vFactor = 0;
-                }else {
-                    vFactor = gl.inv_ciclico.Factor;
-                }
 
                 if(gl.lista_estados.items != null){
 
@@ -235,6 +243,10 @@ public class frm_inv_cic_add extends PBase {
             EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboEstado.setAdapter(EstadosAdapter);
             if (bodlist.size()>0) cboEstado.setSelection(index-1);
+
+
+             execws(4);
+
 
             txtUbic.setText(gl.inv_ciclico.NoUbic +"");
             idubic = gl.inv_ciclico.NoUbic;
@@ -620,6 +632,9 @@ public class frm_inv_cic_add extends PBase {
                     case 3:
                         callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", BeTrans_inv_ciclico);
                         break;
+                    case 4:
+                        callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", gl.pprod.IdProducto, "pActivo", true);
+                        break;
                     }
 
             } catch (Exception e) {
@@ -643,11 +658,63 @@ public class frm_inv_cic_add extends PBase {
                 case 3:
                     Inventario_Agregar_Conteo_();
                     break;
+                case 4:
+                    processPresentacion();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void processPresentacion() {
+
+        try {
+            BeListPres = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
+
+            if (BeListPres!=null){
+
+                if (BeListPres.items!=null){
+
+                    Listar_Presentaciones();
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processPresentacion:"+e.getMessage());
+        }
+
+    }
+
+    private void Listar_Presentaciones() {
+
+        try{
+
+            PresList.clear();
+
+            for (clsBeProducto_Presentacion BePres: BeListPres.items){
+                PresList.add(BePres.Nombre);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cboPres.setAdapter(dataAdapter);
+
+            if ( gl.inv_ciclico.IdPresentacion > 0){
+
+                List AuxPres = stream(BeListPres.items).select(c->c.IdPresentacion).toList();
+                int indx=AuxPres.indexOf(gl.inv_ciclico.IdPresentacion);
+                cboPres.setSelection(indx);
+            }else {
+
+                cboPres.setSelection(0);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("cic_add_cboPres:"+e.getMessage());
+        }
+
     }
 
     private void Inv_Ciclico_Actualiza_Conteo() {
