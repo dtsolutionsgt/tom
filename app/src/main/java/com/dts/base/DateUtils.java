@@ -691,5 +691,30 @@ public class DateUtils {
         return sd+"/"+sm+"/"+sy;
     }
 
-    //endregion
+    public String AddYearsToDate(String Fecha, int Years){
+
+		String vFecha="";
+
+		try{
+
+			int cyear,cmonth,cday;
+
+			cday = Integer.parseInt(vFecha.substring(0,2));
+			cmonth= Integer.parseInt(vFecha.substring(4,5));
+			cyear = Integer.parseInt(vFecha.substring(7,10));
+
+			cyear = cyear + Years;
+
+			String fechaAValidar = String.format("%d-%d-%d", cday, cmonth,cyear);
+
+			vFecha= fechaAValidar;
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+
+	}
+
+	//endregion
 }

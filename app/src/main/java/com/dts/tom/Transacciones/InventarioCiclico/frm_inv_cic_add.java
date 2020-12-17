@@ -1,10 +1,12 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,8 +14,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dts.base.WebService;
+import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
+import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -22,7 +27,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
+
 public class frm_inv_cic_add extends PBase {
+
+    private WebServiceHandler ws;
+    private XMLObject xobj;
 
     private ImageView imgDate;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
@@ -32,11 +42,20 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
-    private int idprod,IdProductoBodega,idubic;
+    private int IdProductoBodega,idubic;
     private double ocant, opeso,vFactor;
     private String Resultado;
     private ArrayList<String> bodlist= new ArrayList<String>();
     private  clsBeTrans_inv_ciclico_vw pitem;
+    private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
+
+    //variables para obtener id de los combobox
+    private int IdEstadoselected, IdPresentacionselected;
+
+    //obtiene el id máximo de inventario ciclico
+    private int IDInventarioCiclico;
+
+    private boolean noubicflag = false;
 
 
     @Override
@@ -71,12 +90,20 @@ public class frm_inv_cic_add extends PBase {
 
         idPresentacion =0;
         vFactor = 0.00;
-        idprod=0;
         IdProductoBodega = 0;
         idubic = 0;
 
-        setHandlers();
+        //respuesta del ws cuando actualiza.
+        String Resultado ="";
+
+        IDInventarioCiclico = 0;
+
+        ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
+        xobj = new XMLObject(ws);
+
         Load();
+
+        setHandlers();
 
     }
 
@@ -100,6 +127,68 @@ public class frm_inv_cic_add extends PBase {
                         }
                     }
                     return false;
+                }
+            });
+
+            cboEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+                {
+                    try
+                    {
+                        TextView spinlabel = (TextView) parentView.getChildAt(0);
+
+                        if(spinlabel != null){
+                            spinlabel.setTextColor(Color.BLACK);
+                            spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                            spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                        }
+
+                        IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
+                        gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
+
+
+                    } catch (Exception e)
+                    {
+                        msgbox(e.getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
+                }
+
+            });
+
+            cboPres.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+                {
+                    try
+                    {
+                        TextView spinlabel = (TextView) parentView.getChildAt(0);
+
+                        if(spinlabel != null){
+                            spinlabel.setTextColor(Color.BLACK);
+                            spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                            spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                        }
+
+                       // IdPresentacionselected = gl.lista_estados.items.get(position).IdEstado;
+                        IdPresentacionselected = gl.inv_ciclico.IdPresentacion;
+
+                    } catch (Exception e)
+                    {
+                        msgbox(e.getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
                 }
 
             });
@@ -211,9 +300,9 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
-            txtCantContada.setText("");
+            txtCantContada.setText("0");
 
-            if(gl.inv_ciclico.cantidad > 0 || gl.inv_ciclico.cantidad != null){
+            if(!gl.inv_ciclico.cantidad.equals(0.00)){
 
                 if(idPresentacion == 0){
 
@@ -233,45 +322,49 @@ public class frm_inv_cic_add extends PBase {
 
     private void Scan_Codigo_Producto() {
 
-
         if(gl.inv_ciclico.codigo_producto == null){
             toast("¡Producto no existe!");
         }else{
 
-            if(txtProd.getText().toString().trim() != gl.inv_ciclico.codigo_producto){
+            if(!gl.inv_ciclico.Codigo.equals(txtProd.getText().toString().trim())){
 
                 toast("El código de producto no es válido");
                 txtProd.requestFocus();
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
             }
         }
 
 
         if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
 
-            buscaproducto(IdProductoBodega, txtProd.getText().toString().trim());
-        }
+            if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
 
-    }
-
-    private boolean buscaproducto(int idProductoBodega, String trim) {
-
-        int ii, idu, idp;
-
-        for ( ii = 0; ii < gl.reconteo_list.size(); ii++){
-
-            if(gl.reconteo_list.get(ii).IdUbicacion == idubic){
+                toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
 
             }
-
         }
-
-
-        return  true;
     }
 
+    private boolean buscaproducto(int idprod, String prodtxt) {
+
+        boolean respuesta = false;
+        int ii, idu, idp;
+
+        for (ii = 0; ii < gl.reconteo_list.size() - 1; ii++) {
+
+            if (gl.reconteo_list.get(ii).IdUbicacion == idubic && gl.reconteo_list.get(ii).IdProductoBodega == idprod) {
+
+                txtUbic.setText(idubic + "");
+                respuesta = true;
+                break;
+            }
+        }
+
+        return respuesta;
+    }
 
     public void ChangeDate(View view) {
 
@@ -327,30 +420,239 @@ public class frm_inv_cic_add extends PBase {
             toast("¡Ubicacion incorrecta!");
         }else if(txtProd.getText().toString().trim().isEmpty()){
             toast("¡Producto incorrecto!");
-        }else if(txtCantContada.getText().toString().trim().isEmpty()){
+        }else if(txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")){
             toast("¡Cantidad incorrecta!");
-        }else if (gl.pprod.Control_lote){
-            if(txtLote1.getText().toString().trim().isEmpty()){
+        }else if (gl.pprod.Control_lote && txtLote1.getText().toString().trim().isEmpty() ){
                 toast("¡Lote incorrecto!");
-            }
-        }else if(gl.inv_ciclico.control_peso){
-            if(txtPesoContado.getText().toString().trim().isEmpty()){
+        }else if(gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()){
                 toast("¡Peso incorrecto!");
-            }
         }else{
 
+            Guardar();
+
+        }
+    }
+
+    private void Guardar(){
+
+        if( gl.pprod.Control_lote){
+
+            gl.inv_ciclico.Lote = txtLote1.getText().toString().trim();
+        }
+
+        if(gl.pprod.Control_vencimiento){
+
+            gl.inv_ciclico.Fecha_Vence = du.convierteFecha(dtpVence.getText().toString().trim());
+        }
+
+        if(IdPresentacionselected < 0 ){
+
+            gl.inv_ciclico.idPresentacion_nuevo = 0;
+
+        }else{
+            gl.inv_ciclico.idPresentacion_nuevo = IdPresentacionselected;
+        }
+
+        gl.inv_ciclico.cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
+
+
+        if(gl.inv_ciclico.control_peso){
+            gl.inv_ciclico.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
+        }
+
+        if( gl.pprod.Control_lote){
+
+            if(noubicflag){
+
+            }else if(txtLote1.getText().toString().trim() !=  gl.inv_ciclico.Lote_stock){
+
+                // If Not AgregaNuevoRegistro(1) Then Return
+                if(!AgregaNuevoRegistro(1)){
+                    return;
+                }
+
+            }else{
+
+                pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
+                pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+                pitem.Lote = gl.inv_ciclico.Lote;
+                pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+                pitem.Cantidad = gl.inv_ciclico.cantidad;
+                pitem.Peso = gl.inv_ciclico.Peso;
+                pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+
+                if(pitem.IdPresentacion > 0){
+
+                    String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
+                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                }
+                //ejecutar proceso actualización
+                execws(1);
+            }
+
+        }else{
+
+            if(noubicflag){
+
+                //If Not AgregaNuevoRegistro(0) Then Return
+                //Tarea_Conteo()
+            }else{
+
+                pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
+                pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+                pitem.Lote = gl.inv_ciclico.Lote;
+                pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+                pitem.Cantidad = gl.inv_ciclico.cantidad;
+                pitem.Peso = gl.inv_ciclico.Peso;
+                pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+
+                if(pitem.IdPresentacion > 0){
+
+                    String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
+                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                }
+                //ejecutar proceso actualización
+                execws(1);
+
+            }
+
+        }
+
+    }
+
+    private boolean AgregaNuevoRegistro(int IdStock){
+
+        try{
+
+            if(IdStock > 0){
+
+                //obtener el MaxIDInventarioCiclico
+                execws(2);
+            }
+
+
+            BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+
+            BeTrans_inv_ciclico.IdInvCiclico = 0;
+            BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
+            BeTrans_inv_ciclico.IdStock = IDInventarioCiclico;
+            BeTrans_inv_ciclico.IdProductoBodega =  gl.inv_ciclico.IdProductoBodega;
+            BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
+            BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
+            BeTrans_inv_ciclico.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+            BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+            BeTrans_inv_ciclico.IdUbicacion = idubic;
+            BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
+            BeTrans_inv_ciclico.EsNuevo = true;
+
+
             if( gl.pprod.Control_lote){
-              String lote= txtLote1.getText().toString().trim();
+                BeTrans_inv_ciclico.Lote = gl.inv_ciclico.Lote;
+                if(IdStock > 0){
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote_stock;
+                }else {
+                    BeTrans_inv_ciclico.Lote_stock = gl.inv_ciclico.Lote;
+                }
             }
 
             if(gl.pprod.Control_vencimiento){
-
-                String fecha_vence = du.convierteFecha(dtpVence.getText().toString().trim());
+                BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+                BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+            }else {
+                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
             }
 
-            pitem= new clsBeTrans_inv_ciclico_vw();
-
-            toast("¡Todo bien, guardar!");
+            return  true;
         }
+        catch (Exception e){
+            mu.msgbox("inv_cic_AgregarNuevoRegistro:"+e.getMessage());
+            return  false;
+        }
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Inventario_Ciclico_Actualiza_Conteo","pitem",pitem,"Resultado",Resultado);
+                        break;
+                    case 2:
+                        callMethod("MaxIDInventarioCiclico");
+                        break;
+
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
+        try {
+            if (throwing) throw new Exception(errmsg);
+
+            switch (ws.callback) {
+                case 1:
+                    Inv_Ciclico_Actualiza_Conteo();
+                    break;
+                case 2:
+                    MaxIDInventarioCiclico_();
+                    break;
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void Inv_Ciclico_Actualiza_Conteo() {
+
+        try {
+            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo");
+
+            toast("¡Todo bien, guardado!");
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+    private void MaxIDInventarioCiclico_() {
+
+        try {
+
+            IDInventarioCiclico = xobj.getresultSingle(Integer.class,"MaxIDInventarioCiclico");
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
     }
 }
