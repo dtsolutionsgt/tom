@@ -612,8 +612,10 @@ public class frm_inv_cic_add extends PBase {
                     case 2:
                         callMethod("MaxIDInventarioCiclico");
                         break;
-
-                }
+                    case 3:
+                        callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", BeTrans_inv_ciclico);
+                        break;
+                    }
 
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -632,6 +634,9 @@ public class frm_inv_cic_add extends PBase {
                     break;
                 case 2:
                     MaxIDInventarioCiclico_();
+                    break;
+                case 3:
+                    Inventario_Agregar_Conteo_();
                     break;
             }
 
@@ -688,8 +693,10 @@ public class frm_inv_cic_add extends PBase {
                 BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
             }
 
+            //m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
+            execws(3);
 
-            nuevoRegistro = true;
+
 
 
         } catch (Exception e) {
@@ -697,6 +704,19 @@ public class frm_inv_cic_add extends PBase {
         }
     }
 
+    private void Inventario_Agregar_Conteo_() {
+
+        try {
+
+            int getrespuesta = xobj.getresult(Integer.class,"Inventario_Agregar_Conteo");
+
+            nuevoRegistro = true;
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+
+    }
 
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
