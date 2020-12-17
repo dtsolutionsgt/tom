@@ -584,6 +584,9 @@ public class frm_inv_cic_add extends PBase {
                     BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
                 }
 
+               // m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
+                execws(3);
+
                 nuevoRegistro = true;
 
             }
@@ -710,7 +713,11 @@ public class frm_inv_cic_add extends PBase {
 
             int getrespuesta = xobj.getresult(Integer.class,"Inventario_Agregar_Conteo");
 
-            nuevoRegistro = true;
+            if(getrespuesta ==1){
+                nuevoRegistro = true;
+            }else{
+                nuevoRegistro = false;
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
