@@ -167,6 +167,7 @@ public class frm_list_rec_prod_detalle extends PBase {
             }
 
             if (pListTransRecDet!=null){
+
                 if (pListTransRecDet.items!=null){
 
                    for (clsBeTrans_re_det obj:pListTransRecDet.items){

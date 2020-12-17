@@ -322,7 +322,7 @@ public class XMLObject  {
 
                     for (int vv =0;vv<vList.getLength();vv++){
                         en=vList.item(vv).getNodeName();
-                        sv=getNodeValue(en,elm);
+                           sv=getNodeValue(en,elm);
                         try{
                             crow[vv]=sv;
                         }catch (Exception ex){

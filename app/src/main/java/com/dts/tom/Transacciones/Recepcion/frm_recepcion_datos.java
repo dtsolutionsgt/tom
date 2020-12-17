@@ -3766,6 +3766,10 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
                 BeStockRec.Cantidad = vCant;
+                //#EJC20201217:Si es UMBA y el LicPlate no es vacío asignar.
+                if (!txtBarra.getText().toString().isEmpty()){
+                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                }
             }
 
             if (BeProducto.Control_vencimiento){
