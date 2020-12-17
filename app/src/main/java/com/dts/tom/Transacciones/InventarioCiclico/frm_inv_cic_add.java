@@ -27,7 +27,9 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -694,7 +696,14 @@ public class frm_inv_cic_add extends PBase {
             PresList.clear();
 
             for (clsBeProducto_Presentacion BePres: BeListPres.items){
-                PresList.add(BePres.Nombre);
+
+                if(PresList.contains(BePres.Nombre)){
+
+                }else{
+
+                    PresList.add(BePres.Nombre);
+
+                }
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
