@@ -367,6 +367,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     }
 
     private void Lista_Inventario_Disponible(){
+
         clsBeStockReemplazo vItem;
 
         try{

@@ -2075,6 +2075,7 @@ public class frm_recepcion_datos extends PBase {
                 txtBarra.setText(BeINavBarraPallet.Codigo_barra);
             }else{
                 txtBarra.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
+                txtBarra.setText("");
             }
 
             if(BeProducto.IdProductoBodega>0){
@@ -2180,8 +2181,8 @@ public class frm_recepcion_datos extends PBase {
 
 //                txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.setText(Cant_Pendiente+"");
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
+                txtBarra.requestFocus();
+                txtBarra.selectAll();
 
                 clsBeTrans_oc_det_lote BeLoteLinea;
 
@@ -2243,6 +2244,7 @@ public class frm_recepcion_datos extends PBase {
                 txtBarra.setText(pListTransRecDet.items.get(0).Lic_plate);
             }else{
                 txtBarra.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
+                txtBarra.setText("");
             }
 
             if(BeProducto.IdProductoBodega>0){
@@ -2423,6 +2425,7 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.mode==1){
                 txtBarra.setText(BeProducto.Codigo);
+                txtBarra.setText("");
             }
 
             /*txtBarra.setFocusable(false);
@@ -3766,6 +3769,10 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
                 BeStockRec.Cantidad = vCant;
+                //#EJC20201217:Si es UMBA y el LicPlate no es vacío asignar.
+                if (!txtBarra.getText().toString().isEmpty()){
+                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                }
             }
 
             if (BeProducto.Control_vencimiento){
