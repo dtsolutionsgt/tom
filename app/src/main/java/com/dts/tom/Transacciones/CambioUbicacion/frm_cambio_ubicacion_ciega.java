@@ -108,6 +108,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private int vIdStockNuevo = 0;
     private int vIdMovimientoNuevo= 0;
 
+    private boolean Existe_Lp=false;
+
     private boolean escaneoPallet;
 
     private clsBeTrans_movimientos gMovimientoDet;
@@ -370,7 +372,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
+               Procesa_Lp();
                 }
 
                 return false;
@@ -819,6 +821,51 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    private void Procesa_Lp() {
+        try {
+
+            progress.setMessage("Cargando datos del producto");
+            progress.show();
+
+            String pbarra;
+
+            pbarra = txtCodigoPrd.getText().toString();
+
+            cvLote = "";
+            cvPresID = 0;
+            cvEstOrigen = 0;
+            cvProdID = 0;
+            cvVence = "01/01/1900";
+
+            String vStarWithParameter = "$";
+
+            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+            if (txtLicPlate.getText().toString().startsWith("$") ||
+                    txtLicPlate.getText().toString().startsWith("(01)") ||
+                    txtLicPlate.getText().toString().startsWith(vStarWithParameter)) {
+
+                //Es una barra de pallet válida por tamaño
+                int vLengthBarra = txtLicPlate.getText().toString().length();
+
+                // if (vLengthBarra >= 16) {
+
+                escaneoPallet = true;
+
+                pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
+
+                //Llama al método del WS Get_Stock_By_Lic_Plate
+
+                execws(18);
+
+
+            }
+
+        } catch (Exception ex) {
+            progress.cancel();
+            msgbox("Error " + ex.getMessage());
+        }
+    }
+
     private void llenaDatosProducto() {
         try {
 
@@ -1120,12 +1167,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 17:
                     processStockLP_AndCodigo();
                     break;
+                case 18:
+                    processExisteLp();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
+
 
     public class WebServiceHandler extends WebService {
 
@@ -1223,6 +1274,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
                         callMethod("Get_Stock_By_Lic_Plate_And_Codigo","pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
                                 "pIdBodega", gl.IdBodega);
+                        break;
+                    case 18:
+                        callMethod("Existe_Lp","pLic_Plate",pLicensePlate);
                         break;
                 }
 
@@ -1847,6 +1901,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
+    }
+
+    private void processExisteLp(){
+
+        try{
+
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+
+            if (Existe_Lp){
+                txtCodigoPrd.requestFocus();
+            }else{
+                progress.cancel();
+                mu.msgbox("Lp no existe");
+                txtLicPlate.selectAll();
+                txtLicPlate.requestFocus();
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("processExisteLp:"+e.getMessage());
+        }
     }
 
     private void inicializaTarea(boolean finalizar){
