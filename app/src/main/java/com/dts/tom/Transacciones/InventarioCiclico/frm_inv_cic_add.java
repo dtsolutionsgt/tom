@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,9 +28,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -39,6 +38,7 @@ public class frm_inv_cic_add extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
+    private Button btnBack_cic;
     private ImageView imgDate;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
     private Spinner cboEstado,cboPres;
@@ -53,6 +53,7 @@ public class frm_inv_cic_add extends PBase {
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
+    private ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
 
     private  clsBeTrans_inv_ciclico_vw pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
@@ -75,6 +76,7 @@ public class frm_inv_cic_add extends PBase {
         super.InitBase();
 
 
+        btnBack_cic = findViewById(R.id.btnBack_cic);
         txtUbic = findViewById(R.id.txtUbic);
         txtProd = findViewById(R.id.txtProd);
         lblUbic1 = findViewById(R.id.lblUbic1);
@@ -134,6 +136,7 @@ public class frm_inv_cic_add extends PBase {
                         }else {
 
                             Scan_Codigo_Producto();
+                            txtCantContada.requestFocus();
                         }
                     }
                     return false;
@@ -156,7 +159,6 @@ public class frm_inv_cic_add extends PBase {
 
                         IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
                         gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
-
 
                     } catch (Exception e)
                     {
@@ -186,8 +188,7 @@ public class frm_inv_cic_add extends PBase {
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                       // IdPresentacionselected = gl.lista_estados.items.get(position).IdEstado;
-                        IdPresentacionselected = gl.inv_ciclico.IdPresentacion;
+                        IdPresentacionselected = IndexPresList.get(position);
 
                     } catch (Exception e)
                     {
@@ -246,7 +247,7 @@ public class frm_inv_cic_add extends PBase {
             cboEstado.setAdapter(EstadosAdapter);
             if (bodlist.size()>0) cboEstado.setSelection(index-1);
 
-
+            //llama a ws para cargar spinner con presentaciones del producto
              execws(4);
 
 
@@ -257,15 +258,19 @@ public class frm_inv_cic_add extends PBase {
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
             lblProd.setTypeface(null, Typeface.BOLD);
             lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
+
+
             txtLote1.setText(gl.inv_ciclico.Lote+"");
+
+
             dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
 
             //GT30112020 se llena spinner con presentación del producto
-            List<String> spinnerArray =  new ArrayList<String>();
+           /* List<String> spinnerArray =  new ArrayList<String>();
             spinnerArray.add(gl.inv_ciclico.Pres);
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cboPres.setAdapter(dataAdapter);
+            cboPres.setAdapter(dataAdapter);*/
 
             if(gl.inv_ciclico.IdPresentacion == 0){
 
@@ -282,6 +287,7 @@ public class frm_inv_cic_add extends PBase {
             if( gl.pprod.Control_lote){
                 txtlote_cic.setVisibility(TextView.VISIBLE);
                 txtLote1.setVisibility(TextView.VISIBLE);
+                txtLote1.setEnabled(false);
             }else{
                 txtlote_cic.setVisibility(TextView.INVISIBLE);
                 txtLote1.setVisibility(TextView.INVISIBLE);
@@ -330,6 +336,8 @@ public class frm_inv_cic_add extends PBase {
                     txtCantContada.setText(stringDecimal);
                 }
             }
+
+            txtProd.requestFocus();
         }
 
     }
@@ -347,8 +355,7 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                txtCantContada.requestFocus();
-
+                txtCantContada.setText("");
             }
         }
 
@@ -358,9 +365,10 @@ public class frm_inv_cic_add extends PBase {
             if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
 
                 toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
-
             }
         }
+
+        txtCantContada.requestFocus();
     }
 
     private boolean buscaproducto(int idprod, String prodtxt) {
@@ -413,6 +421,8 @@ public class frm_inv_cic_add extends PBase {
         try{
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
+            pitem = new clsBeTrans_inv_ciclico_vw();
+            BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
             gl.pprod = new clsBeProducto();
 
             frm_inv_cic_add.super.finish();
@@ -693,8 +703,8 @@ public class frm_inv_cic_add extends PBase {
 
         try{
 
+            //crea listas con descripcion item no repetidos del ws
             PresList.clear();
-
             for (clsBeProducto_Presentacion BePres: BeListPres.items){
 
                 if(PresList.contains(BePres.Nombre)){
@@ -705,6 +715,21 @@ public class frm_inv_cic_add extends PBase {
 
                 }
             }
+
+            //crea lista con id item no repetido del ws
+            IndexPresList.clear();
+            for (clsBeProducto_Presentacion BePres: BeListPres.items){
+
+                if(IndexPresList.contains(BePres.IdPresentacion)){
+
+                }else{
+
+                    IndexPresList.add(BePres.IdPresentacion);
+
+                }
+            }
+
+
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
