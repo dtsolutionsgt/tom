@@ -362,7 +362,7 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                txtCantContada.setText("");
+                //txtCantContada.setText("");
 
                 if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
 

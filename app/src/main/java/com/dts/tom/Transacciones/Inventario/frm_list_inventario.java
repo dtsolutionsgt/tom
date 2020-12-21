@@ -327,4 +327,12 @@ public class frm_list_inventario extends PBase {
 
     }
 
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        Load();
+
+    }
+
 }
