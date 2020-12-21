@@ -137,7 +137,13 @@ public class frm_inv_cic_add extends PBase {
                         }else {
 
                             Scan_Codigo_Producto();
-                            txtCantContada.requestFocus();
+
+                            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+                                txtLote1.requestFocus();
+                            }else {
+                                txtCantContada.requestFocus();
+                            }
+
                         }
                     }
                     return false;
@@ -357,19 +363,18 @@ public class frm_inv_cic_add extends PBase {
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                 txtCantContada.setText("");
+
+                if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
+
+                    if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
+
+                        toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
+                    }
+                }
             }
         }
 
-
-        if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
-
-            if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
-
-                toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
-            }
-        }
-
-        txtCantContada.requestFocus();
+        //txtCantContada.requestFocus();
     }
 
     private boolean buscaproducto(int idprod, String prodtxt) {
@@ -424,6 +429,10 @@ public class frm_inv_cic_add extends PBase {
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
             pitem = new clsBeTrans_inv_ciclico_vw();
             BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+            txtUbic.setText("");
+            txtProd.setText("");
+            txtCantContada.setText("");
+            txtPesoContado.setText("");
             gl.pprod = new clsBeProducto();
 
             frm_inv_cic_add.super.finish();
