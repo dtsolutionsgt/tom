@@ -523,12 +523,9 @@ public class frm_inv_cic_add extends PBase {
 
                 if(pitem.IdPresentacion > 0){
 
-                  /*  String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));*/
-
                     pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
-                //ejecutar proceso actualización
+                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 execws(1);
             }
 
@@ -562,12 +559,9 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
 
                 if(pitem.IdPresentacion > 0){
-
-                    //String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    //pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
                     pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
-                //ejecutar proceso actualización
+                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 execws(1);
 
             }
