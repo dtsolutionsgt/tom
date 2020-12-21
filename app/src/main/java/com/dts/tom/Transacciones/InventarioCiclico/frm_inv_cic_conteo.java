@@ -65,7 +65,7 @@ public class frm_inv_cic_conteo extends PBase {
 
     Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
-    private clsBe_inv_reconteo_data lista_filtro = new clsBe_inv_reconteo_data();
+    private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
 
 
@@ -227,6 +227,9 @@ public class frm_inv_cic_conteo extends PBase {
         try{
             DT = xobj.filldt();
             data_list.clear();
+            //lista_filtro.clear();
+
+
             gl.reconteo_list.clear();
 
             if(!txtBuscFiltro.equals("")){
@@ -286,6 +289,8 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(29));
 
                             data_list.add(data_rec);
+                            //lista_filtro.add(data_rec);
+
                             gl.reconteo_list.add(data_rec);
 
                             DT.moveToNext();
@@ -377,11 +382,11 @@ public class frm_inv_cic_conteo extends PBase {
         if(registros>1){
 
             //carga la lista con el Filtro Ubicación
-            FiltroUbicacion(evaluar);
+            FiltroxUbicacion(evaluar);
 
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
-            msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
+            msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
             txtBuscFiltro.setText("");
             Busqueda = false;
 
@@ -406,6 +411,10 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             }
             if(registros > 1){
+
+
+                //carga la lista con el Filtro Código
+                FiltroxCodigo(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
                 msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
@@ -439,14 +448,64 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
-    private void FiltroUbicacion(String evaluar) {
+    private void FiltroxCodigo(String evaluar) {
 
         clsBe_inv_reconteo_data rec;
 
-        data_list.clear();
+        lista_filtro.clear();
 
         rec = new clsBe_inv_reconteo_data();
-        data_list.add(rec);
+        lista_filtro.add(rec);
+
+        for (int i = 0; i < gl.reconteo_list.size(); i++) {
+
+            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).codigo_producto);
+
+            if (ubicacion_lista.equals(evaluar)){
+
+                data_rec = new clsBe_inv_reconteo_data();
+                data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
+
+                data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
+                data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
+                data_rec.IdProductoEstado = gl.reconteo_list.get(i).IdProductoEstado;
+                data_rec.IdPresentacion = gl.reconteo_list.get(i).IdPresentacion;
+                data_rec.Codigo = gl.reconteo_list.get(i).Codigo;
+                data_rec.Producto_nombre = gl.reconteo_list.get(i).Producto_nombre;
+                data_rec.Pres = gl.reconteo_list.get(i).Pres;
+                data_rec.UMBas = gl.reconteo_list.get(i).UMBas;
+                data_rec.cantidad = gl.reconteo_list.get(i).cantidad;
+                data_rec.Lote = gl.reconteo_list.get(i).Lote;
+                data_rec.Lote_stock = gl.reconteo_list.get(i).Lote_stock;
+                data_rec.Peso = gl.reconteo_list.get(i).Peso;
+                data_rec.Fecha_Vence =  gl.reconteo_list.get(i).Fecha_Vence;
+                data_rec.control_peso = gl.reconteo_list.get(i).control_peso;
+                data_rec.Conteo = gl.reconteo_list.get(i).Conteo;
+                data_rec.Ubic_nombre = gl.reconteo_list.get(i).Ubic_nombre;
+                data_rec.Estado = gl.reconteo_list.get(i).Estado;
+                data_rec.Factor = gl.reconteo_list.get(i).Factor;
+                data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
+                data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
+                lista_filtro.add(data_rec);
+            }
+        }
+
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
+        listCiclico.setAdapter(adapter_ciclico);
+
+        int count =data_list.size()-1;
+        cmdList.setText( count+ "/" + count);
+
+    }
+
+    private void FiltroxUbicacion(String evaluar) {
+
+        clsBe_inv_reconteo_data rec;
+
+        lista_filtro.clear();
+
+        rec = new clsBe_inv_reconteo_data();
+        lista_filtro.add(rec);
 
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
 
@@ -477,11 +536,11 @@ public class frm_inv_cic_conteo extends PBase {
                 data_rec.Factor = gl.reconteo_list.get(i).Factor;
                 data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
                 data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
-                data_list.add(data_rec);
+                lista_filtro.add(data_rec);
             }
         }
 
-        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
         int count =data_list.size()-1;
@@ -887,7 +946,7 @@ public class frm_inv_cic_conteo extends PBase {
                     BeListTramos = new ArrayList<clsBeTrans_inv_tramo>();
                     TipoConteo = 0;*/
 
-                    gl.reconteo_list.clear();
+                    //gl.reconteo_list.clear();
                     frm_inv_cic_conteo.super.finish();
                 }
             });
