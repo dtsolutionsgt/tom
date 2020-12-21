@@ -23,6 +23,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -494,18 +495,21 @@ public class frm_inv_cic_add extends PBase {
                     toast("errror con correlativo =0");
                 }
 
-            }else if(txtLote1.getText().toString().trim() !=  gl.inv_ciclico.Lote_stock){
+            }else if(!gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim())){
 
                 if(!AgregaNuevoRegistro(1)){
-                    //return;
+
                     toast("errror con nuevo correlativo!");
                 }
 
             }else{
 
                 pitem= new clsBeTrans_inv_ciclico_vw();
+
+                pitem.Idinvciclico = 0;
+                pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;;
                 pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
                 pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
                 pitem.Lote = gl.inv_ciclico.Lote;
@@ -519,8 +523,10 @@ public class frm_inv_cic_add extends PBase {
 
                 if(pitem.IdPresentacion > 0){
 
-                    String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                  /*  String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
+                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));*/
+
+                    pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
                 //ejecutar proceso actualización
                 execws(1);
@@ -539,13 +545,16 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem.Idinvciclico = 0;
+                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+                pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
                 pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
                 pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
                 pitem.Lote = gl.inv_ciclico.Lote;
                 pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
-                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
@@ -759,6 +768,7 @@ public class frm_inv_cic_add extends PBase {
             if(respuesta !=0){
 
                 toast("¡Todo bien, guardado!");
+                frm_inv_cic_add.super.finish();
             }
 
         } catch (Exception e) {
@@ -803,7 +813,7 @@ public class frm_inv_cic_add extends PBase {
             }
 
             //m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
-            execws(3);
+            //execws(3);
 
 
 

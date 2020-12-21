@@ -113,9 +113,11 @@ public class frm_inv_cic_conteo extends PBase {
 
         ProgressDialog("Cargando conteo ciclico.");
 
+        Lista_Tareas();
+
         setHandles();
 
-        Lista_Tareas();
+
 
        //execws(1);
 
@@ -910,6 +912,14 @@ public class frm_inv_cic_conteo extends PBase {
         public void setrespuesta(boolean value) {
             respuesta=value;
         }
+    }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        Lista_Tareas();
+
     }
 
 }
