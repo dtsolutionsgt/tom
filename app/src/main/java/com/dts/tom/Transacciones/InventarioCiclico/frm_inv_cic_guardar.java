@@ -518,7 +518,7 @@ public class frm_inv_cic_guardar extends PBase {
                     fecha_vence = du.getFechaActual();
                     BeTrans_inv_ciclico.Fec_agr = fecha_vence;
                 } catch (ParseException e) {
-                    mu.msgbox("Guardar_obtieneFechaActual:"+e.getMessage());
+                    mu.msgbox("error_getFechaActual:"+e.getMessage());
                 }
 
                 //GuardarProductoNuevo

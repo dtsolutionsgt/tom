@@ -817,6 +817,23 @@ public class frm_inv_cic_add extends PBase {
                 BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
             }
 
+            BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtCantContada.getText().toString().trim());
+            BeTrans_inv_ciclico.Cant_stock = gl.inv_ciclico.Cant_Stock;
+            BeTrans_inv_ciclico.Cant_reconteo = 0;
+
+            if(gl.inv_ciclico.control_peso){
+
+                BeTrans_inv_ciclico.Peso = Double.parseDouble(txtPesoContado.getText().toString().trim());
+                BeTrans_inv_ciclico.Peso_stock =  gl.inv_ciclico.Peso_Stock;
+                BeTrans_inv_ciclico.Peso_reconteo = 0;
+            }
+
+            BeTrans_inv_ciclico.Idoperador =  gl.IdOperador;
+            BeTrans_inv_ciclico.User_agr = gl.gNomOperador;
+
+            String fecha_vence = du.getFechaActual();
+            BeTrans_inv_ciclico.Fec_agr = fecha_vence;
+
             //m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
             //execws(3);
 
