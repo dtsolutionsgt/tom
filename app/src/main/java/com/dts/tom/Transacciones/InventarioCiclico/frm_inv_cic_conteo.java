@@ -268,9 +268,13 @@ public class frm_inv_cic_conteo extends PBase {
                                 data_rec.Lote = "";
                             }
 
-                            data_rec.Lote_stock = DT.getString(6);
-                            data_rec.Peso = Double.valueOf(DT.getString(14));
+                            if(DT.getString(6)!=null){
+                                data_rec.Lote_stock = DT.getString(6);
+                            }else{
+                                data_rec.Lote_stock = "";
+                            }
 
+                            data_rec.Peso = Double.valueOf(DT.getString(14));
 
                             //fecha_vence_stock = index 8, fecha_vence = index 9
                             if (DT.getString(8)!=null){
@@ -417,7 +421,7 @@ public class frm_inv_cic_conteo extends PBase {
                 FiltroxCodigo(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
+                msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
 

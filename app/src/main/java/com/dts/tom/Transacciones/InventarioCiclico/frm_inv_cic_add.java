@@ -118,6 +118,8 @@ public class frm_inv_cic_add extends PBase {
 
         setHandlers();
 
+        //txtProd.requestFocus();
+
     }
 
     private void setHandlers() {
@@ -504,7 +506,7 @@ public class frm_inv_cic_add extends PBase {
                     toast("errror con correlativo =0");
                 }
 
-            }else if(!gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim())){
+            }else if(!(gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim()))){
 
                 if(!AgregaNuevoRegistro(1)){
 
