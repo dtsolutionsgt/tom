@@ -372,7 +372,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-               Procesa_Lp();
+                     Procesa_Lp();
                 }
 
                 return false;
@@ -1457,8 +1457,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 throw new Exception("Ubicación destino incorrecta");
             }else{
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
-                lblUbicCompDestino.setText(bodega_ubicacion_destino.getNombreCompleto());
+                lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+
                 if(gl.modo_cambio==2 && !vProcesar){
+                    progress.cancel();
                     cmbEstadoDestino.requestFocus();
                 }else{
                     datosOk();
@@ -1910,6 +1912,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
 
             if (Existe_Lp){
+                progress.cancel();
                 txtCodigoPrd.requestFocus();
             }else{
                 progress.cancel();
