@@ -508,10 +508,15 @@ public class frm_inv_cic_add extends PBase {
 
             }else if(!(gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim()))){
 
-                if(!AgregaNuevoRegistro(1)){
+                //se omite funcionalidad, no actualiza registro de reconteo, sino agrega otra linea en la tabla
+                /*if(!AgregaNuevoRegistro(1)){
+                    toast("Registro reconteo agregado!");
+                }*/
 
-                    toast("errror con nuevo correlativo!");
-                }
+                //Es registro para reconteo
+                EnviarReconteo();
+
+
 
             }else{
 
@@ -578,6 +583,12 @@ public class frm_inv_cic_add extends PBase {
             }
 
         }
+
+    }
+
+    private void EnviarReconteo() {
+
+        execws(5);
 
     }
 
@@ -661,7 +672,12 @@ public class frm_inv_cic_add extends PBase {
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", gl.pprod.IdProducto, "pActivo", true);
                         break;
+
+                    case 5:
+                        callMethod("Inventario_Ciclico_Actualiza_Reconteo", "idinvreconteo", gl.inv_ciclico.idinvreconteo, "pCantidad_Reconteo", txtCantContada.getText().toString().trim());
+                        break;
                     }
+
 
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -686,6 +702,9 @@ public class frm_inv_cic_add extends PBase {
                     break;
                 case 4:
                     processPresentacion();
+                    break;
+                case 5:
+                    Inventario_Ciclico_Actualiza_Reconteo();
                     break;
             }
 
@@ -835,13 +854,10 @@ public class frm_inv_cic_add extends PBase {
             BeTrans_inv_ciclico.Fec_agr = fecha_vence;
 
             //m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
-            //execws(3);
-
-
-
+            execws(3);
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox("Inventario_Agregar_Conteo: "+e.getMessage());
         }
     }
 
@@ -858,9 +874,27 @@ public class frm_inv_cic_add extends PBase {
             }
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox("Inventario_Agregar_Conteo getResult: "+e.getMessage());
         }
 
+    }
+
+    private void Inventario_Ciclico_Actualiza_Reconteo() {
+
+        try {
+            int respuesta  = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Reconteo");
+
+            if(respuesta ==1){
+                toast("Reconteo registrado!");
+            }else if(respuesta > 1) {
+                toast("Se actualizó más de un registro!");
+            }else if (respuesta == 0){
+                toast("Error al actualizar recongeo");
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("actualiza_ciclico_reconteo_: "+e.getMessage());
+        }
     }
 
     private void execws(int callbackvalue) {

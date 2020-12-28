@@ -6,9 +6,8 @@ public class clsBe_inv_reconteo_data {
 
 
     @Element(required=false) public int idinventarioenc = 0;
+    @Element(required=false) public int idinvreconteo=0;
     @Element(required=false) public int IdUbicacion = 0;
-
-
     @Element(required=false) public int NoUbic=0;
     @Element(required=false) public String Codigo="";
     @Element(required=false) public int IdProductoEstado=0;
@@ -43,13 +42,15 @@ public class clsBe_inv_reconteo_data {
 
     public clsBe_inv_reconteo_data(){}
 
-    public clsBe_inv_reconteo_data(int NoUbic,String Codigo,String Producto_nombre,int IdProductoEstado,int IdPresentacion,String UMBas,
+    public clsBe_inv_reconteo_data( int idinventarioenc,int idinvreconteo,int NoUbic,String Codigo,String Producto_nombre,int IdProductoEstado,int IdPresentacion,String UMBas,
                                    String Pres,Double Cant_Conteo,Double cantidad,Double Peso_Conteo,Double Cant_Stock,
                                    Double Peso_Stock,Double Peso,String Lote,String Lote_stock,String Fecha_Vence, boolean control_peso,int Conteo,
                                    String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,int idPresentacion_nuevo,
                                    int IdProductoEst_nuevo,String codigo_producto,
                                    int Nivel,String Pos,Double Factor){
 
+        this.idinventarioenc = idinventarioenc;
+        this.idinvreconteo = idinvreconteo;
         this.NoUbic = NoUbic;
         this.Codigo = Codigo;
         this.IdProductoEstado = IdProductoEstado;
@@ -81,6 +82,21 @@ public class clsBe_inv_reconteo_data {
         this.Factor = Factor;
     }
 
+
+    public int getidinventarioenc() {
+        return idinventarioenc;
+    }
+    public void setidinventarioenc(int value) {
+        idinventarioenc=value;
+    }
+
+    public int getidinvreconteo() {
+        return idinvreconteo;
+    }
+    public void setidinvreconteo(int value) {
+        idinvreconteo=value;
+    }
+
     public int getNoUbic() {
         return NoUbic;
     }
@@ -109,15 +125,12 @@ public class clsBe_inv_reconteo_data {
         IdPresentacion=value;
     }
 
-
     public String getProducto_nombre() {
         return Producto_nombre;
     }
     public void setProducto_nombre(String value) {
         Producto_nombre=value;
     }
-
-
 
     public String getUMBas() {
         return UMBas;

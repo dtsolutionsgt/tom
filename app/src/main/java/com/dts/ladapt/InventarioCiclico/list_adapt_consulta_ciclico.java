@@ -84,6 +84,8 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblNivel = convertView.findViewById(R.id.lblNivel);
                 holder.lblPos = convertView.findViewById(R.id.lblPos);
                 holder.lblFactor = convertView.findViewById(R.id.lblFactor);
+                holder.lblidinvreconteo = convertView.findViewById(R.id.lblidinvreconteo);
+
                 convertView.setTag(holder);
             }else{
                 holder = (ViewHolder) convertView.getTag();
@@ -111,6 +113,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblNivel.setText("Nivel");
                 holder.lblPos.setText("Pos");
                 holder.lblFactor.setText("Factor");
+                holder.lblidinvreconteo.setText("id_reconteo");
 
             }else{
 
@@ -134,6 +137,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblNivel.setText(data_list.get(position).Nivel  +"");
                 holder.lblPos.setText(data_list.get(position).Pos  +"");
                 holder.lblFactor.setText(data_list.get(position).Factor  +"");
+                holder.lblidinvreconteo.setText(data_list.get(position).idinvreconteo +"");
             }
 
 
@@ -150,6 +154,6 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
     static class ViewHolder {
         TextView lblNoUbic,lblCodigo,lblProducto_nombre,lblUMBas,lblPres,lblCant_Conteo,lblPeso_Conteo,lblCant_Stock,
                 lblPeso_Stock,lblLote,lblFecha_Vence,lblConteo,lblUbic_nombre,lblEstado,lblIdProductoBodega,lblTramo,
-                lblIndiceX,lblNivel,lblPos,lblFactor;
+                lblIndiceX,lblNivel,lblPos,lblFactor,lblidinvreconteo;
     }
 }

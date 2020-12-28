@@ -246,51 +246,53 @@ public class frm_inv_cic_conteo extends PBase {
 
                             data_rec = new clsBe_inv_reconteo_data();
                             data_rec.idinventarioenc = Integer.parseInt(DT.getString(0));
-                            data_rec.NoUbic = Integer.parseInt(DT.getString(4));
-                            data_rec.IdProductoBodega = Integer.parseInt(DT.getString(1));
-                            data_rec.IdProductoEstado = Integer.parseInt(DT.getString(2));
+                            data_rec.idinvreconteo = Integer.parseInt(DT.getString(1));
 
-                            if(DT.getString(3) != null){
-                                data_rec.IdPresentacion = Integer.parseInt(DT.getString(3));
+                            data_rec.NoUbic = Integer.parseInt(DT.getString(5));
+                            data_rec.IdProductoBodega = Integer.parseInt(DT.getString(2));
+                            data_rec.IdProductoEstado = Integer.parseInt(DT.getString(3));
+
+                            if(DT.getString(4) != null){
+                                data_rec.IdPresentacion = Integer.parseInt(DT.getString(4));
                             }else{
                                 data_rec.IdPresentacion = 0;
                             }
 
-                            data_rec.Codigo = DT.getString(30);
-                            data_rec.Producto_nombre = DT.getString(20);
-                            data_rec.Pres = DT.getString(22);
-                            data_rec.UMBas = DT.getString(23);
-                            data_rec.cantidad = Double.valueOf(DT.getString(11));
+                            data_rec.Codigo = DT.getString(31);
+                            data_rec.Producto_nombre = DT.getString(21);
+                            data_rec.Pres = DT.getString(23);
+                            data_rec.UMBas = DT.getString(24);
+                            data_rec.cantidad = Double.valueOf(DT.getString(12));
 
-                            if(DT.getString(7)!=null){
-                                data_rec.Lote = DT.getString(7);
+                            if(DT.getString(8)!=null){
+                                data_rec.Lote = DT.getString(8);
                             }else{
                                 data_rec.Lote = "";
                             }
 
-                            if(DT.getString(6)!=null){
-                                data_rec.Lote_stock = DT.getString(6);
+                            if(DT.getString(7)!=null){
+                                data_rec.Lote_stock = DT.getString(7);
                             }else{
                                 data_rec.Lote_stock = "";
                             }
 
-                            data_rec.Peso = Double.valueOf(DT.getString(14));
+                            data_rec.Peso = Double.valueOf(DT.getString(15));
 
-                            //fecha_vence_stock = index 8, fecha_vence = index 9
-                            if (DT.getString(8)!=null){
-                                //vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
-                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(8));
+                            //fecha_vence_stock = index 9, fecha_vence = index 10
+                            if (DT.getString(9)!=null){
+                                //vItem.FechaVence = du.convierteFechaMostar(DT.getString(20));
+                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
                             }else{
                                 data_rec.Fecha_Vence = "";
                             }
 
-                            data_rec.control_peso = Boolean.valueOf(DT.getString(24));
-                            data_rec.Conteo = Integer.parseInt(DT.getString(11));
-                            data_rec.Ubic_nombre = DT.getString(21);
-                            data_rec.Estado = DT.getString(19);
-                            data_rec.Factor = Double.valueOf(DT.getString(35));
-                            data_rec.idPresentacion_nuevo = Integer.parseInt(DT.getString(27));
-                            data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(29));
+                            data_rec.control_peso = Boolean.valueOf(DT.getString(25));
+                            data_rec.Conteo = Integer.parseInt(DT.getString(12));
+                            data_rec.Ubic_nombre = DT.getString(22);
+                            data_rec.Estado = DT.getString(20);
+                            data_rec.Factor = Double.valueOf(DT.getString(36));
+                            data_rec.idPresentacion_nuevo = Integer.parseInt(DT.getString(28));
+                            data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(30));
 
                             data_list.add(data_rec);
                             //lista_filtro.add(data_rec);
@@ -469,6 +471,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                 data_rec = new clsBe_inv_reconteo_data();
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
+                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
                 data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
                 data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
@@ -519,6 +522,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                 data_rec = new clsBe_inv_reconteo_data();
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
+                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
                 data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
                 data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
