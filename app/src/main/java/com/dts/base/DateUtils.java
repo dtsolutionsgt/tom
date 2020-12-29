@@ -430,6 +430,7 @@ public class DateUtils {
 		return vFecha;
 	}
 
+	//#CKFK 20201229 Agregué esta función para poder formatear las fecha con diagonal
 	public String convierteFechaDiagonal(String Fecha){
 		String vFecha="";
 
