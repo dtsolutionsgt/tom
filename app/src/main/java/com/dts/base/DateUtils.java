@@ -430,6 +430,27 @@ public class DateUtils {
 		return vFecha;
 	}
 
+	public String convierteFechaDiagonal(String Fecha){
+		String vFecha="";
+
+		try{
+
+			long f;
+			String fechaS;
+			int cyear,cmonth,cday,ch,cm;
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
 	public String convierteFechaMostar(String Fecha){
 		String vFecha="";
 
