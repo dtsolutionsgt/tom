@@ -1266,6 +1266,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pMovimiento",gMovimientoDet);
                         break;
                     case 14:
+                        //#CKF 20201229 Agregue campo en la vista
                         callMethod("Aplica_Cambio_Estado_Ubic_HH",
                                 "pMovimiento",gMovimientoDet,
                                 "pStockRes",vStockRes,
