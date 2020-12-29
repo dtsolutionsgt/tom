@@ -38,6 +38,12 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String codigo_poliza="";
+    @Element(required=false) public String ticket="";
+    @Element(required=false) public String numero_orden="";
+    @Element(required=false) public String fecha_aceptacion="1900-01-01T00:00:01";
+    @Element(required=false) public String fecha_llegada="1900-01-01T00:00:01";
+    @Element(required=false) public double total_otros=0;
 
     public clsBeTrans_oc_pol() {
     }
@@ -49,7 +55,9 @@ public class clsBeTrans_oc_pol {
                              double Cbm,String Dua,String Fecha_poliza,String Pais_procede,
                              double Tipo_cambio,double Total_valoraduana,int Total_lineas,int Total_bultos,
                              double Total_bultos_peso,double Total_usd,double Total_flete,double Total_seguro,
-                             String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew) {
+                             String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew,
+                             String codigo_poliza,String ticket,String numero_orden,String fecha_aceptacion,
+                             String fecha_llegada,double total_otros) {
 
         this.IdOrdenCompraPol=IdOrdenCompraPol;
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
@@ -84,7 +92,12 @@ public class clsBeTrans_oc_pol {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.IsNew=IsNew;
-
+        this.codigo_poliza=codigo_poliza;
+        this.ticket=ticket;
+        this.numero_orden=numero_orden;
+        this.fecha_aceptacion=fecha_aceptacion;
+        this.fecha_llegada=fecha_llegada;
+        this.total_otros=total_otros;
     }
 
 
@@ -285,6 +298,42 @@ public class clsBeTrans_oc_pol {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+    public String getcodigo_poliza() {
+        return codigo_poliza;
+    }
+    public void setcodigo_poliza(String value) {
+        codigo_poliza=value;
+    }
+    public String getticket() {
+        return ticket;
+    }
+    public void setticket(String value) {
+        ticket=value;
+    }
+    public String getnumero_orden() {
+        return numero_orden;
+    }
+    public void setnumero_orden(String value) {
+        numero_orden=value;
+    }
+    public String getfecha_aceptacion() {
+        return fecha_aceptacion;
+    }
+    public void setfecha_aceptacion(String value) {
+        fecha_aceptacion=value;
+    }
+    public String getfecha_llegada() {
+        return fecha_llegada;
+    }
+    public void setfecha_llegada(String value) {
+        fecha_llegada=value;
+    }
+    public double gettotal_otros() {
+        return total_otros;
+    }
+    public void settotal_otros(double value) {
+        total_otros=value;
     }
 }
 

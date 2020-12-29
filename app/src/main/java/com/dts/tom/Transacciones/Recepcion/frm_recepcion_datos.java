@@ -80,7 +80,7 @@ public class frm_recepcion_datos extends PBase {
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate;
-    private CheckBox chkPaletizar;
+    private CheckBox chkPaletizar, chkPalletNoEstandar;
     private Dialog dialog;
 
     //Objeto para dialogo de parametros
@@ -199,6 +199,7 @@ public class frm_recepcion_datos extends PBase {
         imgDate = (ImageView)findViewById(R.id.imgDate);
 
         chkPaletizar = (CheckBox)findViewById(R.id.chkPaletizar);
+        chkPalletNoEstandar = (CheckBox)findViewById(R.id.chkPalletNoEstandar);
 
         btnBack = (Button)findViewById(R.id.btnBack);
         btnIr = (Button)findViewById(R.id.btnIr);
@@ -332,6 +333,12 @@ public class frm_recepcion_datos extends PBase {
                     }else{
                         chkPaletizar.setVisibility(View.GONE);
                     }
+
+                    /*if (EsPallet){
+                        chkPalletNoEstandar.setVisibility(View.VISIBLE);
+                    }else{
+                        chkPalletNoEstandar.setVisibility(View.GONE);
+                    }*/
 
                 }
 
@@ -1700,7 +1707,6 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-
     private void msgContinuarTemp(String msg) {
 
         try{
@@ -3017,8 +3023,7 @@ public class frm_recepcion_datos extends PBase {
 
                 pListBeStockRec.items.get(pIndiceListaStock).Atributo_Variante_1 = "";
                 pListBeStockRec.items.get(pIndiceListaStock).No_linea = pLineaOC;
-
-
+                pListBeStockRec.items.get(pIndiceListaStock).pallet_no_estandar = false;
             }
 
         }catch (Exception e){
@@ -3344,6 +3349,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Nombre_unidad_medida = BeProducto.UnidadMedida.Nombre;
                 BeTransReDet.Codigo_Producto = BeProducto.Codigo;
 
+                //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+                BeTransReDet.pallet_no_estandar=(chkPalletNoEstandar.isChecked()?true:false);
+
                 BeTransReDet.ProductoEstado = new clsBeProducto_estado();
 
                 if (IdEstadoSelect>0) {
@@ -3421,7 +3429,6 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-
             if (BeProducto!=null){
                 BeTransReDet = new clsBeTrans_re_det();
                 BeTransReDet = pListTransRecDet.items.get(0);
@@ -3474,6 +3481,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.IsNew = true;
                 BeTransReDet.User_agr = gl.IdOperador+"";
                 BeTransReDet.Fec_agr = String.valueOf(du.getFechaActual());
+
+                //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+                BeTransReDet.pallet_no_estandar=(chkPalletNoEstandar.isChecked()?true:false);
 
                 BeTransReDet.MotivoDevolucion = new clsBeMotivo_devolucion();
 
@@ -3652,9 +3662,6 @@ public class frm_recepcion_datos extends PBase {
                     listaStock.items =stream(pListBeStockRec.items).where(c->c.IdProductoBodega == BeTransReDet.IdProductoBodega  &&
                             c.IdRecepcionDet == pIdRecepcionDet
                             && c.IdUnidadMedida == BeTransReDet.IdUnidadMedida).toList();
-
-
-
                 }
 
                 if (stream(listaStock.items).count()==0){
@@ -3783,6 +3790,9 @@ public class frm_recepcion_datos extends PBase {
 
             BeStockRec.ProductoValidado = true;
             BeStockRec.No_linea = pLineaOC;
+
+            //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+            BeStockRec.pallet_no_estandar = (chkPalletNoEstandar.isChecked()?true:false);
 
             if (Escaneo_Pallet){
                 BeStockRec.Lic_plate = BeINavBarraPallet.Codigo_barra;
