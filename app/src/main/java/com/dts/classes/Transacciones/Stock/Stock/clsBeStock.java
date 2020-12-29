@@ -53,7 +53,7 @@ public class clsBeStock {
     @Element(required=false) public int IdStockOrigen=0;
     @Element(required=false) public clsBeRevision Revision=new clsBeRevision();
     @Element(required=false) public boolean IsReportStockEnFecha = false;
-    @Element(required=false) public boolean pallet_no_estandar= false;
+    @Element(required=false) public boolean Pallet_No_Estandar= false;
 
     public clsBeStock()
     {
@@ -99,7 +99,7 @@ public class clsBeStock {
         this.IdStockOrigen=IdStockOrigen;
         this.Revision=Revision;
         this.IsReportStockEnFecha=IsReportStockEnFecha;
-        this.pallet_no_estandar=pallet_no_estandar;
+        this.Pallet_No_Estandar=Pallet_No_Estandar;
     }
 
     public clsBeStock(int IdBodega,int IdStock,int IdPropietarioBodega,int IdProductoBodega,
@@ -112,7 +112,7 @@ public class clsBeStock {
                       boolean Activo,double Peso,double Temperatura,String Atributo_Variante_1,
                       boolean IsNew,boolean ProductoValidado,String UbicacionAnterior,clsBeProducto_Presentacion Presentacion,
                       clsBeProducto_estado ProductoEstado,clsBeStock_parametroList Parametros,clsBeProducto Producto,
-                      int IdStockOrigen,clsBeRevision Revision,boolean IsReportStockEnFecha, boolean pallet_no_estandar
+                      int IdStockOrigen,clsBeRevision Revision,boolean IsReportStockEnFecha, boolean Pallet_No_Estandar
     ) {
 
         this.IdBodega=IdBodega;
@@ -157,7 +157,7 @@ public class clsBeStock {
         this.IdStockOrigen=IdStockOrigen;
         this.Revision=Revision;
         this.IsReportStockEnFecha=IsReportStockEnFecha;
-        this.pallet_no_estandar=pallet_no_estandar;
+        this.Pallet_No_Estandar=Pallet_No_Estandar;
     }
 
 
@@ -413,11 +413,11 @@ public class clsBeStock {
     public void setIsReportStockEnFecha(boolean value) {
         IsReportStockEnFecha=value;
     }
-    public boolean getpallet_no_estandar() {
-        return pallet_no_estandar;
+    public boolean getPallet_No_Estandar() {
+        return Pallet_No_Estandar;
     }
-    public void setPallet_no_estandar(boolean value) {
-        pallet_no_estandar=value;
+    public void setPallet_No_Estandar(boolean value) {
+        Pallet_No_Estandar=value;
     }
 }
 

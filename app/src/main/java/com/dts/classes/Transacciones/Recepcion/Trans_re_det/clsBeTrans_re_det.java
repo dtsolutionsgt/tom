@@ -61,7 +61,7 @@ public class clsBeTrans_re_det {
     @Element(required=false) public String UbicacionCompleta="";
     @Element(required=false) public String Lic_plate="";
     @Element(required=false) public double Uds_lic_plate=0;
-    @Element(required=false) public boolean pallet_no_estandar= false;
+    @Element(required=false) public boolean Pallet_No_Estandar= false;
 
     public clsBeTrans_re_det() {
     }
@@ -78,7 +78,7 @@ public class clsBeTrans_re_det {
                              boolean IsNew,boolean Control_Peso,int IdPropietarioBodega,int IdUbicacion,
                              int IdUbicacionAnterior,int IdOrdenCompraEnc,String Fecha_Rec,String Fecha_tarea,
                              String Hora_ini,String Hora_Fin,String Estado_Rec,String UbicacionCompleta,
-                             String Lic_plate,double Uds_lic_plate, boolean pallet_no_estandar) {
+                             String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar) {
 
         this.IdPresentacion=IdPresentacion;
         this.IdUnidadMedida=IdUnidadMedida;
@@ -130,7 +130,7 @@ public class clsBeTrans_re_det {
         this.UbicacionCompleta=UbicacionCompleta;
         this.Lic_plate=Lic_plate;
         this.Uds_lic_plate=Uds_lic_plate;
-        this.pallet_no_estandar=pallet_no_estandar;
+        this.Pallet_No_Estandar=Pallet_No_Estandar;
 
     }
 
@@ -434,11 +434,11 @@ public class clsBeTrans_re_det {
     public void setUds_lic_plate(double value) {
         Uds_lic_plate=value;
     }
-    public boolean getpallet_no_estandar() {
-        return pallet_no_estandar;
+    public boolean getPallet_No_Estandar() {
+        return Pallet_No_Estandar;
     }
-    public void setPallet_no_estandar(boolean value) {
-        pallet_no_estandar=value;
+    public void setPallet_No_Estandar(boolean value) {
+        Pallet_No_Estandar=value;
     }
 }
 

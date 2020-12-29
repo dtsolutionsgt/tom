@@ -3023,7 +3023,7 @@ public class frm_recepcion_datos extends PBase {
 
                 pListBeStockRec.items.get(pIndiceListaStock).Atributo_Variante_1 = "";
                 pListBeStockRec.items.get(pIndiceListaStock).No_linea = pLineaOC;
-                pListBeStockRec.items.get(pIndiceListaStock).pallet_no_estandar = false;
+                pListBeStockRec.items.get(pIndiceListaStock).Pallet_No_Estandar = false;
             }
 
         }catch (Exception e){
@@ -3350,7 +3350,7 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Codigo_Producto = BeProducto.Codigo;
 
                 //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
-                BeTransReDet.pallet_no_estandar=(chkPalletNoEstandar.isChecked()?true:false);
+                BeTransReDet.Pallet_No_Estandar=(chkPalletNoEstandar.isChecked()?true:false);
 
                 BeTransReDet.ProductoEstado = new clsBeProducto_estado();
 
@@ -3483,7 +3483,7 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Fec_agr = String.valueOf(du.getFechaActual());
 
                 //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
-                BeTransReDet.pallet_no_estandar=(chkPalletNoEstandar.isChecked()?true:false);
+                BeTransReDet.Pallet_No_Estandar=(chkPalletNoEstandar.isChecked()?true:false);
 
                 BeTransReDet.MotivoDevolucion = new clsBeMotivo_devolucion();
 
@@ -3792,7 +3792,7 @@ public class frm_recepcion_datos extends PBase {
             BeStockRec.No_linea = pLineaOC;
 
             //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
-            BeStockRec.pallet_no_estandar = (chkPalletNoEstandar.isChecked()?true:false);
+            BeStockRec.Pallet_No_Estandar = (chkPalletNoEstandar.isChecked()?true:false);
 
             if (Escaneo_Pallet){
                 BeStockRec.Lic_plate = BeINavBarraPallet.Codigo_barra;
@@ -4296,9 +4296,12 @@ public class frm_recepcion_datos extends PBase {
                         //Guardar_Recepcion_Nueva
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",listaProdPalletsNuevos.items,"pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
+                                "pListStockRecSer",pListBeStockSeRec.items,
+                                "pListStockRec",pListBeStockRec.items,
+                                "pListProductoPallet",listaProdPalletsNuevos.items,
+                                "pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUsuario",gl.IdOperador);
                         break;
                     case 17 :
                         //Guardar_Recepcion_Edita
