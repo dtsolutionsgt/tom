@@ -259,31 +259,16 @@ public class frm_inv_cic_add extends PBase {
             //llama a ws para cargar spinner con presentaciones del producto
              execws(4);
 
-
             txtUbic.setText(gl.inv_ciclico.NoUbic +"");
             idubic = gl.inv_ciclico.NoUbic;
-
             lblUbic1.setTypeface(null, Typeface.BOLD);
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
             lblProd.setTypeface(null, Typeface.BOLD);
             lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-
-
             txtLote1.setText(gl.inv_ciclico.Lote+"");
-
-
             dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
 
-            //GT30112020 se llena spinner con presentación del producto
-           /* List<String> spinnerArray =  new ArrayList<String>();
-            spinnerArray.add(gl.inv_ciclico.Pres);
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cboPres.setAdapter(dataAdapter);*/
-
             if(gl.inv_ciclico.IdPresentacion == 0){
-
-                //lblUM.setText(gl.inv_ciclico.Pres);
                 lblUM.setText(gl.inv_ciclico.UMBas);
             }else{
 

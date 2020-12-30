@@ -576,7 +576,9 @@ public class frm_inv_cic_conteo extends PBase {
         }else if(registros==1){
 
             Busqueda = true;
-            startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
+            execws(4);
+            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
         } else if(registros == 0){
 
@@ -584,7 +586,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                 String codigo_producto = data_list.get(i).Codigo;
 
-                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad > 0){
 
                     registros = registros+1;
 
@@ -604,7 +606,9 @@ public class frm_inv_cic_conteo extends PBase {
 
                 //Se encontró una coincidencia en la busqueda y la clase global se ha llenado, solo se carga el activity con la data
                 Busqueda = true;
-                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
+                execws(4);
+                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
             else if(registros ==0){
 
@@ -823,6 +827,7 @@ public class frm_inv_cic_conteo extends PBase {
 
             if(gl.lista_estados !=null){
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
             }
 
 
