@@ -225,6 +225,8 @@ public class frm_list_inventario extends PBase {
     }
 
     public void BotonActualizar(View view){
+
+        ProgressDialog("Recargando datos de inventario...");
         execws(1);
     }
 

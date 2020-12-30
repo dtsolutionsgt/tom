@@ -103,9 +103,9 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
-    public clsBeTrans_inv_ciclico_vw inv_ciclico_vw = new clsBeTrans_inv_ciclico_vw();
+    //public clsBeTrans_inv_ciclico_vw inv_ciclico_vw = new clsBeTrans_inv_ciclico_vw();
     //public clsBeTrans_inv_ciclico_vwList inv_ciclico_vwList = new clsBeTrans_inv_ciclico_vwList();
-    public ArrayList<clsBeTrans_inv_ciclico_vw> inv_ciclico_vwList = new ArrayList<clsBeTrans_inv_ciclico_vw>();
+    //public ArrayList<clsBeTrans_inv_ciclico_vw> inv_ciclico_vwList = new ArrayList<clsBeTrans_inv_ciclico_vw>();
     public ArrayList<clsBe_inv_reconteo_data> reconteo_list = new ArrayList<clsBe_inv_reconteo_data>();
 
 

@@ -283,12 +283,11 @@ public class frm_inv_cic_add extends PBase {
 
             if(gl.inv_ciclico.IdPresentacion == 0){
 
-                lblUM.setText(gl.inv_ciclico.Pres);
+                //lblUM.setText(gl.inv_ciclico.Pres);
+                lblUM.setText(gl.inv_ciclico.UMBas);
             }else{
 
-
                 String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
-
                 lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
             }
 
@@ -886,6 +885,8 @@ public class frm_inv_cic_add extends PBase {
 
             if(respuesta ==1){
                 toast("Reconteo registrado!");
+                super.finish();
+
             }else if(respuesta > 1) {
                 toast("Se actualizó más de un registro!");
             }else if (respuesta == 0){

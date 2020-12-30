@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -248,6 +249,7 @@ public class frm_inv_cic_nuevo extends PBase {
             gl.pBeProductoNuevo.IdMarca = IdMarca;
             gl.pBeProductoNuevo.IdTipoProducto = IdTipo;
             gl.pBeProductoNuevo.IdUnidadMedidaBasica = IdUmBas;
+            //gl.pBeProductoNuevo.Presentacion=
             gl.pBeProductoNuevo.Codigo = etcodigo.getText().toString().trim();
             gl.pBeProductoNuevo.Nombre = etdescripcion.getText().toString().trim();
             gl.pBeProductoNuevo.Codigo_barra = etcodigo.getText().toString().trim();
@@ -262,9 +264,8 @@ public class frm_inv_cic_nuevo extends PBase {
             if(gl.pBeProductoNuevo != null){
 
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_guardar.class));
-            }
 
-            //toast("Registro agregado");
+            }
 
         }catch (Exception e) {
             mu.msgbox(e.getMessage());

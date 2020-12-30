@@ -67,14 +67,7 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
     private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
-
-
-
-
-    private clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
-    private clsBeTrans_inv_enc_reconteo reconteo = new clsBeTrans_inv_enc_reconteo();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
-
     private Object item;
 
 
@@ -208,7 +201,6 @@ public class frm_inv_cic_conteo extends PBase {
         if(BeInvEnc.Idinventarioenc != 0){
 
             cmdList.setText(" 0/0 ");
-            Integer idprodbod = 0;
             ubicid = 0;
             lic_plate = false;
             lplate = "";
@@ -227,9 +219,6 @@ public class frm_inv_cic_conteo extends PBase {
         try{
             DT = xobj.filldt();
             data_list.clear();
-            //lista_filtro.clear();
-
-
             gl.reconteo_list.clear();
 
             if(!txtBuscFiltro.equals("")){
@@ -280,7 +269,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                //vItem.FechaVence = du.convierteFechaMostar(DT.getString(20));
                                 data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
                             }else{
                                 data_rec.Fecha_Vence = "";
@@ -295,16 +283,16 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(30));
 
                             data_list.add(data_rec);
-                            //lista_filtro.add(data_rec);
 
+                            //GT 30122020 lista global para ser accedida desde validaciones cuando se agrega nuevo_producto
                             gl.reconteo_list.add(data_rec);
 
                             DT.moveToNext();
 
                         }
 
+                        //Se resta un registro, porque el primero es un registro para los encabezados del grid
                         int count =data_list.size()-1;
-                        //cmdList.setText("No.Reg: "+count);
                         cmdList.setText( count+ "/" + count);
 
                         if (DT!=null) DT.close();
@@ -328,7 +316,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         }catch (Exception e){
             progress.cancel();
-            mu.msgbox("processReConteos:"+e.getMessage());
+            mu.msgbox("Carga_Conteos:"+e.getMessage());
         }
     }
 
@@ -567,7 +555,8 @@ public class frm_inv_cic_conteo extends PBase {
 
             String ubicacion = String.valueOf(data_list.get(i).NoUbic);
 
-            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+            //if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0 ){
 
                 registros = registros+1;
 
@@ -840,6 +829,11 @@ public class frm_inv_cic_conteo extends PBase {
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
+    }
+
+    public void limpiar(View view) {
+        txtBuscFiltro.setText("");
+        txtBuscFiltro.requestFocus();
     }
 
     public class WebServiceHandler extends WebService {
