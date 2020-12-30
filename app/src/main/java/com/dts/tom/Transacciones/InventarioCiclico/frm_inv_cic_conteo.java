@@ -378,16 +378,20 @@ public class frm_inv_cic_conteo extends PBase {
             //carga la lista con el Filtro Ubicación
             FiltroxUbicacion(evaluar);
 
-
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
+
             msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
+
             txtBuscFiltro.setText("");
+
             Busqueda = false;
 
         }else if(registros==1){
 
             Busqueda = true;
-            startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
+            execws(4);
+            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
         } else if(registros == 0){
 
@@ -416,8 +420,11 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda= false;
 
             } else if (registros ==1){
+
                 Busqueda = true;
-                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+                execws(4);
+
+                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
             else if(registros ==0){
 
