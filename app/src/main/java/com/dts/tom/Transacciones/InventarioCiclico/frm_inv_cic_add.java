@@ -313,7 +313,7 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
-            txtCantContada.setText("0");
+            txtCantContada.setText("");
 
             if(!gl.inv_ciclico.cantidad.equals(0.00)){
 

@@ -15,7 +15,7 @@
         android:background="@drawable/color_medium">
 
         <TextView
-            android:id="@+id/lblTituloForma"
+            android:id="@+id/lblConteo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"

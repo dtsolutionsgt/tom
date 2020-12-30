@@ -56,7 +56,7 @@ public class frm_inv_cic_conteo extends PBase {
     private boolean esconteo, lic_plate, noubicflag, nostockflag, ProductosMultiples;
     private String lplate, LoteSel,FechaVencSel,PresSel,ProdSel;
     private Integer ubicid, nubicid,IdUbicacionSel;
-    private TextView cmdList;
+    private TextView cmdList, lblConteo;
     CheckBox checkbox;
     boolean chkPendientes;
     private Integer Idx;
@@ -78,6 +78,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         super.InitBase();
 
+        lblConteo = findViewById(R.id.lblConteo);
         txtBuscFiltro = findViewById(R.id.txtBuscFiltro);
         listCiclico = findViewById(R.id.listCiclico);
         checkbox = findViewById(R.id.chkPendientes);
@@ -205,7 +206,8 @@ public class frm_inv_cic_conteo extends PBase {
             lic_plate = false;
             lplate = "";
 
-            execws(3);
+            execws(1);
+            //execws(3);
 
         } else{
             mu.msgbox("validar: No hay Tarea registrada.");
@@ -329,9 +331,9 @@ public class frm_inv_cic_conteo extends PBase {
         if (reconteos != null){
 
             if(reconteos.items != null){
-                if(reconteos.items.size()>0){
+                if(reconteos.items.size()>0  && reconteos.items.get(0).Reconteo > 0){
 
-                    idreconteo = reconteos.items.size();
+                    idreconteo = reconteos.items.get(0).Reconteo;
 
                 }else{
 
@@ -340,8 +342,17 @@ public class frm_inv_cic_conteo extends PBase {
             }
         }
 
-        esconteo = false;
-        idreconteo = 0;
+        esconteo = (idreconteo == 0?true:false);
+
+        if(esconteo){
+            lblConteo.setText("Conteo");
+        }else{
+            lblConteo.setText("Reconteo #" + idreconteo);
+        }
+
+        //If esconteo Then lblConteo.Text = "Conteo" Else lblConteo.Text = "Reconteo #" & idreconteo
+
+
 
         execws(3);
 
