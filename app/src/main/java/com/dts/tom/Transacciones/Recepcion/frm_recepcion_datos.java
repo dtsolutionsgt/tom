@@ -814,7 +814,12 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                txtLicPlate.setText(pNumeroLP);
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtBarra.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                }else{
+                    txtLicPlate.setText(pNumeroLP);
+                }
             }else{
                 lblLicPlate.setVisibility(View.GONE);
                 txtLicPlate.setFocusable(false);
@@ -1852,9 +1857,8 @@ public class frm_recepcion_datos extends PBase {
 
                     Escaneo_Pallet_Interno = true;
 
+                    //Llama al método del WS Existe_Lp
                     execws(24);
-
-
                 }
             }
 
@@ -4589,7 +4593,12 @@ public class frm_recepcion_datos extends PBase {
             pNumeroLP = xobj.getresult(String.class,"Get_Nuevo_Correlativo_LicensePlate");
 
             if (gl.mode==1){
-                txtLicPlate.setText(pNumeroLP);
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtBarra.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                }else{
+                    txtLicPlate.setText(pNumeroLP);
+                }
             }
 
         }catch (Exception e){
@@ -4730,7 +4739,11 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-            vBeStockRec.Lic_plate = xobj.getresult(String.class,"Get_Nuevo_Correlativo_LicensePlate_S");
+            if (!txtBarra.getText().toString().isEmpty()){
+                vBeStockRec.Lic_plate = txtBarra.getText().toString();
+            }else {
+                vBeStockRec.Lic_plate = xobj.getresult(String.class, "Get_Nuevo_Correlativo_LicensePlate_S");
+            }
 
             Terminar_Guardar_Detalle_Recepcion_Nueva();
 

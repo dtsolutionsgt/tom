@@ -49,7 +49,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma,lblUbicCompDestino,lblPosiciones;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
 
@@ -111,10 +111,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean Es_Explosion = false;
     private int vIdStockNuevo = 0;
     private int vIdMovimientoNuevo= 0;
+    private int vPosiciones=0;
 
     private boolean Existe_Lp=false;
 
     private boolean EsPalletNoEstandar=false;
+    private boolean TienePosiciones=false;
 
     private boolean escaneoPallet;
 
@@ -168,8 +170,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             btnGuardarCiega = (Button) findViewById(R.id.btnGuardarCiega);
 
             txtPosiciones = new EditText(this,null);
-            lblPosiciones = new TextView(this,null);
-
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
             cmbEstadoDestino.setVisibility(gl.modo_cambio == 1 ? View.GONE : View.VISIBLE);
@@ -1185,6 +1185,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 19:
                     processPalletNoEstandar();
                     break;
+                case 20:
+                    processTienePosiciones();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1266,12 +1269,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pMovimiento",gMovimientoDet);
                         break;
                     case 14:
-                        //#CKF 20201229 Agregue campo en la vista
+                        //#CKFK 20201229 Agregué campo Pallet_No_Estandar en la vista de stock_res
                         callMethod("Aplica_Cambio_Estado_Ubic_HH",
                                 "pMovimiento",gMovimientoDet,
                                 "pStockRes",vStockRes,
                                 "pIdStockNuevo",vIdStockNuevo,
-                                "pIdMovimientoNuevo",vIdMovimientoNuevo);
+                                "pIdMovimientoNuevo",vIdMovimientoNuevo,
+                                "pPosiciones",vPosiciones);
                         break;
                     case 15:
                         callMethod("ml_get_ubicacion_sugerida","pIdProducto",cvProdID,
@@ -1296,6 +1300,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         break;
                     case 19:
                         callMethod("Es_Pallet_No_Estandar","pStock",pStock);
+                        break;
+                    case 20:
+                        callMethod("Tiene_Posiciones","pStock",pStock);
                         break;
                 }
 
@@ -1953,6 +1960,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
 
             if (EsPalletNoEstandar){
+                execws(20);
+            }else{
+                validaDestino();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processPalletNoEstandar:"+e.getMessage());
+        }
+    }
+
+    private void processTienePosiciones(){
+
+        try{
+
+            TienePosiciones = xobj.getresult(Boolean.class,"Tiene_Posiciones");
+
+            if (!TienePosiciones){
                 msgAskIngresePosiciones();
             }else{
                 validaDestino();
@@ -1971,6 +1995,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             alert.setTitle("Ingrese número de posiciones");
 
+            vPosiciones = 0;
+
             final LinearLayout layout   = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
 
@@ -1978,7 +2004,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 ((ViewGroup) txtPosiciones.getParent()).removeView(txtPosiciones);
             }
 
-            txtPosiciones.setText("0");
+            txtPosiciones.setText("");
+            txtPosiciones.requestFocus();
 
             layout.addView(txtPosiciones);
 
@@ -1992,7 +2019,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     layout.removeAllViews();
 
-                    validaDestino();
+                    vPosiciones=Integer.valueOf(txtPosiciones.getText().toString());
+
+                    if (vPosiciones==0){
+                        layout.removeAllViews();
+                        msgAskIngresePosiciones();
+                    }else{
+                        validaDestino();
+                    }
 
                 }
             });
@@ -2042,6 +2076,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             lblCant.setText("");
             txtUbicDestino.setText("");
+            lblUbicCompDestino.setText("");
             txtCantidad.setText("");
             txtCodigoPrd.setText("");
 
