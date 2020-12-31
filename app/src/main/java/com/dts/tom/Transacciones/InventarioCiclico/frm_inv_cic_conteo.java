@@ -63,7 +63,7 @@ public class frm_inv_cic_conteo extends PBase {
     private Cursor DT;
     private boolean Busqueda;
 
-    Existe_producto existeProducto = new Existe_producto();
+    //Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
     private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
@@ -350,10 +350,6 @@ public class frm_inv_cic_conteo extends PBase {
             lblConteo.setText("Reconteo #" + idreconteo);
         }
 
-        //If esconteo Then lblConteo.Text = "Conteo" Else lblConteo.Text = "Reconteo #" & idreconteo
-
-
-
         execws(3);
 
     }
@@ -443,14 +439,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                     execws(2);
 
-                    if(!(existeProducto.respuesta)){
+                  /*  if(!(existeProducto.respuesta)){
 
                         msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
 
                     }else{
 
                         Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }
+                    }*/
 
                 }else{
 
@@ -634,14 +630,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                     execws(2);
 
-                    if(!(existeProducto.respuesta)){
+            /*        if(!(existeProducto.respuesta)){
 
                         msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
 
                     }else{
 
                         Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }
+                    }*/
 
                 }else{
 
@@ -660,7 +656,18 @@ public class frm_inv_cic_conteo extends PBase {
 
         try{
 
-            existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
+            boolean respuesta = false;
+
+            //existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
+            respuesta = xobj.getresult(Boolean.class,"Existe_Producto");
+
+            if(! respuesta){
+
+                msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
+
+            }else{
+                msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
+            }
 
         }
         catch (Exception e){
@@ -669,7 +676,7 @@ public class frm_inv_cic_conteo extends PBase {
 
     }
 
-    private void SubTarea1(){
+/*    private void SubTarea1(){
 
         clsBeProducto tProd;
 
@@ -725,7 +732,7 @@ public class frm_inv_cic_conteo extends PBase {
             lplate = "";
             mu.msgbox("processReConteos:"+e.getMessage());
         }
-    }
+    }*/
 
     private void SubTarea2(){
 
@@ -1031,7 +1038,7 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
-    public static class Existe_producto{
+/*    public static class Existe_producto{
         @Element(required=false) public boolean respuesta=false;
 
         public Existe_producto() {
@@ -1047,7 +1054,7 @@ public class frm_inv_cic_conteo extends PBase {
         public void setrespuesta(boolean value) {
             respuesta=value;
         }
-    }
+    }*/
 
     @Override
     public void onRestart()
