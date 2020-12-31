@@ -630,15 +630,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                     execws(2);
 
-            /*        if(!(existeProducto.respuesta)){
-
-                        msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
-
-                    }else{
-
-                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }*/
-
                 }else{
 
                     Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
