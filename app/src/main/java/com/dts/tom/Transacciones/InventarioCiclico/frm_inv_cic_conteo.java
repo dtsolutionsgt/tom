@@ -632,7 +632,8 @@ public class frm_inv_cic_conteo extends PBase {
 
                 }else{
 
-                    Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
+                    //Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
+                    msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
                 }
             }
         }
@@ -842,8 +843,9 @@ public class frm_inv_cic_conteo extends PBase {
             gl.lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
 
             if(gl.lista_estados !=null){
-                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
+                txtBuscFiltro.setText("");
+                startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
 
 
@@ -1028,24 +1030,6 @@ public class frm_inv_cic_conteo extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
-
-/*    public static class Existe_producto{
-        @Element(required=false) public boolean respuesta=false;
-
-        public Existe_producto() {
-        }
-
-        public Existe_producto(boolean respuesta){
-            this.respuesta=respuesta;
-        }
-
-        public boolean getrespuesta() {
-            return respuesta;
-        }
-        public void setrespuesta(boolean value) {
-            respuesta=value;
-        }
-    }*/
 
     @Override
     public void onRestart()
