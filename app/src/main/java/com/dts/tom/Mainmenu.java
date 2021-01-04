@@ -58,7 +58,6 @@ public class Mainmenu extends PBase {
             gridView.setNumColumns(2);
         }
 
-
         Load();
 
         setHandlers();
@@ -83,11 +82,9 @@ public class Mainmenu extends PBase {
 
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
-
     }
 
     //endregion
@@ -101,14 +98,14 @@ public class Mainmenu extends PBase {
 
     private void Load(){
 
-        try{
+        try {
 
             listItems();
 
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
             lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
 
-        }catch (Exception e){
+        } catch (Exception e){
             mu.msgbox(e.getMessage());
         }
 
@@ -152,6 +149,10 @@ public class Mainmenu extends PBase {
 
                 item = clsCls.new clsMenu();
                 item.ID=8;item.Name="Existencias";item.Icon=8;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=10;item.Name="Utilerias";item.Icon=10;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -250,14 +251,16 @@ public class Mainmenu extends PBase {
                     break;
 
                 case 9://Cambio de usuario
-                    Mainmenu.super.finish();
+                    Mainmenu.super.finish(); break;
+
+                case 10:// Utilerias
+                    menuUtilerias(); break;
             }
 
-        }catch (Exception e){
+        } catch (Exception e){
             mu.msgbox(e.getMessage());
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
 
     private void msgAskUbicNoDirigida(String msg) {
@@ -293,9 +296,72 @@ public class Mainmenu extends PBase {
 
     }
 
+    private void menuUtilerias() {
+        final AlertDialog Dialog;
+        final String[] selitems = {"Actualizar versión"};
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Utilerias ");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 0:
+                        msgAskUpdate("Actualizar versión");break;
+
+                }
+
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void actualizaVersion() {
+        try {
+            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
+            intent.putExtra("filename","tom.apk");
+            this.startActivity(intent);
+        } catch (Exception e) {
+            msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
+        }
+
+    }
+
     //endregion
 
     //region Dialogs
+
+
+    private void msgAskUpdate(String msg) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+        dialog.setTitle("Tom WMS");
+        dialog.setMessage("¿" + msg + "?");
+
+        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                actualizaVersion();
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        dialog.show();
+
+    }
+
 
 
     //endregion
