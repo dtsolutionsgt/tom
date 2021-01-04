@@ -91,6 +91,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public int IdClasificacion=0;
   @Element(required=false) public int IdTipoProducto=0;
   @Element(required=false) public String NombreTipoProducto="";
+  @Element(required=false) public Boolean Pallet_No_Estandar=false;
 
 
   public clsBeVW_stock_res() {
@@ -116,7 +117,7 @@ public class clsBeVW_stock_res {
                            boolean encontrado,clsBeBodega_ubicacion UbicacionActual,double Cantidad_Res,String ValorTexto,
                            double ValorNumerico,String ValorFecha,int ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
-                           int IdClasificacion,int IdTipoProducto,String NombreTipoProducto) {
+                           int IdClasificacion,int IdTipoProducto,String NombreTipoProducto, Boolean Pallet_No_Estandar) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -201,6 +202,7 @@ public class clsBeVW_stock_res {
     this.IdClasificacion=IdClasificacion;
     this.IdTipoProducto=IdTipoProducto;
     this.NombreTipoProducto=NombreTipoProducto;
+    this.Pallet_No_Estandar=Pallet_No_Estandar;
 
   }
 
@@ -703,6 +705,11 @@ public class clsBeVW_stock_res {
   public void setNombreTipoProducto(String value) {
     NombreTipoProducto=value;
   }
-
+  public boolean getPallet_No_Estandar() {
+    return Pallet_No_Estandar;
+  }
+  public void setPallet_No_Estandar(boolean value) {
+    Pallet_No_Estandar=value;
+  }
 }
 
