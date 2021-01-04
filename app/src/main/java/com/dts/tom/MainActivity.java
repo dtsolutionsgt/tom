@@ -117,10 +117,9 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
 
                 setHandlers();
-
                 gl.deviceId =androidid();
 
-            }else{
+            } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
             }
