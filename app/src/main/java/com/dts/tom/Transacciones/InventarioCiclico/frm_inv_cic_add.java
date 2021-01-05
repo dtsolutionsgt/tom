@@ -116,6 +116,12 @@ public class frm_inv_cic_add extends PBase {
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
+
+        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
+        if(gl.IndexCiclico < gl.reconteo_list.size() ){
+            Index = gl.IndexCiclico -1;
+        }
+
         Load();
 
         setHandlers();
@@ -224,14 +230,6 @@ public class frm_inv_cic_add extends PBase {
 
             //index para el combobox estados
             int index = 0;
-
-            //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
-            if(gl.IndexCiclico < gl.reconteo_list.size() ){
-                Index = gl.IndexCiclico -1;
-            }
-
-
-
 
             if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
                 vFactor = 0;
@@ -444,15 +442,21 @@ public class frm_inv_cic_add extends PBase {
 
     public void backward(View view) {
 
-        if(Index >= 1){
-            gl.inv_ciclico=  gl.reconteo_list.get(Index -1);
+        if(Index > 0){
+            Index = Index -1;
+            gl.inv_ciclico=  gl.reconteo_list.get(Index);
+            Load();
+            setHandlers();
         }
 
     }
 
     public void forward(View view) {
 
-            gl.inv_ciclico=  gl.reconteo_list.get(Index +1);
+        Index = Index+1;
+        gl.inv_ciclico=  gl.reconteo_list.get(Index);
+        Load();
+        setHandlers();
 
     }
 
