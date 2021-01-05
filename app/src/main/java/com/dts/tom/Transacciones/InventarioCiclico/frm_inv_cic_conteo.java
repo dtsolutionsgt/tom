@@ -293,9 +293,7 @@ public class frm_inv_cic_conteo extends PBase {
                             //GT 30122020 lista global para ser accedida desde validaciones cuando se agrega nuevo_producto
                             gl.reconteo_list.add(data_rec);
 
-
                             DT.moveToNext();
-
                         }
 
                         //Se resta un registro, porque el primero es un registro para los encabezados del grid
@@ -578,6 +576,9 @@ public class frm_inv_cic_conteo extends PBase {
 
         if(registros>1){
 
+            //carga la lista con el Filtro Ubicación
+            FiltroxUbicacion(evaluar);
+
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
             msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
             txtBuscFiltro.setText("");
@@ -606,6 +607,10 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             }
             if(registros > 1){
+
+
+                //carga la lista con el Filtro Código
+                FiltroxCodigo(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
                 msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
