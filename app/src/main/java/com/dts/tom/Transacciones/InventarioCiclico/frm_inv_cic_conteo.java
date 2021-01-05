@@ -68,6 +68,7 @@ public class frm_inv_cic_conteo extends PBase {
     private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
     private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
+    private clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
     private Object item;
 
 
@@ -178,11 +179,13 @@ public class frm_inv_cic_conteo extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    selid = 0;
+                    //selid = 0;
+                    gl.IndexCiclico = 0;
 
                     if (position > 0) {
 
                         gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                        gl.IndexCiclico = position;
 
                         execws(4);
 
@@ -219,6 +222,7 @@ public class frm_inv_cic_conteo extends PBase {
         clsBe_inv_reconteo_data rec;
 
         try{
+
             DT = xobj.filldt();
             data_list.clear();
             gl.reconteo_list.clear();
@@ -288,6 +292,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //GT 30122020 lista global para ser accedida desde validaciones cuando se agrega nuevo_producto
                             gl.reconteo_list.add(data_rec);
+
 
                             DT.moveToNext();
 
@@ -438,15 +443,6 @@ public class frm_inv_cic_conteo extends PBase {
                 if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
-
-                  /*  if(!(existeProducto.respuesta)){
-
-                        msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
-
-                    }else{
-
-                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }*/
 
                 }else{
 

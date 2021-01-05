@@ -30,6 +30,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -50,8 +51,9 @@ public class frm_inv_cic_add extends PBase {
     private int month;
     private int day;
     private int IdProductoBodega,idubic, idstock;
-    private double ocant, opeso,vFactor;
+    private double vFactor;
     private String Resultado;
+    private int Index;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
@@ -62,6 +64,7 @@ public class frm_inv_cic_add extends PBase {
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
 
     private boolean nuevoRegistro;
+
     //variables para obtener id de los combobox
     private int IdEstadoselected, IdPresentacionselected;
 
@@ -106,11 +109,9 @@ public class frm_inv_cic_add extends PBase {
         vFactor = 0.00;
         IdProductoBodega = 0;
         idubic = 0;
-
-        //respuesta del ws cuando actualiza.
-        String Resultado ="";
-
         IDInventarioCiclico = 0;
+
+        Index = 0;
 
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -118,9 +119,6 @@ public class frm_inv_cic_add extends PBase {
         Load();
 
         setHandlers();
-
-        //txtProd.requestFocus();
-
     }
 
     private void setHandlers() {
@@ -222,9 +220,18 @@ public class frm_inv_cic_add extends PBase {
 
     private void Load() {
 
-        int index = 0;
-
         if(gl.inv_ciclico !=null){
+
+            //index para el combobox estados
+            int index = 0;
+
+            //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
+            if(gl.IndexCiclico < gl.reconteo_list.size() ){
+                Index = gl.IndexCiclico -1;
+            }
+
+
+
 
             if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
                 vFactor = 0;
@@ -332,7 +339,12 @@ public class frm_inv_cic_add extends PBase {
             }
 
             txtProd.requestFocus();
+
+        }else{
+
+            mu.msgbox( "El registro seleccionado no es válido.");
         }
+
 
     }
 
@@ -431,9 +443,17 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void backward(View view) {
+
+        if(Index >= 1){
+            gl.inv_ciclico=  gl.reconteo_list.get(Index -1);
+        }
+
     }
 
     public void forward(View view) {
+
+            gl.inv_ciclico=  gl.reconteo_list.get(Index +1);
+
     }
 
     public void btnGuardar(View view) {
