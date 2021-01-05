@@ -1,6 +1,7 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -404,7 +405,7 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void Exit(View view) {
-        frm_inv_cic_add.super.finish();
+        finish();
     }
 
     @Override

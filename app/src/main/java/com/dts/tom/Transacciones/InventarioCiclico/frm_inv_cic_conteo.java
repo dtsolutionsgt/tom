@@ -1014,6 +1014,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                     gl.nuevo_producto_cic = txtBuscFiltro.getText().toString().trim();
                     txtBuscFiltro.setText("");
+                    gl.cerrarActividad2=false;
                     startActivity(new Intent(getApplicationContext(), frm_inv_cic_nuevo.class));
                 }
             });

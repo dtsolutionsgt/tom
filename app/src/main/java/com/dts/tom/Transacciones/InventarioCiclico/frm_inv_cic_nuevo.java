@@ -128,13 +128,15 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdFamilia = position +1;
+                    IdFamilia = list_spinner.get(position).Id;
+                    //toast("familia " + IdFamilia);
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay familia seleccionada");
                 }
             });
 
@@ -142,13 +144,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdClasificacion = position +1;
+                    IdClasificacion = list_spinner2.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay clasificación seleccionada");
                 }
             });
 
@@ -156,13 +159,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdMarca = position +1;
+                    IdMarca = list_spinner3.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay marca seleccionada");
                 }
             });
 
@@ -170,13 +174,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdTipo = position +1;
+                    IdTipo = list_spinner4.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay tipo seleccionado");
                 }
             });
 
@@ -184,13 +189,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdUmBas = position +1;
+                    IdUmBas = list_spinner5.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay Umbas seleccionado");
                 }
             });
 
@@ -576,6 +582,11 @@ public class frm_inv_cic_nuevo extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if (gl.cerrarActividad2) finish();
     }
 
 }
