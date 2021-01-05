@@ -571,7 +571,6 @@ public class frm_inv_cic_guardar extends PBase {
             if(Valida){
 
                 toast("Registro guardado");
-                //startActivity(new Intent(this, frm_inv_cic_conteo.class));
                 gl.cerrarActividad2=true;
                 finish();
 
