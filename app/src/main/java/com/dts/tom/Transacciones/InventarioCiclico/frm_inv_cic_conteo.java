@@ -158,7 +158,6 @@ public class frm_inv_cic_conteo extends PBase {
                     if (isChecked) {
 
                         chkPendientes = true;
-                        //ListaTareas();
                         checkbox.setText("Pendientes");
                         ProgressDialog("Cargando pendientes.");
                         execws(1);
@@ -166,7 +165,6 @@ public class frm_inv_cic_conteo extends PBase {
                     } else {
 
                         chkPendientes = false;
-                        //ListaTareas();
                         checkbox.setText("Contados");
                         ProgressDialog("Cargando contados.");
                         execws(1);
@@ -179,7 +177,6 @@ public class frm_inv_cic_conteo extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    //selid = 0;
                     gl.IndexCiclico = 0;
 
                     if (position > 0) {
