@@ -1,6 +1,7 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -49,8 +51,9 @@ public class frm_inv_cic_add extends PBase {
     private int month;
     private int day;
     private int IdProductoBodega,idubic, idstock;
-    private double ocant, opeso,vFactor;
+    private double vFactor;
     private String Resultado;
+    private int Index;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
@@ -61,6 +64,7 @@ public class frm_inv_cic_add extends PBase {
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
 
     private boolean nuevoRegistro;
+
     //variables para obtener id de los combobox
     private int IdEstadoselected, IdPresentacionselected;
 
@@ -105,21 +109,22 @@ public class frm_inv_cic_add extends PBase {
         vFactor = 0.00;
         IdProductoBodega = 0;
         idubic = 0;
-
-        //respuesta del ws cuando actualiza.
-        String Resultado ="";
-
         IDInventarioCiclico = 0;
+
+        Index = 0;
 
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
+
+        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
+        if(gl.IndexCiclico < gl.reconteo_list.size() ){
+            Index = gl.IndexCiclico -1;
+        }
+
         Load();
 
         setHandlers();
-
-        //txtProd.requestFocus();
-
     }
 
     private void setHandlers() {
@@ -221,9 +226,10 @@ public class frm_inv_cic_add extends PBase {
 
     private void Load() {
 
-        int index = 0;
-
         if(gl.inv_ciclico !=null){
+
+            //index para el combobox estados
+            int index = 0;
 
             if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
                 vFactor = 0;
@@ -259,36 +265,20 @@ public class frm_inv_cic_add extends PBase {
             //llama a ws para cargar spinner con presentaciones del producto
              execws(4);
 
-
             txtUbic.setText(gl.inv_ciclico.NoUbic +"");
             idubic = gl.inv_ciclico.NoUbic;
-
             lblUbic1.setTypeface(null, Typeface.BOLD);
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
             lblProd.setTypeface(null, Typeface.BOLD);
             lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-
-
             txtLote1.setText(gl.inv_ciclico.Lote+"");
-
-
             dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
 
-            //GT30112020 se llena spinner con presentación del producto
-           /* List<String> spinnerArray =  new ArrayList<String>();
-            spinnerArray.add(gl.inv_ciclico.Pres);
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cboPres.setAdapter(dataAdapter);*/
-
             if(gl.inv_ciclico.IdPresentacion == 0){
-
-                lblUM.setText(gl.inv_ciclico.Pres);
+                lblUM.setText(gl.inv_ciclico.UMBas);
             }else{
 
-
                 String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
-
                 lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
             }
 
@@ -329,7 +319,7 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
-            txtCantContada.setText("0");
+            txtCantContada.setText("");
 
             if(!gl.inv_ciclico.cantidad.equals(0.00)){
 
@@ -347,7 +337,12 @@ public class frm_inv_cic_add extends PBase {
             }
 
             txtProd.requestFocus();
+
+        }else{
+
+            mu.msgbox( "El registro seleccionado no es válido.");
         }
+
 
     }
 
@@ -420,7 +415,7 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void Exit(View view) {
-        frm_inv_cic_add.super.finish();
+        finish();
     }
 
     @Override
@@ -446,9 +441,23 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void backward(View view) {
+
+        if(Index > 0){
+            Index = Index -1;
+            gl.inv_ciclico=  gl.reconteo_list.get(Index);
+            Load();
+            setHandlers();
+        }
+
     }
 
     public void forward(View view) {
+
+        Index = Index+1;
+        gl.inv_ciclico=  gl.reconteo_list.get(Index);
+        Load();
+        setHandlers();
+
     }
 
     public void btnGuardar(View view) {
@@ -886,6 +895,8 @@ public class frm_inv_cic_add extends PBase {
 
             if(respuesta ==1){
                 toast("Reconteo registrado!");
+                super.finish();
+
             }else if(respuesta > 1) {
                 toast("Se actualizó más de un registro!");
             }else if (respuesta == 0){

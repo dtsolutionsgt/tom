@@ -104,7 +104,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblPeso_Stock.setText("Peso_Stock");
                 holder.lblLote.setText("Lote");
                 holder.lblFecha_Vence.setText("Fecha_Vence");
-                holder.lblConteo.setText("Conteo");
+                holder.lblConteo.setText("Cantidad");
                 holder.lblUbic_nombre.setText("Ubic_nombre");
                 holder.lblEstado.setText("Estado");
                 holder.lblIdProductoBodega.setText("IdProductoBodega");

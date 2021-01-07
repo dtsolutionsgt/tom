@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -127,13 +128,15 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdFamilia = position +1;
+                    IdFamilia = list_spinner.get(position).Id;
+                    //toast("familia " + IdFamilia);
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay familia seleccionada");
                 }
             });
 
@@ -141,13 +144,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdClasificacion = position +1;
+                    IdClasificacion = list_spinner2.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay clasificación seleccionada");
                 }
             });
 
@@ -155,13 +159,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdMarca = position +1;
+                    IdMarca = list_spinner3.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay marca seleccionada");
                 }
             });
 
@@ -169,13 +174,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdTipo = position +1;
+                    IdTipo = list_spinner4.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay tipo seleccionado");
                 }
             });
 
@@ -183,13 +189,14 @@ public class frm_inv_cic_nuevo extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    IdUmBas = position +1;
+                    IdUmBas = list_spinner5.get(position).Id;
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
 
-                    toast("No hay estado seleccionado");
+                    toast("No hay Umbas seleccionado");
                 }
             });
 
@@ -248,6 +255,7 @@ public class frm_inv_cic_nuevo extends PBase {
             gl.pBeProductoNuevo.IdMarca = IdMarca;
             gl.pBeProductoNuevo.IdTipoProducto = IdTipo;
             gl.pBeProductoNuevo.IdUnidadMedidaBasica = IdUmBas;
+            //gl.pBeProductoNuevo.Presentacion=
             gl.pBeProductoNuevo.Codigo = etcodigo.getText().toString().trim();
             gl.pBeProductoNuevo.Nombre = etdescripcion.getText().toString().trim();
             gl.pBeProductoNuevo.Codigo_barra = etcodigo.getText().toString().trim();
@@ -262,9 +270,8 @@ public class frm_inv_cic_nuevo extends PBase {
             if(gl.pBeProductoNuevo != null){
 
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_guardar.class));
-            }
 
-            //toast("Registro agregado");
+            }
 
         }catch (Exception e) {
             mu.msgbox(e.getMessage());
@@ -575,6 +582,11 @@ public class frm_inv_cic_nuevo extends PBase {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.show();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if (gl.cerrarActividad2) finish();
     }
 
 }
