@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -14,6 +17,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
+import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -23,7 +27,8 @@ import java.util.Date;
 public class frm_cambio_ubicacion_dirigida extends PBase {
 
     private TextView lblTituloForma,lblCant,lblCambioEstado,lblUbicDestino;
-    private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtCantidad,txtUbicDestino,txtEstadoDestino;
+    private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,
+            txtCantidad,txtUbicDestino,txtEstadoDestino, txtPosiciones;
 
     private double vCantidadAUbicar;
     private boolean compl;
@@ -31,12 +36,18 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private clsBeTrans_movimientos gMovimientoDet;
     private clsBeBodega_ubicacion bodega_ubicacion;
     private clsBeProducto_estado gProdEstado;
+    private clsBeStock pStock;
 
     private frm_cambio_ubicacion_dirigida.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
 
     private Date fecha_ini;
+
+    private boolean EsPalletNoEstandar=false;
+    private boolean TienePosiciones=false;
+
+    private int vPosiciones=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
         txtEstadoDestino = (EditText) findViewById(R.id.txtEstadoDestino);
         txtPropietario = (EditText) findViewById(R.id.txtPropietario);
+
+        txtPosiciones = new EditText(this,null);
+        txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         lblUbicDestino = (TextView)findViewById(R.id.lblDestino);
 
@@ -301,7 +315,20 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             }
 
             progress.cancel();
-            msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+
+            //#CKFK 20210106 Moví esto para después de ingresar las posiciones en caso de que aplique
+             // msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+
+            pStock = new clsBeStock();
+            pStock.IdUbicacion = Integer.valueOf(txtUbicOrigen.getText().toString());
+            pStock.IdProductoBodega = gl.tareadet.getProducto().IdProductoBodega;
+            pStock.IdProductoEstado = gl.tareadet.Stock.ProductoEstado.getIdEstado();
+            pStock.IdPresentacion = gl.tareadet.ProductoPresentacion.getIdPresentacion();
+            pStock.IdUnidadMedida = gl.tareadet.UnidadMedida.IdUnidadMedida;
+            pStock.Fecha_vence = du.convierteFechaDiagonal(txtVence.getText().toString());
+            pStock.Lote = gl.tareadet.getProducto().Lote;
+
+            execws(5);
 
         }catch (Exception e){
             progress.cancel();
@@ -491,6 +518,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     case 4:
                         callMethod("Get_Single_By_IdEstado","pIdEstado",gl.tareadet.IdEstadoDestino);
                         break;
+                    case 5:
+                        callMethod("Es_Pallet_No_Estandar","pStock",pStock);
+                        break;
+                    case 6:
+                        callMethod("Tiene_Posiciones","pStock",pStock);
+                        break;
+
                 }
 
             } catch (Exception e) {
@@ -514,6 +548,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     break;
                 case 4:
                     processProdEstado();
+                    break;
+                case 5:
+                    processPalletNoEstandar();
+                    break;
+                case 6:
+                    processTienePosiciones();
                     break;
             }
 
@@ -658,5 +698,98 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
+    private void processPalletNoEstandar(){
+
+        try{
+
+            EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
+
+            if (EsPalletNoEstandar){
+                execws(6);
+            }else{
+
+                msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processPalletNoEstandar:"+e.getMessage());
+        }
+    }
+
+    private void processTienePosiciones(){
+
+        try{
+
+            TienePosiciones = xobj.getresult(Boolean.class,"Tiene_Posiciones");
+
+            if (!TienePosiciones){
+                msgAskIngresePosiciones();
+            }else{
+                msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processPalletNoEstandar:"+e.getMessage());
+        }
+    }
+
+    private void msgAskIngresePosiciones() {
+
+        try{
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Ingrese número de posiciones");
+
+            vPosiciones = 0;
+
+            final LinearLayout layout   = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            if(txtPosiciones.getParent()!= null){
+                ((ViewGroup) txtPosiciones.getParent()).removeView(txtPosiciones);
+            }
+
+            txtPosiciones.setText("");
+            txtPosiciones.requestFocus();
+
+            layout.addView(txtPosiciones);
+
+            alert.setView(layout);
+
+            showkeyb();
+            alert.setCancelable(false);
+            alert.create();
+
+            alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    layout.removeAllViews();
+
+                    vPosiciones=Integer.valueOf(txtPosiciones.getText().toString());
+
+                    if (vPosiciones==0){
+                        layout.removeAllViews();
+                        msgAskIngresePosiciones();
+                    }else{
+                        msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
+                    }
+
+                }
+            });
+
+            alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    layout.removeAllViews();
+                }
+            });
+
+            alert.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
 
 }

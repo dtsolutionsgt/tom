@@ -76,7 +76,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private clsBeProducto_Presentacion presentacion = new clsBeProducto_Presentacion();
     private ArrayList<clsBeProducto_Presentacion> presentacionArrayList = new ArrayList<clsBeProducto_Presentacion>();*/
 
-
     private clsBeProducto_estadoList productoEstadoDestinoList = new clsBeProducto_estadoList();
 
     private USUbicStrucStage5List lUbicSug = new USUbicStrucStage5List();
