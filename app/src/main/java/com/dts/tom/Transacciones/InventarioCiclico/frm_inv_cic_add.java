@@ -237,6 +237,8 @@ public class frm_inv_cic_add extends PBase {
                 vFactor = gl.inv_ciclico.Factor;
             }
 
+            idPresentacion = gl.inv_ciclico.IdPresentacion;
+
          //validaciones para obtener lista de estados por idPropietario
             if(gl.lista_estados != null){
 
@@ -318,9 +320,37 @@ public class frm_inv_cic_add extends PBase {
 
 
             if(BeInvEnc.Mostrar_Cantidad_Teorica_hh){
-                lblCantStock.setVisibility(TextView.VISIBLE);
-                lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
+
+                if(!gl.inv_ciclico.cantidad.equals(0.00)){
+
+                    if(idPresentacion == 0){
+
+                        lblCantStock.setVisibility(TextView.VISIBLE);
+                        lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
+
+                    }else{
+
+                        double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                        String stringDecimal = String.format("%.6f", resultado_);
+                        lblCantStock.setText(stringDecimal);
+                    }
+                }else{
+
+                    if(idPresentacion == 0){
+
+                        lblCantStock.setVisibility(TextView.VISIBLE);
+                        lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
+
+                    }else{
+
+                        double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                        String stringDecimal = String.format("%.6f", resultado_);
+                        lblCantStock.setText(stringDecimal);
+                    }
+                }
+
             }else{
+
                 lblCantStock.setVisibility(TextView.INVISIBLE);
             }
 
