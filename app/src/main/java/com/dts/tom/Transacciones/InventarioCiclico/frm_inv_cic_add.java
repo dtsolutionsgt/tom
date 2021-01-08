@@ -307,13 +307,21 @@ public class frm_inv_cic_add extends PBase {
             if(gl.inv_ciclico.control_peso){
 
                 txtpeso_cic.setVisibility(TextView.VISIBLE);
-                lblCantStock.setVisibility(TextView.VISIBLE);
+
                 txtPesoContado.setVisibility(TextView.VISIBLE);
 
             }else{
                 txtpeso_cic.setVisibility(TextView.INVISIBLE);
-                lblCantStock.setVisibility(TextView.INVISIBLE);
+
                 txtPesoContado.setVisibility(TextView.INVISIBLE);
+            }
+
+
+            if(BeInvEnc.Mostrar_Cantidad_Teorica_hh){
+                lblCantStock.setVisibility(TextView.VISIBLE);
+                lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
+            }else{
+                lblCantStock.setVisibility(TextView.INVISIBLE);
             }
 
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);

@@ -254,6 +254,11 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.Producto_nombre = DT.getString(21);
                             data_rec.Pres = DT.getString(23);
                             data_rec.UMBas = DT.getString(24);
+
+                            if(BeInvEnc.Mostrar_Cantidad_Teorica_hh){
+                                data_rec.Cant_Stock = Double.valueOf(DT.getString(11));
+                            }
+
                             data_rec.cantidad = Double.valueOf(DT.getString(12));
 
                             if(DT.getString(8)!=null){
