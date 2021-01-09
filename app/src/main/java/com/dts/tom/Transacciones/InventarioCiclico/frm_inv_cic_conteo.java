@@ -427,7 +427,7 @@ public class frm_inv_cic_conteo extends PBase {
                 FiltroxCodigo(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
+                msgbox("El código contiene varias ubicaciones, seleccione ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
 
@@ -463,7 +463,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
 
-            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).codigo_producto);
+            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).Codigo);
 
             if (ubicacion_lista.equals(evaluar)){
 
@@ -500,7 +500,6 @@ public class frm_inv_cic_conteo extends PBase {
 
         int count =data_list.size()-1;
         cmdList.setText( count+ "/" + count);
-
     }
 
     private void FiltroxUbicacion(String evaluar) {
@@ -551,7 +550,6 @@ public class frm_inv_cic_conteo extends PBase {
 
         int count =data_list.size()-1;
         cmdList.setText( count+ "/" + count);
-
     }
 
     private void ListaFiltrada2() {

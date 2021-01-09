@@ -145,14 +145,10 @@ public class frm_inv_cic_add extends PBase {
 
                             Scan_Codigo_Producto();
 
-                            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
-                                txtLote1.requestFocus();
-                            }else {
-                                txtCantContada.requestFocus();
-                            }
 
                         }
                     }
+
                     return false;
                 }
             });
@@ -284,7 +280,6 @@ public class frm_inv_cic_add extends PBase {
                 lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
             }
 
-
             if( gl.pprod.Control_lote){
                 txtlote_cic.setVisibility(TextView.VISIBLE);
                 txtLote1.setVisibility(TextView.VISIBLE);
@@ -293,7 +288,6 @@ public class frm_inv_cic_add extends PBase {
                 txtlote_cic.setVisibility(TextView.INVISIBLE);
                 txtLote1.setVisibility(TextView.INVISIBLE);
             }
-
 
             if(gl.pprod.Control_vencimiento){
                 txtFecha_cic.setVisibility(TextView.VISIBLE);
@@ -304,7 +298,6 @@ public class frm_inv_cic_add extends PBase {
                 imgDate.setVisibility(TextView.INVISIBLE);
                 dtpVence.setVisibility(TextView.INVISIBLE);
             }
-
 
             if(gl.inv_ciclico.control_peso){
 
@@ -356,9 +349,6 @@ public class frm_inv_cic_add extends PBase {
 
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
-
-            txtCantContada.setText("");
-
             if(!gl.inv_ciclico.cantidad.equals(0.00)){
 
                 if(idPresentacion == 0){
@@ -393,23 +383,30 @@ public class frm_inv_cic_add extends PBase {
             if(!gl.inv_ciclico.Codigo.equals(txtProd.getText().toString().trim())){
 
                 toast("El código de producto no es válido");
-                txtProd.requestFocus();
+                //txtProd.requestFocus();
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                //txtCantContada.setText("");
+            }
 
-                if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
+            if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
 
-                    if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
+                if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
 
-                        toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
-                    }
+                    toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
+
+                    /*******************************************************************************/
+                    /****** FALTA CREAR TOAST PARA CONFIRMAR Y ENVIAR A FORM_CIC_NUEVO.JAVA *******/
                 }
+            }
+
+            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+                txtLote1.requestFocus();
+            }else {
+                txtCantContada.requestFocus();
             }
         }
 
-        //txtCantContada.requestFocus();
     }
 
     private boolean buscaproducto(int idprod, String prodtxt) {
@@ -420,6 +417,7 @@ public class frm_inv_cic_add extends PBase {
         for (ii = 0; ii < gl.reconteo_list.size() - 1; ii++) {
 
             if (gl.reconteo_list.get(ii).IdUbicacion == idubic && gl.reconteo_list.get(ii).IdProductoBodega == idprod) {
+
 
                 txtUbic.setText(idubic + "");
                 respuesta = true;
