@@ -309,25 +309,24 @@
             android:onClick="Exit" />
 
         <Button
+            android:id="@+id/btAtras"
             android:layout_width="120dp"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:textSize="14sp"
-            android:text="Anterior"
             android:layout_marginStart="120dp"
-            android:onClick="backward">
-        </Button>
+            android:onClick="backward"
+            android:text="Anterior"
+            android:textSize="14sp"></Button>
 
         <Button
+            android:id="@+id/btAdelante"
             android:layout_width="120dp"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:textSize="14sp"
-            android:text="Siguiente"
             android:layout_marginStart="270dp"
             android:onClick="forward"
-            >
-        </Button>
+            android:text="Siguiente"
+            android:textSize="14sp"></Button>
 
 
     </RelativeLayout>

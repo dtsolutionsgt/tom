@@ -41,7 +41,7 @@ public class frm_inv_cic_add extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private Button btnBack_cic;
+    private Button btnBack_cic,btAdelante,btAtras;
     private ImageView imgDate;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
     private Spinner cboEstado,cboPres;
@@ -50,10 +50,11 @@ public class frm_inv_cic_add extends PBase {
     private int year;
     private int month;
     private int day;
-    private int IdProductoBodega,idubic, idstock;
+    private int IdProductoBodega,idubic, idstock, tam_lista;
     private double vFactor;
     private String Resultado;
     private int Index;
+    private int adelante,atras;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
@@ -80,7 +81,8 @@ public class frm_inv_cic_add extends PBase {
         setContentView(R.layout.activity_frm_inv_cic_add);
         super.InitBase();
 
-
+        btAdelante = findViewById(R.id.btAdelante);
+        btAtras = findViewById(R.id.btAtras);
         btnBack_cic = findViewById(R.id.btnBack_cic);
         txtUbic = findViewById(R.id.txtUbic);
         txtProd = findViewById(R.id.txtProd);
@@ -112,22 +114,24 @@ public class frm_inv_cic_add extends PBase {
         IDInventarioCiclico = 0;
 
         Index = 0;
+        tam_lista = 0;
 
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
 
-        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
-        if(gl.IndexCiclico < gl.reconteo_list.size() ){
-            Index = gl.IndexCiclico;
-        }
+        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
+        Index = gl.IndexCiclico;
+        tam_lista = gl.reconteo_list.size() -1;
 
-        //BuscarIndex();
+        ValidaBotones();
 
         Load();
 
         setHandlers();
     }
+
+
 
     private void setHandlers() {
         try{
@@ -485,21 +489,50 @@ public class frm_inv_cic_add extends PBase {
     public void backward(View view) {
 
         if(Index > 0){
+
             Index = Index -1;
             gl.inv_ciclico=  gl.reconteo_list.get(Index);
+
+            ValidaBotones();
+
             Load();
             setHandlers();
-        }
 
+
+        }
     }
 
     public void forward(View view) {
 
-        Index = Index+1;
-        gl.inv_ciclico=  gl.reconteo_list.get(Index);
-        Load();
-        setHandlers();
+        if (Index < tam_lista){
 
+            Index = Index+1;
+            gl.inv_ciclico=  gl.reconteo_list.get(Index);
+
+            ValidaBotones();
+
+            Load();
+            setHandlers();
+
+        }
+
+    }
+
+    public void ValidaBotones(){
+
+        if(Index == tam_lista){
+            btAdelante.setEnabled(false);
+        }
+        if(Index == 0){
+
+            btAtras.setEnabled(false);
+
+        }
+
+        if(Index > 0 && Index < tam_lista){
+            btAdelante.setEnabled(true);
+            btAtras.setEnabled(true);
+        }
     }
 
     public void btnGuardar(View view) {
