@@ -182,7 +182,7 @@ public class frm_inv_cic_conteo extends PBase {
                     if (position > 0) {
 
                         gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
-                        gl.IndexCiclico = position;
+                        gl.IndexCiclico = gl.inv_ciclico.index;
 
                         execws(4);
 
@@ -223,6 +223,7 @@ public class frm_inv_cic_conteo extends PBase {
             DT = xobj.filldt();
             data_list.clear();
             gl.reconteo_list.clear();
+            int index = 0;
 
             if(!txtBuscFiltro.equals("")){
 
@@ -237,6 +238,9 @@ public class frm_inv_cic_conteo extends PBase {
                         while (!DT.isAfterLast()) {
 
                             data_rec = new clsBe_inv_reconteo_data();
+
+
+                            data_rec.index = index;
                             data_rec.idinventarioenc = Integer.parseInt(DT.getString(0));
                             data_rec.idinvreconteo = Integer.parseInt(DT.getString(1));
 
@@ -294,6 +298,8 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //GT 30122020 lista global para ser accedida desde validaciones cuando se agrega nuevo_producto
                             gl.reconteo_list.add(data_rec);
+
+                            index = index+1;
 
                             DT.moveToNext();
                         }
@@ -468,6 +474,9 @@ public class frm_inv_cic_conteo extends PBase {
             if (ubicacion_lista.equals(evaluar)){
 
                 data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
                 data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
@@ -518,6 +527,9 @@ public class frm_inv_cic_conteo extends PBase {
             if (ubicacion_lista.equals(evaluar)){
 
                 data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
                 data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
@@ -641,10 +653,6 @@ public class frm_inv_cic_conteo extends PBase {
 
     }
 
-
-
-
-
     private void Existe_Producto() {
 
         try{
@@ -665,157 +673,6 @@ public class frm_inv_cic_conteo extends PBase {
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
-        }
-
-    }
-
-/*    private void SubTarea1(){
-
-        clsBeProducto tProd;
-
-        try{
-
-                if(checkbox.isChecked()){
-                    //filtrar data de items
-                    // item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
-
-
-                    item = 0;
-
-                }else{
-                    //filtrar data de items
-                    //item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") > 0).FirstOrDefault()
-                    item = 1;
-                }
-
-                if(item != null){
-
-                    tareapos = Idx;
-                    txtBuscFiltro.setText("");
-                    //Tarea_Conteo()
-                    //Valida_Ubicacion_Orig();
-                }
-                else{
-
-                    if(BeInvEnc.Capturar_no_existente){
-
-                        execws(2);
-
-                        if(!(existeProducto.respuesta)){
-
-                            //msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
-
-                        }else{
-
-                            Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                        }
-
-                    }else{
-
-                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }
-                }
-
-            //items = m_proxy.Inventario_Ciclico_Listar_Conteo(tarea.Idinventarioenc, _ gOperador, _ Not chkPend.Checked)
-            SubTarea3();
-
-        }
-        catch (Exception e){
-            lic_plate = false;
-            lplate = "";
-            mu.msgbox("processReConteos:"+e.getMessage());
-        }
-    }*/
-
-    private void SubTarea2(){
-
-        execws(3);
-
-        if(LoteSel !="" && FechaVencSel !="" && ProdSel != "0" && IdUbicacionSel != 0){
-            if(checkbox.isChecked()){
-
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") = 0 AndAlso x.Item("Lote_stock") = LoteSel _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-
-            }else{
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") > 0 AndAlso x.Item("Lote_stock") = LoteSel _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-            }
-
-            FechaVencSel = "";
-            LoteSel = "";
-            PresSel = "";
-            IdUbicacionSel = 0;
-            ProdSel = "";
-
-            if(item != null ){
-                tareapos = Idx;
-                txtBuscFiltro.setText("");
-                //Tarea_Conteo();Get_Control_Lote_And_Vencimiento_By_IdProductoBodega
-
-                //txtUbic.Text = item.Item("IdUbicacion");
-                //Valida_Ubicacion_Orig();
-                //txtProd.Focus();
-            }
-            else{
-                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-            }
-
-        }
-        else if(LoteSel != "" && FechaVencSel != "" && ProdSel != "" && IdUbicacionSel != 0){
-
-            if(checkbox.isChecked()){
-
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") = 0 _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-
-            }else{
-
-                           /* item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") > 0 _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-            }
-
-            FechaVencSel = "";
-            LoteSel = "";
-            PresSel = "";
-            IdUbicacionSel = 0;
-            ProdSel = "";
-
-            if(item != null ){
-                tareapos = Idx;
-                txtBuscFiltro.setText("");
-                //Tarea_Conteo();
-                //txtUbic.Text = item.Item("IdUbicacion");
-                //Valida_Ubicacion_Orig();
-                //txtProd.Focus();
-            }
-            else{
-                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-            }
-        }
-
-        SubTarea3();
-
-    }
-
-    private void SubTarea3() {
-
-        cmdList.setText("0/0");
-
-        if(!lic_plate){
-
-            execws(3);
-
-            //Toast.makeText(getApplicationContext(),"datatable " + DT.getCount() ,Toast.LENGTH_SHORT);
-
         }
 
     }

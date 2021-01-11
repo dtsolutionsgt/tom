@@ -119,8 +119,10 @@ public class frm_inv_cic_add extends PBase {
 
         //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
         if(gl.IndexCiclico < gl.reconteo_list.size() ){
-            Index = gl.IndexCiclico -1;
+            Index = gl.IndexCiclico;
         }
+
+        //BuscarIndex();
 
         Load();
 
@@ -145,7 +147,18 @@ public class frm_inv_cic_add extends PBase {
 
                             Scan_Codigo_Producto();
 
+                            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+                                txtLote1.requestFocus();
+                            }else {
 
+                                txtCantContada.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        txtCantContada.requestFocus();
+                                    }
+                                });
+
+                            }
                         }
                     }
 
@@ -399,14 +412,7 @@ public class frm_inv_cic_add extends PBase {
                     /****** FALTA CREAR TOAST PARA CONFIRMAR Y ENVIAR A FORM_CIC_NUEVO.JAVA *******/
                 }
             }
-
-            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
-                txtLote1.requestFocus();
-            }else {
-                txtCantContada.requestFocus();
-            }
         }
-
     }
 
     private boolean buscaproducto(int idprod, String prodtxt) {
