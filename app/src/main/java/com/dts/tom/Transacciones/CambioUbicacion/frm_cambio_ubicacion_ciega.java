@@ -857,6 +857,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 execws(18);
 
+                progress.cancel();
 
             }
 

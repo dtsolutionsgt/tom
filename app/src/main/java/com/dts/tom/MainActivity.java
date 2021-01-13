@@ -403,6 +403,7 @@ public class MainActivity extends PBase {
                     }
 
                     idimpres=impres.get(position).IdImpresora;
+                    gl.MacPrinter =  impres.get(position).mac_adress;
                     gl.IdImpresora = idimpres;
 
                 } catch (Exception e) {
@@ -630,6 +631,7 @@ public class MainActivity extends PBase {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 }else{
+
                                     //#CKFK 20201021 Agregué este else
                                     execws(7);
                                 }

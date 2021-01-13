@@ -63,6 +63,7 @@ public class appGlobals extends Application {
     //variable y listas publicas para mainActivity
     public int IdEstadoProductoNE;
     public String CodigoBodega;
+    public String MacPrinter="";
     public List<clsBeOperador_bodega> gOperadorBodega;
     public List<clsBeImpresora> gImpresora;
 

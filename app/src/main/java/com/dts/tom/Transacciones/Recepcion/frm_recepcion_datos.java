@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -56,6 +57,9 @@ import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -3213,6 +3217,7 @@ public class frm_recepcion_datos extends PBase {
                 if (BeTransReDet.Presentacion.EsPallet){
 
                     //ImprimirBarra
+
                     progress.cancel();
 
                 }else{
@@ -3245,6 +3250,26 @@ public class frm_recepcion_datos extends PBase {
             mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
         }
 
+    }
+
+    private void Imprimir_Barra(){
+        try{
+
+            //CM_20210112: Impresión de barras.
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+            ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+            zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+            zPrinterIns.sendCommand("^XA^FO20,20^A0N,25,25^FDThis is a ZPL test.^FS^XZ");
+            Thread.sleep(500);
+
+            // Close the connection to release resources.
+            printerIns.close();
+
+            Looper.myLooper().quit();
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
+        }
     }
 
     double Factor=0;
