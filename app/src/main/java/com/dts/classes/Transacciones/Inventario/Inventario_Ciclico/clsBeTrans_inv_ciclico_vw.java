@@ -1,5 +1,8 @@
 package com.dts.classes.Transacciones.Inventario.Inventario_Ciclico;
 
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacionList;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeTrans_inv_ciclico_vw {
@@ -44,6 +47,7 @@ public class clsBeTrans_inv_ciclico_vw {
     @Element(required=false) public int Total  = 0;
     @Element(required=false) public double Factor  = 0.00;
     @Element(required=false) public int IdBodega  = 0;
+    @Element(required=false) public clsBeBodega_ubicacion Ubicacion=new clsBeBodega_ubicacion();
 
     public clsBeTrans_inv_ciclico_vw(){}
 
@@ -56,7 +60,7 @@ public class clsBeTrans_inv_ciclico_vw {
                                      String Pres_nombre,String Unid_nombre,boolean Control_peso,boolean Genera_lote,
                                      boolean Control_vencimiento,int IdProductoEst_nuevo,int idPresentacion_nuevo,
                                      int idreconteo,String Codigo_Producto,int Columna,int Nivel,String Posicion,
-                                     int Total,double Factor,int IdBodega){
+                                     int Total,double Factor,int IdBodega, clsBeBodega_ubicacion Ubicacion){
 
 
         this.Idinvciclico=Idinvciclico;
@@ -100,6 +104,8 @@ public class clsBeTrans_inv_ciclico_vw {
         this.Total=Total;
         this.Factor=Factor;
         this.IdBodega=IdBodega;
+        this.Ubicacion=Ubicacion;
+
     }
 
     public int getIdinvciclico() {
@@ -380,6 +386,13 @@ public class clsBeTrans_inv_ciclico_vw {
     }
     public void setIdBodega(int value) {
         IdBodega=value;
+    }
+
+    public clsBeBodega_ubicacion getUbicaciones() {
+        return Ubicacion;
+    }
+    public void setUbicaciones(clsBeBodega_ubicacion value) {
+        Ubicacion=value;
     }
 
 }

@@ -225,6 +225,8 @@ public class frm_list_inventario extends PBase {
     }
 
     public void BotonActualizar(View view){
+
+        ProgressDialog("Recargando datos de inventario...");
         execws(1);
     }
 
@@ -324,6 +326,14 @@ public class frm_list_inventario extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+
+    }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        Load();
 
     }
 

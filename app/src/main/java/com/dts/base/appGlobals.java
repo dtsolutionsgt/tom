@@ -10,6 +10,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
+import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_dataList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vwList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
@@ -104,11 +105,9 @@ public class appGlobals extends Application {
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
-    public clsBeTrans_inv_ciclico_vw inv_ciclico_vw = new clsBeTrans_inv_ciclico_vw();
-    //public clsBeTrans_inv_ciclico_vwList inv_ciclico_vwList = new clsBeTrans_inv_ciclico_vwList();
-    public ArrayList<clsBeTrans_inv_ciclico_vw> inv_ciclico_vwList = new ArrayList<clsBeTrans_inv_ciclico_vw>();
     public ArrayList<clsBe_inv_reconteo_data> reconteo_list = new ArrayList<clsBe_inv_reconteo_data>();
-
+    public clsBe_inv_reconteo_dataList reconteo_ciclico = new clsBe_inv_reconteo_dataList();
+    public int IndexCiclico;
 
 
     public clsBeProducto pprod = new clsBeProducto();
@@ -120,6 +119,9 @@ public class appGlobals extends Application {
     public clsBeVW_stock_res_CI existencia = new clsBeVW_stock_res_CI();
 
 
+    //variable para cerrar 2 activitys y regresar a la primera
+    public boolean cerrarActividad2 = false;
+
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
     public String gCodigoBodega,gNomOperador;
@@ -128,6 +130,5 @@ public class appGlobals extends Application {
     public int gCantDecDespliegue=0;
     public int gCantDecCalculo=0;
     public String deviceId="";
-
     public int mode=0;
 }

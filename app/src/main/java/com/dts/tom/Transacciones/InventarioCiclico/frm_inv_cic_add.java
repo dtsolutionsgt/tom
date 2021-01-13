@@ -1,6 +1,7 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,14 +24,14 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -39,6 +41,7 @@ public class frm_inv_cic_add extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
+    private Button btnBack_cic;
     private ImageView imgDate;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
     private Spinner cboEstado,cboPres;
@@ -48,17 +51,20 @@ public class frm_inv_cic_add extends PBase {
     private int month;
     private int day;
     private int IdProductoBodega,idubic, idstock;
-    private double ocant, opeso,vFactor;
+    private double vFactor;
     private String Resultado;
+    private int Index;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
+    private ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
 
     private  clsBeTrans_inv_ciclico_vw pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
 
     private boolean nuevoRegistro;
+
     //variables para obtener id de los combobox
     private int IdEstadoselected, IdPresentacionselected;
 
@@ -75,6 +81,7 @@ public class frm_inv_cic_add extends PBase {
         super.InitBase();
 
 
+        btnBack_cic = findViewById(R.id.btnBack_cic);
         txtUbic = findViewById(R.id.txtUbic);
         txtProd = findViewById(R.id.txtProd);
         lblUbic1 = findViewById(R.id.lblUbic1);
@@ -102,19 +109,22 @@ public class frm_inv_cic_add extends PBase {
         vFactor = 0.00;
         IdProductoBodega = 0;
         idubic = 0;
-
-        //respuesta del ws cuando actualiza.
-        String Resultado ="";
-
         IDInventarioCiclico = 0;
+
+        Index = 0;
 
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
+
+        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder
+        if(gl.IndexCiclico < gl.reconteo_list.size() ){
+            Index = gl.IndexCiclico -1;
+        }
+
         Load();
 
         setHandlers();
-
     }
 
     private void setHandlers() {
@@ -134,6 +144,13 @@ public class frm_inv_cic_add extends PBase {
                         }else {
 
                             Scan_Codigo_Producto();
+
+                            if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+                                txtLote1.requestFocus();
+                            }else {
+                                txtCantContada.requestFocus();
+                            }
+
                         }
                     }
                     return false;
@@ -156,7 +173,6 @@ public class frm_inv_cic_add extends PBase {
 
                         IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
                         gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
-
 
                     } catch (Exception e)
                     {
@@ -186,8 +202,7 @@ public class frm_inv_cic_add extends PBase {
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                       // IdPresentacionselected = gl.lista_estados.items.get(position).IdEstado;
-                        IdPresentacionselected = gl.inv_ciclico.IdPresentacion;
+                        IdPresentacionselected = IndexPresList.get(position);
 
                     } catch (Exception e)
                     {
@@ -211,9 +226,10 @@ public class frm_inv_cic_add extends PBase {
 
     private void Load() {
 
-        int index = 0;
-
         if(gl.inv_ciclico !=null){
+
+            //index para el combobox estados
+            int index = 0;
 
             if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
                 vFactor = 0;
@@ -246,13 +262,11 @@ public class frm_inv_cic_add extends PBase {
             cboEstado.setAdapter(EstadosAdapter);
             if (bodlist.size()>0) cboEstado.setSelection(index-1);
 
-
+            //llama a ws para cargar spinner con presentaciones del producto
              execws(4);
-
 
             txtUbic.setText(gl.inv_ciclico.NoUbic +"");
             idubic = gl.inv_ciclico.NoUbic;
-
             lblUbic1.setTypeface(null, Typeface.BOLD);
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
             lblProd.setTypeface(null, Typeface.BOLD);
@@ -260,21 +274,11 @@ public class frm_inv_cic_add extends PBase {
             txtLote1.setText(gl.inv_ciclico.Lote+"");
             dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
 
-            //GT30112020 se llena spinner con presentación del producto
-            List<String> spinnerArray =  new ArrayList<String>();
-            spinnerArray.add(gl.inv_ciclico.Pres);
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cboPres.setAdapter(dataAdapter);
-
             if(gl.inv_ciclico.IdPresentacion == 0){
-
-                lblUM.setText(gl.inv_ciclico.Pres);
+                lblUM.setText(gl.inv_ciclico.UMBas);
             }else{
 
-
                 String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
-
                 lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
             }
 
@@ -282,6 +286,7 @@ public class frm_inv_cic_add extends PBase {
             if( gl.pprod.Control_lote){
                 txtlote_cic.setVisibility(TextView.VISIBLE);
                 txtLote1.setVisibility(TextView.VISIBLE);
+                txtLote1.setEnabled(false);
             }else{
                 txtlote_cic.setVisibility(TextView.INVISIBLE);
                 txtLote1.setVisibility(TextView.INVISIBLE);
@@ -314,7 +319,7 @@ public class frm_inv_cic_add extends PBase {
             lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
 
 
-            txtCantContada.setText("0");
+            txtCantContada.setText("");
 
             if(!gl.inv_ciclico.cantidad.equals(0.00)){
 
@@ -330,7 +335,14 @@ public class frm_inv_cic_add extends PBase {
                     txtCantContada.setText(stringDecimal);
                 }
             }
+
+            txtProd.requestFocus();
+
+        }else{
+
+            mu.msgbox( "El registro seleccionado no es válido.");
         }
+
 
     }
 
@@ -347,20 +359,19 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                txtCantContada.requestFocus();
+                //txtCantContada.setText("");
 
+                if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
+
+                    if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
+
+                        toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
+                    }
+                }
             }
         }
 
-
-        if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
-
-            if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
-
-                toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
-
-            }
-        }
+        //txtCantContada.requestFocus();
     }
 
     private boolean buscaproducto(int idprod, String prodtxt) {
@@ -404,7 +415,7 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void Exit(View view) {
-        frm_inv_cic_add.super.finish();
+        finish();
     }
 
     @Override
@@ -413,6 +424,12 @@ public class frm_inv_cic_add extends PBase {
         try{
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
+            pitem = new clsBeTrans_inv_ciclico_vw();
+            BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+            txtUbic.setText("");
+            txtProd.setText("");
+            txtCantContada.setText("");
+            txtPesoContado.setText("");
             gl.pprod = new clsBeProducto();
 
             frm_inv_cic_add.super.finish();
@@ -424,9 +441,23 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void backward(View view) {
+
+        if(Index > 0){
+            Index = Index -1;
+            gl.inv_ciclico=  gl.reconteo_list.get(Index);
+            Load();
+            setHandlers();
+        }
+
     }
 
     public void forward(View view) {
+
+        Index = Index+1;
+        gl.inv_ciclico=  gl.reconteo_list.get(Index);
+        Load();
+        setHandlers();
+
     }
 
     public void btnGuardar(View view) {
@@ -484,18 +515,26 @@ public class frm_inv_cic_add extends PBase {
                     toast("errror con correlativo =0");
                 }
 
-            }else if(txtLote1.getText().toString().trim() !=  gl.inv_ciclico.Lote_stock){
+            }else if(!(gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim()))){
 
-                if(!AgregaNuevoRegistro(1)){
-                    //return;
-                    toast("errror con nuevo correlativo!");
-                }
+                //se omite funcionalidad, no actualiza registro de reconteo, sino agrega otra linea en la tabla
+                /*if(!AgregaNuevoRegistro(1)){
+                    toast("Registro reconteo agregado!");
+                }*/
+
+                //Es registro para reconteo
+                EnviarReconteo();
+
+
 
             }else{
 
                 pitem= new clsBeTrans_inv_ciclico_vw();
+
+                pitem.Idinvciclico = 0;
+                pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;;
                 pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
                 pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
                 pitem.Lote = gl.inv_ciclico.Lote;
@@ -509,10 +548,9 @@ public class frm_inv_cic_add extends PBase {
 
                 if(pitem.IdPresentacion > 0){
 
-                    String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
+                    pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
-                //ejecutar proceso actualización
+                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 execws(1);
             }
 
@@ -529,13 +567,16 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem.Idinvciclico = 0;
+                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+                pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.IdUbicacion;
+                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
                 pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
                 pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
                 pitem.Lote = gl.inv_ciclico.Lote;
                 pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
-                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
@@ -543,17 +584,20 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
 
                 if(pitem.IdPresentacion > 0){
-
-                    //String stringDecimal = String.format("%.6f", pitem.Cantidad * vFactor);
-                    //pitem.Cantidad = Double.parseDouble(String.format("%.6f", stringDecimal));
                     pitem.Cantidad = pitem.Cantidad *vFactor;
                 }
-                //ejecutar proceso actualización
+                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
                 execws(1);
 
             }
 
         }
+
+    }
+
+    private void EnviarReconteo() {
+
+        execws(5);
 
     }
 
@@ -637,7 +681,12 @@ public class frm_inv_cic_add extends PBase {
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", gl.pprod.IdProducto, "pActivo", true);
                         break;
+
+                    case 5:
+                        callMethod("Inventario_Ciclico_Actualiza_Reconteo", "idinvreconteo", gl.inv_ciclico.idinvreconteo, "pCantidad_Reconteo", txtCantContada.getText().toString().trim());
+                        break;
                     }
+
 
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -662,6 +711,9 @@ public class frm_inv_cic_add extends PBase {
                     break;
                 case 4:
                     processPresentacion();
+                    break;
+                case 5:
+                    Inventario_Ciclico_Actualiza_Reconteo();
                     break;
             }
 
@@ -693,8 +745,8 @@ public class frm_inv_cic_add extends PBase {
 
         try{
 
+            //crea listas con descripcion item no repetidos del ws
             PresList.clear();
-
             for (clsBeProducto_Presentacion BePres: BeListPres.items){
 
                 if(PresList.contains(BePres.Nombre)){
@@ -705,6 +757,21 @@ public class frm_inv_cic_add extends PBase {
 
                 }
             }
+
+            //crea lista con id item no repetido del ws
+            IndexPresList.clear();
+            for (clsBeProducto_Presentacion BePres: BeListPres.items){
+
+                if(IndexPresList.contains(BePres.IdPresentacion)){
+
+                }else{
+
+                    IndexPresList.add(BePres.IdPresentacion);
+
+                }
+            }
+
+
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -734,6 +801,7 @@ public class frm_inv_cic_add extends PBase {
             if(respuesta !=0){
 
                 toast("¡Todo bien, guardado!");
+                frm_inv_cic_add.super.finish();
             }
 
         } catch (Exception e) {
@@ -777,14 +845,28 @@ public class frm_inv_cic_add extends PBase {
                 BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
             }
 
+            BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtCantContada.getText().toString().trim());
+            BeTrans_inv_ciclico.Cant_stock = gl.inv_ciclico.Cant_Stock;
+            BeTrans_inv_ciclico.Cant_reconteo = 0;
+
+            if(gl.inv_ciclico.control_peso){
+
+                BeTrans_inv_ciclico.Peso = Double.parseDouble(txtPesoContado.getText().toString().trim());
+                BeTrans_inv_ciclico.Peso_stock =  gl.inv_ciclico.Peso_Stock;
+                BeTrans_inv_ciclico.Peso_reconteo = 0;
+            }
+
+            BeTrans_inv_ciclico.Idoperador =  gl.IdOperador;
+            BeTrans_inv_ciclico.User_agr = gl.gNomOperador;
+
+            String fecha_vence = du.getFechaActual();
+            BeTrans_inv_ciclico.Fec_agr = fecha_vence;
+
             //m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
             execws(3);
 
-
-
-
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox("Inventario_Agregar_Conteo: "+e.getMessage());
         }
     }
 
@@ -801,9 +883,29 @@ public class frm_inv_cic_add extends PBase {
             }
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox("Inventario_Agregar_Conteo getResult: "+e.getMessage());
         }
 
+    }
+
+    private void Inventario_Ciclico_Actualiza_Reconteo() {
+
+        try {
+            int respuesta  = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Reconteo");
+
+            if(respuesta ==1){
+                toast("Reconteo registrado!");
+                super.finish();
+
+            }else if(respuesta > 1) {
+                toast("Se actualizó más de un registro!");
+            }else if (respuesta == 0){
+                toast("Error al actualizar recongeo");
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("actualiza_ciclico_reconteo_: "+e.getMessage());
+        }
     }
 
     private void execws(int callbackvalue) {

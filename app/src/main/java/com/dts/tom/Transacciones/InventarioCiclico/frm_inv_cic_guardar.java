@@ -40,8 +40,6 @@ public class frm_inv_cic_guardar extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
-    //private LayoutParams layoutparams;
-
 
     private ImageView imgDate;
     private int year;
@@ -50,27 +48,24 @@ public class frm_inv_cic_guardar extends PBase {
     private TextView lblNUbic,lblNProd,lblNPeso,lblNLote,lblNVence,txtpresent_cic;
     private EditText dtpNVence,txtNUbic,txtNProd,txtNCantContada,txtNPesoContado,txtNLote;
     private Spinner cboNEstado,cboNPresN,cmbLoteN;
+    private int idprodbod,nidubic;
+    private ProgressDialog progress;
+    int Estado,Presentacion,nidprod;
+    String Lote,fecha_vence;
 
     private clsBeProducto nprod = new clsBeProducto();
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
-    private clsBeProducto_Presentacion BeProducto_Presentacion;
     private clsBeProducto_PresentacionList BeProducto_PresentacionList = new clsBeProducto_PresentacionList();
+    private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
+    private clsBeBodega_ubicacion nubic = new clsBeBodega_ubicacion();
 
     private clsBeTrans_inv_stock_prod InvTeoricoPorProducto = new clsBeTrans_inv_stock_prod();
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProductoList = new clsBeTrans_inv_stock_prodList();
 
-    private int idprodbod,nidubic;
-    private ProgressDialog progress;
-    int Estado;
-    int Presentacion;
-    String Lote;
-    String fecha_vence;
-    int nidprod;
-
-    private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> Preslist= new ArrayList<String>();
-    private clsBeBodega_ubicacion nubic = new clsBeBodega_ubicacion();
+    private ArrayList<String> Lotelist= new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,10 +293,43 @@ public class frm_inv_cic_guardar extends PBase {
                 return left.Lote.compareTo(right.Lote);
             }
         }
+        try{
+            InvTeoricoPorProductoList = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
+
+            if(InvTeoricoPorProductoList != null){
+
+                Collections.sort(InvTeoricoPorProductoList.items, new LoteSort());
+                fillSpinLote();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("spinner_Presentacion:"+e.getMessage());
+        }
 
     }
 
     private void fillSpinLote(){
+
+        try
+        {
+            Lotelist.clear();
+
+
+            for (int i = 0; i <InvTeoricoPorProductoList.items.size(); i++)
+            {
+                Lotelist.add(InvTeoricoPorProductoList.items.get(i).Lote);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, Lotelist);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbLoteN.setAdapter(dataAdapter);
+
+            if (Lotelist.size()>0) cmbLoteN.setSelection(0);
+
+        } catch (Exception e)
+        {
+            mu.msgbox( e.getMessage());
+        }
 
     }
 
@@ -383,7 +411,7 @@ public class frm_inv_cic_guardar extends PBase {
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
 
-                toast("No hay estado seleccionado");
+                toast("No hay presentación seleccionado");
             }
         });
 
@@ -391,13 +419,13 @@ public class frm_inv_cic_guardar extends PBase {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                Lote = String.valueOf(position);
+                Lote = InvTeoricoPorProductoList.items.get(position).Lote;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
 
-                toast("No hay estado seleccionado");
+                toast("No hay Lote seleccionado");
             }
         });
 
@@ -518,7 +546,7 @@ public class frm_inv_cic_guardar extends PBase {
                     fecha_vence = du.getFechaActual();
                     BeTrans_inv_ciclico.Fec_agr = fecha_vence;
                 } catch (ParseException e) {
-                    mu.msgbox("Guardar_obtieneFechaActual:"+e.getMessage());
+                    mu.msgbox("error_getFechaActual:"+e.getMessage());
                 }
 
                 //GuardarProductoNuevo
@@ -543,7 +571,8 @@ public class frm_inv_cic_guardar extends PBase {
             if(Valida){
 
                 toast("Registro guardado");
-                startActivity(new Intent(this, frm_inv_cic_conteo.class));
+                gl.cerrarActividad2=true;
+                finish();
 
             }else{
 
@@ -667,8 +696,8 @@ public class frm_inv_cic_guardar extends PBase {
         progress.show();
     }
 
-    public void Exit(View view) {
+/*    public void Exit(View view) {
         frm_inv_cic_guardar.super.finish();
-    }
+    }*/
 
 }

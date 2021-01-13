@@ -275,16 +275,6 @@
         android:background="@drawable/color_medium"
         >
 
-        <Button
-            android:id="@+id/btnBack_cic"
-            android:layout_width="61dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/back"
-            android:onClick="Exit" />
-
     </RelativeLayout>
 
 </RelativeLayout>
