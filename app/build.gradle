@@ -38,11 +38,11 @@ dependencies {
         exclude group: 'xpp3', module: 'xpp3'
     }
     implementation 'androidx.wear:wear:1.1.0'
-    implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\ZSDK_ANDROID_API.jar')
     implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\commons-net-3.1.jar')
     implementation files('libs\\commons-validator-1.4.0.jar')
+    implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\jackson-annotations-2.2.3.jar')
     implementation files('libs\\jackson-core-2.2.3.jar')
     implementation files('libs\\jackson-databind-2.2.3.jar')

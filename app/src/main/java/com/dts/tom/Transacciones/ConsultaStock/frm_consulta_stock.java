@@ -257,9 +257,27 @@ public class frm_consulta_stock extends PBase {
 
             //CM_20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+            printerIns.open();
             ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-            zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
-            zPrinterIns.sendCommand("^XA^FO20,20^A0N,25,25^FDThis is a ZPL test.^FS^XZ");
+            //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+            String zpl = "^XA\n" +
+                    "^FX Top section with logo, name and address.\n" +
+                    "^CF0,60\n" +
+                    "^FO50,50^GB100,100,100^FS\n" +
+                    "^FO75,75^FR^GB100,100,100^FS\n" +
+                    "^FO93,93^GB40,40,40^FS\n" +
+                    "^FO220,50^FDIntershipping, Inc.^FS\n" +
+                    "^CF0,30\n" +
+                    "^FO220,115^FD1000 Shipping Lane^FS\n" +
+                    "^FO220,155^FDShelbyville TN 38102^FS\n" +
+                    "^FO220,195^FDUnited States (USA)^FS\n" +
+                    "^FO50,250^GB700,3,3^FS\n" +
+                    "^XZ";
+
+            zPrinterIns.sendCommand(zpl);
+
+
             Thread.sleep(500);
 
             // Close the connection to release resources.
