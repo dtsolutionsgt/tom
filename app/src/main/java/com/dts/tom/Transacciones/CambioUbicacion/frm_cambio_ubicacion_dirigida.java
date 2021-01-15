@@ -326,7 +326,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             pStock.IdPresentacion = gl.tareadet.ProductoPresentacion.getIdPresentacion();
             pStock.IdUnidadMedida = gl.tareadet.UnidadMedida.IdUnidadMedida;
             pStock.Fecha_vence = du.convierteFechaDiagonal(txtVence.getText().toString());
-            pStock.Lote = gl.tareadet.getProducto().Lote;
+            pStock.Lote = gl.tareadet.Stock.Lote;
 
             execws(5);
 
@@ -504,25 +504,32 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOrigen.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                   "pBarra",txtUbicOrigen.getText().toString(),
+                                   "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                   "pBarra",txtUbicDestino.getText().toString(),
+                                   "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Actualizar_Trans_Ubic_HH_Det","oBeTrans_ubic_hh_det", gl.tareadet,
-                                "pMovimiento",gMovimientoDet);
+                        callMethod("Actualizar_Trans_Ubic_HH_Det",
+                                   "oBeTrans_ubic_hh_det", gl.tareadet,
+                                   "pMovimiento",gMovimientoDet,
+                                   "pPosiciones",vPosiciones);
                         break;
                     case 4:
-                        callMethod("Get_Single_By_IdEstado","pIdEstado",gl.tareadet.IdEstadoDestino);
+                        callMethod("Get_Single_By_IdEstado",
+                                   "pIdEstado",gl.tareadet.IdEstadoDestino);
                         break;
                     case 5:
-                        callMethod("Es_Pallet_No_Estandar","pStock",pStock);
+                        callMethod("Es_Pallet_No_Estandar",
+                                   "pStock",pStock);
                         break;
                     case 6:
-                        callMethod("Tiene_Posiciones","pStock",pStock);
+                        callMethod("Tiene_Posiciones",
+                                   "pStock",pStock);
                         break;
 
                 }
