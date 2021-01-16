@@ -173,11 +173,13 @@ public class frm_inv_cic_add extends PBase {
 
                             toast("Lote no puede estar vacio!");
                             btGuardar.setEnabled(false);
+                            txtLote1.requestFocus();
 
                         }else {
 
                             //Scan_Codigo_Producto();
                             btGuardar.setEnabled(true);
+                            imgDate.requestFocus();
 
                         }
                     }
