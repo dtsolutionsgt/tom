@@ -142,8 +142,7 @@ public class frm_inv_cic_add extends PBase {
     private void setHandlers() {
         try{
 
-            txtProd.setOnKeyListener(new View.OnKeyListener()
-            {
+            txtProd.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event)
                 {
@@ -157,18 +156,29 @@ public class frm_inv_cic_add extends PBase {
 
                             Scan_Codigo_Producto();
 
-                           /* if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
-                                txtLote1.requestFocus();
-                            }else {
+                        }
+                    }
 
-                                txtCantContada.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        txtCantContada.requestFocus();
-                                    }
-                                });
+                    return false;
+                }
+            });
 
-                            }*/
+            txtLote1.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                    {
+                        if(txtLote1.getText().toString().trim().isEmpty()){
+
+                            toast("Lote no puede estar vacio!");
+                            btGuardar.setEnabled(false);
+
+                        }else {
+
+                            //Scan_Codigo_Producto();
+                            btGuardar.setEnabled(true);
+
                         }
                     }
 
@@ -306,7 +316,7 @@ public class frm_inv_cic_add extends PBase {
             if( gl.pprod.Control_lote){
                 txtlote_cic.setVisibility(TextView.VISIBLE);
                 txtLote1.setVisibility(TextView.VISIBLE);
-                txtLote1.setEnabled(false);
+                //txtLote1.setEnabled(false);
             }else{
                 txtlote_cic.setVisibility(TextView.INVISIBLE);
                 txtLote1.setVisibility(TextView.INVISIBLE);
@@ -431,7 +441,8 @@ public class frm_inv_cic_add extends PBase {
                 }
 
                 btGuardar.setEnabled(true);
-                if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+              //  if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
+                if(gl.pprod.Control_lote){
 
                     txtLote1.requestFocus();
 
