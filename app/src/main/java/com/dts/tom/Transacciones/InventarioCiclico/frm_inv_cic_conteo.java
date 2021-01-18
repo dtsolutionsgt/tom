@@ -448,9 +448,9 @@ public class frm_inv_cic_conteo extends PBase {
                 //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
                 for (int i = 0; i < data_list.size(); i++) {
 
-                    String lote = data_list.get(i).Lote;
+                    String lote_stock = data_list.get(i).Lote_stock;
 
-                    if (lote.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
 
                         registros = registros+1;
 
@@ -475,14 +475,16 @@ public class frm_inv_cic_conteo extends PBase {
                     execws(4);
                 }
 
-                if(BeInvEnc.Capturar_no_existente){
+
+                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+                /*if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
 
                 }else{
 
                     Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                }
+                }*/
             }
         }
     }
@@ -717,14 +719,46 @@ public class frm_inv_cic_conteo extends PBase {
             }
             else if(registros ==0){
 
-                if(BeInvEnc.Capturar_no_existente){
+                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
+                for (int i = 0; i < data_list.size(); i++) {
+
+                    String lote_stock = data_list.get(i).Lote_stock;
+
+                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+
+                        registros = registros+1;
+
+                        if (registros==1){
+                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                        }
+                    }
+                }
+                if(registros > 1){
+
+                    //GT 18012020 carga la lista con el Filtro Lote
+                    FiltroxLote(evaluar);
+
+                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
+                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
+                    txtBuscFiltro.setText("");
+                    Busqueda= false;
+
+                } else if (registros ==1){
+
+                    Busqueda = true;
+                    execws(4);
+                }
+
+
+                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+           /*     if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
 
                 }else{
 
                     msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-                }
+                }*/
             }
         }
 
