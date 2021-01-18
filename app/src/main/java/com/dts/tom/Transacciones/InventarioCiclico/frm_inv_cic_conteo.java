@@ -442,9 +442,38 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda = true;
                 execws(4);
 
-                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
             else if(registros ==0){
+
+                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
+                for (int i = 0; i < data_list.size(); i++) {
+
+                    String lote = data_list.get(i).Lote;
+
+                    if (lote.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+
+                        registros = registros+1;
+
+                        if (registros==1){
+                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                        }
+                    }
+                }
+                if(registros > 1){
+
+                    //GT 18012020 carga la lista con el Filtro Lote
+                    FiltroxLote(evaluar);
+
+                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
+                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
+                    txtBuscFiltro.setText("");
+                    Busqueda= false;
+
+                } else if (registros ==1){
+
+                    Busqueda = true;
+                    execws(4);
+                }
 
                 if(BeInvEnc.Capturar_no_existente){
 
@@ -456,6 +485,58 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             }
         }
+    }
+
+    private void FiltroxLote(String evaluar) {
+
+        clsBe_inv_reconteo_data rec;
+
+        lista_filtro.clear();
+
+        rec = new clsBe_inv_reconteo_data();
+        lista_filtro.add(rec);
+
+        for (int i = 0; i < gl.reconteo_list.size(); i++) {
+
+            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).Lote);
+
+            if (ubicacion_lista.equals(evaluar)){
+
+                data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+                data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
+                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
+                data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
+                data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
+                data_rec.IdProductoEstado = gl.reconteo_list.get(i).IdProductoEstado;
+                data_rec.IdPresentacion = gl.reconteo_list.get(i).IdPresentacion;
+                data_rec.Codigo = gl.reconteo_list.get(i).Codigo;
+                data_rec.Producto_nombre = gl.reconteo_list.get(i).Producto_nombre;
+                data_rec.Pres = gl.reconteo_list.get(i).Pres;
+                data_rec.UMBas = gl.reconteo_list.get(i).UMBas;
+                data_rec.cantidad = gl.reconteo_list.get(i).cantidad;
+                data_rec.Lote = gl.reconteo_list.get(i).Lote;
+                data_rec.Lote_stock = gl.reconteo_list.get(i).Lote_stock;
+                data_rec.Peso = gl.reconteo_list.get(i).Peso;
+                data_rec.Fecha_Vence =  gl.reconteo_list.get(i).Fecha_Vence;
+                data_rec.control_peso = gl.reconteo_list.get(i).control_peso;
+                data_rec.Conteo = gl.reconteo_list.get(i).Conteo;
+                data_rec.Ubic_nombre = gl.reconteo_list.get(i).Ubic_nombre;
+                data_rec.Estado = gl.reconteo_list.get(i).Estado;
+                data_rec.Factor = gl.reconteo_list.get(i).Factor;
+                data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
+                data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
+                lista_filtro.add(data_rec);
+            }
+        }
+
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
+        listCiclico.setAdapter(adapter_ciclico);
+
+        int count =data_list.size()-1;
+        cmdList.setText( count+ "/" + count);
+
     }
 
     private void FiltroxCodigo(String evaluar) {
@@ -575,7 +656,6 @@ public class frm_inv_cic_conteo extends PBase {
 
             String ubicacion = String.valueOf(data_list.get(i).NoUbic);
 
-            //if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
             if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0 ){
 
                 registros = registros+1;
@@ -601,7 +681,6 @@ public class frm_inv_cic_conteo extends PBase {
             Busqueda = true;
 
             execws(4);
-            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
         } else if(registros == 0){
 
@@ -620,7 +699,6 @@ public class frm_inv_cic_conteo extends PBase {
             }
             if(registros > 1){
 
-
                 //carga la lista con el Filtro Código
                 FiltroxCodigo(evaluar);
 
@@ -635,7 +713,7 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda = true;
 
                 execws(4);
-                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
             }
             else if(registros ==0){
 
@@ -645,7 +723,6 @@ public class frm_inv_cic_conteo extends PBase {
 
                 }else{
 
-                    //Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
                     msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
                 }
             }
