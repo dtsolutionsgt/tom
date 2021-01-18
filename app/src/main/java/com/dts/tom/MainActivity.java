@@ -337,6 +337,7 @@ public class MainActivity extends PBase {
 
                     idemp=empresas.items.get(position).IdEmpresa;
                     gl.IdEmpresa = idemp;
+                    gl.gNomEmpresa = empresas.items.get(position).Nombre;
                     idbodega=0;
 
                     execws(2);//Lista las bodegas
