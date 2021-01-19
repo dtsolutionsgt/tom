@@ -55,7 +55,7 @@ public class frm_inv_cic_add extends PBase {
     private double vFactor;
     private String Resultado;
     private int Index;
-    private int adelante,atras;
+    //private int adelante,atras;
     private String codigo_producto;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
@@ -78,6 +78,9 @@ public class frm_inv_cic_add extends PBase {
 
     //Nueva cantidad a enviar cuando el registro no es pendiente, sino ya contado
     private double Nueva_Cantidad;
+
+    //respuesta de validación
+    boolean respuesta_producto;
 
 
     @Override
@@ -125,11 +128,9 @@ public class frm_inv_cic_add extends PBase {
         ws = new WebServiceHandler(frm_inv_cic_add.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
-        //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
-        Index = gl.IndexCiclico;
-        tam_lista = gl.reconteo_list.size() -1;
-
         btGuardar.setEnabled(false);
+
+        respuesta_producto = false;
 
         ValidaBotones();
 
@@ -150,50 +151,22 @@ public class frm_inv_cic_add extends PBase {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
 
+
                         codigo_producto = txtProd.getText().toString().trim();
 
-                        if(codigo_producto.isEmpty()){
+                       if(Scan_Codigo_Producto()){
 
-                            btGuardar.setEnabled(false);
-                            //toast("Ingrese código de producto");
-                            mu.msgbox("Ingrese código de producto");
-                            //txtProd.requestFocus();
+                           btGuardar.setEnabled(true);
+                           respuesta_producto = false;
 
-                        }else {
+                       }
+                       else{
 
-                            Scan_Codigo_Producto();
-
-                        }
-
+                           respuesta_producto = true;
+                       }
                     }
 
-                    return false;
-                }
-            });
-
-            txtLote1.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-                    {
-
-                           if(txtLote1.getText().toString().trim().isEmpty()){
-
-                               //toast("Lote no puede estar vacio!");
-                               mu.msgbox("Lote no puede estar vacio!");
-                               btGuardar.setEnabled(false);
-                               //txtLote1.requestFocus();
-
-                           }else {
-
-                               btGuardar.setEnabled(true);
-                               imgDate.requestFocus();
-
-                           }
-                    }
-
-                    return false;
+                    return respuesta_producto;
                 }
             });
 
@@ -258,6 +231,30 @@ public class frm_inv_cic_add extends PBase {
 
             });
 
+            txtLote1.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                    {
+
+                           if(txtLote1.getText().toString().trim().isEmpty()){
+
+                               mu.msgbox("Lote no puede estar vacio!");
+
+                           }else {
+
+                               btGuardar.setEnabled(true);
+                               imgDate.requestFocus();
+
+                           }
+                    }
+
+                    return false;
+                }
+            });
+
+
         }
         catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
@@ -267,6 +264,11 @@ public class frm_inv_cic_add extends PBase {
     private void Load() {
 
         if(gl.inv_ciclico !=null){
+
+            //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
+            Index = gl.IndexCiclico;
+            tam_lista = gl.reconteo_list.size() -1;
+
 
             //index para el combobox estados
             int index = 0;
@@ -414,34 +416,54 @@ public class frm_inv_cic_add extends PBase {
 
             mu.msgbox( "El registro seleccionado no es válido.");
         }
-
-
     }
 
 
-    private void Scan_Codigo_Producto(){
+    private boolean Scan_Codigo_Producto(){
 
-        if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
-            cboEstado.requestFocus();
-        }else{
+        boolean respuesta = false;
 
-            IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+        try{
 
-            //el codigo ingresado no tiene match con el registro seleccionado, se procede a buscar en la lista
-            if(!Buscar_producto(codigo_producto)){
+            if(!codigo_producto.isEmpty()){
 
-                //txtProd.setText("");
-                //txtProd.requestFocus();
-                //toast("Producto no asignado para conteo. Intente con otro!");
-                mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+                if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
 
+                    cboEstado.requestFocus();
+                    respuesta = true;
+
+                }else{
+
+                    IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
+                    //el codigo ingresado no tiene match con el registro seleccionado, se procede a buscar en la lista
+                    if(Buscar_producto(codigo_producto)){
+
+                        respuesta = true;
+
+                    }else{
+
+                        respuesta = false;
+                        txtProd.setText("");
+                        mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+                    }
+                }
+
+            }else {
+
+                mu.msgbox("No ha ingresado un código.");
             }
+
         }
+        catch (Exception e){
+            respuesta = false;
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return respuesta;
     }
 
     private boolean Buscar_producto(String codigo_producto){
 
-        int registros = 0;
         boolean respuesta = false;
 
         for (int i = 0; i < gl.reconteo_list.size() ; i++) {
@@ -451,32 +473,16 @@ public class frm_inv_cic_add extends PBase {
             //if (codigo.equals(codigo_producto) && gl.reconteo_list.get(i).cantidad.equals(0.0) ) {
             if (codigo.equals(codigo_producto) ) {
 
-
                 gl.inv_ciclico = gl.reconteo_list.get(i);
                 Load();
 
                 respuesta = true;
                 break;
 
-             /*   registros = registros+1;
-
-                if (registros==1){
-
-                    gl.inv_ciclico = gl.reconteo_list.get(i);
-                    Load();
-
-                }*/
             }
         }
 
-       /* if (registros == 0){
-
-            txtProd.setText("");
-            toast("Producto no asignado para conteo. Intente con otro!");
-        }*/
-
         return respuesta;
-
     }
 
 /*    private void Scan_Codigo_Producto1() {

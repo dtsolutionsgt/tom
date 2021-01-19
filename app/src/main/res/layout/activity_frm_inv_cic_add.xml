@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:inputType="textPersonName" />
+                    android:inputType="text" />
 
             </TableRow>
 
@@ -97,7 +97,7 @@
                     android:id="@+id/txtProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="text" />
             </TableRow>
 
             <TableRow
@@ -172,7 +172,7 @@
                     android:id="@+id/txtLote1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="text" />
             </TableRow>
 
 
@@ -250,13 +250,13 @@
                     android:id="@+id/txtCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
+
                 <EditText
                     android:id="@+id/txtPesoContado"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
 
                 <Button
                     android:id="@+id/btnGuardar"
