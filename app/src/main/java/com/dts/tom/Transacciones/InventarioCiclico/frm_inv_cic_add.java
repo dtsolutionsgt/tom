@@ -56,6 +56,7 @@ public class frm_inv_cic_add extends PBase {
     private String Resultado;
     private int Index;
     private int adelante,atras;
+    private String codigo_producto;
 
     private ArrayList<String> bodlist= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
@@ -148,15 +149,22 @@ public class frm_inv_cic_add extends PBase {
                 {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
-                        if(txtProd.getText().toString().trim().isEmpty()){
 
-                            toast("Ingrese código de producto");
+                        codigo_producto = txtProd.getText().toString().trim();
+
+                        if(codigo_producto.isEmpty()){
+
+                            btGuardar.setEnabled(false);
+                            //toast("Ingrese código de producto");
+                            mu.msgbox("Ingrese código de producto");
+                            //txtProd.requestFocus();
 
                         }else {
 
                             Scan_Codigo_Producto();
 
                         }
+
                     }
 
                     return false;
@@ -169,19 +177,20 @@ public class frm_inv_cic_add extends PBase {
 
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
-                        if(txtLote1.getText().toString().trim().isEmpty()){
 
-                            toast("Lote no puede estar vacio!");
-                            btGuardar.setEnabled(false);
-                            txtLote1.requestFocus();
+                           if(txtLote1.getText().toString().trim().isEmpty()){
 
-                        }else {
+                               //toast("Lote no puede estar vacio!");
+                               mu.msgbox("Lote no puede estar vacio!");
+                               btGuardar.setEnabled(false);
+                               //txtLote1.requestFocus();
 
-                            //Scan_Codigo_Producto();
-                            btGuardar.setEnabled(true);
-                            imgDate.requestFocus();
+                           }else {
 
-                        }
+                               btGuardar.setEnabled(true);
+                               imgDate.requestFocus();
+
+                           }
                     }
 
                     return false;
@@ -409,7 +418,68 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
-    private void Scan_Codigo_Producto() {
+
+    private void Scan_Codigo_Producto(){
+
+        if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
+            cboEstado.requestFocus();
+        }else{
+
+            IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
+            //el codigo ingresado no tiene match con el registro seleccionado, se procede a buscar en la lista
+            if(!Buscar_producto(codigo_producto)){
+
+                //txtProd.setText("");
+                //txtProd.requestFocus();
+                //toast("Producto no asignado para conteo. Intente con otro!");
+                mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+
+            }
+        }
+    }
+
+    private boolean Buscar_producto(String codigo_producto){
+
+        int registros = 0;
+        boolean respuesta = false;
+
+        for (int i = 0; i < gl.reconteo_list.size() ; i++) {
+
+            String codigo = gl.reconteo_list.get(i).Codigo;
+
+            //if (codigo.equals(codigo_producto) && gl.reconteo_list.get(i).cantidad.equals(0.0) ) {
+            if (codigo.equals(codigo_producto) ) {
+
+
+                gl.inv_ciclico = gl.reconteo_list.get(i);
+                Load();
+
+                respuesta = true;
+                break;
+
+             /*   registros = registros+1;
+
+                if (registros==1){
+
+                    gl.inv_ciclico = gl.reconteo_list.get(i);
+                    Load();
+
+                }*/
+            }
+        }
+
+       /* if (registros == 0){
+
+            txtProd.setText("");
+            toast("Producto no asignado para conteo. Intente con otro!");
+        }*/
+
+        return respuesta;
+
+    }
+
+/*    private void Scan_Codigo_Producto1() {
 
         if(gl.inv_ciclico.codigo_producto == null){
             toast("¡Producto no existe!");
@@ -433,8 +503,8 @@ public class frm_inv_cic_add extends PBase {
 
                         toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
 
-                        /*******************************************************************************/
-                        /****** FALTA CREAR TOAST PARA CONFIRMAR Y ENVIAR A FORM_CIC_NUEVO.JAVA *******/
+                        *//*******************************************************************************//*
+                        *//****** FALTA CREAR TOAST PARA CONFIRMAR Y ENVIAR A FORM_CIC_NUEVO.JAVA *******//*
                     } else{
 
 
@@ -464,7 +534,6 @@ public class frm_inv_cic_add extends PBase {
 
             if (gl.reconteo_list.get(ii).IdUbicacion == idubic && gl.reconteo_list.get(ii).IdProductoBodega == idprod) {
 
-
                 txtUbic.setText(idubic + "");
                 respuesta = true;
                 break;
@@ -472,7 +541,7 @@ public class frm_inv_cic_add extends PBase {
         }
 
         return respuesta;
-    }
+    }*/
 
     public void ChangeDate(View view) {
 
@@ -574,17 +643,28 @@ public class frm_inv_cic_add extends PBase {
     public void btnGuardar(View view) {
 
         if(txtUbic.getText().toString().trim().isEmpty()){
-            toast("¡Ubicacion incorrecta!");
+            msgbox("¡Ubicacion vacia!");
+            txtUbic.requestFocus();
+
         }else if(txtProd.getText().toString().trim().isEmpty()){
-            toast("¡Producto incorrecto!");
+            toast("¡Producto vacio!");
+            txtProd.requestFocus();
+
         }else if(txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")){
             toast("¡Cantidad incorrecta!");
+            txtCantContada.requestFocus();
+
         }else if (gl.pprod.Control_lote && txtLote1.getText().toString().trim().isEmpty() ){
                 toast("¡Lote incorrecto!");
+                txtLote1.requestFocus();
+
         }else if(gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()){
                 toast("¡Peso incorrecto!");
+                txtPesoContado.requestFocus();
+
         }else{
 
+            btGuardar.setEnabled(true);
             Guardar();
 
         }
@@ -640,6 +720,7 @@ public class frm_inv_cic_add extends PBase {
 
             }else{
 
+                //GT 18012021 set para la clase que se envia como conteo.
                 pitem= new clsBeTrans_inv_ciclico_vw();
 
                 pitem.Idinvciclico = 0;
