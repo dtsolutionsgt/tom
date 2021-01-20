@@ -7,6 +7,7 @@ public class clsBeTrans_oc_pol {
 
     @Element(required=false) public int IdOrdenCompraPol;
     @Element(required=false) public int IdOrdenCompraEnc;
+    @Element(required=false) public int IdRegimen;
     @Element(required=false) public String Bl_No;
     @Element(required=false) public String NoPoliza;
     @Element(required=false) public String Pto_Descarga;
@@ -30,6 +31,8 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public int Total_lineas;
     @Element(required=false) public int Total_bultos;
     @Element(required=false) public double Total_bultos_peso;
+    @Element(required=false) public double Total_bultos_Peso_Neto;
+    @Element(required=false) public double Total_bultos_Peso_Bruto;
     @Element(required=false) public double Total_usd;
     @Element(required=false) public double Total_flete;
     @Element(required=false) public double Total_seguro;
@@ -57,7 +60,7 @@ public class clsBeTrans_oc_pol {
                              double Total_bultos_peso,double Total_usd,double Total_flete,double Total_seguro,
                              String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew,
                              String codigo_poliza,String ticket,String numero_orden,String fecha_aceptacion,
-                             String fecha_llegada,double total_otros) {
+                             String fecha_llegada,double total_otros, double Total_bultos_Peso_Neto) {
 
         this.IdOrdenCompraPol=IdOrdenCompraPol;
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
@@ -98,6 +101,7 @@ public class clsBeTrans_oc_pol {
         this.fecha_aceptacion=fecha_aceptacion;
         this.fecha_llegada=fecha_llegada;
         this.total_otros=total_otros;
+        this.Total_bultos_Peso_Neto = Total_bultos_Peso_Neto;
     }
 
 
@@ -335,5 +339,24 @@ public class clsBeTrans_oc_pol {
     public void settotal_otros(double value) {
         total_otros=value;
     }
+    public double getTotal_bultos_Peso_Neto() {
+        return Total_bultos_Peso_Neto;
+    }
+    public void setTotal_bultos_Peso_Neto(double value) {
+        Total_bultos_Peso_Neto=value;
+    }
+    public double getTotal_bultos_Peso_Bruto() {
+        return Total_bultos_Peso_Bruto;
+    }
+    public void setTotal_bultos_Peso_Bruto(double value) {
+        Total_bultos_Peso_Bruto=value;
+    }
+    public int getIdRegimen() {
+        return IdRegimen;
+    }
+    public void setIdRegimen(int value) {
+        IdRegimen=value;
+    }
+
 }
 
