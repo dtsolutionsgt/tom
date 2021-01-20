@@ -4,7 +4,6 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_pe_pol {
 
-
     @Element(required=false) public int IdOrdenPedidoPol=0;
     @Element(required=false) public int IdOrdenPedidoEnc=0;
     @Element(required=false) public String Bl_No="";
@@ -44,6 +43,8 @@ public class clsBeTrans_pe_pol {
     @Element(required=false) public String fecha_aceptacion="";
     @Element(required=false) public String fecha_llegada="";
     @Element(required=false) public double total_otros=0;
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public int IdRegimen=0;
 
 
     public clsBeTrans_pe_pol() {
@@ -58,7 +59,8 @@ public class clsBeTrans_pe_pol {
                              double Total_bultos_Peso_Bruto,double Total_bultos_Peso_Neto,double Total_usd,double Total_flete,
                              double Total_seguro,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String codigo_poliza,String ticket,String numero_orden,
-                             String fecha_aceptacion,String fecha_llegada,double total_otros) {
+                             String fecha_aceptacion,String fecha_llegada,double total_otros,boolean IsNew,
+                             int IdRegimen) {
 
         this.IdOrdenPedidoPol=IdOrdenPedidoPol;
         this.IdOrdenPedidoEnc=IdOrdenPedidoEnc;
@@ -99,6 +101,8 @@ public class clsBeTrans_pe_pol {
         this.fecha_aceptacion=fecha_aceptacion;
         this.fecha_llegada=fecha_llegada;
         this.total_otros=total_otros;
+        this.IsNew=IsNew;
+        this.IdRegimen=IdRegimen;
 
     }
 
@@ -336,6 +340,18 @@ public class clsBeTrans_pe_pol {
     }
     public void settotal_otros(double value) {
         total_otros=value;
+    }
+    public boolean getIsNew() {
+        return IsNew;
+    }
+    public void setIsNew(boolean value) {
+        IsNew=value;
+    }
+    public int getIdRegimen() {
+        return IdRegimen;
+    }
+    public void setIdRegimen(int value) {
+        IdRegimen=value;
     }
 
 }
