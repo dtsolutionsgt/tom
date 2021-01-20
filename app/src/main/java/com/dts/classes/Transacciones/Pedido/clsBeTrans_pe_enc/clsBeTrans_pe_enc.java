@@ -2,6 +2,7 @@ package com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc;
 
 import com.dts.classes.Mantenimientos.Cliente.clsBeCliente.clsBeCliente;
 import com.dts.classes.Mantenimientos.Propietario.Propietario_bodega.clsBePropietario_bodega;
+import com.dts.classes.Transacciones.Pedido.Trasn_pe_pol.clsBeTrans_pe_pol;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_det.clsBeTrans_pe_detList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
@@ -74,6 +75,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
     @Element(required=false) public String Serie="";
     @Element(required=false) public int Correlativo=0;
+    @Element(required=false) public clsBeTrans_pe_pol ObjPoliza= new clsBeTrans_pe_pol();
 
 
     public clsBeTrans_pe_enc() {
