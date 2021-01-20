@@ -243,7 +243,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void Imprimir(View view){
-        msgAskImprimir("Está seguro de imprimir");
+        msgAskImprimir("Imprimir Licencia");
     }
 
     @Override
