@@ -330,6 +330,7 @@ public class MainActivity extends PBase {
 
                     idemp=empresas.items.get(position).IdEmpresa;
                     gl.IdEmpresa = idemp;
+                    gl.gNomEmpresa = empresas.items.get(position).Nombre;
                     idbodega=0;
 
                     execws(2);//Lista las bodegas
@@ -396,6 +397,7 @@ public class MainActivity extends PBase {
                     }
 
                     idimpres=impres.get(position).IdImpresora;
+                    gl.MacPrinter =  impres.get(position).mac_adress;
                     gl.IdImpresora = idimpres;
 
                 } catch (Exception e) {
@@ -563,27 +565,28 @@ public class MainActivity extends PBase {
                                         stream(impres)
                                                 .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                                if (BeImpresora.size()>0)
-                                {
-                                    gl.gImpresora = BeImpresora;
-                                    if (gl.gImpresora.get(0).Direccion_Ip =="")
-                                    {
-                                        progress.cancel();
-                                        mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                    }else{
-                                        //#CKFK 20201021 Agregué este else
-                                        execws(7);
-                                    }
-                                }else
+                            if (BeImpresora.size()>0)
+                            {
+                                gl.gImpresora = BeImpresora;
+                                if (gl.gImpresora.get(0).Direccion_Ip =="")
                                 {
                                     progress.cancel();
-                                    //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                    msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
-                                    //mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
-                                }
-                                //Get_BeImpresora_By_IdImpresora(gIdImpresora)
+                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                }else{
 
-                                //execws(7);
+                                    //#CKFK 20201021 Agregué este else
+                                    execws(7);
+                                }
+                            }else
+                            {
+                                progress.cancel();
+                                //CKFK 20201021 Cambié mensaje para que sea un si o no
+                                msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
+                                //mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
+                            }
+                            //Get_BeImpresora_By_IdImpresora(gIdImpresora)
+
+                            //execws(7);
 
                             }else
                             {
@@ -674,6 +677,10 @@ public class MainActivity extends PBase {
         return uniqueID;
     }
 
+    //endregion
+
+    //region Data Processing
+
     private void processEmpresas()
     {
 
@@ -701,10 +708,6 @@ public class MainActivity extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
-
-    //endregion
-
-    //region Data Processing
 
     private void processBodegas()
     {
@@ -835,6 +838,10 @@ public class MainActivity extends PBase {
         }
     }
 
+    //endregion
+
+    //region Spinners
+
     private void fillSpinemp()
     {
 
@@ -858,10 +865,6 @@ public class MainActivity extends PBase {
             mu.msgbox( e.getMessage());
         }
     }
-
-    //endregion
-
-    //region Spinners
 
     private void fillSpinBod()
     {
@@ -966,11 +969,8 @@ public class MainActivity extends PBase {
         }
     }
 
-    //endregion
-
-    //region Aux
-
-    public void ProgressDialog(String mensaje) {
+    public void ProgressDialog(String mensaje)
+    {
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);

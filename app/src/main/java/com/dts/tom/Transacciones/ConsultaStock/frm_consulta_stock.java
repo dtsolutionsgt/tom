@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +34,9 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_add;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -241,6 +245,64 @@ public class frm_consulta_stock extends PBase {
         }
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    public void printBarra(View view){
+        Imprimir_Barra();
+    }
+
+    private void Imprimir_Barra(){
+        try{
+
+            if (!txtCodigo.getText().toString().isEmpty()){
+                //CM_20210112: Impresión de barras.
+                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+                printerIns.open();
+
+                if (printerIns.isConnected()){
+                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+                    String zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%0$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%3$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
+                            (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
+
+                    zPrinterIns.sendCommand(zpl);
+
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("No se pudo obtener conexión con la impresora");
+                }
+
+                Looper.myLooper().quit();
+
+            }else{
+                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
         }
     }
 
