@@ -210,7 +210,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage( msg );
 
             dialog.setCancelable(false);
 

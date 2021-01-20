@@ -3214,19 +3214,9 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.IdImpresora>0){
 
-                if (BeTransReDet.Presentacion.EsPallet){
+                progress.cancel();
 
-                    Imprimir_Licencia();
-
-                    progress.cancel();
-
-                }else{
-                    if (BeTransReDet.Presentacion.Imprime_barra){
-                        progress.cancel();
-                        Imprimir_Barra();
-
-                    }
-                }
+                msgAskImprimir("Seleccione una opción para imprimir");
 
             }
 
@@ -3251,6 +3241,38 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
+
+    private void msgAskImprimir(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Barra();
+                }
+            });
+
+            dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Licencia();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
 
     private void Imprimir_Licencia(){
         try{
