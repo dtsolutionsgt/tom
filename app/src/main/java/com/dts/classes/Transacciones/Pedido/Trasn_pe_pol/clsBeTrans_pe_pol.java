@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_pe_pol {
 
+
     @Element(required=false) public int IdOrdenPedidoPol=0;
     @Element(required=false) public int IdOrdenPedidoEnc=0;
     @Element(required=false) public String Bl_No="";
