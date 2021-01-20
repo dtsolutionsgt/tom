@@ -96,7 +96,7 @@ public class clsBeTrans_pe_enc {
                              boolean PedidoRoad,String HoraEntregaDesde,String HoraEntregaHasta,String Referencia,
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
-                             boolean Control_Ultimo_Lote,String Serie,int Correlativo) {
+                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -162,6 +162,7 @@ public class clsBeTrans_pe_enc {
         this.Control_Ultimo_Lote=Control_Ultimo_Lote;
         this.Serie=Serie;
         this.Correlativo=Correlativo;
+        this.ObjPoliza=ObjPoliza;
 
     }
 
@@ -549,6 +550,12 @@ public class clsBeTrans_pe_enc {
     }
     public void setCorrelativo(int value) {
         Correlativo=value;
+    }
+    public clsBeTrans_pe_pol getObjPoliza() {
+        return ObjPoliza;
+    }
+    public void setPicking(clsBeTrans_pe_pol value) {
+        ObjPoliza=value;
     }
 
 }
