@@ -321,7 +321,7 @@ public class frm_picking_datos extends PBase {
 
                     int vLengthBarra = txtBarra.getText().toString().length();
 
-                    if (vLengthBarra >= 16) {
+                    if (vLengthBarra > 0) {
 
                         Escaneo_Pallet = true;
 
