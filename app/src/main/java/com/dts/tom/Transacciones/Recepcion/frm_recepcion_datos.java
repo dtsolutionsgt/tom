@@ -1011,7 +1011,7 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Peso_recepcion){
 
                 txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
-                txtPesoReal.setText(BeProducto.Peso_tolerancia+"");
+                txtPesoReal.setText(txtPeso.getText()+"");
 
                 if (BeProducto.Presentaciones.items!=null){
 
