@@ -320,19 +320,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     BeListPickingUbic.add(vItem);
 
-                for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
+                    for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
-                    if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
+                        if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
 
-                        vItem = new  clsBeTrans_picking_ubic();
-                        obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
-                        vItem = obj;
+                            vItem = new  clsBeTrans_picking_ubic();
+                            obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
+                            vItem = obj;
 
-                        BeListPickingUbic.add(vItem);
+                            BeListPickingUbic.add(vItem);
+
+                        }
 
                     }
-
-                }
 
                     int count =BeListPickingUbic.size()-1;
                     btnPendientes.setText("Regs: "+count);
@@ -524,8 +524,11 @@ public class frm_detalle_tareas_picking extends PBase {
                         callMethod("Actualizar_Estado_Picking","oBeTrans_picking_enc",gBePicking);
                         break;
                     case 3:
-                        callMethod("Get_All_PickingUbic_By_IdPickingEnc_Tipo","pIdPickingEnc",gBePicking.IdPickingEnc,
-                                "pDetalleOperador",gBePicking.Detalle_operador,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,"Tipo",TipoLista);
+                        callMethod("Get_All_PickingUbic_By_IdPickingEnc_Tipo",
+                                "pIdPickingEnc",gBePicking.IdPickingEnc,
+                                "pDetalleOperador",gBePicking.Detalle_operador,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,
+                                "Tipo",TipoLista);
                         break;
                     case 4:
                         callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
