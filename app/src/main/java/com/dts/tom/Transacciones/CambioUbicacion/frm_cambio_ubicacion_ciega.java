@@ -903,6 +903,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
             msgbox("Error " + ex.getMessage());
         }
+        progress.cancel();
     }
 
     private void llenaDatosProducto() {
