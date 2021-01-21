@@ -182,7 +182,7 @@ public class frm_inv_cic_conteo extends PBase {
                     if (position > 0) {
 
                         gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
-                        gl.IndexCiclico = position;
+                        gl.IndexCiclico = gl.inv_ciclico.index;
 
                         execws(4);
 
@@ -223,6 +223,7 @@ public class frm_inv_cic_conteo extends PBase {
             DT = xobj.filldt();
             data_list.clear();
             gl.reconteo_list.clear();
+            int index = 0;
 
             if(!txtBuscFiltro.equals("")){
 
@@ -237,6 +238,9 @@ public class frm_inv_cic_conteo extends PBase {
                         while (!DT.isAfterLast()) {
 
                             data_rec = new clsBe_inv_reconteo_data();
+
+
+                            data_rec.index = index;
                             data_rec.idinventarioenc = Integer.parseInt(DT.getString(0));
                             data_rec.idinvreconteo = Integer.parseInt(DT.getString(1));
 
@@ -254,6 +258,11 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.Producto_nombre = DT.getString(21);
                             data_rec.Pres = DT.getString(23);
                             data_rec.UMBas = DT.getString(24);
+
+                            if(BeInvEnc.Mostrar_Cantidad_Teorica_hh){
+                                data_rec.Cant_Stock = Double.valueOf(DT.getString(11));
+                            }
+
                             data_rec.cantidad = Double.valueOf(DT.getString(12));
 
                             if(DT.getString(8)!=null){
@@ -289,6 +298,8 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //GT 30122020 lista global para ser accedida desde validaciones cuando se agrega nuevo_producto
                             gl.reconteo_list.add(data_rec);
+
+                            index = index+1;
 
                             DT.moveToNext();
                         }
@@ -422,7 +433,7 @@ public class frm_inv_cic_conteo extends PBase {
                 FiltroxCodigo(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
+                msgbox("El código contiene varias ubicaciones, seleccione ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
 
@@ -431,20 +442,103 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda = true;
                 execws(4);
 
-                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }
             else if(registros ==0){
 
-                if(BeInvEnc.Capturar_no_existente){
+                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
+                for (int i = 0; i < data_list.size(); i++) {
+
+                    String lote_stock = data_list.get(i).Lote_stock;
+
+                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+
+                        registros = registros+1;
+
+                        if (registros==1){
+                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                        }
+                    }
+                }
+                if(registros > 1){
+
+                    //GT 18012020 carga la lista con el Filtro Lote
+                    FiltroxLote(evaluar);
+
+                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
+                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
+                    txtBuscFiltro.setText("");
+                    Busqueda= false;
+
+                } else if (registros ==1){
+
+                    Busqueda = true;
+                    execws(4);
+                }
+
+
+                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+                /*if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
 
                 }else{
 
                     Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                }
+                }*/
             }
         }
+    }
+
+    private void FiltroxLote(String evaluar) {
+
+        clsBe_inv_reconteo_data rec;
+
+        lista_filtro.clear();
+
+        rec = new clsBe_inv_reconteo_data();
+        lista_filtro.add(rec);
+
+        for (int i = 0; i < gl.reconteo_list.size(); i++) {
+
+            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).Lote);
+
+            if (ubicacion_lista.equals(evaluar)){
+
+                data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+                data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
+                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
+                data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
+                data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
+                data_rec.IdProductoEstado = gl.reconteo_list.get(i).IdProductoEstado;
+                data_rec.IdPresentacion = gl.reconteo_list.get(i).IdPresentacion;
+                data_rec.Codigo = gl.reconteo_list.get(i).Codigo;
+                data_rec.Producto_nombre = gl.reconteo_list.get(i).Producto_nombre;
+                data_rec.Pres = gl.reconteo_list.get(i).Pres;
+                data_rec.UMBas = gl.reconteo_list.get(i).UMBas;
+                data_rec.cantidad = gl.reconteo_list.get(i).cantidad;
+                data_rec.Lote = gl.reconteo_list.get(i).Lote;
+                data_rec.Lote_stock = gl.reconteo_list.get(i).Lote_stock;
+                data_rec.Peso = gl.reconteo_list.get(i).Peso;
+                data_rec.Fecha_Vence =  gl.reconteo_list.get(i).Fecha_Vence;
+                data_rec.control_peso = gl.reconteo_list.get(i).control_peso;
+                data_rec.Conteo = gl.reconteo_list.get(i).Conteo;
+                data_rec.Ubic_nombre = gl.reconteo_list.get(i).Ubic_nombre;
+                data_rec.Estado = gl.reconteo_list.get(i).Estado;
+                data_rec.Factor = gl.reconteo_list.get(i).Factor;
+                data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
+                data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
+                lista_filtro.add(data_rec);
+            }
+        }
+
+        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
+        listCiclico.setAdapter(adapter_ciclico);
+
+        int count =data_list.size()-1;
+        cmdList.setText( count+ "/" + count);
+
     }
 
     private void FiltroxCodigo(String evaluar) {
@@ -458,11 +552,14 @@ public class frm_inv_cic_conteo extends PBase {
 
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
 
-            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).codigo_producto);
+            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).Codigo);
 
             if (ubicacion_lista.equals(evaluar)){
 
                 data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
                 data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
@@ -495,7 +592,6 @@ public class frm_inv_cic_conteo extends PBase {
 
         int count =data_list.size()-1;
         cmdList.setText( count+ "/" + count);
-
     }
 
     private void FiltroxUbicacion(String evaluar) {
@@ -514,6 +610,9 @@ public class frm_inv_cic_conteo extends PBase {
             if (ubicacion_lista.equals(evaluar)){
 
                 data_rec = new clsBe_inv_reconteo_data();
+
+                data_rec.index = gl.reconteo_list.get(i).index;
+
                 data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
                 data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
 
@@ -546,7 +645,6 @@ public class frm_inv_cic_conteo extends PBase {
 
         int count =data_list.size()-1;
         cmdList.setText( count+ "/" + count);
-
     }
 
     private void ListaFiltrada2() {
@@ -560,7 +658,6 @@ public class frm_inv_cic_conteo extends PBase {
 
             String ubicacion = String.valueOf(data_list.get(i).NoUbic);
 
-            //if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
             if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0 ){
 
                 registros = registros+1;
@@ -586,7 +683,6 @@ public class frm_inv_cic_conteo extends PBase {
             Busqueda = true;
 
             execws(4);
-            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
         } else if(registros == 0){
 
@@ -605,7 +701,6 @@ public class frm_inv_cic_conteo extends PBase {
             }
             if(registros > 1){
 
-
                 //carga la lista con el Filtro Código
                 FiltroxCodigo(evaluar);
 
@@ -620,27 +715,54 @@ public class frm_inv_cic_conteo extends PBase {
                 Busqueda = true;
 
                 execws(4);
-                //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+
             }
             else if(registros ==0){
 
-                if(BeInvEnc.Capturar_no_existente){
+                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
+                for (int i = 0; i < data_list.size(); i++) {
+
+                    String lote_stock = data_list.get(i).Lote_stock;
+
+                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+
+                        registros = registros+1;
+
+                        if (registros==1){
+                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                        }
+                    }
+                }
+                if(registros > 1){
+
+                    //GT 18012020 carga la lista con el Filtro Lote
+                    FiltroxLote(evaluar);
+
+                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
+                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
+                    txtBuscFiltro.setText("");
+                    Busqueda= false;
+
+                } else if (registros ==1){
+
+                    Busqueda = true;
+                    execws(4);
+                }
+
+
+                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+           /*     if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
 
                 }else{
 
-                    //Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
                     msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-                }
+                }*/
             }
         }
 
     }
-
-
-
-
 
     private void Existe_Producto() {
 
@@ -662,157 +784,6 @@ public class frm_inv_cic_conteo extends PBase {
         }
         catch (Exception e){
             mu.msgbox("Existe_Producto:"+e.getMessage());
-        }
-
-    }
-
-/*    private void SubTarea1(){
-
-        clsBeProducto tProd;
-
-        try{
-
-                if(checkbox.isChecked()){
-                    //filtrar data de items
-                    // item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") = 0).FirstOrDefault()
-
-
-                    item = 0;
-
-                }else{
-                    //filtrar data de items
-                    //item = items.AsEnumerable.Where(Function(x) (x.Item("IdUbicacion") = txtBuscFiltro.Text.Trim OrElse x.Item("Codigo_Producto") = txtBuscFiltro.Text.Trim) AndAlso x.Item("Cantidad") > 0).FirstOrDefault()
-                    item = 1;
-                }
-
-                if(item != null){
-
-                    tareapos = Idx;
-                    txtBuscFiltro.setText("");
-                    //Tarea_Conteo()
-                    //Valida_Ubicacion_Orig();
-                }
-                else{
-
-                    if(BeInvEnc.Capturar_no_existente){
-
-                        execws(2);
-
-                        if(!(existeProducto.respuesta)){
-
-                            //msgCompletar("El producto no existe en el maestro,¿Desea insertarlo?");
-
-                        }else{
-
-                            Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                        }
-
-                    }else{
-
-                        Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                    }
-                }
-
-            //items = m_proxy.Inventario_Ciclico_Listar_Conteo(tarea.Idinventarioenc, _ gOperador, _ Not chkPend.Checked)
-            SubTarea3();
-
-        }
-        catch (Exception e){
-            lic_plate = false;
-            lplate = "";
-            mu.msgbox("processReConteos:"+e.getMessage());
-        }
-    }*/
-
-    private void SubTarea2(){
-
-        execws(3);
-
-        if(LoteSel !="" && FechaVencSel !="" && ProdSel != "0" && IdUbicacionSel != 0){
-            if(checkbox.isChecked()){
-
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") = 0 AndAlso x.Item("Lote_stock") = LoteSel _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-
-            }else{
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") > 0 AndAlso x.Item("Lote_stock") = LoteSel _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-            }
-
-            FechaVencSel = "";
-            LoteSel = "";
-            PresSel = "";
-            IdUbicacionSel = 0;
-            ProdSel = "";
-
-            if(item != null ){
-                tareapos = Idx;
-                txtBuscFiltro.setText("");
-                //Tarea_Conteo();Get_Control_Lote_And_Vencimiento_By_IdProductoBodega
-
-                //txtUbic.Text = item.Item("IdUbicacion");
-                //Valida_Ubicacion_Orig();
-                //txtProd.Focus();
-            }
-            else{
-                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-            }
-
-        }
-        else if(LoteSel != "" && FechaVencSel != "" && ProdSel != "" && IdUbicacionSel != 0){
-
-            if(checkbox.isChecked()){
-
-                            /*item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") = 0 _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-
-            }else{
-
-                           /* item = items.AsEnumerable.Where(Function(x) x.Item("IdUbicacion") = IdUbicacionSel AndAlso x.Item("Codigo_Producto") = ProdSel _
-                                    AndAlso x.Item("Cantidad") > 0 _
-                                    AndAlso Format(x.Item("Fecha_vence_stock"), "yyyyMMdd") = FechaVencSel _
-                                    AndAlso x.Item("pres_nombre") = PresSel).FirstOrDefault()*/
-            }
-
-            FechaVencSel = "";
-            LoteSel = "";
-            PresSel = "";
-            IdUbicacionSel = 0;
-            ProdSel = "";
-
-            if(item != null ){
-                tareapos = Idx;
-                txtBuscFiltro.setText("");
-                //Tarea_Conteo();
-                //txtUbic.Text = item.Item("IdUbicacion");
-                //Valida_Ubicacion_Orig();
-                //txtProd.Focus();
-            }
-            else{
-                mu.msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
-            }
-        }
-
-        SubTarea3();
-
-    }
-
-    private void SubTarea3() {
-
-        cmdList.setText("0/0");
-
-        if(!lic_plate){
-
-            execws(3);
-
-            //Toast.makeText(getApplicationContext(),"datatable " + DT.getCount() ,Toast.LENGTH_SHORT);
-
         }
 
     }

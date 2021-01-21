@@ -45,7 +45,12 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
     @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public int RowIndex;
-
+    @Element(required=false) public double valor_aduana=0;
+    @Element(required=false) public double valor_fob=0;
+    @Element(required=false) public double valor_iva=0;
+    @Element(required=false) public double valor_dai=0;
+    @Element(required=false) public double valor_seguro=0;
+    @Element(required=false) public double valor_flete=0;
 
     public clsBeTrans_oc_det()
     {
@@ -59,7 +64,8 @@ public class clsBeTrans_oc_det {
                              String Fec_agr,String User_mod,String Fec_mod,boolean Activo,
                              String Atributo_variante_1,String Codigo_Producto,boolean IsNew,boolean ExisteEnRecepcion,
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
-                             clsBeUnidad_medida UnidadMedida,int RowIndex) {
+                             clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
+                             double valor_iva,double valor_dai,double valor_seguro,double valor_flete) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -95,7 +101,12 @@ public class clsBeTrans_oc_det {
         this.Presentacion=Presentacion;
         this.UnidadMedida=UnidadMedida;
         this.RowIndex=RowIndex;
-
+        this.valor_aduana=valor_aduana;
+        this.valor_fob=valor_fob;
+        this.valor_iva=valor_iva;
+        this.valor_dai=valor_dai;
+        this.valor_seguro=valor_seguro;
+        this.valor_flete=valor_flete;
     }
 
 
@@ -309,6 +320,41 @@ public class clsBeTrans_oc_det {
     public void setFecha_vence(String value) {
         Fecha_vence=value;
     }
-
+    public double getvalor_aduana() {
+        return valor_aduana;
+    }
+    public void setvalor_aduana(double value) {
+        valor_aduana=value;
+    }
+    public double getvalor_fob() {
+        return valor_fob;
+    }
+    public void setvalor_fob(double value) {
+        valor_fob=value;
+    }
+    public double getvalor_iva() {
+        return valor_iva;
+    }
+    public void setvalor_iva(double value) {
+        valor_iva=value;
+    }
+    public double getvalor_dai() {
+        return valor_dai;
+    }
+    public void setvalor_dai(double value) {
+        valor_dai=value;
+    }
+    public double getvalor_seguro() {
+        return valor_seguro;
+    }
+    public void setvalor_seguro(double value) {
+        valor_seguro=value;
+    }
+    public double getvalor_flete() {
+        return valor_flete;
+    }
+    public void setvalor_flete(double value) {
+        valor_flete=value;
+    }
 }
 

@@ -180,7 +180,7 @@ public class frm_consulta_stock extends PBase {
                                                 txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
                                             //Es una barra de pallet válida por tamaño
                                             int vLengthBarra = txtCodigo.getText().toString().length();
-                                            if (vLengthBarra >= 16) {
+                                            if (vLengthBarra >= 0) {
                                                 pLicensePlate = txtCodigo.getText().toString().replace("$", "");
 
                                                 ProgressDialog("Cargando existencias");

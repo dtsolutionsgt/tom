@@ -38,7 +38,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public int Nivel=0;
     @Element(required=false) public String Pos="";
     @Element(required=false) public Double Factor=0.0;
-
+    @Element(required=false) public int index=0;
 
     public clsBe_inv_reconteo_data(){}
 
@@ -47,7 +47,7 @@ public class clsBe_inv_reconteo_data {
                                    Double Peso_Stock,Double Peso,String Lote,String Lote_stock,String Fecha_Vence, boolean control_peso,int Conteo,
                                    String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,int idPresentacion_nuevo,
                                    int IdProductoEst_nuevo,String codigo_producto,
-                                   int Nivel,String Pos,Double Factor){
+                                   int Nivel,String Pos,Double Factor, int index){
 
         this.idinventarioenc = idinventarioenc;
         this.idinvreconteo = idinvreconteo;
@@ -80,6 +80,7 @@ public class clsBe_inv_reconteo_data {
         this.Nivel = Nivel;
         this.Pos = Pos;
         this.Factor = Factor;
+        this.index = index;
     }
 
 
@@ -301,6 +302,13 @@ public class clsBe_inv_reconteo_data {
     }
     public void setFactor(Double value) {
         Factor=value;
+    }
+
+    public int getindex() {
+        return index;
+    }
+    public void setindex(int value) {
+        index=value;
     }
 
 }

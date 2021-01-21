@@ -25,6 +25,7 @@ public class clsBePropietarios {
     @Element(required=false) public int Color=0;
     @Element(required=false) public String Codigo="";
     @Element(required=false) public boolean Sistema=false;
+    @Element(required=false) public String NIT="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
 
 
@@ -35,7 +36,7 @@ public class clsBePropietarios {
                              String Nombre_comercial,String Imagen,String Telefono,String Direccion,
                              boolean Activo,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Email,boolean Actualiza_costo_oc,int Color,
-                             String Codigo,boolean Sistema,clsBeEmpresa Empresa) {
+                             String Codigo,boolean Sistema,String NIT,clsBeEmpresa Empresa) {
 
         this.IdPropietario=IdPropietario;
         this.IdEmpresa=IdEmpresa;
@@ -55,6 +56,7 @@ public class clsBePropietarios {
         this.Color=Color;
         this.Codigo=Codigo;
         this.Sistema=Sistema;
+        this.NIT = NIT;
         this.Empresa=Empresa;
 
     }
@@ -167,6 +169,12 @@ public class clsBePropietarios {
     }
     public void setSistema(boolean value) {
         Sistema=value;
+    }
+    public String getNIT() {
+        return NIT;
+    }
+    public void setNIT(String value) {
+        NIT=value;
     }
     public clsBeEmpresa getEmpresa() {
         return Empresa;

@@ -117,10 +117,9 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
 
                 setHandlers();
-
                 gl.deviceId =androidid();
 
-            }else{
+            } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
             }
@@ -154,8 +153,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void LimpiarControles()
-    {
+    private void LimpiarControles()     {
 
         try{
             txtpass.setText("");
@@ -259,8 +257,7 @@ public class MainActivity extends PBase {
 
     //region Grant permissions
 
-    private void grantPermissions()
-    {
+    private void grantPermissions()   {
         try {
             if (Build.VERSION.SDK_INT >= 20)
             {
@@ -294,8 +291,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    public void doLogin(View view)
-    {
+    public void doLogin(View view)     {
         try{
 
             imgIngresar.setVisibility(View.INVISIBLE);
@@ -308,9 +304,7 @@ public class MainActivity extends PBase {
 
             imgIngresar.setVisibility(View.VISIBLE);
 
-        }catch (Exception e)
-        {
-
+        } catch (Exception e)  {
         }
     }
 
@@ -320,8 +314,7 @@ public class MainActivity extends PBase {
 
     private void setHandlers() {
 
-        spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()         {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
             {
@@ -483,56 +476,8 @@ public class MainActivity extends PBase {
 
     //region WebService handler
 
-    public class WebServiceHandler extends WebService
-    {
-
-        public WebServiceHandler(PBase Parent,String Url) {
-            super(Parent,Url);
-        }
-
-        @Override
-        public void wsExecute(){
-            try
-            {
-                switch (ws.callback)
-                {
-                    case 1:
-                        callMethod("Android_Get_All_Empresas");
-                        break;
-                    case 2:
-                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);
-                        break;
-                    case 3:
-                        callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
-                                "IdEmpresa",idemp,"IdBodega",idbodega);
-                        break;
-                    case 4:
-                        callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
-                        break;
-                    case 5:
-                        callMethod("Get_cantidad_decimales_calculo","pIdEmpresa",gl.IdEmpresa);
-                        break;
-                    case 6:
-                        callMethod("Get_Cantidad_decimales_despliegue","pIdEmpresa",gl.IdEmpresa);
-                        break;
-                    case 7:
-                        //#CKFK 20200416
-                        //En el paramétro pIdDispositivo debe enviarse el Id del dispositivo en base al gl.deviceId
-                        //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
-                        callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
-                        break;
-                }
-            } catch (Exception e)
-            {
-                error=e.getMessage();errorflag =true;msgbox(error);
-            }
-        }
-    }
-
     @Override
-    public void wsCallBack(Boolean throwing,String errmsg,int errlevel)
-    {
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel)  {
         try
         {
             if (throwing) throw new Exception(errmsg);
@@ -578,18 +523,14 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void Licencia_Valida()
-    {
-
+    private void Licencia_Valida()     {
         try{
-
         }catch (Exception e){
             mu.msgbox("Licencia Valida:"+e.getMessage());
         }
     }
 
-    private void Valida_Ingreso()
-    {
+    private void Valida_Ingreso() {
         try{
 
             if (gl.IdEmpresa>0)
@@ -598,31 +539,31 @@ public class MainActivity extends PBase {
                 {
                     if (gl.IdOperador>0)
                     {
-                    if (!txtpass.getText().toString().isEmpty())
-                    {
-                                List<clsBeBodegaBase> BeBodega =
-                                        stream(bodegas.items)
-                                                .where(c -> c.IdBodega  == gl.IdBodega)
-                                                .toList();
-
-                        gl.CodigoBodega = BeBodega.get(0).Codigo;
-
-                        List<clsBeOperador_bodega> BeOperadorBodega =
-                                stream(users.items)
-                                        .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                                c.IdBodega == gl.IdBodega)
-                                        .orderBy(c-> c.Operador.IdOperador)
-                                        .toList();
-
-                        if (BeOperadorBodega.size()>0)
+                        if (!txtpass.getText().toString().isEmpty())
                         {
+                            List<clsBeBodegaBase> BeBodega =
+                                    stream(bodegas.items)
+                                            .where(c -> c.IdBodega  == gl.IdBodega)
+                                            .toList();
 
-                            gl.gOperadorBodega = BeOperadorBodega;
-                            gl.OperadorBodega = gl.gOperadorBodega.get(0);
+                            gl.CodigoBodega = BeBodega.get(0).Codigo;
 
-                            List<clsBeImpresora> BeImpresora =
-                                    stream(impres)
-                                    .where(c-> c.IdBodega == gl.IdBodega).toList();
+                            List<clsBeOperador_bodega> BeOperadorBodega =
+                                    stream(users.items)
+                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
+                                                    c.IdBodega == gl.IdBodega)
+                                            .orderBy(c-> c.Operador.IdOperador)
+                                            .toList();
+
+                            if (BeOperadorBodega.size()>0)
+                            {
+
+                                gl.gOperadorBodega = BeOperadorBodega;
+                                gl.OperadorBodega = gl.gOperadorBodega.get(0);
+
+                                List<clsBeImpresora> BeImpresora =
+                                        stream(impres)
+                                                .where(c-> c.IdBodega == gl.IdBodega).toList();
 
                             if (BeImpresora.size()>0)
                             {
@@ -647,14 +588,13 @@ public class MainActivity extends PBase {
 
                             //execws(7);
 
-                        }else
-                        {
-                            progress.cancel();
-                            mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
-                        }
+                            }else
+                            {
+                                progress.cancel();
+                                mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
+                            }
 
-                        }else
-                        {
+                        }else                         {
                             progress.cancel();
                             mu.msgbox("Ingrese clave");
                         }
@@ -668,8 +608,7 @@ public class MainActivity extends PBase {
                     progress.cancel();
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
-            }else
-            {
+            }else  {
                 progress.cancel();
                 mu.msgbox("No se ha seleccionado una empresa válida");
             }
@@ -712,8 +651,7 @@ public class MainActivity extends PBase {
 
     }
 
-    public String getLocalBluetoothName()
-    {
+    public String getLocalBluetoothName() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null)
         {
@@ -725,8 +663,7 @@ public class MainActivity extends PBase {
     }
 
     @SuppressLint("MissingPermission")
-    private String androidid()
-    {
+    private String androidid()  {
         String uniqueID="";
         try {
             uniqueID = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -1002,12 +939,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    //endregion
-
-    //region Aux
-
-    private void getURL()
-    {
+    private void getURL()     {
 
         gl.wsurl = "http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
 
@@ -1047,14 +979,12 @@ public class MainActivity extends PBase {
         progress.show();
     }
 
-    private void execws(int callbackvalue)
-    {
+    private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
     }
 
-    protected void onResume()
-    {
+    protected void onResume() {
         try
         {
             Load();
@@ -1064,4 +994,51 @@ public class MainActivity extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
+
+    public class WebServiceHandler extends WebService  {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try
+            {
+                switch (ws.callback)
+                {
+                    case 1:
+                        callMethod("Android_Get_All_Empresas");
+                        break;
+                    case 2:
+                        callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);
+                        break;
+                    case 3:
+                        callMethod("Get_All_Impresora_By_IdEmpresa_And_IdBodega_Dt",
+                                "IdEmpresa",idemp,"IdBodega",idbodega);
+                        break;
+                    case 4:
+                        callMethod("Get_Operadores_By_IdBodega_For_HH","IdBodega",idbodega);
+                        break;
+                    case 5:
+                        callMethod("Get_cantidad_decimales_calculo","pIdEmpresa",gl.IdEmpresa);
+                        break;
+                    case 6:
+                        callMethod("Get_Cantidad_decimales_despliegue","pIdEmpresa",gl.IdEmpresa);
+                        break;
+                    case 7:
+                        //#CKFK 20200416
+                        //En el paramétro pIdDispositivo debe enviarse el Id del dispositivo en base al gl.deviceId
+                        //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
+                        callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
+                        break;
+                }
+            } catch (Exception e)
+            {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
 }

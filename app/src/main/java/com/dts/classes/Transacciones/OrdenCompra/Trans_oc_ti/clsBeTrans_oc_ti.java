@@ -13,13 +13,13 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public String User_mod;
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
-
+    @Element(required=false) public boolean Control_Poliza=false;
 
     public clsBeTrans_oc_ti() {
     }
 
     public clsBeTrans_oc_ti(int IdTipoIngresoOC,String Nombre,boolean Es_devolucion,String User_agr,
-                            String Fec_agr,String User_mod,String Fec_mod,boolean Activo
+                            String Fec_agr,String User_mod,String Fec_mod,boolean Activo,boolean Control_Poliza
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -30,7 +30,7 @@ public class clsBeTrans_oc_ti {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
-
+        this.Control_Poliza=Control_Poliza;
     }
 
 
@@ -82,6 +82,11 @@ public class clsBeTrans_oc_ti {
     public void setActivo(boolean value) {
         Activo=value;
     }
-
+    public boolean getControl_Poliza() {
+        return Control_Poliza;
+    }
+    public void setControl_Poliza(boolean value) {
+        Control_Poliza=value;
+    }
 }
 

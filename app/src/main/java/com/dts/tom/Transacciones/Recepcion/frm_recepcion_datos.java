@@ -84,7 +84,7 @@ public class frm_recepcion_datos extends PBase {
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate;
-    private CheckBox chkPaletizar;
+    private CheckBox chkPaletizar, chkPalletNoEstandar;
     private Dialog dialog;
 
     //Objeto para dialogo de parametros
@@ -203,6 +203,7 @@ public class frm_recepcion_datos extends PBase {
         imgDate = (ImageView)findViewById(R.id.imgDate);
 
         chkPaletizar = (CheckBox)findViewById(R.id.chkPaletizar);
+        chkPalletNoEstandar = (CheckBox)findViewById(R.id.chkPalletNoEstandar);
 
         btnBack = (Button)findViewById(R.id.btnBack);
         btnIr = (Button)findViewById(R.id.btnIr);
@@ -239,6 +240,10 @@ public class frm_recepcion_datos extends PBase {
 
     public void ChangeDate(View view){
         showDialog(DATE_DIALOG_ID);
+    }
+
+    public void Imprimir(View view){
+        msgAskImprimir("Imprimir Licencia");
     }
 
     @Override
@@ -336,6 +341,12 @@ public class frm_recepcion_datos extends PBase {
                     }else{
                         chkPaletizar.setVisibility(View.GONE);
                     }
+
+                    /*if (EsPallet){
+                        chkPalletNoEstandar.setVisibility(View.VISIBLE);
+                    }else{
+                        chkPalletNoEstandar.setVisibility(View.GONE);
+                    }*/
 
                 }
 
@@ -807,7 +818,12 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                txtLicPlate.setText(pNumeroLP);
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtBarra.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                }else{
+                    txtLicPlate.setText(pNumeroLP);
+                }
             }else{
                 lblLicPlate.setVisibility(View.GONE);
                 txtLicPlate.setFocusable(false);
@@ -1704,7 +1720,6 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-
     private void msgContinuarTemp(String msg) {
 
         try{
@@ -1846,9 +1861,8 @@ public class frm_recepcion_datos extends PBase {
 
                     Escaneo_Pallet_Interno = true;
 
+                    //Llama al método del WS Existe_Lp
                     execws(24);
-
-
                 }
             }
 
@@ -3021,8 +3035,7 @@ public class frm_recepcion_datos extends PBase {
 
                 pListBeStockRec.items.get(pIndiceListaStock).Atributo_Variante_1 = "";
                 pListBeStockRec.items.get(pIndiceListaStock).No_linea = pLineaOC;
-
-
+                pListBeStockRec.items.get(pIndiceListaStock).Pallet_No_Estandar = false;
             }
 
         }catch (Exception e){
@@ -3470,6 +3483,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Nombre_unidad_medida = BeProducto.UnidadMedida.Nombre;
                 BeTransReDet.Codigo_Producto = BeProducto.Codigo;
 
+                //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+                BeTransReDet.Pallet_No_Estandar=(chkPalletNoEstandar.isChecked()?true:false);
+
                 BeTransReDet.ProductoEstado = new clsBeProducto_estado();
 
                 if (IdEstadoSelect>0) {
@@ -3547,7 +3563,6 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-
             if (BeProducto!=null){
                 BeTransReDet = new clsBeTrans_re_det();
                 BeTransReDet = pListTransRecDet.items.get(0);
@@ -3600,6 +3615,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.IsNew = true;
                 BeTransReDet.User_agr = gl.IdOperador+"";
                 BeTransReDet.Fec_agr = String.valueOf(du.getFechaActual());
+
+                //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+                BeTransReDet.Pallet_No_Estandar=(chkPalletNoEstandar.isChecked()?true:false);
 
                 BeTransReDet.MotivoDevolucion = new clsBeMotivo_devolucion();
 
@@ -3778,9 +3796,6 @@ public class frm_recepcion_datos extends PBase {
                     listaStock.items =stream(pListBeStockRec.items).where(c->c.IdProductoBodega == BeTransReDet.IdProductoBodega  &&
                             c.IdRecepcionDet == pIdRecepcionDet
                             && c.IdUnidadMedida == BeTransReDet.IdUnidadMedida).toList();
-
-
-
                 }
 
                 if (stream(listaStock.items).count()==0){
@@ -3909,6 +3924,9 @@ public class frm_recepcion_datos extends PBase {
 
             BeStockRec.ProductoValidado = true;
             BeStockRec.No_linea = pLineaOC;
+
+            //#CKFK 20201228 Agregué la funcionalidad de poder determinar si el pallet es o no estandar
+            BeStockRec.Pallet_No_Estandar = (chkPalletNoEstandar.isChecked()?true:false);
 
             if (Escaneo_Pallet){
                 BeStockRec.Lic_plate = BeINavBarraPallet.Codigo_barra;
@@ -4412,9 +4430,12 @@ public class frm_recepcion_datos extends PBase {
                         //Guardar_Recepcion_Nueva
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                "pListStockRecSer",pListBeStockSeRec.items,"pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",listaProdPalletsNuevos.items,"pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador);
+                                "pListStockRecSer",pListBeStockSeRec.items,
+                                "pListStockRec",pListBeStockRec.items,
+                                "pListProductoPallet",listaProdPalletsNuevos.items,
+                                "pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUsuario",gl.IdOperador);
                         break;
                     case 17 :
                         //Guardar_Recepcion_Edita
@@ -4698,7 +4719,12 @@ public class frm_recepcion_datos extends PBase {
             pNumeroLP = xobj.getresult(String.class,"Get_Nuevo_Correlativo_LicensePlate");
 
             if (gl.mode==1){
-                txtLicPlate.setText(pNumeroLP);
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtBarra.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                }else{
+                    txtLicPlate.setText(pNumeroLP);
+                }
             }
 
         }catch (Exception e){
@@ -4839,7 +4865,11 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-            vBeStockRec.Lic_plate = xobj.getresult(String.class,"Get_Nuevo_Correlativo_LicensePlate_S");
+            if (!txtBarra.getText().toString().isEmpty()){
+                vBeStockRec.Lic_plate = txtBarra.getText().toString();
+            }else {
+                vBeStockRec.Lic_plate = xobj.getresult(String.class, "Get_Nuevo_Correlativo_LicensePlate_S");
+            }
 
             Terminar_Guardar_Detalle_Recepcion_Nueva();
 
@@ -5005,6 +5035,34 @@ public class frm_recepcion_datos extends PBase {
                     txtBarra.setSelectAllOnFocus(true);
                     txtBarra.requestFocus();
                 }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskImprimir(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {                }
             });
 
             dialog.show();

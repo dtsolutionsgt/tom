@@ -50,7 +50,7 @@ public class clsBeStock_rec {
     @Element(required=false) public double CantidadEnStock=0;
     @Element(required=false) public double PesoEnStock=0;
     @Element(required=false) public double Cantidad_Nav=0;
-
+    @Element(required=false) public boolean Pallet_No_Estandar= false;
 
     public clsBeStock_rec() {
     }
@@ -65,7 +65,7 @@ public class clsBeStock_rec {
                           boolean Activo,double Peso,double Temperatura,boolean Regularizado,
                           String Fecha_regularizacion,int No_linea,String Atributo_Variante_1,boolean IsNew,
                           boolean ProductoValidado,clsBeProducto_Presentacion Presentacion,clsBeProducto_estado ProductoEstado,double CantidadEnStock,
-                          double PesoEnStock,double Cantidad_Nav) {
+                          double PesoEnStock,double Cantidad_Nav, boolean Pallet_No_Estandar) {
 
         this.IdBodega=IdBodega;
         this.IdStockRec=IdStockRec;
@@ -109,6 +109,7 @@ public class clsBeStock_rec {
         this.CantidadEnStock=CantidadEnStock;
         this.PesoEnStock=PesoEnStock;
         this.Cantidad_Nav=Cantidad_Nav;
+        this.Pallet_No_Estandar=Pallet_No_Estandar;
 
     }
 
@@ -365,6 +366,11 @@ public class clsBeStock_rec {
     public void setCantidad_Nav(double value) {
         Cantidad_Nav=value;
     }
-
+    public boolean getPallet_No_Estandar() {
+        return Pallet_No_Estandar;
+    }
+    public void setPallet_No_Estandar(boolean value) {
+        Pallet_No_Estandar=value;
+    }
 }
 

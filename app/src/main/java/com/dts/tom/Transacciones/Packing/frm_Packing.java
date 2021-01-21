@@ -324,7 +324,7 @@ public class frm_Packing extends PBase {
 
                 int vLengthBarra = txtPrd.getText().toString().length();
 
-                if (vLengthBarra >= 16) {
+                if (vLengthBarra > 0) {
 
                     Escaneo_Pallet = true;
 

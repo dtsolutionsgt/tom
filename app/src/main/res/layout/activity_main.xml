@@ -77,7 +77,7 @@
             android:layout_centerVertical="false"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="24dp"
-            android:text="Versión 1.0.0  "
+            android:text="Versión 1.0.1"
             android:textColor="#FFFFFF" />
 
         <ImageView
@@ -123,7 +123,7 @@
             android:layout_centerVertical="false"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="4dp"
-            android:text="01-Ene-2020"
+            android:text="29-Dic-2020"
             android:textColor="#FFFFFF" />
     </RelativeLayout>
 

@@ -2,6 +2,7 @@ package com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc;
 
 import com.dts.classes.Mantenimientos.Cliente.clsBeCliente.clsBeCliente;
 import com.dts.classes.Mantenimientos.Propietario.Propietario_bodega.clsBePropietario_bodega;
+import com.dts.classes.Transacciones.Pedido.Trasn_pe_pol.clsBeTrans_pe_pol;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_det.clsBeTrans_pe_detList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
@@ -74,6 +75,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
     @Element(required=false) public String Serie="";
     @Element(required=false) public int Correlativo=0;
+    @Element(required=false) public clsBeTrans_pe_pol ObjPoliza= new clsBeTrans_pe_pol();
 
 
     public clsBeTrans_pe_enc() {
@@ -94,7 +96,7 @@ public class clsBeTrans_pe_enc {
                              boolean PedidoRoad,String HoraEntregaDesde,String HoraEntregaHasta,String Referencia,
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
-                             boolean Control_Ultimo_Lote,String Serie,int Correlativo) {
+                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -160,6 +162,7 @@ public class clsBeTrans_pe_enc {
         this.Control_Ultimo_Lote=Control_Ultimo_Lote;
         this.Serie=Serie;
         this.Correlativo=Correlativo;
+        this.ObjPoliza=ObjPoliza;
 
     }
 
@@ -547,6 +550,12 @@ public class clsBeTrans_pe_enc {
     }
     public void setCorrelativo(int value) {
         Correlativo=value;
+    }
+    public clsBeTrans_pe_pol getObjPoliza() {
+        return ObjPoliza;
+    }
+    public void setPicking(clsBeTrans_pe_pol value) {
+        ObjPoliza=value;
     }
 
 }

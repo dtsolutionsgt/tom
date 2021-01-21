@@ -56,6 +56,7 @@ dependencies {
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
     //compileOnly 'com.google.android.wearable:wearable:2.6.0'
     //implementation 'br.com.zbra:android-linq:1.1.0'
+    //implementation 'com.github.zbra-solutions:android-linq:1.1.0'
     //compile 'br.com.zbra:android-linq:1.1.0'
 
 }

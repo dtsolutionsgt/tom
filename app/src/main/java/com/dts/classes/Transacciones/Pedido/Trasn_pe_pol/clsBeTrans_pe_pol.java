@@ -1,69 +1,69 @@
-package com.dts.classes.Transacciones.OrdenCompra.Trans_oc_pol;
-
+package com.dts.classes.Transacciones.Pedido.Trasn_pe_pol;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeTrans_oc_pol {
+public class clsBeTrans_pe_pol {
 
-    @Element(required=false) public int IdOrdenCompraPol;
-    @Element(required=false) public int IdOrdenCompraEnc;
-    @Element(required=false) public int IdRegimen;
-    @Element(required=false) public String Bl_No;
-    @Element(required=false) public String NoPoliza;
-    @Element(required=false) public String Pto_Descarga;
-    @Element(required=false) public String Viaje_no;
-    @Element(required=false) public String Buque_no;
-    @Element(required=false) public String Remitente;
-    @Element(required=false) public String Fecha_abordaje;
-    @Element(required=false) public String Destino;
-    @Element(required=false) public String Dir_destino;
-    @Element(required=false) public String Descripcion;
-    @Element(required=false) public String Po_number;
-    @Element(required=false) public int Cantidad;
-    @Element(required=false) public int Piezas;
-    @Element(required=false) public double Total_kgs;
-    @Element(required=false) public double Cbm;
-    @Element(required=false) public String Dua;
-    @Element(required=false) public String Fecha_poliza;
-    @Element(required=false) public String Pais_procede;
-    @Element(required=false) public double Tipo_cambio;
-    @Element(required=false) public double Total_valoraduana;
-    @Element(required=false) public int Total_lineas;
-    @Element(required=false) public int Total_bultos;
-    @Element(required=false) public double Total_bultos_peso;
-    @Element(required=false) public double Total_bultos_Peso_Neto;
-    @Element(required=false) public double Total_bultos_Peso_Bruto;
-    @Element(required=false) public double Total_usd;
-    @Element(required=false) public double Total_flete;
-    @Element(required=false) public double Total_seguro;
-    @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
-    @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
-    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public int IdOrdenPedidoPol=0;
+    @Element(required=false) public int IdOrdenPedidoEnc=0;
+    @Element(required=false) public String Bl_No="";
+    @Element(required=false) public String NoPoliza="";
+    @Element(required=false) public String Pto_Descarga="";
+    @Element(required=false) public String Viaje_no="";
+    @Element(required=false) public String Buque_no="";
+    @Element(required=false) public String Remitente="";
+    @Element(required=false) public String Fecha_abordaje="";
+    @Element(required=false) public String Destino="";
+    @Element(required=false) public String Dir_destino="";
+    @Element(required=false) public String Descripcion="";
+    @Element(required=false) public String Po_number="";
+    @Element(required=false) public int Cantidad=0;
+    @Element(required=false) public int Piezas=0;
+    @Element(required=false) public double Total_kgs=0;
+    @Element(required=false) public double Cbm=0;
+    @Element(required=false) public String Dua="";
+    @Element(required=false) public String Fecha_poliza="";
+    @Element(required=false) public String Pais_procede="";
+    @Element(required=false) public double Tipo_cambio=0;
+    @Element(required=false) public double Total_valoraduana=0;
+    @Element(required=false) public int Total_lineas=0;
+    @Element(required=false) public int Total_bultos=0;
+    @Element(required=false) public double Total_bultos_Peso_Bruto=0;
+    @Element(required=false) public double Total_bultos_Peso_Neto=0;
+    @Element(required=false) public double Total_usd=0;
+    @Element(required=false) public double Total_flete=0;
+    @Element(required=false) public double Total_seguro=0;
+    @Element(required=false) public String User_agr="";
+    @Element(required=false) public String Fec_agr="";
+    @Element(required=false) public String User_mod="";
+    @Element(required=false) public String Fec_mod="";
     @Element(required=false) public String codigo_poliza="";
     @Element(required=false) public String ticket="";
     @Element(required=false) public String numero_orden="";
-    @Element(required=false) public String fecha_aceptacion="1900-01-01T00:00:01";
-    @Element(required=false) public String fecha_llegada="1900-01-01T00:00:01";
+    @Element(required=false) public String fecha_aceptacion="";
+    @Element(required=false) public String fecha_llegada="";
     @Element(required=false) public double total_otros=0;
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public int IdRegimen=0;
 
-    public clsBeTrans_oc_pol() {
+
+    public clsBeTrans_pe_pol() {
     }
 
-    public clsBeTrans_oc_pol(int IdOrdenCompraPol,int IdOrdenCompraEnc,String Bl_No,String NoPoliza,
+    public clsBeTrans_pe_pol(int IdOrdenPedidoPol,int IdOrdenPedidoEnc,String Bl_No,String NoPoliza,
                              String Pto_Descarga,String Viaje_no,String Buque_no,String Remitente,
                              String Fecha_abordaje,String Destino,String Dir_destino,String Descripcion,
                              String Po_number,int Cantidad,int Piezas,double Total_kgs,
                              double Cbm,String Dua,String Fecha_poliza,String Pais_procede,
                              double Tipo_cambio,double Total_valoraduana,int Total_lineas,int Total_bultos,
-                             double Total_bultos_peso,double Total_usd,double Total_flete,double Total_seguro,
-                             String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew,
-                             String codigo_poliza,String ticket,String numero_orden,String fecha_aceptacion,
-                             String fecha_llegada,double total_otros, double Total_bultos_Peso_Neto) {
+                             double Total_bultos_Peso_Bruto,double Total_bultos_Peso_Neto,double Total_usd,double Total_flete,
+                             double Total_seguro,String User_agr,String Fec_agr,String User_mod,
+                             String Fec_mod,String codigo_poliza,String ticket,String numero_orden,
+                             String fecha_aceptacion,String fecha_llegada,double total_otros,boolean IsNew,
+                             int IdRegimen) {
 
-        this.IdOrdenCompraPol=IdOrdenCompraPol;
-        this.IdOrdenCompraEnc=IdOrdenCompraEnc;
+        this.IdOrdenPedidoPol=IdOrdenPedidoPol;
+        this.IdOrdenPedidoEnc=IdOrdenPedidoEnc;
         this.Bl_No=Bl_No;
         this.NoPoliza=NoPoliza;
         this.Pto_Descarga=Pto_Descarga;
@@ -86,7 +86,8 @@ public class clsBeTrans_oc_pol {
         this.Total_valoraduana=Total_valoraduana;
         this.Total_lineas=Total_lineas;
         this.Total_bultos=Total_bultos;
-        this.Total_bultos_peso=Total_bultos_peso;
+        this.Total_bultos_Peso_Bruto=Total_bultos_Peso_Bruto;
+        this.Total_bultos_Peso_Neto=Total_bultos_Peso_Neto;
         this.Total_usd=Total_usd;
         this.Total_flete=Total_flete;
         this.Total_seguro=Total_seguro;
@@ -94,28 +95,29 @@ public class clsBeTrans_oc_pol {
         this.Fec_agr=Fec_agr;
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
-        this.IsNew=IsNew;
         this.codigo_poliza=codigo_poliza;
         this.ticket=ticket;
         this.numero_orden=numero_orden;
         this.fecha_aceptacion=fecha_aceptacion;
         this.fecha_llegada=fecha_llegada;
         this.total_otros=total_otros;
-        this.Total_bultos_Peso_Neto = Total_bultos_Peso_Neto;
+        this.IsNew=IsNew;
+        this.IdRegimen=IdRegimen;
+
     }
 
 
-    public int getIdOrdenCompraPol() {
-        return IdOrdenCompraPol;
+    public int getIdOrdenPedidoPol() {
+        return IdOrdenPedidoPol;
     }
-    public void setIdOrdenCompraPol(int value) {
-        IdOrdenCompraPol=value;
+    public void setIdOrdenPedidoPol(int value) {
+        IdOrdenPedidoPol=value;
     }
-    public int getIdOrdenCompraEnc() {
-        return IdOrdenCompraEnc;
+    public int getIdOrdenPedidoEnc() {
+        return IdOrdenPedidoEnc;
     }
-    public void setIdOrdenCompraEnc(int value) {
-        IdOrdenCompraEnc=value;
+    public void setIdOrdenPedidoEnc(int value) {
+        IdOrdenPedidoEnc=value;
     }
     public String getBl_No() {
         return Bl_No;
@@ -249,11 +251,17 @@ public class clsBeTrans_oc_pol {
     public void setTotal_bultos(int value) {
         Total_bultos=value;
     }
-    public double getTotal_bultos_peso() {
-        return Total_bultos_peso;
+    public double getTotal_bultos_Peso_Bruto() {
+        return Total_bultos_Peso_Bruto;
     }
-    public void setTotal_bultos_peso(double value) {
-        Total_bultos_peso=value;
+    public void setTotal_bultos_Peso_Bruto(double value) {
+        Total_bultos_Peso_Bruto=value;
+    }
+    public double getTotal_bultos_Peso_Neto() {
+        return Total_bultos_Peso_Neto;
+    }
+    public void setTotal_bultos_Peso_Neto(double value) {
+        Total_bultos_Peso_Neto=value;
     }
     public double getTotal_usd() {
         return Total_usd;
@@ -297,12 +305,6 @@ public class clsBeTrans_oc_pol {
     public void setFec_mod(String value) {
         Fec_mod=value;
     }
-    public boolean getIsNew() {
-        return IsNew;
-    }
-    public void setIsNew(boolean value) {
-        IsNew=value;
-    }
     public String getcodigo_poliza() {
         return codigo_poliza;
     }
@@ -339,17 +341,11 @@ public class clsBeTrans_oc_pol {
     public void settotal_otros(double value) {
         total_otros=value;
     }
-    public double getTotal_bultos_Peso_Neto() {
-        return Total_bultos_Peso_Neto;
+    public boolean getIsNew() {
+        return IsNew;
     }
-    public void setTotal_bultos_Peso_Neto(double value) {
-        Total_bultos_Peso_Neto=value;
-    }
-    public double getTotal_bultos_Peso_Bruto() {
-        return Total_bultos_Peso_Bruto;
-    }
-    public void setTotal_bultos_Peso_Bruto(double value) {
-        Total_bultos_Peso_Bruto=value;
+    public void setIsNew(boolean value) {
+        IsNew=value;
     }
     public int getIdRegimen() {
         return IdRegimen;

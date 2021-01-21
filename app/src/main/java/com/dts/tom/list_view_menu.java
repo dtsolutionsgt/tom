@@ -76,6 +76,7 @@ public class list_view_menu extends BaseAdapter {
         if (items.get(position).Icon==7) holder.imgEst.setImageResource(R.drawable.existencias);
         if (items.get(position).Icon==8) holder.imgEst.setImageResource(R.drawable.rastreo);
         if (items.get(position).Icon==9) holder.imgEst.setImageResource(R.drawable.operador);
+        if (items.get(position).Icon==10) holder.imgEst.setImageResource(R.drawable.tools);
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
