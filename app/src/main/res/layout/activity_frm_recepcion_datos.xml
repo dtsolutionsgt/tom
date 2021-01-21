@@ -262,7 +262,7 @@
                         android:id="@+id/txtPeso"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                     <TextView
                         android:id="@+id/textView86"
@@ -276,7 +276,7 @@
                         android:id="@+id/txtPesoUnitario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
 
@@ -303,7 +303,7 @@
                         android:id="@+id/txtCostoReal"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                     <TextView
                         android:id="@+id/textView88"
@@ -316,7 +316,7 @@
                         android:id="@+id/txtCostoOC"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
 
