@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -56,6 +57,9 @@ import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -239,7 +243,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void Imprimir(View view){
-        msgAskImprimir("Está seguro de imprimir");
+        msgAskImprimir("Imprimir Licencia");
     }
 
     @Override
@@ -1007,7 +1011,7 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Peso_recepcion){
 
                 txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
-                txtPesoReal.setText(BeProducto.Peso_tolerancia+"");
+                txtPesoReal.setText(txtPeso.getText()+"");
 
                 if (BeProducto.Presentaciones.items!=null){
 
@@ -3223,18 +3227,9 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.IdImpresora>0){
 
-                if (BeTransReDet.Presentacion.EsPallet){
+                progress.cancel();
 
-                    //ImprimirBarra
-                    progress.cancel();
-
-                }else{
-                    if (BeTransReDet.Presentacion.Imprime_barra){
-                        progress.cancel();
-                        //ImprimirBarra
-
-                    }
-                }
+                msgAskImprimir("Seleccione una opción para imprimir");
 
             }
 
@@ -3258,6 +3253,134 @@ public class frm_recepcion_datos extends PBase {
             mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
         }
 
+    }
+
+    private void msgAskImprimir(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Barra();
+                }
+            });
+
+            dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Licencia();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+
+    private void Imprimir_Licencia(){
+        try{
+
+            //CM_20210112: Impresión de barras.
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+            printerIns.open();
+
+            if (printerIns.isConnected()){
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+
+                String zpl = String.format("^XA \n" +
+                                "^MMT \n" +
+                                "^PW700 \n" +
+                                "^LL0406 \n" +
+                                "^LS0 \n" +
+                                "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                "^FO2,340^GB670,0,14^FS \n" +
+                                "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                "^FD%4$s^FS \n" +
+                                "^PQ1,0,1,Y " +
+                                "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                        BeProducto.Codigo+" - "+BeProducto.Nombre,
+                        "$"+pNumeroLP);
+
+                zPrinterIns.sendCommand(zpl);
+
+
+                Thread.sleep(500);
+
+                // Close the connection to release resources.
+                printerIns.close();
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
+        }
+    }
+
+    private void Imprimir_Barra(){
+        try{
+
+                            //CM_20210112: Impresión de barras.
+                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+                printerIns.open();
+
+                if (printerIns.isConnected()){
+                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+
+                    String zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            (pNumeroLP!="")?"$"+pNumeroLP:BeProducto.Codigo);
+
+                    zPrinterIns.sendCommand(zpl);
+
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("No se pudo obtener conexión con la impresora");
+                }
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
+        }
     }
 
     double Factor=0;
@@ -3295,6 +3418,9 @@ public class frm_recepcion_datos extends PBase {
                     clsBeProducto_Presentacion bePresentacion = new clsBeProducto_Presentacion();
 
                     bePresentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).first();
+
+
+                    BeTransReDet.Presentacion = bePresentacion;
 
                     if(!bePresentacion.EsPallet){
                         Factor = bePresentacion.Factor;
@@ -4919,33 +5045,33 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void msgAskImprimir(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
-
-            dialog.setCancelable(false);
-
-            dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {                }
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
-    }
+//    private void msgAskImprimir(String msg) {
+//        try{
+//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+//
+//            dialog.setTitle(R.string.app_name);
+//            dialog.setMessage("¿" + msg + "?");
+//
+//            dialog.setCancelable(false);
+//
+//            dialog.setIcon(R.drawable.ic_quest);
+//
+//            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                }
+//            });
+//
+//            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {                }
+//            });
+//
+//            dialog.show();
+//
+//        }catch (Exception e){
+//            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+//        }
+//
+//    }
 
     private void doExit(){
         try{

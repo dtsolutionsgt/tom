@@ -1,16 +1,25 @@
 package com.dts.tom.Transacciones.ConsultaStock;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 public class frm_consulta_stock_detalleCI extends PBase {
 
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
+
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +92,157 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
         }
 
+    }
+
+    public void printBarras(View view){
+        msgAskImprimir("Seleccione una opción para imprimir");
+    }
+
+    private void Imprimir_Barra(){
+        try{
+
+            if (gl.existencia.Codigo!=0){
+                //CM_20210112: Impresión de barras.
+                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+                printerIns.open();
+
+                if (printerIns.isConnected()){
+                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+
+                    String zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+                            gl.existencia.Codigo+"");
+
+                    zPrinterIns.sendCommand(zpl);
+
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("No se pudo obtener conexión con la impresora");
+                }
+
+
+            }else{
+                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
+        }
+    }
+
+    private void Imprimir_Licencia(){
+        try{
+
+            if (gl.existencia.Codigo!=0){
+                //CM_20210112: Impresión de barras.
+                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+                printerIns.open();
+
+                if (printerIns.isConnected()){
+                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
+                    String zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+                            (gl.existencia.LicPlate !="" )?gl.existencia.LicPlate:gl.existencia.Codigo+"");
+
+                    zPrinterIns.sendCommand(zpl);
+
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("No se pudo obtener conexión con la impresora");
+                }
+
+
+            }else{
+                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("Imprimir_barra: "+e.getMessage());
+        }
+    }
+
+    private void msgAskImprimir(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg );
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Barra();
+                }
+            });
+
+            dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprimir_Licencia();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void ProgressDialog(String mensaje) {
+        progress = new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     public void Backto(View view) {

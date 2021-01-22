@@ -48,8 +48,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblTituloForma,lblUbicCompDestino;
+    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
 
@@ -132,7 +132,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private String vNuevoPalletId;
     private String pLicensePlate;
 
-    private double vCantidadAUbicar, vCantidadDisponible;
+    private double vCantidadAUbicar, vCantidadDisponible, vPesoAUbicar, vPesoDisponible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +150,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtCantidad = (EditText) findViewById(R.id.txtCantidad);
             txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
             txtLicPlate = (EditText)findViewById(R.id.txtLipPlate);
+            txtPeso = (EditText) findViewById(R.id.txtPeso);
 
             lblUbicCompleta = (TextView) findViewById(R.id.lblUbicCompleta);
             lblDescProducto = (TextView) findViewById(R.id.lblDescProducto);
@@ -157,6 +158,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblVence = (TextView) findViewById(R.id.lblVence);
             lblEstadoDestino = (TextView) findViewById(R.id.lblEstadoDestino);
             lblCant = (TextView) findViewById(R.id.lblCant);
+            lblPesoEst = (TextView) findViewById(R.id.lblPesoEst);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
 
@@ -479,6 +481,31 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             try {
 
                                 String Cantwithformat =txtCantidad.getText().toString();
+                                Cantwithformat = Cantwithformat.replace(",","");
+
+                                if(Double.valueOf(Cantwithformat)>0) {
+                                    txtPeso.requestFocus();
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                }
+                return false;
+            }
+        });
+
+        txtPeso.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+
+                            try {
+
+                                String Cantwithformat =txtPeso.getText().toString();
                                 Cantwithformat = Cantwithformat.replace(",","");
 
                                 if(Double.valueOf(Cantwithformat)>0) {
@@ -868,6 +895,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 execws(18);
 
+                progress.cancel();
 
             }
 
@@ -875,6 +903,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
             msgbox("Error " + ex.getMessage());
         }
+        progress.cancel();
     }
 
     private void llenaDatosProducto() {
@@ -1062,6 +1091,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvStockID = tmpStockResList.items.get(0).getIdStock();
                 vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
                 vFactorPres = (tmpStockResList.items.get(0).getFactor()==0?1:tmpStockResList.items.get(0).getFactor());
+                vPesoAUbicar = tmpStockResList.items.get(0).getPeso();
             }else{
                 vCantidadAUbicar = 0;
                 cvStockID =0;
@@ -1088,11 +1118,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
                 lblCant.setText(mu.frmdecimal(vCantidadDisponible, gl.gCantDecDespliegue));
                 txtCantidad.setText(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue));
+                txtPeso.setText(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
                 txtCantidad.selectAll();
             }
 
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
+            txtPeso.setEnabled(true);
 
             txtCantidad.requestFocus();
 
@@ -2077,6 +2109,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicDestino.setText("");
             lblUbicCompDestino.setText("");
             txtCantidad.setText("");
+            txtPeso.setText("");
             txtCodigoPrd.setText("");
 
             cmbPresentacion.setEnabled(false);
@@ -2086,6 +2119,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
+            txtPeso.setEnabled(true);
             txtCodigoPrd.setEnabled(true);
             txtLicPlate.setEnabled(true);
 
@@ -2135,6 +2169,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblCant.setText("");
             txtUbicDestino.setText("");
             txtCantidad.setText("");
+            txtPeso.setText("");
             txtCodigoPrd.setText("");
 
             cmbPresentacion.setEnabled(false);
@@ -2144,6 +2179,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
+            txtPeso.setEnabled(true);
             txtCodigoPrd.setEnabled(true);
             txtLicPlate.setEnabled(true);
 
