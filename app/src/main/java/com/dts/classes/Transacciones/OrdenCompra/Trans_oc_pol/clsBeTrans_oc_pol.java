@@ -45,6 +45,15 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public String fecha_llegada="1900-01-01T00:00:01";
     @Element(required=false) public double total_otros=0;
 
+    @Element(required=false) public String clave_aduana="";
+    @Element(required=false) public String nit_imp_exp="";
+    @Element(required=false) public String clase="";
+    @Element(required=false) public String mod_transporte="";
+    @Element(required=false) public double total_liquidar=0.0;
+    @Element(required=false) public double total_general=0.0;
+
+
+
     public clsBeTrans_oc_pol() {
     }
 
@@ -57,7 +66,8 @@ public class clsBeTrans_oc_pol {
                              double Total_bultos_peso,double Total_usd,double Total_flete,double Total_seguro,
                              String User_agr,String Fec_agr,String User_mod,String Fec_mod,boolean IsNew,
                              String codigo_poliza,String ticket,String numero_orden,String fecha_aceptacion,
-                             String fecha_llegada,double total_otros) {
+                             String fecha_llegada,double total_otros,String clave_aduana, String nit_imp_exp,String clase,
+                             String mod_transporte,double total_liquidar,double total_general) {
 
         this.IdOrdenCompraPol=IdOrdenCompraPol;
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
@@ -98,6 +108,14 @@ public class clsBeTrans_oc_pol {
         this.fecha_aceptacion=fecha_aceptacion;
         this.fecha_llegada=fecha_llegada;
         this.total_otros=total_otros;
+
+        this.clave_aduana=clave_aduana;
+        this.nit_imp_exp=nit_imp_exp;
+        this.clase=clase;
+        this.mod_transporte=mod_transporte;
+        this.total_liquidar=total_liquidar;
+        this.total_general=total_general;
+
     }
 
 
@@ -334,6 +352,48 @@ public class clsBeTrans_oc_pol {
     }
     public void settotal_otros(double value) {
         total_otros=value;
+    }
+
+    public String getclave_aduana() {
+        return clave_aduana;
+    }
+    public void setclave_aduana(String value) {
+        clave_aduana=value;
+    }
+
+    public String getnit_imp_exp() {
+        return nit_imp_exp;
+    }
+    public void setnit_imp_exp(String value) {
+        nit_imp_exp=value;
+    }
+
+    public String getclase() {
+        return clase;
+    }
+    public void setclase(String value) {
+        clase=value;
+    }
+
+    public String getmod_transporte() {
+        return mod_transporte;
+    }
+    public void setmod_transporte(String value) {
+        mod_transporte=value;
+    }
+
+    public double gettotal_liquidar() {
+        return total_liquidar;
+    }
+    public void settotal_liquidar(double value) {
+        total_liquidar=value;
+    }
+
+    public double gettotal_general() {
+        return total_general;
+    }
+    public void settotal_general(double value) {
+        total_general=value;
     }
 }
 
