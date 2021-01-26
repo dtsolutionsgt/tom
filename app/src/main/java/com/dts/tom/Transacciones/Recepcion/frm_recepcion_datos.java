@@ -3233,8 +3233,20 @@ public class frm_recepcion_datos extends PBase {
 
                 msgAskImprimir("Seleccione una opción para imprimir");
 
+            }else{
+                Actualiza_Valores_Despues_Imprimir();
             }
 
+        }catch (Exception e){
+            mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
+        }
+
+    }
+
+    private void Actualiza_Valores_Despues_Imprimir(){
+        try{
+
+            //CM_20210125: Actualiza valores de la OC después imprimir
             switch (gl.TipoOpcion){
 
                 case 1:
@@ -3252,18 +3264,16 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception e){
-            mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
+            mu.msgbox(e.getMessage());
         }
-
     }
-
     //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage( msg);
 
             dialog.setCancelable(false);
 
@@ -3333,6 +3343,9 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
 
+
+            Actualiza_Valores_Despues_Imprimir();
+
         }catch (Exception e){
             mu.msgbox("Imprimir_barra: "+e.getMessage());
         }
@@ -3380,6 +3393,8 @@ public class frm_recepcion_datos extends PBase {
                 }else{
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
+
+            Actualiza_Valores_Despues_Imprimir();
 
         }catch (Exception e){
             mu.msgbox("Imprimir_barra: "+e.getMessage());
