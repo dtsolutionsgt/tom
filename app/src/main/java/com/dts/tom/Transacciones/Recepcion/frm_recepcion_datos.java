@@ -3109,7 +3109,9 @@ public class frm_recepcion_datos extends PBase {
                             Continua_Llenando_Detalle_Recepcion_Nueva();
                         }*/
                 }
-            }
+            }else{
+                DespuesDeValidarCantidad();
+            };
 
         }catch (Exception ex){
 
