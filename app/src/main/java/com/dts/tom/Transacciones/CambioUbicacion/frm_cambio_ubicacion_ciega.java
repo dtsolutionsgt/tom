@@ -49,7 +49,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst,lblTituloForma,lblUbicCompDestino;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
 
@@ -159,6 +159,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblEstadoDestino = (TextView) findViewById(R.id.lblEstadoDestino);
             lblCant = (TextView) findViewById(R.id.lblCant);
             lblPesoEst = (TextView) findViewById(R.id.lblPesoEst);
+            lblPeso = (TextView) findViewById(R.id.lblPeso);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
 
@@ -1575,6 +1576,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 lblDescProducto.setText (BeProductoUbicacion.Nombre);
                 cvPropID = BeProductoUbicacion.IdPropietario;
                 cvUMBID = BeProductoUbicacion.IdUnidadMedidaBasica;
+
+                if (BeProductoUbicacion.getControl_peso()){
+                    txtPeso.setVisibility(View.VISIBLE);
+                    lblPeso.setVisibility(View.VISIBLE);
+                    lblPesoEst.setVisibility(View.VISIBLE);
+                }else{
+                    txtPeso.setVisibility(View.GONE);
+                    lblPeso.setVisibility(View.VISIBLE);
+                    lblPesoEst.setVisibility(View.VISIBLE);
+                }
 
                 //Llama al método del WS Get_Estados_By_IdPropietario
                 execws(10);

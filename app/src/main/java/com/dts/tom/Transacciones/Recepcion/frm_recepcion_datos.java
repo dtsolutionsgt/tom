@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -2579,8 +2578,6 @@ public class frm_recepcion_datos extends PBase {
                     +"Lote: "+BeINavBarraPallet.Lote +"\n"
                     +"¿El producto está completo y en buen estado?";
 
-
-
             msgValidaProductoPallet(vMensaje1);
 
         }catch (Exception e){
@@ -3192,6 +3189,8 @@ public class frm_recepcion_datos extends PBase {
                     gl.gBeRecepcion.DetalleParametros.items.add(I,RD);
                     I += 1;
                 }
+            }else{
+                DespuesDeValidarCantidad();
             }
 
             if (pListBeStockRec.items.size()==0){
@@ -3531,39 +3530,11 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                /*if (BeProducto.Control_vencimiento){
-
-                    if (cmbVenceRec.getText().toString().isEmpty()){
-                        mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
-                        return;
-                    }else{
-                        BeTransReDet.Fecha_vence =du.convierteFecha(cmbVenceRec.getText().toString().trim());
-                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
-
-                        String FechaVence=BeTransReDet.Fecha_vence;
-
-                        if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
-                            msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
-                        }else{
-                            Continua_Llenando_Detalle_Recepcion_Nueva();
-                        }
-
-                        //#CKFK 20200917 Puse esto en comentario porque la validación no se hacía correctamente
-                        //if (!Valida_Fecha_Vencimiento()){
-                        //    return;
-                        //}else{
-                        //    Continua_Llenando_Detalle_Recepcion_Nueva();
-                        //}
-                    }
-                }else{
-                    BeTransReDet.Fecha_vence = "";
-                    Continua_Llenando_Detalle_Recepcion_Nueva();
-                }*/
-
                 if (!BeProducto.Control_vencimiento){
                     BeTransReDet.Fecha_vence = "";
                 }
 
+                //Llamado 1
                 Continua_Llenando_Detalle_Recepcion_Nueva();
 
             }
@@ -3700,28 +3671,8 @@ public class frm_recepcion_datos extends PBase {
                     BeTransReDet.Fecha_vence = "";
                 }
 
+                //Llamado 2
                 Continua_Llenando_Detalle_Recepcion_Nueva();
-
-                //#CKFK 20200917 Lo puse en comentario porque hice la validación de la fecha de vencimiento antes de comenzar a Guardar
-                /*if (BeProducto.Control_vencimiento){
-
-                    if (cmbVenceRec.getText().toString().isEmpty()){
-                        mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
-                        return;
-                    }else{
-                        BeTransReDet.Fecha_vence =du.convierteFecha(cmbVenceRec.getText().toString().trim());
-                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
-                        if (!Valida_Fecha_Vencimiento()){
-                            return;
-                        }else{
-                            Continua_Llenando_Detalle_Recepcion_Nueva();
-                        }
-                    }
-
-                }else{
-                    BeTransReDet.Fecha_vence = "";
-                    Continua_Llenando_Detalle_Recepcion_Nueva();
-                }*/
 
             }
 
@@ -3818,6 +3769,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (stream(listaStock.items).count()==0){
                     mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                    return;
                 }
 
                 for( clsBeStock_rec BeStockRec : listaStock.items){
@@ -3841,7 +3793,10 @@ public class frm_recepcion_datos extends PBase {
                                 BeStockRecNuevaRec = BeStockRec;
                                 vCantNuevaRec = vCant;
                                 vFactorNuevaRec = Factor;
-                                execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                BeStockRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                /*execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                return;*/
                             }else{
                                 BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;//CInt(txtIdUbicacion.Text.Trim)
                             }
