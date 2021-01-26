@@ -364,5 +364,6 @@ public class clsBeTrans_oc_det {
     public void setPeso_Neto(double value) {
         Peso_Neto=value;
     }
+
 }
 
