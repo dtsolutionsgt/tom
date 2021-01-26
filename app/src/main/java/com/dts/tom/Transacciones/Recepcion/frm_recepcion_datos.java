@@ -3257,7 +3257,7 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros.
+    //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
