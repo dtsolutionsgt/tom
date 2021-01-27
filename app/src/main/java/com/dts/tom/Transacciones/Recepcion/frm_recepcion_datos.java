@@ -3182,7 +3182,7 @@ public class frm_recepcion_datos extends PBase {
                 gl.gBeRecepcion.DetalleParametros.items = plistBeReDetParametros.items;
             }
 
-            I = 0;
+             I = 0;
 
             if (plistBeReDetParametros.items!=null){
                 for  (clsBeTrans_re_det_parametros RD: plistBeReDetParametros.items){
