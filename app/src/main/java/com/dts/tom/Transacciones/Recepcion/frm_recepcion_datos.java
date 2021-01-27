@@ -3189,9 +3189,9 @@ public class frm_recepcion_datos extends PBase {
                     gl.gBeRecepcion.DetalleParametros.items.add(I,RD);
                     I += 1;
                 }
-            }else{
-                DespuesDeValidarCantidad();
-            }
+            }/*else{
+               DespuesDeValidarCantidad();
+            }*/
 
             if (pListBeStockRec.items.size()==0){
                 mu.msgbox("No se guardó el stock, no se puede continuar");
