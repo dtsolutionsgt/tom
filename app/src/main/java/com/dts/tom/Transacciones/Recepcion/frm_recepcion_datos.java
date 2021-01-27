@@ -3342,18 +3342,26 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
 
-
             Actualiza_Valores_Despues_Imprimir();
 
         }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.msgbox("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                Actualiza_Valores_Despues_Imprimir();
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
+
+
         }
     }
 
     private void Imprimir_Barra(){
+
         try{
 
-                            //CM_20210112: Impresión de barras.
+                //CM_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
                 printerIns.open();
 
