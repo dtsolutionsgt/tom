@@ -3190,7 +3190,8 @@ public class frm_recepcion_datos extends PBase {
                     I += 1;
                 }
             }else{
-                DespuesDeValidarCantidad();
+                //#EJC20210126: Este enloopa el proceso....
+                //DespuesDeValidarCantidad();
             }
 
             if (pListBeStockRec.items.size()==0){
@@ -3300,6 +3301,7 @@ public class frm_recepcion_datos extends PBase {
 
 
     private void Imprimir_Licencia(){
+
         try{
 
             //CM_20210112: Impresión de barras.
