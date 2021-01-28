@@ -510,7 +510,6 @@ public class frm_list_rec_prod extends PBase {
 
             });
 
-
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
                 @Override
@@ -536,7 +535,6 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             });
-
 
             txtCodigoProductoRecepcion.setOnKeyListener(new View.OnKeyListener() {
                 @Override

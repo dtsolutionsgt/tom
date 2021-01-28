@@ -3274,7 +3274,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
 
-            dialog.setCancelable(false);
+            dialog.setCancelable(true);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -3288,6 +3288,10 @@ public class frm_recepcion_datos extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     Imprimir_Licencia();
                 }
+            });
+
+            dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {}
             });
 
             dialog.show();
@@ -3390,7 +3394,6 @@ public class frm_recepcion_datos extends PBase {
                             (pNumeroLP!="")?"$"+pNumeroLP:BeProducto.Codigo);
 
                     zPrinterIns.sendCommand(zpl);
-
 
                     Thread.sleep(500);
 
