@@ -197,6 +197,23 @@
                     android:id="@+id/cmbPresRec"
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblEstiba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblEstiba"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Camas X Tarima - Cajas X Cama"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
             </TableRow>
 
             <TableRow

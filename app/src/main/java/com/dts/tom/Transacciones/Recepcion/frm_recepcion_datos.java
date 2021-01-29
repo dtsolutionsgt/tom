@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.DecimalDigitsInputFilter;
@@ -78,12 +79,13 @@ public class frm_recepcion_datos extends PBase {
 
     private Spinner cmbEstadoProductoRec,cmbPresRec;
     private EditText txtBarra,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
-    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence;
+    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba;
     private Button btnCantPendiente,btnCantRecibida,btnBack,btnIr;
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate;
     private CheckBox chkPaletizar, chkPalletNoEstandar;
+    private TableRow tblEstiba;
     private Dialog dialog;
 
     //Objeto para dialogo de parametros
@@ -193,6 +195,7 @@ public class frm_recepcion_datos extends PBase {
         lblVence = (TextView) findViewById(R.id.textView81);
         lblLote = (TextView) findViewById(R.id.textView82);
         lblPres = (TextView) findViewById(R.id.textView83);
+        lblEstiba = (TextView) findViewById(R.id.lblEstiba);
 
         btnCantRecibida = (Button)findViewById(R.id.btnCantRecibida);
         btnCantPendiente = (Button)findViewById(R.id.btnCantPendiente);
@@ -206,6 +209,8 @@ public class frm_recepcion_datos extends PBase {
 
         btnBack = (Button)findViewById(R.id.btnBack);
         btnIr = (Button)findViewById(R.id.btnIr);
+
+        tblEstiba  = (TableRow)findViewById(R.id.tblEstiba) ;
 
         setCurrentDateOnView();
 
@@ -339,6 +344,14 @@ public class frm_recepcion_datos extends PBase {
                         chkPaletizar.setVisibility(View.VISIBLE);
                     }else{
                         chkPaletizar.setVisibility(View.GONE);
+                    }
+
+                    if (CajasPorCama > 0 && CamasPorTarima > 0){
+                        tblEstiba.setVisibility(View.VISIBLE);
+                        lblEstiba.setText("Camas por Tarima: " + CamasPorTarima + " Cajas por cama: " +  CajasPorCama);
+                    }else{
+                        tblEstiba.setVisibility(View.GONE);
+                        lblEstiba.setText("");
                     }
 
                     /*if (EsPallet){
@@ -2130,7 +2143,7 @@ public class frm_recepcion_datos extends PBase {
 
                 Factor =Get_Factor_Presentacion(vPresentacion);
 
-                //#EJC20201008: Da error de NoSuchElementException cuando no encuntra la presentación por el ID,
+                //#EJC20201008: Da error de NoSuchElementException cuando no encuentra la presentación por el ID,
                 //Por eso agregué este try catch así.
 
                 clsBeProducto_Presentacion a= new clsBeProducto_Presentacion();
@@ -3341,7 +3354,6 @@ public class frm_recepcion_datos extends PBase {
                         "$"+pNumeroLP);
 
                 zPrinterIns.sendCommand(zpl);
-
 
                 Thread.sleep(500);
 
