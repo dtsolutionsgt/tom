@@ -41,7 +41,7 @@ public class frm_Packing extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private EditText txtUbicOr,txtPrd,txtNuevoLp,txtCantidad,txtLpAnt;
+    private EditText txtUbicOr,txtPrd,txtNuevoLp,txtCantidad,txtLpAnt,txtLic_Plate;
     private TextView lblUbicOrigen,lblDesProducto,lblLpAnt,lblIdStock,lblCCant,lblVence,lblLote;
     private Spinner cmbPres,cmbLote,cmbVence,cmbEstado;
     private Button btnGuardarDirigida,btnBack;
@@ -104,6 +104,7 @@ public class frm_Packing extends PBase {
         txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
         txtCantidad = (EditText)findViewById(R.id.txtCantidad);
         txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
+        txtLic_Plate = findViewById(R.id.txtLic_Plate);
 
         lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
         lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
