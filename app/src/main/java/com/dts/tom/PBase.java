@@ -1,23 +1,19 @@
 package com.dts.tom;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.Gravity;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.dts.base.AppMethods;
+import com.dts.base.DateUtils;
 import com.dts.base.MiscUtils;
 import com.dts.base.appGlobals;
-import com.dts.base.DateUtils;
 import com.dts.base.clsClasses;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_detalle_cambio_ubicacion;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -36,7 +32,7 @@ public class PBase extends Activity {
     protected int itemid,browse,mode;
     protected int selid,selidx,deposito;
     protected long fecha;
-    protected String s,ss;
+    protected String s,ss ;
 
     protected InputMethodManager keyboard;
 

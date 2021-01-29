@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -2579,8 +2578,6 @@ public class frm_recepcion_datos extends PBase {
                     +"Lote: "+BeINavBarraPallet.Lote +"\n"
                     +"¿El producto está completo y en buen estado?";
 
-
-
             msgValidaProductoPallet(vMensaje1);
 
         }catch (Exception e){
@@ -3109,7 +3106,9 @@ public class frm_recepcion_datos extends PBase {
                             Continua_Llenando_Detalle_Recepcion_Nueva();
                         }*/
                 }
-            }
+            }else{
+                DespuesDeValidarCantidad();
+            };
 
         }catch (Exception ex){
 
@@ -3183,14 +3182,16 @@ public class frm_recepcion_datos extends PBase {
                 gl.gBeRecepcion.DetalleParametros.items = plistBeReDetParametros.items;
             }
 
-            I = 0;
+             I = 0;
 
             if (plistBeReDetParametros.items!=null){
                 for  (clsBeTrans_re_det_parametros RD: plistBeReDetParametros.items){
                     gl.gBeRecepcion.DetalleParametros.items.add(I,RD);
                     I += 1;
                 }
-            }
+            }/*else{
+               DespuesDeValidarCantidad();
+            }*/
 
             if (pListBeStockRec.items.size()==0){
                 mu.msgbox("No se guardó el stock, no se puede continuar");
@@ -3231,8 +3232,26 @@ public class frm_recepcion_datos extends PBase {
 
                 msgAskImprimir("Seleccione una opción para imprimir");
 
+            }else{
+                Actualiza_Valores_Despues_Imprimir();
             }
 
+        }catch (Exception e){
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.msgbox("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                Actualiza_Valores_Despues_Imprimir();
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
+        }
+
+    }
+
+    private void Actualiza_Valores_Despues_Imprimir(){
+        try{
+
+            //CM_20210125: Actualiza valores de la OC después imprimir
             switch (gl.TipoOpcion){
 
                 case 1:
@@ -3250,19 +3269,18 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception e){
-            mu.msgbox("Imprime_Barra_Despues_Guardar: "+e.getMessage());
+            mu.msgbox(e.getMessage());
         }
-
     }
-
+    //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage( msg);
 
-            dialog.setCancelable(false);
+            dialog.setCancelable(true);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -3276,6 +3294,10 @@ public class frm_recepcion_datos extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     Imprimir_Licencia();
                 }
+            });
+
+            dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {}
             });
 
             dialog.show();
@@ -3330,15 +3352,26 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
 
+            Actualiza_Valores_Despues_Imprimir();
+
         }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.msgbox("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                Actualiza_Valores_Despues_Imprimir();
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
+
+
         }
     }
 
     private void Imprimir_Barra(){
+
         try{
 
-                            //CM_20210112: Impresión de barras.
+                //CM_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
                 printerIns.open();
 
@@ -3368,7 +3401,6 @@ public class frm_recepcion_datos extends PBase {
 
                     zPrinterIns.sendCommand(zpl);
 
-
                     Thread.sleep(500);
 
                     // Close the connection to release resources.
@@ -3378,8 +3410,16 @@ public class frm_recepcion_datos extends PBase {
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
 
+            Actualiza_Valores_Despues_Imprimir();
+
         }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.msgbox("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                Actualiza_Valores_Despues_Imprimir();
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
         }
     }
 
@@ -3513,39 +3553,11 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                /*if (BeProducto.Control_vencimiento){
-
-                    if (cmbVenceRec.getText().toString().isEmpty()){
-                        mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
-                        return;
-                    }else{
-                        BeTransReDet.Fecha_vence =du.convierteFecha(cmbVenceRec.getText().toString().trim());
-                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
-
-                        String FechaVence=BeTransReDet.Fecha_vence;
-
-                        if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
-                            msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
-                        }else{
-                            Continua_Llenando_Detalle_Recepcion_Nueva();
-                        }
-
-                        //#CKFK 20200917 Puse esto en comentario porque la validación no se hacía correctamente
-                        //if (!Valida_Fecha_Vencimiento()){
-                        //    return;
-                        //}else{
-                        //    Continua_Llenando_Detalle_Recepcion_Nueva();
-                        //}
-                    }
-                }else{
-                    BeTransReDet.Fecha_vence = "";
-                    Continua_Llenando_Detalle_Recepcion_Nueva();
-                }*/
-
                 if (!BeProducto.Control_vencimiento){
                     BeTransReDet.Fecha_vence = "";
                 }
 
+                //Llamado 1
                 Continua_Llenando_Detalle_Recepcion_Nueva();
 
             }
@@ -3682,28 +3694,8 @@ public class frm_recepcion_datos extends PBase {
                     BeTransReDet.Fecha_vence = "";
                 }
 
+                //Llamado 2
                 Continua_Llenando_Detalle_Recepcion_Nueva();
-
-                //#CKFK 20200917 Lo puse en comentario porque hice la validación de la fecha de vencimiento antes de comenzar a Guardar
-                /*if (BeProducto.Control_vencimiento){
-
-                    if (cmbVenceRec.getText().toString().isEmpty()){
-                        mu.msgbox("Ingrese fecha de vencimiento para el producto "+BeProducto.Codigo);
-                        return;
-                    }else{
-                        BeTransReDet.Fecha_vence =du.convierteFecha(cmbVenceRec.getText().toString().trim());
-                        gl.gFechaVenceAnterior = cmbVenceRec.getText().toString().trim();
-                        if (!Valida_Fecha_Vencimiento()){
-                            return;
-                        }else{
-                            Continua_Llenando_Detalle_Recepcion_Nueva();
-                        }
-                    }
-
-                }else{
-                    BeTransReDet.Fecha_vence = "";
-                    Continua_Llenando_Detalle_Recepcion_Nueva();
-                }*/
 
             }
 
@@ -3800,6 +3792,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (stream(listaStock.items).count()==0){
                     mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                    return;
                 }
 
                 for( clsBeStock_rec BeStockRec : listaStock.items){
@@ -3823,7 +3816,10 @@ public class frm_recepcion_datos extends PBase {
                                 BeStockRecNuevaRec = BeStockRec;
                                 vCantNuevaRec = vCant;
                                 vFactorNuevaRec = Factor;
-                                execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                BeStockRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                /*execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                return;*/
                             }else{
                                 BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;//CInt(txtIdUbicacion.Text.Trim)
                             }

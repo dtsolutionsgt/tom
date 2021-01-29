@@ -57,6 +57,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public boolean EsDevolucion;
     @Element(required=false) public clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
     @Element(required=false) public boolean ExisteRecepcionNoFinalizada;
+    @Element(required=false) public String No_Ticket_TMS;
 
 
     public clsBeTrans_oc_enc()
@@ -74,7 +75,8 @@ public class clsBeTrans_oc_enc {
                              int IdDespachoEnc,clsBeTrans_oc_detList DetalleOC,clsBeTrans_oc_det_loteList DetalleLotes,clsBeI_nav_barras_palletList DetallePallets,
                              clsBeTrans_oc_pol ObjPoliza,clsBeTrans_oc_imagenList ListaImg,clsBePropietario_bodega PropietarioBodega,clsBeProveedor_bodega ProveedorBodega,
                              clsBeTrans_oc_estado EstadoOC,int IdBodega,boolean IsNew,boolean EsDevolucion,
-                             clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada) {
+                             clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada,
+                             String No_Ticket_TMS) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -118,6 +120,7 @@ public class clsBeTrans_oc_enc {
         this.EsDevolucion=EsDevolucion;
         this.TipoIngreso=TipoIngreso;
         this.ExisteRecepcionNoFinalizada=ExisteRecepcionNoFinalizada;
+        this.No_Ticket_TMS=No_Ticket_TMS;
 
     }
 
@@ -373,6 +376,12 @@ public class clsBeTrans_oc_enc {
     }
     public void setExisteRecepcionNoFinalizada(boolean value) {
         ExisteRecepcionNoFinalizada=value;
+    }
+    public String getNo_Ticket_TMS() {
+        return No_Ticket_TMS;
+    }
+    public void setNo_Ticket_TMS(String value) {
+        No_Ticket_TMS=value;
     }
 
 }
