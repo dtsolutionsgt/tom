@@ -6,6 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.ConsultaStock.frm_consulta_stock">
 
+    <TableRow
+        android:id="@+id/tblOrdenar"
+        android:layout_width="322dp"
+        android:layout_height="39dp"
+        android:layout_above="@id/scrollExistencia"
+        android:layout_below="@id/lblEstadoT"
+        android:layout_marginRight="14dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toLeftOf="@id/imgPrint">
+
+        <TextView
+            android:id="@+id/txtOrdenar"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:text="Ordenar por:"
+            android:textAppearance="@style/StyleText" />
+
+        <Spinner
+            android:id="@+id/spOrdenar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:entries="@array/filtros"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:scrollbarSize="4dp" />
+    </TableRow>
+
     <HorizontalScrollView
         android:id="@+id/scrollExistencia"
         android:layout_width="match_parent"
@@ -36,14 +67,26 @@
         android:textColor="@android:color/black"
         android:textSize="12sp" />
 
+    <ImageView
+        android:id="@+id/imgPrint"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbEstadoExist"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/printimg"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/btnRegs2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/relbot"
+        android:layout_marginStart="250dp"
         android:layout_marginBottom="5dp"
         android:background="@android:color/holo_blue_dark"
-        android:layout_marginStart="250dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:text="Registros: 0"
@@ -190,17 +233,5 @@
         android:text="-"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
-
-    <ImageView
-        android:id="@+id/imgPrint"
-        android:layout_width="65dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/cmbEstadoExist"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/printimg"
-        android:visibility="invisible" />
 
 </RelativeLayout>

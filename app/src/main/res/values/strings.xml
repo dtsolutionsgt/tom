@@ -13,4 +13,12 @@
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_frm_consulta_stock_detalle_c_i">frm_consulta_stock_detalleCI
     </string>
+
+    <string-array name="filtros">
+        <item>Código</item>
+        <item>Ubicación</item>
+        <item>Estado</item>
+        <item>Fecha vencimiento</item>
+        <item>Fecha ingreso</item>
+    </string-array>
 </resources>
