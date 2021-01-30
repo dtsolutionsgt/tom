@@ -226,27 +226,36 @@ public class frm_consulta_stock extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    String orden = spOrdenar.getSelectedItem().toString();
+                    if (pListStock2 != null){
+                        if (pListStock2.items != null){
+                            if (pListStock2.items.size()>0){
 
-                    switch (orden) {
-                        case  "Código":
-                            Collections.sort(pListStock2.items, new CodigoSort());
-                            break;
-                        case  "Ubicación":
-                            Collections.sort(pListStock2.items, new UbicacionSort());
-                            break;
-                        case  "Estado":
-                            Collections.sort(pListStock2.items, new EstadoSort());
-                            break;
-                        case  "Fecha vencimiento":
-                            Collections.sort(pListStock2.items, new FechaVencSort());
-                            break;
-                        case  "Fecha ingreso":
-                            Collections.sort(pListStock2.items, new FechaIngSort());
-                            break;
+                                String orden = spOrdenar.getSelectedItem().toString();
+
+                                switch (orden) {
+                                    case  "Código":
+                                        Collections.sort(pListStock2.items, new CodigoSort());
+                                        break;
+                                    case  "Ubicación":
+                                        Collections.sort(pListStock2.items, new UbicacionSort());
+                                        break;
+                                    case  "Estado":
+                                        Collections.sort(pListStock2.items, new EstadoSort());
+                                        break;
+                                    case  "Fecha vencimiento":
+                                        Collections.sort(pListStock2.items, new FechaVencSort());
+                                        break;
+                                    case  "Fecha ingreso":
+                                        Collections.sort(pListStock2.items, new FechaIngSort());
+                                        break;
+                                }
+
+                                lista_inventario_ordenado();
+
+                            }
+                        }
                     }
 
-                    lista_inventario_ordenado();
 
                 }
 
