@@ -358,7 +358,7 @@ public class frm_Packing extends PBase {
                 escaneoPallet = true;
                 pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-                //Llama al método del WS Get_Stock_By_Lic_Plate
+                //Llama al método del WS Existe_LP
                 execws(9);
 
                 progress.cancel();
@@ -1550,13 +1550,16 @@ public class frm_Packing extends PBase {
             Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
 
             if (Existe_Lp){
+
+                txtPrd.setEnabled(false);
                 progress.cancel();
-
-
                 txtPrd.setText("");
                 txtPrd.setSelectAllOnFocus(true);
                 txtPrd.requestFocus();
                 lblDesProducto.setText("");
+
+                //Get_Stock_By_Lic_Plate
+                execws(3);
 
             }else{
                 progress.cancel();
@@ -1646,24 +1649,30 @@ public class frm_Packing extends PBase {
                         ListBeStockPallet = new clsBeProductoList();
                         ListBeStockPallet.items = AuxList;
 
-                        BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
-                        BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+                        if (AuxList.size() == 1){
 
-                        lblDesProducto.setTextColor(Color.BLUE);
-                        lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
 
-                        cvProd = BeProductoUbicacionOrigen;
-                        gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
-                        cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
-                        cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+                            BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                            BeStockPallet = ListBeStockPallet.items.get(0).Stock;
 
-                        gLoteOrigen = BeStockPallet.Lote;
-                        cvPresID = BeStockPallet.IdPresentacion;
-                        gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
-                        cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+                            lblDesProducto.setTextColor(Color.BLUE);
+                            lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
 
-                        //Llama al método del WS Get_Estados_By_IdPropietario
-                        execws(4);
+                            cvProd = BeProductoUbicacionOrigen;
+                            gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                            cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                            cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                            gLoteOrigen = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(4);
+
+                        }
+
                     }
 
                 }else{
