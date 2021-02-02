@@ -328,7 +328,7 @@ public class frm_consulta_stock extends PBase {
     {
         public int compare(clsBeVW_stock_res_CI left, clsBeVW_stock_res_CI right)
         {
-            return left.Vence.compareTo(right.Vence);
+            return left.ingreso.compareTo(right.ingreso);
         }
     }
 
@@ -526,7 +526,7 @@ public class frm_consulta_stock extends PBase {
                         item.LicPlate = pListStock2.items.get(i).LicPlate;
                         item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                         item.factor = pListStock2.items.get(i).factor;
-
+                        item.ingreso= pListStock2.items.get(i).ingreso;
                         items_stock.add(item);
                     }
 
@@ -601,7 +601,7 @@ public class frm_consulta_stock extends PBase {
                 item.LicPlate = pListStock2.items.get(i).LicPlate;
                 item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                 item.factor = pListStock2.items.get(i).factor;
-
+                item.ingreso= pListStock2.items.get(i).ingreso;
                 items_stock.add(item);
             }
 
@@ -665,6 +665,7 @@ public class frm_consulta_stock extends PBase {
                     item.LicPlate = pListStock2.items.get(i).LicPlate;
                     item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                     item.factor = pListStock2.items.get(i).factor;
+                    item.ingreso = pListStock2.items.get(i).ingreso;
                     items_stock.add(item);
                 }
 
@@ -735,6 +736,7 @@ public class frm_consulta_stock extends PBase {
                 items.LicPlate = pListStock2.items.get(i).LicPlate;
                 items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                 items.factor = pListStock2.items.get(i).factor;
+                items.ingreso = pListStock2.items.get(i).ingreso;
                 items_stock2.add(items);
 
             }
@@ -749,8 +751,6 @@ public class frm_consulta_stock extends PBase {
 
             vItem = new clsBeVW_stock_res_CI();
             items_stock2.add(vItem);
-
-
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -775,6 +775,7 @@ public class frm_consulta_stock extends PBase {
                     items.Pick = pListStock2.items.get(i).Pick;
                     items.LicPlate = pListStock2.items.get(i).LicPlate;
                     items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
+                    items.ingreso = pListStock2.items.get(i).ingreso;
                     items_stock2.add(items);
                 }
             }

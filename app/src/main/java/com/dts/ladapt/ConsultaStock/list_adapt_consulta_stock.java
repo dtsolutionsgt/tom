@@ -1,5 +1,4 @@
 package com.dts.ladapt.ConsultaStock;
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
-import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
@@ -81,6 +78,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblPick = convertView.findViewById(R.id.lblPick);
                         holder.lbLicPlate = convertView.findViewById(R.id.lblLicPlate_ci);
                         holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
+                        holder.lblIngreso = convertView.findViewById(R.id.lblIngreso);
                 convertView.setTag(holder);
 
             }else {
@@ -108,6 +106,8 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblPick.setText("Pick");
                 holder.lbLicPlate.setText("LicPlate");
                 holder.lblIdProductoBodega.setText("IdProdBodega");
+                holder.lblIngreso.setText("Ingreso");
+
 
             }else{
                 holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
@@ -127,6 +127,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblPick.setText(BeListStock.get(position).Pick  +"");
                 holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
                 holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
+                holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
             }
         }
         catch (Exception ex){
@@ -143,6 +144,6 @@ public class list_adapt_consulta_stock extends BaseAdapter {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
-                lblPick,lbLicPlate,lblIdProductoBodega;
+                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso;
     }
 }

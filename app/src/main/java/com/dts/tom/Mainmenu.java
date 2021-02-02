@@ -1,6 +1,7 @@
 package com.dts.tom;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
@@ -25,8 +27,9 @@ public class Mainmenu extends PBase {
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
 
-    private MainActivity.WebServiceHandler ws;
+    private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;
+    private ProgressDialog progress;
 
     private ArrayList<clsClasses.clsMenu> items= new ArrayList<clsClasses.clsMenu>();
 
@@ -38,12 +41,17 @@ public class Mainmenu extends PBase {
 
     private boolean listo=true;
 
+    private int cantRecep = 0,cantPicking = 0,cantVerif = 0,cantCambioEst = 0, cantCambioUbic = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
 
         super.InitBase();
+
+        ws = new Mainmenu.WebServiceHandler(Mainmenu.this, gl.wsurl);
+        xobj = new XMLObject(ws);
 
         gridView = (GridView) findViewById(R.id.gridView1);
         lblBodega = (TextView) findViewById(R.id.lblBodegaName);
@@ -58,14 +66,12 @@ public class Mainmenu extends PBase {
             gridView.setNumColumns(2);
         }
 
-        Load();
-
         setHandlers();
 
+        ProgressDialog("Cargando forma");
     }
 
     //region Events
-
 
     public void setHandlers(){
         try{
@@ -87,10 +93,176 @@ public class Mainmenu extends PBase {
         }
     }
 
+    public void ProgressDialog(String mensaje){
+        progress=new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
+    }
+
     //endregion
 
     //region Main
+    //endregion
 
+    //region Web Service
+
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1:
+                        callMethod("Get_Count_Recepciones_For_HH_By_IdBodega",
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 2:
+                        callMethod("Get_Count_Picking_For_HH_By_IdBodega",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
+                        break;
+                    case 3:
+                        callMethod("Get_Count_Verificaciones_For_HH_By_IdBodega",
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 4:
+                        callMethod("Get_Count_Cambio_Est_Ubic_For_HH",
+                                "pCambioEstado",0);
+                        break;
+                    case 5:
+                        callMethod("Get_Count_Recepciones_For_HH_By_IdBodega",
+                                "pCambioEstado",1);
+                        break;
+                }
+
+            }catch (Exception e){
+                addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
+        try {
+            if (throwing) throw new Exception(errmsg);
+
+            switch (ws.callback) {
+
+                case 1:
+                    process_get_count_recepciones();break;
+                case 2:
+                    process_get_count_picking();break;
+                case 3:
+                    process_get_count_verificaciones();break;
+                case 4:
+                    process_get_count_cambio_ubic();break;
+                case 5:
+                    process_get_count_cambio_estado();break;
+            }
+
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void process_get_count_recepciones(){
+
+        try {
+
+            progress.setMessage("Obteniendo cantidad  de recepciones");
+
+            cantRecep = (Integer) xobj.getSingle("Get_Count_Recepciones_For_HH_By_IdBodegaResult",Integer.class);
+
+            execws(2);
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void process_get_count_picking(){
+
+        try {
+
+            progress.setMessage("Obteniendo cantidad  de recepciones");
+
+            cantPicking = (Integer) xobj.getSingle("Get_Count_Picking_For_HH_By_IdBodegaResult",Integer.class);
+
+            execws(3);
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void process_get_count_verificaciones(){
+
+        try {
+
+            progress.setMessage("Obteniendo cantidad  de recepciones");
+
+            cantVerif = (Integer) xobj.getSingle("Get_Count_Verificaciones_For_HH_By_IdBodegaResult",Integer.class);
+
+            execws(4);
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void process_get_count_cambio_ubic(){
+
+        try {
+
+            progress.setMessage("Obteniendo cantidad  de recepciones");
+
+            cantCambioUbic = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
+
+            execws(5);
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void process_get_count_cambio_estado(){
+
+        try {
+
+            progress.setMessage("Obteniendo cantidad  de recepciones");
+
+            cantCambioEst = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
+
+            listItems();
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
 
     //endregion
 
@@ -100,10 +272,10 @@ public class Mainmenu extends PBase {
 
         try {
 
-            listItems();
-
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
             lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+
+            execws(1);
 
         } catch (Exception e){
             mu.msgbox(e.getMessage());
@@ -120,15 +292,15 @@ public class Mainmenu extends PBase {
             try {
 
                 item = clsCls.new clsMenu();
-                item.ID=1;item.Name="Recepción";item.Icon=1;
+                item.ID=1;item.Name="Recepción("+ cantRecep + ")";item.Icon=1;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=2;item.Name="Cambio de ubicación";item.Icon=2;
+                item.ID=2;item.Name="Cambio de ubicación("+ cantCambioUbic + ")";item.Icon=2;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=3;item.Name="Cambio de estado";item.Icon=3;
+                item.ID=3;item.Name="Cambio de estado("+ cantCambioEst + ")";item.Icon=3;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -136,11 +308,11 @@ public class Mainmenu extends PBase {
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=5;item.Name="Picking";item.Icon=5;
+                item.ID=5;item.Name="Picking("+ cantPicking + ")";item.Icon=5;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=6;item.Name="Verificación";item.Icon=6;
+                item.ID=6;item.Name="Verificación("+ cantVerif + ")";item.Icon=6;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -158,6 +330,8 @@ public class Mainmenu extends PBase {
                 item = clsCls.new clsMenu();
                 item.ID=9;item.Name="Cambio usuario";item.Icon=9;
                 items.add(item);
+
+                progress.cancel();
 
             } catch (Exception e) {
                 addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -362,7 +536,14 @@ public class Mainmenu extends PBase {
 
     }
 
-
+    protected void onResume() {
+        try{
+            Load();
+            super.onResume();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
 
     //endregion
 

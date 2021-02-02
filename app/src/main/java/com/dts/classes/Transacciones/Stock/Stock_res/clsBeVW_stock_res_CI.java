@@ -1,12 +1,6 @@
 package com.dts.classes.Transacciones.Stock.Stock_res;
 
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
-import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
-
 import org.simpleframework.xml.Element;
 
 public class clsBeVW_stock_res_CI {
@@ -30,6 +24,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String IdProductoEstado="";
   @Element(required=false) public int IdProductoBodega=0;
   @Element(required=false) public int factor=0;
+  @Element(required=false) public String ingreso="1900-01-01T00:00:01";
 
 
   public clsBeVW_stock_res_CI() {
@@ -38,7 +33,7 @@ public class clsBeVW_stock_res_CI {
   public clsBeVW_stock_res_CI(int Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
                               String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,String LicPlate,
-                              String IdProductoEstado,int IdProductoBodega, int factor) {
+                              String IdProductoEstado,int IdProductoBodega, int factor, String ingreso) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -59,6 +54,7 @@ public class clsBeVW_stock_res_CI {
     this.IdProductoEstado= IdProductoEstado;
     this.IdProductoBodega=IdProductoBodega;
     this.factor = factor;
+    this.ingreso = ingreso;
   }
 
   public int getCodigo() {
@@ -144,34 +140,31 @@ public class clsBeVW_stock_res_CI {
   public String getPedido() {
     return Pedido;
   }
-
   public void setPick(String value){ Pick=value; }
   public String getPick() {
     return Pick;
   }
-
-
   public void setLicPlate(String value){ LicPlate=value; }
   public String getLicPlate() {
     return LicPlate;
   }
-
   public void setProductoEstado(String value){ IdProductoEstado=value; }
   public String getIdProductoEstado() {
     return IdProductoEstado;
   }
-
   public void setIdProductoBodega(int value){ IdProductoBodega=value; }
   public int getIdProductoBodega() {
     return IdProductoBodega;
   }
-
-
   public void setfactor(int value){ factor =value; }
   public int getfactor() {
     return factor;
   }
-
-
+  public String getingreso() {
+    return ingreso;
+  }
+  public void setingreso(String value) {
+    ingreso=value;
+  }
 }
 
