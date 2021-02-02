@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.DecimalDigitsInputFilter;
@@ -64,6 +65,7 @@ public class frm_picking_datos extends PBase {
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
     private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick;
     private Spinner cmbPresentacion, cmbEstado;
+    private TableRow trCaducidad;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
@@ -101,6 +103,8 @@ public class frm_picking_datos extends PBase {
 
         cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
+
+        trCaducidad = (TableRow) findViewById(R.id.trCaducidad);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -217,8 +221,13 @@ public class frm_picking_datos extends PBase {
 
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
 
+            if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
+
+            }
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto
-                    + " Expira: " + gBePickingUbic.Fecha_Vence + "Lote: " + gBePickingUbic.Lote
+                    + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
+                    " Expira: " + gBePickingUbic.Fecha_Vence :"" )
+                    + "Lote: " + gBePickingUbic.Lote
                     + " Sol: " + gBePickingUbic.Cantidad_Solicitada + " Rec: " + gBePickingUbic.Cantidad_Recibida + " "
                     + gBePickingUbic.ProductoUnidadMedida);
 
@@ -352,9 +361,21 @@ public class frm_picking_datos extends PBase {
 
             progress.setMessage("Bloqueando controles");
 
-            txtFechaCad.setText("");
+            if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
-            btnFechaVence.setText("Vence en: " + DifDias + " días");
+                trCaducidad.setVisibility(View.VISIBLE);
+                txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+
+                btnFechaVence.setVisibility(View.VISIBLE);
+                btnFechaVence.setText("Vence en: " + DifDias + " días");
+
+            }else{
+
+                trCaducidad.setVisibility(View.GONE);
+                btnFechaVence.setVisibility(View.GONE);
+                txtFechaCad.setText("");
+
+            }
 
             Bloquea_Controles();
 
@@ -890,7 +911,16 @@ public class frm_picking_datos extends PBase {
         try{
 
             CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
-            txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+
+            if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
+                trCaducidad.setVisibility(View.VISIBLE);
+                txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+                btnFechaVence.setVisibility(View.VISIBLE);
+            }else{
+                trCaducidad.setVisibility(View.GONE);
+                btnFechaVence.setVisibility(View.GONE);
+            }
+
             txtLote.setText(gBePickingUbic.Lote);
 
             if (gBeProducto==null){
@@ -956,7 +986,23 @@ public class frm_picking_datos extends PBase {
             CantRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
 
             CantARec = CantSol - CantRec;
-            txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+
+            if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
+
+                trCaducidad.setVisibility(View.VISIBLE);
+                txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+
+                btnFechaVence.setVisibility(View.VISIBLE);
+                btnFechaVence.setText("Vence en: " + DifDias + " días");
+
+            }else{
+
+                trCaducidad.setVisibility(View.GONE);
+                btnFechaVence.setVisibility(View.GONE);
+                txtFechaCad.setText("");
+
+            }
+
             txtLote.setText(gBePickingUbic.Lote);
 
             if (gBePickingUbic.IdPresentacion>0){
