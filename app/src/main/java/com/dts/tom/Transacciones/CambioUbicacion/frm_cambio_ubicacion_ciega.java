@@ -1638,24 +1638,30 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         productoList = new clsBeProductoList();
                         productoList.items = AuxList;
 
-                        BeProductoUbicacion = productoList.items.get(0);
-                        BeStockPallet = productoList.items.get(0).Stock;
+                        if (AuxList.size() == 1){
 
-                        lblDescProducto.setTextColor(Color.BLUE);
-                        lblDescProducto.setText(BeProductoUbicacion.getNombre());
+                            BeProductoUbicacion = productoList.items.get(0);
+                            BeStockPallet = productoList.items.get(0).Stock;
 
-                        cvProd = BeProductoUbicacion;
-                        cvProdID = BeProductoUbicacion.getIdProducto();
-                        cvPropID = BeProductoUbicacion.getIdPropietario();
-                        cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+                            txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
 
-                        cvLote = BeStockPallet.Lote;
-                        cvPresID = BeStockPallet.IdPresentacion;
-                        cvEstOrigen = BeStockPallet.IdProductoEstado;
-                        cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+                            lblDescProducto.setTextColor(Color.BLUE);
+                            lblDescProducto.setText(BeProductoUbicacion.getNombre());
 
-                        //Llama al método del WS Get_Estados_By_IdPropietario
-                        execws(10);
+                            cvProd = BeProductoUbicacion;
+                            cvProdID = BeProductoUbicacion.getIdProducto();
+                            cvPropID = BeProductoUbicacion.getIdPropietario();
+                            cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+
+                            cvLote = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            cvEstOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(10);
+
+                        }
                     }
                 }else{
                     //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
@@ -1982,6 +1988,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (Existe_Lp){
                 progress.cancel();
                 txtCodigoPrd.requestFocus();
+
+                //Get_Stock_By_Lic_Plate
+                execws(5);
             }else{
                 progress.cancel();
                 mu.msgbox("Lp no existe");
