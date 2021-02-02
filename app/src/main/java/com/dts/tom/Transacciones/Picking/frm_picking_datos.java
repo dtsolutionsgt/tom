@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,6 +35,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
@@ -70,6 +74,8 @@ public class frm_picking_datos extends PBase {
 
     private int DifDias = 0;
 
+    private TextToSpeech mTTS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +109,35 @@ public class frm_picking_datos extends PBase {
         }
 
         setHandlers();
+
         Load();
+
+        //#EJC20210201: voice speaking jajajaja :)
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+                    Locale locSpanish = new Locale("spa", "MEX");
+                    int result =mTTS.setLanguage(locSpanish);
+                    if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("tts","Lenguaje no soportado :(");
+                    }else{
+                        String text = lblTituloForma.getText().toString();
+                        float speed = 1f;
+                        float pitch = 1f;
+                        mTTS.setPitch(pitch);
+                        mTTS.setSpeechRate(speed);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                        } else {
+                            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                        }
+                    }
+                }else{
+                    Log.e("tts","No he podido inicializar el TTS :(");
+                }
+            }
+        });
 
     }
 
