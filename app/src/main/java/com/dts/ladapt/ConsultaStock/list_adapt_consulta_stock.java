@@ -1,5 +1,6 @@
 package com.dts.ladapt.ConsultaStock;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,11 +93,11 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblCodigo.setText("Código");
                 holder.lblNombre.setText("Nombre");
                 holder.lblUM.setText("UM");
-                holder.lblExistUMBAs.setText("ExistUMBAs");
+                holder.lblExistUMBAs.setText("Exist UMB");
                 holder.lblPres.setText("Pres");
                 holder.lblExistPres.setText("ExistPres");
-                holder.lblReservadoUMBAs.setText("ReservadoUMBAs");
-                holder.lblDisponibleUMBas.setText("DisponibleUMBas");
+                holder.lblReservadoUMBAs.setText("Res. UMB");
+                holder.lblDisponibleUMBas.setText("Dispo UMB");
                 holder.lblLote.setText("Lote");
                 holder.lblVence.setText("Vence");
                 holder.lblEstado.setText("Estado");
@@ -105,9 +106,27 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblPedido.setText("Pedido");
                 holder.lblPick.setText("Pick");
                 holder.lbLicPlate.setText("LicPlate");
-                holder.lblIdProductoBodega.setText("IdProdBodega");
+                holder.lblIdProductoBodega.setText("IdProdBod");
                 holder.lblIngreso.setText("Ingreso");
 
+                holder.lblCodigo.setTextColor(Color.WHITE);
+                holder.lblNombre.setTextColor(Color.WHITE);
+                holder.lblUM.setTextColor(Color.WHITE);
+                holder.lblExistUMBAs.setTextColor(Color.WHITE);
+                holder.lblPres.setTextColor(Color.WHITE);
+                holder.lblExistPres.setTextColor(Color.WHITE);
+                holder.lblReservadoUMBAs.setTextColor(Color.WHITE);
+                holder.lblDisponibleUMBas.setTextColor(Color.WHITE);
+                holder.lblLote.setTextColor(Color.WHITE);
+                holder.lblVence.setTextColor(Color.WHITE);
+                holder.lblEstado.setTextColor(Color.WHITE);
+                holder.lblUbic.setTextColor(Color.WHITE);
+                holder.lblidUbic.setTextColor(Color.WHITE);
+                holder.lblPedido.setTextColor(Color.WHITE);
+                holder.lblPick.setTextColor(Color.WHITE);
+                holder.lbLicPlate.setTextColor(Color.WHITE);
+                holder.lblIdProductoBodega.setTextColor(Color.WHITE);
+                holder.lblIngreso.setTextColor(Color.WHITE);
 
             }else{
                 holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
@@ -129,8 +148,18 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
                 holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
             }
-        }
-        catch (Exception ex){
+
+            if(selectedIndex!= -1 && position == selectedIndex) {
+                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+            } else {
+                if (position==0){
+                    convertView.setBackgroundResource(R.drawable.color_medium);
+                }else{
+                    convertView.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+
+        }catch (Exception ex){
             toast(ex.getMessage());
         }
         return convertView;

@@ -167,4 +167,3 @@ public class clsBeVW_stock_res_CI {
     ingreso=value;
   }
 }
-
