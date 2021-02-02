@@ -21,6 +21,9 @@ public class clsBeProducto_rellenado {
     @Element(required=false) public String Estado="";
     @Element(required=false) public String Presentacion="";
     @Element(required=false) public String Ubicacion="";
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public int IdUnidadMedidaBasica=0;
 
 
     public clsBeProducto_rellenado() {
@@ -29,8 +32,9 @@ public class clsBeProducto_rellenado {
     public clsBeProducto_rellenado(int IdRellenado,int IdPresentacion,int IdProductoEstado,int IdUbicacion,
                                    int IdTipoAccion,double Minimo,double Maximo,String User_agr,
                                    String Fec_agr,String User_mod,String Fec_mod,boolean Activo,
-                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion
-    ) {
+                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion,
+                                   int IdBodega, int IdProductoBodega, int IdUnidadMedidaBasica)
+    {
 
         this.IdRellenado=IdRellenado;
         this.IdPresentacion=IdPresentacion;
@@ -48,6 +52,9 @@ public class clsBeProducto_rellenado {
         this.Estado=Estado;
         this.Presentacion=Presentacion;
         this.Ubicacion=Ubicacion;
+        this.IdBodega = IdBodega;
+        this.IdProductoBodega = IdProductoBodega;
+        this.IdUnidadMedidaBasica = IdUnidadMedidaBasica;
 
     }
 
@@ -148,6 +155,28 @@ public class clsBeProducto_rellenado {
     public void setUbicacion(String value) {
         Ubicacion=value;
     }
+
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
+    }
+
+    public int getIdProductoBodega() {
+        return IdProductoBodega;
+    }
+    public void setIdProductoBodega(int value) {
+        IdProductoBodega=value;
+    }
+
+    public int getIdUnidadMedidaBasica() {
+        return IdUnidadMedidaBasica;
+    }
+    public void setIdUnidadMedidaBasica(int value) {
+        IdUnidadMedidaBasica=value;
+    }
+
 
 }
 

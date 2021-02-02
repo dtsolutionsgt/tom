@@ -112,7 +112,7 @@ public class frm_picking_datos extends PBase {
 
         Load();
 
-        //#EJC20210201: voice speaking jajajaja :)
+        //#EJC20210201: voice picking jajajaja :)
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -122,11 +122,34 @@ public class frm_picking_datos extends PBase {
                     if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
                         Log.e("tts","Lenguaje no soportado :(");
                     }else{
-                        String text = lblTituloForma.getText().toString();
+
+                        double dif= gBePickingUbic.Cantidad_Solicitada -  gBePickingUbic.Cantidad_Recibida;
+
+                        String text ="";
+
+                        if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")){
+                            text = "Escanee licencia: " + gBePickingUbic.Lic_plate + ".";
+                        }
+
+                        if (!gBePickingUbic.Lote.isEmpty()){
+                             text += " Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                    + " Tome: " + dif + ","
+                                    + " Verifíque lote: " + gBePickingUbic.Lote;
+                        }else{
+                             text += "Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                    + " Tome: " + dif + ","
+                                    + " tome cualquier lote. ";
+                        }
+
+                        if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
+                            text +=" Verifique vencimiento: " +gBePickingUbic.Fecha_Vence;
+                        }
+
                         float speed = 1f;
                         float pitch = 1f;
                         mTTS.setPitch(pitch);
                         mTTS.setSpeechRate(speed);
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
                         } else {
