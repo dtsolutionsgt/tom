@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -345,25 +344,16 @@ public class frm_Packing extends PBase {
             cvProdID = 0;
             cvVence = "01/01/1900";
 
-            String vStarWithParameter = "$";
+            //Es una barra de pallet válida por tamaño
+            int vLengthBarra = txtLic_Plate.getText().toString().length();
 
-            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-            if (txtLic_Plate.getText().toString().startsWith("$") ||
-                    txtLic_Plate.getText().toString().startsWith("(01)") ||
-                    txtLic_Plate.getText().toString().startsWith(vStarWithParameter)) {
+            escaneoPallet = true;
+            pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-                //Es una barra de pallet válida por tamaño
-                int vLengthBarra = txtLic_Plate.getText().toString().length();
+            //Llama al método del WS Existe_LP
+            execws(9);
 
-                escaneoPallet = true;
-                pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
-
-                //Llama al método del WS Existe_LP
-                execws(9);
-
-                progress.cancel();
-
-            }
+            progress.cancel();
 
         } catch (Exception ex) {
             progress.cancel();
