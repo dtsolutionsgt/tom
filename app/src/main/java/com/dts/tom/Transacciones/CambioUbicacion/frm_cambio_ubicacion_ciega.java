@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -52,6 +57,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
+    private TableRow trPeso;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -95,9 +101,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private int cvPresID;
     private String cvLote;
     private String cvVence;
-    private int cvEstOrigen;
+    private int cvEstOrigen=0;
     private int cvEstDestino;
-    private int cvUbicDestID;
+    private int cvUbicDestID=0;
     private int cvStockID;
     private String cvAtrib;
     private int cvPropID;
@@ -133,6 +139,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private String pLicensePlate;
 
     private double vCantidadAUbicar, vCantidadDisponible, vPesoAUbicar, vPesoDisponible;
+
+    private TextToSpeech mTTS;
+    private String text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +179,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino = (Spinner) findViewById(R.id.cmbEstadoDestino);
 
             btnGuardarCiega = (Button) findViewById(R.id.btnGuardarCiega);
+
+            trPeso = (TableRow)findViewById(R.id.trPeso);
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -879,9 +890,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             String vStarWithParameter = "$";
 
             //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-            if (txtLicPlate.getText().toString().startsWith("$") ||
-                    txtLicPlate.getText().toString().startsWith("(01)") ||
-                    txtLicPlate.getText().toString().startsWith(vStarWithParameter)) {
+            if (!txtLicPlate.getText().toString().isEmpty()) {
 
                 //Es una barra de pallet válida por tamaño
                 int vLengthBarra = txtLicPlate.getText().toString().length();
@@ -892,7 +901,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
-                //Llama al método del WS Get_Stock_By_Lic_Plate
+                //Llama al método del WS Existe_Lp
 
                 execws(18);
 
@@ -939,7 +948,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
-                    //Llama al método del WS Get_Stock_By_Lic_Plate
+                    //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
 
                     execws(17);
 
@@ -1474,6 +1483,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     datosCorrectos = false;
                 }
 
+                if(cvUbicDestID == 0){
+                    msgbox("La ubicación de destino no puede ser vacía");
+                    txtUbicDestino.requestFocus();
+                    datosCorrectos = false;
+                }
+
                 if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)){
                     msgbox("La ubicación de destino coincide con la de origen");
                     txtUbicDestino.requestFocus();
@@ -1510,6 +1525,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (bodega_ubicacion_destino == null){
                 vProcesar = false;
+                cvUbicDestID = 0;
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("Ubicación destino incorrecta");
@@ -1544,8 +1560,58 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (bodega_ubicacion_destino == null){
                 throw new Exception("Ubicación destino sugerida incorrecta");
             }else{
+
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
                 lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+
+                if (bodega_ubicacion_destino.getTramo().getEs_Rack()){
+
+                    //#EJC20210202: voice ubicación
+                    mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int status) {
+                            if(status == TextToSpeech.SUCCESS){
+                                Locale locSpanish = new Locale("spa", "MEX");
+                                int result =mTTS.setLanguage(locSpanish);
+                                if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                                    Log.e("tts","Lenguaje no soportado :(");
+                                }else{
+
+                                    String[] cadena_ubicacion = bodega_ubicacion_destino.getDescripcion().split("-");
+                                    String rack = cadena_ubicacion[0].trim().substring(1);
+                                    String columna = cadena_ubicacion[1].trim().substring(1);
+                                    String tramo = cadena_ubicacion[2].trim().substring(1);
+                                    String nivel = cadena_ubicacion[3].trim().substring(1);
+                                    String pos = cadena_ubicacion[4].trim().substring(3);
+                                    String ubicacion = cadena_ubicacion[5].trim().substring(1);
+
+                                    text = "Lleve producto a Rack " + rack + "."
+                                         + " Tramo: " + tramo + "."
+                                         + " Columna: " + columna + "."
+                                         + " Nivel: " + nivel + "."
+                                         + " Posición: " + pos + "."
+                                         + " Ubicación: " + ubicacion + "."
+                                         + " Y escanee el código: " + txtCodigoPrd.getText().toString();
+
+                                    float speed = 1f;
+                                    float pitch = 1f;
+                                    mTTS.setPitch(pitch);
+                                    mTTS.setSpeechRate(speed);
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                                    } else {
+                                        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                                    }
+                                }
+                            }else{
+                                Log.e("tts","No he podido inicializar el TTS :(");
+                            }
+                        }
+                    });
+
+                }
+
             }
 
             txtCantidad.requestFocus();
@@ -1578,13 +1644,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUMBID = BeProductoUbicacion.IdUnidadMedidaBasica;
 
                 if (BeProductoUbicacion.getControl_peso()){
-                    txtPeso.setVisibility(View.VISIBLE);
-                    lblPeso.setVisibility(View.VISIBLE);
-                    lblPesoEst.setVisibility(View.VISIBLE);
+                    trPeso.setVisibility(View.VISIBLE);
                 }else{
-                    txtPeso.setVisibility(View.GONE);
-                    lblPeso.setVisibility(View.VISIBLE);
-                    lblPesoEst.setVisibility(View.VISIBLE);
+                    trPeso.setVisibility(View.GONE);
                 }
 
                 //Llama al método del WS Get_Estados_By_IdPropietario
@@ -1652,6 +1714,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             cvProdID = BeProductoUbicacion.getIdProducto();
                             cvPropID = BeProductoUbicacion.getIdPropietario();
                             cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+
+                            if (BeProductoUbicacion.getControl_peso()){
+                                trPeso.setVisibility(View.VISIBLE);
+                            }else{
+                                trPeso.setVisibility(View.GONE);
+                            }
 
                             cvLote = BeStockPallet.Lote;
                             cvPresID = BeStockPallet.IdPresentacion;
@@ -1903,6 +1971,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
             }else{
+                cvUbicDestID = 0;
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
             }
@@ -2360,7 +2429,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (txtUbicOrigen.getText().toString() !=""){
+            if (!txtUbicOrigen.getText().toString().isEmpty()){
 
                 bodega_ubicacion_origen = new clsBeBodega_ubicacion();
 
@@ -2381,7 +2450,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (txtUbicDestino.getText().toString() !=""){
+            if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
@@ -2401,7 +2470,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (txtUbicDestino.getText().toString() !=""){
+            if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
@@ -2556,6 +2625,74 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
+            //#CKFK 20210202 Agregué estas validaciones para evitar que se guarden datos incorrectos
+            //******************
+
+            datosCorrectos=true;
+
+            if (cvUbicOrigID == 0) {
+                msgbox("Ubicación origen no válida");
+                txtUbicOrigen.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (cvProdID == 0) {
+                msgbox("Producto no válido");
+                txtCodigoPrd.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (vCantidadDisponible == 0) {
+                msgbox("Cantidad disponible es 0, no se puede realizar el movimiento");
+                txtCodigoPrd.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (gl.modo_cambio==2) {
+                if (cvEstDestino == 0){
+                    msgbox("Estado destino incorrecto");
+                    cmbEstadoDestino.requestFocus();
+                    datosCorrectos = false;
+                }
+            }
+
+            vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString().replace(",",""));
+            vCantidadDisponible = Double.parseDouble(lblCant.getText().toString().replace(",",""));
+
+            if (vCantidadAUbicar<0) {
+                mu.msgbox("La cantidad no puede ser negativa");
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (vCantidadAUbicar==0) {
+                msgbox("La cantidad debe ser mayor que 0");
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (vCantidadAUbicar> vCantidadDisponible) {
+                msgbox("Cantidad incorrecta") ;
+                txtCantidad.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if(cvUbicDestID == 0 && txtUbicDestino.getText().toString().isEmpty()){
+                msgbox("La ubicación de destino no puede ser vacía");
+                txtUbicDestino.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)){
+                msgbox("La ubicación de destino coincide con la de origen");
+                txtUbicDestino.requestFocus();
+                datosCorrectos = false;
+            }
+
+            if (!datosCorrectos) return;
+
+            //********************
+
             progress.setMessage("Aplicando cambio de ubicacion");
             progress.show();
 
@@ -2572,6 +2709,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             pStock.Fecha_vence = du.convierteFechaDiagonal(cvVence);
             pStock.Lote = cvLote;
 
+            //Es_Pallet_No_Estandar
             execws(19);
 
         }catch (Exception e){

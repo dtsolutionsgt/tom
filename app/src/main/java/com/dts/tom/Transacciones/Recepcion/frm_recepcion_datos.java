@@ -2404,7 +2404,7 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.Control_lote){
                 if (gl.mode==1){
-                    if (!gl.gLoteAnterior.isEmpty()){
+                    if (!gl.gLoteAnterior.isEmpty() && gl.gProductoAnterior.equals(BeProducto.getCodigo())){
                         txtLoteRec.setText(gl.gLoteAnterior);
                     }
                 }
@@ -2421,6 +2421,12 @@ public class frm_recepcion_datos extends PBase {
                 cmbVenceRec.setVisibility(View.GONE);
                 lblVence.setVisibility(View.GONE);
                 imgDate.setVisibility(View.GONE);
+            }
+
+            if (!gl.gProductoAnterior.equals(BeProducto.getCodigo())){
+                txtLoteRec.setText("");
+                cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
+                cmbEstadoProductoRec.setSelection(0);
             }
 
             if (!gl.gBeRecepcion.Muestra_precio){
@@ -2942,6 +2948,8 @@ public class frm_recepcion_datos extends PBase {
     public void BotonGuardarRecepcion(View view){
 
         try{
+
+            gl.gProductoAnterior = BeProducto.getCodigo();
 
             if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
 
@@ -4439,6 +4447,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
                                 "pListStockRecSer",pListBeStockSeRec.items,
+
                                 "pListStockRec",pListBeStockRec.items,
                                 "pListProductoPallet",listaProdPalletsNuevos.items,
                                 "pIdEmpresa",gl.IdEmpresa,

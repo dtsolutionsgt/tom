@@ -224,13 +224,12 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
             }
-            lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto
+            lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " Expira: " + gBePickingUbic.Fecha_Vence :"" )
-                    + "Lote: " + gBePickingUbic.Lote
-                    + " Sol: " + gBePickingUbic.Cantidad_Solicitada + " Rec: " + gBePickingUbic.Cantidad_Recibida + " "
-                    + gBePickingUbic.ProductoUnidadMedida);
-
+                    + (!gBePickingUbic.Lote.isEmpty()?"Lote: " + gBePickingUbic.Lote:"") + "\r\n"
+                    + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
+                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ gBePickingUbic.ProductoUnidadMedida);
 
             txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});

@@ -4,20 +4,16 @@ import android.app.Application;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
-import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_dataList;
-import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
-import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vwList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
-import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
@@ -25,7 +21,6 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class appGlobals extends Application {
@@ -87,6 +82,7 @@ public class appGlobals extends Application {
     public double  CantRec=0;
     public  double CantOC=0;
     public String gLoteAnterior="";
+    public String gProductoAnterior = "";
     public String gFechaVenceAnterior="";
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
