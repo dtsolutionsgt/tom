@@ -347,7 +347,8 @@ public class frm_Packing extends PBase {
             //Es una barra de pallet válida por tamaño
             int vLengthBarra = txtLic_Plate.getText().toString().length();
 
-            escaneoPallet = true;
+            Escaneo_Pallet = true;
+
             pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
             //Llama al método del WS Existe_LP
@@ -1450,7 +1451,7 @@ public class frm_Packing extends PBase {
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLP,
+                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 4:
