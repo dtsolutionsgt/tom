@@ -3318,7 +3318,9 @@ public class frm_recepcion_datos extends PBase {
             });
 
             dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
+                public void onClick(DialogInterface dialog, int which) {
+                    Actualiza_Valores_Despues_Imprimir();
+                }
             });
 
             dialog.show();
