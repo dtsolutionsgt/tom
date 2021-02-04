@@ -1566,7 +1566,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (bodega_ubicacion_destino.getTramo().getEs_Rack()){
 
-                    //#EJC20210202: voice ubicación
+                    //#CKFK 20210202: voice ubicación
                     mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
                         @Override
                         public void onInit(int status) {
