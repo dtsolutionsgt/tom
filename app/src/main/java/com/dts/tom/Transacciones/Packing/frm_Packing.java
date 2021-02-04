@@ -1642,7 +1642,7 @@ public class frm_Packing extends PBase {
 
                         if (AuxList.size() == 1){
 
-
+                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
                             BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
                             BeStockPallet = ListBeStockPallet.items.get(0).Stock;
 
@@ -1674,7 +1674,7 @@ public class frm_Packing extends PBase {
             }
 
         }catch (Exception e){
-
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
