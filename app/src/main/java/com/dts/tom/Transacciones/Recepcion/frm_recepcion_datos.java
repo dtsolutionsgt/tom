@@ -1285,12 +1285,12 @@ public class frm_recepcion_datos extends PBase {
                             clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
                             BeProdPallet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                             BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
-                            BeProdPallet.IdOperadorBodega = gl.IdOperador;
+                            BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
                             BeProdPallet.IdPresentacion = IdPreseSelect;
                             BeProdPallet.IdRecepcionDet = pIdRecepcionDet;
                             BeProdPallet.Impreso = false;
                             BeProdPallet.IdImpresora = 1;
-                            BeProdPallet.Activo = true;
+                            BeProdPallet.Activo = true;I
                             BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
                             BeProdPallet.Codigo_Barra = txtLicPlate.getText().toString();
                             BeProdPallet.Codigo_Producto = BeProducto.Codigo;
@@ -3505,7 +3505,8 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.ProductoEstado.IdEstado = IdEstadoSelect;
 
                 BeTransReDet.IdProductoEstado = IdEstadoSelect;
-
+                //#EJC20210204: El IdOperadorBodega no se enviaba en algunos casos.
+                BeTransReDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
                 BeTransReDet.IsNew = true;
 
                 BeTransReDet.User_agr = gl.IdOperador+"";
@@ -3755,7 +3756,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Costo_Estadistico = 0;
             }
 
-            BeTransReDet.IdOperadorBodega = gl.IdOperador;
+            //#EJC20210204: El IdOperadorBodega no se enviaba en algunos casos.
+            BeTransReDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
+
             BeTransReDet.Nombre_producto_estado = stream(LProductoEstado.items).where(c->c.IdEstado==IdEstadoSelect).select(c->c.Nombre).first();
 
             if (!txtCantidadRec.getText().toString().isEmpty()){
