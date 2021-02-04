@@ -212,6 +212,10 @@ public class frm_recepcion_datos extends PBase {
 
         tblEstiba  = (TableRow)findViewById(R.id.tblEstiba) ;
 
+        tblEstiba.setVisibility(View.GONE);
+        chkPaletizar.setVisibility(View.GONE);
+        chkPalletNoEstandar.setVisibility(View.GONE);
+
         setCurrentDateOnView();
 
         setHandlers();
@@ -3317,7 +3321,7 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
-            dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Actualiza_Valores_Despues_Imprimir();
                 }
