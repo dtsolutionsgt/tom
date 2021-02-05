@@ -36,6 +36,7 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
+import com.dts.servicios.startCantTareas;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -115,10 +116,8 @@ public class MainActivity extends PBase {
             if (!gl.wsurl.isEmpty()){
                 ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
                 xobj= new XMLObject(ws);
-
                 setHandlers();
                 gl.deviceId =androidid();
-
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
@@ -539,8 +538,7 @@ public class MainActivity extends PBase {
                 {
                     if (gl.IdOperador>0)
                     {
-                        if (!txtpass.getText().toString().isEmpty())
-                        {
+                        if (!txtpass.getText().toString().isEmpty())                        {
                             List<clsBeBodegaBase> BeBodega =
                                     stream(bodegas.items)
                                             .where(c -> c.IdBodega  == gl.IdBodega)
@@ -588,18 +586,16 @@ public class MainActivity extends PBase {
 
                             //execws(7);
 
-                            }else
-                            {
+                            } else {
                                 progress.cancel();
                                 mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
                             }
 
-                        }else                         {
+                        } else {
                             progress.cancel();
                             mu.msgbox("Ingrese clave");
                         }
-                    }else
-                    {
+                    } else  {
                         progress.cancel();
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
@@ -842,8 +838,7 @@ public class MainActivity extends PBase {
 
     //region Spinners
 
-    private void fillSpinemp()
-    {
+    private void fillSpinemp()  {
 
         try
         {
@@ -866,8 +861,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void fillSpinBod()
-    {
+    private void fillSpinBod() {
         String ss;
 
         try {
@@ -890,8 +884,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void fillSpinImpres()
-    {
+    private void fillSpinImpres() {
         try
         {
             prnlist.clear();
@@ -912,8 +905,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void fillSpinUser()
-    {
+    private void fillSpinUser() {
         try
         {
             userlist.clear();
@@ -939,7 +931,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void getURL()     {
+    private void getURL() {
 
         gl.wsurl = "http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
 
@@ -969,8 +961,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    public void ProgressDialog(String mensaje)
-    {
+    public void ProgressDialog(String mensaje){
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);

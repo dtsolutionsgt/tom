@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,12 +15,18 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
+import com.dts.ladapt.list_view_menu2;
+import com.dts.servicios.startCantTareas;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Mainmenu extends PBase {
@@ -33,7 +40,10 @@ public class Mainmenu extends PBase {
 
     private ArrayList<clsClasses.clsMenu> items= new ArrayList<clsClasses.clsMenu>();
 
-    private list_view_menu adaptergrid;
+    private list_view_menu2 adaptergrid;
+
+    private boolean started = false;
+    private Handler handler = new Handler();
 
     private int selId,selIdx,menuid,iicon;
     private String sdoc;
@@ -41,6 +51,7 @@ public class Mainmenu extends PBase {
 
     private boolean listo=true;
 
+    private int tiempo_actualizacion=30*1000;
     private int cantRecep = 0,cantPicking = 0,cantVerif = 0,cantCambioEst = 0, cantCambioUbic = 0;
 
     @Override
@@ -68,6 +79,9 @@ public class Mainmenu extends PBase {
 
         setHandlers();
 
+        String params=gl.wsurl+"#"+gl.IdBodega+"#"+gl.OperadorBodega.IdOperadorBodega;
+        startCantTareas.startService(this,params);
+
         ProgressDialog("Cargando forma");
     }
 
@@ -93,18 +107,109 @@ public class Mainmenu extends PBase {
         }
     }
 
-    public void ProgressDialog(String mensaje){
-        progress=new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
-    }
-
     //endregion
 
     //region Main
+
+    public void listItems() {
+        try{
+            clsClasses.clsMenu item;
+
+            items.clear();selIdx=-1;
+
+            try {
+
+                item = clsCls.new clsMenu();
+                item.ID=1;item.Icon=1;item.Name="Recepción\n";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=2;item.Icon=2;item.Name="Cambio de ubicación";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=3;item.Icon=3;item.Name="Cambio de estado";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=4;item.Icon=4;item.Name="Packing";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=5;item.Icon=5;item.Name="Picking\n";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=7;item.Icon=7;item.Name="Inventario";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=10;item.Icon=10;item.Name="Utilerias";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=9;item.Icon=9;item.Name="Cambio usuario";item.cant=-1;
+                items.add(item);
+
+                progress.cancel();
+
+            } catch (Exception e) {
+                addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            }
+
+            adaptergrid=new list_view_menu2(this, items);
+            gridView.setAdapter(adaptergrid);
+            adaptergrid.setSelectedIndex(selIdx);
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void updateList() {
+        try {
+            items.get(0).cant=cantRecep;
+            items.get(1).cant=cantCambioUbic;
+            items.get(2).cant=cantCambioEst;
+            items.get(4).cant=cantPicking;
+            items.get(5).cant=cantVerif;
+
+            adaptergrid.notifyDataSetChanged();
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void Load(){
+        try {
+            lblBodega.setText("Bodega: "+ gl.CodigoBodega);
+            lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+
+            listItems();
+
+            execws(1);
+        } catch (Exception e){
+            mu.msgbox(e.getMessage());
+        }
+    }
+
+    private void finishLoad() {
+        try {
+            updateList();
+            starttimer();
+        } catch (Exception e){
+            mu.msgbox(e.getMessage());
+        }
+    }
+
     //endregion
 
     //region Web Service
@@ -255,7 +360,7 @@ public class Mainmenu extends PBase {
 
             cantCambioEst = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
 
-            listItems();
+            finishLoad();
 
         } catch (Exception e) {
             progress.cancel();
@@ -266,87 +371,30 @@ public class Mainmenu extends PBase {
 
     //endregion
 
+    //region Timer
+
+    private Runnable timer = new Runnable() {
+        @Override
+        public void run() {
+            cargaDatosServicio();
+            updateList();
+            if(started) starttimer();
+        }
+    };
+
+    public void stoptimer() {
+        started = false;
+        handler.removeCallbacks(timer);
+    }
+
+    public void starttimer() {
+        started = true;
+        handler.postDelayed(timer, tiempo_actualizacion);
+    }
+
+    //endregion
+
     //region Aux
-
-    private void Load(){
-
-        try {
-
-            lblBodega.setText("Bodega: "+ gl.CodigoBodega);
-            lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
-
-            execws(1);
-
-        } catch (Exception e){
-            mu.msgbox(e.getMessage());
-        }
-
-    }
-
-    public void listItems() {
-        try{
-            clsClasses.clsMenu item;
-
-            items.clear();selIdx=-1;
-
-            try {
-
-                item = clsCls.new clsMenu();
-                item.ID=1;item.Name="Recepción("+ cantRecep + ")";item.Icon=1;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=2;item.Name="Cambio de ubicación("+ cantCambioUbic + ")";item.Icon=2;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=3;item.Name="Cambio de estado("+ cantCambioEst + ")";item.Icon=3;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=4;item.Name="Packing";item.Icon=4;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=5;item.Name="Picking("+ cantPicking + ")";item.Icon=5;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=6;item.Name="Verificación("+ cantVerif + ")";item.Icon=6;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=7;item.Name="Inventario";item.Icon=7;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=8;item.Name="Existencias";item.Icon=8;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=10;item.Name="Utilerias";item.Icon=10;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=9;item.Name="Cambio usuario";item.Icon=9;
-                items.add(item);
-
-                progress.cancel();
-
-            } catch (Exception e) {
-                addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-            }
-
-            adaptergrid=new list_view_menu(this, items);
-            gridView.setAdapter(adaptergrid);
-            adaptergrid.setSelectedIndex(selIdx);
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
-
-    }
 
     private void Procesa_Opcion_Menu(int idmenu){
 
@@ -437,37 +485,13 @@ public class Mainmenu extends PBase {
         }
     }
 
-    private void msgAskUbicNoDirigida(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setCancelable(false);
-            dialog.setMessage("¿" + msg + "?");
-
-            dialog.setIcon(R.drawable.cambioubic);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
-                    startActivity(intent);
-
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
-                }
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-
+    public void ProgressDialog(String mensaje){
+        progress=new ProgressDialog(this);
+        progress.setMessage(mensaje);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void menuUtilerias() {
@@ -511,10 +535,109 @@ public class Mainmenu extends PBase {
 
     }
 
+    private void cargaDatosServicio() {
+        String vs,ss;
+        String[] sp;
+
+        cantRecep=-1;cantPicking=-1;cantVerif=-1;cantCambioEst=-1;cantCambioUbic=-1;
+        //toast("timer");
+
+        try {
+
+            vs= readServiceFile();
+            sp=vs.split(",");
+
+            try {
+                ss= sp[0];ss=ss.substring(1);
+                cantRecep=Integer.parseInt(ss);
+            } catch (Exception e) {
+                cantRecep=-1;
+            }
+
+            try {
+                ss= sp[1];ss=ss.substring(1);
+                cantPicking=Integer.parseInt(ss);
+            } catch (Exception e) {
+                cantPicking=-1;
+            }
+
+            try {
+                ss= sp[2];ss=ss.substring(1);
+                cantVerif=Integer.parseInt(ss);
+            } catch (Exception e) {
+                cantVerif=-1;
+            }
+
+            try {
+                ss= sp[3];ss=ss.substring(1);
+                cantCambioUbic=Integer.parseInt(ss);
+            } catch (Exception e) {
+                cantCambioUbic=-1;
+            }
+
+            try {
+                ss= sp[4];ss=ss.substring(1);
+                cantCambioEst=Integer.parseInt(ss);
+            } catch (Exception e) {
+                cantCambioEst=-1;
+            }
+
+        } catch (Exception e) {
+            toast(e.getMessage());
+        }
+    }
+
+    public static String readServiceFile() throws Exception {
+        String fname = Environment.getExternalStorageDirectory().getPath()+"/tom_tareas.txt";
+        String aBuffer = "";
+
+        File myFile = new File(fname);
+        FileInputStream fIn = new FileInputStream(myFile);
+        BufferedReader txtReader = new BufferedReader(new InputStreamReader(fIn));
+        String aDataRow = "";
+        while ((aDataRow = txtReader.readLine()) != null) aBuffer += aDataRow;
+
+        txtReader.close();
+
+        return aBuffer;
+    }
+
     //endregion
 
     //region Dialogs
 
+    private void msgAskUbicNoDirigida(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                    startActivity(intent);
+
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
 
     private void msgAskUpdate(String msg) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -536,6 +659,10 @@ public class Mainmenu extends PBase {
 
     }
 
+    //endregion
+
+    //region Activity Events
+
     protected void onResume() {
         try{
             Load();
@@ -545,9 +672,17 @@ public class Mainmenu extends PBase {
         }
     }
 
-    //endregion
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stoptimer();
+    }
 
-    //region Activity Events
+    @Override
+    public void onBackPressed() {
+        stoptimer();
+        super.onBackPressed();
+    }
 
 
     //endregion

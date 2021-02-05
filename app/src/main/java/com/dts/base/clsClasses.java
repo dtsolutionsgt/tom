@@ -3,7 +3,7 @@ package com.dts.base;
 public class clsClasses {
 
 	public class clsMenu {
-		public int ID,Icon;
+		public int ID,Icon,cant;
 		public String Name;
 	}
 

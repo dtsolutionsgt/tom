@@ -9,12 +9,13 @@
     <ImageView
         android:id="@+id/imgNext"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
+        android:layout_height="64dp"
         android:layout_alignParentLeft="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
         android:src="@drawable/ok48" />
 
     <TextView
@@ -24,15 +25,15 @@
         android:layout_below="@+id/imgNext"
         android:layout_alignStart="@+id/imgNext"
         android:layout_alignEnd="@+id/imgNext"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="-4dp"
-        android:gravity="center|center_horizontal|center_vertical"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="4dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="21sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
