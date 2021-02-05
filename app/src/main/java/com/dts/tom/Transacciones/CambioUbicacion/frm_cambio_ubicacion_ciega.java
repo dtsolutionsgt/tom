@@ -1585,13 +1585,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                     String pos = cadena_ubicacion[4].trim().substring(3);
                                     String ubicacion = cadena_ubicacion[5].trim().substring(1);
 
-                                    text = "Lleve producto a Rack " + rack + "."
+                                    text = "Lleve producto a " + rack + "."
                                          + " Tramo: " + tramo + "."
                                          + " Columna: " + columna + "."
                                          + " Nivel: " + nivel + "."
                                          + " Posición: " + pos + "."
-                                         + " Ubicación: " + ubicacion + "."
-                                         + " Y escanee el código: " + txtCodigoPrd.getText().toString();
+                                         + " Escanee: " + ubicacion;
 
                                     float speed = 1f;
                                     float pitch = 1f;
