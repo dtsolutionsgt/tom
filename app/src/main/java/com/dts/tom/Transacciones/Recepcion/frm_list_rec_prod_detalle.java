@@ -321,7 +321,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }
             });
 
-            dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+            dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {}
             });
 

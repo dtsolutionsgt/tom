@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -345,25 +344,17 @@ public class frm_Packing extends PBase {
             cvProdID = 0;
             cvVence = "01/01/1900";
 
-            String vStarWithParameter = "$";
+            //Es una barra de pallet válida por tamaño
+            int vLengthBarra = txtLic_Plate.getText().toString().length();
 
-            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-            if (txtLic_Plate.getText().toString().startsWith("$") ||
-                    txtLic_Plate.getText().toString().startsWith("(01)") ||
-                    txtLic_Plate.getText().toString().startsWith(vStarWithParameter)) {
+            Escaneo_Pallet = true;
 
-                //Es una barra de pallet válida por tamaño
-                int vLengthBarra = txtLic_Plate.getText().toString().length();
+            pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-                escaneoPallet = true;
-                pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
+            //Llama al método del WS Existe_LP
+            execws(9);
 
-                //Llama al método del WS Existe_LP
-                execws(9);
-
-                progress.cancel();
-
-            }
+            progress.cancel();
 
         } catch (Exception ex) {
             progress.cancel();
@@ -1460,7 +1451,7 @@ public class frm_Packing extends PBase {
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLP,
+                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 4:
@@ -1651,7 +1642,7 @@ public class frm_Packing extends PBase {
 
                         if (AuxList.size() == 1){
 
-
+                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
                             BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
                             BeStockPallet = ListBeStockPallet.items.get(0).Stock;
 
@@ -1683,7 +1674,7 @@ public class frm_Packing extends PBase {
             }
 
         }catch (Exception e){
-
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 

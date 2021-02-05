@@ -15,6 +15,8 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public double Cantidad_recibida;
     @Element(required=false) public String Lote;
     @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
+    @Element(required=false) public String Lic_Plate;
+
 
 
     public clsBeTrans_oc_det_lote() {
@@ -22,7 +24,7 @@ public class clsBeTrans_oc_det_lote {
 
     public clsBeTrans_oc_det_lote(int IdOrdenCompraEnc,int IdOrdenCompraDet,int IdOrdenCompraDetLote,int IdProductoBodega,
                                   int No_linea,String Codigo_producto,double Cantidad,double Cantidad_recibida,
-                                  String Lote,String Fecha_vence) {
+                                  String Lote,String Fecha_vence, String Lic_Plate) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -34,6 +36,7 @@ public class clsBeTrans_oc_det_lote {
         this.Cantidad_recibida=Cantidad_recibida;
         this.Lote=Lote;
         this.Fecha_vence =Fecha_vence;
+        this.Lic_Plate = Lic_Plate;
     }
 
 
@@ -97,6 +100,14 @@ public class clsBeTrans_oc_det_lote {
     public void setFecha_vence(String value) {
         Fecha_vence =value;
     }
+
+    public String getLic_Plate() {
+        return Lic_Plate;
+    }
+    public void setLic_Plate(String value) {
+        Lic_Plate=value;
+    }
+
 
 }
 

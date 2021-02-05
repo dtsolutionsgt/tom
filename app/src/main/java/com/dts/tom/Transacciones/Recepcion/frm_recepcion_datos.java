@@ -212,6 +212,10 @@ public class frm_recepcion_datos extends PBase {
 
         tblEstiba  = (TableRow)findViewById(R.id.tblEstiba) ;
 
+        tblEstiba.setVisibility(View.GONE);
+        chkPaletizar.setVisibility(View.GONE);
+        chkPalletNoEstandar.setVisibility(View.GONE);
+
         setCurrentDateOnView();
 
         setHandlers();
@@ -1285,7 +1289,7 @@ public class frm_recepcion_datos extends PBase {
                             clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
                             BeProdPallet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                             BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
-                            BeProdPallet.IdOperadorBodega = gl.IdOperador;
+                            BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
                             BeProdPallet.IdPresentacion = IdPreseSelect;
                             BeProdPallet.IdRecepcionDet = pIdRecepcionDet;
                             BeProdPallet.Impreso = false;
@@ -3317,8 +3321,10 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
-            dialog.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
+            dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Actualiza_Valores_Despues_Imprimir();
+                }
             });
 
             dialog.show();
@@ -3755,7 +3761,7 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Costo_Estadistico = 0;
             }
 
-            BeTransReDet.IdOperadorBodega = gl.IdOperador;
+            BeTransReDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
             BeTransReDet.Nombre_producto_estado = stream(LProductoEstado.items).where(c->c.IdEstado==IdEstadoSelect).select(c->c.Nombre).first();
 
             if (!txtCantidadRec.getText().toString().isEmpty()){
