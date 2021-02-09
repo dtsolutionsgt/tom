@@ -397,7 +397,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                     Procesa_Lp();
+
+                    inicializaTareaLP();
+
+                    Procesa_Lp();
                 }
 
                 return false;
@@ -889,20 +892,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             String vStarWithParameter = "$";
 
-            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
             if (!txtLicPlate.getText().toString().isEmpty()) {
 
-                //Es una barra de pallet válida por tamaño
-                int vLengthBarra = txtLicPlate.getText().toString().length();
-
-                // if (vLengthBarra >= 16) {
-
-                escaneoPallet = true;
+               escaneoPallet = true;
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
                 //Llama al método del WS Existe_Lp
-
                 execws(18);
 
                 progress.cancel();
@@ -2251,6 +2247,57 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cvUbicOrigID = 0;
             cvEstDestino = 0;
             cvEstOrigen = 0;
+            vCantidadAUbicar = 0;
+            vCantidadDisponible = 0;
+
+            lblCant.setText("");
+            txtUbicDestino.setText("");
+            txtCantidad.setText("");
+            txtPeso.setText("");
+            txtCodigoPrd.setText("");
+
+            cmbPresentacion.setEnabled(false);
+            cmbLote.setEnabled(true);
+            cmbVence.setEnabled(true);
+            cmbEstadoDestino.setEnabled(true);
+
+            txtUbicDestino.setEnabled(true);
+            txtCantidad.setEnabled(true);
+            txtPeso.setEnabled(true);
+            txtCodigoPrd.setEnabled(true);
+            txtLicPlate.setEnabled(true);
+
+            validarDatos = false;
+            vProcesar = false;
+
+            txtUbicOrigen.requestFocus();
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void inicializaTareaLP(){
+        try{
+            progress.setMessage("Inicializando tarea");
+            progress.show();
+
+            txtCodigoPrd.setText("");
+            lblDescProducto.setText("");
+            cmbPresentacion.setAdapter(null);
+            cmbLote.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbEstadoOrigen.setAdapter(null);
+            cmbEstadoDestino.setAdapter(null);
+
+            cvProdID = 0;
+            cvPresID = 0;
+            cvLote  = "";
+            cvVence = "";
+            cvUbicDestID = 0;
+            cvEstDestino = 0;
             vCantidadAUbicar = 0;
             vCantidadDisponible = 0;
 

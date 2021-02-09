@@ -57,7 +57,6 @@ public class frm_Packing extends PBase {
     private String gLoteOrigen="",cvVence="";
     private double cvCant=0,cvCantMax=0;
     private boolean Escaneo_Pallet=false;
-    private String pLP="";
     private double vCantidadAUbicar, vCantidadDisponible;
     private String cvAtrib;
     private double vFactorPres;
@@ -381,7 +380,7 @@ public class frm_Packing extends PBase {
 
                     Escaneo_Pallet = true;
 
-                    pLP = txtPrd.getText().toString().replace("$", "");
+                    pLicensePlate = txtPrd.getText().toString().replace("$", "");
 
                     //Llama al método del WS Get_Stock_By_Lic_Plate
                     execws(3);
@@ -513,7 +512,6 @@ public class frm_Packing extends PBase {
             txtCantidad.setText("");
             txtCantidad.setEnabled(false);
             txtPrd.setText("");
-            txtPrd.setEnabled(false);
 
         }catch (Exception e){
 
@@ -540,7 +538,10 @@ public class frm_Packing extends PBase {
 
             if (BorrarUbicOrigen){
                 lblUbicOrigen.setText("");
+                txtUbicOr.setText("");
             }
+
+            txtLic_Plate.setText("");
 
             lblCCant.setText("");
 
@@ -557,7 +558,6 @@ public class frm_Packing extends PBase {
             txtCantidad.setText("");
             txtCantidad.setEnabled(false);
             txtPrd.setText("");
-            txtPrd.setEnabled(false);
 
         }catch (Exception e){
 
@@ -571,10 +571,8 @@ public class frm_Packing extends PBase {
             int CantPorUbic= 0;
             cvUbicOrigID = 0;
 
-           /* txtPrd.setText("");
-            txtPrd.setSelectAllOnFocus(true);
-            txtPrd.requestFocus();
-            lblDesProducto.setText("");*/
+            txtPrd.setText("");
+            lblDesProducto.setText("");
 
             if (txtUbicOr.getText().toString().equals("")){
                 txtUbicOr.requestFocus();
@@ -1159,7 +1157,7 @@ public class frm_Packing extends PBase {
 
             if( Escaneo_Pallet && ListBeStockPallet != null){
 
-                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
+                vStockRes.Lic_plate = NuevoLp;//BeStockPallet.Lic_plate;
 
                 if( BeStockPallet.Factor > 0){
                     vStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
@@ -1480,7 +1478,7 @@ public class frm_Packing extends PBase {
                                 "pStockRes",vStockRes);
                         break;
                     case 9:
-                        callMethod("Existe_Lp","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
                         break;
                 }
 
@@ -1538,16 +1536,12 @@ public class frm_Packing extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
 
             if (Existe_Lp){
 
-                txtPrd.setEnabled(false);
                 progress.cancel();
-                txtPrd.setText("");
-                txtPrd.setSelectAllOnFocus(true);
                 txtPrd.requestFocus();
-                lblDesProducto.setText("");
 
                 //Get_Stock_By_Lic_Plate
                 execws(3);
@@ -1596,14 +1590,10 @@ public class frm_Packing extends PBase {
 
             cvUbicOrigID = cUbicOrig.IdUbicacion;
             lblUbicOrigen.setText(cUbicOrig.Descripcion);
-
-            //txtPrd.setEnabled(true);
-            //txtPrd.setSelectAllOnFocus(true);
-            //txtPrd.requestFocus();
+            cvUbicDestID = cvUbicOrigID;
 
             txtLic_Plate.setSelectAllOnFocus(true);
             txtLic_Plate.requestFocus();
-
 
             idle = true;
 
@@ -1622,6 +1612,7 @@ public class frm_Packing extends PBase {
                 lblDesProducto.setTextColor(Color.RED);
                 gIdProductoOrigen = 0;
                 lblDesProducto.setText("Código de LP no válido");
+                Limpiar_Valores();
             }else{
 
                 if (Escaneo_Pallet && ListBeStockPallet != null){
@@ -1760,7 +1751,6 @@ public class frm_Packing extends PBase {
                 mu.msgbox("Producto no existe");
                 Limpiar_Valores();
                 progress.cancel();
-                txtPrd.setEnabled(true);
                 txtPrd.requestFocus();
                 txtPrd.selectAll();
             }

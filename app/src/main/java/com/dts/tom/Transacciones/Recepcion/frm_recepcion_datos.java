@@ -358,7 +358,7 @@ public class frm_recepcion_datos extends PBase {
                         lblEstiba.setText("");
                     }
 
-                    /*if (EsPallet){
+                   /* if (EsPallet){
                         chkPalletNoEstandar.setVisibility(View.VISIBLE);
                     }else{
                         chkPalletNoEstandar.setVisibility(View.GONE);
@@ -3485,7 +3485,6 @@ public class frm_recepcion_datos extends PBase {
 
                     bePresentacion = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).first();
 
-
                     BeTransReDet.Presentacion = bePresentacion;
 
                     if(!bePresentacion.EsPallet){
@@ -4453,7 +4452,6 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
                                 "pListStockRecSer",pListBeStockSeRec.items,
-
                                 "pListStockRec",pListBeStockRec.items,
                                 "pListProductoPallet",listaProdPalletsNuevos.items,
                                 "pIdEmpresa",gl.IdEmpresa,
