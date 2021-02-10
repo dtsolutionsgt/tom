@@ -1650,6 +1650,10 @@ public class frm_Packing extends PBase {
                             //Llama al método del WS Get_Estados_By_IdPropietario
                             execws(4);
 
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtPrd.requestFocus();
                         }
 
                     }

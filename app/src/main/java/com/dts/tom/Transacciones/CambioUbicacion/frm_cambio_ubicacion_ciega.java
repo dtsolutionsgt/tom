@@ -898,7 +898,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
-                //Llama al método del WS Existe_Lp
+                //Llama al método del WS Existe_Lp_In_Stock
                 execws(18);
 
                 progress.cancel();
@@ -1294,7 +1294,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdPropietario",BeProductoUbicacion.getIdPropietario());
                         break;
                     case 11://Valida la ubicación origen
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOrigen.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicOrigen.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 12://Valida la ubicación destino
@@ -1325,7 +1326,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdPresentacion",cvPresID);
                         break;
                     case 16://Obtiene descripción de la ubicación destino sugerida
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicDestino.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
@@ -1333,7 +1335,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 18:
-                        callMethod("Existe_Lp","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
                         break;
                     case 19:
                         callMethod("Es_Pallet_No_Estandar","pStock",pStock);
@@ -1724,6 +1726,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             //Llama al método del WS Get_Estados_By_IdPropietario
                             execws(10);
 
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtCodigoPrd.requestFocus();
                         }
                     }
                 }else{
@@ -2047,7 +2053,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
 
             if (Existe_Lp){
                 progress.cancel();
