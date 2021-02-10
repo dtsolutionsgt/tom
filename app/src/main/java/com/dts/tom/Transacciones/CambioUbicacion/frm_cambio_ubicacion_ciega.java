@@ -1574,19 +1574,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 }else{
 
                                     String[] cadena_ubicacion = bodega_ubicacion_destino.getDescripcion().split("-");
-                                    String rack = cadena_ubicacion[0].trim().substring(1);
+                                    String rack = cadena_ubicacion[0].trim().substring(0);
                                     String columna = cadena_ubicacion[1].trim().substring(1);
                                     String tramo = cadena_ubicacion[2].trim().substring(1);
                                     String nivel = cadena_ubicacion[3].trim().substring(1);
                                     String pos = cadena_ubicacion[4].trim().substring(3);
                                     String ubicacion = cadena_ubicacion[5].trim().substring(1);
 
-                                    text = "Lleve producto a " + rack + "."
+                                    text = "Lleve producto a " + rack + ". "
                                          + " Tramo: " + tramo + "."
                                          + " Columna: " + columna + "."
                                          + " Nivel: " + nivel + "."
                                          + " Posición: " + pos + "."
-                                         + " Escanee: " + ubicacion;
+                                         + " Y Escanee: " + ubicacion;
 
                                     float speed = 1f;
                                     float pitch = 1f;
