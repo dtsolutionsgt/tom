@@ -1301,7 +1301,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         break;
                     case 12://Valida la ubicación destino
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
-                                "pBarra",txtUbicSug.getText().toString(),
+                                "pBarra",txtUbicDestino.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 13:
