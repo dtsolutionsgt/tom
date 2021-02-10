@@ -387,24 +387,31 @@ public class frm_Packing extends PBase {
                 }
 
             }else{
+
                 Escaneo_Pallet=false;
+
+                if (txtNuevoLp.getText().toString().isEmpty()){
+                    int cyear,cmonth,cday,ch,cm;
+                    final Calendar c = Calendar.getInstance();
+                    cyear = c.get(Calendar.YEAR);
+                    cmonth = c.get(Calendar.MONTH)+1;
+                    cday = c.get(Calendar.DAY_OF_MONTH);
+                    ch= c.get(Calendar.HOUR_OF_DAY);
+                    cm= c.get(Calendar.MINUTE);
+
+                    String vCodigoBodega =  FormatBodega(gl.CodigoBodega);
+                    String vCodigoProducto = FormatProducto(txtPrd.getText().toString());
+                    String vCorrelativo = (cyear-2000) +
+                            ("00"+cmonth).substring(("00"+cmonth).length()-2) +
+                            ("00"+cday).substring(("00"+cday).length()-2)  +
+                            ("00"+ch).substring(("00"+ch).length()-2)  +
+                            ("00"+cm).substring(("00"+cm).length()-2) ;
+
+                    txtNuevoLp.setText(vCodigoBodega + "" + vCodigoProducto + "W"+vCorrelativo); // & vCorrelativo
+                }
+
+                //Get_BeProducto_By_Codigo_For_HH
                 execws(6);
-            }
-
-            if (txtNuevoLp.getText().toString().isEmpty()){
-                int cyear,cmonth,cday,ch,cm;
-                final Calendar c = Calendar.getInstance();
-                cyear = c.get(Calendar.YEAR);
-                cmonth = c.get(Calendar.MONTH)+1;
-                cday = c.get(Calendar.DAY_OF_MONTH);
-                ch= c.get(Calendar.HOUR_OF_DAY);
-                cm= c.get(Calendar.MINUTE);
-
-                String vCodigoBodega =  FormatBodega(gl.CodigoBodega);
-                String vCodigoProducto = FormatProducto(txtPrd.getText().toString());
-                String vCorrelativo = (cyear-2000) + String.format("%2d",cmonth) + String.format("%2d",cday) + String.format("%2d",ch) + String.format("%2d",cm);
-
-                txtNuevoLp.setText(vCodigoBodega + vCodigoProducto + "W"+vCorrelativo); // & vCorrelativo
             }
 
         }catch (Exception e){
@@ -418,16 +425,13 @@ public class frm_Packing extends PBase {
 
         try{
 
-            int Lengthindex = pCodigo.length()-1;
+            int Lengthindex = pCodigo.length();
 
-            if (Lengthindex==2){
+            if (Lengthindex>=2){
                 cdBodega = pCodigo;
-            }else if (Lengthindex==1){
-                cdBodega = "0"+pCodigo;
-            }else if (Lengthindex==0){
-                cdBodega = "00"+pCodigo;
             }else{
-                mu.msgbox("Formato de bodega incorrecto");
+                cdBodega = ("00"+pCodigo);
+                cdBodega = cdBodega.substring(cdBodega.length()-2);
             }
 
         }catch (Exception e){
@@ -443,20 +447,13 @@ public class frm_Packing extends PBase {
 
         try{
 
-            int Lengthindex = pCodigo.length()-1;
+            int Lengthindex = pCodigo.length();
 
-            if (Lengthindex==4){
+            if (Lengthindex>=4){
                 cdBodega = pCodigo;
-            }else if (Lengthindex==3){
-                cdBodega = "0"+pCodigo;
-            }else if (Lengthindex==2){
-                cdBodega = "00"+pCodigo;
-            }else if (Lengthindex==1){
-                cdBodega = "000"+pCodigo;
-            }else if (Lengthindex==0){
-                cdBodega = "0000"+pCodigo;
             }else{
-                mu.msgbox("Formato de producto incorrecto");
+                cdBodega = ("0000"+pCodigo);
+                cdBodega = cdBodega.substring(cdBodega.length()-4);
             }
 
         }catch (Exception e){
@@ -1823,19 +1820,22 @@ public class frm_Packing extends PBase {
 
                 if (cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0){
                     gl.gCPresAnterior = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
-                    gl.gCNomPresAnterior = cmbPres.getSelectedItem().toString().split(" - ")[1];
+                    if (cmbPres.getSelectedItem().toString().split(" - ").length>1){
+                        gl.gCNomPresAnterior = cmbPres.getSelectedItem().toString().split(" - ")[1];
+                    }
                 }else{
                     gl.gCPresAnterior = -1;
                     gl.gCNomPresAnterior = "";
                 }
 
                 //CM_20201128: correcciones al iniciar valores después de asociar lp nuevo.
-                Limpiar_Valores();
+                //CKFK 20210209 No hace falta inicializar valores por que lo hace al buscar la ubicacion origen
+                //Limpiar_Valores();
 
                 lblDesProducto.setText("");
 
                 //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
-                Scan_Ubic_Origen();
+                execws(1);
 
 
             }
