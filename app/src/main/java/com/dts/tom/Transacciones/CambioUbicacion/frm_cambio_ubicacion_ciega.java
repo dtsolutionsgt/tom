@@ -2184,6 +2184,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbVence.setAdapter(null);
             cmbEstadoOrigen.setAdapter(null);
             cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2248,6 +2250,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbVence.setAdapter(null);
             cmbEstadoOrigen.setAdapter(null);
             cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2303,6 +2307,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbVence.setAdapter(null);
             cmbEstadoOrigen.setAdapter(null);
             cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2510,7 +2516,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (!txtUbicSug.getText().toString().isEmpty()){
+            if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
