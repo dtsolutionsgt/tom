@@ -500,7 +500,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 Cantwithformat = Cantwithformat.replace(",","");
 
                                 if(Double.valueOf(Cantwithformat)>0) {
-                                    txtPeso.requestFocus();
+                                    if (txtPeso.getVisibility()==View.VISIBLE){
+                                        txtPeso.requestFocus();
+                                    }else{
+                                        txtUbicDestino.requestFocus();
+                                    }
                                 }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
