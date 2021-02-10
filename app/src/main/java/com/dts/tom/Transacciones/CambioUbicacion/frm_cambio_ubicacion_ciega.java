@@ -1301,7 +1301,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         break;
                     case 12://Valida la ubicación destino
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
-                                "pBarra",txtUbicDestino.getText().toString(),
+                                "pBarra",txtUbicSug.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 13:
@@ -2530,7 +2530,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (!lblUbicCompDestino.getText().toString().isEmpty()){
+            if (!txtUbicSug.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
