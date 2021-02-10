@@ -361,9 +361,18 @@
 
                 <EditText
                     android:id="@+id/txtUbicDestino"
-                    android:layout_width="match_parent"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/txtUbicSug"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:paddingLeft="3dp"
+                    android:text="-"
+                    android:textColor="@color/colorPrimary" />
 
             </TableRow>
 

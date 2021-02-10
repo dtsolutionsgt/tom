@@ -509,6 +509,7 @@ public class frm_picking_datos extends PBase {
 
                                                     if (plistPickingUbi.items.get(vTempIndex).IdUbicacion==gIdUbicacion){
                                                         gBeProducto = BeStockPallet;
+                                                        //Primer llamado
                                                         Cargar_Datos_Producto_Picking_Consolidado();
                                                         return;
                                                     }else{
@@ -606,6 +607,7 @@ public class frm_picking_datos extends PBase {
                 }
 
                 if (Escaneo_Pallet && vPalletValido){
+                    //Segundo llamado
                     Cargar_Datos_Producto_Picking_Consolidado();
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
@@ -617,6 +619,7 @@ public class frm_picking_datos extends PBase {
                 }else{
 
                     gBeProducto = new clsBeProducto();
+                    //Get_BeProducto_By_Codigo_For_HH (Primera vez)
                     execws(4);
                 }
 
@@ -697,6 +700,7 @@ public class frm_picking_datos extends PBase {
 
                                                     if (plistPickingUbi.items.get(vTempIndex).IdUbicacion==gIdUbicacion){
                                                         gBeProducto = BeStockPallet;
+                                                        //Tercer llamado
                                                         Cargar_Datos_Producto_Picking();
                                                         return;
                                                     }else{
@@ -794,6 +798,7 @@ public class frm_picking_datos extends PBase {
                 }
 
                 if (Escaneo_Pallet && vPalletValido){
+                    //Cuarto llamado
                     Cargar_Datos_Producto_Picking();
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
@@ -804,8 +809,16 @@ public class frm_picking_datos extends PBase {
 
                 }else{
 
-                    gBeProducto = new clsBeProducto();
-                    execws(4);
+                    //#CKFK 20210210 Puse esto en comentario porque inicializaba el producto, y daba error
+                    // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
+
+                   //gBeProducto = new clsBeProducto();
+                   // execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+
+                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
+                    btnConfirmarPk.setEnabled(false);
+                    txtBarra.setSelectAllOnFocus(true);
+                    txtBarra.requestFocus();
                 }
 
             }
@@ -859,6 +872,7 @@ public class frm_picking_datos extends PBase {
                     if (TipoLista==1){
                         Cargar_Datos_Producto_Picking_Consolidado();
                     }else{
+                        //Quinto llamado
                         Cargar_Datos_Producto_Picking();
                     }
                 }
@@ -895,6 +909,7 @@ public class frm_picking_datos extends PBase {
             if (TipoLista==1){
                 Cargar_Datos_Producto_Picking_Consolidado();
             }else{
+                //Sexto llamado
                 Cargar_Datos_Producto_Picking();
             }
 
@@ -926,6 +941,7 @@ public class frm_picking_datos extends PBase {
 
                 //#EJC20200610: No me gusta como se ve esto, pero tengo demo ma;ana
                 gBeProducto = new clsBeProducto();
+                //Get_BeProducto_By_Codigo_For_HH (Tercera vez)
                 execws(4);
                 return;
             }
@@ -1266,7 +1282,9 @@ public class frm_picking_datos extends PBase {
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.IdProducto,"pActivo",true);
                         break;
                     case 4:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtBarra.getText().toString(),"IdBodega",gl.IdBodega);
+                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                "pCodigo",txtBarra.getText().toString().replace("$", ""),
+                                "IdBodega",gl.IdBodega);
                         break;
                     case 5:
                         callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
@@ -1420,6 +1438,7 @@ public class frm_picking_datos extends PBase {
                     if (TipoLista==1){
                         Cargar_Datos_Producto_Picking_Consolidado();
                     }else{
+                        //Séptimo llamado
                         Cargar_Datos_Producto_Picking();
                     }
                 }else{

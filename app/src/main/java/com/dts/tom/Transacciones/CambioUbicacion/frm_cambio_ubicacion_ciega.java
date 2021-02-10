@@ -54,7 +54,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
     private TableRow trPeso;
@@ -171,6 +171,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblPeso = (TextView) findViewById(R.id.lblPeso);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
+            txtUbicSug = (TextView) findViewById(R.id.txtUbicSug);
 
             cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
             cmbLote = (Spinner) findViewById(R.id.cmbLote);
@@ -1299,7 +1300,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 12://Valida la ubicación destino
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicDestino.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 13:
@@ -1327,7 +1329,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         break;
                     case 16://Obtiene descripción de la ubicación destino sugerida
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
-                                "pBarra",txtUbicDestino.getText().toString(),
+                                "pBarra",txtUbicSug.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
@@ -1966,7 +1968,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (lUbicSug != null){
                 if(lUbicSug.items.size()>0){
 
-                    txtUbicDestino.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    txtUbicSug.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    txtUbicDestino.setHint("Escanee " + String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
                     validaDestinoSug();
 
                 }
@@ -2222,6 +2225,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 execws(1);
             }else{
                 txtUbicOrigen.requestFocus();
+                progress.cancel();
             }
 
         }catch (Exception ex){
@@ -2278,6 +2282,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             txtUbicOrigen.requestFocus();
 
+            progress.cancel();
+
         }catch (Exception ex){
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -2328,6 +2334,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vProcesar = false;
 
             txtUbicOrigen.requestFocus();
+
+            progress.cancel();
 
         }catch (Exception ex){
             progress.cancel();
@@ -2502,7 +2510,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (!txtUbicDestino.getText().toString().isEmpty()){
+            if (!txtUbicSug.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
@@ -2522,15 +2530,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (!txtUbicDestino.getText().toString().isEmpty()){
+            if (!lblUbicCompDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino sugerida
                 execws(16);
+            }else{
+                progress.cancel();
             }
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
