@@ -120,48 +120,71 @@ public class frm_picking_datos extends PBase {
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status == TextToSpeech.SUCCESS){
-                    Locale locSpanish = new Locale("spa", "MEX");
-                    int result =mTTS.setLanguage(locSpanish);
-                    if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
-                        Log.e("tts","Lenguaje no soportado :(");
-                    }else{
-
-                        double dif= gBePickingUbic.Cantidad_Solicitada -  gBePickingUbic.Cantidad_Recibida;
-
-                        String text ="";
-
-                        if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")){
-                            text = "Escanee licencia: " + gBePickingUbic.Lic_plate + ".";
-                        }
-
-                        if (!gBePickingUbic.Lote.isEmpty()){
-                             text += " Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
-                                    + " Tome: " + dif + ","
-                                    + " Verifíque lote: " + gBePickingUbic.Lote;
+                try {
+                    if(status == TextToSpeech.SUCCESS){
+                        Locale locSpanish = new Locale("spa", "MEX");
+                        int result =mTTS.setLanguage(locSpanish);
+                        if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                            Log.e("tts","Lenguaje no soportado :(");
                         }else{
-                             text += "Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
-                                    + " Tome: " + dif + ","
-                                    + " tome cualquier lote. ";
-                        }
 
-                        if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
-                            text +=" Verifique vencimiento: " +gBePickingUbic.Fecha_Vence;
-                        }
+                            double dif= gBePickingUbic.Cantidad_Solicitada -  gBePickingUbic.Cantidad_Recibida;
 
-                        float speed = 1f;
-                        float pitch = 1f;
-                        mTTS.setPitch(pitch);
-                        mTTS.setSpeechRate(speed);
+                            String text ="";
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
-                        } else {
-                            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                            if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")){
+
+                                if (gBePickingUbic.Lic_plate.length() > 4){
+                                    String lic_short = gBePickingUbic.Lic_plate.substring(gBePickingUbic.Lic_plate.length()-4);
+                                    text = "Escanee licencia con terminación: " +  lic_short + ".";
+
+                                }else{
+                                    text = "Escanee licencia: " + gBePickingUbic.Lic_plate + ".";
+                                }
+
+                            }
+
+                            String vCantidad ="0";
+
+                            if(dif% 1 == 0){
+                                //es entero
+                                int i = (int) dif;
+                                vCantidad = String.valueOf(i);
+                            }else{
+                                //No es entero
+                                vCantidad = String.valueOf(dif);
+                            }
+
+                            if (!gBePickingUbic.Lote.isEmpty()){
+                                 text += " Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                        + " Tome: " + vCantidad + "."
+                                        + " Verifíque lote: " + gBePickingUbic.Lote;
+                            }else{
+                                 text += "Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                        + " Tome: " + vCantidad + ", "
+                                        + " de cualquier lote. ";
+                            }
+
+                            if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
+                                text +=" Verifique vencimiento: " +gBePickingUbic.Fecha_Vence;
+                            }
+
+                            float speed = 1f;
+                            float pitch = 1f;
+                            mTTS.setPitch(pitch);
+                            mTTS.setSpeechRate(speed);
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                            } else {
+                                mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                            }
                         }
+                    }else{
+                        Log.e("tts","No he podido inicializar el TTS :(");
                     }
-                }else{
-                    Log.e("tts","No he podido inicializar el TTS :(");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

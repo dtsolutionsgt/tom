@@ -60,7 +60,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public boolean ExisteRecepcionNoFinalizada;
     @Element(required=false) public String No_Ticket_TMS;
     @Element(required=false) public int IdNoDocumentoRef;
-
+    @Element(required=false) public int IdAcuerdoComercial;
 
     public clsBeTrans_oc_enc()
     {
@@ -79,7 +79,8 @@ public class clsBeTrans_oc_enc {
                              clsBeTrans_oc_estado EstadoOC,int IdBodega,boolean IsNew,boolean EsDevolucion,
                              clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada,
                              String No_Ticket_TMS,
-                             int IdNoDocumentoRef) {
+                             int IdNoDocumentoRef,
+                             int IdAcuerdoComercial) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -125,6 +126,7 @@ public class clsBeTrans_oc_enc {
         this.ExisteRecepcionNoFinalizada=ExisteRecepcionNoFinalizada;
         this.No_Ticket_TMS=No_Ticket_TMS;
         this.IdNoDocumentoRef = IdNoDocumentoRef;
+        this.IdAcuerdoComercial = IdAcuerdoComercial;
 
     }
 
@@ -393,6 +395,13 @@ public class clsBeTrans_oc_enc {
     public void setIdNoDocumentoRef(int value) {
         IdNoDocumentoRef=value;
     }
+    public int getIdAcuerdoComercial() {
+        return IdAcuerdoComercial;
+    }
+    public void setIdAcuerdoComercial(int value) {
+        IdAcuerdoComercial=value;
+    }
+
 
 }
 
