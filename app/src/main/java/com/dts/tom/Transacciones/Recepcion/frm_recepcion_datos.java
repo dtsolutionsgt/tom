@@ -4004,7 +4004,7 @@ public class frm_recepcion_datos extends PBase {
                             }
 
                         }else{
-                            mu.msgbox("La cantidad de pallets es > 1 y genera_lp_auto es Falso, debe recibir los pallets de forma unitaria (Cantidad = 1)");
+                            toastlong("La cantidad de pallets es > 1 y genera_lp_auto es Falso, debe recibir los pallets de forma unitaria (Cantidad = 1)");
                             return;
                         }
 
