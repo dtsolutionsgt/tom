@@ -54,7 +54,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
     private TableRow trPeso;
@@ -171,6 +171,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblPeso = (TextView) findViewById(R.id.lblPeso);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
+            txtUbicSug = (TextView) findViewById(R.id.txtUbicSug);
 
             cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
             cmbLote = (Spinner) findViewById(R.id.cmbLote);
@@ -397,7 +398,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                     Procesa_Lp();
+
+                    inicializaTareaLP();
+
+                    Procesa_Lp();
                 }
 
                 return false;
@@ -496,7 +500,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 Cantwithformat = Cantwithformat.replace(",","");
 
                                 if(Double.valueOf(Cantwithformat)>0) {
-                                    txtPeso.requestFocus();
+                                    if (txtPeso.getVisibility()==View.VISIBLE){
+                                        txtPeso.requestFocus();
+                                    }else{
+                                        txtUbicDestino.requestFocus();
+                                    }
                                 }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
@@ -889,20 +897,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             String vStarWithParameter = "$";
 
-            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
             if (!txtLicPlate.getText().toString().isEmpty()) {
 
-                //Es una barra de pallet válida por tamaño
-                int vLengthBarra = txtLicPlate.getText().toString().length();
-
-                // if (vLengthBarra >= 16) {
-
-                escaneoPallet = true;
+               escaneoPallet = true;
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
-                //Llama al método del WS Existe_Lp
-
+                //Llama al método del WS Existe_Lp_In_Stock
                 execws(18);
 
                 progress.cancel();
@@ -1298,11 +1299,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdPropietario",BeProductoUbicacion.getIdPropietario());
                         break;
                     case 11://Valida la ubicación origen
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOrigen.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicOrigen.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 12://Valida la ubicación destino
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicDestino.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 13:
@@ -1329,7 +1332,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdPresentacion",cvPresID);
                         break;
                     case 16://Obtiene descripción de la ubicación destino sugerida
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicDestino.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicSug.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
@@ -1337,7 +1341,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 18:
-                        callMethod("Existe_Lp","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
                         break;
                     case 19:
                         callMethod("Es_Pallet_No_Estandar","pStock",pStock);
@@ -1578,19 +1582,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 }else{
 
                                     String[] cadena_ubicacion = bodega_ubicacion_destino.getDescripcion().split("-");
-                                    String rack = cadena_ubicacion[0].trim().substring(1);
+                                    String rack = cadena_ubicacion[0].trim().substring(0);
                                     String columna = cadena_ubicacion[1].trim().substring(1);
                                     String tramo = cadena_ubicacion[2].trim().substring(1);
                                     String nivel = cadena_ubicacion[3].trim().substring(1);
                                     String pos = cadena_ubicacion[4].trim().substring(3);
                                     String ubicacion = cadena_ubicacion[5].trim().substring(1);
 
-                                    text = "Lleve producto a " + rack + "."
+                                    text = "Lleve producto a " + rack + ". "
                                          + " Tramo: " + tramo + "."
                                          + " Columna: " + columna + "."
                                          + " Nivel: " + nivel + "."
                                          + " Posición: " + pos + "."
-                                         + " Escanee: " + ubicacion;
+                                         + " Y Escanee: " + ubicacion;
 
                                     float speed = 1f;
                                     float pitch = 1f;
@@ -1728,6 +1732,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             //Llama al método del WS Get_Estados_By_IdPropietario
                             execws(10);
 
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtCodigoPrd.requestFocus();
                         }
                     }
                 }else{
@@ -1964,7 +1972,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (lUbicSug != null){
                 if(lUbicSug.items.size()>0){
 
-                    txtUbicDestino.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    txtUbicSug.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    txtUbicDestino.setHint("Escanee " + String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
                     validaDestinoSug();
 
                 }
@@ -2051,7 +2060,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
 
             if (Existe_Lp){
                 progress.cancel();
@@ -2179,6 +2188,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbVence.setAdapter(null);
             cmbEstadoOrigen.setAdapter(null);
             cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2220,6 +2231,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 execws(1);
             }else{
                 txtUbicOrigen.requestFocus();
+                progress.cancel();
             }
 
         }catch (Exception ex){
@@ -2242,6 +2254,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbVence.setAdapter(null);
             cmbEstadoOrigen.setAdapter(null);
             cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2275,6 +2289,63 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vProcesar = false;
 
             txtUbicOrigen.requestFocus();
+
+            progress.cancel();
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void inicializaTareaLP(){
+        try{
+            progress.setMessage("Inicializando tarea");
+            progress.show();
+
+            txtCodigoPrd.setText("");
+            lblDescProducto.setText("");
+            cmbPresentacion.setAdapter(null);
+            cmbLote.setAdapter(null);
+            cmbVence.setAdapter(null);
+            cmbEstadoOrigen.setAdapter(null);
+            cmbEstadoDestino.setAdapter(null);
+            txtUbicSug.setText("");
+            txtUbicDestino.setHint("");
+
+            cvProdID = 0;
+            cvPresID = 0;
+            cvLote  = "";
+            cvVence = "";
+            cvUbicDestID = 0;
+            cvEstDestino = 0;
+            vCantidadAUbicar = 0;
+            vCantidadDisponible = 0;
+
+            lblCant.setText("");
+            txtUbicDestino.setText("");
+            txtCantidad.setText("");
+            txtPeso.setText("");
+            txtCodigoPrd.setText("");
+
+            cmbPresentacion.setEnabled(false);
+            cmbLote.setEnabled(true);
+            cmbVence.setEnabled(true);
+            cmbEstadoDestino.setEnabled(true);
+
+            txtUbicDestino.setEnabled(true);
+            txtCantidad.setEnabled(true);
+            txtPeso.setEnabled(true);
+            txtCodigoPrd.setEnabled(true);
+            txtLicPlate.setEnabled(true);
+
+            validarDatos = false;
+            vProcesar = false;
+
+            txtUbicOrigen.requestFocus();
+
+            progress.cancel();
 
         }catch (Exception ex){
             progress.cancel();
@@ -2469,15 +2540,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            if (!txtUbicDestino.getText().toString().isEmpty()){
+            if (!txtUbicSug.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
 
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino sugerida
                 execws(16);
+            }else{
+                progress.cancel();
             }
 
         }catch (Exception e){
+            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }

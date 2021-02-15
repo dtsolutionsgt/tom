@@ -14,12 +14,22 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean Control_Poliza=false;
+    @Element(required=false) public boolean Requerir_Documento_Ref=false;
+
 
     public clsBeTrans_oc_ti() {
     }
 
-    public clsBeTrans_oc_ti(int IdTipoIngresoOC,String Nombre,boolean Es_devolucion,String User_agr,
-                            String Fec_agr,String User_mod,String Fec_mod,boolean Activo,boolean Control_Poliza
+    public clsBeTrans_oc_ti(int IdTipoIngresoOC,
+                            String Nombre,
+                            boolean Es_devolucion,
+                            String User_agr,
+                            String Fec_agr,
+                            String User_mod,
+                            String Fec_mod,
+                            boolean Activo,
+                            boolean Control_Poliza,
+                            boolean requerir_documento_ref
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -31,6 +41,7 @@ public class clsBeTrans_oc_ti {
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
         this.Control_Poliza=Control_Poliza;
+        this.Requerir_Documento_Ref = requerir_documento_ref;
     }
 
 
@@ -88,5 +99,14 @@ public class clsBeTrans_oc_ti {
     public void setControl_Poliza(boolean value) {
         Control_Poliza=value;
     }
+
+    public boolean getRequerir_Documento_Ref() {
+        return Requerir_Documento_Ref;
+    }
+
+    public void setRequerir_Documento_Ref(boolean value) {
+        Requerir_Documento_Ref=value;
+    }
+
 }
 

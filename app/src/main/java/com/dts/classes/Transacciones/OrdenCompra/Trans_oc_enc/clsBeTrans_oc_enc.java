@@ -10,6 +10,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_estado.clsBeTrans_oc_e
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_imagen.clsBeTrans_oc_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_pol.clsBeTrans_oc_pol;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
+import com.zebra.sdk.comm.snmp.internal.OidNotFoundException;
 
 import org.simpleframework.xml.Element;
 
@@ -58,7 +59,8 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
     @Element(required=false) public boolean ExisteRecepcionNoFinalizada;
     @Element(required=false) public String No_Ticket_TMS;
-
+    @Element(required=false) public int IdNoDocumentoRef;
+    @Element(required=false) public int IdAcuerdoComercial;
 
     public clsBeTrans_oc_enc()
     {
@@ -76,7 +78,9 @@ public class clsBeTrans_oc_enc {
                              clsBeTrans_oc_pol ObjPoliza,clsBeTrans_oc_imagenList ListaImg,clsBePropietario_bodega PropietarioBodega,clsBeProveedor_bodega ProveedorBodega,
                              clsBeTrans_oc_estado EstadoOC,int IdBodega,boolean IsNew,boolean EsDevolucion,
                              clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada,
-                             String No_Ticket_TMS) {
+                             String No_Ticket_TMS,
+                             int IdNoDocumentoRef,
+                             int IdAcuerdoComercial) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -121,6 +125,8 @@ public class clsBeTrans_oc_enc {
         this.TipoIngreso=TipoIngreso;
         this.ExisteRecepcionNoFinalizada=ExisteRecepcionNoFinalizada;
         this.No_Ticket_TMS=No_Ticket_TMS;
+        this.IdNoDocumentoRef = IdNoDocumentoRef;
+        this.IdAcuerdoComercial = IdAcuerdoComercial;
 
     }
 
@@ -383,6 +389,19 @@ public class clsBeTrans_oc_enc {
     public void setNo_Ticket_TMS(String value) {
         No_Ticket_TMS=value;
     }
+    public int getIdNoDocumentoRef() {
+        return IdNoDocumentoRef;
+    }
+    public void setIdNoDocumentoRef(int value) {
+        IdNoDocumentoRef=value;
+    }
+    public int getIdAcuerdoComercial() {
+        return IdAcuerdoComercial;
+    }
+    public void setIdAcuerdoComercial(int value) {
+        IdAcuerdoComercial=value;
+    }
+
 
 }
 
