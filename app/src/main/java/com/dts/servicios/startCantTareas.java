@@ -16,8 +16,8 @@ public class startCantTareas {
             extras.putString("params",params);
             JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent).setOverrideDeadline(0L).setExtras(extras);
 
-            builder.setMinimumLatency(30 * 1000); // wait
-            builder.setOverrideDeadline(30 * 1000); //  delay
+            builder.setMinimumLatency(25 * 1000); // wait
+            builder.setOverrideDeadline(20 * 1000); //  delay
 
             JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);
             jobScheduler.schedule(builder.build());
