@@ -123,6 +123,12 @@ public class MainActivity extends PBase {
                 setURL();
             }
 
+            try {
+                String orddir=Environment.getExternalStorageDirectory().getPath() + "/tomtask";
+                File directory = new File(orddir);
+                directory.mkdirs();
+            } catch (Exception e) {}
+
             //Load();
 
         } catch (Exception e) {

@@ -51,7 +51,7 @@ public class Mainmenu extends PBase {
 
     private boolean listo=true;
 
-    private int tiempo_actualizacion=30 * 1000;
+    private int tiempo_actualizacion=25 * 1000;
     private int cantRecep = 0,cantPicking = 0,cantVerif = 0,cantCambioEst = 0, cantCambioUbic = 0;
 
     @Override
