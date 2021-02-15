@@ -1,5 +1,6 @@
 package com.dts.servicios;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,7 +10,9 @@ import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
+import android.widget.RemoteViews;
 
 
 import androidx.core.app.NotificationCompat;
@@ -28,7 +31,7 @@ public class srvBaseJob extends JobService {
 
     private boolean idle=false;
 
-    private String appname="TomIms";
+    private String appname="TomWMS Nueva tarea";
     private int iconresource=R.drawable.logotomims;
 
 
@@ -73,6 +76,45 @@ public class srvBaseJob extends JobService {
 
     //region Notification
 
+    public void notifynew(String ntext) {
+        int notificationId = createID();
+        String channelId = "channel-id",channelName = "Channel Name";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        Intent fullScreenIntent = new Intent(this, srvBaseJob.class);
+        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification);
+
+        notificationLayout.setTextViewText(R.id.title, ntext);
+
+        Notification notification = new Notification();
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(iconresource)
+                .setContentTitle(appname)
+                .setContentText(ntext)
+                .setLights(Color.YELLOW, 500, 5000)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setContent(notificationLayout)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setFullScreenIntent(fullScreenPendingIntent, true)
+                .setColor(Color.parseColor("#6200EE"));
+
+        mBuilder.setDefaults(notification.defaults);
+
+        notificationManager.notify(notificationId, mBuilder.build());
+
+    }
 
     public void notification(String message) {
 

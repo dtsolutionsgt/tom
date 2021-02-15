@@ -26,10 +26,6 @@
         <activity android:name=".frm_rec_ftos"></activity>
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_guardar" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo" />
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_add" />
         <activity android:name="com.dts.ladapt.list_adapt_verificados" />
