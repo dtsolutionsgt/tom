@@ -415,9 +415,9 @@ public class frm_picking_datos extends PBase {
 
                 String vStarWithParameter = "$";
 
-                if (txtBarra.getText().toString().startsWith("$") |
+               /* if (txtBarra.getText().toString().startsWith("$") |
                         txtBarra.getText().toString().startsWith("(01)") |
-                        txtBarra.getText().toString().startsWith(vStarWithParameter)) {
+                        txtBarra.getText().toString().startsWith(vStarWithParameter)) {*/
 
                     int vLengthBarra = txtBarra.getText().toString().length();
 
@@ -432,10 +432,10 @@ public class frm_picking_datos extends PBase {
                     }
 
 
-                } else {
+               /* } else {
                     Escaneo_Pallet = false;
                     Continua_procesando_barra();
-                }
+                }*/
 
             }
 
@@ -836,7 +836,7 @@ public class frm_picking_datos extends PBase {
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
                    //gBeProducto = new clsBeProducto();
-                   // execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+                   //execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
 
                     msgbox("El código de licencia no es válido, ingréselo nuevamente");
                     btnConfirmarPk.setEnabled(false);
