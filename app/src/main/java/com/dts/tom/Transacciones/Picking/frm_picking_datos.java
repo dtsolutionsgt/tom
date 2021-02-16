@@ -1158,7 +1158,11 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
                 gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
-                gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                if (gBeProducto.getControl_vencimiento()){
+                    gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                }else{
+                    gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                }
                 gBePickingUbic.Fec_mod = du.getFechaActual();
 
                 BePickingDet.IdPickingDet = gBePickingUbic.IdPickingDet;

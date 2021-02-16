@@ -19,8 +19,7 @@
         <TextView
             android:id="@+id/lblUbicDetPick"
             android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
@@ -28,8 +27,8 @@
 
         <TextView
             android:id="@+id/lblNomUbicDet"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
@@ -37,9 +36,8 @@
 
         <TextView
             android:id="@+id/lblCodigoDet"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="42380"
             android:textColor="@color/colorPrimaryDark"
@@ -48,8 +46,7 @@
         <TextView
             android:id="@+id/lblProductoDet"
             android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="00000"
             android:textColor="@color/colorPrimaryDark"
@@ -57,29 +54,26 @@
 
         <TextView
             android:id="@+id/lblUmbasDet"
-            android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Pendiente"
+            android:text="UM"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/lblPresDet"
             android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Juan"
+            android:text="CAJA"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/lblSol"
             android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1.0"
             android:textColor="@color/colorPrimaryDark"
@@ -88,47 +82,41 @@
         <TextView
             android:id="@+id/lblRec"
             android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1.0" />
 
         <TextView
             android:id="@+id/lblLoteDet"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
             android:text="20200421" />
 
         <TextView
             android:id="@+id/lblLpDet"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/lblVenceDet"
             android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/lblNomEstadoDet"
             android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/lblPesoDet"
             android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView" />
 
