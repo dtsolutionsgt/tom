@@ -28,8 +28,9 @@ public class clsBeTrans_pe_pol {
     @Element(required=false) public double Total_valoraduana=0;
     @Element(required=false) public int Total_lineas=0;
     @Element(required=false) public int Total_bultos=0;
-    @Element(required=false) public double Total_bultos_Peso_Bruto=0;
-    @Element(required=false) public double Total_bultos_Peso_Neto=0;
+   // @Element(required=false) public double Total_bultos_Peso_Bruto=0;
+   // @Element(required=false) public double Total_bultos_Peso_Neto=0;
+   @Element(required=false) public double Total_bultos_Peso=0;
     @Element(required=false) public double Total_usd=0;
     @Element(required=false) public double Total_flete=0;
     @Element(required=false) public double Total_seguro=0;
@@ -62,7 +63,7 @@ public class clsBeTrans_pe_pol {
                              String Po_number,int Cantidad,int Piezas,double Total_kgs,
                              double Cbm,String Dua,String Fecha_poliza,String Pais_procede,
                              double Tipo_cambio,double Total_valoraduana,int Total_lineas,int Total_bultos,
-                             double Total_bultos_Peso_Bruto,double Total_bultos_Peso_Neto,double Total_usd,double Total_flete,
+                             double Total_bultos_Peso,double Total_usd,double Total_flete,
                              double Total_seguro,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String codigo_poliza,String ticket,String numero_orden,
                              String fecha_aceptacion,String fecha_llegada,double total_otros,String clave_aduana,
@@ -93,8 +94,9 @@ public class clsBeTrans_pe_pol {
         this.Total_valoraduana=Total_valoraduana;
         this.Total_lineas=Total_lineas;
         this.Total_bultos=Total_bultos;
-        this.Total_bultos_Peso_Bruto=Total_bultos_Peso_Bruto;
-        this.Total_bultos_Peso_Neto=Total_bultos_Peso_Neto;
+        //this.Total_bultos_Peso_Bruto=Total_bultos_Peso_Bruto;
+       // this.Total_bultos_Peso_Neto=Total_bultos_Peso_Neto;
+        this.Total_bultos_Peso=Total_bultos_Peso;
         this.Total_usd=Total_usd;
         this.Total_flete=Total_flete;
         this.Total_seguro=Total_seguro;
@@ -264,17 +266,23 @@ public class clsBeTrans_pe_pol {
     public void setTotal_bultos(int value) {
         Total_bultos=value;
     }
-    public double getTotal_bultos_Peso_Bruto() {
+   /* public double getTotal_bultos_Peso_Bruto() {
         return Total_bultos_Peso_Bruto;
     }
     public void setTotal_bultos_Peso_Bruto(double value) {
         Total_bultos_Peso_Bruto=value;
-    }
-    public double getTotal_bultos_Peso_Neto() {
+    }*/
+  /*  public double getTotal_bultos_Peso_Neto() {
         return Total_bultos_Peso_Neto;
     }
     public void setTotal_bultos_Peso_Neto(double value) {
         Total_bultos_Peso_Neto=value;
+    }*/
+   public double getTotal_bultos_Peso() {
+       return Total_bultos_Peso;
+   }
+    public void setTotal_bultos_Peso(double value) {
+        Total_bultos_Peso=value;
     }
     public double getTotal_usd() {
         return Total_usd;

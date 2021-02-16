@@ -52,6 +52,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public double valor_seguro=0;
     @Element(required=false) public double valor_flete=0;
     @Element(required=false) public double Peso_Neto=0;
+    @Element(required=false) public double Peso_Bruto=0;
 
     public clsBeTrans_oc_det()
     {
@@ -66,7 +67,7 @@ public class clsBeTrans_oc_det {
                              String Atributo_variante_1,String Codigo_Producto,boolean IsNew,boolean ExisteEnRecepcion,
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
-                             double valor_iva,double valor_dai,double valor_seguro,double valor_flete, double Peso_Neto) {
+                             double valor_iva,double valor_dai,double valor_seguro,double valor_flete, double Peso_Neto, double Peso_Bruto) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -109,6 +110,7 @@ public class clsBeTrans_oc_det {
         this.valor_seguro=valor_seguro;
         this.valor_flete=valor_flete;
         this.Peso_Neto=Peso_Neto;
+        this.Peso_Bruto=Peso_Bruto;
     }
 
 
@@ -364,6 +366,11 @@ public class clsBeTrans_oc_det {
     public void setPeso_Neto(double value) {
         Peso_Neto=value;
     }
-
+    public double getPeso_Bruto() {
+        return Peso_Bruto;
+    }
+    public void setPeso_Bruto(double value) {
+        Peso_Bruto=value;
+    }
 }
 
