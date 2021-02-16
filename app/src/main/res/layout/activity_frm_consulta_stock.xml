@@ -138,6 +138,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
+            android:onClick="buscarStock"
             android:text="@string/buscar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"

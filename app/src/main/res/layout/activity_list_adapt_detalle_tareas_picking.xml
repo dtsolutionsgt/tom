@@ -21,6 +21,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -30,6 +31,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -39,6 +41,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="42380"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -48,6 +51,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="00000"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -57,6 +61,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="UM"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -66,6 +71,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="CAJA"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -75,6 +81,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="1.0"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
@@ -84,12 +91,14 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="1.0" />
 
         <TextView
             android:id="@+id/lblLoteDet"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
+            android:minHeight="60dp"
             android:text="20200421" />
 
         <TextView
@@ -97,6 +106,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="TextView" />
 
         <TextView
@@ -104,6 +114,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="TextView" />
 
         <TextView
@@ -111,6 +122,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="TextView" />
 
         <TextView
@@ -118,6 +130,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="60dp"
             android:text="TextView" />
 
         <TextView

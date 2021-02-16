@@ -50,7 +50,7 @@ public class frm_consulta_stock extends PBase {
     private ProgressDialog progress;
 
     private ListView listView;
-    private Button btnBack, registros;
+    private Button btnBack, registros,btnBuscar;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic;
     private int idubic, idprod, conteo;
@@ -86,6 +86,7 @@ public class frm_consulta_stock extends PBase {
 
         listView = (ListView) findViewById(R.id.listExist);
         btnBack = (Button) findViewById(R.id.btnBack);
+        btnBuscar = (Button) findViewById(R.id.btnBuscar);
         registros = findViewById(R.id.btnRegs2);
         txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
@@ -266,7 +267,6 @@ public class frm_consulta_stock extends PBase {
                 }
 
             });
-
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -798,6 +798,62 @@ public class frm_consulta_stock extends PBase {
         progress.show();
     }
 
+    public void buscarStock(View view){
+
+        try{
+
+            lblNombreProducto.setText("");
+
+            if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
+                    (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
+            ) {
+                toast("Ingrese código de producto y/o ubicacioó");
+            } else {
+
+                if(txtCodigo.getText().toString().isEmpty()){
+                    idprod = 0;
+                }else{
+                    idprod = Integer.valueOf(txtCodigo.getText().toString());
+                }
+                if(txtUbic.getText().toString().isEmpty()){
+                    idubic = 0;
+                }else{
+                    idubic = Integer.valueOf(txtUbic.getText().toString());
+                }
+
+                if (idprod==0 && idubic!=0){
+                    ProgressDialog("Cargando existencias");
+
+                    execws(1);
+                }else if(idprod!=0 && idubic==0){
+
+                    String vStarWithParameter = "$";
+                    //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+                    if (txtCodigo.getText().toString().startsWith("$") ||
+                            txtCodigo.getText().toString().startsWith("(01)") ||
+                            txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
+                        //Es una barra de pallet válida por tamaño
+                        int vLengthBarra = txtCodigo.getText().toString().length();
+                        if (vLengthBarra >= 0) {
+                            pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+
+                            ProgressDialog("Cargando existencias");
+                            execws(2);
+                        }
+                    } else {
+
+                        ProgressDialog("Cargando existencias");
+                        execws(3);
+                    }
+                }else if(idprod!=0 && idubic!=0){
+                   ProgressDialog("Cargando existencias");
+                   execws(4);
+                }
+            }
+        }catch (Exception ex){
+
+        }
+    }
 
     public class WebServiceHandler extends WebService {
 
