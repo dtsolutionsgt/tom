@@ -151,7 +151,7 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblCodigo,lblPres,lblUmbas,lblCantidad,lblProdBod,lblEstado,lblVence,lblLp;
+        TextView lblCodigo,lblPres,lblUmbas,lblCantidad,lblProdBod,lblEstado,lblVence,lblLp, lblDiferencia;
     }
 
 }

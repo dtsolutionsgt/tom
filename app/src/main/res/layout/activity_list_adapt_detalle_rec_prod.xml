@@ -16,64 +16,64 @@
             android:id="@+id/lblCodigo"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="420037" />
 
         <TextView
             android:id="@+id/lblPres"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="Caja01" />
 
         <TextView
             android:id="@+id/lblUmbas"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="UNIDAD" />
 
         <TextView
             android:id="@+id/lblCantidad"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="1.0" />
 
         <TextView
             android:id="@+id/lblProdBod"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="0.0" />
 
         <TextView
             android:id="@+id/lblEstado"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="0" />
 
         <TextView
             android:id="@+id/lblVence"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="1" />
 
         <TextView
             android:id="@+id/lblLp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:minLines="2"
             android:text="1" />
     </LinearLayout>
 </RelativeLayout>

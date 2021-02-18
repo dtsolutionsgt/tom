@@ -67,7 +67,8 @@ public class clsBeTrans_oc_det {
                              String Atributo_variante_1,String Codigo_Producto,boolean IsNew,boolean ExisteEnRecepcion,
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
-                             double valor_iva,double valor_dai,double valor_seguro,double valor_flete, double Peso_Neto, double Peso_Bruto) {
+                             double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
+                             double Peso_Neto, double Peso_Bruto) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;

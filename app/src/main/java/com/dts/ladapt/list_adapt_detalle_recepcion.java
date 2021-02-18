@@ -62,6 +62,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblUmbas = (TextView) convertView.findViewById(R.id.lblUmbas);
             holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
             holder.lblCantRec = (TextView) convertView.findViewById(R.id.lblCantRec);
+            holder.lblDiferencia = (TextView) convertView.findViewById(R.id.lblDiferencia);
             holder.lblCosto = (TextView) convertView.findViewById(R.id.lblCosto);
             holder.lblFactor = (TextView) convertView.findViewById(R.id.lblFactor);
             holder.lblIdOcDet = (TextView) convertView.findViewById(R.id.lblIdOcDet);
@@ -88,6 +89,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblCantidad.setTextColor(R.style.titlestyle);
             holder.lblCantRec.setText("CantidadRec");
             holder.lblCantRec.setTextColor(R.style.titlestyle);
+            holder.lblDiferencia.setText("Diferencia");
+            holder.lblDiferencia.setTextColor(R.style.titlestyle);
             holder.lblCosto.setText("Costo");
             holder.lblCantRec.setTextColor(R.style.titlestyle);
             holder.lblFactor.setText("Factor");
@@ -106,6 +109,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblUmbas.setText("--");
             holder.lblCantidad.setText("0");
             holder.lblCantRec.setText("0");
+            holder.lblDiferencia.setText("0");
             holder.lblCosto.setText("0");
             holder.lblFactor.setText("0");
             holder.lblIdOcDet.setText("0");
@@ -138,6 +142,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             if(BeDetalleOC.get(position).Cantidad_recibida>0){
                 holder.lblCantRec.setText(""+BeDetalleOC.get(position).Cantidad_recibida);
             }
+
+            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad-BeDetalleOC.get(position).Cantidad_recibida));
 
             if(BeDetalleOC.get(position).Costo>0){
                 holder.lblCosto.setText(""+BeDetalleOC.get(position).Costo);
@@ -173,7 +179,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblNoLinea,lblCodigo,lblProducto,lblPres,lblUmbas,lblCantidad,lblCantRec,lblCosto,lblFactor,lblIdOcDet,lblIdOcEnc;
+        TextView lblNoLinea,lblCodigo,lblProducto,lblPres,lblUmbas,lblCantidad,lblCantRec,lblDiferencia,lblCosto,lblFactor,lblIdOcDet,lblIdOcEnc;
     }
 
 }
