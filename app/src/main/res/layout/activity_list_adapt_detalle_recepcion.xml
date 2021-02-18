@@ -17,108 +17,120 @@
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="1"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCodigo"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="420037"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblProducto"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="XXXXXX"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPres"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="Caja01"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblUmbas"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="UN"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantidad"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="1.0"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantRec"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="0.0"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblDiferencia"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="0"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCosto"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="0"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblFactor"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="1"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblIdOcDet"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="1"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblIdOcEnc"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="3"
+            android:minLines="2"
             android:text="1"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </RelativeLayout>

@@ -2213,8 +2213,11 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-//                txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
-                txtCantidadRec.setText(Cant_Pendiente+"");
+               // txtCantidadRec.setText(mu.frmdecimal(Cant_Pendiente,gl.gCantDecDespliegue)+"");
+               // txtCantidadRec.setText(Cant_Pendiente+"");
+               // #CKFK 20210218 Quité la cantidad pendiente de recibir en la CantidadRec por instrucción de Erik
+                txtCantidadRec.setText("");
+
                 txtBarra.requestFocus();
                 txtBarra.selectAll();
 

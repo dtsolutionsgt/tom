@@ -78,7 +78,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="2"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="Tarea"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +91,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="2"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="Motivo"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +104,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="2"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="Observación"
             android:textSize="18sp" />
 
@@ -112,7 +115,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="2"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="Estado"
             android:textSize="18sp" />
     </LinearLayout>

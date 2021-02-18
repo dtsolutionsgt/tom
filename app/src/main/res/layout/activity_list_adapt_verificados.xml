@@ -18,7 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="420037" />
+            android:maxLines="5"
+            android:minLines="2"
+            android:text="420037"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblEstadoRes"
@@ -26,7 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Caja01" />
+            android:maxLines="5"
+            android:minLines="2"
+            android:text="Caja01"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPresRes"
@@ -34,7 +40,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="UNIDAD" />
+            android:maxLines="5"
+            android:minLines="2"
+            android:text="UNIDAD"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantRes"
@@ -42,6 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="1.0" />
+            android:maxLines="5"
+            android:minLines="2"
+            android:text="1.0"
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

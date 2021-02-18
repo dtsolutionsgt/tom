@@ -20,70 +20,78 @@
             android:id="@+id/lblIdOC"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblRecepcionEnc"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="1"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblNDocOc"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="00000"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblNoRefOC"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="00000"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblProvee"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="IDEALSA"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblTipoIng"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="Con OC"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblTipoRece"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
+            android:maxLines="4"
+            android:minLines="2"
             android:text="HCOC00"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
