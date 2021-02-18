@@ -82,7 +82,7 @@
         android:id="@+id/lblNoDocumento"
         style="@style/StyleText"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
         android:background="@drawable/color_light"
         android:gravity="center"
