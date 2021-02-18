@@ -807,7 +807,7 @@ public class frm_consulta_stock extends PBase {
             if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
             ) {
-                toast("Ingrese código de producto y/o ubicacioó");
+                toast("Ingrese código de producto y/o ubicación");
             } else {
 
                 if(txtCodigo.getText().toString().isEmpty()){
@@ -847,7 +847,7 @@ public class frm_consulta_stock extends PBase {
                     }
                 }else if(idprod!=0 && idubic!=0){
                    ProgressDialog("Cargando existencias");
-                   execws(4);
+                   execws(2);
                 }
             }
         }catch (Exception ex){

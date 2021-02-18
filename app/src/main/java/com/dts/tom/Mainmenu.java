@@ -247,7 +247,7 @@ public class Mainmenu extends PBase {
                                 "pCambioEstado",0);
                         break;
                     case 5:
-                        callMethod("Get_Count_Recepciones_For_HH_By_IdBodega",
+                        callMethod("Get_Count_Cambio_Est_Ubic_For_HH",
                                 "pCambioEstado",1);
                         break;
                 }
