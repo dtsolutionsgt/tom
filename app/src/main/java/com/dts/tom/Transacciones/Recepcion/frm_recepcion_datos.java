@@ -70,7 +70,6 @@ import java.util.NoSuchElementException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
-import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeConfiguracionBarraPallet;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
 
 public class frm_recepcion_datos extends PBase {
@@ -381,14 +380,10 @@ public class frm_recepcion_datos extends PBase {
                         if (BeProducto.Control_vencimiento){
                             cmbVenceRec.setSelectAllOnFocus(true);
                             cmbVenceRec.requestFocus();
-                        }
-
-                        if (BeProducto.Control_lote){
+                        }else if (BeProducto.Control_lote){
                             txtLoteRec.setSelectAllOnFocus(true);
                             txtLoteRec.requestFocus();
-                        }
-
-                        if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
+                        }else if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
                            txtCantidadRec.requestFocus();
                         }
 
@@ -486,32 +481,24 @@ public class frm_recepcion_datos extends PBase {
                     msgboxValidaFechaVence("La fecha no puede estar vacía.");
                     return false;
                 }
-            }
-
-            if (BeProducto.Control_lote){
+            }else if (BeProducto.Control_lote){
                 if(txtLoteRec.getText().toString().isEmpty()){
                     msgboxValidaLote("El campo de lote no puede estar vacío.");
                     return false;
                 }
-            }
-
-            if(BeProducto.Control_peso){
+            }else if(BeProducto.Control_peso){
                 if (txtPeso.getText().toString().isEmpty()){
                     msgboxValidaPeso("El peso no puede estar vacío");
                     return false;
                 }
-            }
-
-            if (txtCantidadRec.getText().toString().isEmpty()){
+            }else if (txtCantidadRec.getText().toString().isEmpty()){
                 mu.msgbox("La cantidad no puede estar vacía");
                 txtCantidadRec.requestFocus();
                 return false;
-            }else{
-                if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
+            }else if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
                     mu.msgbox("La cantidad debe ser mayor a 0");
                     txtCantidadRec.requestFocus();
                     return false;
-                }
             }
 
         }catch (Exception e){
@@ -1859,17 +1846,17 @@ public class frm_recepcion_datos extends PBase {
 
             if (!txtBarra.getText().toString().isEmpty()){
 
-                String vStarWithParameter = "$";
+               /* String vStarWithParameter = "$";
 
                 if (gBeConfiguracionBarraPallet!=null){
                     if (!gBeConfiguracionBarraPallet.IdentificadorInicio.isEmpty()){
                         vStarWithParameter = gBeConfiguracionBarraPallet.IdentificadorInicio;
                     }
-                }
+                }*/
 
-                if (txtBarra.getText().toString().startsWith("$") |
+                /*if (txtBarra.getText().toString().startsWith("$") |
                         txtBarra.getText().toString().startsWith("(01)") |
-                        txtBarra.getText().toString().startsWith(vStarWithParameter)){
+                        txtBarra.getText().toString().startsWith(vStarWithParameter)){*/
 
                     //int vLengthBarra  = txtBarra.getText().toString().length();
 
@@ -1879,7 +1866,7 @@ public class frm_recepcion_datos extends PBase {
 
                     //Llama al método del WS Existe_Lp
                     execws(24);
-                }
+                //}
             }
 
         }catch (Exception e){
@@ -5049,7 +5036,15 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    txtLoteRec.requestFocus();
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.setSelectAllOnFocus(true);
+                        cmbVenceRec.requestFocus();
+                    }else if (BeProducto.Control_lote){
+                        txtLoteRec.setSelectAllOnFocus(true);
+                        txtLoteRec.requestFocus();
+                    }else if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
+                        txtCantidadRec.requestFocus();
+                    }
                 }
             });
 
@@ -5177,6 +5172,16 @@ public class frm_recepcion_datos extends PBase {
 
             if (Existe_Lp){
                 msgAskExisteLp("El Lp:"+pLp+" ya existe, desea agregarlo al producto:"+BeProducto.Codigo);
+            }else{
+                if (BeProducto.Control_vencimiento){
+                    cmbVenceRec.setSelectAllOnFocus(true);
+                    cmbVenceRec.requestFocus();
+                }else if (BeProducto.Control_lote){
+                    txtLoteRec.setSelectAllOnFocus(true);
+                    txtLoteRec.requestFocus();
+                }else if (!BeProducto.Control_lote&&!BeProducto.Control_vencimiento){
+                    txtCantidadRec.requestFocus();
+                }
             }
 
         }catch (Exception e){
