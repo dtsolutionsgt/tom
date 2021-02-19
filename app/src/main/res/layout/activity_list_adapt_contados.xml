@@ -16,48 +16,66 @@
             android:id="@+id/lblIdInvDet"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="420037" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="420037"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblUbicCont"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="Caja01" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Caja01"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblEstadoCont"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="UNIDAD" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UNIDAD"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPresCont"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="1.0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1.0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantCont"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="0.0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0.0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPesoCont"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

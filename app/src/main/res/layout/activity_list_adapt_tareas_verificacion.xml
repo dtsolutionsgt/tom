@@ -17,6 +17,8 @@
             android:id="@+id/lblEPedEnc"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Ped Enc"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -26,6 +28,8 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Referencia"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -35,6 +39,8 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Muelle"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -43,6 +49,8 @@
             android:id="@+id/lblEIdCliente"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Id Cliente"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -51,6 +59,8 @@
             android:id="@+id/lblECliente"
             android:layout_width="275dp"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Cliente"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -59,6 +69,8 @@
             android:id="@+id/lblEEstado"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Estado"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -67,6 +79,8 @@
             android:id="@+id/lblEIdPickingEnc"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="IdPickingEnc"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -85,7 +99,11 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Ped Enc"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -93,7 +111,11 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="458796"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -101,7 +123,11 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="M1"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -109,8 +135,12 @@
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:minHeight="50dp"
             android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="2548"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -118,7 +148,11 @@
             android:layout_width="275dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Cliente"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -126,7 +160,11 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Buen Estado"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -134,7 +172,11 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="1236"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
     </LinearLayout>

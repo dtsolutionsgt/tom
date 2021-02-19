@@ -18,6 +18,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Código"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
@@ -27,6 +29,8 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Nombre"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
@@ -36,6 +40,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Presentación"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
@@ -45,6 +51,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Unidad Medida"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
@@ -54,6 +62,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Disp UM Bas"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
@@ -63,6 +73,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Id Ubicacion"
             android:textColor="#FFFFFF" />
 
@@ -71,6 +83,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Vence"
             android:textColor="#FFFFFF" />
 
@@ -79,6 +93,8 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Lic Plate"
             android:textColor="#FFFFFF" />
 
@@ -86,6 +102,8 @@
             android:id="@+id/lblELoteRe"
             android:layout_width="100dp"
             android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Lote"
             android:textColor="#FFFFFF" />
 
@@ -94,6 +112,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Id Producto Bodega"
             android:textColor="#FFFFFF" />
 
@@ -102,6 +122,8 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Peso"
             android:textColor="#FFFFFF" />
 
@@ -145,91 +167,130 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="42380"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblProductoRe"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="00000"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPresRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Caja24"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblUmbasRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Pendiente"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="1.0"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblUbicRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="1" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblVenceRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="TextView"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblLpRe"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="TextView"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblLoteRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="20200421"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCodPrRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="42380"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPesoRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="TextView"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblEstadoRe"

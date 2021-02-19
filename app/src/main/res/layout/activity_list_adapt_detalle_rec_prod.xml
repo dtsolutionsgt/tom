@@ -17,63 +17,87 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="420037" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="420037"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblPres"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="Caja01" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Caja01"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblUmbas"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="UNIDAD" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UNIDAD"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblCantidad"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="1.0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1.0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblProdBod"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="0.0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0.0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblEstado"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="0" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblVence"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="1" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblLp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minLines="2"
-            android:text="1" />
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -78,9 +78,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="4"
-            android:minLines="2"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Tarea"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -91,9 +93,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="4"
-            android:minLines="2"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Motivo"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -104,9 +108,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="4"
-            android:minLines="2"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Observación"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
         <TextView
@@ -115,9 +121,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hapticFeedbackEnabled="false"
-            android:maxLines="4"
-            android:minLines="2"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Estado"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
     </LinearLayout>
 
