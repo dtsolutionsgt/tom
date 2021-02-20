@@ -48,6 +48,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Notificacion_Voz=false;
     @Element(required=false) public boolean Control_Tarifa_Servicios=false;
 
+    @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
+
     public clsBeBodega() {
     }
 
@@ -60,8 +62,9 @@ public class clsBeBodega extends clsBeBodegaBase {
                        double Alto,boolean Reservar_stocks_por_linea,boolean Rechazar_pedido_por_stock,String IdTipoTransaccion,
                        double Zoom,int IdMotivoUbicacionDanadoPicking,boolean cambio_ubicacion_auto,String codigo_bodega_erp,
                        int ubic_producto_ne,int IdProductoEstadoNE,clsBeEmpresa Empresa,clsBeBodega_areaList Areas,
-                       clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,clsBeBodega_muellesList Muelles,
-            String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias, boolean Notificacion_Voz, boolean Control_Tarifa_Servicios
+                       clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,
+                       clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
+                       boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto
     ) {
 
         this.IdBodega=IdBodega;
@@ -110,6 +113,8 @@ public class clsBeBodega extends clsBeBodegaBase {
 
         this.Notificacion_Voz = Notificacion_Voz;
         this.Control_Tarifa_Servicios=Control_Tarifa_Servicios;
+
+        this.Id_Motivo_Ubic_Reabasto=Id_Motivo_Ubic_Reabasto;
 
     }
 
@@ -359,5 +364,11 @@ public class clsBeBodega extends clsBeBodegaBase {
         Control_Tarifa_Servicios=value;
     }
 
+    public int getId_Motivo_Ubic_Reabasto() {
+        return Id_Motivo_Ubic_Reabasto;
+    }
+    public void setId_Motivo_Ubic_Reabasto(int value) {
+        Id_Motivo_Ubic_Reabasto=value;
+    }
 }
 
