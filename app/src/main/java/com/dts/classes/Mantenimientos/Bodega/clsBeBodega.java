@@ -46,7 +46,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public String Cuenta_Ingreso_Mercancias="0";
     @Element(required=false) public String Cuenta_Egreso_Mercancias="0";
     @Element(required=false) public boolean Notificacion_Voz=false;
-
+    @Element(required=false) public boolean Control_Tarifa_Servicios=false;
 
     public clsBeBodega() {
     }
@@ -61,7 +61,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        double Zoom,int IdMotivoUbicacionDanadoPicking,boolean cambio_ubicacion_auto,String codigo_bodega_erp,
                        int ubic_producto_ne,int IdProductoEstadoNE,clsBeEmpresa Empresa,clsBeBodega_areaList Areas,
                        clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,clsBeBodega_muellesList Muelles,
-            String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias, boolean Notificacion_Voz
+            String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias, boolean Notificacion_Voz, boolean Control_Tarifa_Servicios
     ) {
 
         this.IdBodega=IdBodega;
@@ -109,6 +109,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Cuenta_Egreso_Mercancias = Cuenta_Egreso_Mercancias;
 
         this.Notificacion_Voz = Notificacion_Voz;
+        this.Control_Tarifa_Servicios=Control_Tarifa_Servicios;
 
     }
 
@@ -349,6 +350,13 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setNotificacion_Voz(boolean value) {
         Notificacion_Voz=value;
+    }
+
+    public boolean getControl_Tarifa_Servicios() {
+        return Control_Tarifa_Servicios;
+    }
+    public void setControl_Tarifa_Servicios(boolean value) {
+        Control_Tarifa_Servicios=value;
     }
 
 }
