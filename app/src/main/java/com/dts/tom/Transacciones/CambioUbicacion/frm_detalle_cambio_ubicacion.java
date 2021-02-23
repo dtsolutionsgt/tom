@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.SplittableRandom;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -416,12 +415,15 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             pBeTransUbicHhDetList = xobj.getresult(clsBeTrans_ubic_hh_detList.class,"Get_All_By_IdTransUbicEnc_And_IdOperador");
 
             if(pBeTransUbicHhDetList!=null){
+
                 if(pBeTransUbicHhDetList.items!=null){
 
                     Llena_Tarea_Detalle_Ubicacion();
 
                 }
             }
+
+            progress.cancel();
 
         } catch (Exception e) {
             progress.cancel();

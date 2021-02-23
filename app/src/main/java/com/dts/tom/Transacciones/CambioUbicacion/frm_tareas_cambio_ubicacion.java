@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,19 +15,14 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
-import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_encList;
+import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.ladapt.CambioUbicacion.list_view_tareas_cambio_ubic;
-import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -211,6 +205,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
         }
     }
 
+
     private void Llena_Tareas_Ubicacion(){
 
         clsBeTrans_ubic_hh_enc vItem;
@@ -228,6 +223,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
                         vItem = new clsBeTrans_ubic_hh_enc();
 
+                        gl.IdPropietarioBodega = pListBeTransUbicHhEnc.items.get(i).IdPropietarioBodega;
                         vItem.IdTareaUbicacionEnc = pListBeTransUbicHhEnc.items.get(i).getIdTareaUbicacionEnc();
                         vItem.DescripcionMotivo = pListBeTransUbicHhEnc.items.get(i).getDescripcionMotivo();
                         vItem.Observacion = pListBeTransUbicHhEnc.items.get(i).getObservacion();
@@ -295,8 +291,13 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
+                        /*callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
                                 "pIdOperador",gl.IdOperador,
+                                "pIdTarea",pIdTarea,
+                                "cambio_estado",!Modo);*/
+                        //#CKFK 20210221 Vamos a mandar el operador 0 para que nos liste todas las tareas
+                        callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
+                                "pIdOperador",0,
                                 "pIdTarea",pIdTarea,
                                 "cambio_estado",!Modo);
                         break;

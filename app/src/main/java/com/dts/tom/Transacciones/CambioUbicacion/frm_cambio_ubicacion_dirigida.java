@@ -428,7 +428,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.IdEmpresa = gl.IdEmpresa;
             gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
             gMovimientoDet.IdTransaccion = gl.tareaenc.IdTareaUbicacionEnc;
-            gMovimientoDet.IdPropietarioBodega = gl.tareadet.Producto.IdPropietario;
+            gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
             gMovimientoDet.IdProductoBodega = gl.tareadet.Producto.IdProductoBodega;
             gMovimientoDet.IdUbicacionOrigen = gl.tareadet.UbicacionOrigen.IdUbicacion;
             gMovimientoDet.IdUbicacionDestino = gl.tareadet.UbicacionDestino.IdUbicacion;

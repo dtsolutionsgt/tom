@@ -70,6 +70,7 @@ public class appGlobals extends Application {
     //Variables para recepción
     public String tipoIngreso;
     public int IdPropietario;
+    public int IdPropietarioBodega;
     public int gIdRecepcionEnc;
     public int TipoOpcion;
     public clsBeTrans_oc_detList gListDetalleOC = new clsBeTrans_oc_detList();
