@@ -556,6 +556,10 @@ public class frm_Packing extends PBase {
             txtCantidad.setEnabled(false);
             txtPrd.setText("");
 
+            txtLic_Plate.setText("");
+            txtUbicOr.setText("2570");
+            txtLic_Plate.requestFocus();
+
         }catch (Exception e){
 
         }

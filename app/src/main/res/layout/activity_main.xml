@@ -312,7 +312,7 @@
             android:paddingLeft="1dp"
             android:paddingTop="1dp"
             android:paddingBottom="1dp"
-            android:src="@drawable/tom_wms" />
+            android:src="@drawable/tom_logo"/>
     </RelativeLayout>
 
     <RelativeLayout
