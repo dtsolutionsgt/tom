@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -33,6 +34,7 @@ public class Mainmenu extends PBase {
 
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
+
 
     private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;

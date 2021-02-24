@@ -330,7 +330,7 @@
         android:layout_marginBottom="30dp">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imgEmpresaLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="recargar"

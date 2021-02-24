@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -16,6 +18,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,10 +42,12 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.servicios.startCantTareas;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -58,6 +64,7 @@ public class MainActivity extends PBase {
     private TextView lblver,lbldate,lblurl;
     private ProgressDialog progress;
     private ImageView imgIngresar;
+    private ImageView imgEmpresaLogin;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -76,6 +83,8 @@ public class MainActivity extends PBase {
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
     private String NomOperador;
+
+    private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +119,7 @@ public class MainActivity extends PBase {
             lbldate=(TextView)  findViewById(R.id.textView3);
             lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
+            imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
 
             getURL();
 
@@ -264,18 +274,33 @@ public class MainActivity extends PBase {
 
     private void grantPermissions()   {
         try {
-            if (Build.VERSION.SDK_INT >= 20)
-            {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+            if (Build.VERSION.SDK_INT >= 20) {
+
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+                        && checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                     startApplication();
-                } else
-                {
-                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.CALL_PHONE,
+                                    Manifest.permission.CAMERA,
+                                    Manifest.permission.WAKE_LOCK,
+                                    Manifest.permission.READ_PHONE_STATE
+                            }, 1);
                 }
             }
-        } catch (Exception e)
-        {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+
+        } catch (Exception e) {
+            addlog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
@@ -846,13 +871,53 @@ public class MainActivity extends PBase {
 
     private void fillSpinemp()  {
 
+        String filePathImg = null;
+
         try
         {
             emplist.clear();
 
+            String dirLogosEmpresa = getApplicationContext().getFilesDir() + "/LogosEmpresa/";
+            int vCodigoEmpresa;
+
+            File dir = new File(getApplicationContext().getFilesDir(), "LogosEmpresa");
+            if(!dir.exists()){
+                dir.mkdir();
+            }
+
             for (int i = 0; i <empresas.items.size(); i++)
             {
+                vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
                 emplist.add(empresas.items.get(i).Nombre);
+
+                try {
+
+                    String img = empresas.items.get(i).Imagen;
+
+                    if (img != null) {
+
+                        if (i==0){
+                            File f = new File(dirLogosEmpresa);
+                            if(!f.isDirectory()) f.mkdir();
+                        }
+
+                        filePathImg = dirLogosEmpresa + vCodigoEmpresa + ".png";
+                        File file = new File(filePathImg);
+
+                        if (!file.exists()) {
+                            byte[] imgbytes = Base64.decode(img, Base64.DEFAULT);
+                            int bs = imgbytes.length;
+                            FileOutputStream fos = new FileOutputStream(filePathImg);
+                            BufferedOutputStream outputStream = new BufferedOutputStream(fos);
+                            outputStream.write(imgbytes);
+                            outputStream.close();
+                        }
+                    }
+
+                } catch (Exception ee) {
+                    Log.e("ImgOp", ee.getMessage());
+                }
+
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, emplist);
@@ -860,6 +925,13 @@ public class MainActivity extends PBase {
             spinemp.setAdapter(dataAdapter);
 
             if (emplist.size()>0) spinemp.setSelection(0);
+
+            //#EJC20210223: Set las image get from empresa, por ahora solo funcionará para una empresa, en el futuro lo debo mejorar para que funcione para N
+            if (filePathImg != null) {
+                Bitmap bmImg = BitmapFactory.decodeFile(filePathImg);
+                imgEmpresaLogin.setImageBitmap(bmImg);
+            }
+
 
         } catch (Exception e)
         {
