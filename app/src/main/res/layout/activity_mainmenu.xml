@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Menú principal"
+            android:text="Menú principal - WMS"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />

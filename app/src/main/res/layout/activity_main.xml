@@ -42,7 +42,8 @@
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
-                        android:text="Ingreso"
+                        android:paddingTop="5dp"
+                        android:text="Inicio de sesión"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -286,6 +287,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="TOM WMS"
             android:textColor="#FFFFFF"
@@ -302,17 +304,6 @@
             android:padding="10dp"
             android:src="@drawable/menu" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:adjustViewBounds="true"
-            android:paddingLeft="1dp"
-            android:paddingTop="1dp"
-            android:paddingBottom="1dp"
-            android:src="@drawable/tom_logo"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -334,7 +325,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="recargar"
-            android:src="@drawable/palet" />
+            android:scaleType="center"
+            android:src="@drawable/tomwmspng_2021" />
 
     </RelativeLayout>
 
