@@ -7,6 +7,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTran
 import com.dts.classes.Transacciones.Recepcion.Trans_re_fact.clsBeTrans_re_factList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_ocList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_op.clsBeTrans_re_opList;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_muelles;
 
@@ -48,7 +49,8 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public int IdPiloto=0;
     @Element(required=false) public String No_Marchamo="";
     @Element(required=false) public boolean Mostrar_Cantidad_Esperada;
-    @Element(required=false) public clsBeTrans_re_oc OrdenCompraRec=new clsBeTrans_re_oc();
+    @Element(required=false) public clsBeTrans_re_oc OrdenCompraRec =new clsBeTrans_re_oc();
+    @Element(required=false) public clsBeTrans_re_ocList OrdenCompraRecList = new clsBeTrans_re_ocList();
     @Element(required=false) public clsBeTrans_re_detList Detalle=new clsBeTrans_re_detList();
     @Element(required=false) public clsBeTrans_re_det_parametrosList DetalleParametros=new clsBeTrans_re_det_parametrosList();
     @Element(required=false) public clsBeTrans_re_opList DetalleOperadores=new clsBeTrans_re_opList();

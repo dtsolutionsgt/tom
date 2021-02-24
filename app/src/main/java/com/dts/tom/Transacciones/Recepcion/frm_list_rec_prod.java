@@ -463,7 +463,6 @@ public class frm_list_rec_prod extends PBase {
                         gBeOrdenCompra.User_Mod = gl.IdOperador+"";
                         gBeOrdenCompra.Fec_Mod =  du.getActDate()+"";
 
-
                     }
 
                     progress.setMessage("Inicializando Oc");
@@ -815,9 +814,7 @@ public class frm_list_rec_prod extends PBase {
 
                             BeListDetalleOC.add(vItem);
 
-
                     }
-
 
                 }
 
@@ -994,6 +991,7 @@ public class frm_list_rec_prod extends PBase {
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
 
             try {
+
                 if (throwing) throw new Exception(errmsg);
 
                 switch (ws.callback) {
@@ -1424,7 +1422,7 @@ public class frm_list_rec_prod extends PBase {
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_OC();
                if(Recepcion_Completa()){
-                   msgPreguntaFinalizar("La recepción esta completa. ¿Finalizar?");
+                   msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                }
             }
 

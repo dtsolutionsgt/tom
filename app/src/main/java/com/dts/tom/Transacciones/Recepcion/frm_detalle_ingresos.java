@@ -405,7 +405,7 @@ public class frm_detalle_ingresos extends PBase {
                 gBeReOC = new clsBeTrans_re_oc();
                 pListDetalleOC =new clsBeTrans_oc_detList();
 
-                progress.setMessage("Obteniendo orden de compra");
+                progress.setMessage("Obteniendo documento de ingreso");
 
                 gBeOrdenCompra = gBeRecepcion.OrdenCompraRec.OC;
 
@@ -413,7 +413,7 @@ public class frm_detalle_ingresos extends PBase {
 
                 gBeReOC = gBeRecepcion.OrdenCompraRec;
 
-                progress.setMessage("Obteniendo detalle de oc");
+                progress.setMessage("Obteniendo detalle de ingreso");
 
                 pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
 

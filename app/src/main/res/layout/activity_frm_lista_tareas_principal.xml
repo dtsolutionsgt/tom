@@ -55,7 +55,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Listado de tareas"
+            android:text="Tareas de Recepción"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
