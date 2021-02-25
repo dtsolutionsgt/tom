@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.Recepcion;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
@@ -26,8 +26,9 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
+import com.dts.tom.PBase;
+import com.dts.tom.R;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
-import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
 import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.Comparator;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
-public class frm_lista_tareas_principal extends PBase {
+public class frm_lista_tareas_recepcion extends PBase {
 
     private EditText txtTarea;
     private TextView lblTitulo;
@@ -67,7 +68,7 @@ public class frm_lista_tareas_principal extends PBase {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_lista_tareas_principal);
+        setContentView(R.layout.activity_frm_lista_tareas_recepcion);
 
         super.InitBase();
 
@@ -82,7 +83,7 @@ public class frm_lista_tareas_principal extends PBase {
 
         ProgressDialog("Cargando forma");
 
-        ws = new WebServiceHandler(frm_lista_tareas_principal.this, gl.wsurl);
+        ws = new WebServiceHandler(frm_lista_tareas_recepcion.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
         setHandlers();

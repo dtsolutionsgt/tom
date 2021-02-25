@@ -1,9 +1,13 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.Recepcion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+
+import com.dts.tom.DrawingView;
+import com.dts.tom.PBase;
+import com.dts.tom.R;
 
 public class frmFirma extends PBase {
 

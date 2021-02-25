@@ -1,4 +1,4 @@
-package com.dts.tom;
+package com.dts.tom.Transacciones.Recepcion;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -14,6 +14,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+
+import com.dts.tom.PBase;
+import com.dts.tom.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

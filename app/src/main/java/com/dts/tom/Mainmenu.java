@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -23,6 +22,7 @@ import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
+import com.dts.tom.Transacciones.Recepcion.frm_lista_tareas_recepcion;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -422,7 +422,7 @@ public class Mainmenu extends PBase {
                     gl.tipoIngreso = "HCOC00";
                     gl.tipoTarea = idmenu;
 
-                    startActivity(new Intent(this,frm_lista_tareas_principal.class));
+                    startActivity(new Intent(this, frm_lista_tareas_recepcion.class));
 
                     break;
 
@@ -449,14 +449,14 @@ public class Mainmenu extends PBase {
                 case 5://Picking
 
                     gl.tipoTarea = idmenu;
-                    startActivity(new Intent(this,frm_lista_tareas_principal.class));
+                    startActivity(new Intent(this, frm_lista_tareas_recepcion.class));
 
                     break;
 
                 case 6://Verificacion
 
                     gl.tipoTarea = idmenu;
-                    startActivity(new Intent(this, frm_lista_tareas_principal.class));
+                    startActivity(new Intent(this, frm_lista_tareas_recepcion.class));
 
                     break;
 
