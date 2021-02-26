@@ -63,6 +63,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdOperadorBodegaDefecto;
     //a veces las funcionalidades avanzadas incluidas en los softwares, joden el mundo de lo tradicional.
     //Las redes convulosionales, opinan que tu pensamiento, osea el mío es retrogrado.
+    //He recibido tu mensaje, el progreso es inevitable, quedarse estancado es opcional.
 
 //#EJC - Dosnt exist!
     //#KFK20210226:
