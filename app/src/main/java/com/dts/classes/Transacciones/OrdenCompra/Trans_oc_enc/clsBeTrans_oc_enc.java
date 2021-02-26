@@ -62,6 +62,10 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdAcuerdoComercial;
     @Element(required=false) public int IdOperadorBodegaDefecto;
     //a veces las funcionalidades avanzadas incluidas en los softwares, joden el mundo de lo tradicional.
+    @Element(required=false) public int IdOperadorBodegaDefecto;
+
+//#EJC - Dosnt exist!
+    //#KFK20210226:
     public clsBeTrans_oc_enc()
     {
 
@@ -401,6 +405,7 @@ public class clsBeTrans_oc_enc {
     public void setIdAcuerdoComercial(int value) {
         IdAcuerdoComercial=value;
     }
+//#EJCIdOperadorBodegaDefecto Add ON 20210226
     public int getIdOperadorBodegaDefecto() {
         return IdOperadorBodegaDefecto;
     }
@@ -408,6 +413,4 @@ public class clsBeTrans_oc_enc {
         IdOperadorBodegaDefecto=value;
     }
 
-
 }
-
