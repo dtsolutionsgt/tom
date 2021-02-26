@@ -61,7 +61,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String No_Ticket_TMS;
     @Element(required=false) public int IdNoDocumentoRef;
     @Element(required=false) public int IdAcuerdoComercial;
-
+//#EJC - Dosnt exist!
     public clsBeTrans_oc_enc()
     {
 
