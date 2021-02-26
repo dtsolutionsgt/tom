@@ -63,6 +63,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdOperadorBodegaDefecto;
 
 //#EJC - Dosnt exist!
+    //#KFK20210226:
     public clsBeTrans_oc_enc()
     {
 
