@@ -61,7 +61,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdNoDocumentoRef;
     @Element(required=false) public int IdAcuerdoComercial;
     @Element(required=false) public int IdOperadorBodegaDefecto;
-
+    //a veces las funcionalidades avanzadas incluidas en los softwares, joden el mundo de lo tradicional.
     public clsBeTrans_oc_enc()
     {
 
