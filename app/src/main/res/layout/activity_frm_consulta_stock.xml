@@ -4,110 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="BacKList"
     tools:context=".Transacciones.ConsultaStock.frm_consulta_stock">
-
-    <TableRow
-        android:id="@+id/tblOrdenar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblEstadoT"
-        android:layout_marginRight="14dp"
-        android:layout_marginBottom="16dp"
-        android:layout_toLeftOf="@id/imgPrint">
-
-        <TextView
-            android:id="@+id/txtOrdenar"
-            android:layout_width="126dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:text="Ordenar por:"
-            android:textAppearance="@style/StyleText" />
-
-        <Spinner
-            android:id="@+id/spOrdenar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:entries="@array/filtros"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarSize="4dp" />
-
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tbAgrupar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tblOrdenar">
-
-        <CheckBox
-            android:id="@+id/chkAgrupar"
-            android:layout_width="129dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Agrupar"
-            android:textSize="18sp" />
-    </TableRow>
-
-    <HorizontalScrollView
-        android:id="@+id/scrollExistencia"
-        android:layout_width="match_parent"
-        android:layout_height="288dp"
-        android:layout_above="@id/btnRegs2"
-        android:layout_below="@id/tbAgrupar"
-        android:layout_marginTop="5dp">
-
-        <ListView
-            android:id="@+id/listExist"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp" />
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/lblNombreProducto"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/txtCodigo1"
-        android:layout_alignParentStart="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
-        android:text="-"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
-
-    <ImageView
-        android:id="@+id/imgPrint"
-        android:layout_width="65dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/cmbEstadoExist"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/printimg"
-        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnRegs2"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/relbot"
-        android:layout_marginStart="250dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="5dp"
         android:background="@android:color/holo_blue_dark"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
         android:text="Registros: 0"
         android:textColor="@android:color/background_light"
-        android:textSize="15sp" />
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -127,8 +38,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
-            android:onClick="Exit"
-            />
+            android:onClick="BacKList" />
 
         <Button
             android:id="@+id/btnBuscar"
@@ -138,8 +48,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
-            android:onClick="buscarStock"
-            android:text="@string/buscar"
+            android:text="Buscar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -160,7 +69,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="@string/consulta_de_existencia_trx8"
+            android:text="Consulta de Existencia - TRX8"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -168,88 +77,86 @@
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/txtUbic1"
+        android:id="@+id/txtUbicacion"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="172dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:autofillHints=""
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/lblUbicacionT"
+        android:id="@+id/textView47"
         style="@style/StyleText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtUbic1"
-        android:layout_alignBottom="@+id/txtUbic1"
+        android:layout_alignTop="@+id/txtUbicacion"
+        android:layout_alignBottom="@+id/txtUbicacion"
         android:text="Ubicación:" />
 
     <EditText
-        android:id="@+id/txtCodigo1"
+        android:id="@+id/txtProducto"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@+id/lblNombreUbicacion"
-        android:layout_alignStart="@+id/txtUbic1"
-        android:layout_alignEnd="@+id/txtUbic1"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
-        android:autofillHints=""
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUbicacion"
+        android:layout_alignStart="@+id/txtUbicacion"
+        android:layout_alignEnd="@+id/txtUbicacion"
+        android:layout_marginTop="10dp"
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/lblCodigoProductoT"
+        android:id="@+id/textView52"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lblNombreUbicacion"
-        android:layout_alignEnd="@+id/lblUbicacionT"
-        android:layout_alignBottom="@+id/txtCodigo1"
+        android:layout_alignTop="@+id/txtProducto"
+        android:layout_alignEnd="@+id/textView47"
+        android:layout_alignBottom="@+id/txtProducto"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="0dp"
-        android:text="@string/c_digo" />
+        android:text="Código:" />
 
     <Spinner
         android:id="@+id/cmbEstadoExist"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@+id/lblNombreProducto"
-        android:layout_alignStart="@+id/txtCodigo1"
-        android:layout_alignEnd="@+id/txtCodigo1"
+        android:layout_height="45dp"
+        android:layout_below="@+id/txtProducto"
+        android:layout_alignStart="@+id/txtProducto"
+        android:layout_alignEnd="@+id/txtProducto"
         android:layout_alignParentBottom="false"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp" />
 
     <TextView
-        android:id="@+id/lblEstadoT"
+        android:id="@+id/textView53"
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lblNombreProducto"
-        android:layout_alignEnd="@+id/lblCodigoProductoT"
+        android:layout_alignTop="@+id/cmbEstadoExist"
+        android:layout_alignEnd="@+id/textView52"
         android:layout_alignBottom="@+id/cmbEstadoExist"
         android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <ImageView
+        android:id="@+id/imgPrint"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/cmbEstadoExist"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:text="@string/estado" />
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/printimg" />
 
-
-    <TextView
-        android:id="@+id/lblNombreUbicacion"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/txtUbic1"
-        android:layout_alignParentStart="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:paddingStart="5dp"
-        android:text="-"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
-
+    <ListView
+        android:id="@+id/listExist"
+        android:layout_width="wrap_content"
+        android:layout_height="315dp"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@id/imgPrint"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="60dp" />
 </RelativeLayout>

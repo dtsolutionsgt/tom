@@ -193,8 +193,9 @@ public class frm_list_rec_prod_detalle extends PBase {
                 {
                 Map<String, Map<String, Map<String, Map<Double, List<clsBeTrans_re_det>>>>> employessGroup=
                         null;
-                    employessGroup = pListTransRecDet.items.stream().collect(Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,
-                            Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto_estado,
+                    employessGroup = pListTransRecDet.items.stream().collect(
+                            Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,
+                                Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto_estado,
                                     Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto,
                                             Collectors.groupingBy(clsBeTrans_re_det::getcantidad_recibida)))));
                     employessGroup.size();
