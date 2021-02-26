@@ -403,6 +403,7 @@ public class clsBeTrans_oc_enc {
         IdAcuerdoComercial=value;
     }
 //#EJCIdOperadorBodegaDefecto Add ON 20210226
+    //#EJC ANother comment here
     public int getIdOperadorBodegaDefecto() {
         return IdOperadorBodegaDefecto;
     }
