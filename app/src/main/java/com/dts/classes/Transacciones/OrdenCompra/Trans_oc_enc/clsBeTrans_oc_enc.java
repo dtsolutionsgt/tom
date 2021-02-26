@@ -10,7 +10,6 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_estado.clsBeTrans_oc_e
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_imagen.clsBeTrans_oc_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_pol.clsBeTrans_oc_pol;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
-import com.zebra.sdk.comm.snmp.internal.OidNotFoundException;
 
 import org.simpleframework.xml.Element;
 
