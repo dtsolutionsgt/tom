@@ -122,6 +122,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     private boolean EsPalletNoEstandar=false;
     private boolean TienePosiciones=false;
+    private boolean Ubicacion_Es_Valida= false;
 
     private boolean escaneoPallet;
 
@@ -1230,6 +1231,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 20:
                     processTienePosiciones();
                     break;
+                case 21:
+                    processUbicacion_Valida();
+                    break;
+
             }
 
         } catch (Exception e) {
@@ -1349,6 +1354,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     case 20:
                         callMethod("Tiene_Posiciones","pStock",pStock);
                         break;
+                    case 21:
+                        callMethod("Ubicacion_Es_Valida","pIdProducto",BeProductoUbicacion.IdProductoBodega,
+                                "pIdUbicacion",txtUbicDestino.getText().toString(),"pIdBodega",gl.IdBodega);
+                        break;
+
                 }
 
             } catch (Exception e) {
@@ -1502,6 +1512,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (!datosCorrectos) return;
 
                 progress.cancel();
+
                 msgAskAplicar((gl.modo_cambio ==1? "Mover producto a ubicación: " + bodega_ubicacion_destino.Descripcion: "Aplicar cambio de estado?"));
 
             }else{
@@ -1533,6 +1544,32 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("Ubicación destino incorrecta");
+            }else{
+                execws(21);
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processUbicacion_Valida(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            Ubicacion_Es_Valida = xobj.getresult(Boolean.class,"Ubicacion_Es_Valida");
+
+            if (!Ubicacion_Es_Valida){
+                vProcesar = false;
+                cvUbicDestID = 0;
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                throw new Exception("La ubicación destino, no permite este tipo de producto!");
             }else{
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
                 lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
@@ -1964,7 +2001,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void processUbicacionDestSugerida(){
         try{
 
-            progress.setMessage("Procesando ubidacion destino sugerida");
+            progress.setMessage("Procesando ubicación destino sugerida");
             progress.show();
 
             lUbicSug = xobj.getresult(USUbicStrucStage5List.class,"ml_get_ubicacion_sugerida");
@@ -2519,7 +2556,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void validaDestino(){
 
         try{
-
+            
+            progress.setMessage("Procesando ubicación destino...");
+            progress.show();
+            
             if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();

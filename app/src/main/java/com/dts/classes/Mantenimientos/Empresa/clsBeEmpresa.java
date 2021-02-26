@@ -32,6 +32,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public boolean codigo_automatico=false;
     @Element(required=false) public boolean politica_contrasenas=false;
     @Element(required=false) public int IdMotivoAjusteInventario=0;
+    @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
 
 
     public clsBeEmpresa()
@@ -276,6 +277,13 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     }
     public void setIdMotivoAjusteInventario(int value) {
         IdMotivoAjusteInventario=value;
+    }
+
+    public String getHora_Corte_Jornada_Sistema() {
+        return Hora_Corte_Jornada_Sistema;
+    }
+    public void setHora_Corte_Jornada_Sistema(String value) {
+        Hora_Corte_Jornada_Sistema =value;
     }
 
 }
