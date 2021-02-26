@@ -60,6 +60,8 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String No_Ticket_TMS;
     @Element(required=false) public int IdNoDocumentoRef;
     @Element(required=false) public int IdAcuerdoComercial;
+    @Element(required=false) public int IdOperadorBodegaDefecto;
+
 //#EJC - Dosnt exist!
     public clsBeTrans_oc_enc()
     {
@@ -400,7 +402,12 @@ public class clsBeTrans_oc_enc {
     public void setIdAcuerdoComercial(int value) {
         IdAcuerdoComercial=value;
     }
-
+//#EJCIdOperadorBodegaDefecto Add ON 20210226
+    public int getIdOperadorBodegaDefecto() {
+        return IdOperadorBodegaDefecto;
+    }
+    public void setIdOperadorBodegaDefecto(int value) {
+        IdOperadorBodegaDefecto=value;
+    }
 
 }
-
