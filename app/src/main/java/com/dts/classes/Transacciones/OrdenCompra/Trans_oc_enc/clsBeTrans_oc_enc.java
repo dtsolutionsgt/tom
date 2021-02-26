@@ -402,7 +402,7 @@ public class clsBeTrans_oc_enc {
     public void setIdAcuerdoComercial(int value) {
         IdAcuerdoComercial=value;
     }
-//#EJCIdOperadorBodegaDefecto Add
+//#EJCIdOperadorBodegaDefecto Add ON 20210226
     public int getIdOperadorBodegaDefecto() {
         return IdOperadorBodegaDefecto;
     }
