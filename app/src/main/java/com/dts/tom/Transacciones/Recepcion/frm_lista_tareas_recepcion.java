@@ -101,6 +101,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             if (gl.tipoTarea==1){
 
+                lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
                     //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega
@@ -112,9 +113,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                 }
 
             }else if(gl.tipoTarea==5){
+                lblTitulo.setText("Tareas de Picking");
                 //Llama al método del WS Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega
                 execws(3);
             }else if(gl.tipoTarea==6){
+                lblTitulo.setText("Tareas de Verificación");
                 //Llama al método del WS Get_All_Pedidos_A_Verificar_By_IdBodega
                 execws(4);
             }

@@ -466,7 +466,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
             gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
             gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
-            gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperador);
+            gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperadorBodega);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
             gMovimientoDet.IsNew = true;

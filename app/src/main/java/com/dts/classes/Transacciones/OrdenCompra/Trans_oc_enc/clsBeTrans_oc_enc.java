@@ -13,7 +13,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeTrans_oc_enc {
+public class clsBeTrans_oc_enc { 
 
     @Element(required=false) public int IdOrdenCompraEnc;
     @Element(required=false) public int IdPropietarioBodega;

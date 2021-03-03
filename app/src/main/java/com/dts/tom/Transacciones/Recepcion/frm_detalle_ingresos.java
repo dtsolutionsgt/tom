@@ -354,7 +354,7 @@ public class frm_detalle_ingresos extends PBase {
             gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class,"GetSingleRec");
             gl.mode =1;
             if (gBeRecepcion!=null)
-            {//
+            {
                 Llenar_Campos();
             }
 
@@ -397,7 +397,7 @@ public class frm_detalle_ingresos extends PBase {
 
             if (gl.TipoOpcion==1) {
 
-                progress.setMessage("Obteniendo detalle de recepción");
+                 progress.setMessage("Obteniendo detalle de recepción");
 
                 pListTransRecDet = gBeRecepcion.Detalle;
 
@@ -407,7 +407,7 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Obteniendo documento de ingreso");
 
-                gBeOrdenCompra = gBeRecepcion.OrdenCompraRec.OC;
+               gBeOrdenCompra = gBeRecepcion.OrdenCompraRec.OC;
 
                 progress.setMessage("Obteniendo re oc");
 
@@ -564,13 +564,17 @@ public class frm_detalle_ingresos extends PBase {
 
             tipooclist.clear();
 
-            tipooclist.add(gBeRecepcion.OrdenCompraRec.OC.TipoIngreso.Nombre);
+            if (gBeRecepcion.OrdenCompraRec.OC.TipoIngreso != null){
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tipooclist);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbTipoDoc.setAdapter(dataAdapter);
+                tipooclist.add(gBeRecepcion.OrdenCompraRec.OC.TipoIngreso.Nombre);
 
-            if (tipooclist.size()>0) cmbTipoDoc.setSelection(0);
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tipooclist);
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cmbTipoDoc.setAdapter(dataAdapter);
+
+                if (tipooclist.size()>0) cmbTipoDoc.setSelection(0);
+
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());

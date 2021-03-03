@@ -26,6 +26,8 @@ public class clsBePropietarios {
     @Element(required=false) public String Codigo="";
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public String NIT="";
+    @Element(required=false) public String codigo_acceso="";
+    @Element(required=false) public String clave_acceso="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
 
 
@@ -36,7 +38,8 @@ public class clsBePropietarios {
                              String Nombre_comercial,String Imagen,String Telefono,String Direccion,
                              boolean Activo,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Email,boolean Actualiza_costo_oc,int Color,
-                             String Codigo,boolean Sistema,String NIT,clsBeEmpresa Empresa) {
+                             String Codigo,boolean Sistema,String NIT,String codigo_acceso,
+                             String clave_acceso,clsBeEmpresa Empresa) {
 
         this.IdPropietario=IdPropietario;
         this.IdEmpresa=IdEmpresa;
@@ -58,6 +61,8 @@ public class clsBePropietarios {
         this.Sistema=Sistema;
         this.NIT = NIT;
         this.Empresa=Empresa;
+        this.codigo_acceso=codigo_acceso;
+        this.clave_acceso=clave_acceso;
 
     }
 
@@ -181,6 +186,18 @@ public class clsBePropietarios {
     }
     public void setEmpresa(clsBeEmpresa value) {
         Empresa=value;
+    }
+    public String getCodigo_acceso() {
+        return codigo_acceso;
+    }
+    public void setCodigo_acceso(String value) {
+        codigo_acceso=value;
+    }
+    public String getClave_acceso() {
+        return clave_acceso;
+    }
+    public void setClave_acceso(String value) {
+        clave_acceso=value;
     }
 
 }

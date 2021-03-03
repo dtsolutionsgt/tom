@@ -232,7 +232,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_All_By_IdTransUbicEnc_And_IdOperador","pIdTransUbicHhEnc",gl.IdTareaUbicEnc,
-                                "pIdOperador",(chkTodos.isChecked()?0: gl.IdOperador));
+                                "pIdOperador",(chkTodos.isChecked()?0: gl.OperadorBodega.IdOperadorBodega));
                         break;
                     case 2:
                         callMethod("Actualizar_Estado_Cambio","pIdTransUbicHHEnc", gl.tareaenc,"finalizar", true);
@@ -298,7 +298,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                     List<clsBeTrans_ubic_hh_det> BeTransUbicHhDetTmp =
                             stream(pBeTransUbicHhDetList.items)
-                                    .where(c -> (soperador?c.IdOperador > -1:c.IdOperador == gl.IdOperador))
+                                    .where(c -> (soperador?c.IdOperadorBodega > -1:c.IdOperadorBodega == gl.OperadorBodega.getIdOperadorBodega()))
                                     .where(c -> (BeBuscaProducto==0? c.getProducto().IdProducto > -1: c.getProducto().IdProducto == BeBuscaProducto))
                                     .where (c -> (ubicados?c.getCantidad() == c.getRecibido(): c.getCantidad() - c.getRecibido() >0))
                                     .where(c -> c.getCantidad()>0)
@@ -324,12 +324,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                         pBeTransUbicHhDetListArray.add(vItem);
 
-                        if (pBeTransUbicHhDetList.items.get(i).getIdOperador()==gl.IdOperador){
+                        if (pBeTransUbicHhDetList.items.get(i).getIdOperadorBodega()==gl.OperadorBodega.getIdOperadorBodega()){
                             listUser += 1;
                         }
 
                         if (!pBeTransUbicHhDetList.items.get(i).getRealizado()){
-                            if (pBeTransUbicHhDetList.items.get(i).getIdOperador()==gl.IdOperador){
+                            if (pBeTransUbicHhDetList.items.get(i).getIdOperadorBodega()==gl.OperadorBodega.getIdOperadorBodega()){
                                 listCompUser += 1;
                             }
 
