@@ -27,7 +27,7 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public String Asunto="";
     @Element(required=false) public String DescripcionMotivo;
     @Element(required=false) public boolean IsNew;
-
+    @Element(required=false) public int IdReabastecimientoLog=0;
 
     public clsBeTrans_ubic_hh_enc() {
     }
@@ -204,6 +204,11 @@ public class clsBeTrans_ubic_hh_enc {
     public void setIsNew(boolean value) {
         IsNew=value;
     }
-
+    public int getIdReabastecimientoLog() {
+        return IdReabastecimientoLog;
+    }
+    public void setIdReabastecimientoLog(int value) {
+        IdReabastecimientoLog=value;
+    }
 }
 

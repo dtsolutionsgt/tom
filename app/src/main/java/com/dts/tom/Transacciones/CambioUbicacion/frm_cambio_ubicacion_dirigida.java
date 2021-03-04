@@ -48,6 +48,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private boolean TienePosiciones=false;
 
     private int vPosiciones=0;
+    private int vIdReabastecimientoLog=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -514,10 +515,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                                    "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
+                        //#EJC20210304: Agregué el IdReabastecimiento como parámetro.
                         callMethod("Actualizar_Trans_Ubic_HH_Det",
                                    "oBeTrans_ubic_hh_det", gl.tareadet,
                                    "pMovimiento",gMovimientoDet,
-                                   "pPosiciones",vPosiciones);
+                                   "pPosiciones",vPosiciones,
+                                   "pIdReabastecimientoLog", gl.tareaenc.getIdReabastecimientoLog());
                         break;
                     case 4:
                         callMethod("Get_Single_By_IdEstado",

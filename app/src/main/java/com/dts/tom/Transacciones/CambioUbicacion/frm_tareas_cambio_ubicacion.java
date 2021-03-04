@@ -222,13 +222,12 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                     for (int i = 0; i<=pListBeTransUbicHhEnc.items.size()-1; i++) {
 
                         vItem = new clsBeTrans_ubic_hh_enc();
-
                         gl.IdPropietarioBodega = pListBeTransUbicHhEnc.items.get(i).IdPropietarioBodega;
                         vItem.IdTareaUbicacionEnc = pListBeTransUbicHhEnc.items.get(i).getIdTareaUbicacionEnc();
                         vItem.DescripcionMotivo = pListBeTransUbicHhEnc.items.get(i).getDescripcionMotivo();
                         vItem.Observacion = pListBeTransUbicHhEnc.items.get(i).getObservacion();
                         vItem.Estado = pListBeTransUbicHhEnc.items.get(i).getEstado();
-
+                        vItem.IdReabastecimientoLog =  pListBeTransUbicHhEnc.items.get(i).getIdReabastecimientoLog();
                         pListBeTareasCambioHH.add(vItem);
 
                     }
