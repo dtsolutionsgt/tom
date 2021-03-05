@@ -919,6 +919,7 @@ public class frm_recepcion_datos extends PBase {
                     BotonIrGuardarParametros();
                 }
             });
+
             btnBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

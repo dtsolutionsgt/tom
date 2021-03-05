@@ -465,7 +465,6 @@ public class MainActivity extends PBase {
                     gl.gNomOperador = NomOperador;
 
                     txtpass.requestFocus();
-                    showkeyb();
 
                 } catch (Exception e) {
                     msgbox(e.getMessage());
@@ -499,6 +498,18 @@ public class MainActivity extends PBase {
                 return false;
             }
         });
+
+        txtpass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    showkeyb();
+                }else{
+                    hidekeyb();
+                }
+            }
+        });
+
 
     }
 
@@ -1001,12 +1012,17 @@ public class MainActivity extends PBase {
             {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
+
+                txtpass.requestFocus();
+                //showkeyb();
+
             }
 
         } catch (Exception e)
         {
             mu.msgbox( e.getMessage());
         }
+
     }
 
     private void getURL() {

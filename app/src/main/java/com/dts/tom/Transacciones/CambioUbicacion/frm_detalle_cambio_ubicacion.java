@@ -259,7 +259,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         try{
 
             gl.IdTareaUbicDet = IdTareaDet;
-            gl.tareadet = pBeTransUbicHhDetList.items.get(index);
+            gl.tareadet= pBeTransUbicHhDetList.items.get(index);
 
             Intent intent = new Intent(this,frm_cambio_ubicacion_dirigida.class);
             startActivity(intent);
