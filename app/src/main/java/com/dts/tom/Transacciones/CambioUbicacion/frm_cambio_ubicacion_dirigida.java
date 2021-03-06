@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,10 +28,10 @@ import java.util.Date;
 
 public class frm_cambio_ubicacion_dirigida extends PBase {
 
-    private TextView lblTituloForma,lblCant,lblCambioEstado,lblUbicDestino, lblDescProd, lblNomDestino,
-            txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,txtPeso,
-            txtEstadoDestino, txtUnidadMedida;
-    private EditText txtUbicOrigen,txtCodigoPrd, txtCantidad,txtUbicDestino,txtPosiciones, txtLicPlate;
+    private TextView lblTituloForma, lblCant, lblCambioEstado, lblUbicDestino, lblDescProd, lblNomDestino,
+                     txtPresentacion, txtPropietario,txtLote,txtVence,txtEstado,txtPeso,
+                     txtEstadoDestino, txtUnidadMedida;
+    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad,txtUbicDestino,txtPosiciones, txtLicPlate;
     private TableRow trLote, trVence, trPresentacion, trPeso, trLP;
 
     private double vCantidadAUbicar;
@@ -53,6 +54,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private int vPosiciones=0;
     private int vIdReabastecimientoLog=0;
 
+    private boolean listo=true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         lblCambioEstado = (TextView) findViewById(R.id.lblCambioEstado);
         txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
         txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
-        txtPresentacion = (EditText) findViewById(R.id.txtPresentacion);
+        txtPresentacion = (TextView) findViewById(R.id.txtPresentacion);
         txtLote = (TextView) findViewById(R.id.txtLote);
         txtVence = (TextView) findViewById(R.id.txtVence);
         txtEstado = (TextView) findViewById(R.id.txtEstado);
@@ -100,13 +103,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         txtEstadoDestino.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
 
         txtCodigoPrd.setEnabled(true);
-        txtPresentacion.setEnabled(true);
-        txtPropietario.setEnabled(true);
-        txtLote.setEnabled(true);
-        txtVence.setEnabled(true);
-        txtEstado.setEnabled(true);
-        txtEstadoDestino.setEnabled(true);
-        txtPeso.setEnabled(false);
 
         setHandlers();
 
@@ -143,7 +139,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         if (txtUbicOrigen.getText().toString().equals("") ||
                                 txtUbicOrigen.getText().toString().isEmpty() ||
                                 txtUbicOrigen.getText().toString()==null){
-                            mu.msgbox("Debe ingresar la ubicación origen");
+                            toast("Debe ingresar la ubicación origen");
                         }
                     }
                 }
@@ -155,117 +151,53 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
                        if (keyCode == KeyEvent.KEYCODE_ENTER){
-                           if (txtCodigoPrd.getText().toString().equals("") ||
-                                   txtCodigoPrd.getText().toString().isEmpty() ||
-                                   txtCodigoPrd.getText().toString()==null){
-                               mu.msgbox("Debe ingresar el código del producto");
-                               txtCodigoPrd.requestFocus();
-                           }else{
-                               if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
-                                       (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
-
-                                   msgbox(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
-                                   txtCodigoPrd.requestFocus();
-
-                               }else{
-                                   txtUbicDestino.requestFocus();
-                               }
-                           }
+                           validaCodProd();
                        }
-
                     }
-
                     return false;
                 }
             });
-/*
 
-            txtCodigoPrd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /*txtCodigoPrd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus) {
 
+                    if(!hasFocus) {
                         if (txtCodigoPrd.getText().toString().equals("") ||
                                 txtCodigoPrd.getText().toString().isEmpty() ||
                                 txtCodigoPrd.getText().toString()==null){
-                            mu.msgbox("Debe ingresar el código del producto");
-                            v.requestFocus();
-                        }else{
-
-                            if (gl.tareadet.Producto.Codigo!=txtCodigoPrd.getText().toString() &&
-                                    gl.tareadet.Producto.Codigo_barra!=txtCodigoPrd.getText().toString()){
-
-                                msgbox(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
-                                v.requestFocus();
-                            }else{
-
-                                txtUbicDestino.requestFocus();
-
-                            }
+                            toast("Debe ingresar el código del producto");
                         }
                     }
                 }
-            });
-*/
+            });*/
 
             txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN)) {
 
-                        if (txtLicPlate.getText().toString().equals("") ||
-                                txtLicPlate.getText().toString().isEmpty() ||
-                                txtLicPlate.getText().toString()==null){
-
-                            mu.msgbox("Debe ingresar el license plate del producto");
-                            v.requestFocus();
-
-                        }else{
-                            if (gl.tareadet.Stock.getLic_plate()==txtLicPlate.getText().toString()){
-
-                                msgbox(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
-                                v.requestFocus();
-
-                            }else{
-                                txtCodigoPrd.requestFocus();
-                            }
+                        if (keyCode == KeyEvent.KEYCODE_ENTER){
+                            validaLP();
                         }
                     }
-
                     return false;
                 }
             });
-/*
 
-            txtLicPlate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+          /*  txtLicPlate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-
                     if(!hasFocus) {
-
                         if (txtLicPlate.getText().toString().equals("") ||
-                                txtLicPlate.getText().toString().isEmpty() ||
-                                txtLicPlate.getText().toString()==null){
-
-                            mu.msgbox("Debe ingresar el license plate del producto");
-                            v.requestFocus();
-
-                        }else{
-
-                            if (gl.tareadet.Stock.getLic_plate()==txtLicPlate.getText().toString()){
-
-                                msgbox(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
-                                v.requestFocus();
-
-                            }else{
-                                txtCodigoPrd.requestFocus();
-                            }
+                            txtLicPlate.getText().toString().isEmpty() ||
+                            txtLicPlate.getText().toString()==null){
+                            msgbox("Debe ingresar el código del License Plate");
                         }
                     }
                 }
             });
 */
-
             txtUbicDestino.setOnKeyListener(new View.OnKeyListener(){
 
                 @Override
@@ -280,18 +212,18 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 }
             });
 
-            /*txtUbicDestino.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            txtUbicDestino.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(!hasFocus) {
                         if (txtUbicDestino.getText().toString().equals("") ||
                                 txtUbicDestino.getText().toString().isEmpty() ||
                                 txtUbicDestino.getText().toString()==null){
-                            mu.msgbox("Debe ingresar la ubicación destino");
+                            toast("Debe ingresar la ubicación destino");
                         }
                     }
                 }
-            });*/
+            });
 
             txtCantidad.setOnKeyListener(new View.OnKeyListener(){
 
@@ -304,6 +236,17 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         }
                     }
                     return false;
+                }
+            });
+
+            txtCantidad.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus) {
+                        if (txtUbicDestino.getText().toString().equals("")){
+                            txtUbicDestino.requestFocus();
+                        }
+                    }
                 }
             });
 
@@ -325,10 +268,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             lblTituloForma.setText(gl.tareadet.UbicacionOrigen.NombreCompleto);
 
-            txtUbicOrigen.setHint("Escanee " + gl.tareadet.UbicacionOrigen.IdUbicacion);
-            txtCodigoPrd.setHint("Escanee " + gl.tareadet.Producto.Codigo);
-            txtLicPlate.setHint("Escanee " + gl.tareadet.Stock.getLic_plate());
-            txtUbicDestino.setHint("Escanee " + gl.tareadet.IdUbicacionDestino);
+            txtUbicOrigen.setHint("" + gl.tareadet.UbicacionOrigen.IdUbicacion);
+            txtCodigoPrd.setHint("" + gl.tareadet.Producto.Codigo);
+            txtLicPlate.setHint("" + gl.tareadet.Stock.getLic_plate());
+            txtUbicDestino.setHint("" + gl.tareadet.IdUbicacionDestino);
 
             lblDescProd.setText(gl.tareadet.Producto.Nombre);
             txtPresentacion.setText(gl.tareadet.ProductoPresentacion.Nombre);
@@ -442,6 +385,52 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
+    private void  validaCodProd(){
+        try{
+            if (!txtCodigoPrd.getText().toString().equals("") ){
+                if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
+                        (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
+
+                    txtCodigoPrd.setText("");
+                    txtCodigoPrd.requestFocus();
+                    throw new  Exception(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
+
+                }
+            }else if (txtCodigoPrd.getText().toString().equals("") ||
+                    txtCodigoPrd.getText().toString().isEmpty() ||
+                    txtCodigoPrd.getText().toString()==null){
+                txtCodigoPrd.requestFocus();
+                throw new  Exception("Debe ingresar el código del producto");
+            }
+        }catch (Exception ex){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void validaLP(){
+        try{
+
+            if (!txtLicPlate.getText().toString().equals("")) {
+
+                String Lp=txtLicPlate.getText().toString().replace("$","");
+
+                if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
+                    txtLicPlate.setText("");
+                    txtLicPlate.requestFocus();
+
+                    throw new Exception(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                }
+            }else  if (txtLicPlate.getText().toString().equals("") ||
+                    txtLicPlate.getText().toString().isEmpty() ||
+                    txtLicPlate.getText().toString()==null){
+                txtLicPlate.requestFocus();
+                throw new  Exception("Debe ingresar el License Plate del producto");
+            }
+        }catch (Exception ex){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
     private void cambioUbicEst(){
 
         try{
@@ -464,6 +453,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     txtLicPlate.requestFocus();
                     return;
                 }
+
+                String Lp=txtLicPlate.getText().toString().replace("$","");
+                if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
+
+                    msgbox(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                    txtLicPlate.setText("");
+                    txtLicPlate.requestFocus();
+                    return;
+
+                }
             }
 
             if (txtCodigoPrd.getText().toString().equals("") ||
@@ -472,6 +471,15 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 mu.msgbox("Debe ingresar el código del producto");
                 txtCodigoPrd.requestFocus();
                 return;
+            }else{
+                if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
+                    (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
+
+                    msgbox(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
+                    txtCodigoPrd.setText("");
+                    txtCodigoPrd.requestFocus();
+                    return;
+                }
             }
 
             if (txtUbicOrigen.getText().toString().isEmpty()) {
@@ -784,7 +792,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             if (bodega_ubicacion.IdUbicacion != gl.IdOrigen)
             {
-                txtUbicOrigen.selectAll();
+                txtUbicOrigen.setText("");
                 txtUbicOrigen.requestFocus();
                 throw new Exception("La ubicación origen no coincide");
             }
@@ -814,16 +822,14 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("Ubicación destino incorrecta");
-            }
-
-            if (bodega_ubicacion.IdUbicacion != gl.IdDestino){
+            }else if (bodega_ubicacion.IdUbicacion != gl.IdDestino) {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("La ubicación destino no coincide");
+            }else{
+                txtCantidad.selectAll();
+                txtCantidad.requestFocus();
             }
-
-            txtCantidad.selectAll();
-            txtCantidad.requestFocus();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

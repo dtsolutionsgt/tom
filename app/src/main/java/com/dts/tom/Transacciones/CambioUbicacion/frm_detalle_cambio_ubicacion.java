@@ -350,9 +350,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                             if (pBeTransUbicHhDetList.items.size()==1){
 
-                                if (pBeTransUbicHhDetList.items.get(0).getCantidad()-pBeTransUbicHhDetList.items.get(0).getRecibido()>0){
-                                    msgAskContinuar("Ya solo le queda este registro pendiente ¿Quiere continuar ingresando lo pendiente?");
-                                }else{
+                                if (pBeTransUbicHhDetList.items.get(0).getCantidad()-pBeTransUbicHhDetList.items.get(0).getRecibido()==0){
+                                    /*msgAskContinuar("Ya solo le queda este registro pendiente ¿Quiere continuar ingresando lo pendiente?");
+                                }else{*/
                                     if(txtCodigo.getText().toString().equals("")){
                                         msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
                                                 (gl.modo_cambio==1? "ubicar": "cambiar de estado")));

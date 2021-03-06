@@ -66,7 +66,7 @@
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="License Plate:"
+                    android:text="LP:"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -108,7 +108,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:enabled="true"
-                    android:hint="0000"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
@@ -154,10 +153,10 @@
                 <TextView
                     android:id="@+id/txtUnidadMedida"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:ems="10"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="Unidad Medida"
@@ -183,15 +182,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtPresentacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="Presentacion"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
             </TableRow>
@@ -214,15 +215,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtPropietario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="Propietario"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </TableRow>
 
@@ -244,15 +247,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtLote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="L0000"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </TableRow>
 
@@ -274,15 +279,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtVence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="00/00/0000"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </TableRow>
 
@@ -304,15 +311,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtEstado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="Bueno"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </TableRow>
 
@@ -427,16 +436,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtPeso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:ems="10"
-                    android:enabled="true"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="0.00"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </TableRow>
 
@@ -458,15 +468,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtEstadoDestino"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:text="#0000"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
             </TableRow>

@@ -24,24 +24,20 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                tools:visibility="gone">
+                android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/lblLicensePlate"
+                    android:id="@+id/textView10"
+                    style="@style/StyleText"
                     android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:textSize="18sp" />
+                    android:layout_height="match_parent"
+                    android:text="License Plate:" />
 
                 <EditText
-                    android:id="@+id/txtLicensePlate"
+                    android:id="@+id/txtBarra"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="Name"
-                    android:textSize="18sp" />
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
             </TableRow>
 
             <TableRow
@@ -50,14 +46,14 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/lblCodigoProducto"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Barra:" />
+                    android:text="Código:" />
 
                 <EditText
-                    android:id="@+id/txtBarra"
+                    android:id="@+id/txtCodigoProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />

@@ -4993,6 +4993,10 @@ public class frm_recepcion_datos extends PBase {
         msgAskExit("Está seguro de salir");
     }
 
+    public void BotonMostrar(View view){
+        BotonIrGuardarParametros();
+    }
+
     private void msgAskExit(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);

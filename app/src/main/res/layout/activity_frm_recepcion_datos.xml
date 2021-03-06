@@ -48,15 +48,15 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
             android:background="@drawable/back"
             android:onClick="ExitForm" />
 
         <Button
             android:id="@+id/btnFinalizarRece"
-            android:layout_width="249dp"
+            android:layout_width="268dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:layout_toStartOf="@+id/btnIr"
             android:layout_toEndOf="@+id/btnBack"
@@ -72,8 +72,10 @@
             android:layout_width="61dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/arr_rnd_right" />
+            android:background="@drawable/arr_rnd_right"
+            android:enabled="true"
+            android:onClick="BotonMostrar" />
+
     </RelativeLayout>
 
     <ScrollView
@@ -129,7 +131,7 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
-                    android:text="Lp :"
+                    android:text="LP :"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
