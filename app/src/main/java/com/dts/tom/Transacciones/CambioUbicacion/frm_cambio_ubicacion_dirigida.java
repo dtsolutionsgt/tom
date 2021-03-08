@@ -170,8 +170,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         }
                     }
                 }
-            });*/
-
+            });
+*/
             txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {

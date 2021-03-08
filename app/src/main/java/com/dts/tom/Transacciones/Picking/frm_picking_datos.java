@@ -63,12 +63,13 @@ public class frm_picking_datos extends PBase {
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate;
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
-    private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick;
+    private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
+    private String pCodigo = "";
     private int gIdUbicacion=0;
     public static double CantReemplazar=0;
     public static boolean ReemplazoLP=false;
@@ -94,6 +95,7 @@ public class frm_picking_datos extends PBase {
         txtUniBas = (EditText) findViewById(R.id.txtUniBas);
         txtCantidadPick = (EditText) findViewById(R.id.txtCantidadPick);
         txtPesoPick = (EditText) findViewById(R.id.txtPesoPick);
+        txtCodigoProducto = (EditText) findViewById(R.id.txtCodigoProducto);
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
@@ -200,6 +202,17 @@ public class frm_picking_datos extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         Procesa_Barra();
+                    }
+
+                    return false;
+                }
+            });
+
+            txtCodigoProducto.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        Procesa_Codigo();
                     }
 
                     return false;
@@ -445,6 +458,30 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void Procesa_Codigo() {
+
+        try {
+
+            if (!txtCodigoProducto.getText().toString().isEmpty()) {
+
+                int vLengthCodigo = txtCodigoProducto.getText().toString().length();
+
+                if (vLengthCodigo > 0) {
+
+                    Escaneo_Pallet = false;
+
+                    pCodigo = txtCodigoProducto.getText().toString();
+
+                    Continua_procesando_barra();
+
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("Procesa_Codigo:" + e.getMessage());
+        }
+    }
+
     private void Continua_procesando_barra(){
 
 
@@ -634,7 +671,7 @@ public class frm_picking_datos extends PBase {
                     Cargar_Datos_Producto_Picking_Consolidado();
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
-                        (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtBarra.getText().toString()))){
+                        (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtCodigoProducto.getText().toString()))){
 
                     msgContinuarPorCodigo("Se requiere licencia de pallet para este producto y se ha ingresado el código, ¿está seguro de verificar por código de producto?");
                     return;
@@ -1020,6 +1057,7 @@ public class frm_picking_datos extends PBase {
 
         try{
 
+            txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
             CantSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
             CantRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
 
