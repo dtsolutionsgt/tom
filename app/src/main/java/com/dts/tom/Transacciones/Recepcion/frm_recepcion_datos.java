@@ -68,6 +68,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.xml.validation.Validator;
+
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
@@ -82,16 +84,19 @@ public class frm_recepcion_datos extends PBase {
     private Button btnCantPendiente,btnCantRecibida,btnBack,btnIr;
     private ProgressDialog progress;
     private DatePicker dpResult;
-    private ImageView imgDate;
+    private ImageView imgDate, cmdImprimir;
     private CheckBox chkPaletizar, chkPalletNoEstandar;
-    private TableRow tblEstiba;
+    private TableRow tblEstiba, tbLPeso;
     private Dialog dialog;
+
+    private boolean imprimirDesdeBoton=false;
 
     //Objeto para dialogo de parametros
     private TextView lblSerieTit,lblSerialP,lblPesoTit,lblTempTit,lblPrducto,lblLicPlate,lblFManufact,lblAnada,lblTempEsta,lblTempReal,lblPresParam,lblPesoEsta,lblPesoReal,lblSerialIni,lblSerialFin;
     private EditText txtLicPlate,txtSerial,txtAnada,txtFechaManu,txtFechaIng,txtTempEsta,txtTempReal,txtPesoEsta,txtPesoReal,txtSerieIni,txtSerieFin;
     private Spinner cmbPresParams;
     int pIndexStock=-1;
+    double Cant_Recibida_Actual=0;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -202,6 +207,7 @@ public class frm_recepcion_datos extends PBase {
         dpResult = (DatePicker) findViewById(R.id.datePicker);
 
         imgDate = (ImageView)findViewById(R.id.imgDate);
+        cmdImprimir = (ImageView)findViewById(R.id.cmdImprimir);
 
         chkPaletizar = (CheckBox)findViewById(R.id.chkPaletizar);
         chkPalletNoEstandar = (CheckBox)findViewById(R.id.chkPalletNoEstandar);
@@ -209,7 +215,8 @@ public class frm_recepcion_datos extends PBase {
         btnBack = (Button)findViewById(R.id.btnBack);
         btnIr = (Button)findViewById(R.id.btnIr);
 
-        tblEstiba  = (TableRow)findViewById(R.id.tblEstiba) ;
+        tblEstiba  = (TableRow)findViewById(R.id.tblEstiba);
+        tbLPeso  = (TableRow)findViewById(R.id.tbLPeso);
 
         tblEstiba.setVisibility(View.GONE);
         chkPaletizar.setVisibility(View.GONE);
@@ -399,6 +406,29 @@ public class frm_recepcion_datos extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+
+                        if (tbLPeso.getVisibility()==View.VISIBLE){
+                            txtPeso.requestFocus();
+                        }else{
+                            ValidaCampos();
+                        }
+                    }
+
+                    return false;
+                }
+            });
+
+            txtPeso.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+
+                        double pesoTotal = Double.valueOf(txtPeso.getText().toString()).doubleValue();
+                        double cant = Double.valueOf(txtCantidadRec.getText().toString()).doubleValue();
+                        if (cant>0){
+                            double pesoUni = mu.round(pesoTotal/cant,gl.gCantDecCalculo);
+                            txtPesoUnitario.setText(String.valueOf(pesoUni));
+                        }
                         ValidaCampos();
                     }
 
@@ -406,7 +436,7 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
-             cmbVenceRec .addTextChangedListener(new TextWatcher() {
+            cmbVenceRec .addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
@@ -432,6 +462,13 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
+            cmdImprimir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imprimirDesdeBoton=true;
+                    Imprimir(v);
+                }
+            });
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
@@ -444,24 +481,29 @@ public class frm_recepcion_datos extends PBase {
     //region validaciones
 
     private void ValidaCampos(){
-
         double Cant_Recibida = 0;
 
         try{
 
-            Cant_Recibida = Double.parseDouble(txtCantidadRec.getText().toString());
+            if (!txtCantidadRec.getText().toString().isEmpty() &&
+                !txtCantidadRec.getText().toString().equals("")&&
+                txtCantidadRec.getText().toString()!=null){
+                Cant_Recibida = Double.parseDouble(txtCantidadRec.getText().toString());
 
-            Cant_Recibida = mu.round(Cant_Recibida,6);
+                Cant_Recibida = mu.round(Cant_Recibida,6);
 
-            if (BeProducto!=null){
-                if (ValidaDatosIngresados()){
-                    //#CKFK20200816 Quité esta validacion porque no estó correcta
+                if (BeProducto!=null){
+                    if (ValidaDatosIngresados()){
+                        //#CKFK20200816 Quité esta validacion porque no estó correcta
                    /* if (Cant_Recibida_Anterior!=Cant_Recibida && Cant_Recibida_Anterior!=0){
                         Mostro_Propiedades = false;
                         return;
                     }*/
-                    Mostrar_Propiedades_Parametros();
+                        Mostrar_Propiedades_Parametros();
+                    }
                 }
+            }else{
+               throw new Exception("La cantidad no puede ser vacía");
             }
 
         }catch (Exception e){
@@ -481,24 +523,39 @@ public class frm_recepcion_datos extends PBase {
                     msgboxValidaFechaVence("La fecha no puede estar vacía.");
                     return false;
                 }
-            }else if (BeProducto.Control_lote){
+            }
+
+            if (BeProducto.Control_lote){
                 if(txtLoteRec.getText().toString().isEmpty()){
                     msgboxValidaLote("El campo de lote no puede estar vacío.");
                     return false;
                 }
-            }else if(BeProducto.Control_peso){
+            }
+
+            if(BeProducto.Control_peso){
                 if (txtPeso.getText().toString().isEmpty()){
                     msgboxValidaPeso("El peso no puede estar vacío");
                     return false;
+                }else{
+                    double pesoTotal = Double.valueOf(txtPeso.getText().toString()).doubleValue();
+                    double cant = Double.valueOf(txtCantidadRec.getText().toString()).doubleValue();
+                    if (cant>0){
+                        double pesoUni = mu.round(pesoTotal/cant,gl.gCantDecCalculo);
+                        txtPesoUnitario.setText(String.valueOf(pesoUni));
+                    }
                 }
-            }else if (txtCantidadRec.getText().toString().isEmpty()){
+            }
+
+            if (txtCantidadRec.getText().toString().isEmpty()){
                 mu.msgbox("La cantidad no puede estar vacía");
                 txtCantidadRec.requestFocus();
                 return false;
-            }else if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
-                    mu.msgbox("La cantidad debe ser mayor a 0");
-                    txtCantidadRec.requestFocus();
-                    return false;
+            }
+
+            if (Double.parseDouble(txtCantidadRec.getText().toString())<=0){
+                mu.msgbox("La cantidad debe ser mayor a 0");
+                txtCantidadRec.requestFocus();
+                return false;
             }
 
         }catch (Exception e){
@@ -646,7 +703,12 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            MuestraParametros1(this );
+            //#CKFK 20210308 Agregué este cambio para que los parámetros solo se muestren cuando sea necesario
+           if (existen_parametros_para_mostrar()){
+                MuestraParametros1(this );
+            }else{
+               Guardar_Recepcion_Nueva();
+            }
 
         }catch (Exception e){
             mu.msgbox("Muestra_Propiedades_Producto: "+e.getMessage());
@@ -654,11 +716,58 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private boolean existen_parametros_para_mostrar(){
+
+        int datos_ingresar = 0;
+        boolean mostrar = false;
+
+        try{
+
+            if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
+                datos_ingresar +=1;
+
+            }
+
+            if (BeProducto.Capturar_aniada){
+                datos_ingresar +=1;
+            }
+
+            if (BeProducto.Peso_recepcion){
+                datos_ingresar +=1;
+            }
+
+            if (BeProducto.Temperatura_recepcion){
+                datos_ingresar +=1;
+            }
+
+            if (BeProducto.Serializado){
+                datos_ingresar +=1;
+            }
+
+            if (BeProducto.Temperatura_recepcion){
+                datos_ingresar +=1;
+            }
+
+            if (pListBEProductoParametro!=null){
+                if (pListBEProductoParametro.items!=null){
+                    datos_ingresar +=1;
+                }
+            }
+
+            mostrar = datos_ingresar>0;
+
+        }catch (Exception ex){
+            mu.msgbox("existen_parametros_para_mostrar: "+ex.getMessage());
+        }
+
+        return mostrar;
+    }
+
     private void MuestraParametros1(Activity activity){
 
         try{
             int IndexPresentacion=-1;
-            double Cant_Recibida_Actual=0;
+            Cant_Recibida_Actual=0;
 
             if (!txtCantidadRec.getText().toString().isEmpty()){
                 Cant_Recibida_Actual = Double.parseDouble(txtCantidadRec.getText().toString());
@@ -746,7 +855,9 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (IndexPresentacion!=-1){
-                if((bePresentacion.EsPallet||chkPaletizar.isChecked())&&(bePresentacion.CamasPorTarima ==0|| bePresentacion.CajasPorCama==0)){
+
+                if((bePresentacion.EsPallet||chkPaletizar.isChecked())&&
+                        (bePresentacion.CamasPorTarima ==0|| bePresentacion.CajasPorCama==0)){
                    // mu.msgbox("La presentación no tiene los valores necesarios para recepcionar pallets");
                     txtLicPlate.setFocusable(false);
                     txtLicPlate.setFocusableInTouchMode(false);
@@ -757,14 +868,25 @@ public class frm_recepcion_datos extends PBase {
                     if (bePresentacion.EsPallet ||chkPaletizar.isChecked()|| bePresentacion.Permitir_paletizar){
 
                         if (bePresentacion.Genera_lp_auto){
+
+                            txtLicPlate.setFocusable(true);
+                            txtLicPlate.setFocusableInTouchMode(true);
+                            txtLicPlate.setClickable(true);
+
                             if (!Existe_Lp){
                                 execws(6);
                             }else{
                                 pNumeroLP = pLp;
+
+                                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                                if (!txtBarra.getText().toString().isEmpty()){
+                                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                                }else{
+                                    txtLicPlate.setText(pNumeroLP);
+                                }
+
                             }
-                            txtLicPlate.setFocusable(true);
-                            txtLicPlate.setFocusableInTouchMode(true);
-                            txtLicPlate.setClickable(true);
+
                         }
 
                     } else if (!bePresentacion.EsPallet || bePresentacion.Permitir_paletizar||chkPaletizar.isChecked()) {
@@ -775,40 +897,20 @@ public class frm_recepcion_datos extends PBase {
                                     execws(6);
                                 }else{
                                     pNumeroLP = pLp;
+
+                                    //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                                    if (!txtBarra.getText().toString().isEmpty()){
+                                        txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                                    }else{
+                                        txtLicPlate.setText(pNumeroLP);
+                                    }
+
                                 }
                             }
                         }else if(Cant_Recibida_Actual>bePresentacion.Factor){
                             if (pIndexStock<0){
                                 execws(7);
                             }
-
-                            pNumeroLP = "";
-
-                            if (pListBeLicensePlate.items!=null){
-
-                                for (int i = pListBeLicensePlate.items.size()-1; i>=0; i--) {
-                                    if(pListBeLicensePlate.items.get(i).CantidadDisponible>=Cant_Recibida_Actual){
-                                        if (!Existe_Lp){
-                                            pNumeroLP = pListBeLicensePlate.items.get(i).LicensePlates;
-                                        }else{
-                                            pNumeroLP = pLp;
-                                        }
-
-                                        break;
-                                    }
-                                }
-
-                            }
-
-                            if (gl.mode==2){
-                                pListBeStockRec.items.get(pIndexStock).Lic_plate = pNumeroLP;
-                            }
-
-                            txtLicPlate.setVisibility(View.VISIBLE);
-
-                            txtLicPlate.setFocusable(false);
-                            txtLicPlate.setFocusableInTouchMode(false);
-                            txtLicPlate.setClickable(false);
 
                         }
                     }else{
@@ -821,12 +923,6 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                if (!txtBarra.getText().toString().isEmpty()){
-                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
-                }else{
-                    txtLicPlate.setText(pNumeroLP);
-                }
             }else{
                 lblLicPlate.setVisibility(View.GONE);
                 txtLicPlate.setFocusable(false);
@@ -1015,7 +1111,14 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Peso_recepcion){
 
                 txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
-                txtPesoReal.setText(txtPeso.getText()+"");
+
+                if (!txtPesoUnitario.getText().toString().isEmpty() &&
+                    !txtPesoUnitario.getText().toString().equals("") &&
+                    txtPesoUnitario.getText().toString()!=null){
+                    txtPesoReal.setText(txtPesoUnitario.getText()+"");
+                }else{
+                    throw new Exception("Debe ingresar el peso del producto");
+                }
 
                 if (BeProducto.Presentaciones.items!=null){
 
@@ -1065,6 +1168,7 @@ public class frm_recepcion_datos extends PBase {
         boolean Parametros_Ingresados=false;
         clsBeStock_rec BeStock_rec  = new clsBeStock_rec();
         boolean Guardar=false;
+        MensajeParam="";
 
         try{
 
@@ -1194,7 +1298,7 @@ public class frm_recepcion_datos extends PBase {
                 if (val>0){
 
                     if (txtPesoReal.getText().toString().isEmpty()){
-                        MensajeParam +="Debe de ingresar peso \n";
+                        MensajeParam +="Debe ingresar peso \n";
                         return false;
                     }else if(Double.parseDouble(txtPesoReal.getText().toString())<=0){
                         MensajeParam+="El peso debe ser mayor a 0 \n";
@@ -2912,26 +3016,32 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (Mostrar_Propiedades_Parametros){
-                Muestra_Propiedades_Producto();
-            }else{
-                if (!Mostro_Propiedades){
-                    Llena_Stock();
-                    Mostro_Propiedades = true;
+            if (BeProducto!=null){
+                if(ValidaDatosIngresados()){
+                    if (Mostrar_Propiedades_Parametros){
+                        Muestra_Propiedades_Producto();
+                    }else{
+                        if (!Mostro_Propiedades){
+                            Llena_Stock();
+                            Mostro_Propiedades = true;
+                        }
+                    }
+
+                    if (!Mostro_Propiedades){
+                        Muestra_Propiedades_Producto();
+                        return;
+                    }
+
+                    if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
+
+                        execws(12);
+
+                    }else{
+                        ContinuaGuardandoRecepcion();
+                    }
                 }
-            }
-
-            if (!Mostro_Propiedades){
-                Muestra_Propiedades_Producto();
-                return;
-            }
-
-            if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
-
-               execws(12);
-
             }else{
-                ContinuaGuardandoRecepcion();
+                msgbox("No está definido el producto que se va a recepcionar");
             }
 
         }catch (Exception e){
@@ -2998,11 +3108,18 @@ public class frm_recepcion_datos extends PBase {
 
                 pListBeStockRec.items.get(pIndiceListaStock).IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 pListBeStockRec.items.get(pIndiceListaStock).IdProductoBodega = BeProducto.IdProductoBodega;
-                if (pListBeStockRec.items.get(pIndiceListaStock).Lic_plate!=null){
-                    pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = pListBeStockRec.items.get(pIndiceListaStock).Lic_plate;
+
+                //#CKFK 20210308 Agregué esta validación para ingresar el LP que ingresaron manualmente
+                if (!pLp.equals("")){
+                    pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = pLp;
                 }else{
-                    pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = "";
+                    if (pListBeStockRec.items.get(pIndiceListaStock).Lic_plate!=null){
+                        pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = pListBeStockRec.items.get(pIndiceListaStock).Lic_plate;
+                    }else{
+                        pListBeStockRec.items.get(pIndiceListaStock).Lic_plate = "";
+                    }
                 }
+
                 pListBeStockRec.items.get(pIndiceListaStock).Fecha_Ingreso = String.valueOf(du.getFechaActual());
                 pListBeStockRec.items.get(pIndiceListaStock).IdRecepcionDet = pIdRecepcionDet;
 
@@ -3246,6 +3363,7 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.cancel();
 
+                imprimirDesdeBoton=false;
                 msgAskImprimir("Seleccione una opción para imprimir");
 
             }else{
@@ -3272,6 +3390,7 @@ public class frm_recepcion_datos extends PBase {
 
                 case 1:
                     progress.setMessage("Actualizando valores OCDet");
+                    progress.show();
                     beTransOCDet =new clsBeTrans_oc_det();
                     beTransOCDet.IdOrdenCompraEnc = pIdOrdenCompraEnc;
                     beTransOCDet.IdOrdenCompraDet = pIdOrdenCompraDet;
@@ -3287,6 +3406,7 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             mu.msgbox(e.getMessage());
         }
+        progress.cancel();
     }
     //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
@@ -3314,7 +3434,9 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Actualiza_Valores_Despues_Imprimir();
+                    if (!imprimirDesdeBoton){
+                        Actualiza_Valores_Despues_Imprimir();
+                    }
                 }
             });
 
@@ -4316,6 +4438,7 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    progress.cancel();
                     return;
                 }
             });
@@ -4751,6 +4874,34 @@ public class frm_recepcion_datos extends PBase {
 
             pListBeLicensePlate = xobj.getresult(clsBeLicensePlatesList.class,"Get_Licenses_Plates_By_IdRecepcionEnc");
 
+            pNumeroLP = "";
+
+            if (pListBeLicensePlate.items!=null){
+
+                for (int i = pListBeLicensePlate.items.size()-1; i>=0; i--) {
+                    if(pListBeLicensePlate.items.get(i).CantidadDisponible>=Cant_Recibida_Actual){
+                        if (!Existe_Lp){
+                            pNumeroLP = pListBeLicensePlate.items.get(i).LicensePlates;
+                        }else{
+                            pNumeroLP = pLp;
+                        }
+
+                        break;
+                    }
+                }
+
+            }
+
+            if (gl.mode==2){
+                pListBeStockRec.items.get(pIndexStock).Lic_plate = pNumeroLP;
+            }
+
+            txtLicPlate.setVisibility(View.VISIBLE);
+
+            txtLicPlate.setFocusable(false);
+            txtLicPlate.setFocusableInTouchMode(false);
+            txtLicPlate.setClickable(false);
+
         }catch (Exception e){
             mu.msgbox("processLicensePallet: "+e.getMessage());
         }
@@ -4966,14 +5117,14 @@ public class frm_recepcion_datos extends PBase {
 
             gl.Carga_Producto_x_Pallet=false;
 
-            progress.cancel();
-
             doExit();
 
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processActualizaCantidadRecibida"+e.getMessage());
         }
+
+        progress.cancel();
     }
 
     private  void processMaxIdRecepcionDet(){

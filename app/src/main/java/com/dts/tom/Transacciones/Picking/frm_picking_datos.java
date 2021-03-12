@@ -65,7 +65,7 @@ public class frm_picking_datos extends PBase {
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
     private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
@@ -107,6 +107,11 @@ public class frm_picking_datos extends PBase {
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
         trCaducidad = (TableRow) findViewById(R.id.trCaducidad);
+        trLP = (TableRow) findViewById(R.id.trLP);
+        trCodigo = (TableRow) findViewById(R.id.trCodigo);
+        trPeso = (TableRow) findViewById(R.id.trPeso);
+        trLote = (TableRow) findViewById(R.id.trLote);
+        trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -250,9 +255,18 @@ public class frm_picking_datos extends PBase {
 
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
+                trLP.setVisibility(View.VISIBLE);
+                txtCodigoProducto.setEnabled(false);
             } else {
                 lblLicPlate.setText("");
-                lblLicPlate.setVisibility(View.GONE);
+                trLP.setVisibility(View.GONE);
+                txtCodigoProducto.setEnabled(true);
+            }
+
+            if(gBePickingUbic.getIdPresentacion()==0){
+                trPresentacion.setVisibility(View.VISIBLE);
+            }else{
+                trPresentacion.setVisibility(View.GONE);
             }
 
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
@@ -984,6 +998,8 @@ public class frm_picking_datos extends PBase {
 
         try{
 
+            txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
+
             CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
@@ -1258,8 +1274,10 @@ public class frm_picking_datos extends PBase {
 
             Tipo=2;
 
+           // if (trLP)
+
             if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("Ingrese código del producto");
+                mu.msgbox("Ingrese LP del producto");
                 txtBarra.setSelectAllOnFocus(true);
                 txtBarra.requestFocus();
                 return;
@@ -1433,6 +1451,24 @@ public class frm_picking_datos extends PBase {
             if (gBeProducto!=null){
 
                 gBeProducto.IdProductoBodega = gBePickingUbic.IdProductoBodega;
+
+                if(gBeProducto.getControl_lote()){
+                    trLote.setVisibility(View.VISIBLE);
+                }else{
+                    trLote.setVisibility(View.GONE);
+                }
+
+                if(gBeProducto.getControl_peso()){
+                    trPeso.setVisibility(View.VISIBLE);
+                }else{
+                    trPeso.setVisibility(View.GONE);
+                }
+
+                if(gBeProducto.getControl_vencimiento()){
+                    trCaducidad.setVisibility(View.VISIBLE);
+                }else{
+                    trCaducidad.setVisibility(View.GONE);
+                }
 
                 execws(2);
 

@@ -112,16 +112,15 @@
                     android:layout_marginStart="155dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_toStartOf="@+id/imageView13"
+                    android:layout_toStartOf="@+id/cmdImprimir"
                     android:inputType="textPersonName" />
 
                 <ImageView
-                    android:id="@+id/imageView13"
+                    android:id="@+id/cmdImprimir"
                     android:layout_width="70dp"
                     android:layout_height="54dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="0dp"
-                    android:onClick="Imprimir"
                     android:padding="10dp"
                     android:src="@drawable/login_printer" />
 
@@ -275,7 +274,7 @@
                         style="@style/StyleText"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
-                        android:text="Peso:" />
+                        android:text="Peso bruto:" />
 
                     <EditText
                         android:id="@+id/txtPeso"
@@ -295,6 +294,7 @@
                         android:id="@+id/txtPesoUnitario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
