@@ -13,15 +13,19 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -85,7 +89,7 @@ public class frm_recepcion_datos extends PBase {
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate, cmdImprimir;
-    private CheckBox chkPaletizar, chkPalletNoEstandar;
+    private CheckBox chkPaletizar, chkPalletNoEstandar, chkEstiba;
     private TableRow tblEstiba, tbLPeso;
     private Dialog dialog;
 
@@ -167,6 +171,10 @@ public class frm_recepcion_datos extends PBase {
     static final int DATE_DIALOG_ID = 999;
     private Object[] a1;
 
+    double CajasPorCama = 0;
+    double CamasPorTarima = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,6 +219,7 @@ public class frm_recepcion_datos extends PBase {
 
         chkPaletizar = (CheckBox)findViewById(R.id.chkPaletizar);
         chkPalletNoEstandar = (CheckBox)findViewById(R.id.chkPalletNoEstandar);
+        chkEstiba = (CheckBox)findViewById(R.id.chkEstiba);
 
         btnBack = (Button)findViewById(R.id.btnBack);
         btnIr = (Button)findViewById(R.id.btnIr);
@@ -221,6 +230,7 @@ public class frm_recepcion_datos extends PBase {
         tblEstiba.setVisibility(View.GONE);
         chkPaletizar.setVisibility(View.GONE);
         chkPalletNoEstandar.setVisibility(View.GONE);
+        chkEstiba.setVisibility(View.GONE);
 
         setCurrentDateOnView();
 
@@ -345,13 +355,13 @@ public class frm_recepcion_datos extends PBase {
                     IndexPresSelected=position;
                     boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
                     boolean PermitePaletizar = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.Permitir_paletizar).first();
-                    double CajasPorCama = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CajasPorCama).first();
-                    double CamasPorTarima = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CamasPorTarima).first();
+                    CajasPorCama = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CajasPorCama).first();
+                    CamasPorTarima = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CamasPorTarima).first();
 
                     if (EsPallet||PermitePaletizar){
                         chkPaletizar.setVisibility(View.GONE);
                     }else if(PermitePaletizar && CajasPorCama>0 && CamasPorTarima>0) {
-                        chkPaletizar.setVisibility(View.VISIBLE);
+                       // chkPaletizar.setVisibility(View.VISIBLE);
                     }else{
                         chkPaletizar.setVisibility(View.GONE);
                     }
@@ -364,11 +374,16 @@ public class frm_recepcion_datos extends PBase {
                         lblEstiba.setText("");
                     }
 
-                   /* if (EsPallet){
+                    if (EsPallet){
                         chkPalletNoEstandar.setVisibility(View.VISIBLE);
+                        if (CajasPorCama==0 && CamasPorTarima==0){
+                            chkEstiba.setVisibility(View.VISIBLE);
+                        }else{
+                            chkEstiba.setVisibility(View.GONE);
+                        }
                     }else{
                         chkPalletNoEstandar.setVisibility(View.GONE);
-                    }*/
+                    }
 
                 }
 
@@ -469,6 +484,28 @@ public class frm_recepcion_datos extends PBase {
                     Imprimir(v);
                 }
             });
+
+             chkEstiba.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     if(((CompoundButton) view).isChecked()){
+                         setEstiba();
+                     } else {
+
+                         CajasPorCama=0;
+                         CamasPorTarima=0;
+
+                         if (CajasPorCama > 0 && CamasPorTarima > 0){
+                             tblEstiba.setVisibility(View.VISIBLE);
+                             lblEstiba.setText("Camas por Tarima: " + CamasPorTarima + " Cajas por cama: " +  CajasPorCama);
+                         }else{
+                             tblEstiba.setVisibility(View.GONE);
+                             lblEstiba.setText("");
+                         }
+
+                     }
+                 }
+             });
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
@@ -1030,6 +1067,149 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
         mu.msgbox("MuestraParametros1: "+ e.getMessage());
         }
+    }
+
+
+    private void setEstiba(){
+
+        try{
+            final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Definición de Estiba");
+            alert.setMessage("Total de cajas: " + (CajasPorCama * CamasPorTarima));
+
+            alert.setIcon(R.drawable.palet);
+
+            final EditText txtCamasxtarima = new EditText(this);
+            final EditText txtCajasxcama = new EditText(this);
+            final TextView lblCamasxtarima = new TextView(this);
+            final TextView lblCajasxcama = new TextView(this);
+            final LinearLayout llContent = new LinearLayout(this);
+            final TableRow trCajasxcama = new TableRow(this);
+            final TableRow trCamasxtarima = new TableRow(this);
+            llContent.setOrientation(LinearLayout.VERTICAL);
+
+            trCamasxtarima.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+            trCajasxcama.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
+
+            final float scale = this.getResources().getDisplayMetrics().density;
+
+            lblCamasxtarima.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT,(int) (1 * scale + 0.5f)));
+            txtCamasxtarima.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT,(int) (1 * scale + 0.5f)));
+
+            lblCajasxcama.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT,(int) (1 * scale + 0.5f)));
+            txtCajasxcama.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT,(int) (1 * scale + 0.5f)));
+
+            txtCamasxtarima.setText("" + CamasPorTarima);
+            txtCajasxcama.setText("" + CajasPorCama);
+
+            txtCamasxtarima.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            txtCajasxcama.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            lblCajasxcama.setTextSize(16);
+            lblCajasxcama.setText("Cajas por Cama");
+
+            lblCamasxtarima.setTextSize(16);
+            lblCamasxtarima.setText("Camas por Tarima");
+
+            trCamasxtarima.addView(lblCamasxtarima);
+            trCamasxtarima.addView(txtCamasxtarima);
+
+            trCajasxcama.addView(lblCajasxcama);
+            trCajasxcama.addView(txtCajasxcama);
+
+            llContent.addView(trCamasxtarima);
+            llContent.addView(trCajasxcama);
+
+            alert.setView(llContent);
+
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) lblCamasxtarima.getLayoutParams();
+            marginParams.setMargins(10,
+                    marginParams.topMargin,
+                    marginParams.rightMargin,
+                    marginParams.bottomMargin);
+
+            ViewGroup.MarginLayoutParams mrglCamasxtarima = (ViewGroup.MarginLayoutParams) lblCamasxtarima.getLayoutParams();
+            mrglCamasxtarima.setMargins(10,
+                    marginParams.topMargin,
+                    marginParams.rightMargin,
+                    marginParams.bottomMargin);
+
+            ViewGroup.MarginLayoutParams mrgtCamasxtarima = (ViewGroup.MarginLayoutParams) txtCamasxtarima.getLayoutParams();
+            mrgtCamasxtarima.setMargins(10,
+                    marginParams.topMargin,
+                    marginParams.rightMargin,
+                    marginParams.bottomMargin);
+
+            //txtCamasxtarima.setWidth(100);
+            txtCamasxtarima.setSelectAllOnFocus(true);
+
+            ViewGroup.MarginLayoutParams mrglCajasxcama = (ViewGroup.MarginLayoutParams) lblCajasxcama.getLayoutParams();
+            mrglCajasxcama.setMargins(10,
+                    marginParams.topMargin,
+                    marginParams.rightMargin,
+                    marginParams.bottomMargin);
+
+            ViewGroup.MarginLayoutParams mrgtCajasxcama = (ViewGroup.MarginLayoutParams) txtCajasxcama.getLayoutParams();
+            mrgtCajasxcama.setMargins(10,
+                    marginParams.topMargin,
+                    marginParams.rightMargin,
+                    marginParams.bottomMargin);
+
+            //txtCajasxcama.setWidth(100);
+            txtCajasxcama.setSelectAllOnFocus(true);
+
+            alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    chkEstiba.setChecked(false);
+
+                    if (CajasPorCama > 0 && CamasPorTarima > 0){
+                        tblEstiba.setVisibility(View.VISIBLE);
+                        lblEstiba.setText("Camas por Tarima: " + CamasPorTarima + " Cajas por cama: " +  CajasPorCama);
+                    }else{
+                        tblEstiba.setVisibility(View.GONE);
+                        lblEstiba.setText("");
+                    }
+
+                }
+            });
+
+            alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    CamasPorTarima=Double.valueOf(txtCamasxtarima.getText().toString());
+                    CajasPorCama=Double.valueOf(txtCajasxcama.getText().toString());
+                    alert.setMessage("Total de cajas: " + (CajasPorCama * CamasPorTarima));
+
+                    if (CajasPorCama > 0 && CamasPorTarima > 0){
+                        tblEstiba.setVisibility(View.VISIBLE);
+                        lblEstiba.setText("Camas por Tarima: " + CamasPorTarima + " Cajas por cama: " +  CajasPorCama);
+                    }else{
+                        tblEstiba.setVisibility(View.GONE);
+                        lblEstiba.setText("");
+                    }
+
+                    if(CamasPorTarima==0 || CajasPorCama==0){
+                       toastlong("Debe ingresar la definición de estiba");
+                       llContent.removeAllViews();
+                       setEstiba();
+                    }else{
+                        llContent.removeAllViews();
+                    }
+                }
+            });
+
+            final AlertDialog dialog = alert.create();
+            dialog.show();
+
+            txtCamasxtarima.requestFocus();
+            showkeyb();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     //View view
@@ -3053,6 +3233,19 @@ public class frm_recepcion_datos extends PBase {
     public void BotonGuardarRecepcion(View view){
 
         try{
+
+            if (BeProducto.Presentaciones != null) {
+                if (BeProducto.Presentaciones.items != null){
+                    boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+
+                    if (EsPallet){
+                        if (CajasPorCama==0 && CamasPorTarima==0){
+                            msgbox("Debe ingresar la definición de la estiba");
+                            return;
+                        }
+                    }
+                }
+            }
 
             gl.gProductoAnterior = BeProducto.getCodigo();
 

@@ -161,6 +161,11 @@
                     android:layout_height="match_parent"
                     android:inputType="date" />
 
+                <Spinner
+                    android:id="@+id/cmbVence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
             </TableRow>
 
             <TableRow
@@ -180,6 +185,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/cmbLote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
@@ -379,9 +389,18 @@
                     android:id="@+id/chkPaletizar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Paletizar"
+                    tools:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/chkEstiba"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Paletizar" />
+                    android:text="Definir estiba" />
 
             </TableRow>
 
