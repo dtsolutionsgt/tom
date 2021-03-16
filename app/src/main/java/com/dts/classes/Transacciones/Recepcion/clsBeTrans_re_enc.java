@@ -72,6 +72,7 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public String MuelleRec="";
     @Element(required=false) public String NOFactura="";
     @Element(required=false) public clsBeTarea_hh TareaHH=new clsBeTarea_hh();
+    @Element(required=false) public int IdBodega=0;
 
 
     public clsBeTrans_re_enc() {
@@ -285,19 +286,15 @@ public class clsBeTrans_re_enc {
     public boolean getRevision_Inconsistencia() {
         return Revision_Inconsistencia;
     }
-
     public void setRevision_Inconsistencia(boolean value) {
         Revision_Inconsistencia=value;
     }
-
     public boolean getbloqueada() {
         return bloqueada;
     }
-
     public void setBloqueada(boolean value) {
         bloqueada=value;
     }
-
     public String getbloqueada_por() {
         return bloqueada_por;
     }
@@ -478,6 +475,10 @@ public class clsBeTrans_re_enc {
     public void setTareaHH(clsBeTarea_hh value) {
         TareaHH=value;
     }
-
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
+    }
 }
-

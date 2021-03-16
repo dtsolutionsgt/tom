@@ -64,7 +64,6 @@ public class clsBeTrans_oc_enc {
 
     public clsBeTrans_oc_enc()
     {
-
     }
 
     public clsBeTrans_oc_enc(int IdOrdenCompraEnc,int IdPropietarioBodega,int IdProveedorBodega,int IdTipoIngresoOC,
