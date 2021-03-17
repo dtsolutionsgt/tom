@@ -204,28 +204,37 @@ public class XMLObject  {
                 Node bodyroot=children.item(0);
                 NodeList body=bodyroot.getChildNodes();
                 Node responseroot=body.item(0);
-                NodeList response=responseroot.getChildNodes();
-                mequedeaqui=4;
-                ss="";
 
-                for(int i =0;i<response.getLength();i++)
-                {
-                    mequedeaqui=5;
-                    ss+=response.item(i).getNodeName()+",\n";
+                //#eEJC20210317: Si viene nulo no procesar para evitar error.
+                if (responseroot!=null){
 
-                    if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
+                    NodeList response=responseroot.getChildNodes();
+                    mequedeaqui=4;
+                    ss="";
+
+                    for(int i =0;i<response.getLength();i++)
                     {
-                        cVals=response.item(i).getChildNodes().getLength();
-                        mequedeaqui=6;
-                        if (cVals>0)
+                        mequedeaqui=5;
+                        ss+=response.item(i).getNodeName()+",\n";
+
+                        if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
                         {
-                            mequedeaqui+=7;
-                            xmlnode=response.item(i);
-                            sxml=nodeToString(xmlnode);
-                            return sxml;
+                            cVals=response.item(i).getChildNodes().getLength();
+                            mequedeaqui=6;
+                            if (cVals>0)
+                            {
+                                mequedeaqui+=7;
+                                xmlnode=response.item(i);
+                                sxml=nodeToString(xmlnode);
+                                return sxml;
+                            }
                         }
                     }
+
+                }else{
+                    Log.e("Un nulo","Hace nulo a todos los que no son nulos");
                 }
+
             } catch (Exception e)
             {
                 debg = e.getMessage() + "\n "+ ws.xmlresult;
@@ -417,5 +426,4 @@ public class XMLObject  {
         }
         return null;
     }
-
 }

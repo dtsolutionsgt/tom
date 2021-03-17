@@ -49,10 +49,13 @@ public class list_adapter_tareashh extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder;
 
         if (convertView == null) {
+
             convertView = l_Inflater.inflate(R.layout.activity_list_adapter_tareashh, null);
+
             holder = new ViewHolder();
 
             holder.lblIdOrderCompraEnc = (TextView) convertView.findViewById(R.id.lblIdOC);
@@ -62,16 +65,21 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblProveedor = (TextView) convertView.findViewById(R.id.lblProvee);
             holder.lblTipoIngresoOC = (TextView) convertView.findViewById(R.id.lblTipoIng);
             holder.lblTipoRecepcion = (TextView) convertView.findViewById(R.id.lblTipoRece);
+            holder.lblNombrePropietario = (TextView) convertView.findViewById(R.id.lblNombrePropietario);
 
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         if (position==0){
+
             holder.lblIdOrderCompraEnc.setText("OC");
             holder.lblIdRecepcionEnc.setText("Rec");
             holder.lblIdRecepcionEnc.setTextColor(R.style.titlestyle);
+            holder.lblNombrePropietario.setText("Propietario");
+            holder.lblNombrePropietario.setTextColor(R.style.titlestyle);
             holder.lblNoReferenciaOC.setText("NoRefOC");
             holder.lblNoReferenciaOC.setTextColor(R.style.titlestyle);
             holder.lblNoDocumentoOc.setText("NoDocOc");
@@ -82,6 +90,7 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblTipoIngresoOC.setTextColor(R.style.titlestyle);
             holder.lblTipoRecepcion.setText("TipoRecepcion");
             holder.lblTipoRecepcion.setTextColor(R.style.titlestyle);
+
         }else{
 
             holder.lblIdOrderCompraEnc.setText("0");
@@ -98,6 +107,10 @@ public class list_adapter_tareashh extends BaseAdapter {
             }
             if(BeListTareasHH.get(position).IdRecepcionEnc>0){
                 holder.lblIdRecepcionEnc.setText(""+BeListTareasHH.get(position).IdRecepcionEnc);
+            }
+
+            if(BeListTareasHH.get(position).NombrePropietario!=null){
+                holder.lblNombrePropietario.setText(BeListTareasHH.get(position).NombrePropietario);
             }
 
             if(BeListTareasHH.get(position).NoReferenciaOC!=null){
@@ -137,7 +150,14 @@ public class list_adapter_tareashh extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblIdOrderCompraEnc,lblIdRecepcionEnc,lblNoReferenciaOC,lblNoDocumentoOc,lblProveedor,lblTipoIngresoOC,lblTipoRecepcion;
+        TextView lblIdOrderCompraEnc,
+                lblIdRecepcionEnc,
+                lblNombrePropietario,
+                lblNoReferenciaOC,
+                lblNoDocumentoOc,
+                lblProveedor,
+                lblTipoIngresoOC,
+                lblTipoRecepcion;
     }
 
 }

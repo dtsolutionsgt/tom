@@ -556,9 +556,9 @@ public class frm_list_rec_prod extends PBase {
 
                     if (chkRecepcionados.isChecked()==true) {
                         //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                     }else{
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                     }
                 }
             });
@@ -759,14 +759,14 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    private void Lista_Detalle_OC(){
+    private void Lista_Detalle_Documento_Ingreso(){
 
         clsBeTrans_oc_det vItem;
         BeListDetalleOC.clear();
 
         try{
 
-            progress.setMessage("Cargando detalle de OC");
+            progress.setMessage("Cargando detalle de documento de ingreso.");
 
             if(pListDetalleOC.items!=null){
 
@@ -793,6 +793,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                            vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
 
                             BeListDetalleOC.add(vItem);
 
@@ -811,6 +812,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                            vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
 
                             BeListDetalleOC.add(vItem);
 
@@ -924,7 +926,7 @@ public class frm_list_rec_prod extends PBase {
                     case 1:
                         callMethod("Iniciar_Recepcion_OC","oBeTrans_oc_enc",gBeOrdenCompra);
                         break;
-                    case  2:
+                    case 2:
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                 "Estado","Pendiente");
                         break;
@@ -1004,7 +1006,7 @@ public class frm_list_rec_prod extends PBase {
                         execws(3);
                         break;
                     case 3:
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                         Recepcion_Completa();
                         execws(4);
                         break;
@@ -1204,7 +1206,7 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia!=0){
                                 pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOC.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
-                                Lista_Detalle_OC();
+                                Lista_Detalle_Documento_Ingreso();
                             }
 
                             if (vTipoDiferencia>0){
@@ -1420,7 +1422,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==1){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
-                Lista_Detalle_OC();
+                Lista_Detalle_Documento_Ingreso();
                if(Recepcion_Completa()){
                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                }
@@ -1429,7 +1431,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==2){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
-                Lista_Detalle_OC();
+                Lista_Detalle_Documento_Ingreso();
               Recepcion_Completa();
             }
 

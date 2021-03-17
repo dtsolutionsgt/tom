@@ -432,8 +432,11 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void listItems(){
+
         clsBeTareasIngresoHH vItem;
+
         BeListTareas.clear();
+
         int count;
 
         try{
@@ -441,6 +444,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.setMessage("Listando tareas");
 
             if (pListBeTareasIngresoHH!=null){
+
                 if (pListBeTareasIngresoHH.items!=null){
 
                     vItem = new clsBeTareasIngresoHH();
@@ -460,6 +464,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombreProveedor=pListBeTareasIngresoHH.items.get(i).NombreProveedor;
                         vItem.NombreTipoIngresoOC=pListBeTareasIngresoHH.items.get(i).NombreTipoIngresoOC;
                         vItem.NombreTipoRecepcion=pListBeTareasIngresoHH.items.get(i).NombreTipoRecepcion;
+                        vItem.NombrePropietario = pListBeTareasIngresoHH.items.get(i).NombrePropietario;
 
                         BeListTareas.add(vItem);
 

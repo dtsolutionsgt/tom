@@ -67,7 +67,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblFactor = (TextView) convertView.findViewById(R.id.lblFactor);
             holder.lblIdOcDet = (TextView) convertView.findViewById(R.id.lblIdOcDet);
             holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
-
+            holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
+            holder.lblIdPropietarioBodega = (TextView) convertView.findViewById(R.id.lblIdPropietarioBodega);
 
             convertView.setTag(holder);
         } else {
@@ -97,8 +98,13 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblFactor.setTextColor(R.style.titlestyle);
             holder.lblIdOcDet.setText("IdOcDet");
             holder.lblIdOcDet.setTextColor(R.style.titlestyle);
+            holder.lblIdOcDet.setVisibility(View.GONE);
             holder.lblIdOcEnc.setText("IdOcEnc");
             holder.lblIdOcEnc.setTextColor(R.style.titlestyle);
+            holder.lblIdOcEnc.setVisibility(View.GONE);
+            holder.lblIdPropietarioBodega.setText("IdPropietarioBodega");
+            holder.lblIdPropietarioBodega.setTextColor(R.style.titlestyle);
+            holder.lblIdPropietarioBodega.setVisibility(View.GONE);
 
         }else{
 
@@ -113,8 +119,11 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblCosto.setText("0");
             holder.lblFactor.setText("0");
             holder.lblIdOcDet.setText("0");
+            holder.lblIdOcDet.setVisibility(View.GONE);
             holder.lblIdOcEnc.setText("0");
-
+            holder.lblIdOcEnc.setVisibility(View.GONE);
+            holder.lblIdPropietarioBodega.setText("0");
+            holder.lblIdPropietarioBodega.setVisibility(View.GONE);
 
             if(BeDetalleOC.get(position).No_Linea>0){
                 holder.lblNoLinea.setText(""+BeDetalleOC.get(position).No_Linea);
@@ -161,6 +170,10 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblIdOcEnc.setText(""+BeDetalleOC.get(position).IdOrdenCompraEnc);
             }
 
+            if(BeDetalleOC.get(position).IdPropietarioBodega>0){
+                holder.lblIdPropietarioBodega.setText(""+BeDetalleOC.get(position).IdPropietarioBodega);
+            }
+
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -179,7 +192,19 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblNoLinea,lblCodigo,lblProducto,lblPres,lblUmbas,lblCantidad,lblCantRec,lblDiferencia,lblCosto,lblFactor,lblIdOcDet,lblIdOcEnc;
+        TextView lblNoLinea,
+                lblCodigo,
+                lblProducto,
+                lblPres,
+                lblUmbas,
+                lblCantidad,
+                lblCantRec,
+                lblDiferencia,
+                lblCosto,
+                lblFactor,
+                lblIdOcDet,
+                lblIdOcEnc,
+                lblIdPropietarioBodega;
     }
 
 }
