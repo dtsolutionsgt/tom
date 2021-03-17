@@ -15,6 +15,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean Control_Poliza=false;
     @Element(required=false) public boolean Requerir_Documento_Ref=false;
+    @Element(required=false) public boolean Es_Poliza_Consolidada=false;
 
 
     public clsBeTrans_oc_ti() {
@@ -106,6 +107,14 @@ public class clsBeTrans_oc_ti {
 
     public void setRequerir_Documento_Ref(boolean value) {
         Requerir_Documento_Ref=value;
+    }
+
+    public boolean getEs_Poliza_Consolidada() {
+        return Es_Poliza_Consolidada;
+    }
+
+    public void setEs_Poliza_Consolidada(boolean value) {
+        Es_Poliza_Consolidada=value;
     }
 
 }
