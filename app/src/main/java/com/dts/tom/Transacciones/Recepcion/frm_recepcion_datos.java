@@ -109,7 +109,7 @@ public class frm_recepcion_datos extends PBase {
     private boolean Mostrar_Propiedades_Parametros = false;
     private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
-    private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;
+    private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
     private boolean PCorrecto=false;
     private boolean TCorrecta=false;
@@ -3768,8 +3768,8 @@ public class frm_recepcion_datos extends PBase {
 
 
             if (BeProducto!=null){
-                BeTransReDet = new clsBeTrans_re_det();
 
+                BeTransReDet = new clsBeTrans_re_det();
                 BeTransReDet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 BeTransReDet.Producto = new clsBeProducto();
                 BeTransReDet.Producto.IdProducto = BeProducto.IdProducto;
@@ -4701,7 +4701,7 @@ public class frm_recepcion_datos extends PBase {
                     case 1:
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
-                    case  2:
+                    case 2:
                         callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
                                 "pIdPropietario",gl.IdPropietario,
                                 "pIdBodega",gl.IdBodega);
@@ -4929,9 +4929,16 @@ public class frm_recepcion_datos extends PBase {
 
             LProductoEstado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
 
-            Listar_Producto_Estado();
+            if (LProductoEstado!=null){
 
-            execws(4);
+                Listar_Producto_Estado();
+
+                execws(4);
+            }else {
+                progress.cancel();
+                mu.msgbox("Estados de producto no están definidos para el propietario");
+            }
+
 
         }catch (Exception e){
             mu.msgbox("processListarProductoEstado:"+e.getMessage());
@@ -5243,14 +5250,22 @@ public class frm_recepcion_datos extends PBase {
 
             progress.setMessage("Finalizando proceso de guardar recepción");
 
-            Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+            //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
+            if(!xobj.ws.xmlresult.contains("CustomError")){
 
-            if (!Resultado.isEmpty()){
-                Imprime_Barra_Despues_Guardar();
+                Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+
+                if (!Resultado.isEmpty()){
+                    Imprime_Barra_Despues_Guardar();
+                }else{
+                    progress.cancel();
+                    mu.msgbox("No se pudo guardar la recepción");
+                    return;
+                }
+
             }else{
                 progress.cancel();
-                mu.msgbox("No se pudo guardar la recepción");
-                return;
+                mu.msgbox("No se pudo guardar la recepción:  " + ws.xmlresult);
             }
 
         }catch (Exception e){

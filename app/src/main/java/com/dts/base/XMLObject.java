@@ -25,7 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 
 public class XMLObject  {
 
-    private WebService ws;
+    public WebService ws;
     private Cursor data;
     private int adimx,adimy;
 

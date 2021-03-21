@@ -31,6 +31,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
@@ -94,7 +95,7 @@ public class frm_list_rec_prod extends PBase {
 
     private clsBeTrans_oc_det selitem;
 
-    private list_adapt_detalle_recepcion adapter;
+    private list_adapt_detalle_recepcion listdetadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -499,7 +500,7 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        adapter.setSelectedIndex(position);
+                        listdetadapter.setSelectedIndex(position);
 
                         procesar_registro();
 
@@ -524,7 +525,7 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        adapter.setSelectedIndex(position);
+                        listdetadapter.setSelectedIndex(position);
 
                         msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
@@ -794,6 +795,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
+                            vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
 
                             BeListDetalleOC.add(vItem);
 
@@ -813,6 +815,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
+                            vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
 
                             BeListDetalleOC.add(vItem);
 
@@ -825,8 +828,14 @@ public class frm_list_rec_prod extends PBase {
 
             Collections.sort(BeListDetalleOC,new OrdenarItems());
 
-            adapter=new list_adapt_detalle_recepcion(this,BeListDetalleOC);
-            listView.setAdapter(adapter);
+            //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
+            boolean es_poliza_consolidada = false;
+            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            TipoIngreso = gBeOrdenCompra.getTipoIngreso();
+            if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
+
+            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada);
+            listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());

@@ -20,11 +20,13 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
     private int selectedIndex;
 
     private LayoutInflater l_Inflater;
+    private boolean Es_Poliza_Consolidada=false;
 
-    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results) {
+    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results, boolean pEs_Poliza_Consolidada) {
         BeDetalleOC = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
+        Es_Poliza_Consolidada = pEs_Poliza_Consolidada;
     }
 
     public void setSelectedIndex(int ind) {
@@ -69,6 +71,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
             holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
             holder.lblIdPropietarioBodega = (TextView) convertView.findViewById(R.id.lblIdPropietarioBodega);
+            holder.lblNombrePropietario =  (TextView) convertView.findViewById(R.id.lblNombrePropietario);
 
             convertView.setTag(holder);
         } else {
@@ -77,6 +80,11 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
         if (position==0){
 
+            holder.lblNombrePropietario.setText("Propietario");
+            holder.lblNombrePropietario.setTextColor(R.style.titlestyle);
+            if (!Es_Poliza_Consolidada) {
+                holder.lblNombrePropietario.setVisibility(View.GONE);
+            }
             holder.lblNoLinea.setText("NoLinea");
             holder.lblCodigo.setText("Código");
             holder.lblCodigo.setTextColor(R.style.titlestyle);
@@ -104,10 +112,13 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblIdOcEnc.setVisibility(View.GONE);
             holder.lblIdPropietarioBodega.setText("IdPropietarioBodega");
             holder.lblIdPropietarioBodega.setTextColor(R.style.titlestyle);
-            holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+            if (!Es_Poliza_Consolidada) {
+                holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+            }
 
         }else{
 
+            holder.lblNombrePropietario.setText("--");
             holder.lblNoLinea.setText("0");
             holder.lblCodigo.setText("--");
             holder.lblProducto.setText("--");
@@ -123,7 +134,10 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblIdOcEnc.setText("0");
             holder.lblIdOcEnc.setVisibility(View.GONE);
             holder.lblIdPropietarioBodega.setText("0");
-            holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+
+            if (!Es_Poliza_Consolidada) {
+                holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+            }
 
             if(BeDetalleOC.get(position).No_Linea>0){
                 holder.lblNoLinea.setText(""+BeDetalleOC.get(position).No_Linea);
@@ -174,6 +188,10 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblIdPropietarioBodega.setText(""+BeDetalleOC.get(position).IdPropietarioBodega);
             }
 
+            if(!BeDetalleOC.get(position).Nombre_Propietario.isEmpty()){
+                holder.lblNombrePropietario.setText(""+BeDetalleOC.get(position).Nombre_Propietario);
+            }
+
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -193,18 +211,19 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblNoLinea,
-                lblCodigo,
-                lblProducto,
-                lblPres,
-                lblUmbas,
-                lblCantidad,
-                lblCantRec,
-                lblDiferencia,
-                lblCosto,
-                lblFactor,
-                lblIdOcDet,
-                lblIdOcEnc,
-                lblIdPropietarioBodega;
+                 lblCodigo,
+                 lblProducto,
+                 lblPres,
+                 lblUmbas,
+                 lblCantidad,
+                 lblCantRec,
+                 lblDiferencia,
+                 lblCosto,
+                 lblFactor,
+                 lblIdOcDet,
+                 lblIdOcEnc,
+                 lblIdPropietarioBodega,
+                 lblNombrePropietario;
     }
 
 }

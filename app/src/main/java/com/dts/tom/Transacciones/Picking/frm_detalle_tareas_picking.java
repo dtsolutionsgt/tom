@@ -86,7 +86,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
         Load();
 
-
     }
 
     private void setHandlers() {

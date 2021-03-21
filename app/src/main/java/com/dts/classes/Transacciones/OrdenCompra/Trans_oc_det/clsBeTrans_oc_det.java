@@ -3,14 +3,11 @@ package com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det;
 
 import com.dts.classes.Mantenimientos.Arancel.clsBeArancel;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
-import com.dts.classes.Mantenimientos.Producto.Producto_kit.clsBeProducto_kit_composicion;
 import com.dts.classes.Mantenimientos.Producto.Producto_kit.clsBeProducto_kit_composicionList;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 
 import org.simpleframework.xml.Element;
-
-import java.util.List;
 
 public class clsBeTrans_oc_det {
 
@@ -60,6 +57,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public clsBeTrans_oc_detList lProductosHijosKit;
     @Element(required=false) public clsBeProducto_kit_composicionList lProductoComposicionKit;
     @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public String Nombre_Propietario ="";
 
     public clsBeTrans_oc_det()
     {
@@ -399,6 +397,13 @@ public class clsBeTrans_oc_det {
     }
     public void setIdPropietarioBodega(int value) {
         IdPropietarioBodega=value;
+    }
+
+    public String getNombre_Propietario() {
+        return Nombre_Propietario;
+    }
+    public void setNombre_Propietario(String value) {
+        Nombre_Propietario =value;
     }
 
 }
