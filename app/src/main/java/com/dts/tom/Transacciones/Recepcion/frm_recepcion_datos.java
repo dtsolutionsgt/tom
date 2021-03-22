@@ -152,6 +152,8 @@ public class frm_recepcion_datos extends PBase {
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
     private   clsBeTrans_re_detList LRecepcionCantidad = new clsBeTrans_re_detList();
 
+    private int pIdPropietarioBodega=0;
+
     double vFactorNuevaRec=0;
     double vCantNuevaRec=0;
 
@@ -245,6 +247,12 @@ public class frm_recepcion_datos extends PBase {
 
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
+        }
+
+        if(gl.gBeOrdenCompra.TipoIngreso.getEs_Poliza_Consolidada()){
+            pIdPropietarioBodega =  BeOcDet.IdPropietarioBodega;
+        }else{
+            pIdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
         }
 
         if(!gl.Escaneo_Pallet){
@@ -1544,7 +1552,8 @@ public class frm_recepcion_datos extends PBase {
                     pListBeStockRec.items = new ArrayList<clsBeStock_rec>();
 
                     BeStock_rec.IdRecepcionDet = pIdRecepcionDet;
-                    BeStock_rec.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                    //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                    BeStock_rec.IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                     BeStock_rec.IdProductoBodega = BeProducto.IdProductoBodega;
                     BeStock_rec.IdUnidadMedida = BeProducto.IdUnidadMedidaBasica;
                     if(IdPreseSelect>0){
@@ -1577,7 +1586,8 @@ public class frm_recepcion_datos extends PBase {
                         if (BeStock_rec.Presentacion.Imprime_barra){
 
                             clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
-                            BeProdPallet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                            //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                            BeProdPallet.IdPropietarioBodega =  pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                             BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
                             BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
                             BeProdPallet.IdPresentacion = IdPreseSelect;
@@ -1680,7 +1690,8 @@ public class frm_recepcion_datos extends PBase {
 
                     }//TerminaValidacionPerfilSerializado
 
-                    pListBeStockRec.items.get(pIndexStock).IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                    //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                    pListBeStockRec.items.get(pIndexStock).IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                     pListBeStockRec.items.get(pIndexStock).IdProductoBodega = BeProducto.IdProductoBodega;
                     pListBeStockRec.items.get(pIndexStock).Lic_plate = txtLicPlate.getText().toString();
                     pListBeStockRec.items.get(pIndexStock).Fecha_Ingreso = String.valueOf(du.getFechaActual());
@@ -1803,7 +1814,8 @@ public class frm_recepcion_datos extends PBase {
 
                             if (BeStock_rec.Presentacion.Imprime_barra&&BeStock_rec.Presentacion.EsPallet){
 
-                                pListBeProductoPallet.items.get(pIndexProdPallet).IdPropietarioBodega=gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                                //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                                pListBeProductoPallet.items.get(pIndexProdPallet).IdPropietarioBodega=pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                                 pListBeProductoPallet.items.get(pIndexProdPallet).IdProductoBodega = BeProducto.IdProductoBodega;
                                 pListBeProductoPallet.items.get(pIndexProdPallet).IdOperadorBodega = 0;
                                 pListBeProductoPallet.items.get(pIndexProdPallet).IdPresentacion = IdPreseSelectParam;
@@ -1935,7 +1947,8 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            ObjS.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+            //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+            ObjS.IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
             ObjS.IdProductoBodega = BeProducto.IdProductoBodega;
 
             ObjS.Lic_plate = txtLicPlate.getText().toString();
@@ -3012,7 +3025,8 @@ public class frm_recepcion_datos extends PBase {
             if (BeINavBarraPallet!=null){
 
                 vBeStockRecPallet.IdStockRec = 0;
-                vBeStockRecPallet.IdPropietarioBodega = gl.gBeOrdenCompra.IdPropietarioBodega;
+                //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                vBeStockRecPallet.IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeOrdenCompra.IdPropietarioBodega;
                 vBeStockRecPallet.IdProductoBodega = BeProducto.IdProductoBodega;
                 if (IdPreseSelect>0){
                     vBeStockRecPallet.IdPresentacion =IdPreseSelect;
@@ -3391,7 +3405,8 @@ public class frm_recepcion_datos extends PBase {
                 pListBeStockRec.items = new ArrayList<clsBeStock_rec>();
                 BeStock_rec.IdRecepcionDet = pIdRecepcionDet;
                 BeStock_rec.IdRecepcionEnc = gl.gIdRecepcionEnc;
-                BeStock_rec.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                BeStock_rec.IdPropietarioBodega =pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 BeStock_rec.IdProductoBodega = BeProducto.IdProductoBodega;
                 BeStock_rec.IsNew = true;
 
@@ -3407,7 +3422,8 @@ public class frm_recepcion_datos extends PBase {
 
             if (pIndiceListaStock>=0){
 
-                pListBeStockRec.items.get(pIndiceListaStock).IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                pListBeStockRec.items.get(pIndiceListaStock).IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 pListBeStockRec.items.get(pIndiceListaStock).IdProductoBodega = BeProducto.IdProductoBodega;
 
                 //#CKFK 20210308 Agregué esta validación para ingresar el LP que ingresaron manualmente
@@ -3878,7 +3894,9 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto!=null){
 
                 BeTransReDet = new clsBeTrans_re_det();
-                BeTransReDet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                //#CKFK 20210322 Corregí el IdPropietarioBodega colocando el de la orden de compra
+                BeTransReDet.IdPropietarioBodega =  pIdPropietarioBodega;
+
                 BeTransReDet.Producto = new clsBeProducto();
                 BeTransReDet.Producto.IdProducto = BeProducto.IdProducto;
                 BeTransReDet.Producto.Codigo = BeProducto.Codigo;
@@ -4018,7 +4036,9 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet = new clsBeTrans_re_det();
                 BeTransReDet = pListTransRecDet.items.get(0);
 
-                BeTransReDet.IdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                //#CKFK 20210322 Corregí el IdPropietarioBodega colocando el de la orden de compra
+                BeTransReDet.IdPropietarioBodega =  pIdPropietarioBodega;
+
                 BeTransReDet.Producto = new clsBeProducto();
                 BeTransReDet.Producto.IdProducto = BeProducto.IdProducto;
                 BeTransReDet.Producto.Codigo = BeProducto.Codigo;
