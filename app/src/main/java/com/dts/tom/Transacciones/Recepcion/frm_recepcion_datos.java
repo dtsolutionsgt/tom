@@ -4251,17 +4251,26 @@ public class frm_recepcion_datos extends PBase {
 
                             BeEstado = stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).first();
 
-                            if (BeEstado.Danado){
+                            if (BeEstado.IdUbicacionBodegaDefecto>0){
                                 BeStockRecNuevaRec = BeStockRec;
                                 vCantNuevaRec = vCant;
                                 vFactorNuevaRec = Factor;
                                 BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
                                 BeStockRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
-                                /*execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
-                                return;*/
+                            }else{
+                                BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                            }
+                            /*if (BeEstado.Danado){
+                                BeStockRecNuevaRec = BeStockRec;
+                                vCantNuevaRec = vCant;
+                                vFactorNuevaRec = Factor;
+                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                BeStockRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                *//*execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
+                                return;*//*
                             }else{
                                 BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;//CInt(txtIdUbicacion.Text.Trim)
-                            }
+                            }*/
 
                         }
 
