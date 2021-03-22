@@ -166,7 +166,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblCantRec.setText(""+BeDetalleOC.get(position).Cantidad_recibida);
             }
 
-            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad-BeDetalleOC.get(position).Cantidad_recibida));
+            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad_recibida-BeDetalleOC.get(position).Cantidad));
 
             if(BeDetalleOC.get(position).Costo>0){
                 holder.lblCosto.setText(""+BeDetalleOC.get(position).Costo);

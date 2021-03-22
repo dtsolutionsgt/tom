@@ -711,18 +711,18 @@ public class frm_list_rec_prod extends PBase {
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
 
-                    if (Cantidad_recibida>0){
+                    if (Cantidad_recibida<0){
 
-                        vTipoDiferencia = mu.round(Cantidad-Cantidad_recibida,7);
+                        vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
 
-                        if (vTipoDiferencia>0){
+                        if (vTipoDiferencia<0){
 
                             btnCompletaRec.setText("DIF - (NEG)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
                             progress.cancel();
                             return false;
 
-                        }else if(vTipoDiferencia<0){
+                        }else if(vTipoDiferencia>0){
 
                             btnCompletaRec.setText(" DIF - (POS)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF0399D5"));
