@@ -13,7 +13,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Motivo_devolucion.clsBeMotivo_devolucion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
@@ -48,6 +48,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
 import com.dts.classes.Transacciones.Recepcion.LicencePlates.clsBeLicensePlatesList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
@@ -72,8 +73,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.xml.validation.Validator;
-
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
@@ -82,7 +81,7 @@ public class frm_recepcion_datos extends PBase {
 
     Calendar calendario = Calendar.getInstance();
 
-    private Spinner cmbEstadoProductoRec,cmbPresRec;
+    private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
     private EditText txtBarra,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba;
     private Button btnCantPendiente,btnCantRecibida,btnBack,btnIr;
@@ -90,7 +89,7 @@ public class frm_recepcion_datos extends PBase {
     private DatePicker dpResult;
     private ImageView imgDate, cmdImprimir;
     private CheckBox chkPaletizar, chkPalletNoEstandar, chkEstiba;
-    private TableRow tblEstiba, tbLPeso;
+    private TableRow tblEstiba, tbLPeso, tblPres;
     private Dialog dialog;
 
     private boolean imprimirDesdeBoton=false;
@@ -162,6 +161,7 @@ public class frm_recepcion_datos extends PBase {
     private ArrayList<String> EstadoList= new ArrayList<String>();
     private ArrayList<String> PresList= new ArrayList<String>();
     private ArrayList<String> VenceList= new ArrayList<String>();
+    private ArrayList<String> LotesList = new ArrayList<String>();
 
     // date
     private int year;
@@ -187,6 +187,8 @@ public class frm_recepcion_datos extends PBase {
 
         cmbEstadoProductoRec = (Spinner)findViewById(R.id.cmbEstadoProductoRec);
         cmbPresRec = (Spinner) findViewById(R.id.cmbPresRec);
+        cmbVence = (Spinner) findViewById(R.id.cmbVence);
+        cmbLote = (Spinner) findViewById(R.id.cmbLote);
         cmbVenceRec = (EditText) findViewById(R.id.cmbVenceRec);
 
         txtBarra = (EditText) findViewById(R.id.txtBarra);
@@ -226,6 +228,7 @@ public class frm_recepcion_datos extends PBase {
 
         tblEstiba  = (TableRow)findViewById(R.id.tblEstiba);
         tbLPeso  = (TableRow)findViewById(R.id.tbLPeso);
+        tblPres  = (TableRow)findViewById(R.id.tblPres);
 
         tblEstiba.setVisibility(View.GONE);
         chkPaletizar.setVisibility(View.GONE);
@@ -521,6 +524,21 @@ public class frm_recepcion_datos extends PBase {
         double Cant_Recibida = 0;
 
         try{
+
+            if (BeProducto.Presentaciones != null) {
+                if (BeProducto.Presentaciones.items != null){
+
+                    if (IdPreseSelect!=-1){
+                        boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+                        if (EsPallet){
+                            if (CajasPorCama==0 && CamasPorTarima==0){
+                                throw new Exception("Debe ingresar la definición de la estiba");
+                            }
+                        }
+                    }
+
+                }
+            }
 
             if (!txtCantidadRec.getText().toString().isEmpty() &&
                 !txtCantidadRec.getText().toString().equals("")&&
@@ -2174,6 +2192,30 @@ public class frm_recepcion_datos extends PBase {
                 pIdOrdenCompraEnc = BeOcDet.IdOrdenCompraEnc;
                 pLineaOC = BeOcDet.No_Linea;
 
+                cmbVence.setVisibility(View.GONE);
+                cmbLote.setVisibility(View.GONE);
+
+                cmbVenceRec.setVisibility(View.VISIBLE);
+                txtLoteRec.setVisibility(View.VISIBLE);
+
+                if (BeOcDet!=null) {
+
+                    if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
+
+                        if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
+
+                            cmbVence.setVisibility(View.VISIBLE);
+                            cmbLote.setVisibility(View.VISIBLE);
+
+                            cmbVenceRec.setVisibility(View.GONE);
+                            txtLoteRec.setVisibility(View.GONE);
+
+                            fillFechaVence();
+                            fillLotes();
+                        }
+                    }
+                }
+
                 if (Escaneo_Pallet){
 
                     BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
@@ -2495,36 +2537,36 @@ public class frm_recepcion_datos extends PBase {
 
                 clsBeTrans_oc_det_lote BeLoteLinea;
 
-                if (BeOcDet!=null){
+                /*if (BeOcDet!=null){
 
-                if (gl.gBeOrdenCompra.DetalleLotes.items!=null){
+                    if (gl.gBeOrdenCompra.DetalleLotes.items!=null){
 
-                    if (gl.gBeOrdenCompra.DetalleLotes.items.size()>0){
+                        if (gl.gBeOrdenCompra.DetalleLotes.items.size()>0){
 
-                        BeLoteLinea = stream(gl.gBeOrdenCompra.DetalleLotes.items)
-                                .where(c->c.No_linea == BeOcDet.No_Linea &&
-                                        c.IdOrdenCompraDet == pIdOrdenCompraDet
-                                        && c.Codigo_producto.equals(BeOcDet.Codigo_Producto)).first();
+                            BeLoteLinea = stream(gl.gBeOrdenCompra.DetalleLotes.items)
+                                    .where(c->c.No_linea == BeOcDet.No_Linea &&
+                                            c.IdOrdenCompraDet == pIdOrdenCompraDet
+                                            && c.Codigo_producto.equals(BeOcDet.Codigo_Producto)).first();
 
-                        if (BeLoteLinea!=null){
-                            txtLoteRec.setText(BeLoteLinea.Lote);
+                            if (BeLoteLinea!=null){
+                                txtLoteRec.setText(BeLoteLinea.Lote);
 
-                            if (!BeLoteLinea.Fecha_vence.isEmpty()){
+                                if (!BeLoteLinea.Fecha_vence.isEmpty()){
 
-                                VenceList.clear();
+                                    VenceList.clear();
 
-                                BeLoteLinea.Fecha_vence =du.convierteFechaMostar(BeLoteLinea.Fecha_vence);
+                                    BeLoteLinea.Fecha_vence =du.convierteFechaMostar(BeLoteLinea.Fecha_vence);
 
-                                VenceList.add(BeLoteLinea.Fecha_vence);
+                                    VenceList.add(BeLoteLinea.Fecha_vence);
 
-                                cmbVenceRec.setText(VenceList.get(0));
+                                    cmbVenceRec.setText(VenceList.get(0));
 
+                                }
                             }
-                        }
 
+                        }
                     }
-                }
-            }
+                }*/
 
                 FinalizCargaProductos();
 
@@ -2883,6 +2925,68 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    private void fillFechaVence() {
+        String ss;
+
+        try {
+
+            VenceList.clear();
+
+            clsBeTrans_oc_det_loteList vence = new clsBeTrans_oc_det_loteList();
+            vence=gl.gBeOrdenCompra.DetalleLotes;
+            List<clsBeTrans_oc_det_lote> BeVence =  stream(vence.items)
+                    .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                c.No_linea == BeOcDet.No_Linea &&
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                    .toList();
+
+            for (int i = 0; i <BeVence.size(); i++)
+            {
+                VenceList.add(BeVence.get(i).IdOrdenCompraDet + " - " + BeVence.get(i).Fecha_vence);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, VenceList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbVence.setAdapter(dataAdapter);
+
+            if (VenceList.size()>0) cmbVence.setSelection(0);
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+    private void fillLotes() {
+        String ss;
+
+        try {
+
+            LotesList.clear();
+
+            clsBeTrans_oc_det_loteList lotes = new clsBeTrans_oc_det_loteList();
+            lotes=gl.gBeOrdenCompra.DetalleLotes;
+            List<clsBeTrans_oc_det_lote> BeLotes = stream(lotes.items)
+                    .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                c.No_linea == BeOcDet.No_Linea &&
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                    .toList();
+
+            for (int i = 0; i <BeLotes.size(); i++)
+            {
+                LotesList.add(BeLotes.get(i).IdOrdenCompraDet + " - " + BeLotes.get(i).Lote);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, LotesList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbLote.setAdapter(dataAdapter);
+
+            if (LotesList.size()>0) cmbLote.setSelection(0);
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
     private void Guardar_Pallet(){
 
         try{
@@ -3236,14 +3340,18 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
-                    boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
 
-                    if (EsPallet){
-                        if (CajasPorCama==0 && CamasPorTarima==0){
-                            msgbox("Debe ingresar la definición de la estiba");
-                            return;
+                    if (IdPreseSelect!=-1){
+                        boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+
+                        if (EsPallet){
+                            if (CajasPorCama==0 && CamasPorTarima==0){
+                                msgbox("Debe ingresar la definición de la estiba");
+                                return;
+                            }
                         }
                     }
+
                 }
             }
 
@@ -4702,7 +4810,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
                     case 2:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
                                 "pIdPropietario",gl.IdPropietario,
                                 "pIdBodega",gl.IdBodega);
                         break;
@@ -4927,7 +5035,7 @@ public class frm_recepcion_datos extends PBase {
 
             progress.setMessage("Obteniendo estados de producto");
 
-            LProductoEstado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
+            LProductoEstado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodegaHH");
 
             if (LProductoEstado!=null){
 

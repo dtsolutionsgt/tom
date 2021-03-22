@@ -164,7 +164,8 @@
                 <Spinner
                     android:id="@+id/cmbVence"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="45dp"
+                    tools:visibility="invisible" />
 
             </TableRow>
 
@@ -189,7 +190,8 @@
                 <Spinner
                     android:id="@+id/cmbLote"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:visibility="invisible" />
             </TableRow>
 
             <TableRow
