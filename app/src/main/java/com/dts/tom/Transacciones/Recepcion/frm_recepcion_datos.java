@@ -4507,6 +4507,11 @@ public class frm_recepcion_datos extends PBase {
                 //#EJC20201217:Si es UMBA y el LicPlate no es vacío asignar.
                 if (!txtBarra.getText().toString().isEmpty()){
                     BeStockRec.Lic_plate= txtBarra.getText().toString();
+                }else{
+                    if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
+                        txtBarra.setText(pNumeroLP);
+                        BeStockRec.Lic_plate= txtBarra.getText().toString();
+                    }
                 }
             }
 
@@ -4530,6 +4535,16 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 if (BeTransReDet.Lic_plate!=null){
                     if (BeStockRec!=null){
+                        if(BeStockRec.Lic_plate==""){
+                            if (!txtBarra.getText().toString().isEmpty()){
+                                BeStockRec.Lic_plate= txtBarra.getText().toString();
+                            }else{
+                                if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
+                                    txtBarra.setText(pNumeroLP);
+                                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                                }
+                            }
+                        }
                         BeTransReDet.Lic_plate = BeStockRec.Lic_plate;
                     }else{
                         BeTransReDet.Lic_plate = "";
@@ -4599,6 +4614,16 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.IdImpresora = 1;
                         BeProdPallet.Activo = true;
                         BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
+                        if(BeStockRec.Lic_plate==""){
+                            if (!txtBarra.getText().toString().isEmpty()){
+                                BeStockRec.Lic_plate= txtBarra.getText().toString();
+                            }else{
+                                if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
+                                    txtBarra.setText(pNumeroLP);
+                                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                                }
+                            }
+                        }
                         BeProdPallet.Codigo_Barra = BeStockRec.Lic_plate;
                         BeProdPallet.Codigo_Producto = BeProducto.Codigo;
                         BeProdPallet.Reimpresiones = 0;
