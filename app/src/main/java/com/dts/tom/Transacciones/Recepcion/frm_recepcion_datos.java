@@ -89,7 +89,7 @@ public class frm_recepcion_datos extends PBase {
     private DatePicker dpResult;
     private ImageView imgDate, cmdImprimir;
     private CheckBox chkPaletizar, chkPalletNoEstandar, chkEstiba;
-    private TableRow tblEstiba, tbLPeso, tblPres;
+    private TableRow tblEstiba, tbLPeso, tblPres,tblLote, tblVence;
     private Dialog dialog;
 
     private boolean imprimirDesdeBoton=false;
@@ -231,6 +231,8 @@ public class frm_recepcion_datos extends PBase {
         tblEstiba  = (TableRow)findViewById(R.id.tblEstiba);
         tbLPeso  = (TableRow)findViewById(R.id.tbLPeso);
         tblPres  = (TableRow)findViewById(R.id.tblPres);
+        tblLote  = (TableRow)findViewById(R.id.tblLote);
+        tblVence  = (TableRow)findViewById(R.id.tblVence);
 
         tblEstiba.setVisibility(View.GONE);
         chkPaletizar.setVisibility(View.GONE);
@@ -396,6 +398,18 @@ public class frm_recepcion_datos extends PBase {
                         chkPalletNoEstandar.setVisibility(View.GONE);
                     }
 
+                    BeProducto.Presentacion = BeProducto.Presentaciones.items.get(position);
+
+                    if (BeProducto.Presentacion != null){
+                        if (BeProducto.Presentacion.Genera_lp_auto) {
+                            progress.setMessage("Buscando License Plate");
+                            progress.show();
+                            execws(6);
+                            progress.cancel();
+                        }
+                    }
+
+
                 }
 
                 @Override
@@ -496,7 +510,7 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
-             chkEstiba.setOnClickListener(new View.OnClickListener() {
+            chkEstiba.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View view) {
                      if(((CompoundButton) view).isChecked()){
@@ -518,8 +532,54 @@ public class frm_recepcion_datos extends PBase {
                  }
              });
 
+            cmbVence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+                {
+                    try
+                    {
+                        cmbVenceRec.setText(cmbVence.getSelectedItem().toString());
+                        fillLotes();
+
+                    } catch (Exception e)
+                    {
+                        msgbox(e.getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
+                }
+
+            });
+
+            cmbLote.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+                {
+                    try
+                    {
+                        txtLoteRec.setText(cmbLote.getSelectedItem().toString());
+
+                    } catch (Exception e)
+                    {
+                        msgbox(e.getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
+                }
+
+            });
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
+            progress.cancel();
         }
 
     }
@@ -747,6 +807,7 @@ public class frm_recepcion_datos extends PBase {
 //                    txtCantidadRec.setText(mu.frmdecimal(1,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.setText(1+"");
                     txtCantidadRec.requestFocus();
+                    return;
                 }
 
             }else if (bePresentacion.Permitir_paletizar && chkPaletizar.isChecked() &&!bePresentacion.Genera_lp_auto){
@@ -762,6 +823,7 @@ public class frm_recepcion_datos extends PBase {
 //                    txtCantidadRec.setText(mu.frmdecimal(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.setText(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima+"");
                     txtCantidadRec.requestFocus();
+                    return;
                 }
 
             }
@@ -2205,26 +2267,50 @@ public class frm_recepcion_datos extends PBase {
                 pIdOrdenCompraEnc = BeOcDet.IdOrdenCompraEnc;
                 pLineaOC = BeOcDet.No_Linea;
 
-                cmbVence.setVisibility(View.GONE);
-                cmbLote.setVisibility(View.GONE);
+                if (BeProducto.getControl_vencimiento()){
 
-                cmbVenceRec.setVisibility(View.VISIBLE);
-                txtLoteRec.setVisibility(View.VISIBLE);
+                    tblVence.setVisibility(View.VISIBLE);
+                    cmbVence.setVisibility(View.GONE);
+                    cmbVenceRec.setVisibility(View.VISIBLE);
+                    imgDate.setVisibility(View.VISIBLE);
 
-                if (BeOcDet!=null) {
+                    if (BeOcDet!=null) {
 
-                    if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
+                        if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                        if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
+                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
 
-                            cmbVence.setVisibility(View.VISIBLE);
-                            cmbLote.setVisibility(View.VISIBLE);
+                                cmbVence.setVisibility(View.VISIBLE);
 
-                            cmbVenceRec.setVisibility(View.GONE);
-                            txtLoteRec.setVisibility(View.GONE);
+                                cmbVenceRec.setVisibility(View.GONE);
+                                imgDate.setVisibility(View.GONE);
 
-                            fillFechaVence();
-                            fillLotes();
+                                fillFechaVence();
+                            }
+                        }
+                    }
+                }else{
+                    tblVence.setVisibility(View.GONE);
+                }
+
+                if (BeProducto.getControl_lote()){
+
+                    cmbLote.setVisibility(View.GONE);
+
+                    txtLoteRec.setVisibility(View.VISIBLE);
+
+                    if (BeOcDet!=null) {
+
+                        if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
+
+                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
+
+                                cmbLote.setVisibility(View.VISIBLE);
+
+                                txtLoteRec.setVisibility(View.GONE);
+
+                                fillLotes();
+                            }
                         }
                     }
                 }
@@ -2302,6 +2388,16 @@ public class frm_recepcion_datos extends PBase {
                         pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
                     }
 
+                    if (BeProducto.Presentacion != null){
+                        if (BeProducto.Presentacion.Genera_lp_auto) {
+                            txtLicPlate.setFocusable(true);
+                            txtLicPlate.setFocusableInTouchMode(true);
+                            txtLicPlate.setClickable(true);
+
+                            execws(6);
+                        }
+                    }
+
                 }else{
 
                     pListTransRecDet.items = new ArrayList<clsBeTrans_re_det>();
@@ -2350,6 +2446,16 @@ public class frm_recepcion_datos extends PBase {
                         pLineaOC  = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
                     }else if(pLineaOC==-1){
                         pLineaOC= stream(gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC.items).max(c->c.IdOrdenCompraDet>0).IdOrdenCompraDet+1;
+                    }
+
+                    if (BeProducto.Presentacion != null){
+                        if (BeProducto.Presentacion.Genera_lp_auto) {
+                            txtLicPlate.setFocusable(true);
+                            txtLicPlate.setFocusableInTouchMode(true);
+                            txtLicPlate.setClickable(true);
+
+                            execws(6);
+                        }
                     }
 
                 }else{
@@ -2447,18 +2553,20 @@ public class frm_recepcion_datos extends PBase {
             lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
-                lblVence.setVisibility(View.VISIBLE);
+                /*lblVence.setVisibility(View.VISIBLE);
                 cmbVenceRec.setVisibility(View.VISIBLE);
-                imgDate.setVisibility(View.VISIBLE);
+                imgDate.setVisibility(View.VISIBLE);*/
+                tblVence.setVisibility(View.VISIBLE);
 
                 if (!gl.gFechaVenceAnterior.equals("")){
                     cmbVenceRec.setText(gl.gFechaVenceAnterior);
                 }
 
             }else{
-                cmbVenceRec.setVisibility(View.GONE);
+                /*cmbVenceRec.setVisibility(View.GONE);
                 lblVence.setVisibility(View.GONE);
-                imgDate.setVisibility(View.GONE);
+                imgDate.setVisibility(View.GONE);*/
+                tblVence.setVisibility(View.GONE);
             }
 
             Valida_Lote();
@@ -2758,8 +2866,13 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (!gl.gProductoAnterior.equals(BeProducto.getCodigo())){
-                txtLoteRec.setText("");
-                cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
+                if (cmbLote.getVisibility()!=View.VISIBLE){
+                    txtLoteRec.setText("");
+                }
+                if (cmbVence.getVisibility()!=View.VISIBLE){
+                    cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
+                }
+
                 cmbEstadoProductoRec.setSelection(0);
             }
 
@@ -2955,7 +3068,7 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i <BeVence.size(); i++)
             {
-                VenceList.add(BeVence.get(i).IdOrdenCompraDet + " - " + BeVence.get(i).Fecha_vence);
+                VenceList.add(du.convierteFechaMostar(BeVence.get(i).Fecha_vence));
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, VenceList);
@@ -2963,6 +3076,7 @@ public class frm_recepcion_datos extends PBase {
             cmbVence.setAdapter(dataAdapter);
 
             if (VenceList.size()>0) cmbVence.setSelection(0);
+            cmbVenceRec.setText(cmbVence.getSelectedItem().toString());
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
@@ -2978,15 +3092,27 @@ public class frm_recepcion_datos extends PBase {
 
             clsBeTrans_oc_det_loteList lotes = new clsBeTrans_oc_det_loteList();
             lotes=gl.gBeOrdenCompra.DetalleLotes;
-            List<clsBeTrans_oc_det_lote> BeLotes = stream(lotes.items)
-                    .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+            List<clsBeTrans_oc_det_lote> BeLotes;
+
+            if (BeProducto.getControl_vencimiento()){
+                BeLotes = stream(lotes.items)
+                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                c.No_linea == BeOcDet.No_Linea &&
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())))
+                        .toList();
+
+            }else{
+                BeLotes = stream(lotes.items)
+                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                 c.No_linea == BeOcDet.No_Linea &&
                                 c.IdOrdenCompraDet == pIdOrdenCompraDet)
-                    .toList();
+                        .toList();
+            }
 
             for (int i = 0; i <BeLotes.size(); i++)
             {
-                LotesList.add(BeLotes.get(i).IdOrdenCompraDet + " - " + BeLotes.get(i).Lote);
+                LotesList.add(BeLotes.get(i).Lote);
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, LotesList);
@@ -4012,6 +4138,8 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!BeProducto.Control_vencimiento){
                     BeTransReDet.Fecha_vence = "";
+                }else{
+                    BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
                 }
 
                 //Llamado 1
@@ -4151,6 +4279,8 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!BeProducto.Control_vencimiento){
                     BeTransReDet.Fecha_vence = "";
+                }else{
+                    BeTransReDet.Fecha_vence = du.convierteFecha(cmbVenceRec.getText().toString().trim());
                 }
 
                 //Llamado 2
@@ -5195,7 +5325,11 @@ public class frm_recepcion_datos extends PBase {
                 if (!txtBarra.getText().toString().isEmpty()){
                     txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
                 }else{
-                    txtLicPlate.setText(pNumeroLP);
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(pNumeroLP);
+                    }else{
+                        txtBarra.setText(pNumeroLP);
+                    }
                 }
             }
 

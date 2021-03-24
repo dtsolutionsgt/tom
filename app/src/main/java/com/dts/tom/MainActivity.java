@@ -753,7 +753,7 @@ public class MainActivity extends PBase {
         {
             public int compare(clsBeBodegaBase left, clsBeBodegaBase right)
             {
-                return left.Nombre.compareTo(right.Nombre);
+                return left.IdBodega - right.IdBodega;
             }
         }
 
