@@ -1450,8 +1450,9 @@ public class frm_recepcion_datos extends PBase {
 
             if (Parametros_Ingresados){
 
-                Peso_Correcto();
-
+                if (BeProducto.getControl_peso()){
+                    Peso_Correcto();
+                }
             }
 
         }catch (Exception e){
@@ -1630,59 +1631,64 @@ public class frm_recepcion_datos extends PBase {
                    pListBeStockRec.items.add(BeStock_rec);
                    pIndexStock = pListBeStockRec.items.size()-1;
 
+                   if (IdPreseSelect!=-1){
+                       if  ((BeProducto.Presentaciones!=null)){
 
-                    if  ((BeProducto.Presentaciones!=null)){
+                           if (BeProducto.Presentaciones.items!=null) {
 
-                        if (BeProducto.Presentaciones.items!=null) {
+                               List AuxLisPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
 
-                            List AuxLisPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                               int IndexPresentacion = AuxLisPres.indexOf(IdPreseSelect);
 
-                        int IndexPresentacion = AuxLisPres.indexOf(IdPreseSelect);
+                               clsBeProducto_Presentacion bePresentacion = new clsBeProducto_Presentacion();
 
-                        clsBeProducto_Presentacion bePresentacion = new clsBeProducto_Presentacion();
+                               bePresentacion = BeProducto.Presentaciones.items.get(IndexPresentacion);
 
-                        bePresentacion = BeProducto.Presentaciones.items.get(IndexPresentacion);
+                               BeStock_rec.Presentacion = bePresentacion;
 
-                        BeStock_rec.Presentacion = bePresentacion;
+                               if (BeStock_rec.Presentacion.Imprime_barra){
 
-                        if (BeStock_rec.Presentacion.Imprime_barra){
+                                   clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
+                                   //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
+                                   BeProdPallet.IdPropietarioBodega =  pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+                                   BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
+                                   BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
+                                   BeProdPallet.IdPresentacion = IdPreseSelect;
+                                   BeProdPallet.IdRecepcionDet = pIdRecepcionDet;
+                                   BeProdPallet.Impreso = false;
+                                   BeProdPallet.IdImpresora = 1;
+                                   BeProdPallet.Activo = true;
+                                   BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
+                                   BeProdPallet.Codigo_Barra = txtLicPlate.getText().toString();
+                                   BeProdPallet.Codigo_Producto = BeProducto.Codigo;
+                                   BeProdPallet.Reimpresiones = 0;
+                                   BeProdPallet.Fec_agr =String.valueOf(du.getFechaActual());
+                                   BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
+                                   BeProdPallet.IsNew = true;
 
-                            clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
-                            //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
-                            BeProdPallet.IdPropietarioBodega =  pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
-                            BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
-                            BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
-                            BeProdPallet.IdPresentacion = IdPreseSelect;
-                            BeProdPallet.IdRecepcionDet = pIdRecepcionDet;
-                            BeProdPallet.Impreso = false;
-                            BeProdPallet.IdImpresora = 1;
-                            BeProdPallet.Activo = true;
-                            BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
-                            BeProdPallet.Codigo_Barra = txtLicPlate.getText().toString();
-                            BeProdPallet.Codigo_Producto = BeProducto.Codigo;
-                            BeProdPallet.Reimpresiones = 0;
-                            BeProdPallet.Fec_agr =String.valueOf(du.getFechaActual());
-                            BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
-                            BeProdPallet.IsNew = true;
+                                   if (pListBeProductoPallet.items!=null){
+                                       pListBeProductoPallet.items.add(BeProdPallet);
+                                       pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
+                                   }else{
 
-                            if (pListBeProductoPallet.items!=null){
-                                pListBeProductoPallet.items.add(BeProdPallet);
-                                pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
-                            }else{
+                                       pListBeProductoPallet.items =  new ArrayList<clsBeProducto_pallet>();
 
-                                pListBeProductoPallet.items =  new ArrayList<clsBeProducto_pallet>();
+                                       pListBeProductoPallet.items.add(BeProdPallet);
+                                       pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
+                                   }
+                               }
 
-                                pListBeProductoPallet.items.add(BeProdPallet);
-                                pIndexProdPallet = pListBeProductoPallet.items.size() - 1;
-                            }
-                        }
-                        }else{
-                            BeStock_rec.Presentacion.IdPresentacion = 0;
-                        }
+                           }else{
+                               BeStock_rec.Presentacion.IdPresentacion = 0;
+                           }
 
-                    }else{
-                        BeStock_rec.Presentacion.IdPresentacion = 0;
-                    }
+                       }else{
+                           BeStock_rec.Presentacion.IdPresentacion = 0;
+                       }
+                   }else{
+                       BeStock_rec.Presentacion.IdPresentacion = 0;
+                   }
+
 
                 }//finpIndexStock
 
@@ -3052,7 +3058,8 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void fillFechaVence() {
-        String ss;
+
+        String valor;
 
         try {
 
@@ -3068,7 +3075,11 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i <BeVence.size(); i++)
             {
-                VenceList.add(du.convierteFechaMostar(BeVence.get(i).Fecha_vence));
+                valor = du.convierteFechaMostar(BeVence.get(i).Fecha_vence);
+
+                if (VenceList.indexOf(valor)==-1){
+                    VenceList.add(valor);
+                }
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, VenceList);
@@ -3084,7 +3095,8 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void fillLotes() {
-        String ss;
+
+        String valor;
 
         try {
 
@@ -3112,7 +3124,11 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i <BeLotes.size(); i++)
             {
-                LotesList.add(BeLotes.get(i).Lote);
+                valor = BeLotes.get(i).Lote;
+
+                if (LotesList.indexOf(valor)==-1){
+                    LotesList.add(valor);
+                }
             }
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, LotesList);
@@ -5606,6 +5622,7 @@ public class frm_recepcion_datos extends PBase {
             int vIndex = -1;
 
             progress.setMessage("Actualizando cantidad recibida");
+            progress.show();
 
             GetDetalle = xobj.getresult(Boolean.class, "Get_Detalle_OC_By_IdOrdeCompraDet");
 
