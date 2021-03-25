@@ -3878,6 +3878,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     if (!imprimirDesdeBoton){
+                        progress.setMessage("Actualizando valores OC");
+                        progress.show();
                         Actualiza_Valores_Despues_Imprimir();
                     }
                 }

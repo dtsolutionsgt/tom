@@ -711,7 +711,7 @@ public class frm_list_rec_prod extends PBase {
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
 
-                    if (Cantidad_recibida<0){
+                    if (Cantidad_recibida>0){
 
                         vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
 
@@ -1218,11 +1218,11 @@ public class frm_list_rec_prod extends PBase {
                                 Lista_Detalle_Documento_Ingreso();
                             }
 
-                            if (vTipoDiferencia>0){
+                            if (vTipoDiferencia<0){
 
                                 msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
 
-                            }else if(vTipoDiferencia <0){
+                            }else if(vTipoDiferencia >0){
 
                                 msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
