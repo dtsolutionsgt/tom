@@ -564,6 +564,10 @@ public class MainActivity extends PBase {
         }
     }
 
+    private void ejecuta(){
+        startActivity(new Intent(this,Mainmenu.class));
+    }
+
     private void Licencia_Valida()     {
         try{
         }catch (Exception e){
@@ -615,7 +619,7 @@ public class MainActivity extends PBase {
                                 }else{
 
                                     //#CKFK 20201021 Agregué este else
-                                    execws(7);  
+                                    execws(7);
                                 }
                             }else
                             {
@@ -671,7 +675,8 @@ public class MainActivity extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    execws(7);
+                  execws(7);
+                  //ejecuta();
                 }
             });
 
@@ -1117,6 +1122,7 @@ public class MainActivity extends PBase {
                         //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
+                        //ejecuta();
                         break;
                 }
             } catch (Exception e)

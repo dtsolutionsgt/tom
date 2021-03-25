@@ -5,6 +5,8 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
 
 import org.simpleframework.xml.Element;
 
+import java.util.EmptyStackException;
+
 public class clsBeBodega extends clsBeBodegaBase {
 
     @Element(required=false) public String Codigo_barra="";
@@ -47,6 +49,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public String Cuenta_Egreso_Mercancias="0";
     @Element(required=false) public boolean Notificacion_Voz=false;
     @Element(required=false) public boolean Control_Tarifa_Servicios=false;
+    @Element(required=false) public boolean Es_Bodega_Fiscal=false;
+    @Element(required=false) public boolean habilitar_ingreso_consolidado=false;
 
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
 
@@ -64,7 +68,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        int ubic_producto_ne,int IdProductoEstadoNE,clsBeEmpresa Empresa,clsBeBodega_areaList Areas,
                        clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
-                       boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto
+                       boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
+                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado
     ) {
 
         this.IdBodega=IdBodega;
@@ -107,15 +112,13 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Tramos=Tramos;
         this.Ubicaciones=Ubicaciones;
         this.Muelles=Muelles;
-
         this.Cuenta_Ingreso_Mercancias= Cuenta_Ingreso_Mercancias;
         this.Cuenta_Egreso_Mercancias = Cuenta_Egreso_Mercancias;
-
         this.Notificacion_Voz = Notificacion_Voz;
         this.Control_Tarifa_Servicios=Control_Tarifa_Servicios;
-
         this.Id_Motivo_Ubic_Reabasto=Id_Motivo_Ubic_Reabasto;
-
+        this.Es_Bodega_Fiscal = Es_Bodega_Fiscal;
+        this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
     }
 
     public int getIdPais() {
@@ -369,6 +372,19 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setId_Motivo_Ubic_Reabasto(int value) {
         Id_Motivo_Ubic_Reabasto=value;
+    }
+
+    public boolean getEs_Bodega_Fiscal() {
+        return Es_Bodega_Fiscal;
+    }
+    public void setEs_Bodega_Fiscal(boolean value) {
+        Es_Bodega_Fiscal =value;
+    }
+
+    public boolean gethabilitar_ingreso_consolidado() {
+        return habilitar_ingreso_consolidado;
+    }
+    public void sethabilitar_ingreso_consolidado(boolean value) {habilitar_ingreso_consolidado =value;
     }
 }
 

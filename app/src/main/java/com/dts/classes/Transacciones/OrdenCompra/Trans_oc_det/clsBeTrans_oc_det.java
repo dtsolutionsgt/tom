@@ -58,6 +58,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public clsBeProducto_kit_composicionList lProductoComposicionKit;
     @Element(required=false) public int IdPropietarioBodega=0;
     @Element(required=false) public String Nombre_Propietario ="";
+    @Element(required=false) public int IdPedidoCompraDet;
 
     public clsBeTrans_oc_det()
     {
@@ -73,7 +74,7 @@ public class clsBeTrans_oc_det {
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
                              double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
-                             double Peso_Neto, double Peso_Bruto) {
+                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -117,6 +118,7 @@ public class clsBeTrans_oc_det {
         this.valor_flete=valor_flete;
         this.Peso_Neto=Peso_Neto;
         this.Peso_Bruto=Peso_Bruto;
+        this.IdPedidoCompraDet=IdPedidoCompraDet;
     }
 
 
@@ -405,6 +407,14 @@ public class clsBeTrans_oc_det {
     public void setNombre_Propietario(String value) {
         Nombre_Propietario =value;
     }
+
+    public int getIdPedidoCompraDet() {
+        return IdPedidoCompraDet;
+    }
+    public void setIdPedidoCompraDet(int value) {
+        IdPedidoCompraDet =value;
+    }
+
 
 }
 
