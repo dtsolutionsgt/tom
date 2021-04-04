@@ -501,6 +501,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 Cantwithformat = Cantwithformat.replace(",","");
 
                                 if(Double.valueOf(Cantwithformat)>0) {
+
+                                    Recalcula_Peso();
+
                                     if (txtPeso.getVisibility()==View.VISIBLE){
                                         txtPeso.requestFocus();
                                     }else{
@@ -1149,6 +1152,22 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
         }
 
+    }
+
+    private void Recalcula_Peso(){
+
+        double vCantidad = 0, vPesoUni = 0;
+
+        try{
+
+            if (BeProductoUbicacion.getControl_peso()){
+                vPesoUni = BeProductoUbicacion.Peso_referencia;
+                vCantidad = Double.valueOf(txtCantidad.getText().toString());
+                txtPeso.setText(String.valueOf(vPesoUni*vCantidad));
+            }
+        }catch (Exception ex){
+            mu.msgbox("Recalcula_Peso:" + ex.getMessage());
+        }
     }
 
     public void ProgressDialog(String mensaje){
@@ -2789,6 +2808,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtCantidad.requestFocus();
                 datosCorrectos = false;
             }
+
+            Recalcula_Peso();
 
             if(cvUbicDestID == 0 && txtUbicDestino.getText().toString().isEmpty()){
                 msgbox("La ubicación de destino no puede ser vacía");

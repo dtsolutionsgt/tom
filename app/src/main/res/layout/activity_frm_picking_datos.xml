@@ -174,9 +174,12 @@
 
                 <EditText
                     android:id="@+id/txtPesoPick"
+                    style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="number" />
+                    android:enabled="false"
+                    android:inputType="number"
+                    android:text="=" />
             </TableRow>
 
             <TableRow

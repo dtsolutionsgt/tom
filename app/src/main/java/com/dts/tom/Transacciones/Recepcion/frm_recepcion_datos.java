@@ -2329,7 +2329,10 @@ public class frm_recepcion_datos extends PBase {
                         if (frm_list_rec_prod.BeProducto.IdProducto>0){
                             BeProducto = frm_list_rec_prod.BeProducto;
                             BeProducto.Presentaciones.items = stream(BeProducto.Presentaciones.items).where(c->c.Codigo_barra.equals(BeINavBarraPallet.UM_Producto)).toList();
-                            BeProducto.Presentacion = BeProducto.Presentaciones.items.get(0);
+
+                            if (BeProducto.Presentaciones.items.size()>0){
+                                BeProducto.Presentacion = BeProducto.Presentaciones.items.get(0);
+                            }
                         }
                     }
 
@@ -3816,6 +3819,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            progress.show();
             progress.setMessage("Validando imprimir barra");
 
             if (gl.IdImpresora>0){
@@ -3867,6 +3871,7 @@ public class frm_recepcion_datos extends PBase {
         }
         progress.cancel();
     }
+
     //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
         try{
@@ -5562,6 +5567,7 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado="";
 
+            progress.show();
             progress.setMessage("Finalizando proceso de guardar recepción");
 
             //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
@@ -5594,6 +5600,7 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado="";
 
+            progress.show();
             progress.setMessage("Finalizando proceso de guardar recepción");
 
             Resultado = xobj.getresult(String.class,"GuardarRecepcionModif");

@@ -228,6 +228,8 @@ public class frm_picking_datos extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                        Recalcula_Peso();
                         Procesar_Registro();
                     }
 
@@ -237,6 +239,29 @@ public class frm_picking_datos extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("setHandlers:" + e.getMessage());
+        }
+    }
+
+    private void Recalcula_Peso(){
+
+        double vPeso = 0, vCantidad = 0, vPesoUni = 0, vCantidadIngresada = 0;
+
+        try{
+
+            if (gBeProducto.getControl_peso()){
+
+                vPeso = gBePickingUbic.Peso_solicitado;
+                vCantidad = gBePickingUbic.Cantidad_Solicitada;
+
+                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString());
+
+                if (vCantidad>0){
+                    vPesoUni = vPeso/vCantidad;
+                    txtPesoPick.setText(String.valueOf(vPesoUni*vCantidadIngresada));
+                }
+            }
+        }catch (Exception ex){
+            mu.msgbox("Recalcula_Peso:" + ex.getMessage());
         }
     }
 
@@ -1141,6 +1166,8 @@ public class frm_picking_datos extends PBase {
         try{
 
             if (!txtCantidadPick.getText().toString().isEmpty()||!txtCantidadPick.getText().equals("0")){
+
+                Recalcula_Peso();
 
                 if (TipoLista==2){
 

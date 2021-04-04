@@ -232,6 +232,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
+                                Recalcula_Peso();
                                 cambioUbicEst();
                         }
                     }
@@ -518,6 +519,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 compl=true;
             }
 
+            Recalcula_Peso();
+
             progress.cancel();
 
             //#CKFK 20210106 Moví esto para después de ingresar las posiciones en caso de que aplique
@@ -541,6 +544,29 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             progress.cancel();
         }
 
+    }
+
+    private void Recalcula_Peso(){
+
+        double vPeso = 0, vCantidad = 0, vPesoUni = 0, vCantidadIngresada = 0;
+
+        try{
+
+            if (gl.tareadet.getProducto().getControl_peso()){
+
+                vPeso = gl.tareadet.Stock.getPeso();
+                vCantidad = gl.tareadet.Stock.getCantidad();
+                vCantidadIngresada =Double.valueOf(txtCantidad.getText().toString());
+
+                if (vCantidad>0){
+                    vPesoUni = vPeso/vCantidad;
+
+                    txtPeso.setText(String.valueOf(vPesoUni*vCantidadIngresada));
+                }
+            }
+        }catch (Exception ex){
+            mu.msgbox("Recalcula_Peso:" + ex.getMessage());
+        }
     }
 
     private void msgAsk(String msg) {
