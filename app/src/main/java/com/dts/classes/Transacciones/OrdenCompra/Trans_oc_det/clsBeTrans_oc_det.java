@@ -59,6 +59,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public int IdPropietarioBodega=0;
     @Element(required=false) public String Nombre_Propietario ="";
     @Element(required=false) public int IdPedidoCompraDet;
+    @Element(required=false) public int IdOrdenCompraDetPadre=0;
 
     public clsBeTrans_oc_det()
     {
@@ -413,6 +414,13 @@ public class clsBeTrans_oc_det {
     }
     public void setIdPedidoCompraDet(int value) {
         IdPedidoCompraDet =value;
+    }
+
+    public int getIdOrdenCompraDetPadre () {
+        return IdOrdenCompraDetPadre ;
+    }
+    public void setIdOrdenCompraDetPadre (int value) {
+        IdOrdenCompraDetPadre  =value;
     }
 
 
