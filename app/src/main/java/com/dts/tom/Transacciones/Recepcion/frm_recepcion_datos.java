@@ -2289,7 +2289,7 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
+                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
 
                                 cmbVence.setVisibility(View.VISIBLE);
                                 cmbVenceRec.setVisibility(View.GONE);
@@ -2313,7 +2313,7 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
+                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
 
                                 cmbLote.setVisibility(View.VISIBLE);
                                 txtLoteRec.setVisibility(View.GONE);
@@ -3212,7 +3212,7 @@ public class frm_recepcion_datos extends PBase {
 
             if (UbicLotesList.size()>0){
                 String defUbic = UbicLotesList.get(0);
-                lblUbicacion.setText(lblPropPrd.getText() + " - "  + defUbic);
+                if(!defUbic.isEmpty()) lblUbicacion.setText("Doc: -> " + defUbic);
             }
 
         } catch (Exception e) {
