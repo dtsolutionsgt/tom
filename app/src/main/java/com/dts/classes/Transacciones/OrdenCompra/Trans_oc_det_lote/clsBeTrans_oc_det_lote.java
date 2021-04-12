@@ -17,6 +17,7 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
     @Element(required=false) public String Lic_Plate;
     @Element(required=false) public String Ubicacion;
+    @Element(required=false) public Boolean IsNew;
 
     public clsBeTrans_oc_det_lote() {
     }
@@ -114,6 +115,16 @@ public class clsBeTrans_oc_det_lote {
     public void setUbicacion(String value) {
         Ubicacion=value;
     }
+
+    public Boolean getIsNew(){
+        return IsNew;
+    }
+
+    public void setIsNew(boolean value){
+        IsNew=value;
+    }
+
+
 }
 
 
