@@ -3075,12 +3075,17 @@ public class frm_recepcion_datos extends PBase {
                                 c.IdOrdenCompraDet == pIdOrdenCompraDet)
                     .toList();
 
+            double CantRec =0;
+
             for (int i = 0; i <BeVence.size(); i++)
             {
                 valor = du.convierteFechaMostar(BeVence.get(i).Fecha_vence);
+                CantRec = BeVence.get(i).Cantidad_recibida;
 
                 if (VenceList.indexOf(valor)==-1){
-                    VenceList.add(valor);
+                    if (CantRec==0){
+                        VenceList.add(valor);
+                    }
                 }
             }
 
@@ -3124,12 +3129,18 @@ public class frm_recepcion_datos extends PBase {
                         .toList();
             }
 
+            double CantRec =0;
+
             for (int i = 0; i <BeLotes.size(); i++)
             {
+
                 valor = BeLotes.get(i).Lote;
+               CantRec = BeLotes.get(i).Cantidad_recibida;
 
                 if (LotesList.indexOf(valor)==-1){
-                    LotesList.add(valor);
+                    if (CantRec==0){
+                        LotesList.add(valor);
+                    }
                 }
             }
 
@@ -5309,6 +5320,9 @@ public class frm_recepcion_datos extends PBase {
                 case 24:
                     processExisteLp();
                     break;
+                case 25:
+                    process_Recepcion_To_Nav();
+                    break;
 
             }
 
@@ -5675,8 +5689,23 @@ public class frm_recepcion_datos extends PBase {
                 Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
 
                 if (!Resultado.isEmpty()){
-                    //if execws(25);
-                    Imprime_Barra_Despues_Guardar();
+
+                    if (!lblUbicacion.getText().toString().isEmpty()){
+                        String[] ubi = lblUbicacion.getText().toString().split(" - ");
+
+                        if (ubi.length>1){
+                            if (!ubi[1].isEmpty()){
+                                execws(25);
+                            }else{
+                                Imprime_Barra_Despues_Guardar();
+                            }
+                        }else{
+                            Imprime_Barra_Despues_Guardar();
+                        }
+                    }else{
+                        Imprime_Barra_Despues_Guardar();
+                    }
+
                 }else{
                     progress.cancel();
                     mu.msgbox("No se pudo guardar la recepción");
@@ -5972,6 +6001,24 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
+        }
+    }
+
+    private void process_Recepcion_To_Nav(){
+
+        try{
+
+            boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_To_NAV_For_BYB2");
+
+            if (procesada){
+                toastlong("Recepción procesada en SAP");
+                Imprime_Barra_Despues_Guardar();
+            }else{
+                Imprime_Barra_Despues_Guardar();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("process_Recepcion_To_Nav:"+e.getMessage());
         }
     }
 
