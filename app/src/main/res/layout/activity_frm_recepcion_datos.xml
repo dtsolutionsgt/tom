@@ -195,6 +195,22 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/tblUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblUbicacion"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Ubicación"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+            </TableRow>
+
+            <TableRow
                 android:id="@+id/tblPres"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
