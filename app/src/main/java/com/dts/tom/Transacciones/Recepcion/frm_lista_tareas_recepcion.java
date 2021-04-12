@@ -34,6 +34,7 @@ import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ExecutionException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -591,7 +592,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     if (vIdTarea>0){
                         procesar_registro();
                     }else{
-                        mu.msgbox("No existe la tarea "+selid);
+
+                        if (existe_en_recepciones(txtTarea.getText().toString())) {
+
+                        }else{
+                            mu.msgbox("No existe la tarea "+selid);
+                        }
                     }
 
                 }else if(gl.tipoTarea==5){
@@ -627,6 +633,21 @@ public class frm_lista_tareas_recepcion extends PBase {
                 txtTarea.requestFocus();
             }
         }
+    }
+
+    private boolean existe_en_recepciones(String v_producto){
+
+        boolean result = false;
+
+        try{
+
+            result = true;
+            
+        }catch (Exception ex){
+
+        }
+
+        return result;
     }
 
     public void ProgressDialog(String mensaje){
