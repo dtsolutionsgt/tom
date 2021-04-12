@@ -123,6 +123,7 @@ public class frm_recepcion_datos extends PBase {
     private String pLp="";
     private boolean Escaneo_Pallet_Interno;
     private boolean Existe_Lp=false;
+    private String ubiDetLote="";
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
@@ -243,6 +244,8 @@ public class frm_recepcion_datos extends PBase {
         chkPaletizar.setVisibility(View.GONE);
         chkPalletNoEstandar.setVisibility(View.GONE);
         chkEstiba.setVisibility(View.GONE);
+
+        lblUbicacion.setText("");
 
         setCurrentDateOnView();
 
@@ -3211,8 +3214,8 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (UbicLotesList.size()>0){
-                String defUbic = UbicLotesList.get(0);
-                if(!defUbic.isEmpty()) lblUbicacion.setText("Doc: -> " + defUbic);
+                ubiDetLote = UbicLotesList.get(0);
+                if(!ubiDetLote.isEmpty()) lblUbicacion.setText("Doc: -> " + ubiDetLote);
             }
 
         } catch (Exception e) {
@@ -4441,14 +4444,12 @@ public class frm_recepcion_datos extends PBase {
 
             if (detalle_lotes.items.size()>0){
 
-                String[] ubi = lblUbicacion.getText().toString().split(" - ");
-
                 BeDetalleLotes = stream(detalle_lotes.items)
                         .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                 c.No_linea == BeOcDet.No_Linea &&
                                 c.IdOrdenCompraDet == pIdOrdenCompraDet &&
                                 c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
-                                c.Ubicacion.equals(ubi[1]) &&
+                                c.Ubicacion.equals(ubiDetLote) &&
                                 c.Lote.equals(cmbLote.getSelectedItem().toString()))
                         .first();
                 BeDetalleLotes.Cantidad_recibida = Integer.valueOf(txtCantidadRec.getText().toString());
@@ -5224,7 +5225,7 @@ public class frm_recepcion_datos extends PBase {
                         break;
                     case 25:
                         callMethod("Push_Recepcion_To_NAV_For_BYB2",
-                                   "DocumentoUbicacion", lblUbicacion.getText().toString(),
+                                   "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
                                    "Cantidad", txtCantidadRec.getText().toString());
                         break;
@@ -5690,18 +5691,8 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!Resultado.isEmpty()){
 
-                    if (!lblUbicacion.getText().toString().isEmpty()){
-                        String[] ubi = lblUbicacion.getText().toString().split(" - ");
-
-                        if (ubi.length>1){
-                            if (!ubi[1].isEmpty()){
-                                execws(25);
-                            }else{
-                                Imprime_Barra_Despues_Guardar();
-                            }
-                        }else{
-                            Imprime_Barra_Despues_Guardar();
-                        }
+                    if (!ubiDetLote.isEmpty()){
+                        execws(25);
                     }else{
                         Imprime_Barra_Despues_Guardar();
                     }
@@ -6011,7 +6002,7 @@ public class frm_recepcion_datos extends PBase {
             boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_To_NAV_For_BYB2");
 
             if (procesada){
-                toastlong("Recepción procesada en SAP");
+                toastlong("Recepción procesada en ByB");
                 Imprime_Barra_Despues_Guardar();
             }else{
                 Imprime_Barra_Despues_Guardar();
