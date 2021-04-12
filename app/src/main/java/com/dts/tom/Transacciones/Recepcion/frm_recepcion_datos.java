@@ -164,6 +164,7 @@ public class frm_recepcion_datos extends PBase {
     private ArrayList<String> PresList= new ArrayList<String>();
     private ArrayList<String> VenceList= new ArrayList<String>();
     private ArrayList<String> LotesList = new ArrayList<String>();
+    private ArrayList<String> UbicLotesList = new ArrayList<String>();
 
     // date
     private int year;
@@ -562,7 +563,7 @@ public class frm_recepcion_datos extends PBase {
                     try
                     {
                         txtLoteRec.setText(cmbLote.getSelectedItem().toString());
-
+                        fillUbicacion();
                     } catch (Exception e)
                     {
                         msgbox(e.getMessage());
@@ -2287,10 +2288,8 @@ public class frm_recepcion_datos extends PBase {
                             if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
 
                                 cmbVence.setVisibility(View.VISIBLE);
-
                                 cmbVenceRec.setVisibility(View.GONE);
                                 imgDate.setVisibility(View.GONE);
-
                                 fillFechaVence();
                             }
                         }
@@ -2312,9 +2311,7 @@ public class frm_recepcion_datos extends PBase {
                             if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 1) {
 
                                 cmbLote.setVisibility(View.VISIBLE);
-
                                 txtLoteRec.setVisibility(View.GONE);
-
                                 fillLotes();
                             }
                         }
@@ -2562,9 +2559,7 @@ public class frm_recepcion_datos extends PBase {
             lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
-                /*lblVence.setVisibility(View.VISIBLE);
-                cmbVenceRec.setVisibility(View.VISIBLE);
-                imgDate.setVisibility(View.VISIBLE);*/
+
                 tblVence.setVisibility(View.VISIBLE);
 
                 if (!gl.gFechaVenceAnterior.equals("")){
@@ -2572,9 +2567,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }else{
-                /*cmbVenceRec.setVisibility(View.GONE);
-                lblVence.setVisibility(View.GONE);
-                imgDate.setVisibility(View.GONE);*/
+
                 tblVence.setVisibility(View.GONE);
             }
 
@@ -3139,6 +3132,72 @@ public class frm_recepcion_datos extends PBase {
             cmbLote.setAdapter(dataAdapter);
 
             if (LotesList.size()>0) cmbLote.setSelection(0);
+
+        } catch (Exception e) {
+            mu.msgbox( e.getMessage());
+        }
+    }
+
+    //#EJC20210412: Funcion para llenar ubicacion de NAV.
+    private void fillUbicacion() {
+
+        String valor;
+
+        try {
+
+            UbicLotesList.clear();
+
+            clsBeTrans_oc_det_loteList lotes = new clsBeTrans_oc_det_loteList();
+            lotes=gl.gBeOrdenCompra.DetalleLotes;
+            List<clsBeTrans_oc_det_lote> BeLotes;
+
+            String SelectedLote ="";
+            String FechaVence ="";
+
+            SelectedLote = txtLoteRec.getText().toString().trim();
+            FechaVence = du.convierteFecha(cmbVenceRec.getText().toString());
+
+            String finalSelectedLote = SelectedLote;
+            String finalFechaVence = FechaVence;
+
+            if (BeProducto.getControl_vencimiento()){
+
+                BeLotes = stream(lotes.items)
+                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                c.No_linea == BeOcDet.No_Linea &&
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                c.Lote.equals(finalSelectedLote)  &&
+                                c.Fecha_vence.equals(finalFechaVence))
+                        .toList();
+
+            }else{
+                BeLotes = stream(lotes.items)
+                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                c.No_linea == BeOcDet.No_Linea &&
+                                c.Lote.equals(finalSelectedLote)  &&
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                        .toList();
+            }
+
+            double CantRec =0;
+
+            for (int i = 0; i <BeLotes.size(); i++)
+            {
+                valor = BeLotes.get(i).Ubicacion;
+                CantRec =BeLotes.get(i).Cantidad;
+
+                if (UbicLotesList.indexOf(valor)==-1){
+                    if (CantRec ==0){
+                        UbicLotesList.add(valor);
+                    }
+                }
+            }
+
+            if (UbicLotesList.size()>0){
+                String defUbic = UbicLotesList.get(0);
+                //Llenar label..
+                //lblPropPrd.setText(lblPropPrd.getText() + " - "  + defUbic);
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
@@ -4450,6 +4509,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
+
                     if (gl.mode==1){
                         pListTransRecDet.items.add(BeTransReDet);
                     }
@@ -4589,6 +4649,7 @@ public class frm_recepcion_datos extends PBase {
 
                             int vCantidadPallets =Integer.parseInt(txtCantidadRec.getText().toString().replace(",",""));
                             int vIndiceLista=0;
+
                            vBeStockRec = new clsBeStock_rec();
                            BeProdPallet  = new clsBeProducto_pallet();
 
@@ -4622,6 +4683,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                 }else{
+
                     BeStockRec.Cantidad = Double.parseDouble(txtCantidadRec.getText().toString().replace(",",""))*Factor;
 
                     if (BeStockRec.Presentacion.Imprime_barra){
