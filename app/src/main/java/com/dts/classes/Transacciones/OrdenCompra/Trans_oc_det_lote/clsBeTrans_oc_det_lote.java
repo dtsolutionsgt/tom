@@ -17,7 +17,7 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
     @Element(required=false) public String Lic_Plate;
     @Element(required=false) public String Ubicacion;
-    @Element(required=false) public Boolean IsNew;
+    @Element(required=false) public Boolean IsNew=false;
 
     public clsBeTrans_oc_det_lote() {
     }

@@ -3789,9 +3789,11 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void DespuesDeValidarCantidad(){
+
         int vIndice=-1;
         String Resultado = "";
         int CantRegSeries  = 0;
+
         if (pListBeStockSeRec.items!=null){
             CantRegSeries = pListBeStockSeRec.items.size();
         }
@@ -4442,18 +4444,20 @@ public class frm_recepcion_datos extends PBase {
             clsBeTrans_oc_det_loteList detalle_lotes = new clsBeTrans_oc_det_loteList();
             detalle_lotes=gl.gBeOrdenCompra.DetalleLotes;
 
-            if (detalle_lotes.items.size()>0){
+            if (detalle_lotes.items != null ){
+                if (detalle_lotes.items.size()>0){
 
-                BeDetalleLotes = stream(detalle_lotes.items)
-                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                c.No_linea == BeOcDet.No_Linea &&
-                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
-                                c.Ubicacion.equals(ubiDetLote) &&
-                                c.Lote.equals(cmbLote.getSelectedItem().toString()))
-                        .first();
-                BeDetalleLotes.Cantidad_recibida = Integer.valueOf(txtCantidadRec.getText().toString());
-                BeDetalleLotes.IsNew = true;
+                    BeDetalleLotes = stream(detalle_lotes.items)
+                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                    c.No_linea == BeOcDet.No_Linea &&
+                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                    c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
+                                    c.Ubicacion.equals(ubiDetLote) &&
+                                    c.Lote.equals(cmbLote.getSelectedItem().toString()))
+                            .first();
+                    BeDetalleLotes.Cantidad_recibida = Integer.valueOf(txtCantidadRec.getText().toString());
+                    BeDetalleLotes.IsNew = true;
+                }
             }
 
             listaStockPalletsNuevos = new clsBeStock_recList();
