@@ -40,6 +40,7 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
+import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
 import com.dts.servicios.startCantTareas;
 
 import java.io.BufferedOutputStream;
@@ -73,6 +74,7 @@ public class MainActivity extends PBase {
     private clsBeBodegaList bodegas = new clsBeBodegaList();
     private ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
+    private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
 
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
@@ -83,8 +85,10 @@ public class MainActivity extends PBase {
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
     private String NomOperador;
+    private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
+    private String version="4.5.1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,6 @@ public class MainActivity extends PBase {
             e.printStackTrace();
         }
     }
-
 
     private void startApplication() {
 
@@ -365,6 +368,8 @@ public class MainActivity extends PBase {
 
                     execws(2);//Lista las bodegas
 
+                    if (idle) validaVersion();
+
                 } catch (Exception e)
                 {
                     msgbox(e.getMessage());
@@ -519,12 +524,10 @@ public class MainActivity extends PBase {
 
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel)  {
-        try
-        {
+        try {
             if (throwing) throw new Exception(errmsg);
 
-            switch (ws.callback)
-            {
+            switch (ws.callback) {
                 case 1:
                     progress.setMessage("Cargando empresas");
                     processEmpresas();break;
@@ -546,6 +549,7 @@ public class MainActivity extends PBase {
                     break;
                 case 5:
                     processGetDecimalesCalculo();
+                    execws(8);
                     break;
                 case 6:
                     processGetDecimalesDespliegue();
@@ -553,12 +557,14 @@ public class MainActivity extends PBase {
                 case 7:
                     startActivity(new Intent(this,Mainmenu.class));
                     break;
+                case 8:
+                    processVersiones();
+                    break;
             }
 
             progress.cancel();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e)  {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -724,19 +730,14 @@ public class MainActivity extends PBase {
 
     //region Data Processing
 
-    private void processEmpresas()
-    {
-
-        try
-        {
+    private void processEmpresas() {
+        try {
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             if(empresas != null){
 
-                class EmpresaSort implements Comparator<clsBeEmpresaBase>
-                {
-                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)
-                    {
+                class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
+                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
                         return left.Nombre.compareTo(right.Nombre);
                     }
                 }
@@ -752,24 +753,19 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()
-    {
-        class BodegaSort implements Comparator<clsBeBodegaBase>
-        {
-            public int compare(clsBeBodegaBase left, clsBeBodegaBase right)
-            {
+    private void processBodegas()     {
+        class BodegaSort implements Comparator<clsBeBodegaBase>   {
+            public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
                 return left.IdBodega - right.IdBodega;
             }
         }
 
-        try
-        {
+        try  {
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
             Collections.sort(bodegas.items, new BodegaSort());
             fillSpinBod();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -852,8 +848,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processGetDecimalesDespliegue()
-    {
+    private void processGetDecimalesDespliegue()     {
         try
         {
 
@@ -875,8 +870,18 @@ public class MainActivity extends PBase {
             //Llama al metodo del WS Get_cantidad_decimales_calculo
             execws(6);
 
-        }catch (Exception e)
+        } catch (Exception e)
         {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processVersiones() {
+        try {
+            versiones=xobj.getresult(clsBeVersion_wms_hh_andList.class,"Android_Get_All_Versiones");
+            validaVersion();
+            idle=true;
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -889,8 +894,7 @@ public class MainActivity extends PBase {
 
         String filePathImg = null;
 
-        try
-        {
+        try    {
             emplist.clear();
 
             String dirLogosEmpresa = getApplicationContext().getFilesDir() + "/LogosEmpresa/";
@@ -901,8 +905,7 @@ public class MainActivity extends PBase {
                 dir.mkdir();
             }
 
-            for (int i = 0; i <empresas.items.size(); i++)
-            {
+            for (int i = 0; i <empresas.items.size(); i++)             {
                 vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
                 emplist.add(empresas.items.get(i).Nombre);
 
@@ -1075,12 +1078,10 @@ public class MainActivity extends PBase {
     }
 
     protected void onResume() {
-        try
-        {
+        try  {
             Load();
             super.onResume();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
@@ -1093,10 +1094,8 @@ public class MainActivity extends PBase {
 
         @Override
         public void wsExecute(){
-            try
-            {
-                switch (ws.callback)
-                {
+            try  {
+                switch (ws.callback) {
                     case 1:
                         callMethod("Android_Get_All_Empresas");
                         break;
@@ -1124,12 +1123,53 @@ public class MainActivity extends PBase {
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         //ejecuta();
                         break;
+                    case 8:
+                        callMethod("Android_Get_All_Versiones");
+                        break;
                 }
-            } catch (Exception e)
-            {
+            } catch (Exception e)  {
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
         }
     }
+
+    //endregion
+
+    //region Control Version
+
+    private void validaVersion() {
+        int pp,idemp=0;
+
+
+        if (empresas.items.size()==0) return;
+
+        try {
+            pp=spinemp.getSelectedItemPosition();
+            idemp=empresas.items.get(pp).IdEmpresa;
+
+            for (int i = 0; i <versiones.items.size(); i++) {
+                if (versiones.items.get(i).IdEmpresa==idemp) {
+                    if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
+                        actualizaVersion();return;
+                    }
+                }
+           }
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+
+    }
+
+    private void actualizaVersion() {
+        try {
+            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
+            intent.putExtra("filename","tom.apk");
+            this.startActivity(intent);
+        } catch (Exception e) {
+            msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
+        }
+    }
+
+    //endregion
 
 }
