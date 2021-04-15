@@ -138,7 +138,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeLicensePlatesList pListBeLicensePlate = new clsBeLicensePlatesList();
     private clsBeTrans_re_enc auxRec = new clsBeTrans_re_enc();
     private clsBeTrans_re_det BeTransReDet= new clsBeTrans_re_det();
-    private clsBeTrans_oc_det_lote BeDetalleLotes= new clsBeTrans_oc_det_lote();
+    private clsBeTrans_oc_det_lote BeDetalleLotes  = new clsBeTrans_oc_det_lote();
     private clsBeStock_rec BeStockRecNuevaRec = new clsBeStock_rec();
     private clsBeStock_recList listaStockPalletsNuevos = new clsBeStock_recList();
     private clsBeProducto_palletList listaProdPalletsNuevos = new clsBeProducto_palletList();
@@ -2327,7 +2327,7 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
-                if (Escaneo_Pallet){
+               if (Escaneo_Pallet){
 
                     BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
 
@@ -3096,8 +3096,14 @@ public class frm_recepcion_datos extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbVence.setAdapter(dataAdapter);
 
-            if (VenceList.size()>0) cmbVence.setSelection(0);
-            cmbVenceRec.setText(cmbVence.getSelectedItem().toString());
+            if (VenceList.size()>0) {
+                cmbVence.setSelection(0);
+                cmbVenceRec.setText(cmbVence.getSelectedItem().toString());
+            }else{
+                cmbVence.setVisibility(View.GONE);
+                cmbVenceRec.setVisibility(View.VISIBLE);
+                imgDate.setVisibility(View.VISIBLE);
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
@@ -3116,7 +3122,7 @@ public class frm_recepcion_datos extends PBase {
             lotes=gl.gBeOrdenCompra.DetalleLotes;
             List<clsBeTrans_oc_det_lote> BeLotes;
 
-            if (BeProducto.getControl_vencimiento()){
+            if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
                 BeLotes = stream(lotes.items)
                         .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                 c.No_linea == BeOcDet.No_Linea &&
@@ -3151,7 +3157,12 @@ public class frm_recepcion_datos extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbLote.setAdapter(dataAdapter);
 
-            if (LotesList.size()>0) cmbLote.setSelection(0);
+            if (LotesList.size()>0) {
+                cmbLote.setSelection(0);
+            }else{
+                cmbLote.setVisibility(View.GONE);
+                txtLoteRec.setVisibility(View.VISIBLE);
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
@@ -3180,7 +3191,7 @@ public class frm_recepcion_datos extends PBase {
             String finalSelectedLote = SelectedLote;
             String finalFechaVence = FechaVence;
 
-            if (BeProducto.getControl_vencimiento()){
+            if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
                 BeUbicaciones = stream(ubic.items)
                         .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
@@ -3216,6 +3227,8 @@ public class frm_recepcion_datos extends PBase {
             if (UbicLotesList.size()>0){
                 ubiDetLote = UbicLotesList.get(0);
                 if(!ubiDetLote.isEmpty()) lblUbicacion.setText("Doc: -> " + ubiDetLote);
+            }else{
+                tblUbicacion.setVisibility(View.GONE);
             }
 
         } catch (Exception e) {
@@ -4458,6 +4471,8 @@ public class frm_recepcion_datos extends PBase {
                     BeDetalleLotes.Cantidad_recibida = Integer.valueOf(txtCantidadRec.getText().toString());
                     BeDetalleLotes.IsNew = true;
                 }
+            }else{
+                BeDetalleLotes = null;
             }
 
             listaStockPalletsNuevos = new clsBeStock_recList();
@@ -5228,6 +5243,9 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Existe_Lp","pLic_Plate",pLp);
                         break;
                     case 25:
+                        if (BeProducto.Presentaciones.items.size()>0){
+
+                        }
                         callMethod("Push_Recepcion_To_NAV_For_BYB2",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
@@ -5695,7 +5713,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!Resultado.isEmpty()){
 
-                    if (!ubiDetLote.isEmpty()){
+                    if (!ubiDetLote.isEmpty() && !ubiDetLote.equals("") ){
                         execws(25);
                     }else{
                         Imprime_Barra_Despues_Guardar();

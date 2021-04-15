@@ -326,7 +326,7 @@
             android:layout_height="match_parent"
             android:onClick="recargar"
             android:scaleType="center"
-            android:src="@drawable/tomwmspng_2021" />
+            android:src="@drawable/tom_logo" />
 
     </RelativeLayout>
 

@@ -1351,6 +1351,8 @@ public class frm_list_rec_prod extends PBase {
 
                     MuestraPantallaFirma(this);
 
+                }else{
+                    Finalizar_Recepcion();
                 }
 
             }else{
