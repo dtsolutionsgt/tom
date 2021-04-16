@@ -3226,13 +3226,18 @@ public class frm_recepcion_datos extends PBase {
 
             if (UbicLotesList.size()>0){
                 ubiDetLote = UbicLotesList.get(0);
-                if(!ubiDetLote.isEmpty()) lblUbicacion.setText("Doc: -> " + ubiDetLote);
+                if (ubiDetLote!=null){
+                    if(!ubiDetLote.isEmpty() &&
+                            !ubiDetLote.equals("")) lblUbicacion.setText("Doc: -> " + ubiDetLote);
+                }else {
+                    tblUbicacion.setVisibility(View.GONE);
+                }
             }else{
                 tblUbicacion.setVisibility(View.GONE);
             }
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            mu.msgbox("FillUbicacion " + e.getMessage());
         }
     }
 
@@ -5243,13 +5248,16 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Existe_Lp","pLic_Plate",pLp);
                         break;
                     case 25:
-                        if (BeProducto.Presentaciones.items.size()>0){
-
+                        double vCantidad = 0;
+                        if (IdPreseSelect!=-1){
+                          vCantidad = BeProducto.Presentacion.getFactor()* Double.valueOf(txtCantidadRec.getText().toString());
+                        }else{
+                            vCantidad = Double.valueOf(txtCantidadRec.getText().toString());
                         }
                         callMethod("Push_Recepcion_To_NAV_For_BYB2",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
-                                   "Cantidad", txtCantidadRec.getText().toString());
+                                   "Cantidad", vCantidad);
                         break;
                 }
 
@@ -5713,11 +5721,16 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!Resultado.isEmpty()){
 
-                    if (!ubiDetLote.isEmpty() && !ubiDetLote.equals("") ){
-                        execws(25);
+                    if (ubiDetLote!=null){
+                        if (!ubiDetLote.isEmpty() && !ubiDetLote.equals("") ){
+                            execws(25);
+                        }else{
+                            Imprime_Barra_Despues_Guardar();
+                        }
                     }else{
                         Imprime_Barra_Despues_Guardar();
                     }
+
 
                 }else{
                     progress.cancel();

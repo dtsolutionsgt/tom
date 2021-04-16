@@ -338,6 +338,7 @@ public class MainActivity extends PBase {
             imgIngresar.setVisibility(View.VISIBLE);
 
         } catch (Exception e)  {
+            addlog(new Object() {}.getClass().getEnclosingMethod().getName() + "." , e.getMessage(),"");
         }
     }
 
@@ -372,7 +373,7 @@ public class MainActivity extends PBase {
 
                 } catch (Exception e)
                 {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
             }
 
@@ -404,7 +405,7 @@ public class MainActivity extends PBase {
 
                 } catch (Exception e)
                 {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -436,7 +437,7 @@ public class MainActivity extends PBase {
                     gl.IdImpresora = idimpres;
 
                 } catch (Exception e) {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -472,7 +473,7 @@ public class MainActivity extends PBase {
                     txtpass.requestFocus();
 
                 } catch (Exception e) {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -577,7 +578,7 @@ public class MainActivity extends PBase {
     private void Licencia_Valida()     {
         try{
         }catch (Exception e){
-            mu.msgbox("Licencia Valida:"+e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
         }
     }
 
@@ -954,7 +955,7 @@ public class MainActivity extends PBase {
 
         } catch (Exception e)
         {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -977,7 +978,7 @@ public class MainActivity extends PBase {
             if (bodlist.size()>0) spinbod.setSelection(0);
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -998,7 +999,7 @@ public class MainActivity extends PBase {
             if (prnlist.size()>0) spinprint.setSelection(0);
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -1028,7 +1029,7 @@ public class MainActivity extends PBase {
 
         } catch (Exception e)
         {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
 
     }
@@ -1128,7 +1129,8 @@ public class MainActivity extends PBase {
                         break;
                 }
             } catch (Exception e)  {
-                error=e.getMessage();errorflag =true;msgbox(error);
+                error=e.getMessage();errorflag =true;
+                msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
             }
         }
     }
