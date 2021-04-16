@@ -880,7 +880,9 @@ public class MainActivity extends PBase {
     private void processVersiones() {
         try {
             versiones=xobj.getresult(clsBeVersion_wms_hh_andList.class,"Android_Get_All_Versiones");
-            validaVersion();
+            if (versiones!=null){
+                validaVersion();
+            }
             idle=true;
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
