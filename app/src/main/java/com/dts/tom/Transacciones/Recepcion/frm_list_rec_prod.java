@@ -326,14 +326,14 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            vIdOrdenCompra=0;
+/*            vIdOrdenCompra=0;
 
             if (gl.gBeRecepcion.OrdenCompraRec!=null){
                 if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
                     vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
                 }
             }
-
+*/
             gBeStockRec.Uds_lic_plate = gBeStockRec.Cantidad;
             gBeStockRec.No_bulto = 0;
 
@@ -437,6 +437,14 @@ public class frm_list_rec_prod extends PBase {
 
                     gBeOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.OC;
                     gl.gBeOrdenCompra = gBeOrdenCompra;
+
+                    vIdOrdenCompra=0;
+
+                    if (gl.gBeRecepcion.OrdenCompraRec!=null){
+                        if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
+                            vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
+                        }
+                    }
 
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);

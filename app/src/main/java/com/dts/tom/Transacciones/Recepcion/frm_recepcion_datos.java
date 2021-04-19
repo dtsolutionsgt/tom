@@ -4169,6 +4169,8 @@ public class frm_recepcion_datos extends PBase {
                     if(!bePresentacion.EsPallet){
                         Factor = bePresentacion.Factor;
                     }else{
+                        bePresentacion.CamasPorTarima=CamasPorTarima;
+                        bePresentacion.CajasPorCama=CajasPorCama;
                         Factor = bePresentacion.Factor * bePresentacion.CamasPorTarima * bePresentacion.CajasPorCama;
                     }
 
@@ -4642,6 +4644,7 @@ public class frm_recepcion_datos extends PBase {
                 }else if(chkPaletizar.isChecked()){
                     BeStockRec.Cantidad += vCant * Factor;
                 }else if (BeStockRec.Presentacion.EsPallet&&BeStockRec.Presentacion.Genera_lp_auto){
+                    if (Factor == 0) Factor=1;
                     BeStockRec.Cantidad = 1 * Factor;
                 }else{
                     BeStockRec.Cantidad = BeStockRec.Cantidad;
@@ -5719,7 +5722,7 @@ public class frm_recepcion_datos extends PBase {
 
                 Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
 
-                if (!Resultado.isEmpty()){
+                if (Resultado!=null){
 
                     if (ubiDetLote!=null){
                         if (!ubiDetLote.isEmpty() && !ubiDetLote.equals("") ){
@@ -5745,7 +5748,7 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             progress.cancel();
-        mu.msgbox("processGuardarRecNueva:"+e.getMessage());
+            mu.msgbox("processGuardarRecNueva:"+e.getMessage());
         }
     }
 
