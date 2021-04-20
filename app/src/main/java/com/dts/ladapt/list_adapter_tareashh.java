@@ -75,18 +75,18 @@ public class list_adapter_tareashh extends BaseAdapter {
 
         if (position==0){
 
-            holder.lblIdOrderCompraEnc.setText("OC");
+            holder.lblIdOrderCompraEnc.setText("NoDoc");
             holder.lblIdRecepcionEnc.setText("Rec");
             holder.lblIdRecepcionEnc.setTextColor(R.style.titlestyle);
             holder.lblNombrePropietario.setText("Propietario");
             holder.lblNombrePropietario.setTextColor(R.style.titlestyle);
-            holder.lblNoReferenciaOC.setText("NoRefOC");
+            holder.lblNoReferenciaOC.setText("NoRefDoc");
             holder.lblNoReferenciaOC.setTextColor(R.style.titlestyle);
-            holder.lblNoDocumentoOc.setText("NoDocOc");
+            holder.lblNoDocumentoOc.setText("No_Doc_ERP");
             holder.lblNoDocumentoOc.setTextColor(R.style.titlestyle);
             holder.lblProveedor.setText("Proveedor");
             holder.lblProveedor.setTextColor(R.style.titlestyle);
-            holder.lblTipoIngresoOC.setText("TipoIngresoOC");
+            holder.lblTipoIngresoOC.setText("TipoIngresoDoc");
             holder.lblTipoIngresoOC.setTextColor(R.style.titlestyle);
             holder.lblTipoRecepcion.setText("TipoRecepcion");
             holder.lblTipoRecepcion.setTextColor(R.style.titlestyle);
