@@ -1151,13 +1151,16 @@ public class MainActivity extends PBase {
             pp=spinemp.getSelectedItemPosition();
             idemp=empresas.items.get(pp).IdEmpresa;
 
-            for (int i = 0; i <versiones.items.size(); i++) {
-                if (versiones.items.get(i).IdEmpresa==idemp) {
-                    if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
-                        actualizaVersion();return;
+            if (versiones!=null){
+                for (int i = 0; i <versiones.items.size(); i++) {
+                    if (versiones.items.get(i).IdEmpresa==idemp) {
+                        if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
+                            actualizaVersion();return;
+                        }
                     }
                 }
-           }
+            }
+
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
