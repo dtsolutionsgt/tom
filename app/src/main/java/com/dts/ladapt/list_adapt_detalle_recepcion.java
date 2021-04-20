@@ -104,10 +104,10 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblCantRec.setTextColor(R.style.titlestyle);
             holder.lblFactor.setText("Factor");
             holder.lblFactor.setTextColor(R.style.titlestyle);
-            holder.lblIdOcDet.setText("IdOcDet");
+            holder.lblIdOcDet.setText("IdDocDet");
             holder.lblIdOcDet.setTextColor(R.style.titlestyle);
             holder.lblIdOcDet.setVisibility(View.GONE);
-            holder.lblIdOcEnc.setText("IdOcEnc");
+            holder.lblIdOcEnc.setText("IdDocEnc");
             holder.lblIdOcEnc.setTextColor(R.style.titlestyle);
             holder.lblIdOcEnc.setVisibility(View.GONE);
             holder.lblIdPropietarioBodega.setText("IdPropietarioBodega");

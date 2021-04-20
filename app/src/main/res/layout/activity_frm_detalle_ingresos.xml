@@ -100,7 +100,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="OC #:" />
+                    android:text="DOC #:" />
 
                 <EditText
                     android:id="@+id/txtOc"
