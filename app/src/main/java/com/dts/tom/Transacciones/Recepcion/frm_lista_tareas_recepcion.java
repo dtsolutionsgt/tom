@@ -224,7 +224,10 @@ public class frm_lista_tareas_recepcion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
+                        callMethod("Get_All_Recepciones_For_HH_By_IdBodega_By_Operador",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
+                        //callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_All_Rec_Ciegas_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
@@ -280,7 +283,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             progress.setMessage("Obteniendo lista de tareas");
 
-            pListBeTareasIngresoHH=xobj.getresult(clsBeTareasIngresoHHList.class,"Get_All_Recepciones_For_HH_By_IdBodega");
+            pListBeTareasIngresoHH=xobj.getresult(clsBeTareasIngresoHHList.class,"Get_All_Recepciones_For_HH_By_IdBodega_By_Operador");
 
             listItems();
 
