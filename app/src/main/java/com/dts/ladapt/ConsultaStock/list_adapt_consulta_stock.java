@@ -147,6 +147,25 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
                 holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
                 holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
+
+                holder.lblCodigo.setTextColor(Color.BLACK);
+                holder.lblNombre.setTextColor(Color.BLACK);
+                holder.lblUM.setTextColor(Color.BLACK);
+                holder.lblExistUMBAs.setTextColor(Color.BLACK);
+                holder.lblPres.setTextColor(Color.BLACK);
+                holder.lblExistPres.setTextColor(Color.BLACK);
+                holder.lblReservadoUMBAs.setTextColor(Color.BLACK);
+                holder.lblDisponibleUMBas.setTextColor(Color.BLACK);
+                holder.lblLote.setTextColor(Color.BLACK);
+                holder.lblVence.setTextColor(Color.BLACK);
+                holder.lblEstado.setTextColor(Color.BLACK);
+                holder.lblUbic.setTextColor(Color.BLACK);
+                holder.lblidUbic.setTextColor(Color.BLACK);
+                holder.lblPedido.setTextColor(Color.BLACK);
+                holder.lblPick.setTextColor(Color.BLACK);
+                holder.lbLicPlate.setTextColor(Color.BLACK);
+                holder.lblIdProductoBodega.setTextColor(Color.BLACK);
+                holder.lblIngreso.setTextColor(Color.BLACK);
             }
 
             if(selectedIndex!= -1 && position == selectedIndex) {

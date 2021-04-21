@@ -105,7 +105,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
-                    //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega
+                    //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega_By_Operador
                     execws(1);
                 }else if (gl.tipoIngreso.equals("HSOC00")){
                     gl.TipoOpcion =2;
