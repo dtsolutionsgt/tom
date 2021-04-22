@@ -9,6 +9,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="StyleText">
@@ -28,5 +29,6 @@
     <style name="DialogTheme" parent="Theme.AppCompat.Light">
         <item name="colorAccent">#BA5536</item>
     </style>
+
 
 </resources>

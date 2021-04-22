@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".Transacciones.Recepcion.frm_lista_tareas_recepcion">
 
     <RelativeLayout
@@ -23,7 +24,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/back"
+            android:background="@drawable/arr_back"
             android:onClick="SalirTareas" />
 
         <Button
@@ -33,7 +34,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
+            android:background="?android:attr/colorFocusedHighlight"
             android:text="Detalle"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
@@ -54,6 +55,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_input"
+            android:backgroundTint="?android:attr/colorFocusedHighlight"
             android:gravity="center"
             android:text="Tareas de Recepción"
             android:textColor="#FFFFFF"
@@ -107,6 +110,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/color_medium"
+        android:backgroundTint="?android:attr/colorFocusedHighlight"
         android:text="Regs: 0"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />

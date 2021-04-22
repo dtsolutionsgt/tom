@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/color_light"
-    tools:context=".Mainmenu" >
+    android:background="@android:color/background_light"
+    tools:context=".Mainmenu">
 
     <RelativeLayout
         android:id="@+id/reltop"
@@ -21,6 +21,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_input"
+            android:backgroundTint="?android:attr/colorFocusedHighlight"
             android:gravity="center"
             android:text="Menú principal - WMS"
             android:textColor="#FFFFFF"
@@ -84,7 +86,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:gravity="center"
-                android:text="Nombre usuario" />
+                android:text="Nombre usuario"
+                android:textStyle="bold" />
         </RelativeLayout>
 
     </RelativeLayout>
@@ -98,6 +101,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@android:color/background_light"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:visibility="visible" />
