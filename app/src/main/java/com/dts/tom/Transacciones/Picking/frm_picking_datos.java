@@ -117,6 +117,7 @@ public class frm_picking_datos extends PBase {
 
         if (selitem != null) {
             gBePickingUbic = selitem;
+            gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
         }
 
         setHandlers();
@@ -1599,6 +1600,7 @@ public class frm_picking_datos extends PBase {
             BePickingDet.Fec_mod =  du.getFechaActual();
 
             BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
+
             execws(6);
 
         }catch (Exception e){
