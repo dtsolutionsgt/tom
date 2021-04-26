@@ -470,7 +470,7 @@ public class frm_verificacion_datos extends PBase {
                     case 3:
                         callMethod("Actualiza_Cant_Peso_Verificacion",
                                    "pBePickingUbicList",pSubListPickingU.items,
-                                   "pIdOperador",gl.OperadorBodega.getIdOperador(),
+                                   "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
                                    "pCantidad",pCantidad,
                                    "pPeso",pPeso);
                         break;
