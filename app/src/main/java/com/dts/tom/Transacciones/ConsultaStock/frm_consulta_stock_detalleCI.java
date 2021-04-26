@@ -110,7 +110,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
                     //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
-
                     String zpl = String.format("^XA \n" +
                                     "^MMT \n" +
                                     "^PW700 \n" +

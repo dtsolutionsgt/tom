@@ -2357,9 +2357,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     if (gl.Carga_Producto_x_Pallet){
-
                         Carga_Datos_Producto_Por_Pallet();
-
                     }else{
                         txtCantidadRec.requestFocus();
                         if (gl.mode==1){
@@ -2472,7 +2470,6 @@ public class frm_recepcion_datos extends PBase {
                             execws(6);
                         }
                     }
-
                 }else{
                     pListTransRecDet.items = new ArrayList<clsBeTrans_re_det>();
 
@@ -2960,6 +2957,13 @@ public class frm_recepcion_datos extends PBase {
             if (gl.mode==1){
                 if (Escaneo_Pallet){
                     LlenaCamposEsPallet();
+                }else{
+                    if (BeProducto.Genera_lp){
+                        progress.setMessage("Generando licencia..");
+                        progress.show();
+                        execws(6);
+                        progress.cancel();
+                    }
                 }
             }else{
                 Llena_beStock_Anterior();
@@ -5437,7 +5441,6 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 LlenaDatosFaltantes_Existente();
             }
-
 
         }catch (Exception e){
             progress.cancel();
