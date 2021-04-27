@@ -61,6 +61,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdNoDocumentoRef;
     @Element(required=false) public int IdAcuerdoComercial;
     @Element(required=false) public int IdOperadorBodegaDefecto;
+    @Element(required=false) public String No_Documento_Recepcion_ERP;
 
     public clsBeTrans_oc_enc()
     {
@@ -406,5 +407,10 @@ public class clsBeTrans_oc_enc {
     public void setIdOperadorBodegaDefecto(int value) {
         IdOperadorBodegaDefecto=value;
     }
-
+    public String getNo_Documento_Recepcion_ERP() {
+        return No_Documento_Recepcion_ERP;
+    }
+    public void setNo_Documento_Recepcion_ERP(String value) {
+        No_Documento_Recepcion_ERP=value;
+    }
 }
