@@ -101,7 +101,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private void Imprimir_Barra(){
         try{
 
-            if (gl.existencia.Codigo!=0){
+            if (gl.existencia.Codigo!= "0"){
                 //CM_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
                 printerIns.open();
@@ -154,7 +154,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private void Imprimir_Licencia(){
         try{
 
-            if (gl.existencia.Codigo!=0){
+            if (gl.existencia.Codigo!="0"){
                 //CM_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
                 printerIns.open();

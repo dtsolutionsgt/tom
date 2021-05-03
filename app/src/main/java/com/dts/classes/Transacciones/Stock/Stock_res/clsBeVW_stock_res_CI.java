@@ -5,7 +5,7 @@ import org.simpleframework.xml.Element;
 
 public class clsBeVW_stock_res_CI {
 
-  @Element(required=false) public int Codigo=0;
+  @Element(required=false) public String Codigo="";
   @Element(required=false) public String Nombre="";
   @Element(required=false) public String UM="";
   @Element(required=false) public String ExistUMBAs="";
@@ -30,7 +30,7 @@ public class clsBeVW_stock_res_CI {
   public clsBeVW_stock_res_CI() {
   }
 
-  public clsBeVW_stock_res_CI(int Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
+  public clsBeVW_stock_res_CI(String Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
                               String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,String LicPlate,
                               String IdProductoEstado,int IdProductoBodega, int factor, String ingreso) {
@@ -57,10 +57,10 @@ public class clsBeVW_stock_res_CI {
     this.ingreso = ingreso;
   }
 
-  public int getCodigo() {
+  public String getCodigo() {
     return Codigo;
   }
-  public void setCodigo(int value) {
+  public void setCodigo(String value) {
     Codigo=value;
   }
   public String getNombre() {

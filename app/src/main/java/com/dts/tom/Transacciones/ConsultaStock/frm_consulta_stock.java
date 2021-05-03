@@ -296,7 +296,8 @@ public class frm_consulta_stock extends PBase {
     {
         public int compare(clsBeVW_stock_res_CI left, clsBeVW_stock_res_CI right)
         {
-            return left.Codigo-right.Codigo;
+            //return left.Codigo  - right.Codigo;
+            return left.Codigo.compareTo(right.Codigo);
         }
     }
 

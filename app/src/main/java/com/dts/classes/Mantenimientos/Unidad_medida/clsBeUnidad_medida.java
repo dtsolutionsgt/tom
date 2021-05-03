@@ -18,6 +18,8 @@ public class clsBeUnidad_medida {
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public String User_agr="";
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public boolean es_um_cobro=false;
+    @Element(required=false) public double factor=1;
 
 
     public clsBeUnidad_medida() {
@@ -25,7 +27,7 @@ public class clsBeUnidad_medida {
 
     public clsBeUnidad_medida(int IdUnidadMedida,int IdPropietario,clsBePropietarios Propietario,String Codigo,
                               String Nombre,boolean Activo,String Fec_agr,String User_mod,
-                              String Fec_mod,String User_agr,boolean IsNew) {
+                              String Fec_mod,String User_agr,boolean IsNew, boolean es_um_cobro,double factor) {
 
         this.IdUnidadMedida=IdUnidadMedida;
         this.IdPropietario=IdPropietario;
@@ -38,7 +40,8 @@ public class clsBeUnidad_medida {
         this.Fec_mod=Fec_mod;
         this.User_agr=User_agr;
         this.IsNew=IsNew;
-
+        this.es_um_cobro=es_um_cobro;
+        this.factor = factor;
     }
 
 
@@ -107,6 +110,19 @@ public class clsBeUnidad_medida {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+    public boolean getes_um_cobro() {
+        return es_um_cobro;
+    }
+    public void setes_um_cobro(boolean value) {
+        es_um_cobro=value;
+    }
+
+    public double getfactor() {
+        return factor;
+    }
+    public void setfactor(double value) {
+        factor=value;
     }
 
 }
