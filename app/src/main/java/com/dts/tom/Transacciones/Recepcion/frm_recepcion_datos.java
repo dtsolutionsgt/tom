@@ -33,7 +33,7 @@ import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
+//import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Motivo_devolucion.clsBeMotivo_devolucion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
@@ -270,6 +270,15 @@ public class frm_recepcion_datos extends PBase {
         }else{
             Load();
         }
+
+        if (gl.bloquear_lp_hh) {
+            txtBarra.setEnabled(false);
+            txtCantidadRec.requestFocus();
+        } else{
+            txtBarra.setEnabled(true);
+            txtBarra.requestFocus();
+        }
+
     }
 
     //region Events

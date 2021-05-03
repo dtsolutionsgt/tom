@@ -399,6 +399,7 @@ public class MainActivity extends PBase {
                     }
 
                     idbodega=bodegas.items.get(position).IdBodega;
+                    gl.bloquear_lp_hh = bodegas.items.get(position).bloquear_lp_hh;
                     gl.IdBodega = idbodega;
                     idimpres=0;
                     execws(3);

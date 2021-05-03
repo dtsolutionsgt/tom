@@ -128,4 +128,5 @@ public class appGlobals extends Application {
     public int gCantDecCalculo=0;
     public String deviceId="";
     public int mode=0;
+    public boolean bloquear_lp_hh = false;
 }
