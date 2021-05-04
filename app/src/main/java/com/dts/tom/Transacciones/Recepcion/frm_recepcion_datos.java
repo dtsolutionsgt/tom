@@ -4002,21 +4002,17 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    if (!imprimirDesdeBoton){
-                        progress.setMessage("Actualizando valores OC");
-                        progress.show();
-                        Imprimir_Barra();
-                    }
+                    progress.setMessage("Actualizando valores OC");
+                    progress.show();
+                    Imprimir_Barra();
                 }
             });
 
             dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    if (!imprimirDesdeBoton){
-                        progress.setMessage("Actualizando valores OC");
-                        progress.show();
-                        Imprimir_Licencia();
-                    }
+                    progress.setMessage("Actualizando valores OC");
+                    progress.show();
+                    Imprimir_Licencia();
                 }
             });
 
