@@ -147,17 +147,17 @@ public class clsBeProveedor {
     public void setContacto(String value) {
         Contacto=value;
     }
-    public boolean getActivo() {
-        return Activo;
-    }
-    public void setActivo(boolean value) {
-        Activo=value;
-    }
     public boolean getMuestra_precio() {
         return Muestra_precio;
     }
     public void setMuestra_precio(boolean value) {
         Muestra_precio=value;
+    }
+    public boolean getActivo() {
+        return Activo;
+    }
+    public void setActivo(boolean value) {
+        Activo=value;
     }
     public String getUser_agr() {
         return User_agr;

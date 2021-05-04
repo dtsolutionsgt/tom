@@ -57,11 +57,6 @@ public class XMLObject  {
 
             xnode=getXMLRegion(source+"Result");
 
-//            if (xnode.contains("USUbicStrucStage5")) {
-//                xnode = xnode.replace("<int>","<clsUbic><ubic>");
-//                xnode = xnode.replace("</int>","</ubic></clsUbic>");
-//            }
-
             Serializer serializer = new Persister();
 
             if (!xnode.isEmpty())

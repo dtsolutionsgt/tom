@@ -40,8 +40,8 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
-import com.dts.servicios.startCantTareas;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -75,6 +75,7 @@ public class MainActivity extends PBase {
     private ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
     private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
+    private clsBeResolucion_lp_operadorList lResolucionesLp = new clsBeResolucion_lp_operadorList();
 
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
@@ -185,9 +186,11 @@ public class MainActivity extends PBase {
     }
 
     private void setURL(){
+
         String url="http://192.168.0.103/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
+
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Conexión");
@@ -539,13 +542,11 @@ public class MainActivity extends PBase {
                 case 3:
                     progress.setMessage("Cargando impresoras");
                     processImpresoras();
-
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
                     progress.setMessage("Cargando usuarios");
                     processUsers();
-
                     //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
                     break;
@@ -561,6 +562,9 @@ public class MainActivity extends PBase {
                     break;
                 case 8:
                     processVersiones();
+                    break;
+                case 9:
+                    processResolucionLP();
                     break;
             }
 
@@ -625,21 +629,17 @@ public class MainActivity extends PBase {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 }else{
-
-                                    //#CKFK 20201021 Agregué este else
-                                    execws(7);
+                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
+                                    //execws(7);
+                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
+                                    execws(9);
                                 }
                             }else
                             {
                                 progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
                                 msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
-                                //mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
-                            //Get_BeImpresora_By_IdImpresora(gIdImpresora)
-
-                            //execws(7);
-
                             } else {
                                 progress.cancel();
                                 mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
@@ -671,7 +671,9 @@ public class MainActivity extends PBase {
     }
 
     private void msgAsk_continuar_sin_impresora(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setCancelable(false);
@@ -685,6 +687,39 @@ public class MainActivity extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                   execws(7);
                   //ejecuta();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAsk_continuar_sin_resolucionLp(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setCancelable(false);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.printicon);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(7);
                 }
             });
 
@@ -885,6 +920,19 @@ public class MainActivity extends PBase {
                 validaVersion();
             }
             idle=true;
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processResolucionLP() {
+        try {
+            lResolucionesLp=xobj.getresult(clsBeResolucion_lp_operadorList.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            if (lResolucionesLp!=null){
+                validaResolucionLP();
+            }else{
+                msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
+            }
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -1130,6 +1178,11 @@ public class MainActivity extends PBase {
                     case 8:
                         callMethod("Android_Get_All_Versiones");
                         break;
+                    case 9:
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
             } catch (Exception e)  {
                 error=e.getMessage();errorflag =true;
@@ -1143,6 +1196,7 @@ public class MainActivity extends PBase {
     //region Control Version
 
     private void validaVersion() {
+
         int pp,idemp=0;
 
 
@@ -1159,6 +1213,24 @@ public class MainActivity extends PBase {
                             actualizaVersion();return;
                         }
                     }
+                }
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+
+    }
+
+    private void validaResolucionLP() {
+
+        try {
+
+            if (lResolucionesLp!=null){
+                if (lResolucionesLp.items.size() == 0){
+                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
+                }else{
+                    execws(7);
                 }
             }
 
