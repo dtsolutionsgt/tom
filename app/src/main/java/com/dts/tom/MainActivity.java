@@ -40,6 +40,7 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
 
@@ -75,7 +76,7 @@ public class MainActivity extends PBase {
     private ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
     private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
-    private clsBeResolucion_lp_operadorList lResolucionesLp = new clsBeResolucion_lp_operadorList();
+    private clsBeResolucion_lp_operador ResolucionLpByBodega = new clsBeResolucion_lp_operador();
 
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
@@ -927,9 +928,10 @@ public class MainActivity extends PBase {
 
     private void processResolucionLP() {
         try {
-            lResolucionesLp=xobj.getresult(clsBeResolucion_lp_operadorList.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
-            if (lResolucionesLp!=null){
-                validaResolucionLP();
+            ResolucionLpByBodega =xobj.getresult(clsBeResolucion_lp_operador.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            if (ResolucionLpByBodega !=null){
+                //#EJC20210504: Registra ingreso y carga menú principal.
+                execws(7);
             }else{
                 msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
             }
@@ -1222,23 +1224,23 @@ public class MainActivity extends PBase {
 
     }
 
-    private void validaResolucionLP() {
-
-        try {
-
-            if (lResolucionesLp!=null){
-                if (lResolucionesLp.items.size() == 0){
-                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
-                }else{
-                    execws(7);
-                }
-            }
-
-        } catch (Exception e) {
-            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-        }
-
-    }
+//    private void validaResolucionLP() {
+//
+//        try {
+//
+//            if (ResolucionLpByBodega !=null){
+//                if (ResolucionLpByBodega.items.size() == 0){
+//                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
+//                }else{
+//                    execws(7);
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+//        }
+//
+//    }
 
     private void actualizaVersion() {
         try {

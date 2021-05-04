@@ -89,7 +89,7 @@ public class frm_picking_datos extends PBase {
         ws = new WebServiceHandler(frm_picking_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtBarra = (EditText) findViewById(R.id.txtBarra);
+        txtBarra = (EditText) findViewById(R.id.txtLP);
         txtFechaCad = (EditText) findViewById(R.id.txtFechaCad);
         txtLote = (EditText) findViewById(R.id.txtLote);
         txtUniBas = (EditText) findViewById(R.id.txtUniBas);

@@ -45,6 +45,8 @@ import com.dts.classes.Mantenimientos.Producto.Producto_pallet.clsBeProducto_pal
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametros;
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametrosList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
@@ -82,7 +84,7 @@ public class frm_recepcion_datos extends PBase {
     Calendar calendario = Calendar.getInstance();
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
-    private EditText txtBarra,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
+    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion;
     private Button btnCantPendiente,btnCantRecibida,btnBack,btnIr;
     private ProgressDialog progress;
@@ -110,6 +112,8 @@ public class frm_recepcion_datos extends PBase {
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
+    private clsBeResolucion_lp_operador ResolucionActivaLpByBodega = new clsBeResolucion_lp_operador();
+
     private boolean PCorrecto=false;
     private boolean TCorrecta=false;
     private boolean PallCorrecto= false;
@@ -196,7 +200,7 @@ public class frm_recepcion_datos extends PBase {
         cmbLote = (Spinner) findViewById(R.id.cmbLote);
         cmbVenceRec = (EditText) findViewById(R.id.cmbVenceRec);
 
-        txtBarra = (EditText) findViewById(R.id.txtBarra);
+        txtNoLP = (EditText) findViewById(R.id.txtLP);
         txtLoteRec = (EditText) findViewById(R.id.txtLoteRec);
         txtUmbasRec = (EditText) findViewById(R.id.txtUmbasRec);
         txtCantidadRec = (EditText) findViewById(R.id.txtCantidadRec);
@@ -272,11 +276,11 @@ public class frm_recepcion_datos extends PBase {
         }
 
         if (gl.bloquear_lp_hh) {
-            txtBarra.setEnabled(false);
+            txtNoLP.setEnabled(false);
             txtCantidadRec.requestFocus();
         } else{
-            txtBarra.setEnabled(true);
-            txtBarra.requestFocus();
+            txtNoLP.setEnabled(true);
+            txtNoLP.requestFocus();
         }
 
     }
@@ -437,7 +441,7 @@ public class frm_recepcion_datos extends PBase {
 
             });
 
-            txtBarra.setOnKeyListener(new View.OnKeyListener() {
+            txtNoLP.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
@@ -908,6 +912,7 @@ public class frm_recepcion_datos extends PBase {
     private void MuestraParametros1(Activity activity){
 
         try{
+
             int IndexPresentacion=-1;
             Cant_Recibida_Actual=0;
 
@@ -1021,8 +1026,8 @@ public class frm_recepcion_datos extends PBase {
                                 pNumeroLP = pLp;
 
                                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                                if (!txtBarra.getText().toString().isEmpty()){
-                                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                                if (!txtNoLP.getText().toString().isEmpty()){
+                                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
                                 }else{
                                     txtLicPlate.setText(pNumeroLP);
                                 }
@@ -1041,8 +1046,8 @@ public class frm_recepcion_datos extends PBase {
                                     pNumeroLP = pLp;
 
                                     //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                                    if (!txtBarra.getText().toString().isEmpty()){
-                                        txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                                    if (!txtNoLP.getText().toString().isEmpty()){
+                                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
                                     }else{
                                         txtLicPlate.setText(pNumeroLP);
                                     }
@@ -2245,7 +2250,7 @@ public class frm_recepcion_datos extends PBase {
             pLp = "";
             Escaneo_Pallet_Interno = false;
 
-            if (!txtBarra.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().isEmpty()){
 
                /* String vStarWithParameter = "$";
 
@@ -2261,7 +2266,7 @@ public class frm_recepcion_datos extends PBase {
 
                     //int vLengthBarra  = txtBarra.getText().toString().length();
 
-                    pLp = txtBarra.getText().toString().replace("$", "");
+                    pLp = txtNoLP.getText().toString().replace("$", "");
 
                     Escaneo_Pallet_Interno = true;
 
@@ -2560,10 +2565,10 @@ public class frm_recepcion_datos extends PBase {
             progress.setMessage("Terminando de cargar datos y validando valores");
 
             if (Escaneo_Pallet){
-                txtBarra.setText(BeINavBarraPallet.Codigo_barra);
+                txtNoLP.setText(BeINavBarraPallet.Codigo_barra);
             }else{
-                txtBarra.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
-                txtBarra.setText("");
+                txtNoLP.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
+                txtNoLP.setText("");
             }
 
             if(BeProducto.IdProductoBodega>0){
@@ -2670,8 +2675,8 @@ public class frm_recepcion_datos extends PBase {
                // #CKFK 20210218 Quité la cantidad pendiente de recibir en la CantidadRec por instrucción de Erik
                 txtCantidadRec.setText("");
 
-                txtBarra.requestFocus();
-                txtBarra.selectAll();
+                txtNoLP.requestFocus();
+                txtNoLP.selectAll();
 
                 clsBeTrans_oc_det_lote BeLoteLinea;
 
@@ -2730,10 +2735,10 @@ public class frm_recepcion_datos extends PBase {
             progress.setMessage("Terminando de cargar datos y validando valores");
 
             if (Escaneo_Pallet){
-                txtBarra.setText(pListTransRecDet.items.get(0).Lic_plate);
+                txtNoLP.setText(pListTransRecDet.items.get(0).Lic_plate);
             }else{
-                txtBarra.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
-                txtBarra.setText("");
+                txtNoLP.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
+                txtNoLP.setText("");
             }
 
             if(BeProducto.IdProductoBodega>0){
@@ -2924,8 +2929,8 @@ public class frm_recepcion_datos extends PBase {
             txtUmbasRec.setClickable(false);
 
             if (gl.mode==1){
-                txtBarra.setText(BeProducto.Codigo);
-                txtBarra.setText("");
+                txtNoLP.setText(BeProducto.Codigo);
+                txtNoLP.setText("");
             }
 
             /*txtBarra.setFocusable(false);
@@ -4674,12 +4679,12 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 BeStockRec.Cantidad = vCant;
                 //#EJC20201217:Si es UMBA y el LicPlate no es vacío asignar.
-                if (!txtBarra.getText().toString().isEmpty()){
-                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    BeStockRec.Lic_plate= txtNoLP.getText().toString();
                 }else{
                     if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
-                        txtBarra.setText(pNumeroLP);
-                        BeStockRec.Lic_plate= txtBarra.getText().toString();
+                        txtNoLP.setText(pNumeroLP);
+                        BeStockRec.Lic_plate= txtNoLP.getText().toString();
                     }
                 }
             }
@@ -4705,12 +4710,12 @@ public class frm_recepcion_datos extends PBase {
                 if (BeTransReDet.Lic_plate!=null){
                     if (BeStockRec!=null){
                         if(BeStockRec.Lic_plate==""){
-                            if (!txtBarra.getText().toString().isEmpty()){
-                                BeStockRec.Lic_plate= txtBarra.getText().toString();
+                            if (!txtNoLP.getText().toString().isEmpty()){
+                                BeStockRec.Lic_plate= txtNoLP.getText().toString();
                             }else{
                                 if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
-                                    txtBarra.setText(pNumeroLP);
-                                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                                    txtNoLP.setText(pNumeroLP);
+                                    BeStockRec.Lic_plate= txtNoLP.getText().toString();
                                 }
                             }
                         }
@@ -4786,12 +4791,12 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.Activo = true;
                         BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
                         if(BeStockRec.Lic_plate==""){
-                            if (!txtBarra.getText().toString().isEmpty()){
-                                BeStockRec.Lic_plate= txtBarra.getText().toString();
+                            if (!txtNoLP.getText().toString().isEmpty()){
+                                BeStockRec.Lic_plate= txtNoLP.getText().toString();
                             }else{
                                 if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
-                                    txtBarra.setText(pNumeroLP);
-                                    BeStockRec.Lic_plate= txtBarra.getText().toString();
+                                    txtNoLP.setText(pNumeroLP);
+                                    BeStockRec.Lic_plate= txtNoLP.getText().toString();
                                 }
                             }
                         }
@@ -5180,9 +5185,13 @@ public class frm_recepcion_datos extends PBase {
                                 "pActivo",true);
                         break;
                     case 6:
-                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
-                                "pIdProducto",BeProducto.IdProducto);
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
+//                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
+//                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
+//                                "pIdProducto",BeProducto.IdProducto);
                         break;
                     case 7:
                         callMethod("Get_Licenses_Plates_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
@@ -5316,7 +5325,9 @@ public class frm_recepcion_datos extends PBase {
                     processTieneParametrosPersonalizados();
                     break;
                 case 6:
-                    processNuevoLP();
+                    processNuevoLPA();
+                    //#EJC20210504: Refactor por resolución LP
+                    //processNuevoLP();
                     break;
                 case 7:
                     processLicensePallet();
@@ -5537,13 +5548,59 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.mode==1){
                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                if (!txtBarra.getText().toString().isEmpty()){
-                    txtLicPlate.setText(txtBarra.getText().toString().replace("$",""));
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
                 }else{
                     if (txtLicPlate != null){
                         txtLicPlate.setText(pNumeroLP);
                     }else{
-                        txtBarra.setText(pNumeroLP);
+                        txtNoLP.setText(pNumeroLP);
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP: "+e.getMessage());
+        }
+
+    }
+
+    private void processNuevoLPA(){
+
+        try {
+
+            ResolucionActivaLpByBodega =xobj.getresult(clsBeResolucion_lp_operador.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+
+            if (ResolucionActivaLpByBodega!=null){
+
+                float pLpSiguiente =ResolucionActivaLpByBodega.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(ResolucionActivaLpByBodega.Correlativo_Final).length();
+
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                String str = String.valueOf(intLPSig);
+                StringBuilder sb = new StringBuilder();
+
+                for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
+                    sb.append('0');
+                }
+
+                sb.append(str);
+                String result = sb.toString();
+
+                pNumeroLP= ResolucionActivaLpByBodega.Serie + result;
+            }
+
+            if (gl.mode==1){
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                }else{
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(pNumeroLP);
+                    }else{
+                        txtNoLP.setText(pNumeroLP);
                     }
                 }
             }
@@ -5714,8 +5771,8 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-            if (!txtBarra.getText().toString().isEmpty()){
-                vBeStockRec.Lic_plate = txtBarra.getText().toString();
+            if (!txtNoLP.getText().toString().isEmpty()){
+                vBeStockRec.Lic_plate = txtNoLP.getText().toString();
             }else {
                 vBeStockRec.Lic_plate = xobj.getresult(String.class, "Get_Nuevo_Correlativo_LicensePlate_S");
             }
@@ -5914,9 +5971,9 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    txtBarra.setText("");
-                    txtBarra.setSelectAllOnFocus(true);
-                    txtBarra.requestFocus();
+                    txtNoLP.setText("");
+                    txtNoLP.setSelectAllOnFocus(true);
+                    txtNoLP.requestFocus();
                 }
             });
 
