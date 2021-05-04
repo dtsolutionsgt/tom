@@ -4770,7 +4770,6 @@ public class frm_recepcion_datos extends PBase {
                             toastlong("La cantidad de pallets es > 1 y genera_lp_auto es Falso, debe recibir los pallets de forma unitaria (Cantidad = 1)");
                             return;
                         }
-
                     }
 
                 }else{
@@ -4845,7 +4844,6 @@ public class frm_recepcion_datos extends PBase {
             if (BeStockRecNuevaRec.Presentacion.Imprime_barra){
 
                 BeProdPallet = new  clsBeProducto_pallet();
-
                 BeProdPallet.IdPropietarioBodega = BeTransReDet.IdPropietarioBodega;
                 BeProdPallet.IdProductoBodega = BeTransReDet.IdProductoBodega;
                 BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
@@ -5228,7 +5226,8 @@ public class frm_recepcion_datos extends PBase {
                     case 16:
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
-                        callMethod("Guardar_Recepcion","pRecEnc",gl.gBeRecepcion,
+                        callMethod("Guardar_Recepcion",
+                                "pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
                                 "pListStockRecSer",pListBeStockSeRec.items,
                                 "pListStockRec",pListBeStockRec.items,
@@ -5236,7 +5235,8 @@ public class frm_recepcion_datos extends PBase {
                                 "pLotesRec", BeDetalleLotes,
                                 "pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,
-                                "pIdUsuario",gl.IdOperador);
+                                "pIdUsuario",gl.IdOperador,
+                                "pIdResolucionLp",gl.IdResolucionLpOperador);
                         break;
                     case 17 :
                         //Guardar_Recepcion_Edita
@@ -5573,6 +5573,8 @@ public class frm_recepcion_datos extends PBase {
 
             if (ResolucionActivaLpByBodega!=null){
 
+                gl.IdResolucionLpOperador = ResolucionActivaLpByBodega.IdResolucionlp;
+
                 float pLpSiguiente =ResolucionActivaLpByBodega.Correlativo_Actual +1;
                 float largoMaximo = String.valueOf(ResolucionActivaLpByBodega.Correlativo_Final).length();
 
@@ -5590,6 +5592,9 @@ public class frm_recepcion_datos extends PBase {
                 String result = sb.toString();
 
                 pNumeroLP= ResolucionActivaLpByBodega.Serie + result;
+
+            }else{
+                gl.IdResolucionLpOperador =0;
             }
 
             if (gl.mode==1){

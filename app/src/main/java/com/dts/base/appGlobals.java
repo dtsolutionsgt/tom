@@ -129,4 +129,5 @@ public class appGlobals extends Application {
     public String deviceId="";
     public int mode=0;
     public boolean bloquear_lp_hh = false;
+    public int IdResolucionLpOperador=0;
 }
