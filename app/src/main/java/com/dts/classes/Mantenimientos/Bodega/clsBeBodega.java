@@ -52,7 +52,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Es_Bodega_Fiscal=false;
     @Element(required=false) public boolean habilitar_ingreso_consolidado=false;
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
-    @Element(required=false) public boolean bloquear_lp_hh= false;
+
 
     public clsBeBodega() {
     }
@@ -69,7 +69,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
                        boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
-                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,boolean bloquear_lp_hh
+                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado
     ) {
 
         this.IdBodega=IdBodega;
@@ -119,7 +119,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Id_Motivo_Ubic_Reabasto=Id_Motivo_Ubic_Reabasto;
         this.Es_Bodega_Fiscal = Es_Bodega_Fiscal;
         this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
-        this.bloquear_lp_hh =  bloquear_lp_hh;
+
     }
 
     public int getIdPais() {
@@ -387,9 +387,6 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void sethabilitar_ingreso_consolidado(boolean value) {habilitar_ingreso_consolidado =value; }
 
-    public boolean getbloquear_lp_hh() {
-        return bloquear_lp_hh;
-    }
-    public void setbloquear_lp_hh(boolean value) {bloquear_lp_hh =value; }
+
 }
 
