@@ -35,7 +35,6 @@ public class Mainmenu extends PBase {
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
 
-
     private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;

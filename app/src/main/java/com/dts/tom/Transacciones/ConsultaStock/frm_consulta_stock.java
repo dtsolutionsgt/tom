@@ -278,7 +278,9 @@ public class frm_consulta_stock extends PBase {
 
                         gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                        startActivity(new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class));
+                        Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
+                        intent.putExtra("IdTipoEtiqueta", BeProducto.IdTipoEtiqueta);
+                        startActivity(intent);
 
                     }
 

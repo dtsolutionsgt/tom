@@ -121,7 +121,7 @@ public class appGlobals extends Application {
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
-    public String gCodigoBodega,gNomOperador,gNomEmpresa;
+    public String gCodigoBodega,gNomOperador,gNomEmpresa, gNomBodega;
     public int tipoTarea;
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
     public int gCantDecDespliegue=0;

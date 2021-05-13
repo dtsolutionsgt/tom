@@ -86,7 +86,7 @@ public class MainActivity extends PBase {
     private ArrayList<String> userlist= new ArrayList<String>();
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
-    private String NomOperador;
+    private String NomOperador, NomBodega;
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
@@ -403,8 +403,10 @@ public class MainActivity extends PBase {
                     }
 
                     idbodega=bodegas.items.get(position).IdBodega;
+                    NomBodega = bodegas.items.get(position).Nombre;
                     gl.bloquear_lp_hh = bodegas.items.get(position).bloquear_lp_hh;
                     gl.IdBodega = idbodega;
+                    gl.gNomBodega = NomBodega;
                     idimpres=0;
                     execws(3);
 
