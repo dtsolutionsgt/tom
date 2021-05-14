@@ -1387,7 +1387,7 @@ public class frm_picking_datos extends PBase {
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",gBePickingUbic.IdProductoBodega);
                         break;
                     case 2:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega","pIdPropietario",gBeProducto.Propietario.IdPropietario,"pIdBodega",gl.IdBodega);
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH","pIdPropietario",gBeProducto.Propietario.IdPropietario,"pIdBodega",gl.IdBodega);
                         break;
                     case 3:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.IdProducto,"pActivo",true);
@@ -1518,7 +1518,7 @@ public class frm_picking_datos extends PBase {
 
             progress.setMessage("Obteniendo estados de producto");
 
-            LProductoEstadoIngreso = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
+            LProductoEstadoIngreso = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodegaHH");
 
             if (gBeProducto.Presentaciones!=null){
                 if (gBeProducto.Presentaciones.items!=null){
