@@ -17,14 +17,16 @@ public class clsBeTareasIngresoHH {
     @Element(required=false) public String NoReferenciaOC="";
     @Element(required=false) public int IdOrderCompraEnc=0;
     @Element(required=false) public String NombreTipoRecepcion="";
-
+    @Element(required=false) public String NumOrden="";
+    @Element(required=false) public String NumPoliza="";
 
     public clsBeTareasIngresoHH() {
     }
 
     public clsBeTareasIngresoHH(int IdRecepcionEnc,int IdPropietarioBodega,int IdPropietario,String NombrePropietario,
                                 int IdProveedor,String NombreProveedor,String NoDocumentoOc,String NombreMotivoDevolucion,
-                                String NombreTipoIngresoOC,String NoReferenciaOC,int IdOrderCompraEnc,String NombreTipoRecepcion
+                                String NombreTipoIngresoOC,String NoReferenciaOC,int IdOrderCompraEnc,String NombreTipoRecepcion,
+                                String NumOrden,String NumPoliza
     ) {
 
         this.IdRecepcionEnc=IdRecepcionEnc;
@@ -39,6 +41,8 @@ public class clsBeTareasIngresoHH {
         this.NoReferenciaOC=NoReferenciaOC;
         this.IdOrderCompraEnc=IdOrderCompraEnc;
         this.NombreTipoRecepcion=NombreTipoRecepcion;
+        this.NumOrden= NumOrden;
+        this.NumPoliza=NumPoliza;
 
     }
 
@@ -114,6 +118,18 @@ public class clsBeTareasIngresoHH {
     }
     public void setNombreTipoRecepcion(String value) {
         NombreTipoRecepcion=value;
+    }
+    public String getNumOrden() {
+        return NumOrden;
+    }
+    public void setNumOrden(String value) {
+        NumOrden=value;
+    }
+    public String getNumPoliza() {
+        return NumPoliza;
+    }
+    public void setNumPoliza(String value) {
+        NumPoliza=value;
     }
 
 }

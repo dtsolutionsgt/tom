@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableRow;
 
 import androidx.core.content.FileProvider;
 
@@ -59,7 +60,8 @@ public class frm_detalle_ingresos extends PBase {
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
 
     private Spinner cmbPropietario,cmbProveedor,cmbTipoDoc,cmbFechaRec;
-    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec;
+    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza;
+    private TableRow tblNumOrden, tblNumPoliza;
     private ProgressBar pbar;
     private ProgressDialog progress;
     private ImageView btnCamara;
@@ -87,6 +89,11 @@ public class frm_detalle_ingresos extends PBase {
         txtGuia = (EditText)findViewById(R.id.txtGuia);
         txtEstadoRec = (EditText)findViewById(R.id.txtEstadoRec);
         txtMuelleRec = (EditText)findViewById(R.id.txtMuelleRec);
+        txtNumOrden = (EditText)findViewById(R.id.txtNumOrden);
+        txtNumPoliza = (EditText)findViewById(R.id.txtNumPoliza);
+
+        tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
+        tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
 
         cmbPropietario = (Spinner) findViewById(R.id.cmbPropietario);
         cmbProveedor = (Spinner) findViewById(R.id.cmbProveedor);
@@ -374,6 +381,8 @@ public class frm_detalle_ingresos extends PBase {
             txtRef.setText("");
             txtMarch.setText("");
             txtEstadoRec.setText("");
+            txtNumOrden.setText("");
+            txtNumPoliza.setText("");
 
             progress.setMessage("Listando propietarios");
 
@@ -447,6 +456,23 @@ public class frm_detalle_ingresos extends PBase {
 
                 if (gBeOrdenCompra.No_Documento!=null){
                     txtOc.setText(gBeOrdenCompra.No_Documento);
+                }
+
+                progress.setMessage("Llenando número de orden");
+
+
+                if (gBeOrdenCompra.getObjPoliza().numero_orden!=null){
+                    txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
+                }else{
+                    tblNumOrden.setVisibility(View.GONE);
+                }
+
+                progress.setMessage("Llenando número de póliza");
+
+                if (gBeOrdenCompra.getObjPoliza().codigo_poliza!=null){
+                    txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().codigo_poliza);
+                }else{
+                    tblNumPoliza.setVisibility(View.GONE);
                 }
 
                 progress.setMessage("Llenando referencia");

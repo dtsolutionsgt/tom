@@ -66,6 +66,8 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblTipoIngresoOC = (TextView) convertView.findViewById(R.id.lblTipoIng);
             holder.lblTipoRecepcion = (TextView) convertView.findViewById(R.id.lblTipoRece);
             holder.lblNombrePropietario = (TextView) convertView.findViewById(R.id.lblNombrePropietario);
+            holder.lblNumPoliza = (TextView) convertView.findViewById(R.id.lblNumPoliza);
+            holder.lblNumOrden = (TextView) convertView.findViewById(R.id.lblNumOrden);
 
             convertView.setTag(holder);
 
@@ -90,6 +92,10 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblTipoIngresoOC.setTextColor(R.style.titlestyle);
             holder.lblTipoRecepcion.setText("TipoRecepcion");
             holder.lblTipoRecepcion.setTextColor(R.style.titlestyle);
+            holder.lblNumOrden.setText("NumOrden");
+            holder.lblNumOrden.setTextColor(R.style.titlestyle);
+            holder.lblNumPoliza.setText("NumPoliza");
+            holder.lblNumPoliza.setTextColor(R.style.titlestyle);
 
         }else{
 
@@ -97,10 +103,11 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblIdRecepcionEnc.setText("0");
             holder.lblNoReferenciaOC.setText("--");
             holder.lblNoDocumentoOc.setText("--");
+            holder.lblNumOrden.setText("--");
+            holder.lblNumPoliza.setText("--");
             holder.lblProveedor.setText("--");
             holder.lblTipoIngresoOC.setText("--");
             holder.lblTipoRecepcion.setText("--");
-
 
             if(BeListTareasHH.get(position).IdOrderCompraEnc>0){
                 holder.lblIdOrderCompraEnc.setText(""+BeListTareasHH.get(position).IdOrderCompraEnc);
@@ -132,6 +139,14 @@ public class list_adapter_tareashh extends BaseAdapter {
             if(BeListTareasHH.get(position).NombreTipoRecepcion!=null){
                 holder.lblTipoRecepcion.setText(BeListTareasHH.get(position).NombreTipoRecepcion);
             }
+
+            if(BeListTareasHH.get(position).NumOrden!=null){
+                holder.lblNumOrden.setText(BeListTareasHH.get(position).NumOrden);
+            }
+
+            if(BeListTareasHH.get(position).NumPoliza!=null){
+                holder.lblNumPoliza.setText(BeListTareasHH.get(position).NumPoliza);
+            }
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -157,7 +172,9 @@ public class list_adapter_tareashh extends BaseAdapter {
                 lblNoDocumentoOc,
                 lblProveedor,
                 lblTipoIngresoOC,
-                lblTipoRecepcion;
+                lblTipoRecepcion,
+                lblNumOrden,
+                lblNumPoliza;
     }
 
 }
