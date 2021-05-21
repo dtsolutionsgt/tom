@@ -113,7 +113,8 @@
             <TableRow
                 android:id="@+id/tblNumPoliza"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblNumPoliza"
@@ -133,7 +134,8 @@
             <TableRow
                 android:id="@+id/tblNumOrden"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblNumOrden"
