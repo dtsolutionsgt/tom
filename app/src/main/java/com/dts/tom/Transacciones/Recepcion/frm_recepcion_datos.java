@@ -5657,7 +5657,9 @@ public class frm_recepcion_datos extends PBase {
             if (gl.mode==1){
                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
                 if (!txtNoLP.getText().toString().isEmpty()){
-                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                    }
                 }else{
                     if (txtLicPlate != null){
                         txtLicPlate.setText(pNumeroLP);

@@ -460,19 +460,20 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Llenando número de orden");
 
-
-                if (gBeOrdenCompra.getObjPoliza().numero_orden!=null){
+                tblNumOrden.setVisibility(View.GONE);
+                if (gBeOrdenCompra.getObjPoliza().numero_orden!=null &&
+                        !gBeOrdenCompra.getObjPoliza().numero_orden.isEmpty()){
                     txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
-                }else{
-                    tblNumOrden.setVisibility(View.GONE);
+                    tblNumOrden.setVisibility(View.VISIBLE);
                 }
 
                 progress.setMessage("Llenando número de póliza");
 
-                if (gBeOrdenCompra.getObjPoliza().codigo_poliza!=null){
+                tblNumPoliza.setVisibility(View.GONE);
+                if (gBeOrdenCompra.getObjPoliza().codigo_poliza!=null &&
+                   !gBeOrdenCompra.getObjPoliza().codigo_poliza.isEmpty()){
                     txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().codigo_poliza);
-                }else{
-                    tblNumPoliza.setVisibility(View.GONE);
+                    tblNumPoliza.setVisibility(View.VISIBLE);
                 }
 
                 progress.setMessage("Llenando referencia");
