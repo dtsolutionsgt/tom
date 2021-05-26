@@ -52,7 +52,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Es_Bodega_Fiscal=false;
     @Element(required=false) public boolean habilitar_ingreso_consolidado=false;
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
-
+    @Element(required=false) public boolean captura_estiba_ingreso = false;
+    @Element(required=false) public boolean captura_pallet_no_estandar = false;
 
     public clsBeBodega() {
     }
@@ -69,7 +70,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
                        boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
-                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado
+                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
+                       boolean captura_estiba_ingreso, boolean captura_pallet_no_estandar
     ) {
 
         this.IdBodega=IdBodega;
@@ -119,6 +121,8 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Id_Motivo_Ubic_Reabasto=Id_Motivo_Ubic_Reabasto;
         this.Es_Bodega_Fiscal = Es_Bodega_Fiscal;
         this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
+        this.captura_estiba_ingreso = captura_estiba_ingreso;
+        this.captura_pallet_no_estandar = captura_pallet_no_estandar;
 
     }
 
@@ -386,6 +390,20 @@ public class clsBeBodega extends clsBeBodegaBase {
         return habilitar_ingreso_consolidado;
     }
     public void sethabilitar_ingreso_consolidado(boolean value) {habilitar_ingreso_consolidado =value; }
+
+    public boolean getCaptura_pallet_no_estandar() {
+        return captura_pallet_no_estandar;
+    }
+    public void setCaptura_pallet_no_estandar(boolean value) {
+        captura_pallet_no_estandar=value;
+    }
+
+    public boolean getCaptura_estiba_ingreso() {
+        return captura_estiba_ingreso;
+    }
+    public void setCaptura_estiba_ingreso(boolean value) {
+        captura_estiba_ingreso=value;
+    }
 
 
 }
