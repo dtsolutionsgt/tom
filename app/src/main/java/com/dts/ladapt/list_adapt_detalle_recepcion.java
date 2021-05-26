@@ -193,7 +193,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             }
 
             if (position > 0 && BeDetalleOC.get(position).Cantidad_recibida > 0.0) {
-
+                //#GT 20210524 Aquí ponemos la letra de color rojo para identificar que ya fue recepcionado
                 holder.lblNoLinea.setTextColor(Color.parseColor("#f7400f"));
                 holder.lblCodigo.setTextColor(Color.parseColor("#f7400f"));
                 holder.lblProducto.setTextColor(Color.parseColor("#f7400f"));
@@ -237,7 +237,12 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 convertView.setBackgroundResource(R.drawable.color_medium);
                 holder.lblNoLinea.setTextColor(R.style.titlestyle);
             }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
+                //#CKFK 20210525 Aquí ponemos la fila de color verde claro para identificar que ya fue recepcionado
+                if (BeDetalleOC.get(position).Cantidad_recibida > 0.0) {
+                    convertView.setBackgroundColor(Color.parseColor("#9eff92"));
+                }else{
+                    convertView.setBackgroundColor(Color.TRANSPARENT);
+                }
             }
 
         }
