@@ -408,15 +408,21 @@ public class frm_recepcion_datos extends PBase {
                         lblEstiba.setText("");
                     }
 
-                    if (EsPallet){
+
+                    if (gl.gCapturaPalletNoEstandar){
                         chkPalletNoEstandar.setVisibility(View.VISIBLE);
+                    }else{
+                        chkPalletNoEstandar.setVisibility(View.GONE);
+                    }
+
+                    if(gl.gCapturaEstibaIngreso) {
                         if (CajasPorCama==0 && CamasPorTarima==0){
                             chkEstiba.setVisibility(View.VISIBLE);
                         }else{
                             chkEstiba.setVisibility(View.GONE);
                         }
                     }else{
-                        chkPalletNoEstandar.setVisibility(View.GONE);
+                        chkEstiba.setVisibility(View.GONE);
                     }
 
                     BeProducto.Presentacion = BeProducto.Presentaciones.items.get(position);

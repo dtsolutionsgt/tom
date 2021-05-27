@@ -407,6 +407,8 @@ public class MainActivity extends PBase {
                     gl.bloquear_lp_hh = bodegas.items.get(position).bloquear_lp_hh;
                     gl.IdBodega = idbodega;
                     gl.gNomBodega = NomBodega;
+                    gl.gCapturaEstibaIngreso = bodegas.items.get(position).captura_estiba_ingreso;
+                    gl.gCapturaPalletNoEstandar = bodegas.items.get(position).captura_pallet_no_estandar;
                     idimpres=0;
                     execws(3);
 

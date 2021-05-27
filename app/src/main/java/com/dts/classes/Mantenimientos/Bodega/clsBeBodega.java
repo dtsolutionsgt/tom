@@ -405,6 +405,5 @@ public class clsBeBodega extends clsBeBodegaBase {
         captura_estiba_ingreso=value;
     }
 
-
 }
 
