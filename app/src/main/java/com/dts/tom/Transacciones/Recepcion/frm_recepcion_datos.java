@@ -411,15 +411,21 @@ public class frm_recepcion_datos extends PBase {
                         lblEstiba.setText("");
                     }
 
-                    if (EsPallet){
+
+                    if (gl.gCapturaPalletNoEstandar){
                         chkPalletNoEstandar.setVisibility(View.VISIBLE);
+                    }else{
+                        chkPalletNoEstandar.setVisibility(View.GONE);
+                    }
+
+                    if(gl.gCapturaEstibaIngreso) {
                         if (CajasPorCama==0 && CamasPorTarima==0){
                             chkEstiba.setVisibility(View.VISIBLE);
                         }else{
                             chkEstiba.setVisibility(View.GONE);
                         }
                     }else{
-                        chkPalletNoEstandar.setVisibility(View.GONE);
+                        chkEstiba.setVisibility(View.GONE);
                     }
 
                     BeProducto.Presentacion = BeProducto.Presentaciones.items.get(position);
@@ -5341,7 +5347,9 @@ public class frm_recepcion_datos extends PBase {
             if (gl.mode==1){
                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
                 if (!txtNoLP.getText().toString().isEmpty()){
-                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                    }
                 }else{
                     if (txtLicPlate != null){
                         txtLicPlate.setText(pNumeroLP);

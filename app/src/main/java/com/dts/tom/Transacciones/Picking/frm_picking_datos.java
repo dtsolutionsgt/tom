@@ -1241,9 +1241,13 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.Encontrado=true;
                 gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
                 if (gBeProducto.getControl_vencimiento()){
-                    gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                    if (! gBePickingUbic.Fecha_Vence.contains("T")){
+                        gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                    }
                 }else{
-                    gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                    if (! gBePickingUbic.Fecha_Vence.contains("T")){
+                        gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                    }
                 }
                 gBePickingUbic.Fec_mod = du.getFechaActual();
 
@@ -1404,8 +1408,10 @@ public class frm_picking_datos extends PBase {
                         callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
-                        callMethod("Actualizar_Picking","oBeTrans_picking_ubic",gBePickingUbic,"BeStockRes",BeStockRes,
-                                "oBeTrans_picking_det",BePickingDet,"IdBodega",gl.IdBodega);
+                        callMethod("Actualizar_Picking","oBeTrans_picking_ubic",gBePickingUbic,
+                                                        "BeStockRes",BeStockRes,
+                                                        "oBeTrans_picking_det",BePickingDet,
+                                                        "IdBodega",gl.IdBodega);
                         break;
                     case 8:
                         callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet","oBeTrans_picking_ubic",gBePickingUbic,
