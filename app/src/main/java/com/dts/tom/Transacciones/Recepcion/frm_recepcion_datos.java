@@ -511,21 +511,29 @@ public class frm_recepcion_datos extends PBase {
                 public void beforeTextChanged(CharSequence s, int start, int count,int after) {}
 
                 @Override
-                public void afterTextChanged(Editable s) {
-                    String valor= cmbVenceRec .getText().toString();
-                    try{
+                public void afterTextChanged(Editable s) {}
 
-                 /*       if (!du.EsFecha(valor)){
-                            toast("No es una fecha válida");
-                            cmbVenceRec.getText().delete(valor.length() - 1, valor.length());
-                        };*/
 
-                       // du.EsFecha(valor);
-                    }catch(Exception e){
-                        if(valor.length() != 0){
-                            cmbVenceRec.getText().delete(valor.length() - 1, valor.length());
+            });
+
+            cmbVenceRec.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        String valor= cmbVenceRec .getText().toString();
+                        try{
+
+                            if (!du.EsFecha(valor)){
+                                msgbox("No es una fecha válida, se colocará la fecha actual");
+                                cmbVenceRec.setText(du.getActDateStr());
+                            };
+
+                            // du.EsFecha(valor);
+                        }catch(Exception e){
+                            cmbVenceRec.setText(du.getActDateStr());
                         }
                     }
+
                 }
             });
 
@@ -3620,6 +3628,21 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             imprimirDesdeBoton=false;
+
+            String valor= cmbVenceRec .getText().toString();
+            try{
+
+                if (!du.EsFecha(valor)){
+                    msgbox("No es una fecha válida, se colocará la fecha actual");
+                    cmbVenceRec.setText(du.getActDateStr());
+                    return;
+                };
+
+                // du.EsFecha(valor);
+            }catch(Exception e){
+                cmbVenceRec.setText(du.getActDateStr());
+                return;
+            }
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
