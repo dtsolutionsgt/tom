@@ -989,7 +989,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (escaneoPallet && productoList != null) {
                 if(cmbVence.getAdapter() != null){
                     cvVence = cmbVence.getSelectedItem().toString();
-                    if (cmbLote.getAdapter().getCount() == 1) {
+                    if (cmbVence.getAdapter().getCount() == 1) {
                         cmbVence.setEnabled(false);
                     }
                 } else{
@@ -1081,7 +1081,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             AuxList = stream(stockResList.items)
                     .where(c -> c.IdProducto == cvProdID)
                     .where(c -> c.IdPresentacion == cvPresID)
-                    .where(c -> c.Lote.equals(cvLote))
+                    .where(c -> (BeProductoUbicacion.Control_lote?c.Lote.equals(cvLote):1==1))
                     .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
                     .where(c -> (cvEstOrigen > 0 ? c.IdProductoEstado == cvEstOrigen : c.IdProductoEstado >= 0))
                     .where(c -> (BeProductoUbicacion.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
@@ -2003,8 +2003,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     gl.gCNomPresAnterior = "";
                 }
 
-                inicializaTarea(true);
-
                 progress.cancel();
                 msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
 
@@ -2449,6 +2447,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Es_Explosion = true;
+                    inicializaTarea(true);
                     msgAskImprimirEtiqueta("Imprimir etiqueta");
                 }
             });
@@ -2457,6 +2456,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 public void onClick(DialogInterface dialog, int which)
                 {
                     Es_Explosion = false;
+                    inicializaTarea(true);
                 }
             });
 
@@ -2649,7 +2649,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if( escaneoPallet && productoList != null){
                         if( BeStockPallet.CantidadPresentacion != vCantidadAUbicar){
                             msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                        }else{
+                            inicializaTarea(true);
                         }
+                    }else{
+                        inicializaTarea(true);
                     }
                 }
             });

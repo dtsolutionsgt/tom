@@ -70,14 +70,13 @@ public class DateUtils {
 			cant = vFecha.length();
 
 				day = vFecha.substring(0,2);
-				mounth=vFecha.substring(4,5);
-				year = vFecha.substring(7,10);
-
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-				String fechaAValidar = String.format("%d-%d-%d", day, mounth,year);
+				mounth=vFecha.substring(3,5);
+				year = vFecha.substring(6,10);
 
 				try{
-					sdf.parse(fechaAValidar);
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					sdf.setLenient(false);
+					sdf.parse(day + "-" + mounth + "-" + year);
 					correcta=true;
 				}catch (Exception e){
 					correcta=false;
