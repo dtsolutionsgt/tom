@@ -246,8 +246,13 @@ public class frm_recepcion_datos extends PBase {
         tblEstiba.setVisibility(View.GONE);
         tblUbicacion.setVisibility(View.GONE);
         chkPaletizar.setVisibility(View.GONE);
-        chkPalletNoEstandar.setVisibility(View.GONE);
         chkEstiba.setVisibility(View.GONE);
+
+        if (gl.gCapturaPalletNoEstandar){
+            chkPalletNoEstandar.setVisibility(View.VISIBLE);
+        }else{
+            chkPalletNoEstandar.setVisibility(View.GONE);
+        }
 
         lblUbicacion.setText("");
 
@@ -406,13 +411,6 @@ public class frm_recepcion_datos extends PBase {
                     }else{
                         tblEstiba.setVisibility(View.GONE);
                         lblEstiba.setText("");
-                    }
-
-
-                    if (gl.gCapturaPalletNoEstandar){
-                        chkPalletNoEstandar.setVisibility(View.VISIBLE);
-                    }else{
-                        chkPalletNoEstandar.setVisibility(View.GONE);
                     }
 
                     if(gl.gCapturaEstibaIngreso) {
@@ -2919,19 +2917,23 @@ public class frm_recepcion_datos extends PBase {
                 lblCReal.setVisibility(View.GONE);
             }
 
-            CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
-                    && c.IdPresentacion == vPresentacion).select(c->c.Costo).first();
+            try {
+                CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
+                        && c.IdPresentacion == vPresentacion).select(c->c.Costo).first();
 
-            if (gl.gBeOrdenCompra!=null) {
-                if (((gl.gBeOrdenCompra.IdOrdenCompraEnc > 0) && (CostoOC > 0))) {
-                    txtCostoOC.setText(mu.round(CostoOC,  gl.gCantDecCalculo)+"");
-                }
-                else {
+                if (gl.gBeOrdenCompra!=null) {
+                    if (((gl.gBeOrdenCompra.IdOrdenCompraEnc > 0) && (CostoOC > 0))) {
+                        txtCostoOC.setText(mu.round(CostoOC,  gl.gCantDecCalculo)+"");
+                    }
+                    else {
+                        txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
+                    }
+
+                } else {
                     txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
                 }
-
-            } else {
-                txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
+            } catch (Exception e) {
+                mu.msgbox("fcp_CostoOC: "+e.getMessage());
             }
 
             txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
@@ -3979,7 +3981,7 @@ public class frm_recepcion_datos extends PBase {
                 msgAskImprimir("Seleccione una opción para imprimir");
 
             }else{
-                Actualiza_Valores_Despues_Imprimir(false);
+                Actualiza_Valores_Despues_Imprimir(true);
             }
 
         }catch (Exception e){
