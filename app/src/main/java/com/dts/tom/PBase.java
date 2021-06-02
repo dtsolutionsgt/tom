@@ -9,6 +9,8 @@ import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.dts.base.AppMethods;
 import com.dts.base.DateUtils;
 import com.dts.base.MiscUtils;
