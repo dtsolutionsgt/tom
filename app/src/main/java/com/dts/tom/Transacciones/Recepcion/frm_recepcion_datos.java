@@ -2450,7 +2450,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            progress.setMessage("Terminando de cargar datos y validando valores");
+            progress.setMessage("Consultando parámetros de producto.");
 
             if (Escaneo_Pallet){
                 txtNoLP.setText(BeINavBarraPallet.Codigo_barra);
@@ -2598,7 +2598,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            progress.setMessage("Terminando de cargar datos y validando valores");
+            progress.setMessage("Procesando valores int. ref. #20210601");
 
             if (Escaneo_Pallet){
                 txtNoLP.setText(pListTransRecDet.items.get(0).Lic_plate);
@@ -5094,7 +5094,7 @@ public class frm_recepcion_datos extends PBase {
                         }else{
                             vCantidad = Double.parseDouble(txtCantidadRec.getText().toString());
                         }
-                        callMethod("Push_Recepcion_To_NAV_For_BYB2",
+                        callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
                                    "Cantidad", vCantidad);
@@ -5888,7 +5888,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_To_NAV_For_BYB2");
+            boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Produccion_To_NAV_For_BYB");
 
             if (procesada){
                 toastlong("Recepción procesada en ByB");

@@ -54,6 +54,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
     @Element(required=false) public boolean captura_estiba_ingreso = false;
     @Element(required=false) public boolean captura_pallet_no_estandar = false;
+    @Element(required=false) public float valor_porcentaje_iva = 0;
+
 
     public clsBeBodega() {
     }
@@ -404,6 +406,14 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setCaptura_estiba_ingreso(boolean value) {
         captura_estiba_ingreso=value;
     }
+
+    public float getvalor_porcentaje_iva() {
+        return valor_porcentaje_iva;
+    }
+    public void setvalor_porcentaje_iva(Float value) {
+        valor_porcentaje_iva=value;
+    }
+
 
 }
 
