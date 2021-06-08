@@ -33,6 +33,8 @@ dependencies {
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
 
+    implementation 'com.android.support:design:28.0.0'
+
     implementation "com.android.support:support-compat:28.0.0"
     implementation('org.simpleframework:simple-xml:2.7.1') {
        exclude group: 'stax', module: 'stax-api'

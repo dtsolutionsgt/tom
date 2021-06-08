@@ -429,6 +429,30 @@ public class DateUtils {
 		return vFecha;
 	}
 
+//GT066 recibe fecha sin los ceros en el dia o en el mes
+	public String convierteFechaSinHora(String Fecha){
+		String vFecha="";
+
+		try{
+
+			long f;
+			String fechaS;
+			int cyear,cmonth,cday,ch,cm;
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
+
+
 	//#CKFK 20201229 Agregué esta función para poder formatear las fecha con diagonal
 	public String convierteFechaDiagonal(String Fecha){
 		String vFecha="";

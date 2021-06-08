@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Recepcion.frm_lista_tareas_recepcion">
 
+
     <RelativeLayout
         android:id="@+id/relbot"
         android:layout_width="match_parent"
@@ -136,5 +137,8 @@
         android:progress="1"
         android:progressDrawable="@drawable/progress_bar_circular_style"
         android:visibility="invisible" />
+
+
+
 
 </RelativeLayout>

@@ -3468,19 +3468,30 @@ public class frm_recepcion_datos extends PBase {
             imprimirDesdeBoton=false;
 
             String valor= cmbVenceRec .getText().toString();
-            try{
 
-                if (!du.EsFecha(valor)){
-                    msgbox("No es una fecha válida, se colocará la fecha actual");
-                    cmbVenceRec.setText(du.getActDateStr());
-                    return;
-                };
+            String fecha_ajustada =  du.convierteFechaSinHora(valor);
 
-                // du.EsFecha(valor);
-            }catch(Exception e){
+            if (!du.EsFecha(fecha_ajustada)){
+                msgbox("No es una fecha válida, se colocará la fecha actual");
                 cmbVenceRec.setText(du.getActDateStr());
-                return;
+            }else
+            {
+                cmbVenceRec.setText(fecha_ajustada);
             }
+
+//            try{
+//
+//                if (!du.EsFecha(valor)){
+//                    msgbox("No es una fecha válida, se colocará la fecha actual");
+//                    cmbVenceRec.setText(du.getActDateStr());
+//                    return;
+//                };
+//
+//                // du.EsFecha(valor);
+//            }catch(Exception e){
+//                cmbVenceRec.setText(du.getActDateStr());
+//                return;
+//            }
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
