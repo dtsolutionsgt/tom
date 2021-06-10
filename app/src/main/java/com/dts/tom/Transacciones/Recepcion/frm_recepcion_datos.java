@@ -66,6 +66,7 @@ import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2995,10 +2996,17 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
                 BeLotes = stream(lotes.items)
-                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                c.No_linea == BeOcDet.No_Linea &&
-                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())))
+                        .where(c -> {
+                            try {
+                                return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                        c.No_linea == BeOcDet.No_Linea &&
+                                        c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                        c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return false;
+                        })
                         .toList();
 
             }else{
@@ -3617,7 +3625,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 pListBeStockRec.items.get(pIndiceListaStock).Regularizado = false;
-                pListBeStockRec.items.get(pIndiceListaStock).Fecha_regularizacion = du.convierteFecha("01-01-1900");
+                pListBeStockRec.items.get(pIndiceListaStock).Fecha_regularizacion = du.convierteFecha("01/01/1900");
 
                 pListBeStockRec.items.get(pIndiceListaStock).Atributo_Variante_1 = "";
                 pListBeStockRec.items.get(pIndiceListaStock).No_linea = pLineaOC;
@@ -3687,7 +3695,9 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception ex){
-
+            mu.msgbox("ContinuaGuardandoRecepcion: "+ex.getMessage());
+        }finally{
+            progress.cancel();
         }
     }
 
@@ -4383,12 +4393,19 @@ public class frm_recepcion_datos extends PBase {
                 if (detalle_lotes.items.size()>0){
 
                     BeDetalleLotes = stream(detalle_lotes.items)
-                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                    c.No_linea == BeOcDet.No_Linea &&
-                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                    c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
-                                    c.Ubicacion.equals(ubiDetLote) &&
-                                    c.Lote.equals(cmbLote.getSelectedItem().toString()))
+                            .where(c -> {
+                                try {
+                                    return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                            c.No_linea == BeOcDet.No_Linea &&
+                                            c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                            c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
+                                            c.Ubicacion.equals(ubiDetLote) &&
+                                            c.Lote.equals(cmbLote.getSelectedItem().toString());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                return false;
+                            })
                             .first();
                     BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
                     BeDetalleLotes.IsNew = true;

@@ -522,10 +522,18 @@ public class frm_inv_cic_guardar extends PBase {
 
                 //BeTrans_inv_ciclico.fecha_vence = dtpNVence.getText().toString().trim();
 
-                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(dtpNVence.getText().toString().trim());
+                try {
+                    BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(dtpNVence.getText().toString().trim());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 //BeTrans_inv_ciclico.fecha_vence_stock = dtpNVence.getText().toString().trim();
-                BeTrans_inv_ciclico.Fecha_vence_stock = du.convierteFecha(dtpNVence.getText().toString().trim());
+                try {
+                    BeTrans_inv_ciclico.Fecha_vence_stock = du.convierteFecha(dtpNVence.getText().toString().trim());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
                 BeTrans_inv_ciclico.Cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());

@@ -72,12 +72,26 @@ public class DateUtils {
 				day = vFecha.substring(0,2);
 				mounth=vFecha.substring(3,5);
 				year = vFecha.substring(6,10);
+				SimpleDateFormat dateFormat;
 
-				try{
-					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					sdf.setLenient(false);
-					sdf.parse(day + "-" + mounth + "-" + year);
+			try{
+
+					if (vFecha.contains("-")){
+						dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+					}else{
+						dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					}
+
+					dateFormat.setLenient(false);
+
+				if (vFecha.contains("-")){
+					dateFormat.parse(day + "-" + mounth + "-" + year);
+				}else{
+					dateFormat.parse(day + "/" + mounth + "/" + year);
+				}
+
 					correcta=true;
+
 				}catch (Exception e){
 					correcta=false;
 				}
@@ -408,7 +422,8 @@ public class DateUtils {
 		return f;
 	}
 
-	public String convierteFecha(String Fecha){
+	public String convierteFecha(String Fecha) throws Exception {
+
 		String vFecha="";
 
 		try{
@@ -416,21 +431,30 @@ public class DateUtils {
 			long f;
 			String fechaS;
 			int cyear,cmonth,cday,ch,cm;
+			SimpleDateFormat dateFormat;
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			//throw new Exception("La fecha contiene el separadaor - mientras que el patrón de verificación es /")
+			//#EJC20210610
+			if (Fecha.contains("-")){
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			}else{
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
+
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 			vFecha=dateFormat.format(date);
 
 		}catch (Exception e){
-
+			throw e;
 		}
 		return vFecha;
 	}
 
 //GT066 recibe fecha sin los ceros en el dia o en el mes
 	public String convierteFechaSinHora(String Fecha){
+
 		String vFecha="";
 
 		try{
@@ -438,8 +462,14 @@ public class DateUtils {
 			long f;
 			String fechaS;
 			int cyear,cmonth,cday,ch,cm;
+			SimpleDateFormat dateFormat;
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			if (Fecha.contains("-")){
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			}else{
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
+
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -451,19 +481,21 @@ public class DateUtils {
 		return vFecha;
 	}
 
-
-
 	//#CKFK 20201229 Agregué esta función para poder formatear las fecha con diagonal
 	public String convierteFechaDiagonal(String Fecha){
+
 		String vFecha="";
 
 		try{
 
-			long f;
-			String fechaS;
-			int cyear,cmonth,cday,ch,cm;
+			SimpleDateFormat dateFormat;
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			if (vFecha.contains("-")){
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			}else{
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
+
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -476,13 +508,10 @@ public class DateUtils {
 	}
 
 	public String convierteFechaMostar(String Fecha){
+
 		String vFecha="";
 
 		try{
-
-			long f;
-			String fechaS;
-			int cyear,cmonth,cday,ch,cm;
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date date = dateFormat.parse(Fecha);
@@ -497,14 +526,20 @@ public class DateUtils {
 	}
 
 	public int DateDiff(String pFecha) throws ParseException{
+
 		int Dif=0;
 		String fechaS,vFecha;
 		int cyear,cmonth,cday,ch,cm;
 
 		try{
 
-			String format = "dd-MM-yyyy";
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			SimpleDateFormat dateFormat;
+
+			if (pFecha.contains("-")){
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			}else{
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
 
 			final Calendar c = Calendar.getInstance();
 			cyear = c.get(Calendar.YEAR);
@@ -513,28 +548,35 @@ public class DateUtils {
 
 			fechaS=cday+"-"+cmonth+"-"+cyear+"";
 
-			Date dateObj1 = sdf.parse(fechaS);
-			Date dateObj2 = sdf.parse(pFecha);
+			Date dateObj1 = dateFormat.parse(fechaS);
+			Date dateObj2 = dateFormat.parse(pFecha);
 
 			long diff = dateObj2.getTime() - dateObj1.getTime();
 
 			Dif = (int) (diff / (24 * 60 * 60 * 1000));
 
 		}catch (Exception e){
+
 		}
 
 		return Dif;
 	}
 
 	public int DateDiffPos(String pFecha) throws ParseException{
+
 		int Dif=0;
-		String fechaS,vFecha;
-		int cyear,cmonth,cday,ch,cm;
+		String fechaS;
+		int cyear,cmonth,cday;
 
 		try{
 
-			String format = "dd-MM-yyyy";
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			SimpleDateFormat dateFormat;
+
+			if (pFecha.contains("-")){
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			}else{
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
 
 			final Calendar c = Calendar.getInstance();
 			cyear = c.get(Calendar.YEAR);
@@ -543,14 +585,15 @@ public class DateUtils {
 
 			fechaS=cday+"-"+cmonth+"-"+cyear+"";
 
-			Date dateObj1 = sdf.parse(fechaS);
-			Date dateObj2 = sdf.parse(pFecha);
+			Date dateObj1 = dateFormat.parse(fechaS);
+			Date dateObj2 = dateFormat.parse(pFecha);
 
 			long diff = dateObj1.getTime() - dateObj2.getTime();
 
 			Dif = (int) (diff / (24 * 60 * 60 * 1000));
 
 		}catch (Exception e){
+
 		}
 
 		return Dif;
@@ -561,10 +604,6 @@ public class DateUtils {
 		String vFecha="";
 
 		try{
-
-			long f;
-			String fechaS;
-			int cyear,cmonth,cday,ch,cm;
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date date = dateFormat.parse(Fecha);
@@ -579,6 +618,7 @@ public class DateUtils {
 	}
 
 	public String getFechaActual() throws ParseException {
+
 		String fechaS,vFecha;
 		int cyear,cmonth,cday,ch,cm;
 
@@ -598,6 +638,7 @@ public class DateUtils {
 	}
 
 	public String getFecha() throws ParseException{
+
 		 String Fecha,vFecha;
 		Date date;
 		int year,month,day;
