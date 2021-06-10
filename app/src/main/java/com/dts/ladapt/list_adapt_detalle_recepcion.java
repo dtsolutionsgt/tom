@@ -86,32 +86,33 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblNombrePropietario.setVisibility(View.GONE);
             }
             holder.lblNoLinea.setText("NoLinea");
+            holder.lblNoLinea.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblCodigo.setText("Código");
-            holder.lblCodigo.setTextColor(R.style.titlestyle);
+            holder.lblCodigo.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblProducto.setText("Producto");
-            holder.lblProducto.setTextColor(R.style.titlestyle);
+            holder.lblProducto.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblPres.setText("Presentación");
-            holder.lblPres.setTextColor(R.style.titlestyle);
+            holder.lblPres.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblUmbas.setText("UmBas");
-            holder.lblUmbas.setTextColor(R.style.titlestyle);
+            holder.lblUmbas.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblCantidad.setText("Cantidad");
-            holder.lblCantidad.setTextColor(R.style.titlestyle);
+            holder.lblCantidad.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblCantRec.setText("CantidadRec");
-            holder.lblCantRec.setTextColor(R.style.titlestyle);
+            holder.lblCantRec.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblDiferencia.setText("Diferencia");
-            holder.lblDiferencia.setTextColor(R.style.titlestyle);
+            holder.lblDiferencia.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblCosto.setText("Costo");
-            holder.lblCantRec.setTextColor(R.style.titlestyle);
+            holder.lblCantRec.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblFactor.setText("Factor");
-            holder.lblFactor.setTextColor(R.style.titlestyle);
+            holder.lblFactor.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblIdOcDet.setText("IdDocDet");
-            holder.lblIdOcDet.setTextColor(R.style.titlestyle);
+            holder.lblIdOcDet.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblIdOcDet.setVisibility(View.GONE);
             holder.lblIdOcEnc.setText("IdDocEnc");
-            holder.lblIdOcEnc.setTextColor(R.style.titlestyle);
+            holder.lblIdOcEnc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblIdOcEnc.setVisibility(View.GONE);
             holder.lblIdPropietarioBodega.setText("IdPropietarioBodega");
-            holder.lblIdPropietarioBodega.setTextColor(R.style.titlestyle);
+            holder.lblIdPropietarioBodega.setTextColor(Color.parseColor("#FFFFFF"));
             if (!Es_Poliza_Consolidada) {
                 holder.lblIdPropietarioBodega.setVisibility(View.GONE);
             }
@@ -192,7 +193,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblNombrePropietario.setText(""+BeDetalleOC.get(position).Nombre_Propietario);
             }
 
-            if (position > 0 && BeDetalleOC.get(position).Cantidad_recibida > 0.0) {
+          /*  if (position > 0 && BeDetalleOC.get(position).Cantidad_recibida > 0.0) {
                 //#GT 20210524 Aquí ponemos la letra de color rojo para identificar que ya fue recepcionado
                 holder.lblNoLinea.setTextColor(Color.parseColor("#f7400f"));
                 holder.lblCodigo.setTextColor(Color.parseColor("#f7400f"));
@@ -226,7 +227,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblIdOcEnc.setTextColor(R.style.titlestyle);
                 holder.lblIdPropietarioBodega.setTextColor(R.style.titlestyle);
                 holder.lblNombrePropietario.setTextColor(R.style.titlestyle);
-            }
+            }*/
 
         }
 
@@ -238,8 +239,11 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblNoLinea.setTextColor(R.style.titlestyle);
             }else{
                 //#CKFK 20210525 Aquí ponemos la fila de color verde claro para identificar que ya fue recepcionado
-                if (BeDetalleOC.get(position).Cantidad_recibida > 0.0) {
-                    convertView.setBackgroundColor(Color.parseColor("#9eff92"));
+                if (BeDetalleOC.get(position).Cantidad_recibida == BeDetalleOC.get(position).Cantidad) {
+                    convertView.setBackgroundColor(Color.parseColor("#c9ffc0"));
+                }else if (BeDetalleOC.get(position).Cantidad_recibida < BeDetalleOC.get(position).Cantidad  &&
+                          BeDetalleOC.get(position).Cantidad_recibida >0) {
+                    convertView.setBackgroundColor(Color.parseColor("#f5ffae"));
                 }else{
                     convertView.setBackgroundColor(Color.TRANSPARENT);
                 }

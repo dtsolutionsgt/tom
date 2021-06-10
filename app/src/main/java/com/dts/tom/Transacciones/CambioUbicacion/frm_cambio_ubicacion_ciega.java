@@ -121,7 +121,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean Existe_Lp=false;
 
     private boolean EsPalletNoEstandar=false;
-    private boolean TienePosiciones=false;
+    private int TienePosiciones=0;
     private boolean Ubicacion_Es_Valida= false;
 
     private boolean escaneoPallet;
@@ -456,7 +456,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_ENTER:
-                            validaDestino();
+                            AplicarCambioBoton();
                     }
                 }
                 return false;
@@ -1516,6 +1516,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     datosCorrectos = false;
                 }
 
+                Recalcula_Peso();
+
                 if(cvUbicDestID == 0){
                     msgbox("La ubicación de destino no puede ser vacía");
                     txtUbicDestino.requestFocus();
@@ -1544,6 +1546,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
+        }finally {
+            progress.cancel();
         }
 
     }
@@ -2156,11 +2160,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            TienePosiciones = xobj.getresult(Boolean.class,"Tiene_Posiciones");
+            TienePosiciones = xobj.getresult(Integer.class,"Tiene_Posiciones");
 
-            if (!TienePosiciones){
+            if (TienePosiciones==0){
                 msgAskIngresePosiciones();
             }else{
+                vPosiciones = TienePosiciones;
                 validaDestino();
             }
 
@@ -2255,6 +2260,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cvEstOrigen = 0;
             vCantidadAUbicar = 0;
             vCantidadDisponible = 0;
+            vPosiciones =0;
 
             lblUbicCompleta.setText("");
 
@@ -2582,7 +2588,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
-
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino
                 execws(12);
             }
@@ -2732,11 +2737,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vStockRes.IdProductoEstado = cvEstOrigen;
             vStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
             vStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
-            vStockRes.Pallet_No_Estandar=EsPalletNoEstandar;
+            vStockRes.Pallet_No_Estandar = EsPalletNoEstandar;
 
             if( escaneoPallet && productoList != null){
 
-                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
+               vStockRes.Lic_plate = BeStockPallet.Lic_plate;
 
                 if( BeStockPallet.Factor > 0){
                     vStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
@@ -2758,6 +2763,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     public void AplicarCambio(View view){
+
+        AplicarCambioBoton();
+    }
+
+    public  void AplicarCambioBoton(){
 
         try{
 
