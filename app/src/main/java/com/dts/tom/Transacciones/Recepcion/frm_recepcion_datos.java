@@ -5652,23 +5652,21 @@ public class frm_recepcion_datos extends PBase {
                             //Esa ubicación se registra en la tabla: trans_oc_det_lote campo: ubicacion
                             //Se debe enviar a registrar en esa ubicación el producto recepcionado en línea.
                             execws(25);
-                        }else{
-
-                            try {
-                                //#EJC20210611:Cuando es recepción de compra en BYB
-                                //Se debe enviar a registrar la compra en el WS de NAV.
-                                //con el número de recepción.
-                                if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
-                                    execws(26);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            Imprime_Barra_Despues_Guardar();
                         }
                     }else{
-                        Imprime_Barra_Despues_Guardar();
+
+                        try {
+                            //#EJC20210611:Cuando es recepción de compra en BYB
+                            //Se debe enviar a registrar la compra en el WS de NAV.
+                            //con el número de recepción.
+                            if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
+                                execws(26);
+                            }else{
+                                Imprime_Barra_Despues_Guardar();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }else{
@@ -5981,6 +5979,7 @@ public class frm_recepcion_datos extends PBase {
             if (procesada){
                 toastlong("Recepción de compra procesada en ERP");
             }
+
             Imprime_Barra_Despues_Guardar();
 
         }catch (Exception e){
