@@ -2652,11 +2652,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
 
                     if( escaneoPallet && productoList != null){
-                        if( BeStockPallet.CantidadPresentacion != vCantidadAUbicar){
-                            msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                        //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material
+                        if (BeStockPallet.getIdPresentacion()!=0){
+                            if( BeStockPallet.CantidadPresentacion != vCantidadAUbicar){
+                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                            }else{
+                                inicializaTarea(true);
+                            }
                         }else{
-                            inicializaTarea(true);
+                            if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
+                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                            }else{
+                                inicializaTarea(true);
+                            }
                         }
+
                     }else{
                         inicializaTarea(true);
                     }
