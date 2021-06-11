@@ -98,11 +98,11 @@
         android:layout_marginStart="172dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="10dp"
-        android:background="@android:color/holo_red_dark"
+        android:background="@color/rosado"
         android:text="Incompleta"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="normal" />
 
     <EditText
         android:id="@+id/txtCodigoProductoRecepcion"

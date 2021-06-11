@@ -726,7 +726,7 @@ public class frm_list_rec_prod extends PBase {
                         if (vTipoDiferencia<0){
 
                             btnCompletaRec.setText("DIF - (NEG)");
-                            btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
+                            btnCompletaRec.setBackgroundColor(Color.parseColor("#ffa5a0"));
                             progress.cancel();
                             return false;
 
@@ -748,7 +748,7 @@ public class frm_list_rec_prod extends PBase {
                     }else{
 
                         btnCompletaRec.setText("DIF - (NEG)");
-                        btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
+                        btnCompletaRec.setBackgroundColor(Color.parseColor("#ffa5a0"));
                         progress.cancel();
                         return false;
                     }
