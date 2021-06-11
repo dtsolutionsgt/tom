@@ -66,7 +66,9 @@ import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 
-import java.text.ParseException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -3691,6 +3693,8 @@ public class frm_recepcion_datos extends PBase {
                         }*/
                 }
             }else{
+                //#ejc20210611: Definir fecha vence por defecto null
+                BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
                 DespuesDeValidarCantidad();
             }
 
@@ -3721,7 +3725,6 @@ public class frm_recepcion_datos extends PBase {
                         Llena_Detalle_Recepcion_Nueva();
                     }else{
                         Llena_Detalle_Recepcion_Existente();
-
                     }
                     break;
 
@@ -3793,7 +3796,6 @@ public class frm_recepcion_datos extends PBase {
             if (gl.IdImpresora>0){
 
                 progress.cancel();
-
                 imprimirDesdeBoton=false;
                 msgAskImprimir("Seleccione una opción para imprimir");
 
@@ -3880,9 +3882,7 @@ public class frm_recepcion_datos extends PBase {
             addlog(Objects.requireNonNull(new Object() {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
-
     }
-
 
     private void Imprimir_Licencia(){
         try{
@@ -4986,6 +4986,17 @@ public class frm_recepcion_datos extends PBase {
 
             try{
 
+                //#EJC20210611: Calculo de cantidad en UMBAS para BYB.
+                double vCantidad=0;
+
+                if (!txtCantidadRec.getText().toString().isEmpty()){
+                    if (IdPreseSelect!=-1){
+                        vCantidad = BeProducto.Presentacion.getFactor()* Double.parseDouble(txtCantidadRec.getText().toString());
+                    }else{
+                        vCantidad = Double.parseDouble(txtCantidadRec.getText().toString());
+                    }
+                }
+
                 switch (ws.callback) {
 
                     case 1:
@@ -5105,21 +5116,49 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Existe_Lp","pLic_Plate",pLp);
                         break;
                     case 25:
-                        double vCantidad;
-                        if (IdPreseSelect!=-1){
-                          vCantidad = BeProducto.Presentacion.getFactor()* Double.parseDouble(txtCantidadRec.getText().toString());
-                        }else{
-                            vCantidad = Double.parseDouble(txtCantidadRec.getText().toString());
-                        }
+
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
                                    "Cantidad", vCantidad);
                         break;
+
+                    case 26:
+
+                        try {
+
+                           if(BeTransReDet.Fecha_vence.toString().isEmpty()){
+                               //#ejc20210611: Definir fecha vence por defecto null
+                               BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
+                           }
+
+                            callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
+                                    "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
+                                    "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                    "NoLinea", BeTransReDet.No_Linea,
+                                    "CodigoProducto",BeProducto.Codigo,
+                                    "Cantidad", BeTransReDet.cantidad_recibida,
+                                    "NoLote",   BeTransReDet.Lote,
+                                    "FechaVence",BeTransReDet.Fecha_vence,
+                                    "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                            ;
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        break;
                 }
 
             }catch (Exception e){
                 mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
+            }finally{
+                progress.cancel();
             }
 
         }
@@ -5211,9 +5250,11 @@ public class frm_recepcion_datos extends PBase {
                     processExisteLp();
                     break;
                 case 25:
-                    process_Recepcion_To_Nav();
+                    process_Recepcion_Produccion_Nav_BYB();
                     break;
-
+                case 26:
+                    process_Recepcion_Compra_Nav_BYB();
+                    break;
             }
 
         } catch (Exception e) {
@@ -5602,7 +5643,7 @@ public class frm_recepcion_datos extends PBase {
             if(!xobj.ws.xmlresult.contains("CustomError")){
 
                 Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
-                
+
                 if (Resultado!=null){
                     if (ubiDetLote!=null){
                         if (!ubiDetLote.isEmpty()){
@@ -5612,12 +5653,23 @@ public class frm_recepcion_datos extends PBase {
                             //Se debe enviar a registrar en esa ubicación el producto recepcionado en línea.
                             execws(25);
                         }else{
+
+                            try {
+                                //#EJC20210611:Cuando es recepción de compra en BYB
+                                //Se debe enviar a registrar la compra en el WS de NAV.
+                                //con el número de recepción.
+                                if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
+                                    execws(26);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             Imprime_Barra_Despues_Guardar();
                         }
                     }else{
                         Imprime_Barra_Despues_Guardar();
                     }
-
 
                 }else{
                     progress.cancel();
@@ -5904,19 +5956,35 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    private void process_Recepcion_To_Nav(){
+    private void process_Recepcion_Produccion_Nav_BYB(){
 
         try{
 
             boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Produccion_To_NAV_For_BYB");
 
             if (procesada){
-                toastlong("Recepción procesada en ByB");
+                toastlong("Recepción de Producción procesada en ERP");
             }
             Imprime_Barra_Despues_Guardar();
 
         }catch (Exception e){
             mu.msgbox("process_Recepcion_To_Nav:"+e.getMessage());
+        }
+    }
+
+    private void process_Recepcion_Compra_Nav_BYB(){
+
+        try{
+
+            boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+
+            if (procesada){
+                toastlong("Recepción de compra procesada en ERP");
+            }
+            Imprime_Barra_Despues_Guardar();
+
+        }catch (Exception e){
+            mu.msgbox("process_Recepcion_Compra_Nav_BYB:"+e.getMessage());
         }
     }
 
