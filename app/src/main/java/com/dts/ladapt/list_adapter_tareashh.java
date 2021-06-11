@@ -78,24 +78,25 @@ public class list_adapter_tareashh extends BaseAdapter {
         if (position==0){
 
             holder.lblIdOrderCompraEnc.setText("NoDoc");
+            holder.lblIdOrderCompraEnc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblIdRecepcionEnc.setText("Rec");
-            holder.lblIdRecepcionEnc.setTextColor(R.style.titlestyle);
+            holder.lblIdRecepcionEnc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblNombrePropietario.setText("Propietario");
-            holder.lblNombrePropietario.setTextColor(R.style.titlestyle);
+            holder.lblNombrePropietario.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblNoReferenciaOC.setText("NoRefDoc");
-            holder.lblNoReferenciaOC.setTextColor(R.style.titlestyle);
-            holder.lblNoDocumentoOc.setText("No_Doc_ERP");
-            holder.lblNoDocumentoOc.setTextColor(R.style.titlestyle);
+            holder.lblNoReferenciaOC.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNoDocumentoOc.setText("Doc.ERP");
+            holder.lblNoDocumentoOc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblProveedor.setText("Proveedor");
-            holder.lblProveedor.setTextColor(R.style.titlestyle);
-            holder.lblTipoIngresoOC.setText("TipoIngresoDoc");
-            holder.lblTipoIngresoOC.setTextColor(R.style.titlestyle);
-            holder.lblTipoRecepcion.setText("TipoRecepcion");
-            holder.lblTipoRecepcion.setTextColor(R.style.titlestyle);
-            holder.lblNumOrden.setText("NumOrden");
-            holder.lblNumOrden.setTextColor(R.style.titlestyle);
-            holder.lblNumPoliza.setText("NumPoliza");
-            holder.lblNumPoliza.setTextColor(R.style.titlestyle);
+            holder.lblProveedor.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblTipoIngresoOC.setText("TipoIngreso");
+            holder.lblTipoIngresoOC.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblTipoRecepcion.setText("TipoRec");
+            holder.lblTipoRecepcion.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNumOrden.setText("No.Orden");
+            holder.lblNumOrden.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNumPoliza.setText("No.Poliza");
+            holder.lblNumPoliza.setTextColor(Color.parseColor("#FFFFFF"));
 
         }else{
 
@@ -154,7 +155,7 @@ public class list_adapter_tareashh extends BaseAdapter {
         } else {
            if (position==0){
                convertView.setBackgroundResource(R.drawable.color_medium);
-               holder.lblIdOrderCompraEnc.setTextColor(R.style.titlestyle);
+               holder.lblIdOrderCompraEnc.setTextColor(Color.parseColor("#FFFFFF"));
            }else{
                convertView.setBackgroundColor(Color.TRANSPARENT);
            }

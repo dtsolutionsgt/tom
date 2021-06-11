@@ -253,7 +253,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                 if (CantRec == CantOC){
                     btnCompletaRec2.setText("COMPLETA");
-                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF99CC00"));
+                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFA5A0"));
                 }else if (CantRec > CantOC) {
                     btnCompletaRec2.setText(" DIF - (POS)");
                     btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF0399D5"));

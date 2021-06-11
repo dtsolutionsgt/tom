@@ -92,6 +92,7 @@ public class frm_recepcion_datos extends PBase {
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
+    private Button btnFinalizarRece;
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate, cmdImprimir;
@@ -236,6 +237,7 @@ public class frm_recepcion_datos extends PBase {
 
         btnCantRecibida = findViewById(R.id.btnCantRecibida);
         btnCantPendiente = findViewById(R.id.btnCantPendiente);
+        btnFinalizarRece = findViewById(R.id.btnFinalizarRece);
 
         dpResult = findViewById(R.id.datePicker);
 
@@ -2214,12 +2216,34 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
+                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso tipo Orden de producción (6)
+                            clsBeTrans_oc_det_loteList vence;
+                            vence=gl.gBeOrdenCompra.DetalleLotes;
 
-                                cmbVence.setVisibility(View.VISIBLE);
-                                cmbVenceRec.setVisibility(View.GONE);
-                                imgDate.setVisibility(View.GONE);
-                                fillFechaVence();
+                            List<clsBeTrans_oc_det_lote> BeVence =  stream(vence.items)
+                                    .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                            c.No_linea == BeOcDet.No_Linea &&
+                                            c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                            c.Cantidad_recibida < c.Cantidad)
+                                    .toList();
+
+                            if (gl.gBeOrdenCompra.TipoIngreso.getIdTipoIngresoOC()==6 &&
+                                    gl.gBeOrdenCompra.TipoIngreso.getRequerir_Documento_Ref() &&
+                                    BeVence.size()==0){
+
+                                msgSinUbicaciones("No es posible realizar la recepción del producto " + BeProducto.getCodigo() +
+                                                  " porque no hay ubicaciones definidas");
+                                return;
+
+                            }else{
+
+                                if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
+
+                                    cmbVence.setVisibility(View.VISIBLE);
+                                    cmbVenceRec.setVisibility(View.GONE);
+                                    imgDate.setVisibility(View.GONE);
+                                    fillFechaVence();
+                                }
                             }
                         }
                     }
@@ -2238,12 +2262,34 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
+                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso tipo Orden de producción (6)
+                            clsBeTrans_oc_det_loteList lotes;
+                            lotes=gl.gBeOrdenCompra.DetalleLotes;
 
-                                cmbLote.setVisibility(View.VISIBLE);
-                                txtLoteRec.setVisibility(View.GONE);
-                                tblUbicacion.setVisibility(View.VISIBLE);
-                                fillLotes();
+                            List<clsBeTrans_oc_det_lote> BeLote =  stream(lotes.items)
+                                    .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                            c.No_linea == BeOcDet.No_Linea &&
+                                            c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                            c.Cantidad_recibida < c.Cantidad)
+                                    .toList();
+
+                            if (gl.gBeOrdenCompra.TipoIngreso.getIdTipoIngresoOC()==6 &&
+                                    gl.gBeOrdenCompra.TipoIngreso.getRequerir_Documento_Ref() &&
+                                    BeLote.size()==0){
+
+                                msgSinUbicaciones("No es posible realizar la recepción de este producto porque no hay ubicaciones definidas");
+                                return;
+
+                            }else{
+
+                                if (gl.gBeOrdenCompra.DetalleLotes.items.size() > 0) {
+
+                                    cmbLote.setVisibility(View.VISIBLE);
+                                    txtLoteRec.setVisibility(View.GONE);
+                                    tblUbicacion.setVisibility(View.VISIBLE);
+                                    fillLotes();
+                                }
+
                             }
                         }
                     }
@@ -2946,6 +2992,7 @@ public class frm_recepcion_datos extends PBase {
 
             clsBeTrans_oc_det_loteList vence;
             vence=gl.gBeOrdenCompra.DetalleLotes;
+
             List<clsBeTrans_oc_det_lote> BeVence =  stream(vence.items)
                     .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                 c.No_linea == BeOcDet.No_Linea &&
@@ -3882,7 +3929,9 @@ public class frm_recepcion_datos extends PBase {
             addlog(Objects.requireNonNull(new Object() {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
+
     }
+
 
     private void Imprimir_Licencia(){
         try{
@@ -5780,6 +5829,28 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNegativeButton("No", (dialog12, which) -> {
             });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgSinUbicaciones(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Aceptar", (dialog1, which) -> doExit());
 
             dialog.show();
 
