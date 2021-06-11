@@ -5602,11 +5602,14 @@ public class frm_recepcion_datos extends PBase {
             if(!xobj.ws.xmlresult.contains("CustomError")){
 
                 Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
-
+                
                 if (Resultado!=null){
-
                     if (ubiDetLote!=null){
                         if (!ubiDetLote.isEmpty()){
+                            //#EJC20210611:Si es un ingreso de órden de producción.
+                            //Se obtiene un número de ubicación de almacen generado en NAV
+                            //Esa ubicación se registra en la tabla: trans_oc_det_lote campo: ubicacion
+                            //Se debe enviar a registrar en esa ubicación el producto recepcionado en línea.
                             execws(25);
                         }else{
                             Imprime_Barra_Despues_Guardar();
