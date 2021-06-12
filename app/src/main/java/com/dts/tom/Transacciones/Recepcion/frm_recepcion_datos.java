@@ -6077,8 +6077,18 @@ public class frm_recepcion_datos extends PBase {
                 Imprime_Barra_Despues_Guardar();
 
             } catch (Exception e) {
-                ce = xobj.getresult(clsBeCustomError.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
-                throw new Exception(ce.Error);
+
+                String vPrimaryMessage = e.getMessage();
+
+                //#EJC20210612:Intento obtener el customerror del WS.
+                try {
+                    ce = xobj.getresult(clsBeCustomError.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+                } catch (Exception exception) {
+                    //#EJC20210612: Si ocurre un error al parsear, devolver el primer mensaje de error del stack.
+                    throw new Exception(vPrimaryMessage);
+                }
+
+
             }
 
         }catch (Exception e){
