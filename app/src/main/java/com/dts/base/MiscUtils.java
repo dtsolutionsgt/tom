@@ -1,12 +1,15 @@
 package com.dts.base;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dts.tom.PBase;
@@ -189,8 +192,32 @@ public class MiscUtils {
 
 		} catch (Exception ex) {
 		}
-	}   
-	
+	}
+
+	public void msgboxErrorOnWS(String msg, Activity rec) {
+
+		try{
+
+			if (!emptystr(msg)){
+
+				AlertDialog.Builder dialog = new AlertDialog.Builder(cCont);
+
+				dialog.setTitle(R.string.app_name);
+				dialog.setMessage(msg);
+				dialog.setCancelable(false);
+
+				dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						rec.finish();
+					}
+				});
+				dialog.show();
+
+			}
+
+		} catch (Exception ex) {
+		}
+	}
 	public void msgbox(int v) {
 
 		try{

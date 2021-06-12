@@ -361,7 +361,7 @@ public class frm_consulta_stock extends PBase {
                                     "^FT670,306^A0I,25,14^FH^FD%2$s^FS \n" +
                                     "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
                                     "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                     "^FD%3$s^FS \n" +

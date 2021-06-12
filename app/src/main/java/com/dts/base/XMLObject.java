@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
 
+import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.w3c.dom.Document;
@@ -61,10 +63,20 @@ public class XMLObject  {
 
             if (!xnode.isEmpty())
             {
-                return serializer.read(type, xnode);
+                if(xnode.contains("CustomError")){
+                    clsBeCustomError typeErr= new clsBeCustomError();
+                    return (T) serializer.read(typeErr, xnode);
+                }else{
+                    return serializer.read(type, xnode);
+                }
             }else
             {
-                Log.i("porque","vacio");
+                //#EJC20210612ñ
+                Log.i("porque","vacio, .. asumo algun error ocurrió");
+                if(xnode.contains("CustomError")){
+                    clsBeCustomError typeErr= new clsBeCustomError();
+                    return (T) serializer.read(typeErr, xnode);
+                }
             }
 
         }catch (Exception e)
@@ -228,12 +240,22 @@ public class XMLObject  {
 
                 }else{
                     Log.e("Un nulo","Hace nulo a todos los que no son nulos");
+                    if(ws.xmlresult.contains("CustomError")){
+                        return ws.xmlresult;
+                    }
                 }
 
             } catch (Exception e)
             {
-                debg = e.getMessage() + "\n "+ ws.xmlresult;
-                throw new Exception(" XMLObject getXMLRegion : "+ debg);
+
+                //#EJC20210612: No se obtenia el customERror.
+                if(ws.xmlresult.contains("CustomError")){
+                    return ws.xmlresult;
+                }else{
+                    debg = e.getMessage() + "\n "+ ws.xmlresult;
+                    throw new Exception(" XMLObject getXMLRegion : "+ debg);
+                }
+
             } finally {
                 isParsing =false;
             }

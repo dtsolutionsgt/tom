@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +33,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.DecimalDigitsInputFilter;
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
+import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
 import com.dts.classes.Mantenimientos.Motivo_devolucion.clsBeMotivo_devolucion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
@@ -92,7 +97,6 @@ public class frm_recepcion_datos extends PBase {
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
-    private Button btnFinalizarRece;
     private ProgressDialog progress;
     private DatePicker dpResult;
     private ImageView imgDate, cmdImprimir;
@@ -197,6 +201,7 @@ public class frm_recepcion_datos extends PBase {
     double CajasPorCama = 0;
     double CamasPorTarima = 0;
 
+    private String MensajeAdicionalParaImpresion="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +242,6 @@ public class frm_recepcion_datos extends PBase {
 
         btnCantRecibida = findViewById(R.id.btnCantRecibida);
         btnCantPendiente = findViewById(R.id.btnCantPendiente);
-        btnFinalizarRece = findViewById(R.id.btnFinalizarRece);
 
         dpResult = findViewById(R.id.datePicker);
 
@@ -522,9 +526,25 @@ public class frm_recepcion_datos extends PBase {
                             if (!du.EsFecha(valor)){
                                 msgbox("No es una fecha válida, se colocará la fecha actual");
                                 cmbVenceRec.setText(du.getActDateStr());
-                            };
+                            }
 
                             // du.EsFecha(valor);
+                        }catch(Exception e){
+                            cmbVenceRec.setText(du.getActDateStr());
+                        }
+                    }
+
+                }
+            });
+
+            //#EJC20210612FOCUS:Solo lo hacía en el enter
+            txtNoLP.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        String valor= txtNoLP.getText().toString();
+                        try{
+                            Procesa_Barra_Producto();
                         }catch(Exception e){
                             cmbVenceRec.setText(du.getActDateStr());
                         }
@@ -1012,7 +1032,6 @@ public class frm_recepcion_datos extends PBase {
                                 execws(6);
                             }else{
                                 pNumeroLP = pLp;
-
                                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
                                 if (!txtNoLP.getText().toString().isEmpty()){
                                     txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
@@ -1438,7 +1457,6 @@ public class frm_recepcion_datos extends PBase {
             if (!Parametros_Ingresados){
                 mu.msgbox("¿Está seguro de que no va a ingresar los parámetros obligatorios del producto?");
 
-                Parametros_Ingresados = true;
             }
 
             if (BeProducto.getControl_peso()){
@@ -2163,26 +2181,11 @@ public class frm_recepcion_datos extends PBase {
             pLp = "";
 
             if (!txtNoLP.getText().toString().isEmpty()){
-
-               /* String vStarWithParameter = "$";
-
-                if (gBeConfiguracionBarraPallet!=null){
-                    if (!gBeConfiguracionBarraPallet.IdentificadorInicio.isEmpty()){
-                        vStarWithParameter = gBeConfiguracionBarraPallet.IdentificadorInicio;
-                    }
-                }*/
-
-                /*if (txtBarra.getText().toString().startsWith("$") |
-                        txtBarra.getText().toString().startsWith("(01)") |
-                        txtBarra.getText().toString().startsWith(vStarWithParameter)){*/
-
-                    //int vLengthBarra  = txtBarra.getText().toString().length();
-
                     pLp = txtNoLP.getText().toString().replace("$", "");
-
+                    //#EJC20210612: Este valor llegaba vacío a la impresión.
+                    pNumeroLP = pLp;
                 //Llama al método del WS Existe_Lp
                     execws(24);
-                //}
             }
 
         }catch (Exception e){
@@ -3726,18 +3729,6 @@ public class frm_recepcion_datos extends PBase {
                     }else{
                         DespuesDeValidarCantidad();
                     }
-
-                    //#CKFK 20201007 quité esta validacion de fecha porque no era correcta
-                   /* if (FechaVence.equals(String.valueOf(du.getFechaActual()))){
-
-                    }*/
-
-                    //#CKFK 20200917 Puse esto en comentario porque la validación no se hacía correctamente
-                       /* if (!Valida_Fecha_Vencimiento()){
-                            return;
-                        }else{
-                            Continua_Llenando_Detalle_Recepcion_Nueva();
-                        }*/
                 }
             }else{
                 //#ejc20210611: Definir fecha vence por defecto null
@@ -3746,9 +3737,10 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception ex){
+            progress.cancel();
             mu.msgbox("ContinuaGuardandoRecepcion: "+ex.getMessage());
         }finally{
-            progress.cancel();
+            //progress.cancel();
         }
     }
 
@@ -3762,6 +3754,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            if (!progress.isShowing()) progress.show();
             progress.setMessage("Llenando detalle de recepción");
 
             switch (gl.TipoOpcion){
@@ -3808,8 +3801,6 @@ public class frm_recepcion_datos extends PBase {
                 gl.gBeRecepcion.DetalleParametros.items.addAll(plistBeReDetParametros.items);
             }
 
-             I = 0;
-
             if (plistBeReDetParametros.items!=null){
                 Objects.requireNonNull(gl.gBeRecepcion.DetalleParametros.items).addAll(plistBeReDetParametros.items);
                 }
@@ -3844,7 +3835,15 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.cancel();
                 imprimirDesdeBoton=false;
-                msgAskImprimir("Seleccione una opción para imprimir");
+
+                String alert1 = "Seleccione una opción para imprimir";
+                String alert2 = "(" +  MensajeAdicionalParaImpresion + ")" + "\n" + "\n" + alert1;
+
+                if (!MensajeAdicionalParaImpresion.isEmpty()){
+                    msgAskImprimir(alert2);
+                }else{
+                    msgAskImprimir(alert1);
+                }
 
             }else{
                 Actualiza_Valores_Despues_Imprimir(true);
@@ -3893,14 +3892,15 @@ public class frm_recepcion_datos extends PBase {
 
     //#EJC20210125: Dejé solo la función de Tzirin puse en comentario la de Jaros..
     private void msgAskImprimir(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
+//            AlertDialog dialogT = dialog.create();
+//            dialogT.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
-
-            dialog.setCancelable(true);
-
+            dialog.setMessage(msg);
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Código de Producto", (dialog1, which) -> {
@@ -3926,7 +3926,8 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(Objects.requireNonNull(new Object() {
+            addlog(Objects.requireNonNull(new Object()
+            {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
@@ -4106,12 +4107,15 @@ public class frm_recepcion_datos extends PBase {
     double vCant =0;
 
     private void Llena_Detalle_Recepcion_Nueva(){
+
         Factor=0;
         TotalLinea=0;
         vCant =0;
 
         try{
 
+            if (!progress.isShowing()) progress.show();
+            progress.setMessage("Llenando detalle recepción...");
 
             if (BeProducto!=null){
 
@@ -4245,9 +4249,11 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Llena_Detalle_Recepcion_Nueva:"+e.getMessage());
+        }finally{
+            //progress.hide();
         }
     }
 
@@ -4579,7 +4585,10 @@ public class frm_recepcion_datos extends PBase {
 
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Continua:"+e.getMessage());
+        }finally{
+            //progress.hide();
         }
     }
 
@@ -4874,7 +4883,11 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Valida_Cantidad_Recibida(){
+
         double Cantidad;
+
+        //#EJC20210612
+        MensajeAdicionalParaImpresion ="";
 
         try{
 
@@ -4992,12 +5005,11 @@ public class frm_recepcion_datos extends PBase {
     private void msgValidaCantidad(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg );
-
-            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -5012,7 +5024,6 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("msgValidaCantidad"+e.getMessage());
-
         }
     }
 
@@ -5176,7 +5187,7 @@ public class frm_recepcion_datos extends PBase {
 
                         try {
 
-                           if(BeTransReDet.Fecha_vence.toString().isEmpty()){
+                           if(BeTransReDet.Fecha_vence.isEmpty()){
                                //#ejc20210611: Definir fecha vence por defecto null
                                BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
                            }
@@ -5192,10 +5203,6 @@ public class frm_recepcion_datos extends PBase {
                                     "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
                             ;
 
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -5205,9 +5212,10 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }catch (Exception e){
+                progress.hide();
                 mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }finally{
-                progress.cancel();
+                //progress.hide();
             }
 
         }
@@ -5679,6 +5687,20 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private void process_recepcion_compra_nav_byb(){
+
+        //#EJC20210611:Cuando es recepción de compra en BYB
+        //Se debe enviar a registrar la compra en el WS de NAV.
+        //con el número de recepción.
+        if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
+            progress.setMessage("Registrando ingreso de compra en ERP");
+            execws(26);
+        }else{
+            Imprime_Barra_Despues_Guardar();
+        }
+    }
+
+
     private void processGuardarRecNueva(){
 
         try{
@@ -5700,22 +5722,13 @@ public class frm_recepcion_datos extends PBase {
                             //Se obtiene un número de ubicación de almacen generado en NAV
                             //Esa ubicación se registra en la tabla: trans_oc_det_lote campo: ubicacion
                             //Se debe enviar a registrar en esa ubicación el producto recepcionado en línea.
+                            progress.setMessage("Registrando lote en ubicación de ERP");
                             execws(25);
+                        }else{
+                            process_recepcion_compra_nav_byb();
                         }
                     }else{
-
-                        try {
-                            //#EJC20210611:Cuando es recepción de compra en BYB
-                            //Se debe enviar a registrar la compra en el WS de NAV.
-                            //con el número de recepción.
-                            if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
-                                execws(26);
-                            }else{
-                                Imprime_Barra_Despues_Guardar();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        process_recepcion_compra_nav_byb();
                     }
 
                 }else{
@@ -5729,8 +5742,10 @@ public class frm_recepcion_datos extends PBase {
             }
 
         }catch (Exception e){
-            progress.cancel();
+            progress.hide();
             mu.msgbox("processGuardarRecNueva:"+e.getMessage());
+        }finally {
+            //progress.hide();
         }
     }
 
@@ -5756,6 +5771,8 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processGuardarRecModif:"+e.getMessage());
+        }finally {
+            //progress.hide();
         }
 
     }
@@ -5790,7 +5807,7 @@ public class frm_recepcion_datos extends PBase {
             mu.msgbox("processActualizaCantidadRecibida"+e.getMessage());
         }
 
-        progress.cancel();
+        progress.hide();
     }
 
     private  void processMaxIdRecepcionDet(){
@@ -6032,7 +6049,8 @@ public class frm_recepcion_datos extends PBase {
             boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Produccion_To_NAV_For_BYB");
 
             if (procesada){
-                toastlong("Recepción de Producción procesada en ERP");
+                MensajeAdicionalParaImpresion = "Recepción de Producción procesada en ERP";
+                //toastlong("Recepción de Producción procesada en ERP");
             }
             Imprime_Barra_Despues_Guardar();
 
@@ -6045,17 +6063,47 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+            boolean procesada = false;
+            clsBeCustomError ce;
 
-            if (procesada){
-                toastlong("Recepción de compra procesada en ERP");
+            try {
+
+                procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+
+                if (procesada){
+                    MensajeAdicionalParaImpresion = "Recepción de compra procesada en ERP";
+                }
+
+                Imprime_Barra_Despues_Guardar();
+
+            } catch (Exception e) {
+                ce = xobj.getresult(clsBeCustomError.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+                throw new Exception(ce.Error);
             }
 
-            Imprime_Barra_Despues_Guardar();
-
         }catch (Exception e){
-            mu.msgbox("process_Recepcion_Compra_Nav_BYB:"+e.getMessage());
+            //#EJC20210612: Evitar que se quede en la pantalla para evitar error de llave duplicadas.
+            msgboxErrorOnWS2("Error al procesar solicitud en ERP: " + e.getMessage());
         }
+    }
+
+    public void msgboxErrorOnWS2(String msg) {
+        try{
+            ExDialog dialog = new ExDialog(this);
+            dialog.setMessage(msg);
+
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            Log.println(1,"msg",e.getMessage());
+            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     @Override
@@ -6066,7 +6114,6 @@ public class frm_recepcion_datos extends PBase {
             addlog(Objects.requireNonNull(new Object() {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
-
     }
     //endregion
 }
