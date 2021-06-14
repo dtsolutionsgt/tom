@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.Recepcion;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -286,11 +287,14 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void msgAskImprimir() {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog dialogT = dialog.create();
+
+            dialogT.setCanceledOnTouchOutside(false);
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("Imprimir Licencia");
 
-            dialog.setCancelable(true);
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 

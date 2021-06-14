@@ -5692,12 +5692,17 @@ public class frm_recepcion_datos extends PBase {
         //#EJC20210611:Cuando es recepción de compra en BYB
         //Se debe enviar a registrar la compra en el WS de NAV.
         //con el número de recepción.
-        if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
-            progress.setMessage("Registrando ingreso de compra en ERP");
-            execws(26);
+        if (gl.gBeOrdenCompra.No_Documento_Recepcion_ERP != null){
+            if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
+                progress.setMessage("Registrando ingreso de compra en ERP");
+                execws(26);
+            }else{
+                Imprime_Barra_Despues_Guardar();
+            }
         }else{
             Imprime_Barra_Despues_Guardar();
         }
+
     }
 
 
@@ -6021,7 +6026,12 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            try {
+                Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
+            }
 
             if (Existe_Lp){
                 msgAskExisteLp("El Lp:"+pLp+" ya existe, desea agregarlo al producto:"+BeProducto.Codigo);
