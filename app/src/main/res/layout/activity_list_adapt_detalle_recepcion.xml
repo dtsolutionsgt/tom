@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/lblPres"
-            android:layout_width="100dp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -99,7 +99,7 @@
 
         <TextView
             android:id="@+id/lblDiferencia"
-            android:layout_width="75dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -111,7 +111,7 @@
 
         <TextView
             android:id="@+id/lblCosto"
-            android:layout_width="70dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
