@@ -424,7 +424,9 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Obteniendo detalle de ingreso");
 
-                pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                //GT la lista ya viene de frm_lista_tareas_recepcion, porque se obtiene otra vez de aca?
+                //pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                pListDetalleOC = gl.gListDetalleOC;
 
                 if (pListDetalleOC!=null){
                     gl.gListDetalleOC = pListDetalleOC;
@@ -463,7 +465,9 @@ public class frm_detalle_ingresos extends PBase {
                 tblNumOrden.setVisibility(View.GONE);
                 if (gBeOrdenCompra.getObjPoliza().numero_orden!=null &&
                         !gBeOrdenCompra.getObjPoliza().numero_orden.isEmpty()){
-                    txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
+                    //txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
+                    //txtNumPoliza.setText(gBeOrdenCompra.ObjPoliza.numero_orden);
+                    txtNumOrden.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
                     tblNumOrden.setVisibility(View.VISIBLE);
                 }
 
