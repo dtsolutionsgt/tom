@@ -92,6 +92,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public int IdTipoProducto=0;
   @Element(required=false) public String NombreTipoProducto="";
   @Element(required=false) public Boolean Pallet_No_Estandar=false;
+  @Element(required=false) public int Posiciones=0;
 
 
   public clsBeVW_stock_res() {
@@ -711,5 +712,13 @@ public class clsBeVW_stock_res {
   public void setPallet_No_Estandar(boolean value) {
     Pallet_No_Estandar=value;
   }
+
+  public int getPosiciones() {
+    return Posiciones;
+  }
+  public void setPosiciones(int value) {
+    Posiciones=value;
+  }
+
 }
 

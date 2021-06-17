@@ -1584,19 +1584,23 @@ public class frm_Packing extends PBase {
 
             cUbicOrig = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
-            if (cUbicOrig.IdUbicacion==0){
-                lblUbicOrigen.setText("Ubicación no válida");
-                return;
+            if (cUbicOrig!=null){
+
+                if (cUbicOrig.IdUbicacion==0){
+                    lblUbicOrigen.setText("Ubicación no válida");
+                    return;
+                }
+
+                cvUbicOrigID = cUbicOrig.IdUbicacion;
+                lblUbicOrigen.setText(cUbicOrig.Descripcion);
+                cvUbicDestID = cvUbicOrigID;
+
+                txtLic_Plate.setSelectAllOnFocus(true);
+                txtLic_Plate.requestFocus();
+
+                idle = true;
+
             }
-
-            cvUbicOrigID = cUbicOrig.IdUbicacion;
-            lblUbicOrigen.setText(cUbicOrig.Descripcion);
-            cvUbicDestID = cvUbicOrigID;
-
-            txtLic_Plate.setSelectAllOnFocus(true);
-            txtLic_Plate.requestFocus();
-
-            idle = true;
 
         }catch (Exception e){
             mu.msgbox("processUbicacionBarra:"+e.getMessage());

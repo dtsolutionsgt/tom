@@ -6097,10 +6097,7 @@ public class frm_recepcion_datos extends PBase {
                     //#EJC20210612: Si ocurre un error al parsear, devolver el primer mensaje de error del stack.
                     throw new Exception(vPrimaryMessage);
                 }
-
-
             }
-
         }catch (Exception e){
             //#EJC20210612: Evitar que se quede en la pantalla para evitar error de llave duplicadas.
             msgboxErrorOnWS2("Error al procesar solicitud en ERP: " + e.getMessage());
