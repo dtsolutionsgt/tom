@@ -22,6 +22,7 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
@@ -63,6 +64,7 @@ public class frm_Packing extends PBase {
     private String  fechaVenceU;
     private String Lic_Plate_Ant="";
     private String NuevoLp="";
+   // private String pNumeroLP = "";
 
     //GT 29012021 variables para Lic Plate
     private boolean escaneoPallet;
@@ -1481,6 +1483,12 @@ public class frm_Packing extends PBase {
                     case 9:
                         callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
                         break;
+                    case 10:
+                        //#CKFK 20210617 Agregué el llamado a esta función para obtener el LP para el Packing
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
                 progress.cancel();
@@ -1525,7 +1533,11 @@ public class frm_Packing extends PBase {
                 case 9:
                     processExisteLp();
                     break;
-
+                case 10:
+                    processNuevoLPA();
+                    //#EJC20210504: Refactor por resolución LP
+                    //processNuevoLP();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1597,6 +1609,8 @@ public class frm_Packing extends PBase {
             txtLic_Plate.requestFocus();
 
             idle = true;
+
+            execws(10);
 
         }catch (Exception e){
             mu.msgbox("processUbicacionBarra:"+e.getMessage());
@@ -1852,6 +1866,44 @@ public class frm_Packing extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void processNuevoLPA(){
+
+        try {
+
+            clsBeResolucion_lp_operador resolucionActivaLpByBodega = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+
+            if (resolucionActivaLpByBodega !=null){
+
+                gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
+
+                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
+
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                String str = String.valueOf(intLPSig);
+                StringBuilder sb = new StringBuilder();
+
+                for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
+                    sb.append('0');
+                }
+
+                sb.append(str);
+                String result = sb.toString();
+
+                txtNuevoLp.setText(resolucionActivaLpByBodega.Serie + result);
+
+            }else{
+                gl.IdResolucionLpOperador =0;
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP: "+e.getMessage());
+        }
+
     }
 
     private void execws(int callbackvalue) {
