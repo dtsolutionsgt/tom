@@ -79,6 +79,8 @@ public class frm_Packing extends PBase {
     private String pLicensePlate;
     private int cvEstOrigen = 0;
     private int cvProdID = 0;
+    private int pUbicacionLP=0;
+    private String pNombreUbicacionLP="";
     private boolean Existe_Lp=false, imprimirDesdeBoton = false;
 
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
@@ -527,6 +529,8 @@ public class frm_Packing extends PBase {
             txtCantidad.setText("");
             txtCantidad.setEnabled(false);
             txtPrd.setText("");
+            txtUbicDestino.setText("");
+            lblNomDestino.setText("");
 
         }catch (Exception e){
 
@@ -1136,6 +1140,7 @@ public class frm_Packing extends PBase {
     }
 
     private void aplicarCambio() {
+        int vUbicacionProducto;
 
         try{
 
@@ -1145,6 +1150,16 @@ public class frm_Packing extends PBase {
             progress.show();
 
             if (!ValidaDatos())return;
+
+            vUbicacionProducto = BeStockPallet.IdUbicacion;
+
+            if (pUbicacionLP!=0){
+                if (vUbicacionProducto!=pUbicacionLP){
+                    progress.cancel();
+                    msgbox("La ubicación del License Plate seleccionado no coincide con la del License Plate destino, no se puede realizar el packing");
+                    return;
+                }
+            }
 
             NuevoLp = txtNuevoLp.getText().toString();
 
@@ -1377,7 +1392,9 @@ public class frm_Packing extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    aplicarCambio();
+
+                    execws(11);
+                    //aplicarCambio(); Primero voy a buscar ubicación del LP
                 }
             });
 
@@ -1508,6 +1525,13 @@ public class frm_Packing extends PBase {
                                 "pIdOperador",gl.IdOperador,
                                 "pIdBodega",gl.IdBodega);
                         break;
+                    case 11:
+                        //#CKFK 20210617 Agregué el llamado a esta función para obtener la ubicación del LP
+                        callMethod("Get_Ubicacion_LP",
+                                   "pLic_Plate",txtNuevoLp.getText().toString(),
+                                   "pIdBodega",gl.IdBodega,
+                                   "nombre_ubicacion",pNombreUbicacionLP);
+                        break;
                 }
 
                 progress.cancel();
@@ -1556,6 +1580,9 @@ public class frm_Packing extends PBase {
                     processNuevoLPA();
                     //#EJC20210504: Refactor por resolución LP
                     //processNuevoLP();
+                    break;
+                case 11:
+                    processUbicacionLP();
                     break;
             }
 
@@ -1921,6 +1948,26 @@ public class frm_Packing extends PBase {
             mu.msgbox("processNuevoLP: "+e.getMessage());
         }
 
+    }
+
+    private void processUbicacionLP(){
+
+
+        try{
+
+            pUbicacionLP = xobj.getresult(Integer.class,"Get_Ubicacion_LP");
+            pNombreUbicacionLP = xobj.getresultSingle(String.class,"nombre_ubicacion");
+
+            if (pUbicacionLP>0){
+                txtUbicDestino.setText(pUbicacionLP+"");
+                lblNomDestino.setText(pNombreUbicacionLP);
+            }
+
+            aplicarCambio();
+
+        }catch (Exception e){
+            mu.msgbox("processUbicacionLP:"+e.getMessage());
+        }
     }
 
     public void Imprimir(View view){
