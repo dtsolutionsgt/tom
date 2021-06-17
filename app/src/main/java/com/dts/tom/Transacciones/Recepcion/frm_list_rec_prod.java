@@ -450,7 +450,10 @@ public class frm_list_rec_prod extends PBase {
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
+
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                    //GT17062021 Se reordena la lista por num_linea
+                    Collections.sort(pListDetalleOC.items,new OrdenarItems());
 
                     gl.gpListDetalleOC = pListDetalleOC;
 
