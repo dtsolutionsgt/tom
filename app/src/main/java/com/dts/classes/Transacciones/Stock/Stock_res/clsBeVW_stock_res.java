@@ -94,7 +94,6 @@ public class clsBeVW_stock_res {
   @Element(required=false) public Boolean Pallet_No_Estandar=false;
   @Element(required=false) public int Posiciones=0;
 
-
   public clsBeVW_stock_res() {
   }
 
@@ -118,7 +117,8 @@ public class clsBeVW_stock_res {
                            boolean encontrado,clsBeBodega_ubicacion UbicacionActual,double Cantidad_Res,String ValorTexto,
                            double ValorNumerico,String ValorFecha,int ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
-                           int IdClasificacion,int IdTipoProducto,String NombreTipoProducto, Boolean Pallet_No_Estandar) {
+                           int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
+                           Boolean Pallet_No_Estandar,int Posiciones) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -204,6 +204,7 @@ public class clsBeVW_stock_res {
     this.IdTipoProducto=IdTipoProducto;
     this.NombreTipoProducto=NombreTipoProducto;
     this.Pallet_No_Estandar=Pallet_No_Estandar;
+    this.Posiciones = Posiciones;
 
   }
 
@@ -712,13 +713,11 @@ public class clsBeVW_stock_res {
   public void setPallet_No_Estandar(boolean value) {
     Pallet_No_Estandar=value;
   }
-
   public int getPosiciones() {
     return Posiciones;
   }
   public void setPosiciones(int value) {
     Posiciones=value;
   }
-
 }
 

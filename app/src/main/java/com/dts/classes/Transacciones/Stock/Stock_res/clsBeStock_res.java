@@ -42,9 +42,7 @@ public class clsBeStock_res {
     @Element(required=false) public String Atributo_Variante_1="";
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
     @Element(required=false) public String Ultimo_Lote="";
-    //@Element(required=false) public Boolean Pallet_No_Estandar=false;
     @Element(required=false) public Boolean Pallet_no_estandar=false;
-
 
     public clsBeStock_res() {
     }
