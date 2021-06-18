@@ -62,6 +62,8 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdAcuerdoComercial;
     @Element(required=false) public int IdOperadorBodegaDefecto;
     @Element(required=false) public String No_Documento_Recepcion_ERP;
+    @Element(required=false) public String No_Documento_Devolucion="";
+    @Element(required=false) public int IdPedidoEncDevolucion=0;
 
     public clsBeTrans_oc_enc()
     {
@@ -80,7 +82,9 @@ public class clsBeTrans_oc_enc {
                              clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada,
                              String No_Ticket_TMS,
                              int IdNoDocumentoRef,
-                             int IdAcuerdoComercial) {
+                             int IdAcuerdoComercial,
+                             String No_Documento_Devolucion,
+                             int IdPedidoEncDevolucion) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -127,6 +131,8 @@ public class clsBeTrans_oc_enc {
         this.No_Ticket_TMS=No_Ticket_TMS;
         this.IdNoDocumentoRef = IdNoDocumentoRef;
         this.IdAcuerdoComercial = IdAcuerdoComercial;
+        this.No_Documento_Devolucion = No_Documento_Devolucion;
+        this.IdPedidoEncDevolucion = IdPedidoEncDevolucion;
 
     }
 
@@ -412,5 +418,17 @@ public class clsBeTrans_oc_enc {
     }
     public void setNo_Documento_Recepcion_ERP(String value) {
         No_Documento_Recepcion_ERP=value;
+    }
+    public int getIdPedidoEncDevolucion() {
+        return IdPedidoEncDevolucion;
+    }
+    public void setIdPedidoEncDevolucion(int value) {
+        IdOperadorBodegaDefecto=value;
+    }
+    public String getNo_Documento_Devolucion() {
+        return No_Documento_Devolucion;
+    }
+    public void setNo_Documento_Devolucion(String value) {
+        No_Documento_Devolucion=value;
     }
 }
