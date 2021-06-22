@@ -33,7 +33,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public boolean politica_contrasenas=false;
     @Element(required=false) public int IdMotivoAjusteInventario=0;
     @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
-
+    @Element(required=false) public boolean Generar_Stock_Jornada=false;
 
     public clsBeEmpresa()
     {
@@ -64,6 +64,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
         this.codigo_automatico=codigo_automatico;
         this.politica_contrasenas=politica_contrasenas;
         this.IdMotivoAjusteInventario=IdMotivoAjusteInventario;
+        this.Generar_Stock_Jornada=Generar_Stock_Jornada;
     }
 
     public clsBeEmpresa(int IdEmpresa,String Nombre,String Direccion,String Telefono,
@@ -72,7 +73,8 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
                         String User_mod,String Fec_mod,boolean ClienteRapido,
                         boolean Operador_logistico,int Puerto_escaner,boolean Control_presentaciones,boolean Anulaciones_por_supervisor,
                         String Codigo,String Clave,int Intento,int Duracionclave,
-                        int Duracionclavetemporal,boolean codigo_automatico,boolean politica_contrasenas,int IdMotivoAjusteInventario
+                        int Duracionclavetemporal,boolean codigo_automatico,boolean politica_contrasenas,int IdMotivoAjusteInventario,
+                        boolean Generar_Stock_Jornada
     ) {
 
         this.IdEmpresa=IdEmpresa;
@@ -102,6 +104,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
         this.codigo_automatico=codigo_automatico;
         this.politica_contrasenas=politica_contrasenas;
         this.IdMotivoAjusteInventario=IdMotivoAjusteInventario;
+        this.Generar_Stock_Jornada = Generar_Stock_Jornada;
 
     }
 
@@ -284,6 +287,13 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     }
     public void setHora_Corte_Jornada_Sistema(String value) {
         Hora_Corte_Jornada_Sistema =value;
+    }
+
+    public boolean getGenerar_Stock_Jornada() {
+        return Generar_Stock_Jornada;
+    }
+    public void setGenerar_Stock_Jornada(boolean value) {
+        Generar_Stock_Jornada=value;
     }
 
 }
