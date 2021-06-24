@@ -73,21 +73,13 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
         if (position == 0) {
 
             holder.lblCodigo.setText("Código");
-            holder.lblCodigo.setTextColor(R.style.titlestyle);
             holder.lblPres.setText("Presentación");
-            holder.lblPres.setTextColor(R.style.titlestyle);
             holder.lblUmbas.setText("UmBas");
-            holder.lblUmbas.setTextColor(R.style.titlestyle);
             holder.lblCantidad.setText("Cantidad");
-            holder.lblCantidad.setTextColor(R.style.titlestyle);
             holder.lblProdBod.setText("ProdBod");
-            holder.lblProdBod.setTextColor(R.style.titlestyle);
             holder.lblEstado.setText("Estado");
-            holder.lblEstado.setTextColor(R.style.titlestyle);
             holder.lblVence.setText("Vence");
-            holder.lblVence.setTextColor(R.style.titlestyle);
             holder.lblLp.setText("Lic Plate");
-            holder.lblLp.setTextColor(R.style.titlestyle);
 
         } else {
 
@@ -140,12 +132,28 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
         } else {
             if (position==0){
                 convertView.setBackgroundResource(R.drawable.color_medium);
+            }else{
+                //#CKFK 20210525 Aquí ponemos la fila de color verde claro para identificar que ya fue recepcionado
+                if (BeDetalleRec.get(position).cantidad_recibida == 0) {
+                    convertView.setBackgroundColor(Color.parseColor("#c9ffc0"));
+                }else{
+                    convertView.setBackgroundColor(Color.parseColor("#f5ffae"));
+                }
+            }
+        }
+
+
+    /*    if(selectedIndex!= -1 && position == selectedIndex) {
+            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        } else {
+            if (position==0){
+                convertView.setBackgroundResource(R.drawable.color_medium);
                 holder.lblCodigo.setTextColor(R.style.titlestyle);
             }else{
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 
-        }
+        }*/
 
         return convertView;
     }
