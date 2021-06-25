@@ -32,17 +32,18 @@ public class ExDialog extends  AlertDialog.Builder {
         TextView textView = (TextView) adg.getWindow().findViewById(android.R.id.message);
         textView.setTextColor(Color.BLACK);
         textView.setTextSize(24);
-        textView.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
+        textView.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);
         textView.setGravity(Gravity.CENTER);
 
         int btntextsize=24;
-        int btnbackcolor=Color.parseColor("#63CE60");
+        int btnbackcolor=Color.parseColor("#F27C29");
 
         try {
             btnPos=adg.getButton(DialogInterface.BUTTON_POSITIVE);
             btnPos.setTextSize(btntextsize);
             btnPos.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
             btnPos.setBackgroundColor(btnbackcolor);
+            btnPos.setTextColor(Color.BLACK);
         } catch (Exception e) {}
 
         try {
@@ -50,6 +51,7 @@ public class ExDialog extends  AlertDialog.Builder {
             btnNeg.setTextSize(btntextsize);
             btnNeg.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
             btnNeg.setBackgroundColor(btnbackcolor);
+            btnNeg.setTextColor(Color.BLACK);
         } catch (Exception e) {}
 
         try {
@@ -57,6 +59,7 @@ public class ExDialog extends  AlertDialog.Builder {
             btnNeut.setTextSize(btntextsize);
             btnNeut.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
             btnNeut.setBackgroundColor(btnbackcolor);
+            btnNeut.setTextColor(Color.BLACK);
         } catch (Exception e) {}
 
         return adg;

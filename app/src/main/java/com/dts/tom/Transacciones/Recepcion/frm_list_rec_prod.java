@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
@@ -995,10 +997,16 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
-                        callMethod("Finalizar_Recepcion","pRecEnc",gl.gBeRecepcion,"backOrder",false,
-                                "pIdOrdenCompraEnc",vIdOrdenCompra,"pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdEmpresa",
-                                gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador,"pListObjDetR",
-                                pListTransRecDet.items,"pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
+                        callMethod("Finalizar_Recepcion",
+                                                "pRecEnc",gl.gBeRecepcion,
+                                                "backOrder",false,
+                                                "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                                "pIdEmpresa", gl.IdEmpresa,
+                                                "pIdBodega",gl.IdBodega,
+                                                "pIdUsuario",gl.IdOperador,
+                                                "pListObjDetR",pListTransRecDet.items,
+                                                "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                 }
 
@@ -1064,7 +1072,8 @@ public class frm_list_rec_prod extends PBase {
                         execws(14);
                         break;
                     case 14:
-                        doExit();
+                        //doExit();
+                        process_finalizar_recepcion();
                         break;
                 }
 
@@ -1210,6 +1219,62 @@ public class frm_list_rec_prod extends PBase {
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void process_finalizar_recepcion(){
+
+        try{
+
+            String Resultado;
+
+            progress.show();
+            progress.setMessage("Finalizando proceso de guardar recepción");
+
+            //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
+            if(!xobj.ws.xmlresult.contains("CustomError")){
+
+                Resultado = xobj.getresult(String.class,"Finalizar_Recepcion");
+
+                if (Resultado!=null){
+
+                }else{
+                    progress.cancel();
+                    mu.msgbox("No se pudo finalizar la recepción");
+                }
+
+                doExit();
+
+            }else{
+                progress.cancel();
+                Resultado =xobj.ws.xmlresult.replace("<DocumentElement>  <CustomError>    <Error>","").replace("</Error>  </CustomError></DocumentElement>","");
+                msgboxErrorOnWS2("No se pudo finalizar la recepción: " + Resultado);
+            }
+
+        }catch (Exception e){
+            progress.hide();
+            mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
+        }finally {
+            //progress.hide();
+        }
+    }
+
+    public void msgboxErrorOnWS2(String msg) {
+        try{
+            ExDialog dialog = new ExDialog(this);
+            dialog.setMessage(msg);
+
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            Log.println(1,"msg",e.getMessage());
+            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }

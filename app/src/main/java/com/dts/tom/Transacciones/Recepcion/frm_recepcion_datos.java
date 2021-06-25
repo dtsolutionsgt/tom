@@ -5705,7 +5705,6 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-
     private void processGuardarRecNueva(){
 
         try{
