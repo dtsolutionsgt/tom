@@ -12,12 +12,14 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean ReservaStock=false;
     @Element(required=false) public boolean ImprimeBarrasPicking=false;
     @Element(required=false) public boolean ImprimeBarrasPacking=false;
+    @Element(required=false) public boolean requerir_documento_ref =false;
 
     public clsBeTrans_pe_tipo() {
     }
 
     public clsBeTrans_pe_tipo(int IdTipoPedido,String Nombre,String Descripcion,boolean Preparar,
-                              boolean Verificar,boolean ReservaStock,boolean ImprimeBarrasPicking,boolean ImprimeBarrasPacking
+                              boolean Verificar,boolean ReservaStock,boolean ImprimeBarrasPicking,boolean ImprimeBarrasPacking,
+                              boolean requerir_documento_ref
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -28,6 +30,7 @@ public class clsBeTrans_pe_tipo {
         this.ReservaStock=ReservaStock;
         this.ImprimeBarrasPicking=ImprimeBarrasPicking;
         this.ImprimeBarrasPacking=ImprimeBarrasPacking;
+        this.requerir_documento_ref = requerir_documento_ref;
 
     }
 
@@ -79,6 +82,12 @@ public class clsBeTrans_pe_tipo {
     }
     public void setImprimeBarrasPacking(boolean value) {
         ImprimeBarrasPacking=value;
+    }
+    public boolean getrequerir_documento_ref() {
+        return requerir_documento_ref;
+    }
+    public void setrequerir_documento_ref(boolean value) {
+        requerir_documento_ref=value;
     }
 
 }
