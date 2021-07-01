@@ -151,6 +151,7 @@ public class frm_recepcion_datos extends PBase {
     private int pIndiceListaStock = -1;
     private double CostoOC=0;
     private int vPresentacion;
+    private String vLote;
     private String pLp="";
     private boolean Existe_Lp=false;
     private String ubiDetLote="";
@@ -181,6 +182,7 @@ public class frm_recepcion_datos extends PBase {
 
     double vFactorNuevaRec=0;
     double vCantNuevaRec=0;
+    double vCantAnteriorRec=0;
 
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstado = new clsBeProducto_estadoList();
@@ -2472,6 +2474,8 @@ public class frm_recepcion_datos extends PBase {
 
                     pLineaOC = pListTransRecDet.items.get(0).No_Linea;
 
+                    vCantAnteriorRec = pListTransRecDet.items.get(0).cantidad_recibida;
+
                     execws(23);
 
                 }else{
@@ -2652,11 +2656,15 @@ public class frm_recepcion_datos extends PBase {
 
             progress.setMessage("Procesando valores int. ref. #20210601");
 
-            if (Escaneo_Pallet){
+            if (!pListTransRecDet.items.get(0).Lic_plate.toString().isEmpty()) {
                 txtNoLP.setText(pListTransRecDet.items.get(0).Lic_plate);
             }else{
-                txtNoLP.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
-                txtNoLP.setText("");
+                if (Escaneo_Pallet){
+                    txtNoLP.setText(pListTransRecDet.items.get(0).Lic_plate);
+                }else{
+                    txtNoLP.setText(Get_Codigo_Barra(gl.CodigoRecepcion));
+                    txtNoLP.setText("");
+                }
             }
 
             if(BeProducto.IdProductoBodega>0){
@@ -2681,8 +2689,10 @@ public class frm_recepcion_datos extends PBase {
                 imgDate.setVisibility(View.GONE);
             }
 
-            Valida_Lote();
+            //#CKFK 20210630 quite este llamado porque no aplica cuando el registro ya existe
+            //Valida_Lote();
 
+            vLote = pListTransRecDet.items.get(0).Lote;
             vPresentacion = pListTransRecDet.items.get(0).IdPresentacion;
 
             if (vPresentacion>0){
@@ -2737,7 +2747,9 @@ public class frm_recepcion_datos extends PBase {
 
                 Cant_Recibida_Anterior = pListTransRecDet.items.get(0).cantidad_recibida;
 
-                txtLoteRec.setText(pListTransRecDet.items.get(0).Lote);
+               // txtLoteRec.setText(pListTransRecDet.items.get(0).Lote);
+
+                txtLoteRec.setText(vLote);
 
                 cmbVenceRec.setText(du.convierteFechaMostar(pListTransRecDet.items.get(0).Fecha_vence));
 
@@ -2788,16 +2800,20 @@ public class frm_recepcion_datos extends PBase {
                 imgDate.setVisibility(View.GONE);
             }
 
-            if (!gl.gProductoAnterior.equals(BeProducto.getCodigo())){
-                if (cmbLote.getVisibility()!=View.VISIBLE){
-                    txtLoteRec.setText("");
-                }
-                if (cmbVence.getVisibility()!=View.VISIBLE){
-                    cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
-                }
+            if (gl.mode==1){
 
-                cmbEstadoProductoRec.setSelection(0);
+                if (!gl.gProductoAnterior.equals(BeProducto.getCodigo())){
+                    if (cmbLote.getVisibility()!=View.VISIBLE){
+                        txtLoteRec.setText("");
+                    }
+                    if (cmbVence.getVisibility()!=View.VISIBLE){
+                        cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
+                    }
+
+                    cmbEstadoProductoRec.setSelection(0);
+                }
             }
+
 
             if (!gl.gBeRecepcion.Muestra_precio){
                 txtCostoOC.setVisibility(View.GONE);
@@ -4278,6 +4294,10 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Nombre_producto = BeProducto.Nombre;
                 BeTransReDet.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
                 BeTransReDet.IdRecepcionDet = pIdRecepcionDet;
+
+                if (gl.gBeRecepcion.IdBodega == -1){
+                    gl.gBeRecepcion.IdBodega=gl.IdBodega;
+                }
 
                 BeTransReDet.Presentacion = new clsBeProducto_Presentacion();
 
@@ -5796,7 +5816,12 @@ public class frm_recepcion_datos extends PBase {
 
                 vIndex = AuxList.indexOf(beTransOCDet.IdOrdenCompraDet);
 
-                gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;
+                if (gl.mode==1){
+                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;
+                }else{
+                    //#CKFK 20210630 Calcular la cantidad recibida
+                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida - vCantAnteriorRec;
+                }
 
             }
 
