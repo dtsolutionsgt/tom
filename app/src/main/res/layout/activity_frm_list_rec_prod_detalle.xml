@@ -8,11 +8,11 @@
 
     <HorizontalScrollView
         android:id="@+id/srollRecDet"
-        android:layout_width="392dp"
-        android:layout_height="379dp"
+        android:layout_width="match_parent"
+        android:layout_height="437dp"
         android:layout_above="@+id/btnCorregir"
         android:layout_below="@id/txtCodigoProductoRecepcion2"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="0dp">
 
         <ListView
             android:id="@+id/listRecDet"
@@ -51,6 +51,22 @@
         android:onClick="Imprimir"
         android:padding="10dp"
         android:src="@drawable/login_printer"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/cmdEliminar"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView97"
+        android:layout_below="@+id/lblNoDocumento2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="-72dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/btnCompletaRec2"
+        android:layout_toEndOf="@+id/imgImprimir"
+        android:onClick="Eliminar"
+        android:src="@android:drawable/ic_menu_delete"
         android:visibility="invisible" />
 
     <Button

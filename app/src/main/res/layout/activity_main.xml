@@ -213,7 +213,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="24dp"
-                        android:text="Versión 4.5.0"
+                        android:text="Versión 4.5.1"
                         android:textColor="#FFFFFF" />
 
                     <ImageView
@@ -259,7 +259,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="4dp"
-                        android:text="24-Jun-2021"
+                        android:text="30-Jun-2021"
                         android:textColor="#FFFFFF" />
                 </RelativeLayout>
             </TableRow>

@@ -53,6 +53,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     private String pNumeroLP="";
 
     private ImageView imgImprimir;
+    private ImageView cmdEliminar;
 
     private list_adapt_detalle_rec_prod adapter;
     private static final ArrayList<clsBeTrans_re_det> BeListDetalleRec= new ArrayList<>() ;
@@ -72,6 +73,7 @@ public class frm_list_rec_prod_detalle extends PBase {
         btnRegs = findViewById(R.id.btnRegs);
         btnCompletaRec2 = findViewById(R.id.btnCompletaRec2);
         imgImprimir = findViewById(R.id.imgImprimir);
+        cmdEliminar = findViewById(R.id.cmdEliminar);
 
         listView = findViewById(R.id.listRecDet);
 
@@ -120,9 +122,11 @@ public class frm_list_rec_prod_detalle extends PBase {
                         pNumeroLP = selitem.Lic_plate;
 
                         imgImprimir.setVisibility(View.VISIBLE);
+                        cmdEliminar.setVisibility(View.VISIBLE);
 
                 }else{
                     imgImprimir.setVisibility(View.INVISIBLE);
+                    cmdEliminar.setVisibility(View.VISIBLE);
                 }
 
             });
@@ -205,6 +209,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
                        vItem.Fecha_vence = du.convierteFechaMostar(obj.Fecha_vence);
                        vItem.Lic_plate = obj.Lic_plate;
+                       vItem.IdRecepcionDet = obj.IdRecepcionDet;
 
                        BeListDetalleRec.add(vItem);
 
@@ -238,14 +243,14 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                 if (CantRec == CantOC){
                     btnCompletaRec2.setText("COMPLETA");
-                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFA5A0"));
+                    btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF99CC00"));
                 }else if (CantRec > CantOC) {
                     btnCompletaRec2.setText(" DIF - (POS)");
                     btnCompletaRec2.setBackgroundColor(Color.parseColor("#FF0399D5"));
                 }
             }else{
                 btnCompletaRec2.setText("DIF - (NEG)");
-                btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFCC0000"));
+                btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFA5A0"));
             }
         }catch (Exception ex){
             msgbox(ex.getMessage());
@@ -276,6 +281,42 @@ public class frm_list_rec_prod_detalle extends PBase {
         public int compare(clsBeTrans_re_det left,clsBeTrans_re_det rigth){
             return left.IdRecepcionDet-rigth.IdRecepcionDet;
             //return left.Nombre.compareTo(rigth.Nombre);
+        }
+
+    }
+
+    public void Eliminar(View view){
+        msgAskEliminar();
+    }
+
+    private void msgAskEliminar() {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog dialogT = dialog.create();
+
+            dialogT.setCanceledOnTouchOutside(false);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("Está seguro de eliminar el detalle de la recepción " + selid);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) ->
+            {
+                progress.setMessage("Eliminando registro");
+                progress.show();
+                execws(3);
+            });
+
+            dialog.setNegativeButton("No", (dialog12, which) -> {});
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
@@ -441,6 +482,12 @@ public class frm_list_rec_prod_detalle extends PBase {
                         callMethod("Get_Detalle_By_IdRecepcionDet_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                 "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea);
                         break;
+                    case 3:
+                        callMethod("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet",
+                                "pIdOrdenCompraEnc",BeOcDet.IdOrdenCompraEnc,
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdRecepcionDet",selid);
+                        break;
                 }
 
             }catch (Exception e){
@@ -464,6 +511,9 @@ public class frm_list_rec_prod_detalle extends PBase {
                     break;
                 case 2:
                     processDetRec();
+                    break;
+                case 3:
+                    processDeleteDetRec();
                     break;
             }
 
@@ -508,6 +558,43 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }else{
                     doExit();
                 }
+            }else{
+                adapter = null;
+                listView.setAdapter(adapter);
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processDetRec:"+e.getMessage());
+        }
+    }
+
+    private void processDeleteDetRec(){
+        String Resultado;
+
+        try{
+
+            progress.setMessage("Eliminando detalle");
+
+            Resultado = xobj.getresult(String.class,"Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet");
+
+            if (Resultado!=null){
+
+                List AuxList = stream(gl.gpListDetalleOC.items).select(c -> c.IdOrdenCompraDet).toList();
+
+                if (AuxList.size()>0){
+
+                    int vIndex;
+
+                    vIndex = AuxList.indexOf(BeOcDet.IdOrdenCompraDet);
+
+                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida -= selitem.cantidad_recibida;
+                }
+
+                valida_producto_completo();
+
+                execws(2);
+                progress.cancel();
             }
 
         }catch (Exception e){
@@ -540,6 +627,8 @@ public class frm_list_rec_prod_detalle extends PBase {
         try{
 
             super.onResume();
+
+            valida_producto_completo();
 
             if (browse==1){
                 browse=0;
