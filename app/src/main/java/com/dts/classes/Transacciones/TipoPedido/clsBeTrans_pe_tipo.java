@@ -12,7 +12,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean ReservaStock=false;
     @Element(required=false) public boolean ImprimeBarrasPicking=false;
     @Element(required=false) public boolean ImprimeBarrasPacking=false;
-    @Element(required=false) public boolean requerir_documento_ref =false;
+    @Element(required=false) public boolean Requerir_Documento_Ref =false;
     @Element(required=false) public boolean Generar_pedido_ingreso_bodega_destino =false;
     @Element(required=false) public int IdTipoIngresoOC=1;
 
@@ -21,7 +21,7 @@ public class clsBeTrans_pe_tipo {
 
     public clsBeTrans_pe_tipo(int IdTipoPedido,String Nombre,String Descripcion,boolean Preparar,
                               boolean Verificar,boolean ReservaStock,boolean ImprimeBarrasPicking,boolean ImprimeBarrasPacking,
-                              boolean requerir_documento_ref,boolean Generar_pedido_ingreso_bodega_destino,int IdTipoIngresoOC
+                              boolean Requerir_Documento_Ref,boolean Generar_pedido_ingreso_bodega_destino,int IdTipoIngresoOC
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -32,7 +32,7 @@ public class clsBeTrans_pe_tipo {
         this.ReservaStock=ReservaStock;
         this.ImprimeBarrasPicking=ImprimeBarrasPicking;
         this.ImprimeBarrasPacking=ImprimeBarrasPacking;
-        this.requerir_documento_ref = requerir_documento_ref;
+        this.Requerir_Documento_Ref = Requerir_Documento_Ref;
         this.Generar_pedido_ingreso_bodega_destino= Generar_pedido_ingreso_bodega_destino;
         this.IdTipoIngresoOC = IdTipoIngresoOC;
 
@@ -87,12 +87,14 @@ public class clsBeTrans_pe_tipo {
     public void setImprimeBarrasPacking(boolean value) {
         ImprimeBarrasPacking=value;
     }
+
     public boolean getrequerir_documento_ref() {
-        return requerir_documento_ref;
+        return Requerir_Documento_Ref;
     }
     public void setrequerir_documento_ref(boolean value) {
-        requerir_documento_ref=value;
+        Requerir_Documento_Ref=value;
     }
+
     public boolean getGenerar_pedido_ingreso_bodega_destino() {
         return Generar_pedido_ingreso_bodega_destino;
     }
