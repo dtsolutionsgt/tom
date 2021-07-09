@@ -719,6 +719,7 @@ public class frm_picking_datos extends PBase {
                 }else{
 
                     gBeProducto = new clsBeProducto();
+                    gBeProducto.Codigo = pCodigo;
                     //Get_BeProducto_By_Codigo_For_HH (Primera vez)
                     execws(4);
                 }
@@ -912,13 +913,15 @@ public class frm_picking_datos extends PBase {
                     //#CKFK 20210210 Puse esto en comentario porque inicializaba el producto, y daba error
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
-                   //gBeProducto = new clsBeProducto();
-                   //execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+                   gBeProducto = new clsBeProducto();
+                    gBeProducto.Codigo = pCodigo;
 
-                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
-                    btnConfirmarPk.setEnabled(false);
-                    txtBarra.setSelectAllOnFocus(true);
-                    txtBarra.requestFocus();
+                   execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+
+//                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
+//                    btnConfirmarPk.setEnabled(false);
+//                    txtBarra.setSelectAllOnFocus(true);
+//                    txtBarra.requestFocus();
                 }
 
             }
@@ -1398,7 +1401,7 @@ public class frm_picking_datos extends PBase {
                         break;
                     case 4:
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                "pCodigo",txtBarra.getText().toString().replace("$", ""),
+                                "pCodigo",pCodigo.replace("$", ""),
                                 "IdBodega",gl.IdBodega);
                         break;
                     case 5:
