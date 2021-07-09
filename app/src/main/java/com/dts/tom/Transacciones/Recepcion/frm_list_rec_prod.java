@@ -159,7 +159,7 @@ public class frm_list_rec_prod extends PBase {
                     int vLengthBarra  = txtCodigoProductoRecepcion.getText().toString().length();
 
                      if(gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")
-                             | gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
+                             || gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
                              && vLengthBarra > 6){
 
                          LongitudValida = true;
@@ -988,7 +988,8 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
                         break;
                     case 11:
-                        callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case  12:
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Estado","Procesado");
@@ -997,16 +998,17 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
+
                         callMethod("Finalizar_Recepcion",
-                                                "pRecEnc",gl.gBeRecepcion,
-                                                "backOrder",false,
-                                                "pIdOrdenCompraEnc",vIdOrdenCompra,
-                                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                                "pIdEmpresa", gl.IdEmpresa,
-                                                "pIdBodega",gl.IdBodega,
-                                                "pIdUsuario",gl.IdOperador,
-                                                "pListObjDetR",pListTransRecDet.items,
-                                                "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
+                                            "pRecEnc",gl.gBeRecepcion,
+                                            "backOrder",false,
+                                            "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                            "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                            "pIdEmpresa", gl.IdEmpresa,
+                                            "pIdBodega",gl.IdBodega,
+                                            "pIdUsuario",gl.IdOperador,
+                                            "pListObjDetR",pListTransRecDet.items,
+                                            "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                 }
 
@@ -1266,9 +1268,7 @@ public class frm_list_rec_prod extends PBase {
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
+                public void onClick(DialogInterface dialog, int which) {}
             });
 
             dialog.show();

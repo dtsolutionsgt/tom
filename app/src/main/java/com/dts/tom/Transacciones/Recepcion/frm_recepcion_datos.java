@@ -2466,6 +2466,8 @@ public class frm_recepcion_datos extends PBase {
                 pListBeStockSeRec = new clsBeStock_se_recList();
                 pListBeStockRec = new clsBeStock_recList();
                 pListBeProductoPallet = new clsBeProducto_palletList();
+
+                //Asigna los items ya existentes
                 pListTransRecDet.items = gl.gListTransRecDet.items;
 
                 if (pListTransRecDet.items!=null){
@@ -3803,7 +3805,6 @@ public class frm_recepcion_datos extends PBase {
                 try{
 
                     gl.gBeRecepcion.Detalle.items = new ArrayList<>();
-
                     gl.gBeRecepcion.Detalle.items.addAll(auxListTransRecDet.items);
 
                 }catch (Exception ex)
