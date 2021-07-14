@@ -5505,7 +5505,7 @@ public class frm_recepcion_datos extends PBase {
             Etapa ++;
 
         }catch (Exception e){
-            mu.msgbox("ProcessTieneParametrosPersonalizados: "+e.getMessage() + "" + Etapa);
+            mu.msgbox("ProcessTieneParametrosPersonalizados: "+e.getMessage() + "-" + Etapa);
         }
 
     }
