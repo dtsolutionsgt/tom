@@ -1195,7 +1195,7 @@ public class frm_picking_datos extends PBase {
                     vCantidadRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
                     vCantidadSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
 
-                    if (Double.parseDouble(txtCantidadPick.getText().toString())+vCantidadRec>vCantidadSol){
+                    if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
                         mu.msgbox("La cantidad es mayor a la solicitada");
                         txtCantidadPick.selectAll();
                         txtCantidadPick.setSelectAllOnFocus(true);
@@ -1226,14 +1226,14 @@ public class frm_picking_datos extends PBase {
 
             if (TipoLista==2){
 
-                double vDif = gBePickingUbic.Cantidad_Solicitada - Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida;
+                double vDif = gBePickingUbic.Cantidad_Solicitada - Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida;
 
                 if (vDif<0){
                     mu.msgbox("La cantidad recibida es mayor a la cantidad solicitada, no se puede ingresar esa cantidad");
                     return;
                 }
 
-                gBePickingUbic.Cantidad_Recibida +=Double.parseDouble(txtCantidadPick.getText().toString());
+                gBePickingUbic.Cantidad_Recibida +=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
                 if (gBePicking.verifica_auto){
                     gBePickingUbic.Cantidad_Verificada = gBePickingUbic.Cantidad_Recibida;

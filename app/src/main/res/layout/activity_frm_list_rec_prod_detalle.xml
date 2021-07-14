@@ -66,7 +66,7 @@
         android:layout_toStartOf="@+id/btnCompletaRec2"
         android:layout_toEndOf="@+id/imgImprimir"
         android:onClick="Eliminar"
-        android:src="@android:drawable/ic_menu_delete"
+        android:src="@drawable/borrardet"
         android:visibility="invisible" />
 
     <Button
@@ -192,4 +192,5 @@
         android:background="@color/colorPrimary"
         android:text="R."
         android:textColor="#FAF9F9" />
+
 </RelativeLayout>
