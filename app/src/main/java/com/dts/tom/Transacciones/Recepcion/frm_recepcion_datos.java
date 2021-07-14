@@ -5423,6 +5423,8 @@ public class frm_recepcion_datos extends PBase {
 
     private void processTieneParametrosPersonalizados(){
 
+        int Etapa =0;
+
         try{
 
             Pperzonalizados=false;
@@ -5431,7 +5433,11 @@ public class frm_recepcion_datos extends PBase {
             PTiene_Ctrl_Temp=false;
             PTiene_Pres=false;
 
+            Etapa ++;
+
             pListBEProductoParametro = xobj.getresult(clsBeProducto_parametrosList.class,"Get_All_ProductoParametros_By_IdProducto_HH");
+
+            Etapa ++;
 
             if (pListBEProductoParametro!=null){
                 if (pListBEProductoParametro.items!=null){
@@ -5439,29 +5445,43 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
+            Etapa ++;
+
             if (BeProducto.Fechamanufactura&&BeProducto.Materia_prima){
                 PCap_Manu=true;
             }
+
+            Etapa ++;
 
             if (BeProducto.Capturar_aniada){
                 PCap_Anada = true;
             }
 
+            Etapa ++;
+
             if (BeProducto.Genera_lp){
                 PGenera_lp=true;
             }
+
+            Etapa ++;
 
             if (BeProducto.Peso_recepcion){
                 PTiene_Ctrl_Peso = true;
             }
 
+            Etapa ++;
+
             if (BeProducto.Temperatura_recepcion){
                 PTiene_Ctrl_Temp = true;
             }
 
+            Etapa ++;
+
             if (BeProducto.Serializado){
                 PTiene_PorSeries=true;
             }
+
+            Etapa ++;
 
             if (stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega
                     && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).first()>0){
@@ -5472,14 +5492,20 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
+            Etapa ++;
+
             if(Pperzonalizados||PCap_Manu||PCap_Anada||PGenera_lp||PTiene_Ctrl_Peso||PTiene_Ctrl_Temp||PTiene_PorSeries||PTiene_Pres){
+                Etapa ++;
                 Muestra_Propiedades_Producto();
             }else{
+                Etapa ++;
                 Guardar_Recepcion_Nueva();
             }
 
+            Etapa ++;
+
         }catch (Exception e){
-            mu.msgbox("ProcessTieneParametrosPersonalizados: "+e.getMessage());
+            mu.msgbox("ProcessTieneParametrosPersonalizados: "+e.getMessage() + "" + Etapa);
         }
 
     }
