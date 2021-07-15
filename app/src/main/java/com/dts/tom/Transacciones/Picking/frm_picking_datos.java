@@ -1175,7 +1175,7 @@ public class frm_picking_datos extends PBase {
 
                 if (TipoLista==2){
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida;
+                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida);
 
                     if (vDif<0){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1243,6 +1243,12 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
                 gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
+
+                if (gBePickingUbic.Fecha_Vence.isEmpty()){
+                    mu.msgbox("Guardar_Picking:"+ "fecha vacia");
+                }
+
+
                 if (gBeProducto.getControl_vencimiento()){
                     if (! gBePickingUbic.Fecha_Vence.contains("T")){
                         gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);

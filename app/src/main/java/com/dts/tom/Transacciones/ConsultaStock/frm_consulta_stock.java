@@ -130,7 +130,6 @@ public class frm_consulta_stock extends PBase {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
-                                //lbldescripcion.setTextColor(Color.WHITE);
                                 lblNombreUbicacion.setText("");
 
                                 if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
@@ -278,12 +277,19 @@ public class frm_consulta_stock extends PBase {
 
                         gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                        Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
-                        intent.putExtra("IdTipoEtiqueta", BeProducto.IdTipoEtiqueta);
-                        startActivity(intent);
+                        try {
+
+                            Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
+                            intent.putExtra("IdTipoEtiqueta", BeProducto.IdTipoEtiqueta);
+                            startActivity(intent);
+
+                        }
+                        catch (Exception e) {
+                            msgbox("Error al intentar cargar detalle del producto");
+                            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+                        }
 
                     }
-
                 }
 
             });
