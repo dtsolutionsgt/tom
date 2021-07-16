@@ -338,6 +338,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void Llena_Tareas_Picking(){
+
         clsBeTrans_picking_enc vItem;
         BeListTareasPicking.clear();
         int count;
@@ -347,6 +348,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.setMessage("Listando tareas");
 
             if (pListBeTareasPickingHH!=null){
+
                 if (pListBeTareasPickingHH.items!=null){
 
                     vItem = new clsBeTrans_picking_enc();
@@ -370,8 +372,10 @@ public class frm_lista_tareas_recepcion extends PBase {
                         BeListTareasPicking.add(vItem);
 
                     }
+
                     count = BeListTareasPicking.size()-1;
                     lblRegs.setText("Regs: "+ count);
+
                 }
             }
 
@@ -389,6 +393,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void Llena_Tareas_Verificacion(){
+
         clsBeTrans_pe_enc vItem;
         BeListTareasPedido.clear();
         int count;
@@ -399,6 +404,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.show();
 
             if (pListBeTransPeEnc!=null){
+
                 if (pListBeTransPeEnc.items!=null){
 
                     for (clsBeTrans_pe_enc BePedEnc:pListBeTransPeEnc.items ){
@@ -418,8 +424,10 @@ public class frm_lista_tareas_recepcion extends PBase {
                         BeListTareasPedido.add(vItem);
 
                     }
+
                     count = BeListTareasPedido.size();
                     lblRegs.setText("Regs: "+ count);
+
                 }
             }
 
@@ -462,7 +470,6 @@ public class frm_lista_tareas_recepcion extends PBase {
                         progress.setMessage("Listando tarea #: "+pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc);
 
                         vItem = new clsBeTareasIngresoHH();
-
                         vItem.IdOrderCompraEnc=pListBeTareasIngresoHH.items.get(i).IdOrderCompraEnc;
                         vItem.IdRecepcionEnc=pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc;
                         vItem.NoReferenciaOC=pListBeTareasIngresoHH.items.get(i).NoReferenciaOC;
@@ -473,16 +480,17 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombrePropietario = pListBeTareasIngresoHH.items.get(i).NombrePropietario;
                         vItem.NumPoliza = pListBeTareasIngresoHH.items.get(i).NumPoliza;
                         vItem.NumOrden = pListBeTareasIngresoHH.items.get(i).NumOrden;
-
                         BeListTareas.add(vItem);
 
                     }
+
                     count = BeListTareas.size()-1;
                     lblRegs.setText("Regs: "+ count);
 
                 }else{
                     btnNueva.setVisibility(View.VISIBLE);
                 }
+
             }else{
                 btnNueva.setVisibility(View.VISIBLE);
             }
