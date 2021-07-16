@@ -3951,7 +3951,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
 
-    private void Imprimir_Licencia(){
+    private void Imprimir_Barra(){
         try{
 
             //CM_20210112: Impresión de barras.
@@ -3974,33 +3974,34 @@ public class frm_recepcion_datos extends PBase {
                                     "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                     "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
                                     "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                     "^FD%4$s^FS \n" +
                                     "^PQ1,0,1,Y " +
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            "$"+pNumeroLP);
+                            "$"+BeProducto.Codigo_barra);
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
-                            "^MMT\n" +
-                            "^PW609\n" +
-                            "^LL0406\n" +
-                            "^LS0\n" +
-                            "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                            "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                            "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                            "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                            "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                            "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
-                            "^FO2,450^GB670,14,14^FS\n" +
-                            "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                            "^FD%1$s^FS\n" +
-                            "^PQ1,0,1,Y \n" +
-                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    "^MMT\n" +
+                                    "^PW609\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT250,25^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT480,25^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT600,280^A0I,35,40^FH^FD%3$s^FS\n" +
+                                    "^FT350,25^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT600,25^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^FT600,350^A0I,25,24^FH^FDTOMWMS Product Barcode^FS\n" +
+                                    "^FO2,320^GB670,14,14^FS\n" +
+                                    "^BY3,3,160^FT550,100^BCI,,Y,N\n" +
+                                    "^FD%4$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            "$"+pNumeroLP);
+                            "$"+BeProducto.Codigo_barra);
                 }
 
                 zPrinterIns.sendCommand(zpl);
@@ -4015,7 +4016,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir licencia producto");
+                msgAskImprimir("Imprimir código de barra del producto");
             }
             //Solo voy a llamar a esta opcióm al salir.
             //Actualiza_Valores_Despues_Imprimir();
@@ -4035,7 +4036,7 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    private void Imprimir_Barra(){
+    private void Imprimir_Licencia(){
 
         try{
 
@@ -4052,7 +4053,7 @@ public class frm_recepcion_datos extends PBase {
                     if (BeProducto.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
-                                        "^PW700 \n" +
+                                        "^PW609 \n" +
                                         "^LL0406 \n" +
                                         "^LS0 \n" +
                                         "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
@@ -4060,7 +4061,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -4074,19 +4075,20 @@ public class frm_recepcion_datos extends PBase {
                                         "^PW609\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
-                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
-                                        "^FO2,450^GB670,14,14^FS\n" +
-                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                        "^FD%1$s^FS\n" +
+                                        "^FT250,25^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT480,25^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT600,280^A0I,35,40^FH^FD%3$s^FS\n" +
+                                        "^FT350,25^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT600,25^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT600,350^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                        "^FO2,320^GB670,14,14^FS\n" +
+                                        "^BY3,3,160^FT550,100^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                "$"+pNumeroLP);
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                              gl.gNomEmpresa,
+                                              BeProducto.Codigo+" - "+BeProducto.Nombre,
+                                              "$"+pNumeroLP);
                     }
 
                     zPrinterIns.sendCommand(zpl);
@@ -4101,7 +4103,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir código producto");
+                msgAskImprimir("Imprimir licencia de producto");
             }
             //Solo voy a llamar a esta opción cuando seleccione al salir
            // Actualiza_Valores_Despues_Imprimir();
@@ -4109,12 +4111,12 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
-                mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir código producto");
+                    msgAskImprimir("Imprimir licencia del producto");
                 }
             }else{
-                mu.msgbox("Imprimir_barra: "+e.getMessage());
+                mu.msgbox("Imprimir_licencia: "+e.getMessage());
             }
         }
     }
