@@ -280,12 +280,17 @@ public class frm_consulta_stock extends PBase {
                         try {
 
                             Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
-                            intent.putExtra("IdTipoEtiqueta", BeProducto.IdTipoEtiqueta);
-                            startActivity(intent);
+
+                            if(BeProducto.IdTipoEtiqueta > 0){
+                                intent.putExtra("IdTipoEtiqueta", BeProducto.IdTipoEtiqueta);
+                                startActivity(intent);
+                            }else{
+                                msgbox("El Tipo Etiqueta no esta definido");
+                            }
 
                         }
                         catch (Exception e) {
-                            msgbox("Error al intentar cargar detalle del producto");
+                            msgbox("Error al intentar cargar el detalle");
                             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
                         }
 
