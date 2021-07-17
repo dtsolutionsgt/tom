@@ -20,7 +20,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
 
     private ProgressDialog progress;
-    public int IdTipoEtiqueta=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +39,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblubic = findViewById(R.id.lblubicCI);
         lblnomUbic = findViewById(R.id.lblnomUbicCI);
         lblLicPlate= findViewById(R.id.lblLicPlate);
-
-        Intent intent = this.getIntent();
-        Bundle extra = intent.getExtras();
-        IdTipoEtiqueta =  extra.getInt("IdTipoEtiqueta");
 
         asignarDatos();
 
@@ -117,7 +112,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
                     String zpl = "";
 
-                    if (IdTipoEtiqueta==1){
+                    if (gl.existencia.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW700 \n" +
@@ -136,7 +131,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                 gl.existencia.Codigo+"");
-                    }else if (IdTipoEtiqueta==2){
+                    }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW609\n" +
@@ -192,7 +187,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
                     String zpl = "";
 
-                    if (IdTipoEtiqueta==1){
+                    if (gl.existencia.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW700 \n" +
@@ -211,7 +206,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                 (gl.existencia.LicPlate !="" )?gl.existencia.LicPlate:gl.existencia.Codigo+"");
-                    }else if (IdTipoEtiqueta==2){
+                    }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW609\n" +

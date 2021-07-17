@@ -538,6 +538,7 @@ public class frm_consulta_stock extends PBase {
                         item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                         item.factor = pListStock2.items.get(i).factor;
                         item.ingreso= pListStock2.items.get(i).ingreso;
+                        item.IdTipoEtiqueta=pListStock2.items.get(i).IdTipoEtiqueta;
                         items_stock.add(item);
                     }
 
@@ -613,6 +614,7 @@ public class frm_consulta_stock extends PBase {
                 item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                 item.factor = pListStock2.items.get(i).factor;
                 item.ingreso= pListStock2.items.get(i).ingreso;
+                item.IdTipoEtiqueta= pListStock2.items.get(i).IdTipoEtiqueta;//#CKFK 20210716 1846 Agregué el campo IdTipoEtiqueta
                 items_stock.add(item);
             }
 
@@ -677,6 +679,7 @@ public class frm_consulta_stock extends PBase {
                     item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                     item.factor = pListStock2.items.get(i).factor;
                     item.ingreso = pListStock2.items.get(i).ingreso;
+                    item.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
                     items_stock.add(item);
                 }
 
@@ -748,6 +751,7 @@ public class frm_consulta_stock extends PBase {
                 items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                 items.factor = pListStock2.items.get(i).factor;
                 items.ingreso = pListStock2.items.get(i).ingreso;
+                items.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
                 items_stock2.add(items);
 
             }
