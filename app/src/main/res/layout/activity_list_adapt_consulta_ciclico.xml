@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/lblCodigo"
-            android:layout_width="70dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/lblNoUbic"
             android:gravity="center"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/lblCant_Conteo"
-            android:layout_width="100dp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/lblPres"
             android:gravity="center"
@@ -84,7 +84,7 @@
 
         <TextView
             android:id="@+id/lblPeso_Conteo"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -95,7 +95,7 @@
 
         <TextView
             android:id="@+id/lblCant_Stock"
-            android:layout_width="100dp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -128,7 +128,7 @@
 
         <TextView
             android:id="@+id/lblFecha_Vence"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
