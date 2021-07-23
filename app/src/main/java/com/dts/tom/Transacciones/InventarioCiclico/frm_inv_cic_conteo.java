@@ -167,6 +167,7 @@ public class frm_inv_cic_conteo extends PBase {
                     if (position > 0) {
 
                         gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                        gl.inv_ciclico.index = position;
                         gl.IndexCiclico = gl.inv_ciclico.index;
 
                         execws(4);
@@ -781,7 +782,12 @@ public class frm_inv_cic_conteo extends PBase {
             gl.pprod.Control_lote= xobj.getresultSingle(Boolean.class,"Control_lote");
             gl.pprod.Control_vencimiento = xobj.getresultSingle(Boolean.class,"Control_vencimiento");
 
-            execws(5);
+            if (BeInvEnc.Idpropietario >0){
+                execws(5);
+            }
+            else{
+                msgbox("No existe el propietario (podra ser un consolidador?)");
+            }
 
         }
         catch (Exception e){
@@ -800,6 +806,8 @@ public class frm_inv_cic_conteo extends PBase {
 
                 txtBuscFiltro.setText("");
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
+            }else{
+                msgbox("No hay estados para asignar al producto");
             }
 
 
