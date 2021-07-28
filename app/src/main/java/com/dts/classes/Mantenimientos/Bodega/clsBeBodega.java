@@ -55,6 +55,7 @@ public class clsBeBodega extends clsBeBodegaBase {
   /*  @Element(required=false) public boolean captura_estiba_ingreso = false;
     @Element(required=false) public boolean captura_pallet_no_estandar = false;*/
     @Element(required=false) public float valor_porcentaje_iva = 0;
+    @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
 
 
     public clsBeBodega() {
@@ -289,6 +290,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setcambio_ubicacion_auto(boolean value) {
         cambio_ubicacion_auto=value;
     }
+
     public String getcodigo_bodega_erp() {
         return codigo_bodega_erp;
     }
@@ -396,6 +398,13 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setvalor_porcentaje_iva(Float value) {
         valor_porcentaje_iva=value;
+    }
+
+    public boolean getPermitir_Verificacion_Consolidada() {
+        return Permitir_Verificacion_Consolidada;
+    }
+    public void setPermitir_Verificacion_Consolidada(boolean value) {
+        Permitir_Verificacion_Consolidada=value;
     }
 
 
