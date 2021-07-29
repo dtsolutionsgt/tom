@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/lblCodigo"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="4001"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNombre"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblCodigo"
+            android:foregroundTint="#FFEB3B"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="jalapeños"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblUM"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblNombre"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UN"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblExistUMBAs"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblUM"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPres"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblExistUMBAs"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="CAJA"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblExistPres"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblPres"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/lblReservadoUMBAs"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblDisponibleUMBas"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLote"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="L25"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblVence"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="25/10/2020"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="BUENO"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblUbic"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UBICACION #3514"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblidUbic"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="3514"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPedido"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPick"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLicPlate_ci"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdProductoBodega"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIngreso"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="25/10/2020"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdTipoEtiqueta"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblIngreso"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Recepcion.frm_recepcion_datos">
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:headerBackground="@drawable/color_medium"
+        android:visibility="invisible" />
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/back"
+            android:onClick="ExitForm" />
+
+        <Button
+            android:id="@+id/btnFinalizarRece"
+            android:layout_width="268dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toStartOf="@+id/btnIr"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:onClick="BotonGuardarRecepcion"
+            android:text="Recibir"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnIr"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/arr_rnd_right"
+            android:enabled="true"
+            android:onClick="BotonMostrar" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scroldATOS"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/relbot"
+        android:layout_below="@id/reltop">
+
+        <LinearLayout
+            android:id="@+id/lnDatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblPropPrd"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/color_light"
+                android:gravity="center"
+                android:text="Propietario: Idealsa" />
+
+            <RelativeLayout
+                android:id="@+id/tblBarra"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/txtLP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_toStartOf="@+id/cmdImprimir"
+                    android:inputType="textPersonName" />
+
+                <ImageView
+                    android:id="@+id/cmdImprimir"
+                    android:layout_width="70dp"
+                    android:layout_height="54dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="0dp"
+                    android:padding="10dp"
+                    android:src="@drawable/login_printer" />
+
+                <TextView
+                    android:id="@+id/textView52"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="LP :"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <TableRow
+                android:id="@+id/tblVence"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView81"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Vence:" />
+
+                <ImageView
+                    android:id="@+id/imgDate"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:onClick="ChangeDate"
+                    android:src="@drawable/calendar" />
+
+                <EditText
+                    android:id="@+id/cmbVenceRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="date" />
+
+                <Spinner
+                    android:id="@+id/cmbVence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    tools:visibility="invisible" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblLote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView82"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Lote:" />
+
+                <EditText
+                    android:id="@+id/txtLoteRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/cmbLote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="invisible" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblUbicacion"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Ubicación"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblPres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView83"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Presentación:" />
+
+                <Spinner
+                    android:id="@+id/cmbPresRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblEstiba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblEstiba"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Camas X Tarima - Cajas X Cama"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblUmbas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView84"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="U.M.Bas:" />
+
+                <EditText
+                    android:id="@+id/txtUmbasRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView85"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Cantidad:" />
+
+                <EditText
+                    android:id="@+id/txtCantidadRec"
+                    android:layout_width="259dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:inputType="number|numberDecimal"
+                    android:selectAllOnFocus="true" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tbLPeso"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearPeso"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView87"
+                        style="@style/StyleText"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Peso bruto:" />
+
+                    <EditText
+                        android:id="@+id/txtPeso"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/textView86"
+                        style="@style/StyleText"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="3dp"
+                        android:text="Unitario:" />
+
+                    <EditText
+                        android:id="@+id/txtPesoUnitario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="number|numberDecimal" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblCosto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView89"
+                        style="@style/StyleText"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Costo Real:" />
+
+                    <EditText
+                        android:id="@+id/txtCostoReal"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/textView88"
+                        style="@style/StyleText"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="Costo:" />
+
+                    <EditText
+                        android:id="@+id/txtCostoOC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberDecimal" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblEstadoProducto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView90"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Estado:" />
+
+                <Spinner
+                    android:id="@+id/cmbEstadoProductoRec"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <Button
+                    android:id="@+id/btnCantPendiente"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/holo_blue_dark"
+                    android:text="Pendientes: 1"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/chkPaletizar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Paletizar"
+                    tools:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/chkEstiba"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Definir estiba" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btnCantRecibida"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/holo_blue_dark"
+                    android:text="Recibido: 1"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/chkPalletNoEstandar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Pallet No Estándar" />
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

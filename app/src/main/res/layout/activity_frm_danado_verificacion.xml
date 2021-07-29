@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Verificacion.frm_danado_verificacion">
+
+    <TextView
+        android:id="@+id/lblNomUbicVeri"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtUbicDestVeri"
+        android:layout_alignStart="@id/txtUbicDestVeri"
+        android:layout_alignEnd="@id/txtUbicDestVeri"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="#0119A2"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lblProdDanadoVeri"
+        style="@style/StyleText"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:text="-" />
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBackVeri"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentBottom="false"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toStartOf="@+id/btnGuardarDanadoVeri"
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
+
+        <Button
+            android:id="@+id/btnGuardarDanadoVeri"
+            android:layout_width="296dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/color_medium"
+            android:onClick="Reemplazar"
+            android:text="Guardar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Producto a reemplazar"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/cmbEstadoDanadoVeri"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/lblProdDanadoVeri"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="10dp" />
+
+    <TextView
+        android:id="@+id/lblEstadoDanadoVeri"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cmbEstadoDanadoVeri"
+        android:layout_alignBottom="@+id/cmbEstadoDanadoVeri"
+        android:layout_alignParentStart="true"
+        android:text="Estado:" />
+
+    <EditText
+        android:id="@+id/txtUbicDestVeri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbEstadoDanadoVeri"
+        android:layout_alignStart="@+id/cmbEstadoDanadoVeri"
+        android:layout_alignEnd="@+id/cmbEstadoDanadoVeri"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/lblUbicDestVeri"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicDestVeri"
+        android:layout_alignEnd="@+id/lblEstadoDanadoVeri"
+        android:layout_alignBottom="@+id/txtUbicDestVeri"
+        android:layout_alignParentStart="true"
+        android:text="Destino:" />
+</RelativeLayout>

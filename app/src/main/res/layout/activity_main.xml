@@ -6,8 +6,273 @@
     android:layout_height="match_parent"
     android:background="@drawable/color_light"
     android:clickable="true"
-    android:onClick="doMenu"
+    android:verticalScrollbarPosition="defaultPosition"
     tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/svLogin"
+        style="@android:style/Widget.Holo.ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/textView6">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/rellogtit"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@drawable/color_medium">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:paddingTop="5dp"
+                        android:text="Inicio de sesión"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="1dp"
+                    android:adjustViewBounds="true"
+                    android:padding="10dp"
+                    android:src="@drawable/login_company" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:alpha="0.65"
+                    android:padding="10dp"
+                    android:src="@drawable/login_wh" />
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="0dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="5dp"
+                    android:alpha="0.85"
+                    android:padding="10dp"
+                    android:src="@drawable/login_printer" />
+
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="0dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="56dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="10dp"
+                    android:src="@drawable/login_user" />
+
+                <Spinner
+                    android:id="@+id/spinner4"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="56dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:src="@drawable/login_pwd" />
+
+                <EditText
+                    android:id="@+id/editText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:clickable="true"
+                    android:onClick="doLogin"
+                    android:src="@drawable/arr_rnd_right" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="TextView"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/relbot"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/color_medium">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerVertical="false"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="24dp"
+                        android:text="Versión 4.5.3"
+                        android:textColor="#FFFFFF" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentBottom="false"
+                        android:layout_centerHorizontal="true"
+                        android:adjustViewBounds="true"
+                        android:paddingTop="0.5dp"
+                        android:paddingBottom="0.5dp"
+                        android:src="@drawable/color_break" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="0.5dp"
+                        android:layout_marginRight="0.5dp"
+                        android:layout_marginBottom="0.5dp"
+                        android:layout_toEndOf="@+id/imageView4"
+                        android:background="#FFFFFF"
+                        android:paddingBottom="0.5dp">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginEnd="44dp"
+                            android:paddingTop="5dp"
+                            android:src="@drawable/logodts" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerVertical="false"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="14-Jul-2021"
+                        android:textColor="#FFFFFF" />
+                </RelativeLayout>
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true" />
 
     <RelativeLayout
         android:id="@+id/reltop"
@@ -18,13 +283,14 @@
         android:background="@drawable/color_medium">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/lblTituloForma"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="TOM IMS"
+            android:text="TOM WMS"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -39,228 +305,29 @@
             android:padding="10dp"
             android:src="@drawable/menu" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:adjustViewBounds="true"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:src="@drawable/logotomims" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relbot"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/color_medium">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="false"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="24dp"
-            android:text="Versión 1.0.0  "
-            android:textColor="#FFFFFF" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="false"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            android:paddingTop="0.5dp"
-            android:paddingBottom="0.5dp"
-            android:src="@drawable/color_break" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="0.5dp"
-            android:layout_marginRight="0.5dp"
-            android:layout_marginBottom="0.5dp"
-            android:layout_toEndOf="@+id/imageView4"
-            android:background="#FFFFFF"
-            android:paddingBottom="0.5dp">
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="44dp"
-                android:paddingTop="5dp"
-                android:src="@drawable/logodts" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="false"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="4dp"
-            android:text="01-Ene-2020"
-            android:textColor="#FFFFFF" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rellogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:background="@drawable/frame_rect">
-
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editText2"
-            android:layout_alignStart="@+id/textView6"
-            android:layout_alignEnd="@+id/textView6"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="-3dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="-3dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/rellogtit"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/color_medium">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="Ingreso"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rellogtit"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/line_bottom"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Bodega 1"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView6"
-            android:layout_alignStart="@+id/textView6"
-            android:layout_alignEnd="@+id/textView6"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="-4dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="-3dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/textView6"
-            android:layout_alignBottom="@+id/textView6"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="1dp"
-            android:adjustViewBounds="true"
-            android:padding="8dp"
-            android:src="@drawable/login_wh" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="56dp"
-            android:layout_height="36dp"
-            android:layout_below="@+id/imageView6"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="false"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="3dp"
-            android:padding="8dp"
-            android:src="@drawable/login_user" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="56dp"
-            android:layout_height="28dp"
-            android:layout_below="@+id/imageView7"
-            android:layout_alignStart="@+id/imageView7"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="10dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="4dp"
-            android:src="@drawable/login_pwd" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rellogo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/rellogin"
+        android:layout_above="@+id/textView6"
         android:layout_below="@+id/reltop"
         android:layout_alignParentStart="true"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="30dp">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imgEmpresaLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/palet" />
+            android:onClick="recargar"
+            android:scaleType="center"
+            android:src="@drawable/tom_logo" />
 
     </RelativeLayout>
 

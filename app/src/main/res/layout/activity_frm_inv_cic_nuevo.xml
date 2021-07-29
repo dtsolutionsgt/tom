@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo">
+
+    <RelativeLayout
+        android:id="@+id/reltope_ci"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium"
+        android:paddingStart="15dp">
+
+
+        <TextView
+            android:id="@+id/lbltitulo_nv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Agregar Producto"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scroldATOS"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/relbuton_nv"
+        android:layout_below="@id/reltope_ci">
+
+        <LinearLayout
+            android:id="@+id/lnDatos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:id="@+id/tbl2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtProducto"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Codigo:" />
+
+                <EditText
+                    android:id="@+id/etcodigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblPres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblProd"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Descripción:" />
+            </TableRow>
+
+            <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <EditText
+                android:id="@+id/etdescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </TableRow>
+
+            <TableRow
+                android:id="@+id/tblUmbas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView84"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Familia:" />
+
+                <Spinner
+                    android:id="@+id/cmbFamilia_nv"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtpresent_cic"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Clasificación:" />
+
+                <Spinner
+                    android:id="@+id/cmbClasificacion_nv"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblote_cic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtMarca"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Marca:" />
+
+                <Spinner
+                    android:id="@+id/cmbMarca_nv"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblTipo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txttipo"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Tipo:" />
+
+                <Spinner
+                    android:id="@+id/cmbTipo_nv"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblumBas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtumBas"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="U.M.Bas:" />
+
+                <Spinner
+                    android:id="@+id/cmbUmbas_nv"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblcontrol"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                >
+                <TextView
+                    android:id="@+id/txtcvence"
+                    style="@style/StyleText"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:text="Control vence:" />
+
+                <CheckBox
+                    android:id="@+id/chkControlVence"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:buttonTint="@android:color/darker_gray"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/txtclote"
+                    style="@style/StyleText"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:text="Control lote:" />
+
+
+                <CheckBox
+                    android:id="@+id/chkControlLote"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:buttonTint="@android:color/darker_gray"
+                    android:textSize="24sp" />
+
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/relbuton_nv"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium"
+        >
+
+        <Button
+            android:id="@+id/cmdAddProd"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:text="Guardar"
+            android:onClick="GuardarNuevo"
+            android:textSize="14sp"></Button>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

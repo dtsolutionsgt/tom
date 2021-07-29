@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Verificacion.frm_detalle_tareas_verificacion">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_above="@id/relbot"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
+
+        <Button
+            android:id="@+id/btnFinalizarTareaVerificacion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:onClick="finalizarTareaVerificacion"
+            android:text="Finalizar Tarea"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Detalle de productos para verificación"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relPrinIn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbot"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:id="@+id/lblNoDoumento"
+            style="@style/StyleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F4C47C"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:text="No. Documento: "
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/txtCodProd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblNoDoumento"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textView2"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/StyleText"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblNoDoumento"
+            android:layout_alignTop="@+id/editText"
+            android:layout_alignBottom="@+id/editText"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:text="Producto:" />
+
+        <HorizontalScrollView
+            android:id="@+id/Listado"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/relListVeri"
+            android:layout_below="@id/txtCodProd">
+
+            <ListView
+                android:id="@+id/ListDetVeri"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp" />
+        </HorizontalScrollView>
+
+        <RelativeLayout
+            android:id="@+id/relListVeri"
+            android:layout_width="match_parent"
+            android:layout_height="112dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp">
+
+            <Button
+                android:id="@+id/btnConsultaDa"
+                android:layout_width="274dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="7dp"
+                android:text="Consulta de reemplazos" />
+
+            <Button
+                android:id="@+id/btnNoVerificado"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnConsultaDa"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginBottom="5dp"
+                android:text="No Verificado" />
+
+            <Button
+                android:id="@+id/btnRegs"
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnConsultaDa"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_toEndOf="@+id/btnNoVerificado"
+                android:onClick="Actualizar"
+                android:text="Regs: 0" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

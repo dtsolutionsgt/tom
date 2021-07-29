@@ -6,20 +6,21 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.Gravity;
-
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.dts.base.AppMethods;
+import com.dts.base.DateUtils;
 import com.dts.base.MiscUtils;
 import com.dts.base.appGlobals;
-import com.dts.base.DateUtils;
 import com.dts.base.clsClasses;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
-public class PBase extends Activity
-{
+public class PBase extends Activity {
 
     protected String sql;
 
@@ -33,18 +34,18 @@ public class PBase extends Activity
     protected int itemid,browse,mode;
     protected int selid,selidx,deposito;
     protected long fecha;
-    protected String s,ss;
+    protected String s,ss ;
 
+    protected InputMethodManager keyboard;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pbase);
     }
 
-    public void InitBase()
-    {
+    public void InitBase(){
+
         vApp=this.getApplication();
         gl=((appGlobals) this.getApplication());
 
@@ -52,22 +53,21 @@ public class PBase extends Activity
         du=new DateUtils();
         app=new AppMethods(this,gl);
 
+        keyboard = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+
         browse=0;
     }
 
     // Web service call back
 
-    public void wsCallBack(Boolean throwing,String errmsg) throws Exception
-    {
-        if (throwing) throw new Exception(errmsg);
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) throws Exception {
+
     }
 
     // Aux
 
-    protected void msgbox(String msg)
-    {
-        try
-        {
+    protected void msgbox(String msg){
+        try{
             mu.msgbox(msg);
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -82,15 +82,13 @@ public class PBase extends Activity
         toastcent(""+val);
     }
 
-    protected void toastlong(String msg)
-    {
+    protected void toastlong(String msg) {
         Toast toast= Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 
-    protected void toastcent(String msg)
-    {
+    protected void toastcent(String msg) {
 
         if (mu.emptystr(msg)) return;
 
@@ -99,8 +97,7 @@ public class PBase extends Activity
         toast.show();
     }
 
-    public void addlog(final String methodname, String msg, String info)
-    {
+    public void addlog(final String methodname, String msg, String info) {
 
         final String vmethodname = methodname;
         final String vmsg = msg;
@@ -116,8 +113,7 @@ public class PBase extends Activity
 
     }
 
-    protected void setAddlog(String methodname,String msg,String info)
-    {
+    protected void setAddlog(String methodname,String msg,String info) {
 
         BufferedWriter writer = null;
         FileWriter wfile;
@@ -150,6 +146,15 @@ public class PBase extends Activity
         if (condition) return valtrue;else return valfalse;
     }
 
+    protected void showkeyb(){
+        if (keyboard != null) {
+            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    protected void hidekeyb() {
+        keyboard.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
 
     // Activity Events
 

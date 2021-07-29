@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Picking.frm_detalle_tareas_picking">
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="Salir" />
+
+        <Button
+            android:id="@+id/btnFinalizarTareaPicking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:onClick="BotonFinalizar"
+            android:text="Finalizar Tarea"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Detalle de producto para Picking"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lblNoDocumento"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="NoDocumento: "
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/cmbOrdenadorPor"
+        android:layout_width="239dp"
+        android:layout_height="47dp"
+        android:layout_below="@+id/lblNoDocumento"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp" />
+
+    <TextView
+        android:id="@+id/lblOrdenPr"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/cmbOrdenadorPor"
+        android:layout_alignBottom="@+id/cmbOrdenadorPor"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Ordernar por:"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnRes_Det"
+        android:layout_width="49dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicacionFiltro"
+        android:layout_alignBottom="@+id/txtUbicacionFiltro"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/colorPrimary"
+        android:onClick="BotonR"
+        android:text="R."
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtUbicacionFiltro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cmbOrdenadorPor"
+        android:layout_alignStart="@+id/cmbOrdenadorPor"
+        android:layout_alignEnd="@+id/cmbOrdenadorPor"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtUbicacionFiltro"
+        android:layout_alignEnd="@+id/lblOrdenPr"
+        android:layout_alignBottom="@+id/txtUbicacionFiltro"
+        android:layout_marginEnd="6dp"
+        android:layout_toEndOf="@+id/btnRes_Det"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:text="Ubic"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:id="@+id/relBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/btnPendientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/holo_red_dark"
+            android:text="Pendientes: 0"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/hrPicking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relBtn"
+        android:layout_below="@id/txtUbicacionFiltro"
+        android:layout_marginBottom="0dp">
+
+        <ListView
+            android:id="@+id/listTareasPicking"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </HorizontalScrollView>
+
+</RelativeLayout>

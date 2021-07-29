@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transacciones.Recepcion.frm_list_rec_prod_detalle">
+
+    <HorizontalScrollView
+        android:id="@+id/srollRecDet"
+        android:layout_width="match_parent"
+        android:layout_height="437dp"
+        android:layout_above="@+id/btnCorregir"
+        android:layout_below="@id/txtCodigoProductoRecepcion2"
+        android:layout_marginBottom="0dp">
+
+        <ListView
+            android:id="@+id/listRecDet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp" />
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/textView97"
+        style="@style/StyleText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/txtCodigoProductoRecepcion2"
+        android:layout_alignBottom="@id/txtCodigoProductoRecepcion2"
+        android:text="Código:" />
+
+    <EditText
+        android:id="@+id/txtCodigoProductoRecepcion2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnCompletaRec2"
+        android:layout_alignStart="@id/btnCompletaRec2"
+        android:layout_alignEnd="@id/btnCompletaRec2"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:inputType="textPersonName" />
+
+    <ImageView
+        android:id="@+id/imgImprimir"
+        android:layout_width="70dp"
+        android:layout_height="54dp"
+        android:layout_above="@id/textView97"
+        android:layout_below="@id/lblNoDocumento2"
+        android:onClick="Imprimir"
+        android:padding="10dp"
+        android:src="@drawable/login_printer"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/cmdEliminar"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView97"
+        android:layout_below="@+id/lblNoDocumento2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="-72dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/btnCompletaRec2"
+        android:layout_toEndOf="@+id/imgImprimir"
+        android:onClick="Eliminar"
+        android:src="@drawable/borrardet"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btnCompletaRec2"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblNoDocumento2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="93dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="44dp"
+        android:background="@color/rosado"
+        android:text="Incompleta"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/lblNoDocumento2"
+        style="@style/StyleText"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/reltop"
+        android:background="@drawable/color_light"
+        android:gravity="center"
+        android:text="NoDocumento:" />
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="BacKList" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reltop"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/color_medium">
+
+        <TextView
+            android:id="@+id/lblTituloForma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Detalle de productos recepcionados"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnBorrarTd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_red_light"
+        android:text="Borra todas"
+        android:textColor="#FAF9F9"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btnCorregir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnBorrarTd"
+        android:layout_alignBottom="@+id/btnBorrarTd"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/btnBorrarTd"
+        android:background="@color/colorPrimary"
+        android:text="Corregir"
+        android:textColor="#FBF9F9"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btnRegs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnCorregir"
+        android:layout_alignBottom="@+id/btnCorregir"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="40dp"
+        android:layout_toEndOf="@+id/btnCorregir"
+        android:background="#03508A"
+        android:text="Regs: 1"
+        android:textColor="#FDFCFC" />
+
+    <Button
+        android:id="@+id/btnModo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtCodigoProductoRecepcion2"
+        android:layout_alignBottom="@+id/txtCodigoProductoRecepcion2"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/txtCodigoProductoRecepcion2"
+        android:background="@color/colorPrimary"
+        android:text="R."
+        android:textColor="#FAF9F9" />
+
+</RelativeLayout>
