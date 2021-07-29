@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -105,7 +104,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
-                    //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega
+                    //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega_By_Operador
                     execws(1);
                 }else if (gl.tipoIngreso.equals("HSOC00")){
                     gl.TipoOpcion =2;
@@ -128,7 +127,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 doExit();
             }
 
-        }catch (Exception e){
+        } catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -172,7 +171,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                             procesar_registro();
                         }
 
-                    }else if(gl.tipoTarea==6){
+                    } else if(gl.tipoTarea==6){
 
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
@@ -224,7 +223,10 @@ public class frm_lista_tareas_recepcion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
+                        callMethod("Get_All_Recepciones_For_HH_By_IdBodega_By_Operador",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
+                        //callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_All_Rec_Ciegas_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
@@ -337,6 +339,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void Llena_Tareas_Picking(){
+
         clsBeTrans_picking_enc vItem;
         BeListTareasPicking.clear();
         int count;
@@ -370,8 +373,10 @@ public class frm_lista_tareas_recepcion extends PBase {
                         BeListTareasPicking.add(vItem);
 
                     }
+
                     count = BeListTareasPicking.size()-1;
                     lblRegs.setText("Regs: "+ count);
+
                 }
             }
 
@@ -389,6 +394,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void Llena_Tareas_Verificacion(){
+
         clsBeTrans_pe_enc vItem;
         BeListTareasPedido.clear();
         int count;
@@ -399,6 +405,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.show();
 
             if (pListBeTransPeEnc!=null){
+
                 if (pListBeTransPeEnc.items!=null){
 
                     for (clsBeTrans_pe_enc BePedEnc:pListBeTransPeEnc.items ){
@@ -418,8 +425,10 @@ public class frm_lista_tareas_recepcion extends PBase {
                         BeListTareasPedido.add(vItem);
 
                     }
+
                     count = BeListTareasPedido.size();
                     lblRegs.setText("Regs: "+ count);
+
                 }
             }
 
@@ -438,8 +447,11 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void listItems(){
+
         clsBeTareasIngresoHH vItem;
+
         BeListTareas.clear();
+
         int count;
 
         try{
@@ -447,6 +459,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.setMessage("Listando tareas");
 
             if (pListBeTareasIngresoHH!=null){
+
                 if (pListBeTareasIngresoHH.items!=null){
 
                     vItem = new clsBeTareasIngresoHH();
@@ -458,7 +471,6 @@ public class frm_lista_tareas_recepcion extends PBase {
                         progress.setMessage("Listando tarea #: "+pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc);
 
                         vItem = new clsBeTareasIngresoHH();
-
                         vItem.IdOrderCompraEnc=pListBeTareasIngresoHH.items.get(i).IdOrderCompraEnc;
                         vItem.IdRecepcionEnc=pListBeTareasIngresoHH.items.get(i).IdRecepcionEnc;
                         vItem.NoReferenciaOC=pListBeTareasIngresoHH.items.get(i).NoReferenciaOC;
@@ -466,16 +478,20 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombreProveedor=pListBeTareasIngresoHH.items.get(i).NombreProveedor;
                         vItem.NombreTipoIngresoOC=pListBeTareasIngresoHH.items.get(i).NombreTipoIngresoOC;
                         vItem.NombreTipoRecepcion=pListBeTareasIngresoHH.items.get(i).NombreTipoRecepcion;
-
+                        vItem.NombrePropietario = pListBeTareasIngresoHH.items.get(i).NombrePropietario;
+                        vItem.NumPoliza = pListBeTareasIngresoHH.items.get(i).NumPoliza;
+                        vItem.NumOrden = pListBeTareasIngresoHH.items.get(i).NumOrden;
                         BeListTareas.add(vItem);
 
                     }
+
                     count = BeListTareas.size()-1;
                     lblRegs.setText("Regs: "+ count);
 
                 }else{
                     btnNueva.setVisibility(View.VISIBLE);
                 }
+
             }else{
                 btnNueva.setVisibility(View.VISIBLE);
             }
@@ -522,7 +538,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
     private void procesar_registro(){
 
-        try{
+        try {
 
             gl.gIdRecepcionEnc=0;
 
@@ -551,6 +567,10 @@ public class frm_lista_tareas_recepcion extends PBase {
         }catch (Exception e){
             mu.msgbox(e.getMessage());
         }
+
+    }
+
+    private void buscaLP(String lp) {
 
     }
 
@@ -592,7 +612,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     if (vIdTarea>0){
                         procesar_registro();
                     }else{
-                        mu.msgbox("No existe la tarea "+selid);
+
+                        if (existe_en_recepciones(txtTarea.getText().toString())) {
+
+                        }else{
+                            mu.msgbox("No existe la tarea "+selid);
+                        }
                     }
 
                 }else if(gl.tipoTarea==5){
@@ -623,11 +648,30 @@ public class frm_lista_tareas_recepcion extends PBase {
             if (e.getMessage() !=null){
                 mu.msgbox("Error obteniendo la tarea: "+e.getMessage());
             }else{
-                mu.msgbox("El número de tarea ingresado no es válido");
-                txtTarea.setText("");
-                txtTarea.requestFocus();
+                if(gl.tipoTarea==6) {
+                    buscaLP(txtTarea.getText().toString());
+                } else {
+                    mu.msgbox("El número de tarea ingresado no es válido");
+                    txtTarea.setText("");
+                    txtTarea.requestFocus();
+                }
             }
         }
+    }
+
+    private boolean existe_en_recepciones(String v_producto){
+
+        boolean result = false;
+
+        try{
+
+            result = true;
+            
+        }catch (Exception ex){
+
+        }
+
+        return result;
     }
 
     public void ProgressDialog(String mensaje){

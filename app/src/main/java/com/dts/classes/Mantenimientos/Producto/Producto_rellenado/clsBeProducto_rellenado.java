@@ -1,6 +1,5 @@
 package com.dts.classes.Mantenimientos.Producto.Producto_rellenado;
 
-
 import org.simpleframework.xml.Element;
 
 public class clsBeProducto_rellenado {
@@ -17,14 +16,18 @@ public class clsBeProducto_rellenado {
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
     @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public int IdProductoBodega=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public int IdUnidadMedidaBasica=0;
+    @Element(required=false) public int IdUmBasAbastercerCon=0;
+    @Element(required=false) public int IdPresentacionAbastercerCon=0;
+    @Element(required=false) public String NomPresentacionRellenarCon="";
+    @Element(required=false) public String NomUmBasAbastecerCon="";
+    @Element(required=false) public int IdPropietario=0;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String Estado="";
     @Element(required=false) public String Presentacion="";
     @Element(required=false) public String Ubicacion="";
-    @Element(required=false) public int IdProductoBodega=0;
-    @Element(required=false) public int IdBodega=0;
-    @Element(required=false) public int IdUnidadMedidaBasica=0;
-
 
     public clsBeProducto_rellenado() {
     }
@@ -32,9 +35,10 @@ public class clsBeProducto_rellenado {
     public clsBeProducto_rellenado(int IdRellenado,int IdPresentacion,int IdProductoEstado,int IdUbicacion,
                                    int IdTipoAccion,double Minimo,double Maximo,String User_agr,
                                    String Fec_agr,String User_mod,String Fec_mod,boolean Activo,
-                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion,
-                                   int IdBodega, int IdProductoBodega, int IdUnidadMedidaBasica)
-    {
+                                   int IdProductoBodega,int IdBodega,int IdUnidadMedidaBasica,int IdUmBasAbastercerCon,
+                                   int IdPresentacionAbastercerCon,String NomPresentacionRellenarCon,String NomUmBasAbastecerCon,int IdPropietario,
+                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion
+    ) {
 
         this.IdRellenado=IdRellenado;
         this.IdPresentacion=IdPresentacion;
@@ -48,13 +52,18 @@ public class clsBeProducto_rellenado {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
+        this.IdProductoBodega=IdProductoBodega;
+        this.IdBodega=IdBodega;
+        this.IdUnidadMedidaBasica=IdUnidadMedidaBasica;
+        this.IdUmBasAbastercerCon=IdUmBasAbastercerCon;
+        this.IdPresentacionAbastercerCon=IdPresentacionAbastercerCon;
+        this.NomPresentacionRellenarCon=NomPresentacionRellenarCon;
+        this.NomUmBasAbastecerCon=NomUmBasAbastecerCon;
+        this.IdPropietario=IdPropietario;
         this.IsNew=IsNew;
         this.Estado=Estado;
         this.Presentacion=Presentacion;
         this.Ubicacion=Ubicacion;
-        this.IdBodega = IdBodega;
-        this.IdProductoBodega = IdProductoBodega;
-        this.IdUnidadMedidaBasica = IdUnidadMedidaBasica;
 
     }
 
@@ -131,6 +140,54 @@ public class clsBeProducto_rellenado {
     public void setActivo(boolean value) {
         Activo=value;
     }
+    public int getIdProductoBodega() {
+        return IdProductoBodega;
+    }
+    public void setIdProductoBodega(int value) {
+        IdProductoBodega=value;
+    }
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
+    }
+    public int getIdUnidadMedidaBasica() {
+        return IdUnidadMedidaBasica;
+    }
+    public void setIdUnidadMedidaBasica(int value) {
+        IdUnidadMedidaBasica=value;
+    }
+    public int getIdUmBasAbastercerCon() {
+        return IdUmBasAbastercerCon;
+    }
+    public void setIdUmBasAbastercerCon(int value) {
+        IdUmBasAbastercerCon=value;
+    }
+    public int getIdPresentacionAbastercerCon() {
+        return IdPresentacionAbastercerCon;
+    }
+    public void setIdPresentacionAbastercerCon(int value) {
+        IdPresentacionAbastercerCon=value;
+    }
+    public String getNomPresentacionRellenarCon() {
+        return NomPresentacionRellenarCon;
+    }
+    public void setNomPresentacionRellenarCon(String value) {
+        NomPresentacionRellenarCon=value;
+    }
+    public String getNomUmBasAbastecerCon() {
+        return NomUmBasAbastecerCon;
+    }
+    public void setNomUmBasAbastecerCon(String value) {
+        NomUmBasAbastecerCon=value;
+    }
+    public int getIdPropietario() {
+        return IdPropietario;
+    }
+    public void setIdPropietario(int value) {
+        IdPropietario=value;
+    }
     public boolean getIsNew() {
         return IsNew;
     }
@@ -155,28 +212,6 @@ public class clsBeProducto_rellenado {
     public void setUbicacion(String value) {
         Ubicacion=value;
     }
-
-    public int getIdBodega() {
-        return IdBodega;
-    }
-    public void setIdBodega(int value) {
-        IdBodega=value;
-    }
-
-    public int getIdProductoBodega() {
-        return IdProductoBodega;
-    }
-    public void setIdProductoBodega(int value) {
-        IdProductoBodega=value;
-    }
-
-    public int getIdUnidadMedidaBasica() {
-        return IdUnidadMedidaBasica;
-    }
-    public void setIdUnidadMedidaBasica(int value) {
-        IdUnidadMedidaBasica=value;
-    }
-
 
 }
 

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,16 +25,21 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -41,9 +49,11 @@ public class frm_Packing extends PBase {
     private XMLObject xobj;
 
     private EditText txtUbicOr,txtPrd,txtNuevoLp,txtCantidad,txtLpAnt,txtLic_Plate;
-    private TextView lblUbicOrigen,lblDesProducto,lblLpAnt,lblIdStock,lblCCant,lblVence,lblLote;
+    private TextView lblUbicOrigen,lblDesProducto,lblLpAnt,lblIdStock,lblCCant,lblVence,lblLote,
+            lblNomDestino, txtUbicDestino;
     private Spinner cmbPres,cmbLote,cmbVence,cmbEstado;
     private Button btnGuardarDirigida,btnBack;
+    private ImageView cmdImprimir;
 
     private ProgressDialog progress;
     private Dialog dialog;
@@ -69,7 +79,9 @@ public class frm_Packing extends PBase {
     private String pLicensePlate;
     private int cvEstOrigen = 0;
     private int cvProdID = 0;
-    private boolean Existe_Lp=false;
+    private int pUbicacionLP=0;
+    private String pNombreUbicacionLP="";
+    private boolean Existe_Lp=false, imprimirDesdeBoton = false;
 
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
     public static clsBeBodega_ubicacion cUbicDest = new clsBeBodega_ubicacion();
@@ -117,6 +129,8 @@ public class frm_Packing extends PBase {
         lblCCant = (TextView)findViewById(R.id.textView66);
         lblLote= (TextView)findViewById(R.id.textView59);
         lblVence= (TextView)findViewById(R.id.textView60);
+        lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+        txtUbicDestino = findViewById(R.id.txtUbicDestino);
 
         cmbPres = (Spinner) findViewById(R.id.cmbPres);
         cmbLote = (Spinner) findViewById(R.id.cmbLote);
@@ -124,6 +138,7 @@ public class frm_Packing extends PBase {
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
         btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
+        cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
 
         ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -322,6 +337,11 @@ public class frm_Packing extends PBase {
                 }
             });
 
+            cmdImprimir.setOnClickListener(v -> {
+                imprimirDesdeBoton = true;
+                Imprimir(v);
+            });
+
         }catch (Exception e){
             mu.msgbox("setHandles:"+e.getMessage());
         }
@@ -509,6 +529,8 @@ public class frm_Packing extends PBase {
             txtCantidad.setText("");
             txtCantidad.setEnabled(false);
             txtPrd.setText("");
+            txtUbicDestino.setText("");
+            lblNomDestino.setText("");
 
         }catch (Exception e){
 
@@ -1118,13 +1140,26 @@ public class frm_Packing extends PBase {
     }
 
     private void aplicarCambio() {
+        int vUbicacionProducto;
 
         try{
+
+            imprimirDesdeBoton=false;
 
             progress.setMessage("Aplicando el cambio");
             progress.show();
 
             if (!ValidaDatos())return;
+
+            vUbicacionProducto = BeStockPallet.IdUbicacion;
+
+            if (pUbicacionLP!=0){
+                if (vUbicacionProducto!=pUbicacionLP){
+                    progress.cancel();
+                    msgbox("La ubicación del License Plate seleccionado no coincide con la del License Plate destino, no se puede realizar el packing");
+                    return;
+                }
+            }
 
             NuevoLp = txtNuevoLp.getText().toString();
 
@@ -1357,7 +1392,9 @@ public class frm_Packing extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    aplicarCambio();
+
+                    execws(11);
+                    //aplicarCambio(); Primero voy a buscar ubicación del LP
                 }
             });
 
@@ -1476,10 +1513,24 @@ public class frm_Packing extends PBase {
                     case 8:
                         callMethod("Set_LP_Stock",
                                 "pMovimiento", gMovimientoDet,
-                                "pStockRes",vStockRes);
+                                "pStockRes",vStockRes,
+                                "pIdResolucionLp", gl.IdResolucionLpOperador);
                         break;
                     case 9:
                         callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
+                        break;
+                    case 10:
+                        //#CKFK 20210617 Agregué el llamado a esta función para obtener el LP para el Packing
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 11:
+                        //#CKFK 20210617 Agregué el llamado a esta función para obtener la ubicación del LP
+                        callMethod("Get_Ubicacion_LP",
+                                   "pLic_Plate",txtNuevoLp.getText().toString(),
+                                   "pIdBodega",gl.IdBodega,
+                                   "nombre_ubicacion",pNombreUbicacionLP);
                         break;
                 }
 
@@ -1525,7 +1576,14 @@ public class frm_Packing extends PBase {
                 case 9:
                     processExisteLp();
                     break;
-
+                case 10:
+                    processNuevoLPA();
+                    //#EJC20210504: Refactor por resolución LP
+                    //processNuevoLP();
+                    break;
+                case 11:
+                    processUbicacionLP();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1584,19 +1642,25 @@ public class frm_Packing extends PBase {
 
             cUbicOrig = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
-            if (cUbicOrig.IdUbicacion==0){
-                lblUbicOrigen.setText("Ubicación no válida");
-                return;
+            if (cUbicOrig!=null){
+
+                if (cUbicOrig.IdUbicacion==0){
+                    lblUbicOrigen.setText("Ubicación no válida");
+                    return;
+                }
+
+                cvUbicOrigID = cUbicOrig.IdUbicacion;
+                lblUbicOrigen.setText(cUbicOrig.Descripcion);
+                cvUbicDestID = cvUbicOrigID;
+
+                txtLic_Plate.setSelectAllOnFocus(true);
+                txtLic_Plate.requestFocus();
+
+                idle = true;
+
             }
 
-            cvUbicOrigID = cUbicOrig.IdUbicacion;
-            lblUbicOrigen.setText(cUbicOrig.Descripcion);
-            cvUbicDestID = cvUbicOrigID;
-
-            txtLic_Plate.setSelectAllOnFocus(true);
-            txtLic_Plate.requestFocus();
-
-            idle = true;
+            execws(10);
 
         }catch (Exception e){
             mu.msgbox("processUbicacionBarra:"+e.getMessage());
@@ -1836,11 +1900,9 @@ public class frm_Packing extends PBase {
                     gl.gCNomPresAnterior = "";
                 }
 
-                //CM_20201128: correcciones al iniciar valores después de asociar lp nuevo.
-                //CKFK 20210209 No hace falta inicializar valores por que lo hace al buscar la ubicacion origen
-                //Limpiar_Valores();
-
                 lblDesProducto.setText("");
+
+                Imprime_Barra_Despues_Guardar();
 
                 //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
                 execws(1);
@@ -1852,6 +1914,219 @@ public class frm_Packing extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void processNuevoLPA(){
+
+        try {
+
+            clsBeResolucion_lp_operador resolucionActivaLpByBodega = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+
+            if (resolucionActivaLpByBodega !=null){
+
+                gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
+
+                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
+
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                String str = String.valueOf(intLPSig);
+                StringBuilder sb = new StringBuilder();
+
+                for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
+                    sb.append('0');
+                }
+
+                sb.append(str);
+                String result = sb.toString();
+
+                txtNuevoLp.setText(resolucionActivaLpByBodega.Serie + result);
+
+            }else{
+                gl.IdResolucionLpOperador =0;
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP: "+e.getMessage());
+        }
+
+    }
+
+    private void processUbicacionLP(){
+
+
+        try{
+
+            pUbicacionLP = xobj.getresult(Integer.class,"Get_Ubicacion_LP");
+            pNombreUbicacionLP = xobj.getresultSingle(String.class,"nombre_ubicacion");
+
+            if (pUbicacionLP>0){
+                txtUbicDestino.setText(pUbicacionLP+"");
+                lblNomDestino.setText(pNombreUbicacionLP);
+            }
+
+            aplicarCambio();
+
+        }catch (Exception e){
+            mu.msgbox("processUbicacionLP:"+e.getMessage());
+        }
+    }
+
+    public void Imprimir(View view){
+        msgAskImprimir("Imprimir Licencia de Packing");
+    }
+
+    //#CKFK 20210617: Agregué funcionalidad de impresion
+    private void msgAskImprimir(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Licencia de Packing", (dialog12, which) -> {
+                progress.setMessage("Imprimiendo licencia de packing");
+                progress.show();
+                Imprimir_Licencia();
+            });
+
+            dialog.setNegativeButton("Salir", (dialog13, which) -> {
+                if (!imprimirDesdeBoton){
+                    progress.setMessage("Imprimiendo licencia");
+                    progress.show();
+                }else{
+                    progress.cancel();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object()
+            {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+            progress.cancel();
+        }finally {
+            progress.cancel();
+        }
+
+    }
+
+    private void Imprimir_Licencia(){
+        try{
+
+            //CM_20210112: Impresión de barras.
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+            printerIns.open();
+
+            if (printerIns.isConnected()){
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+                String zpl="";
+
+                if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                            "$"+NuevoLp);
+                }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW609\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                    "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                    "^FO2,450^GB670,14,14^FS\n" +
+                                    "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                    "^FD%1$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                            "$"+NuevoLp);
+                }
+
+                zPrinterIns.sendCommand(zpl);
+
+                Thread.sleep(500);
+
+                // Close the connection to release resources.
+                printerIns.close();
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+
+            if (!imprimirDesdeBoton){
+                msgAskImprimir("Imprimir licencia de packing");
+            }
+
+        }catch (Exception e){
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
+                if (!imprimirDesdeBoton){
+                    msgAskImprimir("Imprimir licencia de packing");
+                }
+            }else{
+                mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void Imprime_Barra_Despues_Guardar(){
+
+        try{
+
+            progress.show();
+            progress.setMessage("Validando imprimir barra");
+
+            if (gl.IdImpresora>0){
+
+                progress.cancel();
+                imprimirDesdeBoton=false;
+
+                msgAskImprimir("Imprimir Licencia de Packing");
+
+            }
+
+        }catch (Exception e){
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+                if (!imprimirDesdeBoton){
+                    msgAskImprimir("Imprimir licencia de packing");
+                }
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
+        }
+
     }
 
     private void execws(int callbackvalue) {

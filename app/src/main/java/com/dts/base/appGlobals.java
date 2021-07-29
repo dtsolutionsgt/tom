@@ -88,7 +88,8 @@ public class appGlobals extends Application {
     public String gLP="";
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
-
+    public boolean gCapturaPalletNoEstandar = false;
+    public boolean gCapturaEstibaIngreso = false;
 
     //Variables para picking
     public int gIdPickingEnc=0;
@@ -122,11 +123,13 @@ public class appGlobals extends Application {
 
     //Variables globales generales.
     public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
-    public String gCodigoBodega,gNomOperador,gNomEmpresa;
+    public String gCodigoBodega,gNomOperador,gNomEmpresa, gNomBodega;
     public int tipoTarea;
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
     public int gCantDecDespliegue=0;
     public int gCantDecCalculo=0;
     public String deviceId="";
     public int mode=0;
+    public boolean bloquear_lp_hh = false;
+    public int IdResolucionLpOperador=0;
 }

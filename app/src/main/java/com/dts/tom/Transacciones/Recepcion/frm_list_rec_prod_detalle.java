@@ -1,14 +1,14 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,9 +19,9 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
+import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -49,13 +50,13 @@ public class frm_list_rec_prod_detalle extends PBase {
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
     private clsBeTrans_re_det selitem;
 
-    private int mdet=1;
     private String pNumeroLP="";
 
     private ImageView imgImprimir;
+    private ImageView cmdEliminar;
 
     private list_adapt_detalle_rec_prod adapter;
-    private static ArrayList<clsBeTrans_re_det> BeListDetalleRec= new ArrayList<clsBeTrans_re_det>() ;
+    private static final ArrayList<clsBeTrans_re_det> BeListDetalleRec= new ArrayList<>() ;
 
     private ProgressDialog progress;
 
@@ -69,11 +70,12 @@ public class frm_list_rec_prod_detalle extends PBase {
         ws = new frm_list_rec_prod_detalle.WebServiceHandler(frm_list_rec_prod_detalle.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        btnRegs = (Button) findViewById(R.id.btnRegs);
-        btnCompletaRec2 = (Button) findViewById(R.id.btnCompletaRec2);
-        imgImprimir = (ImageView)findViewById(R.id.imgImprimir);
+        btnRegs = findViewById(R.id.btnRegs);
+        btnCompletaRec2 = findViewById(R.id.btnCompletaRec2);
+        imgImprimir = findViewById(R.id.imgImprimir);
+        cmdEliminar = findViewById(R.id.cmdEliminar);
 
-        listView = (ListView)findViewById(R.id.listRecDet);
+        listView = findViewById(R.id.listRecDet);
 
         if (gl.gselitem != null) {
             BeOcDet=gl.gselitem;
@@ -106,59 +108,50 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         try{
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
 
-                    if (position>0){
+                if (position>0){
 
-                            Object lvObj = listView.getItemAtPosition(position);
-                            selitem = pListTransRecDet.items.get(position-1);
+                    selitem = pListTransRecDet.items.get(position-1);
 
-                            selid =selitem.IdRecepcionDet ;
-                            selidx = position;
-                            adapter.setSelectedIndex(position);
-                            pNumeroLP = selitem.Lic_plate;
+                        selid =selitem.IdRecepcionDet ;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
+                        pNumeroLP = selitem.Lic_plate;
 
-                            imgImprimir.setVisibility(View.VISIBLE);
+                        imgImprimir.setVisibility(View.VISIBLE);
+                        cmdEliminar.setVisibility(View.VISIBLE);
 
-                    }else{
-                        imgImprimir.setVisibility(View.INVISIBLE);
-                    }
-
+                }else{
+                    imgImprimir.setVisibility(View.INVISIBLE);
+                    cmdEliminar.setVisibility(View.VISIBLE);
                 }
 
             });
 
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
 
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                selid = 0;
 
-                    selid = 0;
+                if (position>0){
 
-                    if (position>0){
+                    selitem = pListTransRecDet.items.get(position-1);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        selitem = pListTransRecDet.items.get(position-1);
+                    selid =selitem.IdRecepcionDet ;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        selid =selitem.IdRecepcionDet ;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-
-                        if (!gl.gBeRecepcion.Habilitar_Stock) {
-                            Procesar_registro();
-                        }else{
-                            msgbox("El detalle no se puede modificar porque ya el Stock está habilitado");
-                        }
+                    if (!gl.gBeRecepcion.Habilitar_Stock) {
+                        Procesar_registro();
+                    }else{
+                        msgbox("El detalle no se puede modificar porque ya el Stock está habilitado");
                     }
-
-                    return true;
                 }
 
+                return true;
             });
 
         }catch (Exception e){
@@ -178,6 +171,7 @@ public class frm_list_rec_prod_detalle extends PBase {
         startActivity(new Intent(this, frm_recepcion_datos.class));
     }
 
+    @SuppressLint("SetTextI18n")
     private void Lista_Detalle_Rec(){
         clsBeTrans_re_det vItem;
         BeListDetalleRec.clear();
@@ -187,22 +181,16 @@ public class frm_list_rec_prod_detalle extends PBase {
             vItem = new clsBeTrans_re_det();
             BeListDetalleRec.add(vItem);
 
-            if (mdet==1){
-//Version de Android 7
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-                {
-                Map<String, Map<String, Map<String, Map<Double, List<clsBeTrans_re_det>>>>> employessGroup=
-                        null;
-                    employessGroup = pListTransRecDet.items.stream().collect(
-                            Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,
-                                Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto_estado,
-                                    Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto,
-                                            Collectors.groupingBy(clsBeTrans_re_det::getcantidad_recibida)))));
-                    employessGroup.size();
-                }
-
-            }else{
-
+            //Version de Android 7
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
+            {
+            Map<String, Map<String, Map<String, Map<Double, List<clsBeTrans_re_det>>>>> employessGroup;
+                employessGroup = pListTransRecDet.items.stream().collect(
+                        Collectors.groupingBy(clsBeTrans_re_det::getNombre_presentacion,
+                            Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto_estado,
+                                Collectors.groupingBy(clsBeTrans_re_det::getNombre_producto,
+                                        Collectors.groupingBy(clsBeTrans_re_det::getcantidad_recibida)))));
+                employessGroup.size();
             }
 
             if (pListTransRecDet!=null){
@@ -221,6 +209,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
                        vItem.Fecha_vence = du.convierteFechaMostar(obj.Fecha_vence);
                        vItem.Lic_plate = obj.Lic_plate;
+                       vItem.IdRecepcionDet = obj.IdRecepcionDet;
 
                        BeListDetalleRec.add(vItem);
 
@@ -230,7 +219,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }
             }
 
-            Collections.sort(BeListDetalleRec,new OrdenarItems());
+            Collections.sort(BeListDetalleRec, new OrdenarItems());
 
             adapter=new list_adapt_detalle_rec_prod(this,BeListDetalleRec);
             listView.setAdapter(adapter);
@@ -239,10 +228,11 @@ public class frm_list_rec_prod_detalle extends PBase {
             mu.msgbox("Lista_Detalle_Rec:"+e.getMessage());
         }
     }
+    @SuppressLint("SetTextI18n")
     void valida_producto_completo(){
 
-        double CantRec = 0;
-        double CantOC  = 0;
+        double CantRec;
+        double CantOC;
 
         try{
 
@@ -260,7 +250,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }
             }else{
                 btnCompletaRec2.setText("DIF - (NEG)");
-                btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFCC0000"));
+                btnCompletaRec2.setBackgroundColor(Color.parseColor("#FFA5A0"));
             }
         }catch (Exception ex){
             msgbox(ex.getMessage());
@@ -286,7 +276,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     End Sub*/
 
-    public class OrdenarItems implements Comparator<clsBeTrans_re_det> {
+    public static class OrdenarItems implements Comparator<clsBeTrans_re_det> {
 
         public int compare(clsBeTrans_re_det left,clsBeTrans_re_det rigth){
             return left.IdRecepcionDet-rigth.IdRecepcionDet;
@@ -295,41 +285,71 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     }
 
-    public void Imprimir(View view){
-        msgAskImprimir("Imprimir Licencia");
+    public void Eliminar(View view){
+        msgAskEliminar();
     }
 
-    private void msgAskImprimir(String msg) {
+    private void msgAskEliminar() {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog dialogT = dialog.create();
+
+            dialogT.setCanceledOnTouchOutside(false);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
+            dialog.setMessage("Está seguro de eliminar el detalle de la recepción " + selid);
 
-            dialog.setCancelable(true);
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Barra();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) ->
+            {
+                progress.setMessage("Eliminando registro");
+                progress.show();
+                execws(3);
             });
 
-            dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Licencia();
-                }
-            });
-
-            dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
-            });
+            dialog.setNegativeButton("No", (dialog12, which) -> {});
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void Imprimir(View view){
+        msgAskImprimir();
+    }
+
+    private void msgAskImprimir() {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog dialogT = dialog.create();
+
+            dialogT.setCanceledOnTouchOutside(false);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("Imprimir Licencia");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de Producto", (dialog1, which) -> Imprimir_Barra());
+
+            dialog.setNegativeButton("Licencia de Producto", (dialog12, which) -> Imprimir_Licencia());
+
+            dialog.setNeutralButton("No imprimir", (dialog13, which) -> {});
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
@@ -356,7 +376,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                                 "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
                                 "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
                                 "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
                                 "^FO2,340^GB670,0,14^FS \n" +
                                 "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                 "^FD%4$s^FS \n" +
@@ -414,14 +434,14 @@ public class frm_list_rec_prod_detalle extends PBase {
                                 "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
                                 "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
                                 "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOMIMS, WMS.  Product Barcode^FS \n" +
+                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
                                 "^FO2,340^GB670,0,14^FS \n" +
                                 "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                 "^FD%4$s^FS \n" +
                                 "^PQ1,0,1,Y " +
                                 "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
                         BeProducto.Codigo+" - "+BeProducto.Nombre,
-                        (pNumeroLP!="")?"$"+pNumeroLP:BeProducto.Codigo);
+                        (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
 
                 zPrinterIns.sendCommand(zpl);
 
@@ -462,6 +482,12 @@ public class frm_list_rec_prod_detalle extends PBase {
                         callMethod("Get_Detalle_By_IdRecepcionDet_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                 "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea);
                         break;
+                    case 3:
+                        callMethod("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet",
+                                "pIdOrdenCompraEnc",BeOcDet.IdOrdenCompraEnc,
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdRecepcionDet",selid);
+                        break;
                 }
 
             }catch (Exception e){
@@ -486,10 +512,14 @@ public class frm_list_rec_prod_detalle extends PBase {
                 case 2:
                     processDetRec();
                     break;
+                case 3:
+                    processDeleteDetRec();
+                    break;
             }
 
         } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "wsCallBack: " + e.getMessage());
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: " + e.getMessage());
         }
 
     }
@@ -528,6 +558,43 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }else{
                     doExit();
                 }
+            }else{
+                adapter = null;
+                listView.setAdapter(adapter);
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processDetRec:"+e.getMessage());
+        }
+    }
+
+    private void processDeleteDetRec(){
+        String Resultado;
+
+        try{
+
+            progress.setMessage("Eliminando detalle");
+
+            Resultado = xobj.getresult(String.class,"Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet");
+
+            if (Resultado!=null){
+
+                List AuxList = stream(gl.gpListDetalleOC.items).select(c -> c.IdOrdenCompraDet).toList();
+
+                if (AuxList.size()>0){
+
+                    int vIndex;
+
+                    vIndex = AuxList.indexOf(BeOcDet.IdOrdenCompraDet);
+
+                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida -= selitem.cantidad_recibida;
+                }
+
+                valida_producto_completo();
+
+                execws(2);
+                progress.cancel();
             }
 
         }catch (Exception e){
@@ -548,7 +615,8 @@ public class frm_list_rec_prod_detalle extends PBase {
             super.finish();
             gl.Carga_Producto_x_Pallet=false;
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
@@ -559,6 +627,8 @@ public class frm_list_rec_prod_detalle extends PBase {
         try{
 
             super.onResume();
+
+            valida_producto_completo();
 
             if (browse==1){
                 browse=0;
@@ -577,7 +647,8 @@ public class frm_list_rec_prod_detalle extends PBase {
         try{
             doExit();
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }

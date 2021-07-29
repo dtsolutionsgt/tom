@@ -1,5 +1,6 @@
 package com.dts.ladapt.InventarioCiclico;
 
+import android.graphics.Color;
 import android.widget.BaseAdapter;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
@@ -94,26 +95,47 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             if(position==0){
 
                 holder.lblNoUbic.setText("NoUbic");
+                holder.lblNoUbic.setTextColor(R.style.titlestyle);
                 holder.lblCodigo.setText("Codigo");
+                holder.lblCodigo.setTextColor(R.style.titlestyle);
                 holder.lblProducto_nombre.setText("Producto_nombre");
+                holder.lblProducto_nombre.setTextColor(R.style.titlestyle);
                 holder.lblUMBas.setText("UMBas");
+                holder.lblUMBas.setTextColor(R.style.titlestyle);
                 holder.lblPres.setText("Pres");
+                holder.lblPres.setTextColor(R.style.titlestyle);
                 holder.lblCant_Conteo.setText("Cant_Conteo");
+                holder.lblCant_Conteo.setTextColor(R.style.titlestyle);
                 holder.lblPeso_Conteo.setText("Peso_Conteo");
+                holder.lblPeso_Conteo.setTextColor(R.style.titlestyle);
                 holder.lblCant_Stock.setText("Cant_Stock");
+                holder.lblCant_Stock.setTextColor(R.style.titlestyle);
                 holder.lblPeso_Stock.setText("Peso_Stock");
+                holder.lblPeso_Stock.setTextColor(R.style.titlestyle);
                 holder.lblLote.setText("Lote");
+                holder.lblLote.setTextColor(R.style.titlestyle);
                 holder.lblFecha_Vence.setText("Fecha_Vence");
+                holder.lblFecha_Vence.setTextColor(R.style.titlestyle);
                 holder.lblConteo.setText("Cantidad");
+                holder.lblConteo.setTextColor(R.style.titlestyle);
                 holder.lblUbic_nombre.setText("Ubic_nombre");
+                holder.lblUbic_nombre.setTextColor(R.style.titlestyle);
                 holder.lblEstado.setText("Estado");
+                holder.lblEstado.setTextColor(R.style.titlestyle);
                 holder.lblIdProductoBodega.setText("IdProductoBodega");
+                holder.lblIdProductoBodega.setTextColor(R.style.titlestyle);
                 holder.lblTramo.setText("Tramo");
+                holder.lblTramo.setTextColor(R.style.titlestyle);
                 holder.lblIndiceX.setText("IndiceX");
+                holder.lblIndiceX.setTextColor(R.style.titlestyle);
                 holder.lblNivel.setText("Nivel");
+                holder.lblNivel.setTextColor(R.style.titlestyle);
                 holder.lblPos.setText("Pos");
+                holder.lblPos.setTextColor(R.style.titlestyle);
                 holder.lblFactor.setText("Factor");
+                holder.lblFactor.setTextColor(R.style.titlestyle);
                 holder.lblidinvreconteo.setText("id_reconteo");
+                holder.lblidinvreconteo.setTextColor(R.style.titlestyle);
 
             }else{
 
@@ -140,6 +162,17 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblidinvreconteo.setText(data_list.get(position).idinvreconteo +"");
             }
 
+
+            if(selectedIndex!= -1 && position == selectedIndex) {
+                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+            } else {
+                if (position==0){
+                    convertView.setBackgroundResource(R.drawable.color_medium);
+
+                }else{
+                    convertView.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
 
         }catch (Exception ex){
             toast(ex.getMessage());

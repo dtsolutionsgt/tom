@@ -1,6 +1,5 @@
 package com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det;
 
-
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
@@ -13,26 +12,27 @@ import org.simpleframework.xml.Element;
 
 public class clsBeTrans_ubic_hh_det {
 
-    @Element(required=false) public int IdTareaUbicacionEnc;
-    @Element(required=false) public int IdTareaUbicacionDet;
-    @Element(required=false) public int IdStock;
-    @Element(required=false) public int IdUbicacionOrigen;
-    @Element(required=false) public int IdUbicacionDestino;
-    @Element(required=false) public int IdEstadoOrigen;
-    @Element(required=false) public int IdEstadoDestino;
-    @Element(required=false) public int IdOperador;
-    @Element(required=false) public String HoraInicio;
-    @Element(required=false) public String HoraFin;
+    @Element(required=false) public int IdTareaUbicacionEnc=0;
+    @Element(required=false) public int IdTareaUbicacionDet=0;
+    @Element(required=false) public int IdStock=0;
+    @Element(required=false) public int IdUbicacionOrigen=0;
+    @Element(required=false) public int IdUbicacionDestino=0;
+    @Element(required=false) public int IdEstadoOrigen=0;
+    @Element(required=false) public int IdEstadoDestino=0;
+    @Element(required=false) public int IdOperadorBodega=0;
+    @Element(required=false) public String HoraInicio="";
+    @Element(required=false) public String HoraFin="";
     @Element(required=false) public boolean Realizado;
-    @Element(required=false) public double Cantidad;
+    @Element(required=false) public double Cantidad=0;
     @Element(required=false) public boolean Activo;
-    @Element(required=false) public double Recibido;
-    @Element(required=false) public String Estado;
-    @Element(required=false) public String Atributo_variante_1;
-    @Element(required=false) public int IdTramo;
-    @Element(required=false) public String Tramo;
-    @Element(required=false) public int Indice_x;
-    @Element(required=false) public int Nivel;
+    @Element(required=false) public double Recibido=0;
+    @Element(required=false) public String Estado="";
+    @Element(required=false) public String Atributo_variante_1="";
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public int IdTramo=0;
+    @Element(required=false) public String Tramo="";
+    @Element(required=false) public int Indice_x=0;
+    @Element(required=false) public int Nivel=0;
     @Element(required=false) public clsBeProducto_Presentacion ProductoPresentacion=new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
     @Element(required=false) public clsBeProducto_estado ProductoEstado=new clsBeProducto_estado();
@@ -43,47 +43,17 @@ public class clsBeTrans_ubic_hh_det {
     @Element(required=false) public clsBeOperador Operador=new clsBeOperador();
 
 
-    public clsBeTrans_ubic_hh_det()
-    {
-        this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
-        this.IdTareaUbicacionDet=IdTareaUbicacionDet;
-        this.IdStock=IdStock;
-        this.IdUbicacionOrigen=IdUbicacionOrigen;
-        this.IdUbicacionDestino=IdUbicacionDestino;
-        this.IdEstadoOrigen=IdEstadoOrigen;
-        this.IdEstadoDestino=IdEstadoDestino;
-        this.IdOperador=IdOperador;
-        this.HoraInicio=HoraInicio;
-        this.HoraFin=HoraFin;
-        this.Realizado=Realizado;
-        this.Cantidad=Cantidad;
-        this.Activo=Activo;
-        this.Recibido=Recibido;
-        this.Estado=Estado;
-        this.Atributo_variante_1=Atributo_variante_1;
-        this.IdTramo=IdTramo;
-        this.Tramo=Tramo;
-        this.Indice_x=Indice_x;
-        this.Nivel=Nivel;
-        this.ProductoPresentacion=ProductoPresentacion;
-        this.UnidadMedida=UnidadMedida;
-        this.ProductoEstado=ProductoEstado;
-        this.UbicacionOrigen=UbicacionOrigen;
-        this.UbicacionDestino=UbicacionDestino;
-        this.Producto=Producto;
-        this.Stock=Stock;
-        this.Operador=Operador;
-
+    public clsBeTrans_ubic_hh_det() {
     }
 
     public clsBeTrans_ubic_hh_det(int IdTareaUbicacionEnc,int IdTareaUbicacionDet,int IdStock,int IdUbicacionOrigen,
-                                  int IdUbicacionDestino,int IdEstadoOrigen,int IdEstadoDestino,int IdOperador,
+                                  int IdUbicacionDestino,int IdEstadoOrigen,int IdEstadoDestino,int IdOperadorBodega,
                                   String HoraInicio,String HoraFin,boolean Realizado,double Cantidad,
                                   boolean Activo,double Recibido,String Estado,String Atributo_variante_1,
-                                  int IdTramo,String Tramo,int Indice_x,int Nivel,
-                                  clsBeProducto_Presentacion ProductoPresentacion,clsBeUnidad_medida UnidadMedida,clsBeProducto_estado ProductoEstado,clsBeBodega_ubicacion UbicacionOrigen,
-                                  clsBeBodega_ubicacion UbicacionDestino,clsBeProducto Producto,clsBeStock Stock,clsBeOperador Operador
-    ) {
+                                  int IdBodega,int IdTramo,String Tramo,int Indice_x,
+                                  int Nivel,clsBeProducto_Presentacion ProductoPresentacion,clsBeUnidad_medida UnidadMedida,clsBeProducto_estado ProductoEstado,
+                                  clsBeBodega_ubicacion UbicacionOrigen,clsBeBodega_ubicacion UbicacionDestino,clsBeProducto Producto,clsBeStock Stock,
+                                  clsBeOperador Operador) {
 
         this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
         this.IdTareaUbicacionDet=IdTareaUbicacionDet;
@@ -92,7 +62,7 @@ public class clsBeTrans_ubic_hh_det {
         this.IdUbicacionDestino=IdUbicacionDestino;
         this.IdEstadoOrigen=IdEstadoOrigen;
         this.IdEstadoDestino=IdEstadoDestino;
-        this.IdOperador=IdOperador;
+        this.IdOperadorBodega=IdOperadorBodega;
         this.HoraInicio=HoraInicio;
         this.HoraFin=HoraFin;
         this.Realizado=Realizado;
@@ -101,6 +71,7 @@ public class clsBeTrans_ubic_hh_det {
         this.Recibido=Recibido;
         this.Estado=Estado;
         this.Atributo_variante_1=Atributo_variante_1;
+        this.IdBodega=IdBodega;
         this.IdTramo=IdTramo;
         this.Tramo=Tramo;
         this.Indice_x=Indice_x;
@@ -159,11 +130,11 @@ public class clsBeTrans_ubic_hh_det {
     public void setIdEstadoDestino(int value) {
         IdEstadoDestino=value;
     }
-    public int getIdOperador() {
-        return IdOperador;
+    public int getIdOperadorBodega() {
+        return IdOperadorBodega;
     }
-    public void setIdOperador(int value) {
-        IdOperador=value;
+    public void setIdOperadorBodega(int value) {
+        IdOperadorBodega=value;
     }
     public String getHoraInicio() {
         return HoraInicio;
@@ -212,6 +183,12 @@ public class clsBeTrans_ubic_hh_det {
     }
     public void setAtributo_variante_1(String value) {
         Atributo_variante_1=value;
+    }
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
     }
     public int getIdTramo() {
         return IdTramo;
@@ -287,5 +264,3 @@ public class clsBeTrans_ubic_hh_det {
     }
 
 }
-
-

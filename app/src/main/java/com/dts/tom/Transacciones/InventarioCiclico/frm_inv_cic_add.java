@@ -29,6 +29,7 @@ import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -685,7 +686,11 @@ public class frm_inv_cic_add extends PBase {
 
         if(gl.pprod.Control_vencimiento){
 
-            gl.inv_ciclico.Fecha_Vence = du.convierteFecha(dtpVence.getText().toString().trim());
+            try {
+                gl.inv_ciclico.Fecha_Vence = du.convierteFecha(dtpVence.getText().toString().trim());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if(IdPresentacionselected < 0 ){

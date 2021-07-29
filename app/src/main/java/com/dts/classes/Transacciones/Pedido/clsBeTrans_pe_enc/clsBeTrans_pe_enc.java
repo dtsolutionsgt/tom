@@ -76,7 +76,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Serie="";
     @Element(required=false) public int Correlativo=0;
     @Element(required=false) public clsBeTrans_pe_pol ObjPoliza= new clsBeTrans_pe_pol();
-
+    @Element(required=false) public int IdTipoPedido=0;
 
     public clsBeTrans_pe_enc() {
     }
@@ -96,7 +96,7 @@ public class clsBeTrans_pe_enc {
                              boolean PedidoRoad,String HoraEntregaDesde,String HoraEntregaHasta,String Referencia,
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
-                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza) {
+                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza, int IdTipoPedido) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -163,6 +163,7 @@ public class clsBeTrans_pe_enc {
         this.Serie=Serie;
         this.Correlativo=Correlativo;
         this.ObjPoliza=ObjPoliza;
+        this.IdTipoPedido = IdTipoPedido;
 
     }
 
@@ -556,6 +557,12 @@ public class clsBeTrans_pe_enc {
     }
     public void setPicking(clsBeTrans_pe_pol value) {
         ObjPoliza=value;
+    }
+    public int getIdTipoPedido() {
+        return IdTipoPedido;
+    }
+    public void setIdTipoPedido(int value) {
+        IdTipoPedido=value;
     }
 
 }

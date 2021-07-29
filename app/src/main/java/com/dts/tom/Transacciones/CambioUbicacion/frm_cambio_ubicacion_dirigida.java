@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -26,9 +28,11 @@ import java.util.Date;
 
 public class frm_cambio_ubicacion_dirigida extends PBase {
 
-    private TextView lblTituloForma,lblCant,lblCambioEstado,lblUbicDestino;
-    private EditText txtUbicOrigen,txtCodigoPrd,txtPresentacion,txtPropietario,txtLote,txtVence,txtEstado,
-            txtCantidad,txtUbicDestino,txtEstadoDestino, txtPosiciones;
+    private TextView lblTituloForma, lblCant, lblCambioEstado, lblUbicDestino, lblDescProd, lblNomDestino,
+                     txtPresentacion, txtPropietario,txtLote,txtVence,txtEstado,txtPeso,
+                     txtEstadoDestino, txtUnidadMedida;
+    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad,txtUbicDestino,txtPosiciones, txtLicPlate;
+    private TableRow trLote, trVence, trPresentacion, trPeso, trLP;
 
     private double vCantidadAUbicar;
     private boolean compl;
@@ -48,6 +52,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private boolean TienePosiciones=false;
 
     private int vPosiciones=0;
+    private int vIdReabastecimientoLog=0;
+
+    private boolean listo=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +71,31 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         lblCambioEstado = (TextView) findViewById(R.id.lblCambioEstado);
         txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
         txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
-        txtPresentacion = (EditText) findViewById(R.id.txtPresentacion);
-        txtLote = (EditText) findViewById(R.id.txtLote);
-        txtVence = (EditText) findViewById(R.id.txtVence);
-        txtEstado = (EditText) findViewById(R.id.txtEstado);
+        txtPresentacion = (TextView) findViewById(R.id.txtPresentacion);
+        txtLote = (TextView) findViewById(R.id.txtLote);
+        txtVence = (TextView) findViewById(R.id.txtVence);
+        txtEstado = (TextView) findViewById(R.id.txtEstado);
         txtCantidad = (EditText) findViewById(R.id.txtCantidad);
         txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
-        txtEstadoDestino = (EditText) findViewById(R.id.txtEstadoDestino);
-        txtPropietario = (EditText) findViewById(R.id.txtPropietario);
+        txtEstadoDestino = (TextView) findViewById(R.id.txtEstadoDestino);
+        txtPropietario = (TextView) findViewById(R.id.txtPropietario);
+        txtLicPlate = (EditText) findViewById(R.id.txtLicensePlate);
+        txtPeso = (TextView) findViewById(R.id.txtPeso);
+        txtUnidadMedida = (TextView) findViewById(R.id.txtUnidadMedida);
 
         txtPosiciones = new EditText(this,null);
         txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         lblUbicDestino = (TextView)findViewById(R.id.lblDestino);
+
+        lblDescProd = (TextView)findViewById(R.id.txtDescProd);
+        lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+
+        trLote = (TableRow) findViewById(R.id.trLote);
+        trVence = (TableRow) findViewById(R.id.trVence);
+        trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
+        trPeso = (TableRow) findViewById(R.id.trPeso);
+        trLP = (TableRow) findViewById(R.id.trLP);
 
         lblTituloForma.setText( String.format("Cambio de %s dirigido",(gl.modo_cambio==1?"ubicación":"estado")));
 
@@ -84,12 +103,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         txtEstadoDestino.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
 
         txtCodigoPrd.setEnabled(true);
-        txtPresentacion.setEnabled(true);
-        txtPropietario.setEnabled(true);
-        txtLote.setEnabled(true);
-        txtVence.setEnabled(true);
-        txtEstado.setEnabled(true);
-        txtEstadoDestino.setEnabled(true);
 
         setHandlers();
 
@@ -126,12 +139,65 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         if (txtUbicOrigen.getText().toString().equals("") ||
                                 txtUbicOrigen.getText().toString().isEmpty() ||
                                 txtUbicOrigen.getText().toString()==null){
-                            mu.msgbox("Debe ingresar la ubicación origen");
+                            toast("Debe ingresar la ubicación origen");
                         }
                     }
                 }
             });
 
+            txtCodigoPrd.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+
+                       if (keyCode == KeyEvent.KEYCODE_ENTER){
+                           validaCodProd();
+                       }
+                    }
+                    return false;
+                }
+            });
+
+            /*txtCodigoPrd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if(!hasFocus) {
+                        if (txtCodigoPrd.getText().toString().equals("") ||
+                                txtCodigoPrd.getText().toString().isEmpty() ||
+                                txtCodigoPrd.getText().toString()==null){
+                            toast("Debe ingresar el código del producto");
+                        }
+                    }
+                }
+            });
+*/
+            txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                        if (keyCode == KeyEvent.KEYCODE_ENTER){
+                            validaLP();
+                        }
+                    }
+                    return false;
+                }
+            });
+
+          /*  txtLicPlate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        if (txtLicPlate.getText().toString().equals("") ||
+                            txtLicPlate.getText().toString().isEmpty() ||
+                            txtLicPlate.getText().toString()==null){
+                            msgbox("Debe ingresar el código del License Plate");
+                        }
+                    }
+                }
+            });
+*/
             txtUbicDestino.setOnKeyListener(new View.OnKeyListener(){
 
                 @Override
@@ -153,7 +219,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         if (txtUbicDestino.getText().toString().equals("") ||
                                 txtUbicDestino.getText().toString().isEmpty() ||
                                 txtUbicDestino.getText().toString()==null){
-                            mu.msgbox("Debe ingresar la ubicación destino");
+                            toast("Debe ingresar la ubicación destino");
                         }
                     }
                 }
@@ -166,10 +232,22 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
+                                Recalcula_Peso();
                                 cambioUbicEst();
                         }
                     }
                     return false;
+                }
+            });
+
+            txtCantidad.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus) {
+                        if (txtUbicDestino.getText().toString().equals("")){
+                            txtUbicDestino.requestFocus();
+                        }
+                    }
                 }
             });
 
@@ -191,20 +269,61 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             lblTituloForma.setText(gl.tareadet.UbicacionOrigen.NombreCompleto);
 
-            txtCodigoPrd.setText(gl.tareadet.Producto.Nombre);
+            txtUbicOrigen.setHint("" + gl.tareadet.UbicacionOrigen.IdUbicacion);
+            txtCodigoPrd.setHint("" + gl.tareadet.Producto.Codigo);
+            txtLicPlate.setHint("" + gl.tareadet.Stock.getLic_plate());
+            txtUbicDestino.setHint("" + gl.tareadet.IdUbicacionDestino);
+
+            lblDescProd.setText(gl.tareadet.Producto.Nombre);
             txtPresentacion.setText(gl.tareadet.ProductoPresentacion.Nombre);
             txtPropietario.setText(gl.tareadet.Producto.Propietario.Nombre_comercial);
             txtLote.setText(gl.tareadet.Stock.Lote);
+            txtPeso.setText(""+ gl.tareadet.Stock.getPeso());
+            txtUnidadMedida.setText(""+ gl.tareadet.Producto.UnidadMedida.getNombre());
 
             txtVence.setText(app.strFecha(gl.tareadet.Stock.Fecha_vence));
 
+            if (!gl.tareadet.getProducto().getControl_vencimiento()) {
+                trVence.setVisibility(View.GONE);
+            }else{
+                trVence.setVisibility(View.VISIBLE);
+            }
+
+            if (!gl.tareadet.getProducto().getControl_peso()) {
+                trPeso.setVisibility(View.GONE);
+            }else{
+                trPeso.setVisibility(View.VISIBLE);
+            }
+
+            if (gl.tareadet.Stock.getIdPresentacion()==0) {
+                trPresentacion.setVisibility(View.GONE);
+            }else{
+                trPresentacion.setVisibility(View.VISIBLE);
+            }
+
+            if (!gl.tareadet.getProducto().getControl_lote()) {
+                trLote.setVisibility(View.GONE);
+            }else{
+                trLote.setVisibility(View.VISIBLE);
+            }
+
+            if (gl.tareadet.getStock().getLic_plate().isEmpty() ||
+                gl.tareadet.getStock().getLic_plate().equals("") ||
+                    gl.tareadet.getStock().getLic_plate().toString() == null  ) {
+                trLP.setVisibility(View.GONE);
+            }else{
+                trLP.setVisibility(View.VISIBLE);
+            }
+
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
-            txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
+
+            //#CKFK 20210304 Quitamos la cantidad sugerida
+            //txtCantidad.setText(String.valueOf(gl.tareadet.Cantidad - gl.tareadet.Recibido));
 
             if (!gl.tareadet.UbicacionDestino.NombreCompleto.contains("#")){
-                lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto + " - #" + gl.IdDestino);
+                lblNomDestino.setText(gl.tareadet.UbicacionDestino.NombreCompleto + " - #" + gl.IdDestino);
             }else{
-                lblUbicDestino.setText("Destino: " + gl.tareadet.UbicacionDestino.NombreCompleto);
+                lblNomDestino.setText(gl.tareadet.UbicacionDestino.NombreCompleto);
             }
 
             gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
@@ -213,6 +332,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             lblCant.setText(gl.gCantDisponible+"");
             txtUbicDestino.setText("");
+
+            txtUbicOrigen.requestFocus();
 
             if (gl.modo_cambio==2){
                 txtEstadoDestino.setText("");
@@ -265,6 +386,52 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
     }
 
+    private void  validaCodProd(){
+        try{
+            if (!txtCodigoPrd.getText().toString().equals("") ){
+                if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
+                        (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
+
+                    txtCodigoPrd.setText("");
+                    txtCodigoPrd.requestFocus();
+                    throw new  Exception(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
+
+                }
+            }else if (txtCodigoPrd.getText().toString().equals("") ||
+                    txtCodigoPrd.getText().toString().isEmpty() ||
+                    txtCodigoPrd.getText().toString()==null){
+                txtCodigoPrd.requestFocus();
+                throw new  Exception("Debe ingresar el código del producto");
+            }
+        }catch (Exception ex){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void validaLP(){
+        try{
+
+            if (!txtLicPlate.getText().toString().equals("")) {
+
+                String Lp=txtLicPlate.getText().toString().replace("$","");
+
+                if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
+                    txtLicPlate.setText("");
+                    txtLicPlate.requestFocus();
+
+                    throw new Exception(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                }
+            }else  if (txtLicPlate.getText().toString().equals("") ||
+                    txtLicPlate.getText().toString().isEmpty() ||
+                    txtLicPlate.getText().toString()==null){
+                txtLicPlate.requestFocus();
+                throw new  Exception("Debe ingresar el License Plate del producto");
+            }
+        }catch (Exception ex){
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
     private void cambioUbicEst(){
 
         try{
@@ -277,6 +444,44 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             double cantStock;
 
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString());
+
+            if (trLP.getVisibility()==View.VISIBLE){
+                if (txtLicPlate.getText().toString().equals("") ||
+                        txtLicPlate.getText().toString().isEmpty() ||
+                        txtLicPlate.getText().toString()==null){
+
+                    mu.msgbox("Debe ingresar el license plate del producto");
+                    txtLicPlate.requestFocus();
+                    return;
+                }
+
+                String Lp=txtLicPlate.getText().toString().replace("$","");
+                if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
+
+                    msgbox(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                    txtLicPlate.setText("");
+                    txtLicPlate.requestFocus();
+                    return;
+
+                }
+            }
+
+            if (txtCodigoPrd.getText().toString().equals("") ||
+                    txtCodigoPrd.getText().toString().isEmpty() ||
+                    txtCodigoPrd.getText().toString()==null){
+                mu.msgbox("Debe ingresar el código del producto");
+                txtCodigoPrd.requestFocus();
+                return;
+            }else{
+                if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
+                    (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
+
+                    msgbox(String.format("El código %s ingresado no es válido", txtCodigoPrd.getText().toString()));
+                    txtCodigoPrd.setText("");
+                    txtCodigoPrd.requestFocus();
+                    return;
+                }
+            }
 
             if (txtUbicOrigen.getText().toString().isEmpty()) {
                 mu.msgbox("Debe ingresar la ubicación origen");
@@ -314,6 +519,8 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 compl=true;
             }
 
+            Recalcula_Peso();
+
             progress.cancel();
 
             //#CKFK 20210106 Moví esto para después de ingresar las posiciones en caso de que aplique
@@ -331,12 +538,35 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             execws(5);
 
         }catch (Exception e){
-            progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }finally {
+            progress.cancel();
         }
 
+    }
+
+    private void Recalcula_Peso(){
+
+        double vPeso = 0, vCantidad = 0, vPesoUni = 0, vCantidadIngresada = 0;
+
+        try{
+
+            if (gl.tareadet.getProducto().getControl_peso()){
+
+                vPeso = gl.tareadet.Stock.getPeso();
+                vCantidad = gl.tareadet.Stock.getCantidad();
+                vCantidadIngresada =Double.valueOf(txtCantidad.getText().toString());
+
+                if (vCantidad>0){
+                    vPesoUni = vPeso/vCantidad;
+
+                    txtPeso.setText(String.valueOf(vPesoUni*vCantidadIngresada));
+                }
+            }
+        }catch (Exception ex){
+            mu.msgbox("Recalcula_Peso:" + ex.getMessage());
+        }
     }
 
     private void msgAsk(String msg) {
@@ -466,7 +696,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
             gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
             gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
-            gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperador);
+            gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperadorBodega);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
             gMovimientoDet.IsNew = true;
@@ -514,10 +744,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                                    "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
+                        //#EJC20210304: Agregué el IdReabastecimiento como parámetro.
                         callMethod("Actualizar_Trans_Ubic_HH_Det",
                                    "oBeTrans_ubic_hh_det", gl.tareadet,
                                    "pMovimiento",gMovimientoDet,
-                                   "pPosiciones",vPosiciones);
+                                   "pPosiciones",vPosiciones,
+                                   "pIdReabastecimientoLog", gl.tareaenc.getIdReabastecimientoLog());
                         break;
                     case 4:
                         callMethod("Get_Single_By_IdEstado",
@@ -586,12 +818,17 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             if (bodega_ubicacion.IdUbicacion != gl.IdOrigen)
             {
-                txtUbicOrigen.selectAll();
+                txtUbicOrigen.setText("");
                 txtUbicOrigen.requestFocus();
                 throw new Exception("La ubicación origen no coincide");
             }
 
-            txtUbicDestino.requestFocus();
+            if (trLP.getVisibility()==View.VISIBLE){
+                    txtLicPlate.requestFocus();
+            }else{
+                txtCodigoPrd.requestFocus();
+            }
+
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -611,16 +848,14 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("Ubicación destino incorrecta");
-            }
-
-            if (bodega_ubicacion.IdUbicacion != gl.IdDestino){
+            }else if (bodega_ubicacion.IdUbicacion != gl.IdDestino) {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 throw new Exception("La ubicación destino no coincide");
+            }else{
+                txtCantidad.selectAll();
+                txtCantidad.requestFocus();
             }
-
-            txtCantidad.selectAll();
-            txtCantidad.requestFocus();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -664,6 +899,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             }
 
             progress.cancel();
+            txtUbicOrigen.requestFocus();
 
         } catch (Exception e) {
             progress.cancel();

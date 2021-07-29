@@ -10,11 +10,10 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_estado.clsBeTrans_oc_e
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_imagen.clsBeTrans_oc_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_pol.clsBeTrans_oc_pol;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
-import com.zebra.sdk.comm.snmp.internal.OidNotFoundException;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeTrans_oc_enc {
+public class clsBeTrans_oc_enc { 
 
     @Element(required=false) public int IdOrdenCompraEnc;
     @Element(required=false) public int IdPropietarioBodega;
@@ -62,10 +61,12 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public int IdNoDocumentoRef;
     @Element(required=false) public int IdAcuerdoComercial;
     @Element(required=false) public int IdOperadorBodegaDefecto;
+    @Element(required=false) public String No_Documento_Recepcion_ERP;
+    @Element(required=false) public String No_Documento_Devolucion="";
+    @Element(required=false) public int IdPedidoEncDevolucion=0;
 
     public clsBeTrans_oc_enc()
     {
-
     }
 
     public clsBeTrans_oc_enc(int IdOrdenCompraEnc,int IdPropietarioBodega,int IdProveedorBodega,int IdTipoIngresoOC,
@@ -81,7 +82,9 @@ public class clsBeTrans_oc_enc {
                              clsBeTrans_oc_ti TipoIngreso,boolean ExisteRecepcionNoFinalizada,
                              String No_Ticket_TMS,
                              int IdNoDocumentoRef,
-                             int IdAcuerdoComercial) {
+                             int IdAcuerdoComercial,
+                             String No_Documento_Devolucion,
+                             int IdPedidoEncDevolucion) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -128,6 +131,8 @@ public class clsBeTrans_oc_enc {
         this.No_Ticket_TMS=No_Ticket_TMS;
         this.IdNoDocumentoRef = IdNoDocumentoRef;
         this.IdAcuerdoComercial = IdAcuerdoComercial;
+        this.No_Documento_Devolucion = No_Documento_Devolucion;
+        this.IdPedidoEncDevolucion = IdPedidoEncDevolucion;
 
     }
 
@@ -402,14 +407,28 @@ public class clsBeTrans_oc_enc {
     public void setIdAcuerdoComercial(int value) {
         IdAcuerdoComercial=value;
     }
-
     public int getIdOperadorBodegaDefecto() {
         return IdOperadorBodegaDefecto;
     }
     public void setIdOperadorBodegaDefecto(int value) {
         IdOperadorBodegaDefecto=value;
     }
-
-
+    public String getNo_Documento_Recepcion_ERP() {
+        return No_Documento_Recepcion_ERP;
+    }
+    public void setNo_Documento_Recepcion_ERP(String value) {
+        No_Documento_Recepcion_ERP=value;
+    }
+    public int getIdPedidoEncDevolucion() {
+        return IdPedidoEncDevolucion;
+    }
+    public void setIdPedidoEncDevolucion(int value) {
+        IdOperadorBodegaDefecto=value;
+    }
+    public String getNo_Documento_Devolucion() {
+        return No_Documento_Devolucion;
+    }
+    public void setNo_Documento_Devolucion(String value) {
+        No_Documento_Devolucion=value;
+    }
 }
-

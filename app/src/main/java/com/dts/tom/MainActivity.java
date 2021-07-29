@@ -38,9 +38,12 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
-import com.dts.servicios.startCantTareas;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
+import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -73,6 +76,8 @@ public class MainActivity extends PBase {
     private clsBeBodegaList bodegas = new clsBeBodegaList();
     private ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
+    private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
+    private clsBeResolucion_lp_operador ResolucionLpByBodega = new clsBeResolucion_lp_operador();
 
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
@@ -82,9 +87,11 @@ public class MainActivity extends PBase {
     private ArrayList<String> userlist= new ArrayList<String>();
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
-    private String NomOperador;
+    private String NomOperador, NomBodega;
+    private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
+    private String version="4.5.1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +109,6 @@ public class MainActivity extends PBase {
             e.printStackTrace();
         }
     }
-
 
     private void startApplication() {
 
@@ -182,9 +188,11 @@ public class MainActivity extends PBase {
     }
 
     private void setURL(){
+
         String url="http://192.168.0.103/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
+
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Conexión");
@@ -335,6 +343,7 @@ public class MainActivity extends PBase {
             imgIngresar.setVisibility(View.VISIBLE);
 
         } catch (Exception e)  {
+            addlog(new Object() {}.getClass().getEnclosingMethod().getName() + "." , e.getMessage(),"");
         }
     }
 
@@ -365,9 +374,11 @@ public class MainActivity extends PBase {
 
                     execws(2);//Lista las bodegas
 
+                    if (idle) validaVersion();
+
                 } catch (Exception e)
                 {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
             }
 
@@ -393,13 +404,18 @@ public class MainActivity extends PBase {
                     }
 
                     idbodega=bodegas.items.get(position).IdBodega;
+                    NomBodega = bodegas.items.get(position).Nombre;
+                    gl.bloquear_lp_hh = bodegas.items.get(position).bloquear_lp_hh;
                     gl.IdBodega = idbodega;
+                    gl.gNomBodega = NomBodega;
+                    gl.gCapturaEstibaIngreso = bodegas.items.get(position).captura_estiba_ingreso;
+                    gl.gCapturaPalletNoEstandar = bodegas.items.get(position).captura_pallet_no_estandar;
                     idimpres=0;
                     execws(3);
 
                 } catch (Exception e)
                 {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -431,7 +447,7 @@ public class MainActivity extends PBase {
                     gl.IdImpresora = idimpres;
 
                 } catch (Exception e) {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -465,10 +481,9 @@ public class MainActivity extends PBase {
                     gl.gNomOperador = NomOperador;
 
                     txtpass.requestFocus();
-                    showkeyb();
 
                 } catch (Exception e) {
-                    msgbox(e.getMessage());
+                    msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
 
             }
@@ -500,6 +515,18 @@ public class MainActivity extends PBase {
             }
         });
 
+        txtpass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    showkeyb();
+                }else{
+                    hidekeyb();
+                }
+            }
+        });
+
+
     }
 
     //endregion
@@ -508,12 +535,10 @@ public class MainActivity extends PBase {
 
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel)  {
-        try
-        {
+        try {
             if (throwing) throw new Exception(errmsg);
 
-            switch (ws.callback)
-            {
+            switch (ws.callback) {
                 case 1:
                     progress.setMessage("Cargando empresas");
                     processEmpresas();break;
@@ -523,18 +548,17 @@ public class MainActivity extends PBase {
                 case 3:
                     progress.setMessage("Cargando impresoras");
                     processImpresoras();
-
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
                     progress.setMessage("Cargando usuarios");
                     processUsers();
-
                     //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
                     break;
                 case 5:
                     processGetDecimalesCalculo();
+                    execws(8);
                     break;
                 case 6:
                     processGetDecimalesDespliegue();
@@ -542,34 +566,60 @@ public class MainActivity extends PBase {
                 case 7:
                     startActivity(new Intent(this,Mainmenu.class));
                     break;
+                case 8:
+                    processVersiones();
+                    break;
+                case 9:
+                    processResolucionLP();
+                    break;
             }
 
             progress.cancel();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e)  {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
-    private void Licencia_Valida()     {
+    private void ejecuta(){
+        startActivity(new Intent(this,Mainmenu.class));
+    }
+
+    private void Licencia_Valida() {
         try{
         }catch (Exception e){
-            mu.msgbox("Licencia Valida:"+e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
         }
     }
 
     private void Valida_Ingreso() {
+
+        /*
+        try {
+            gl.IdEmpresa=1;
+            gl.IdBodega=10;
+            gl.IdOperador=1;
+            gl.CodigoBodega="10";
+            gl.OperadorBodega.IdOperadorBodega=1;
+
+            clsBeOperador op=new clsBeOperador();
+            op.setCodigo("1");
+            op.setNombres("Op");
+            op.setApellidos("1");
+            gl.OperadorBodega.setOperador(op);
+            ejecuta();
+        } catch (Exception e) {
+            String ss=e.getMessage();
+        }
+*/
+
         try{
 
-            if (gl.IdEmpresa>0)
-            {
-                if (gl.IdBodega>0)
-                {
-                    if (gl.IdOperador>0)
-                    {
-                        if (!txtpass.getText().toString().isEmpty())                        {
+            if (gl.IdEmpresa>0) {
+                if (gl.IdBodega>0) {
+                    if (gl.IdOperador>0) {
+                        if (!txtpass.getText().toString().isEmpty())  {
                             List<clsBeBodegaBase> BeBodega =
                                     stream(bodegas.items)
                                             .where(c -> c.IdBodega  == gl.IdBodega)
@@ -584,8 +634,7 @@ public class MainActivity extends PBase {
                                             .orderBy(c-> c.Operador.IdOperador)
                                             .toList();
 
-                            if (BeOperadorBodega.size()>0)
-                            {
+                            if (BeOperadorBodega.size()>0) {
 
                                 gl.gOperadorBodega = BeOperadorBodega;
                                 gl.OperadorBodega = gl.gOperadorBodega.get(0);
@@ -594,29 +643,22 @@ public class MainActivity extends PBase {
                                         stream(impres)
                                                 .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                            if (BeImpresora.size()>0)
-                            {
+                            if (BeImpresora.size()>0) {
                                 gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="")
-                                {
+                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                }else{
-
-                                    //#CKFK 20201021 Agregué este else
-                                    execws(7);  
+                                } else {
+                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
+                                    //execws(7);
+                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
+                                    execws(9);
                                 }
-                            }else
-                            {
+                            } else  {
                                 progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
                                 msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
-                                //mu.msgbox("La impresora no está definida,¿Continuar sin impresora?");
                             }
-                            //Get_BeImpresora_By_IdImpresora(gIdImpresora)
-
-                            //execws(7);
-
                             } else {
                                 progress.cancel();
                                 mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
@@ -630,8 +672,7 @@ public class MainActivity extends PBase {
                         progress.cancel();
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
-                }else
-                {
+                }else {
                     progress.cancel();
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
@@ -648,7 +689,43 @@ public class MainActivity extends PBase {
     }
 
     private void msgAsk_continuar_sin_impresora(String msg) {
+
         try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setCancelable(false);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.printicon);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                  execws(7);
+                  //ejecuta();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAsk_continuar_sin_resolucionLp(String msg) {
+
+        try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setCancelable(false);
@@ -708,19 +785,14 @@ public class MainActivity extends PBase {
 
     //region Data Processing
 
-    private void processEmpresas()
-    {
-
-        try
-        {
+    private void processEmpresas() {
+        try {
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             if(empresas != null){
 
-                class EmpresaSort implements Comparator<clsBeEmpresaBase>
-                {
-                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)
-                    {
+                class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
+                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
                         return left.Nombre.compareTo(right.Nombre);
                     }
                 }
@@ -736,24 +808,19 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()
-    {
-        class BodegaSort implements Comparator<clsBeBodegaBase>
-        {
-            public int compare(clsBeBodegaBase left, clsBeBodegaBase right)
-            {
-                return left.Nombre.compareTo(right.Nombre);
+    private void processBodegas()     {
+        class BodegaSort implements Comparator<clsBeBodegaBase>   {
+            public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
+                return left.IdBodega - right.IdBodega;
             }
         }
 
-        try
-        {
+        try  {
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
             Collections.sort(bodegas.items, new BodegaSort());
             fillSpinBod();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -836,8 +903,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processGetDecimalesDespliegue()
-    {
+    private void processGetDecimalesDespliegue()     {
         try
         {
 
@@ -859,8 +925,34 @@ public class MainActivity extends PBase {
             //Llama al metodo del WS Get_cantidad_decimales_calculo
             execws(6);
 
-        }catch (Exception e)
+        } catch (Exception e)
         {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processVersiones() {
+        try {
+            versiones=xobj.getresult(clsBeVersion_wms_hh_andList.class,"Android_Get_All_Versiones");
+            if (versiones!=null){
+                validaVersion();
+            }
+            idle=true;
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processResolucionLP() {
+        try {
+            ResolucionLpByBodega =xobj.getresult(clsBeResolucion_lp_operador.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            if (ResolucionLpByBodega !=null){
+                //#EJC20210504: Registra ingreso y carga menú principal.
+                execws(7);
+            }else{
+                msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
+            }
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -873,8 +965,7 @@ public class MainActivity extends PBase {
 
         String filePathImg = null;
 
-        try
-        {
+        try    {
             emplist.clear();
 
             String dirLogosEmpresa = getApplicationContext().getFilesDir() + "/LogosEmpresa/";
@@ -885,8 +976,7 @@ public class MainActivity extends PBase {
                 dir.mkdir();
             }
 
-            for (int i = 0; i <empresas.items.size(); i++)
-            {
+            for (int i = 0; i <empresas.items.size(); i++)             {
                 vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
                 emplist.add(empresas.items.get(i).Nombre);
 
@@ -935,7 +1025,7 @@ public class MainActivity extends PBase {
 
         } catch (Exception e)
         {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -958,7 +1048,7 @@ public class MainActivity extends PBase {
             if (bodlist.size()>0) spinbod.setSelection(0);
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -979,7 +1069,7 @@ public class MainActivity extends PBase {
             if (prnlist.size()>0) spinprint.setSelection(0);
 
         } catch (Exception e) {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
     }
 
@@ -1001,12 +1091,17 @@ public class MainActivity extends PBase {
             {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
+
+                txtpass.requestFocus();
+                //showkeyb();
+
             }
 
         } catch (Exception e)
         {
-            mu.msgbox( e.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+
     }
 
     private void getURL() {
@@ -1054,12 +1149,10 @@ public class MainActivity extends PBase {
     }
 
     protected void onResume() {
-        try
-        {
+        try  {
             Load();
             super.onResume();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
@@ -1072,10 +1165,8 @@ public class MainActivity extends PBase {
 
         @Override
         public void wsExecute(){
-            try
-            {
-                switch (ws.callback)
-                {
+            try  {
+                switch (ws.callback) {
                     case 1:
                         callMethod("Android_Get_All_Empresas");
                         break;
@@ -1101,13 +1192,83 @@ public class MainActivity extends PBase {
                         //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
+                        //ejecuta();
+                        break;
+                    case 8:
+                        callMethod("Android_Get_All_Versiones");
+                        break;
+                    case 9:
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
                         break;
                 }
-            } catch (Exception e)
-            {
-                error=e.getMessage();errorflag =true;msgbox(error);
+            } catch (Exception e)  {
+                error=e.getMessage();errorflag =true;
+                msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
             }
         }
     }
+
+    //endregion
+
+    //region Control Version
+
+    private void validaVersion() {
+
+        int pp,idemp=0;
+
+
+        if (empresas.items.size()==0) return;
+
+        try {
+            pp=spinemp.getSelectedItemPosition();
+            idemp=empresas.items.get(pp).IdEmpresa;
+
+            if (versiones!=null){
+                for (int i = 0; i <versiones.items.size(); i++) {
+                    if (versiones.items.get(i).IdEmpresa==idemp) {
+                        if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
+                            actualizaVersion();return;
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+
+    }
+
+//    private void validaResolucionLP() {
+//
+//        try {
+//
+//            if (ResolucionLpByBodega !=null){
+//                if (ResolucionLpByBodega.items.size() == 0){
+//                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
+//                }else{
+//                    execws(7);
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+//        }
+//
+//    }
+
+    private void actualizaVersion() {
+        try {
+            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
+            intent.putExtra("filename","tom.apk");
+            this.startActivity(intent);
+        } catch (Exception e) {
+            msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
+        }
+    }
+
+    //endregion
 
 }

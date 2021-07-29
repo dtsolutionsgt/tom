@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
 
+import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.w3c.dom.Document;
@@ -25,7 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 
 public class XMLObject  {
 
-    private WebService ws;
+    public WebService ws;
     private Cursor data;
     private int adimx,adimy;
 
@@ -57,19 +59,24 @@ public class XMLObject  {
 
             xnode=getXMLRegion(source+"Result");
 
-//            if (xnode.contains("USUbicStrucStage5")) {
-//                xnode = xnode.replace("<int>","<clsUbic><ubic>");
-//                xnode = xnode.replace("</int>","</ubic></clsUbic>");
-//            }
-
             Serializer serializer = new Persister();
 
             if (!xnode.isEmpty())
             {
-                return serializer.read(type, xnode);
+                if(xnode.contains("CustomError")){
+                    clsBeCustomError typeErr= new clsBeCustomError();
+                    return (T) serializer.read(typeErr, xnode);
+                }else{
+                    return serializer.read(type, xnode);
+                }
             }else
             {
-                Log.i("porque","vacio");
+                //#EJC20210612ñ
+                Log.i("porque","vacio, .. asumo algun error ocurrió");
+                if(xnode.contains("CustomError")){
+                    clsBeCustomError typeErr= new clsBeCustomError();
+                    return (T) serializer.read(typeErr, xnode);
+                }
             }
 
         }catch (Exception e)
@@ -204,32 +211,51 @@ public class XMLObject  {
                 Node bodyroot=children.item(0);
                 NodeList body=bodyroot.getChildNodes();
                 Node responseroot=body.item(0);
-                NodeList response=responseroot.getChildNodes();
-                mequedeaqui=4;
-                ss="";
 
-                for(int i =0;i<response.getLength();i++)
-                {
-                    mequedeaqui=5;
-                    ss+=response.item(i).getNodeName()+",\n";
+                //#eEJC20210317: Si viene nulo no procesar para evitar error.
+                if (responseroot!=null){
 
-                    if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
+                    NodeList response=responseroot.getChildNodes();
+                    mequedeaqui=4;
+                    ss="";
+
+                    for(int i =0;i<response.getLength();i++)
                     {
-                        cVals=response.item(i).getChildNodes().getLength();
-                        mequedeaqui=6;
-                        if (cVals>0)
+                        mequedeaqui=5;
+                        ss+=response.item(i).getNodeName()+",\n";
+
+                        if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
                         {
-                            mequedeaqui+=7;
-                            xmlnode=response.item(i);
-                            sxml=nodeToString(xmlnode);
-                            return sxml;
+                            cVals=response.item(i).getChildNodes().getLength();
+                            mequedeaqui=6;
+                            if (cVals>0)
+                            {
+                                mequedeaqui+=7;
+                                xmlnode=response.item(i);
+                                sxml=nodeToString(xmlnode);
+                                return sxml;
+                            }
                         }
                     }
+
+                }else{
+                    Log.e("Un nulo","Hace nulo a todos los que no son nulos");
+                    if(ws.xmlresult.contains("CustomError")){
+                        return ws.xmlresult;
+                    }
                 }
+
             } catch (Exception e)
             {
-                debg = e.getMessage() + "\n "+ ws.xmlresult;
-                throw new Exception(" XMLObject getXMLRegion : "+ debg);
+
+                //#EJC20210612: No se obtenia el customERror.
+                if(ws.xmlresult.contains("CustomError")){
+                    return ws.xmlresult;
+                }else{
+                    debg = e.getMessage() + "\n "+ ws.xmlresult;
+                    throw new Exception(" XMLObject getXMLRegion : "+ debg);
+                }
+
             } finally {
                 isParsing =false;
             }
@@ -417,5 +443,4 @@ public class XMLObject  {
         }
         return null;
     }
-
 }

@@ -67,7 +67,7 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public String UMBas="";
     @Element(required=false) public String Transcurrido="";
 
-
+    @Element(required=false) public boolean multi_propietario=false;
 
 
 
@@ -87,7 +87,7 @@ public class clsBeTrans_inv_enc {
                               double Detalle,double Resumen,double Stock,double Peso,
                               boolean IsNew,String EstadoResumen,String EstadoDetalle,String OperadorConteo,
                               String OperadorVerifica,String FechaConteo,String FechaVence,String FechaVerifica,
-                              String Lote,String UMBas) {
+                              String Lote,String UMBas, boolean multi_propietario) {
 
         this.Idinventarioenc=Idinventarioenc;
         this.Idpropietario=Idpropietario;
@@ -143,6 +143,7 @@ public class clsBeTrans_inv_enc {
         this.FechaVerifica=FechaVerifica;
         this.Lote=Lote;
         this.UMBas=UMBas;
+        this.multi_propietario = multi_propietario;
 
 
     }
@@ -472,6 +473,15 @@ public class clsBeTrans_inv_enc {
     public void setUMBas(String value) {
         UMBas=value;
     }
+
+    public boolean getmulti_propietario() {
+        return multi_propietario;
+    }
+    public void setmulti_propietario(boolean value) {
+        multi_propietario=value;
+    }
+
+
 
 }
 

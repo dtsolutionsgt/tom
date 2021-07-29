@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableRow;
 
 import androidx.core.content.FileProvider;
 
@@ -59,7 +60,8 @@ public class frm_detalle_ingresos extends PBase {
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
 
     private Spinner cmbPropietario,cmbProveedor,cmbTipoDoc,cmbFechaRec;
-    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec;
+    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza;
+    private TableRow tblNumOrden, tblNumPoliza;
     private ProgressBar pbar;
     private ProgressDialog progress;
     private ImageView btnCamara;
@@ -87,6 +89,11 @@ public class frm_detalle_ingresos extends PBase {
         txtGuia = (EditText)findViewById(R.id.txtGuia);
         txtEstadoRec = (EditText)findViewById(R.id.txtEstadoRec);
         txtMuelleRec = (EditText)findViewById(R.id.txtMuelleRec);
+        txtNumOrden = (EditText)findViewById(R.id.txtNumOrden);
+        txtNumPoliza = (EditText)findViewById(R.id.txtNumPoliza);
+
+        tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
+        tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
 
         cmbPropietario = (Spinner) findViewById(R.id.cmbPropietario);
         cmbProveedor = (Spinner) findViewById(R.id.cmbProveedor);
@@ -354,7 +361,7 @@ public class frm_detalle_ingresos extends PBase {
             gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class,"GetSingleRec");
             gl.mode =1;
             if (gBeRecepcion!=null)
-            {//
+            {
                 Llenar_Campos();
             }
 
@@ -374,6 +381,8 @@ public class frm_detalle_ingresos extends PBase {
             txtRef.setText("");
             txtMarch.setText("");
             txtEstadoRec.setText("");
+            txtNumOrden.setText("");
+            txtNumPoliza.setText("");
 
             progress.setMessage("Listando propietarios");
 
@@ -397,7 +406,7 @@ public class frm_detalle_ingresos extends PBase {
 
             if (gl.TipoOpcion==1) {
 
-                progress.setMessage("Obteniendo detalle de recepción");
+                 progress.setMessage("Obteniendo detalle de recepción");
 
                 pListTransRecDet = gBeRecepcion.Detalle;
 
@@ -407,7 +416,7 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Obteniendo documento de ingreso");
 
-                gBeOrdenCompra = gBeRecepcion.OrdenCompraRec.OC;
+               gBeOrdenCompra = gBeRecepcion.OrdenCompraRec.OC;
 
                 progress.setMessage("Obteniendo re oc");
 
@@ -415,7 +424,9 @@ public class frm_detalle_ingresos extends PBase {
 
                 progress.setMessage("Obteniendo detalle de ingreso");
 
-                pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                //GT la lista ya viene de frm_lista_tareas_recepcion, porque se obtiene otra vez de aca?
+                //pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                pListDetalleOC = gl.gListDetalleOC;
 
                 if (pListDetalleOC!=null){
                     gl.gListDetalleOC = pListDetalleOC;
@@ -447,6 +458,26 @@ public class frm_detalle_ingresos extends PBase {
 
                 if (gBeOrdenCompra.No_Documento!=null){
                     txtOc.setText(gBeOrdenCompra.No_Documento);
+                }
+
+                progress.setMessage("Llenando número de orden");
+
+                tblNumOrden.setVisibility(View.GONE);
+                if (gBeOrdenCompra.getObjPoliza().numero_orden!=null &&
+                        !gBeOrdenCompra.getObjPoliza().numero_orden.isEmpty()){
+                    //txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
+                    //txtNumPoliza.setText(gBeOrdenCompra.ObjPoliza.numero_orden);
+                    txtNumOrden.setText(gBeOrdenCompra.getObjPoliza().numero_orden);
+                    tblNumOrden.setVisibility(View.VISIBLE);
+                }
+
+                progress.setMessage("Llenando número de póliza");
+
+                tblNumPoliza.setVisibility(View.GONE);
+                if (gBeOrdenCompra.getObjPoliza().codigo_poliza!=null &&
+                   !gBeOrdenCompra.getObjPoliza().codigo_poliza.isEmpty()){
+                    txtNumPoliza.setText(gBeOrdenCompra.getObjPoliza().codigo_poliza);
+                    tblNumPoliza.setVisibility(View.VISIBLE);
                 }
 
                 progress.setMessage("Llenando referencia");
@@ -564,13 +595,17 @@ public class frm_detalle_ingresos extends PBase {
 
             tipooclist.clear();
 
-            tipooclist.add(gBeRecepcion.OrdenCompraRec.OC.TipoIngreso.Nombre);
+            if (gBeRecepcion.OrdenCompraRec.OC.TipoIngreso != null){
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tipooclist);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbTipoDoc.setAdapter(dataAdapter);
+                tipooclist.add(gBeRecepcion.OrdenCompraRec.OC.TipoIngreso.Nombre);
 
-            if (tipooclist.size()>0) cmbTipoDoc.setSelection(0);
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, tipooclist);
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cmbTipoDoc.setAdapter(dataAdapter);
+
+                if (tipooclist.size()>0) cmbTipoDoc.setSelection(0);
+
+            }
 
         } catch (Exception e) {
             mu.msgbox( e.getMessage());

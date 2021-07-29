@@ -93,6 +93,8 @@ public class clsBeProducto {
   @Element(required=false) public String Lote="";
   @Element(required=false) public String FechaVence="1900-01-01T00:00:01";
   @Element(required=false) public double Cantidad=0;
+  @Element(required=false) public int IdUnidadMedidaCobro=0;
+  @Element(required=false) public int IdTipoEtiqueta=0;
 
 
   public clsBeProducto()
@@ -172,6 +174,8 @@ public class clsBeProducto {
     this.Lote=Lote;
     this.FechaVence=FechaVence;
     this.Cantidad=Cantidad;
+    this.IdUnidadMedidaCobro = IdUnidadMedidaCobro;
+    this.IdTipoEtiqueta = IdTipoEtiqueta;
   }
 
   public clsBeProducto(int IdProducto,int IdPropietario,int IdClasificacion,int IdFamilia,
@@ -192,7 +196,7 @@ public class clsBeProducto {
                        clsBeUnidad_medida UnidadMedida,clsBeArancel Arancel,clsBeProducto_PresentacionList Presentaciones,clsBeProducto_codigos_barraList Codigos_Barra,
                        clsBeProducto_parametrosList Parametros,clsBeVW_stock_res Stock,boolean IsNew,Object Tag,
                        int IdPresentacionOrigen,int IdPresentacionDestino,double Factor,double ExistenciaUMBas,
-                       String Lote,String FechaVence,double Cantidad) {
+                       String Lote,String FechaVence,double Cantidad, int IdUnidadMedidaCobro, int IdTipoEtiqueta) {
 
     this.IdProducto=IdProducto;
     this.IdPropietario=IdPropietario;
@@ -269,7 +273,8 @@ public class clsBeProducto {
     this.Lote=Lote;
     this.FechaVence=FechaVence;
     this.Cantidad=Cantidad;
-
+    this.IdUnidadMedidaCobro = IdUnidadMedidaCobro;
+    this.IdTipoEtiqueta = IdTipoEtiqueta;
   }
 
 
@@ -722,6 +727,18 @@ public class clsBeProducto {
   }
   public void setCantidad(double value) {
     Cantidad=value;
+  }
+  public int getIdUnidadMedidaCobro() {
+    return IdUnidadMedidaCobro;
+  }
+  public void setIdUnidadMedidaCobro(int value) {
+    IdUnidadMedidaCobro=value;
+  }
+  public int getIdTipoEtiqueta() {
+    return IdTipoEtiqueta;
+  }
+  public void setIdTipoEtiqueta(int value) {
+    IdTipoEtiqueta=value;
   }
 
 }

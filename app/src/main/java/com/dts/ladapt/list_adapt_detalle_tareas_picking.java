@@ -1,7 +1,5 @@
 package com.dts.ladapt;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;

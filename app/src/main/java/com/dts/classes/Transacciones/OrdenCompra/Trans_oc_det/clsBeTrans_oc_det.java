@@ -3,6 +3,7 @@ package com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det;
 
 import com.dts.classes.Mantenimientos.Arancel.clsBeArancel;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_kit.clsBeProducto_kit_composicionList;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 
@@ -53,6 +54,12 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public double valor_flete=0;
     @Element(required=false) public double Peso_Neto=0;
     @Element(required=false) public double Peso_Bruto=0;
+    @Element(required=false) public clsBeTrans_oc_detList lProductosHijosKit;
+    @Element(required=false) public clsBeProducto_kit_composicionList lProductoComposicionKit;
+    @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public String Nombre_Propietario ="";
+    @Element(required=false) public int IdPedidoCompraDet;
+    @Element(required=false) public int IdOrdenCompraDetPadre=0;
 
     public clsBeTrans_oc_det()
     {
@@ -68,7 +75,7 @@ public class clsBeTrans_oc_det {
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
                              double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
-                             double Peso_Neto, double Peso_Bruto) {
+                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -112,6 +119,7 @@ public class clsBeTrans_oc_det {
         this.valor_flete=valor_flete;
         this.Peso_Neto=Peso_Neto;
         this.Peso_Bruto=Peso_Bruto;
+        this.IdPedidoCompraDet=IdPedidoCompraDet;
     }
 
 
@@ -373,5 +381,48 @@ public class clsBeTrans_oc_det {
     public void setPeso_Bruto(double value) {
         Peso_Bruto=value;
     }
+    public clsBeTrans_oc_detList getlProductosHijosKit() {
+        return lProductosHijosKit;
+    }
+    public void setlProductosHijosKit(clsBeTrans_oc_detList value) {
+        lProductosHijosKit=value;
+    }
+
+    public clsBeProducto_kit_composicionList getlProductoComposicionKit() {
+        return lProductoComposicionKit;
+    }
+    public void setlProductoComposicionKit(clsBeProducto_kit_composicionList value) {
+        lProductoComposicionKit=value;
+    }
+
+    public int getIdPropietarioBodega() {
+        return IdPropietarioBodega;
+    }
+    public void setIdPropietarioBodega(int value) {
+        IdPropietarioBodega=value;
+    }
+
+    public String getNombre_Propietario() {
+        return Nombre_Propietario;
+    }
+    public void setNombre_Propietario(String value) {
+        Nombre_Propietario =value;
+    }
+
+    public int getIdPedidoCompraDet() {
+        return IdPedidoCompraDet;
+    }
+    public void setIdPedidoCompraDet(int value) {
+        IdPedidoCompraDet =value;
+    }
+
+    public int getIdOrdenCompraDetPadre () {
+        return IdOrdenCompraDetPadre ;
+    }
+    public void setIdOrdenCompraDetPadre (int value) {
+        IdOrdenCompraDetPadre  =value;
+    }
+
+
 }
 

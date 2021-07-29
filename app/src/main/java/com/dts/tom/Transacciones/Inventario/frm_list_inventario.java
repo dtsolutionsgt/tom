@@ -78,7 +78,6 @@ public class frm_list_inventario extends PBase {
                         BeInvEnc = new clsBeTrans_inv_enc();
                         BeInvEnc = BeListInv.get(position);
 
-
                         selid = sitem.Idinventarioenc;
                         selidx = position;
                         adapter.setSelectedIndex(position);
@@ -90,7 +89,6 @@ public class frm_list_inventario extends PBase {
                 }
 
             });
-
 
             txtIdTareaInv.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -112,8 +110,6 @@ public class frm_list_inventario extends PBase {
                     return false;
                 }
             });
-
-
 
         }catch (Exception e){
             mu.msgbox("setHandlers:"+e.getMessage());

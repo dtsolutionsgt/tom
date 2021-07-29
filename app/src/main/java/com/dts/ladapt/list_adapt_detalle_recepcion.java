@@ -20,11 +20,13 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
     private int selectedIndex;
 
     private LayoutInflater l_Inflater;
+    private boolean Es_Poliza_Consolidada=false;
 
-    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results) {
+    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results, boolean pEs_Poliza_Consolidada) {
         BeDetalleOC = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
+        Es_Poliza_Consolidada = pEs_Poliza_Consolidada;
     }
 
     public void setSelectedIndex(int ind) {
@@ -67,7 +69,9 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblFactor = (TextView) convertView.findViewById(R.id.lblFactor);
             holder.lblIdOcDet = (TextView) convertView.findViewById(R.id.lblIdOcDet);
             holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
-
+            holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
+            holder.lblIdPropietarioBodega = (TextView) convertView.findViewById(R.id.lblIdPropietarioBodega);
+            holder.lblNombrePropietario =  (TextView) convertView.findViewById(R.id.lblNombrePropietario);
 
             convertView.setTag(holder);
         } else {
@@ -76,32 +80,30 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
         if (position==0){
 
+            holder.lblNombrePropietario.setText("Propietario");
             holder.lblNoLinea.setText("NoLinea");
             holder.lblCodigo.setText("Código");
-            holder.lblCodigo.setTextColor(R.style.titlestyle);
             holder.lblProducto.setText("Producto");
-            holder.lblProducto.setTextColor(R.style.titlestyle);
             holder.lblPres.setText("Presentación");
-            holder.lblPres.setTextColor(R.style.titlestyle);
             holder.lblUmbas.setText("UmBas");
-            holder.lblUmbas.setTextColor(R.style.titlestyle);
             holder.lblCantidad.setText("Cantidad");
-            holder.lblCantidad.setTextColor(R.style.titlestyle);
             holder.lblCantRec.setText("CantidadRec");
-            holder.lblCantRec.setTextColor(R.style.titlestyle);
             holder.lblDiferencia.setText("Diferencia");
-            holder.lblDiferencia.setTextColor(R.style.titlestyle);
             holder.lblCosto.setText("Costo");
-            holder.lblCantRec.setTextColor(R.style.titlestyle);
             holder.lblFactor.setText("Factor");
-            holder.lblFactor.setTextColor(R.style.titlestyle);
-            holder.lblIdOcDet.setText("IdOcDet");
-            holder.lblIdOcDet.setTextColor(R.style.titlestyle);
-            holder.lblIdOcEnc.setText("IdOcEnc");
-            holder.lblIdOcEnc.setTextColor(R.style.titlestyle);
+            holder.lblIdOcDet.setText("IdDocDet");
+            holder.lblIdOcDet.setVisibility(View.GONE);
+            holder.lblIdOcEnc.setText("IdDocEnc");
+            holder.lblIdOcEnc.setVisibility(View.GONE);
+            holder.lblIdPropietarioBodega.setText("IdPropietarioBodega");
+            if (!Es_Poliza_Consolidada) {
+                holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+                holder.lblNombrePropietario.setVisibility(View.GONE);
+            }
 
         }else{
 
+            holder.lblNombrePropietario.setText("--");
             holder.lblNoLinea.setText("0");
             holder.lblCodigo.setText("--");
             holder.lblProducto.setText("--");
@@ -113,8 +115,14 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblCosto.setText("0");
             holder.lblFactor.setText("0");
             holder.lblIdOcDet.setText("0");
+            holder.lblIdOcDet.setVisibility(View.GONE);
             holder.lblIdOcEnc.setText("0");
+            holder.lblIdOcEnc.setVisibility(View.GONE);
+            holder.lblIdPropietarioBodega.setText("0");
 
+            if (!Es_Poliza_Consolidada) {
+                holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+            }
 
             if(BeDetalleOC.get(position).No_Linea>0){
                 holder.lblNoLinea.setText(""+BeDetalleOC.get(position).No_Linea);
@@ -143,7 +151,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblCantRec.setText(""+BeDetalleOC.get(position).Cantidad_recibida);
             }
 
-            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad-BeDetalleOC.get(position).Cantidad_recibida));
+            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad_recibida-BeDetalleOC.get(position).Cantidad));
 
             if(BeDetalleOC.get(position).Costo>0){
                 holder.lblCosto.setText(""+BeDetalleOC.get(position).Costo);
@@ -161,6 +169,14 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblIdOcEnc.setText(""+BeDetalleOC.get(position).IdOrdenCompraEnc);
             }
 
+            if(BeDetalleOC.get(position).IdPropietarioBodega>0){
+                holder.lblIdPropietarioBodega.setText(""+BeDetalleOC.get(position).IdPropietarioBodega);
+            }
+
+            if(!BeDetalleOC.get(position).Nombre_Propietario.isEmpty()){
+                holder.lblNombrePropietario.setText(""+BeDetalleOC.get(position).Nombre_Propietario);
+            }
+
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -168,18 +184,38 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
         } else {
             if (position==0){
                 convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblNoLinea.setTextColor(R.style.titlestyle);
             }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
+                //#CKFK 20210525 Aquí ponemos la fila de color verde claro para identificar que ya fue recepcionado
+                if (BeDetalleOC.get(position).Cantidad_recibida == BeDetalleOC.get(position).Cantidad) {
+                    convertView.setBackgroundColor(Color.parseColor("#c9ffc0"));
+                }else if (BeDetalleOC.get(position).Cantidad_recibida < BeDetalleOC.get(position).Cantidad  &&
+                          BeDetalleOC.get(position).Cantidad_recibida >0) {
+                    convertView.setBackgroundColor(Color.parseColor("#f5ffae"));
+                }
+                else{
+                    convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
             }
-
         }
 
         return convertView;
     }
 
     static class ViewHolder {
-        TextView lblNoLinea,lblCodigo,lblProducto,lblPres,lblUmbas,lblCantidad,lblCantRec,lblDiferencia,lblCosto,lblFactor,lblIdOcDet,lblIdOcEnc;
+        TextView lblNoLinea,
+                 lblCodigo,
+                 lblProducto,
+                 lblPres,
+                 lblUmbas,
+                 lblCantidad,
+                 lblCantRec,
+                 lblDiferencia,
+                 lblCosto,
+                 lblFactor,
+                 lblIdOcDet,
+                 lblIdOcEnc,
+                 lblIdPropietarioBodega,
+                 lblNombrePropietario;
     }
 
 }

@@ -80,6 +80,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lbLicPlate = convertView.findViewById(R.id.lblLicPlate_ci);
                         holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                         holder.lblIngreso = convertView.findViewById(R.id.lblIngreso);
+                        holder.lblIdTipoEtiqueta = convertView.findViewById(R.id.lblIdTipoEtiqueta);
                 convertView.setTag(holder);
 
             }else {
@@ -108,6 +109,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lbLicPlate.setText("LicPlate");
                 holder.lblIdProductoBodega.setText("IdProdBod");
                 holder.lblIngreso.setText("Ingreso");
+                holder.lblIdTipoEtiqueta.setText("IdTipoEtiqueta");
 
                 holder.lblCodigo.setTextColor(Color.WHITE);
                 holder.lblNombre.setTextColor(Color.WHITE);
@@ -127,6 +129,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lbLicPlate.setTextColor(Color.WHITE);
                 holder.lblIdProductoBodega.setTextColor(Color.WHITE);
                 holder.lblIngreso.setTextColor(Color.WHITE);
+                holder.lblIdTipoEtiqueta.setTextColor(Color.WHITE);
 
             }else{
                 holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
@@ -147,6 +150,27 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
                 holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
                 holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
+                holder.lblIdTipoEtiqueta.setText(BeListStock.get(position).IdTipoEtiqueta  +"");
+
+                holder.lblCodigo.setTextColor(Color.BLACK);
+                holder.lblNombre.setTextColor(Color.BLACK);
+                holder.lblUM.setTextColor(Color.BLACK);
+                holder.lblExistUMBAs.setTextColor(Color.BLACK);
+                holder.lblPres.setTextColor(Color.BLACK);
+                holder.lblExistPres.setTextColor(Color.BLACK);
+                holder.lblReservadoUMBAs.setTextColor(Color.BLACK);
+                holder.lblDisponibleUMBas.setTextColor(Color.BLACK);
+                holder.lblLote.setTextColor(Color.BLACK);
+                holder.lblVence.setTextColor(Color.BLACK);
+                holder.lblEstado.setTextColor(Color.BLACK);
+                holder.lblUbic.setTextColor(Color.BLACK);
+                holder.lblidUbic.setTextColor(Color.BLACK);
+                holder.lblPedido.setTextColor(Color.BLACK);
+                holder.lblPick.setTextColor(Color.BLACK);
+                holder.lbLicPlate.setTextColor(Color.BLACK);
+                holder.lblIdProductoBodega.setTextColor(Color.BLACK);
+                holder.lblIngreso.setTextColor(Color.BLACK);
+                holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
             }
 
             if(selectedIndex!= -1 && position == selectedIndex) {
@@ -173,6 +197,6 @@ public class list_adapt_consulta_stock extends BaseAdapter {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
-                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso;
+                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta;
     }
 }

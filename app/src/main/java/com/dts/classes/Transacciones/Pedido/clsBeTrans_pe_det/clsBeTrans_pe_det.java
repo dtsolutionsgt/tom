@@ -62,6 +62,18 @@ public class clsBeTrans_pe_det {
     @Element(required=false) public double PesoReservado=0;
     @Element(required=false) public String FechaIngreso="";
     @Element(required=false) public String FechaVence="";
+    @Element(required=false) public double Peso_Bruto=0;
+    @Element(required=false) public double Peso_Neto=0;
+    @Element(required=false) public double Costo=0;
+
+    @Element(required=false) public double valor_aduana = 0;
+    @Element(required=false) public double valor_fob = 0;
+    @Element(required=false) public double valor_iva = 0;
+    @Element(required=false) public double valor_dai = 0;
+    @Element(required=false) public double valor_seguro = 0;
+    @Element(required=false) public double valor_flete = 0;
+    @Element(required=false) public double Total_linea = 0;
+
 
 
     public clsBeTrans_pe_det() {
@@ -80,7 +92,9 @@ public class clsBeTrans_pe_det {
                              clsBeTrans_picking_ubicList ListaPickingUbic, String Codigo_Producto,
                              String NombreProducto, String ProductoPresentacion, String ProductoUnidadMedida, String ProductoEstado,
                              String BodegaUbicacion, double CantidadFisica, double Factor, double CantidadReservada,
-                             double PesoReservado, String FechaIngreso, String FechaVence) {
+                             double PesoReservado, String FechaIngreso, String FechaVence,double Peso_Bruto,double Peso_Neto,
+                             double Costo,double valor_aduana, double valor_fob, double valor_iva,double valor_dai,
+                             double valor_seguro,double valor_flete,double Total_linea) {
 
         this.IdPedidoDet=IdPedidoDet;
         this.IdPedidoEnc=IdPedidoEnc;
@@ -133,6 +147,17 @@ public class clsBeTrans_pe_det {
         this.PesoReservado=PesoReservado;
         this.FechaIngreso=FechaIngreso;
         this.FechaVence=FechaVence;
+        this.Peso_Bruto = Peso_Bruto;
+        this.Peso_Neto = Peso_Neto;
+        this.Costo = Costo;
+
+        this.valor_aduana = valor_aduana;
+        this.valor_fob = valor_fob;
+        this.valor_iva = valor_iva;
+        this.valor_dai = valor_dai;
+        this.valor_seguro = valor_seguro;
+        this.valor_flete = valor_flete;
+        this.Total_linea = Total_linea;
 
     }
 
@@ -442,6 +467,66 @@ public class clsBeTrans_pe_det {
     }
     public void setFechaVence(String value) {
         FechaVence=value;
+    }
+    public double getPeso_Bruto() {
+        return Peso_Bruto;
+    }
+    public void setPeso_Bruto(double value) {
+        Peso_Bruto=value;
+    }
+    public double getPeso_Neto() {
+        return Peso_Neto    ;
+    }
+    public void setPeso_Neto(double value) {
+        Peso_Neto=value;
+    }
+    public double getCosto() {
+        return Costo ;
+    }
+    public void setCosto(double value) {
+        Costo=value;
+    }
+    public double getValor_Aduana() {
+        return valor_aduana ;
+    }
+    public void setValor_Aduana(double value) {
+        valor_aduana=value;
+    }
+    public double getValor_Fob() {
+        return valor_fob  ;
+    }
+    public void setValor_Fob(double value) {
+        valor_fob =value;
+    }
+    public double getValor_Iva() {
+        return valor_iva ;
+    }
+    public void setValor_Iva(double value) {
+        valor_iva=value;
+    }
+    public double getValor_Dai() {
+        return valor_dai ;
+    }
+    public void setValor_Dai(double value) {
+        valor_dai=value;
+    }
+    public double getValor_Seguro() {
+        return valor_seguro ;
+    }
+    public void setValor_Seguro(double value) {
+        valor_seguro=value;
+    }
+    public double getValor_Flete() {
+        return valor_flete ;
+    }
+    public void setValor_Flete(double value) {
+        valor_flete=value;
+    }
+    public double getTotal_Linea() {
+        return Total_linea ;
+    }
+    public void setTotal_Linea(double value) {
+        Total_linea=value;
     }
 
 }

@@ -49,10 +49,13 @@ public class list_adapter_tareashh extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder;
 
         if (convertView == null) {
+
             convertView = l_Inflater.inflate(R.layout.activity_list_adapter_tareashh, null);
+
             holder = new ViewHolder();
 
             holder.lblIdOrderCompraEnc = (TextView) convertView.findViewById(R.id.lblIdOC);
@@ -62,42 +65,60 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblProveedor = (TextView) convertView.findViewById(R.id.lblProvee);
             holder.lblTipoIngresoOC = (TextView) convertView.findViewById(R.id.lblTipoIng);
             holder.lblTipoRecepcion = (TextView) convertView.findViewById(R.id.lblTipoRece);
+            holder.lblNombrePropietario = (TextView) convertView.findViewById(R.id.lblNombrePropietario);
+            holder.lblNumPoliza = (TextView) convertView.findViewById(R.id.lblNumPoliza);
+            holder.lblNumOrden = (TextView) convertView.findViewById(R.id.lblNumOrden);
 
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         if (position==0){
-            holder.lblIdOrderCompraEnc.setText("OC");
+
+            holder.lblIdOrderCompraEnc.setText("NoDoc");
+            holder.lblIdOrderCompraEnc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblIdRecepcionEnc.setText("Rec");
-            holder.lblIdRecepcionEnc.setTextColor(R.style.titlestyle);
-            holder.lblNoReferenciaOC.setText("NoRefOC");
-            holder.lblNoReferenciaOC.setTextColor(R.style.titlestyle);
-            holder.lblNoDocumentoOc.setText("NoDocOc");
-            holder.lblNoDocumentoOc.setTextColor(R.style.titlestyle);
+            holder.lblIdRecepcionEnc.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNombrePropietario.setText("Propietario");
+            holder.lblNombrePropietario.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNoReferenciaOC.setText("NoRefDoc");
+            holder.lblNoReferenciaOC.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNoDocumentoOc.setText("Doc.ERP");
+            holder.lblNoDocumentoOc.setTextColor(Color.parseColor("#FFFFFF"));
             holder.lblProveedor.setText("Proveedor");
-            holder.lblProveedor.setTextColor(R.style.titlestyle);
-            holder.lblTipoIngresoOC.setText("TipoIngresoOC");
-            holder.lblTipoIngresoOC.setTextColor(R.style.titlestyle);
-            holder.lblTipoRecepcion.setText("TipoRecepcion");
-            holder.lblTipoRecepcion.setTextColor(R.style.titlestyle);
+            holder.lblProveedor.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblTipoIngresoOC.setText("TipoIngreso");
+            holder.lblTipoIngresoOC.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblTipoRecepcion.setText("TipoRec");
+            holder.lblTipoRecepcion.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNumOrden.setText("No.Orden");
+            holder.lblNumOrden.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.lblNumPoliza.setText("No.Poliza");
+            holder.lblNumPoliza.setTextColor(Color.parseColor("#FFFFFF"));
+
         }else{
 
             holder.lblIdOrderCompraEnc.setText("0");
             holder.lblIdRecepcionEnc.setText("0");
             holder.lblNoReferenciaOC.setText("--");
             holder.lblNoDocumentoOc.setText("--");
+            holder.lblNumOrden.setText("--");
+            holder.lblNumPoliza.setText("--");
             holder.lblProveedor.setText("--");
             holder.lblTipoIngresoOC.setText("--");
             holder.lblTipoRecepcion.setText("--");
-
 
             if(BeListTareasHH.get(position).IdOrderCompraEnc>0){
                 holder.lblIdOrderCompraEnc.setText(""+BeListTareasHH.get(position).IdOrderCompraEnc);
             }
             if(BeListTareasHH.get(position).IdRecepcionEnc>0){
                 holder.lblIdRecepcionEnc.setText(""+BeListTareasHH.get(position).IdRecepcionEnc);
+            }
+
+            if(BeListTareasHH.get(position).NombrePropietario!=null){
+                holder.lblNombrePropietario.setText(BeListTareasHH.get(position).NombrePropietario);
             }
 
             if(BeListTareasHH.get(position).NoReferenciaOC!=null){
@@ -119,6 +140,14 @@ public class list_adapter_tareashh extends BaseAdapter {
             if(BeListTareasHH.get(position).NombreTipoRecepcion!=null){
                 holder.lblTipoRecepcion.setText(BeListTareasHH.get(position).NombreTipoRecepcion);
             }
+
+            if(BeListTareasHH.get(position).NumOrden!=null){
+                holder.lblNumOrden.setText(BeListTareasHH.get(position).NumOrden);
+            }
+
+            if(BeListTareasHH.get(position).NumPoliza!=null){
+                holder.lblNumPoliza.setText(BeListTareasHH.get(position).NumPoliza);
+            }
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -126,7 +155,7 @@ public class list_adapter_tareashh extends BaseAdapter {
         } else {
            if (position==0){
                convertView.setBackgroundResource(R.drawable.color_medium);
-               holder.lblIdOrderCompraEnc.setTextColor(R.style.titlestyle);
+               holder.lblIdOrderCompraEnc.setTextColor(Color.parseColor("#FFFFFF"));
            }else{
                convertView.setBackgroundColor(Color.TRANSPARENT);
            }
@@ -137,7 +166,16 @@ public class list_adapter_tareashh extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblIdOrderCompraEnc,lblIdRecepcionEnc,lblNoReferenciaOC,lblNoDocumentoOc,lblProveedor,lblTipoIngresoOC,lblTipoRecepcion;
+        TextView lblIdOrderCompraEnc,
+                lblIdRecepcionEnc,
+                lblNombrePropietario,
+                lblNoReferenciaOC,
+                lblNoDocumentoOc,
+                lblProveedor,
+                lblTipoIngresoOC,
+                lblTipoRecepcion,
+                lblNumOrden,
+                lblNumPoliza;
     }
 
 }

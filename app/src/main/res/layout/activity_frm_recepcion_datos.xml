@@ -48,15 +48,15 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
             android:background="@drawable/back"
             android:onClick="ExitForm" />
 
         <Button
             android:id="@+id/btnFinalizarRece"
-            android:layout_width="249dp"
+            android:layout_width="268dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:layout_toStartOf="@+id/btnIr"
             android:layout_toEndOf="@+id/btnBack"
@@ -72,8 +72,10 @@
             android:layout_width="61dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/arr_rnd_right" />
+            android:background="@drawable/arr_rnd_right"
+            android:enabled="true"
+            android:onClick="BotonMostrar" />
+
     </RelativeLayout>
 
     <ScrollView
@@ -103,23 +105,22 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:id="@+id/txtBarra"
+                    android:id="@+id/txtLP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="155dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_toStartOf="@+id/imageView13"
+                    android:layout_toStartOf="@+id/cmdImprimir"
                     android:inputType="textPersonName" />
 
                 <ImageView
-                    android:id="@+id/imageView13"
+                    android:id="@+id/cmdImprimir"
                     android:layout_width="70dp"
                     android:layout_height="54dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="0dp"
-                    android:onClick="Imprimir"
                     android:padding="10dp"
                     android:src="@drawable/login_printer" />
 
@@ -129,7 +130,7 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
-                    android:text="Lp :"
+                    android:text="LP :"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -160,6 +161,12 @@
                     android:layout_height="match_parent"
                     android:inputType="date" />
 
+                <Spinner
+                    android:id="@+id/cmbVence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    tools:visibility="invisible" />
+
             </TableRow>
 
             <TableRow
@@ -179,6 +186,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/cmbLote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="invisible" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblUbicacion"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Ubicación"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
             </TableRow>
 
             <TableRow
@@ -273,7 +302,7 @@
                         style="@style/StyleText"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
-                        android:text="Peso:" />
+                        android:text="Peso bruto:" />
 
                     <EditText
                         android:id="@+id/txtPeso"
@@ -293,6 +322,7 @@
                         android:id="@+id/txtPesoUnitario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
@@ -377,9 +407,18 @@
                     android:id="@+id/chkPaletizar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Paletizar"
+                    tools:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/chkEstiba"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="10dp"
-                    android:text="Paletizar" />
+                    android:text="Definir estiba" />
 
             </TableRow>
 

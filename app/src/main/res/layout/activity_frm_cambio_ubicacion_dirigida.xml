@@ -21,21 +21,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/rllineas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <TableRow
+                android:id="@+id/trOrigen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblOrigen"
-                    android:layout_width="165dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtUbicOrigen"
-                    android:layout_alignBottom="@+id/txtUbicOrigen"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="38dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Origen:"
@@ -45,29 +41,60 @@
 
                 <EditText
                     android:id="@+id/txtUbicOrigen"
-                    android:layout_width="226dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="176dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
+                    android:enabled="true"
+                    android:hint="#0000"
                     android:inputType="number"
-                    android:textColor="@android:color/black" />
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trLP"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/lblLicensePlate"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="LP:"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/txtLicensePlate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:enabled="true"
+                    android:hint="LP"
+                    android:inputType="number"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trCodigo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblCodigo"
                     android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/lblUbicCompleta"
-                    android:layout_alignTop="@+id/txtCodigoPrd"
-                    android:layout_alignEnd="@+id/lblOrigen"
-                    android:layout_alignBottom="@+id/txtCodigoPrd"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Código:"
@@ -77,29 +104,77 @@
 
                 <EditText
                     android:id="@+id/txtCodigoPrd"
-                    android:layout_width="225dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtUbicOrigen"
-                    android:layout_alignStart="@+id/txtUbicOrigen"
-                    android:layout_alignEnd="@+id/txtUbicOrigen"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:enabled="true"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trProducto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/txtDescProd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="Descripción"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trUnidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/lblUnidadMedida"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:paddingLeft="5dp"
+                    android:text="Unidad Medida:"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtUnidadMedida"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textMultiLine|textPersonName"
-                    android:maxLines="3"
-                    android:minHeight="48dp"
-                    android:textColor="@android:color/black" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="Unidad Medida"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trPresentacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblPresentacion"
-                    android:layout_width="158dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtPresentacion"
-                    android:layout_alignEnd="@+id/lblCodigo"
-                    android:layout_alignBottom="@+id/txtPresentacion"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Presentación:"
@@ -107,28 +182,32 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtPresentacion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/txtCodigoPrd"
-                    android:layout_alignStart="@id/txtCodigoPrd"
-                    android:layout_alignEnd="@id/txtCodigoPrd"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="Presentacion"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trPropietario"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblPropietario"
-                    android:layout_width="146dp"
-                    android:layout_height="39dp"
-                    android:layout_alignTop="@id/txtPropietario"
-                    android:layout_alignEnd="@id/lblPresentacion"
-                    android:layout_alignBottom="@id/txtPropietario"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="-4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Propietario:"
@@ -136,26 +215,31 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtPropietario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/txtPresentacion"
-                    android:layout_alignStart="@id/txtPresentacion"
-                    android:layout_alignEnd="@id/txtPresentacion"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="Propietario"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trLote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblLote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtLote"
-                    android:layout_alignEnd="@id/lblPropietario"
-                    android:layout_alignBottom="@+id/txtLote"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Lote:"
@@ -163,27 +247,31 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtLote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@id/txtPropietario"
-                    android:layout_alignStart="@id/txtPropietario"
-                    android:layout_alignEnd="@id/txtPropietario"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="L0000"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trVence"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblVence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtVence"
-                    android:layout_alignEnd="@+id/lblLote"
-                    android:layout_alignBottom="@+id/txtVence"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="0dp"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Vence:"
@@ -191,26 +279,31 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtVence"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@+id/txtLote"
-                    android:layout_alignStart="@+id/txtLote"
-                    android:layout_alignEnd="@+id/txtLote"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="00/00/0000"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trEstado"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblEstado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtEstado"
-                    android:layout_alignEnd="@+id/lblVence"
-                    android:layout_alignBottom="@+id/txtEstado"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Estado:"
@@ -218,54 +311,83 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtEstado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@+id/txtVence"
-                    android:layout_alignStart="@+id/txtVence"
-                    android:layout_alignEnd="@+id/txtVence"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="Bueno"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trUbicDestino"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblDestino"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtUbicDestino"
-                    android:layout_alignBottom="@+id/txtUbicDestino"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_toStartOf="@+id/txtUbicDestino"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Destino:"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/txtUbicDestino"
-                    android:layout_width="120dp"
-                    android:layout_height="45dp"
-                    android:layout_below="@+id/txtEstado"
-                    android:layout_alignEnd="@+id/txtEstado"
-                    android:layout_marginTop="10dp"
-                    android:inputType="number" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:inputType="number"
+                    android:paddingStart="5dp"
+                    android:text="#0000"
+                    android:textSize="24sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trDestino"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/lblNomDestino"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="Destino"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trCantidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblCantidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lblEstado"
-                    android:layout_alignBottom="@+id/txtCantidad"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Cantidad:"
@@ -275,47 +397,70 @@
 
                 <EditText
                     android:id="@+id/txtCantidad"
-                    android:layout_width="125dp"
+                    android:layout_width="171dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtUbicDestino"
-                    android:layout_alignStart="@id/txtEstado"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentBottom="false"
-                    android:layout_marginTop="10dp"
                     android:inputType="numberDecimal"
+                    android:paddingStart="5dp"
+                    android:text="0.00"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/lbCant"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/txtCantidad"
-                    android:layout_alignBottom="@+id/txtCantidad"
-                    android:layout_alignParentEnd="true"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toEndOf="@+id/txtCantidad"
-                    android:gravity="bottom|right"
+                    android:gravity="right|center_vertical"
                     android:numeric="decimal"
                     android:paddingLeft="3dp"
                     android:paddingBottom="5dp"
                     android:text="00.00"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trPeso"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:id="@+id/lblPeso"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="Peso"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtPeso"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:background="#E3E0E0"
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="0.00"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trEstadoDestino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/lblCambioEstado"
-                    android:layout_width="280dp"
-                    android:layout_height="45dp"
-                    android:layout_alignStart="@id/lblDestino"
-                    android:layout_alignTop="@+id/txtEstadoDestino"
-                    android:layout_alignEnd="@+id/lblCantidad"
-                    android:layout_alignBottom="@+id/txtEstadoDestino"
-                    android:layout_marginStart="-1dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="Estado destino:"
@@ -323,19 +468,20 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <TextView
                     android:id="@+id/txtEstadoDestino"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_below="@+id/txtCantidad"
-                    android:layout_alignStart="@+id/txtCantidad"
-                    android:layout_alignEnd="@+id/lbCant"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
                     android:background="#E3E0E0"
-                    android:inputType="textPersonName" />
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:paddingStart="5dp"
+                    android:text="#0000"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
-            </RelativeLayout>
+            </TableRow>
 
         </LinearLayout>
     </ScrollView>

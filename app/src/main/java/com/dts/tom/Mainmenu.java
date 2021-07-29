@@ -35,7 +35,6 @@ public class Mainmenu extends PBase {
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
 
-
     private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
@@ -193,7 +192,10 @@ public class Mainmenu extends PBase {
     private void Load(){
         try {
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
-            lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+
+            try {
+                lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+            } catch (Exception e) {}
 
             listItems();
 
@@ -233,7 +235,8 @@ public class Mainmenu extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Count_Recepciones_For_HH_By_IdBodega",
-                                "pIdBodega",gl.IdBodega);
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 2:
                         callMethod("Get_Count_Picking_For_HH_By_IdBodega",
@@ -242,15 +245,20 @@ public class Mainmenu extends PBase {
                         break;
                     case 3:
                         callMethod("Get_Count_Verificaciones_For_HH_By_IdBodega",
-                                "pIdBodega",gl.IdBodega);
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
                         callMethod("Get_Count_Cambio_Est_Ubic_For_HH",
-                                "pCambioEstado",0);
+                                "pCambioEstado",0,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 5:
                         callMethod("Get_Count_Cambio_Est_Ubic_For_HH",
-                                "pCambioEstado",1);
+                                "pCambioEstado",1,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                 }
 
@@ -534,7 +542,6 @@ public class Mainmenu extends PBase {
         } catch (Exception e) {
             msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
         }
-
     }
 
     private void cargaDatosServicio() {

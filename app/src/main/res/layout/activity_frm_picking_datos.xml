@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <TableRow
+                android:id="@+id/trLP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -31,10 +32,30 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Barra:" />
+                    android:text="LP:" />
 
                 <EditText
-                    android:id="@+id/txtBarra"
+                    android:id="@+id/txtLP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trCodigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/lblCodigoProducto"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Código:" />
+
+                <EditText
+                    android:id="@+id/txtCodigoProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
@@ -61,6 +82,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trLote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -80,6 +102,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trPresentacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -137,6 +160,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trPeso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -150,9 +174,12 @@
 
                 <EditText
                     android:id="@+id/txtPesoPick"
+                    style="@style/StyleText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="number" />
+                    android:enabled="false"
+                    android:inputType="number"
+                    android:text="=" />
             </TableRow>
 
             <TableRow
@@ -213,18 +240,18 @@
     <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:background="@android:color/background_light">
 
         <TextView
             android:id="@+id/lblTituloForma"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:maxLines="5"
+            android:minLines="1"
             android:text="1008049944 - Aceite Ideal Maiz 60 ml"
             android:textColor="@color/medium"
             android:textSize="18sp"

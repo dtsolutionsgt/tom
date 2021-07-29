@@ -170,6 +170,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginTop="3dp"
+                    android:layout_marginEnd="3dp"
                     android:clickable="true"
                     android:onClick="doLogin"
                     android:src="@drawable/arr_rnd_right" />
@@ -213,7 +214,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="24dp"
-                        android:text="Versión 1.0.1"
+                        android:text="Versión 4.5.3"
                         android:textColor="#FFFFFF" />
 
                     <ImageView
@@ -259,7 +260,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="4dp"
-                        android:text="20-Feb-2021"
+                        android:text="14-Jul-2021"
                         android:textColor="#FFFFFF" />
                 </RelativeLayout>
             </TableRow>
@@ -326,7 +327,7 @@
             android:layout_height="match_parent"
             android:onClick="recargar"
             android:scaleType="center"
-            android:src="@drawable/tomwmspng_2021" />
+            android:src="@drawable/tom_logo" />
 
     </RelativeLayout>
 

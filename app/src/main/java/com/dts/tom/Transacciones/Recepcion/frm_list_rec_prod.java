@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
@@ -31,6 +33,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
@@ -94,10 +97,11 @@ public class frm_list_rec_prod extends PBase {
 
     private clsBeTrans_oc_det selitem;
 
-    private list_adapt_detalle_recepcion adapter;
+    private list_adapt_detalle_recepcion listdetadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_list_rec_prod);
 
@@ -155,7 +159,7 @@ public class frm_list_rec_prod extends PBase {
                     int vLengthBarra  = txtCodigoProductoRecepcion.getText().toString().length();
 
                      if(gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")
-                             | gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
+                             || gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
                              && vLengthBarra > 6){
 
                          LongitudValida = true;
@@ -325,14 +329,14 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            vIdOrdenCompra=0;
+/*            vIdOrdenCompra=0;
 
             if (gl.gBeRecepcion.OrdenCompraRec!=null){
                 if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
                     vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
                 }
             }
-
+*/
             gBeStockRec.Uds_lic_plate = gBeStockRec.Cantidad;
             gBeStockRec.No_bulto = 0;
 
@@ -437,10 +441,21 @@ public class frm_list_rec_prod extends PBase {
                     gBeOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.OC;
                     gl.gBeOrdenCompra = gBeOrdenCompra;
 
+                    vIdOrdenCompra=0;
+
+                    if (gl.gBeRecepcion.OrdenCompraRec!=null){
+                        if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
+                            vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
+                        }
+                    }
+
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
+
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                    //GT17062021 Se reordena la lista por num_linea
+                    Collections.sort(pListDetalleOC.items,new OrdenarItems());
 
                     gl.gpListDetalleOC = pListDetalleOC;
 
@@ -499,7 +514,7 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        adapter.setSelectedIndex(position);
+                        listdetadapter.setSelectedIndex(position);
 
                         procesar_registro();
 
@@ -524,7 +539,7 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        adapter.setSelectedIndex(position);
+                        listdetadapter.setSelectedIndex(position);
 
                         msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
@@ -556,9 +571,9 @@ public class frm_list_rec_prod extends PBase {
 
                     if (chkRecepcionados.isChecked()==true) {
                         //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                     }else{
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                     }
                 }
             });
@@ -712,16 +727,16 @@ public class frm_list_rec_prod extends PBase {
 
                     if (Cantidad_recibida>0){
 
-                        vTipoDiferencia = mu.round(Cantidad-Cantidad_recibida,7);
+                        vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
 
-                        if (vTipoDiferencia>0){
+                        if (vTipoDiferencia<0){
 
                             btnCompletaRec.setText("DIF - (NEG)");
-                            btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
+                            btnCompletaRec.setBackgroundColor(Color.parseColor("#FFA5A0"));
                             progress.cancel();
                             return false;
 
-                        }else if(vTipoDiferencia<0){
+                        }else if(vTipoDiferencia>0){
 
                             btnCompletaRec.setText(" DIF - (POS)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF0399D5"));
@@ -739,7 +754,7 @@ public class frm_list_rec_prod extends PBase {
                     }else{
 
                         btnCompletaRec.setText("DIF - (NEG)");
-                        btnCompletaRec.setBackgroundColor(Color.parseColor("#ffcc0000"));
+                        btnCompletaRec.setBackgroundColor(Color.parseColor("#FFA5A0"));
                         progress.cancel();
                         return false;
                     }
@@ -759,14 +774,14 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    private void Lista_Detalle_OC(){
+    private void Lista_Detalle_Documento_Ingreso(){
 
         clsBeTrans_oc_det vItem;
         BeListDetalleOC.clear();
 
         try{
 
-            progress.setMessage("Cargando detalle de OC");
+            progress.setMessage("Cargando detalle de documento de ingreso.");
 
             if(pListDetalleOC.items!=null){
 
@@ -793,6 +808,8 @@ public class frm_list_rec_prod extends PBase {
                             vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                            vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
+                            vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
 
                             BeListDetalleOC.add(vItem);
 
@@ -811,6 +828,8 @@ public class frm_list_rec_prod extends PBase {
                             vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
                             vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                            vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
+                            vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
 
                             BeListDetalleOC.add(vItem);
 
@@ -823,8 +842,14 @@ public class frm_list_rec_prod extends PBase {
 
             Collections.sort(BeListDetalleOC,new OrdenarItems());
 
-            adapter=new list_adapt_detalle_recepcion(this,BeListDetalleOC);
-            listView.setAdapter(adapter);
+            //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
+            boolean es_poliza_consolidada = false;
+            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            TipoIngreso = gBeOrdenCompra.getTipoIngreso();
+            if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
+
+            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada);
+            listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
@@ -924,7 +949,7 @@ public class frm_list_rec_prod extends PBase {
                     case 1:
                         callMethod("Iniciar_Recepcion_OC","oBeTrans_oc_enc",gBeOrdenCompra);
                         break;
-                    case  2:
+                    case 2:
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                 "Estado","Pendiente");
                         break;
@@ -963,7 +988,8 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
                         break;
                     case 11:
-                        callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case  12:
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Estado","Procesado");
@@ -972,10 +998,17 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
-                        callMethod("Finalizar_Recepcion","pRecEnc",gl.gBeRecepcion,"backOrder",false,
-                                "pIdOrdenCompraEnc",vIdOrdenCompra,"pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdEmpresa",
-                                gl.IdEmpresa,"pIdBodega",gl.IdBodega,"pIdUsuario",gl.IdOperador,"pListObjDetR",
-                                pListTransRecDet.items,"pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
+
+                        callMethod("Finalizar_Recepcion",
+                                            "pRecEnc",gl.gBeRecepcion,
+                                            "backOrder",false,
+                                            "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                            "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                            "pIdEmpresa", gl.IdEmpresa,
+                                            "pIdBodega",gl.IdBodega,
+                                            "pIdUsuario",gl.IdOperador,
+                                            "pListObjDetR",pListTransRecDet.items,
+                                            "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                 }
 
@@ -1004,7 +1037,7 @@ public class frm_list_rec_prod extends PBase {
                         execws(3);
                         break;
                     case 3:
-                        Lista_Detalle_OC();
+                        Lista_Detalle_Documento_Ingreso();
                         Recepcion_Completa();
                         execws(4);
                         break;
@@ -1041,7 +1074,8 @@ public class frm_list_rec_prod extends PBase {
                         execws(14);
                         break;
                     case 14:
-                        doExit();
+                        //doExit();
+                        process_finalizar_recepcion();
                         break;
                 }
 
@@ -1191,6 +1225,60 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
+    private void process_finalizar_recepcion(){
+
+        try{
+
+            String Resultado;
+
+            progress.show();
+            progress.setMessage("Finalizando proceso de guardar recepción");
+
+            //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
+            if(!xobj.ws.xmlresult.contains("CustomError")){
+
+                Resultado = xobj.getresult(String.class,"Finalizar_Recepcion");
+
+                if (Resultado!=null){
+
+                }else{
+                    progress.cancel();
+                    mu.msgbox("No se pudo finalizar la recepción");
+                }
+
+                doExit();
+
+            }else{
+                progress.cancel();
+                Resultado =xobj.ws.xmlresult.replace("<DocumentElement>  <CustomError>    <Error>","").replace("</Error>  </CustomError></DocumentElement>","");
+                msgboxErrorOnWS2("No se pudo finalizar la recepción: " + Resultado);
+            }
+
+        }catch (Exception e){
+            progress.hide();
+            mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
+        }finally {
+            //progress.hide();
+        }
+    }
+
+    public void msgboxErrorOnWS2(String msg) {
+        try{
+            ExDialog dialog = new ExDialog(this);
+            dialog.setMessage(msg);
+
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            Log.println(1,"msg",e.getMessage());
+            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     private void processGetDetalleByIdRepcionEnc(){
         try{
 
@@ -1204,14 +1292,14 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia!=0){
                                 pListDetalleOC.items =stream(gBeOrdenCompra.DetalleOC.items).where(c->c.Cantidad-c.Cantidad_recibida!=0).toList();
-                                Lista_Detalle_OC();
+                                Lista_Detalle_Documento_Ingreso();
                             }
 
-                            if (vTipoDiferencia>0){
+                            if (vTipoDiferencia<0){
 
                                 msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
 
-                            }else if(vTipoDiferencia <0){
+                            }else if(vTipoDiferencia >0){
 
                                 msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
 
@@ -1340,6 +1428,8 @@ public class frm_list_rec_prod extends PBase {
 
                     MuestraPantallaFirma(this);
 
+                }else{
+                    Finalizar_Recepcion();
                 }
 
             }else{
@@ -1420,7 +1510,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==1){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
-                Lista_Detalle_OC();
+                Lista_Detalle_Documento_Ingreso();
                if(Recepcion_Completa()){
                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                }
@@ -1429,7 +1519,7 @@ public class frm_list_rec_prod extends PBase {
             if (browse==2){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
-                Lista_Detalle_OC();
+                Lista_Detalle_Documento_Ingreso();
               Recepcion_Completa();
             }
 
