@@ -2825,8 +2825,16 @@ public class frm_recepcion_datos extends PBase {
             }
 
             try {
-                CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
-                        && c.IdPresentacion == vPresentacion).select(c->c.Costo).first();
+
+                //#EJC20210729: Genera error si no devuelve nada el .first.
+                try {
+
+                    CostoOC = stream(gl.gpListDetalleOC.items).where(c->c.IdProductoBodega == pIdProductoBodega
+                            && c.IdPresentacion == vPresentacion).select(c->c.Costo).first();
+
+                } catch (Exception e) {
+                    CostoOC=0;
+                }
 
                 if (gl.gBeOrdenCompra!=null) {
                     if (((gl.gBeOrdenCompra.IdOrdenCompraEnc > 0) && (CostoOC > 0))) {
@@ -2839,6 +2847,7 @@ public class frm_recepcion_datos extends PBase {
                 } else {
                     txtCostoOC.setText(mu.round(BeProducto.Costo, gl.gCantDecCalculo)+"");
                 }
+
             } catch (Exception e) {
                 mu.msgbox("fcp_CostoOC: "+e.getMessage());
             }
