@@ -33,6 +33,7 @@ public class clsBeProveedor {
     @Element(required=false) public String Referencia="";
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public int IdConfiguracionBarraPallet=0;
+    @Element(required=false) public boolean Es_Proveedor_Servicio=false;
 
 
     public clsBeProveedor() {
@@ -224,6 +225,14 @@ public class clsBeProveedor {
     }
     public void setIdConfiguracionBarraPallet(int value) {
         IdConfiguracionBarraPallet=value;
+    }
+
+
+    public boolean getEs_Proveedor_Servicio() {
+        return Es_Proveedor_Servicio;
+    }
+    public void setEs_Proveedor_Servicio(boolean value) {
+        Es_Proveedor_Servicio=value;
     }
 
 }
