@@ -34,6 +34,7 @@ import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ExecutionException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -101,6 +102,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             if (gl.tipoTarea==1){
 
+                lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
                     //Llama al método del WS Get_All_Recepciones_For_HH_By_IdBodega
@@ -112,9 +114,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                 }
 
             }else if(gl.tipoTarea==5){
+                lblTitulo.setText("Tareas de Picking");
                 //Llama al método del WS Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega
                 execws(3);
             }else if(gl.tipoTarea==6){
+                lblTitulo.setText("Tareas de Verificación");
                 //Llama al método del WS Get_All_Pedidos_A_Verificar_By_IdBodega
                 execws(4);
             }
@@ -231,6 +235,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     case 4:
                         callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
+                    case 5:
+                        callMethod("Get_Pedido_A_Verificar_By_LP","pLP",gl.gLP);
+                        break;
                 }
 
                 anim.cancel();
@@ -256,8 +263,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processListTareasPicking();
                     break;
                 case 4:
-                    processListTareasVerificacion();
-                    break;
+                    processListTareasVerificacion();break;
+                case 5:
+                    ;break;
             }
 
         } catch (Exception e) {
@@ -276,7 +284,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             progress.setMessage("Obteniendo lista de tareas");
 
-            pListBeTareasIngresoHH=xobj.getresult(clsBeTareasIngresoHHList.class,"Get_All_Recepciones_For_HH_By_IdBodega");
+            pListBeTareasIngresoHH=xobj.getresult(clsBeTareasIngresoHHList.class,"Get_All_Recepciones_For_HH_By_IdBodega_By_Operador");
 
             listItems();
 
@@ -338,6 +346,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.setMessage("Listando tareas");
 
             if (pListBeTareasPickingHH!=null){
+
                 if (pListBeTareasPickingHH.items!=null){
 
                     vItem = new clsBeTrans_picking_enc();

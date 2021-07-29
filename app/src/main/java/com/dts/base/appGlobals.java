@@ -85,6 +85,7 @@ public class appGlobals extends Application {
     public String gLoteAnterior="";
     public String gProductoAnterior = "";
     public String gFechaVenceAnterior="";
+    public String gLP="";
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
 
