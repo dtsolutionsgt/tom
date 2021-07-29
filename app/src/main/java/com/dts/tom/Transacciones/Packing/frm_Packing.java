@@ -1024,6 +1024,7 @@ public class frm_Packing extends PBase {
 
             //#CKFK 20200414 quité la condiciones de si se había escaneado un pallet porque el license plate se filtra al inicio
             //cuando se obtiene el stockResList
+            //#CKFK 20210728 Agregué la condición del LP
             AuxList = stream(stockResList.items)
                     .where(c -> c.IdProducto == gIdProductoOrigen)
                     .where(c -> c.IdPresentacion == cvPresID)
@@ -1031,6 +1032,7 @@ public class frm_Packing extends PBase {
                     .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
                     .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
                     .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                    .where(c -> c.Lic_plate.equals(txtLic_Plate.getText().toString()))
                     .toList();
 
             if (AuxList == null) {
