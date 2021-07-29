@@ -127,7 +127,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 doExit();
             }
 
-        }catch (Exception e){
+        } catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
@@ -171,7 +171,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                             procesar_registro();
                         }
 
-                    }else if(gl.tipoTarea==6){
+                    } else if(gl.tipoTarea==6){
 
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
@@ -534,7 +534,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
     private void procesar_registro(){
 
-        try{
+        try {
 
             gl.gIdRecepcionEnc=0;
 
@@ -563,6 +563,10 @@ public class frm_lista_tareas_recepcion extends PBase {
         }catch (Exception e){
             mu.msgbox(e.getMessage());
         }
+
+    }
+
+    private void buscaLP(String lp) {
 
     }
 
@@ -640,9 +644,13 @@ public class frm_lista_tareas_recepcion extends PBase {
             if (e.getMessage() !=null){
                 mu.msgbox("Error obteniendo la tarea: "+e.getMessage());
             }else{
-                mu.msgbox("El número de tarea ingresado no es válido");
-                txtTarea.setText("");
-                txtTarea.requestFocus();
+                if(gl.tipoTarea==6) {
+                    buscaLP(txtTarea.getText().toString());
+                } else {
+                    mu.msgbox("El número de tarea ingresado no es válido");
+                    txtTarea.setText("");
+                    txtTarea.requestFocus();
+                }
             }
         }
     }
