@@ -131,4 +131,7 @@ public class appGlobals extends Application {
     public int mode=0;
     public boolean bloquear_lp_hh = false;
     public int IdResolucionLpOperador=0;
+
+    //variable para diferenciar inv cealsa de cualquier otro
+    public boolean multipropietario = false;
 }
