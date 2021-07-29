@@ -565,7 +565,7 @@ public class frm_detalle_tareas_picking extends PBase {
                     processActualizarPickingEnc();
                     break;
                 case 5:
-                   processGetUbicacion();
+                    processGetUbicacion();
                     break;
             }
 
@@ -580,6 +580,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             progress.setMessage("Obteniendo valores de picking");
 
+            //-----------------------------
             gBePicking =xobj.getresult(clsBeTrans_picking_enc.class,"Get_Picking_By_IdPickingEnc");
 
             if (gBePicking!=null){
@@ -712,16 +713,15 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void doExit(){
-        try{
-
+        try {
             gBePicking = new clsBeTrans_picking_enc();
             plistPickingUbi = new clsBeTrans_picking_ubicList();
-           gbePickingDet = new clsBeTrans_picking_det();
-           BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
-           selitem = new clsBeTrans_picking_ubic();
+            gbePickingDet = new clsBeTrans_picking_det();
+            BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+            selitem = new clsBeTrans_picking_ubic();
             browse = 0;
             super.finish();
-        }catch (Exception e){
+        } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 

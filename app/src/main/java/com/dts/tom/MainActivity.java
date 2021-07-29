@@ -38,6 +38,7 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
@@ -585,7 +586,7 @@ public class MainActivity extends PBase {
         startActivity(new Intent(this,Mainmenu.class));
     }
 
-    private void Licencia_Valida()     {
+    private void Licencia_Valida() {
         try{
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
@@ -593,15 +594,31 @@ public class MainActivity extends PBase {
     }
 
     private void Valida_Ingreso() {
+
+        try {
+            gl.IdEmpresa=1;
+            gl.IdBodega=10;
+            gl.IdOperador=1;
+            gl.CodigoBodega="10";
+            gl.OperadorBodega.IdOperadorBodega=1;
+
+            clsBeOperador op=new clsBeOperador();
+            op.setCodigo("1");
+            op.setNombres("Op");
+            op.setApellidos("1");
+            gl.OperadorBodega.setOperador(op);
+            ejecuta();
+        } catch (Exception e) {
+            String ss=e.getMessage();
+        }
+
+        /*
         try{
 
-            if (gl.IdEmpresa>0)
-            {
-                if (gl.IdBodega>0)
-                {
-                    if (gl.IdOperador>0)
-                    {
-                        if (!txtpass.getText().toString().isEmpty())                        {
+            if (gl.IdEmpresa>0) {
+                if (gl.IdBodega>0) {
+                    if (gl.IdOperador>0) {
+                        if (!txtpass.getText().toString().isEmpty())  {
                             List<clsBeBodegaBase> BeBodega =
                                     stream(bodegas.items)
                                             .where(c -> c.IdBodega  == gl.IdBodega)
@@ -616,8 +633,7 @@ public class MainActivity extends PBase {
                                             .orderBy(c-> c.Operador.IdOperador)
                                             .toList();
 
-                            if (BeOperadorBodega.size()>0)
-                            {
+                            if (BeOperadorBodega.size()>0) {
 
                                 gl.gOperadorBodega = BeOperadorBodega;
                                 gl.OperadorBodega = gl.gOperadorBodega.get(0);
@@ -626,21 +642,18 @@ public class MainActivity extends PBase {
                                         stream(impres)
                                                 .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                            if (BeImpresora.size()>0)
-                            {
+                            if (BeImpresora.size()>0) {
                                 gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="")
-                                {
+                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
                                     progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                }else{
+                                } else {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
                                     //execws(7);
                                     //#EJC20210504> Validar resolucion LP antes de ingresar.
                                     execws(9);
                                 }
-                            }else
-                            {
+                            } else  {
                                 progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
                                 msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
@@ -658,8 +671,7 @@ public class MainActivity extends PBase {
                         progress.cancel();
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
-                }else
-                {
+                }else {
                     progress.cancel();
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
@@ -672,7 +684,7 @@ public class MainActivity extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
+*/
     }
 
     private void msgAsk_continuar_sin_impresora(String msg) {

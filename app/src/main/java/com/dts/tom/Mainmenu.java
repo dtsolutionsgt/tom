@@ -192,7 +192,10 @@ public class Mainmenu extends PBase {
     private void Load(){
         try {
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
-            lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+
+            try {
+                lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );
+            } catch (Exception e) {}
 
             listItems();
 
