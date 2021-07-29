@@ -90,6 +90,8 @@ public class appGlobals extends Application {
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
     public boolean gCapturaPalletNoEstandar = false;
     public boolean gCapturaEstibaIngreso = false;
+    public boolean gVerifCascade = false;
+    public int gVCascIdEnc;
 
     //Variables para picking
     public int gIdPickingEnc=0;

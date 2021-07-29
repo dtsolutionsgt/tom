@@ -595,7 +595,6 @@ public class MainActivity extends PBase {
 
     private void Valida_Ingreso() {
 
-        /*
         try {
             gl.IdEmpresa=1;
             gl.IdBodega=10;
@@ -612,7 +611,8 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             String ss=e.getMessage();
         }
-*/
+
+        /*
 
         try{
 
@@ -686,6 +686,8 @@ public class MainActivity extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
+
+         */
     }
 
     private void msgAsk_continuar_sin_impresora(String msg) {

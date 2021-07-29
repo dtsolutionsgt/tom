@@ -33,7 +33,6 @@ import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -88,6 +87,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         setHandlers();
 
+        gl.gVerifCascade =false;
         Load();
 
     }
@@ -267,7 +267,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 case 4:
                     processListTareasVerificacion();break;
                 case 5:
-                    ;break;
+                    recibeLP();break;
             }
 
         } catch (Exception e) {
@@ -540,7 +540,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         try {
 
-            gl.gIdRecepcionEnc=0;
+            gl.gIdRecepcionEnc=0; gl.gVerifCascade =false;
 
             switch (gl.tipoTarea) {
 
@@ -571,7 +571,32 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void buscaLP(String lp) {
+        gl.gLP=lp;
+        execws(5);
+    }
 
+    private void recibeLP() {
+        try {
+            pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_Pedido_A_Verificar_By_LP");
+            progress.cancel();
+
+            try {
+                if (pListBeTransPeEnc.items.size()==0) throw new Exception();
+            } catch (Exception e){
+                toast("LP no existe");return;
+            }
+
+            gl.gVerifCascade=true;
+            gl.gVCascIdEnc=pListBeTransPeEnc.items.get(0).IdPedidoEnc;
+
+            browse=6;
+            txtTarea.setText("");
+            gl.pIdPedidoEnc=gl.gVCascIdEnc;
+            startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
+
+        } catch (Exception e){
+            mu.msgbox("processListTareasPicking:"+e.getMessage());progress.cancel();
+        }
     }
 
     public void BotonNueva(View view){

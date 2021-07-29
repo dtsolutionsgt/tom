@@ -102,8 +102,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private void Load(){
 
-        try{
-
+        try {
             progress.setMessage("Actualizado detalle de tareas de verificación...");
             progress.show();
 
@@ -144,26 +143,19 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     adapter.setSelectedIndex(position);
-
                     int index = position;
-
                     Procesa_Registro(vItem);
-
                     adapter.refreshItems();
-
                 }
             });
 
             txtCodProd.setOnKeyListener(new View.OnKeyListener(){
-
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-
                                 GetFila();
-
                                 return true;
                         }
                     }
@@ -174,13 +166,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
             btnConsultaDa.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     mostrar_Reemplazados();
-
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
@@ -396,11 +386,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             listDetVeri.setAdapter(null);
 
-            if(pListaPedidoDet!=null){
-                if(pListaPedidoDet.items!=null){
-                    Lista_Detalle_Pedido();
-                }
-            }else{
+            if (pListaPedidoDet!=null){
+                if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
+            } else {
                 btnNoVerificado.setText("Verificado");
                 btnNoVerificado.setBackgroundColor(Color.GREEN);
                 progress.cancel();
@@ -573,7 +561,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
     }
 
     private void Lista_Detalle_Pedido(){
-
         try {
 
             progress.setMessage("Listando detalle de pedido para verificación en HH...");
@@ -611,6 +598,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
                             vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
+
                             pListBeTareasVerificacionHH.add(vItem);
 
                         }
