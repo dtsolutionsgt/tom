@@ -1543,7 +1543,7 @@ public class frm_Packing extends PBase {
                                    "pIdBodega",gl.IdBodega,
                                    "nombre_ubicacion",pNombreUbicacionLP);
                         break;
-                    case 12:
+                    case 12://#CKFK 20210729 Agregué este llamado en el WS para buscar con LP y Producto
                         callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
                                 "pLicensePlate",txtLic_Plate.getText().toString(),
                                 "pCodigo",txtPrd.getText().toString(),
