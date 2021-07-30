@@ -755,9 +755,9 @@ public class frm_Packing extends PBase {
 
                         if (cmbLoteList.size() > 0) {
                             cmbLote.setSelection(0);
-
                             gLoteOrigen = cmbLote.getSelectedItem().toString();
                         }
+
                     }
                 } catch (Exception ex) {
                     gLoteOrigen = "";
