@@ -697,6 +697,10 @@ public class frm_detalle_tareas_picking extends PBase {
                 execws(3);
             }
 
+            try {
+                txtUbicacionFiltro.requestFocus();
+            } catch (Exception e) {}
+
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());
         }

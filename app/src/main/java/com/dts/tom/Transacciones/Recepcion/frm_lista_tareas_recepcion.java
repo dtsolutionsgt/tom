@@ -324,18 +324,13 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void processListTareasVerificacion(){
-
-        try{
-
+        try {
             pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_All_Pedidos_A_Verificar_By_IdBodega");
-
             Llena_Tareas_Verificacion();
-
-        }catch (Exception e){
+        } catch (Exception e){
             mu.msgbox("processListTareasPicking:"+e.getMessage());
             progress.cancel();
         }
-
     }
 
     private void Llena_Tareas_Picking(){
@@ -714,6 +709,10 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             super.onResume();
 
+            try {
+                txtTarea.requestFocus();
+            } catch (Exception e) {}
+
             if (browse==1){
                 browse=0;
                 Load();
@@ -752,6 +751,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.gVerifCascade=false;
                     doExit();
                 }
             });
