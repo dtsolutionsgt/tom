@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.InventarioInicial;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.transition.Visibility;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -291,7 +288,7 @@ public class frm_inv_ini_conteo extends PBase {
             lblPeso.setVisibility(View.GONE);
             txtPesoInvIni.setVisibility(View.GONE);
 
-            txtVenceInvIni.setText(du.convierteFechaMostar(du.getFechaActual()));
+            txtVenceInvIni.setText(du.convierteFechaMostrar(du.getFechaActual()));
 
             pIdTramo=0;
 

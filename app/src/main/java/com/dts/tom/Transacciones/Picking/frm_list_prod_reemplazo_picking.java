@@ -396,7 +396,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.IdUbicacion = DT.getInt(30);
 
                     if (DT.getString(19)!=null){
-                        vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
+                        vItem.FechaVence = du.convierteFechaMostrar(DT.getString(19));
                     }else{
                         vItem.FechaVence = "";
                     }

@@ -268,7 +268,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
+                                data_rec.Fecha_Vence =  du.convierteFechaMostrar(DT.getString(9));
                             }else{
                                 data_rec.Fecha_Vence = "";
                             }

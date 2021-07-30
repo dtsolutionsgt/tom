@@ -155,7 +155,6 @@ public class frm_Packing extends PBase {
 
         try{
 
-
             txtLic_Plate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -432,7 +431,15 @@ public class frm_Packing extends PBase {
                 }
 
                 //Get_BeProducto_By_Codigo_For_HH
-                execws(6);
+                if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
+                    Escaneo_Pallet = true;
+                    //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
+                    execws(12);
+                }else{
+                    //Llama al método Get_BeProducto_By_Codigo_For_HH
+                    execws(6);
+                }
+
             }
 
         }catch (Exception e){
@@ -1537,7 +1544,10 @@ public class frm_Packing extends PBase {
                                    "nombre_ubicacion",pNombreUbicacionLP);
                         break;
                     case 12:
-                        callMethod("Get_All_Presentaciones_By_IdProductoBodega","pIdProducto",BeProductoUbicacionOrigen.IdProductoBodega,"pActivo",true);
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
+                                "pLicensePlate",txtLic_Plate.getText().toString(),
+                                "pCodigo",txtPrd.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
                         break;
                 }
 
@@ -1592,7 +1602,7 @@ public class frm_Packing extends PBase {
                     processUbicacionLP();
                     break;
                 case 12:
-                    processPresentacionesProducto();
+                    processStockLP_AndCodigo();
                     break;
             }
 
@@ -2031,6 +2041,83 @@ public class frm_Packing extends PBase {
         }catch (Exception e){
             mu.msgbox("processUbicacionLP:"+e.getMessage());
         }
+    }
+
+    private void processStockLP_AndCodigo(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_Codigo");
+
+            if (Escaneo_Pallet && ListBeStockPallet == null) {
+                lblDesProducto.setTextColor(Color.RED);
+                gIdProductoOrigen = 0;
+                lblDesProducto.setText("Código de LP no válido");
+                Limpiar_Valores();
+            }else{
+
+                if (Escaneo_Pallet && ListBeStockPallet != null){
+
+                    List AuxList = stream(ListBeStockPallet.items)
+                            .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                            .toList();
+
+                    if (AuxList.size() == 0) {
+                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDesProducto.setTextColor(Color.RED);
+                        gIdProductoOrigen = 0;
+                        lblDesProducto.setText("LP N.E.E.U");
+                    }else{
+
+                        ListBeStockPallet = new clsBeProductoList();
+                        ListBeStockPallet.items = AuxList;
+
+                        if (AuxList.size() == 1){
+
+                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                            BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                            BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+
+                            lblDesProducto.setTextColor(Color.BLUE);
+                            lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+
+                            cvProd = BeProductoUbicacionOrigen;
+                            gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                            cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                            cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                            gLoteOrigen = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(4);
+
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtPrd.requestFocus();
+                        }
+
+                    }
+
+                }else{
+                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    execws(5);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     public void Imprimir(View view){

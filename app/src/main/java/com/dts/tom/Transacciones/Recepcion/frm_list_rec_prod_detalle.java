@@ -2,7 +2,6 @@ package com.dts.tom.Transacciones.Recepcion;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -207,7 +206,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.cantidad_recibida = obj.cantidad_recibida;
                        vItem.IdProductoBodega = obj.IdProductoBodega;
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
-                       vItem.Fecha_vence = du.convierteFechaMostar(obj.Fecha_vence);
+                       vItem.Fecha_vence = du.convierteFechaMostrar(obj.Fecha_vence);
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
 

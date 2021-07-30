@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -72,8 +71,6 @@ import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -347,8 +344,8 @@ public class frm_recepcion_datos extends PBase {
         // set current date into textview
         cmbVenceRec.setText(new StringBuilder()
                 // Month is 0 based, just add 1
-                .append(day).append("-").append(month).append("-")
-                .append(year).append(" "));
+                .append(day).append("/").append(month).append("/")
+                .append(year).append(""));
 
         // set current date into datepicker
         dpResult.init(year, month, day, null);
@@ -2753,7 +2750,7 @@ public class frm_recepcion_datos extends PBase {
 
                 txtLoteRec.setText(vLote);
 
-                cmbVenceRec.setText(du.convierteFechaMostar(pListTransRecDet.items.get(0).Fecha_vence));
+                cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(pListTransRecDet.items.get(0).Fecha_vence));
 
                 txtCostoReal.setText(pListTransRecDet.items.get(0).Costo+"");
 
@@ -2809,7 +2806,7 @@ public class frm_recepcion_datos extends PBase {
                         txtLoteRec.setText("");
                     }
                     if (cmbVence.getVisibility()!=View.VISIBLE){
-                        cmbVenceRec.setText(du.convierteFechaMostar(du.getFechaActual()));
+                        cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(du.getFechaActual()));
                     }
 
                     cmbEstadoProductoRec.setSelection(0);
@@ -2892,7 +2889,7 @@ public class frm_recepcion_datos extends PBase {
                 txtLoteRec.setFocusableInTouchMode(false);
                 txtLoteRec.setClickable(false);
 
-                cmbVenceRec.setText(du.convierteFechaMostar(gBeStockRec.Fecha_vence));
+                cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(gBeStockRec.Fecha_vence));
 
                 cmbVenceRec.setFocusable(false);
                 cmbVenceRec.setFocusableInTouchMode(false);
@@ -2959,7 +2956,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             txtLoteRec.setText(BeINavBarraPallet.Lote);
-            cmbVenceRec.setText(du.convierteFechaMostar(BeINavBarraPallet.Fecha_Vence));
+            cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(BeINavBarraPallet.Fecha_Vence));
 
             if (!EsTransferenciaInternaWMS){
 //                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_UMP,gl.gCantDecDespliegue)+"");
@@ -3033,7 +3030,7 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i <BeVence.size(); i++)
             {
-                valor = du.convierteFechaMostar(BeVence.get(i).Fecha_vence);
+                valor = du.convierteFechaMostrarDiagonal(BeVence.get(i).Fecha_vence);
                 CantRec = BeVence.get(i).Cantidad_recibida;
 
                 if (!VenceList.contains(valor)){
