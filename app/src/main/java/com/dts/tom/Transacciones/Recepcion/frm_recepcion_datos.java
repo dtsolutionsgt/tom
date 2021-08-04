@@ -3956,7 +3956,6 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-
     private void Imprimir_Barra(){
         try{
 
@@ -3990,24 +3989,24 @@ public class frm_recepcion_datos extends PBase {
                             "$"+BeProducto.Codigo_barra);
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
-                                    "^MMT\n" +
-                                    "^PW609\n" +
-                                    "^LL0406\n" +
-                                    "^LS0\n" +
-                                    "^FT250,25^A0I,28,30^FH^FD%1$s^FS\n" +
-                                    "^FT480,25^A0I,28,30^FH^FD%2$s^FS\n" +
-                                    "^FT600,280^A0I,35,40^FH^FD%3$s^FS\n" +
-                                    "^FT350,25^A0I,26,30^FH^FDBodega:^FS\n" +
-                                    "^FT600,25^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                    "^FT600,350^A0I,25,24^FH^FDTOMWMS Product Barcode^FS\n" +
-                                    "^FO2,320^GB670,14,14^FS\n" +
-                                    "^BY3,3,160^FT550,100^BCI,,Y,N\n" +
-                                    "^FD%4$s^FS\n" +
-                                    "^PQ1,0,1,Y \n" +
-                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                            gl.gNomEmpresa,
-                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            "$"+BeProducto.Codigo_barra);
+                                        "^MMT\n" +
+                                        "^PW609\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT480,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT600,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT480,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT600,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                        gl.gNomEmpresa,
+                                        "$"+BeProducto.Codigo_barra,
+                                        BeProducto.Codigo+" - "+BeProducto.Nombre);
                 }
 
                 zPrinterIns.sendCommand(zpl);
@@ -4081,20 +4080,20 @@ public class frm_recepcion_datos extends PBase {
                                         "^PW609\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
-                                        "^FT250,25^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT480,25^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT600,280^A0I,35,40^FH^FD%3$s^FS\n" +
-                                        "^FT350,25^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT600,25^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,350^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
-                                        "^FO2,320^GB670,14,14^FS\n" +
-                                        "^BY3,3,160^FT550,100^BCI,,Y,N\n" +
-                                        "^FD%4$s^FS\n" +
+                                        "^FT480,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT600,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT480,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT600,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                        "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                              gl.gNomEmpresa,
-                                              BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                              "$"+pNumeroLP);
+                                        gl.gNomEmpresa,
+                                        "$"+pNumeroLP,
+                                        BeProducto.Codigo+" - "+BeProducto.Nombre);
                     }
 
                     zPrinterIns.sendCommand(zpl);
