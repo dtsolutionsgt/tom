@@ -143,6 +143,9 @@ public class frm_Packing extends PBase {
         ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
+        //#CKFK 20210730 Agregué el Caps al txtLic_Plate
+        txtLic_Plate.setAllCaps(true);
+
         ProgressDialog("Cargando forma");
 
         setHandles();
@@ -436,6 +439,7 @@ public class frm_Packing extends PBase {
                     //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
                     execws(12);
                 }else{
+                    Escaneo_Pallet = false;
                     //Llama al método Get_BeProducto_By_Codigo_For_HH
                     execws(6);
                 }
@@ -1034,15 +1038,28 @@ public class frm_Packing extends PBase {
             //#CKFK 20200414 quité la condiciones de si se había escaneado un pallet porque el license plate se filtra al inicio
             //cuando se obtiene el stockResList
             //#CKFK 20210728 Agregué la condición del LP
-            AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == gIdProductoOrigen)
-                    .where(c -> c.IdPresentacion == cvPresID)
-                    .where(c -> c.Lote.equals(gLoteOrigen))
-                    .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
-                    .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
-                    .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
-                    .where(c -> c.Lic_plate.equals(txtLic_Plate.getText().toString()))
-                    .toList();
+            if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("") ){
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .where(c -> c.Lic_plate.equals(txtLic_Plate.getText().toString()))
+                        .toList();
+            }else{
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .toList();
+            }
 
             if (AuxList == null) {
                 return;
