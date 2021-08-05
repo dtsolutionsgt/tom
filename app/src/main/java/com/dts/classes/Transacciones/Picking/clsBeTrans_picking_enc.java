@@ -31,6 +31,8 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public String NombreBodega="";
     @Element(required=false) public String NombrePropietarioPicking="";
     @Element(required=false) public int IdPedidoEnc=0;
+    @Element(required=false) public boolean Requiere_Preparacion=false;
+    @Element(required=false) public String Tipo_Preparacion="";
 
 
     public clsBeTrans_picking_enc() {
@@ -215,6 +217,19 @@ public class clsBeTrans_picking_enc {
     }
     public void setIdPedidoEnc(int value) {
         IdPedidoEnc=value;
+    }
+    public boolean getRequiere_Preparacion() {
+        return Requiere_Preparacion;
+    }
+    public void setRequiere_Preparacion(boolean value) {
+        Requiere_Preparacion=value;
+    }
+
+    public String getTipo_Preparacion() {
+        return Tipo_Preparacion;
+    }
+    public void setTipo_Preparacion(String value) {
+        Tipo_Preparacion=value;
     }
 
 }
