@@ -1245,7 +1245,8 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
 
                 if (gBePickingUbic.Fecha_Vence.isEmpty()){
-                    mu.msgbox("Guardar_Picking:"+ "fecha vacia");
+                    //mu.msgbox("Guardar_Picking:"+ "fecha vacia");
+                    gBePickingUbic.Fecha_Vence = "1900-01-01T00:00:01";
                 }
 
 
