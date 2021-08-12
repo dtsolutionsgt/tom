@@ -189,7 +189,7 @@ public class MainActivity extends PBase {
 
     private void setURL(){
 
-        String url="http://192.168.0.103/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="http://192.168.0.98/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
 
