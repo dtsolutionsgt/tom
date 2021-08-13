@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Transacciones.Packing.frm_lista_packing_lotes">
+
+
+    <TextView
+        android:id="@+id/textView108"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="60dp"
+        android:text="Cantidad"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView110"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="60dp"
+        android:layout_toEndOf="@+id/textView108"
+        android:text="No. Bulto"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView112"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="60dp"
+        android:text="No. Camas"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+            android:id="@+id/relbot"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/color_medium">
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="61dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/back"
+                android:onClick="SalirTareas" />
+
+        <Button
+            android:id="@+id/btnDet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="APLICAR" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/reltop"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/color_medium">
+
+            <TextView
+                android:id="@+id/lblTituloForma"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Nombre producto"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    <EditText
+        android:id="@+id/editText8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/textView55"
+        android:inputType="number|textPersonName" />
+
+    <TextView
+        android:id="@+id/textView55"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="25dp"
+        android:text="Lote : "
+        android:textStyle="bold" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText8"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="150dp">
+
+        <ListView
+            android:id="@+id/listTareas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal" />
+    </HorizontalScrollView>
+
+    <EditText
+        android:id="@+id/editTextNumber2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignStart="@+id/textView108"
+        android:layout_alignEnd="@+id/textView108"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextNumber3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignStart="@+id/textView112"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/editTextNumber3"
+        android:layout_toEndOf="@+id/editTextNumber2"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+
+</RelativeLayout>

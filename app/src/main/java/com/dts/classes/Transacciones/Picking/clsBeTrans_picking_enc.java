@@ -23,6 +23,8 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean verifica_auto=false;
     @Element(required=false) public boolean procesado_bof=false;
+    @Element(required=false) public boolean Requiere_Preparacion=false;
+    @Element(required=false) public String Tipo_Preparacion="";
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String NombreUbicacionPicking="";
     @Element(required=false) public clsBeBodega_ubicacion UbicacionPicking=new clsBeBodega_ubicacion();
@@ -33,15 +35,18 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public int IdPedidoEnc=0;
 
 
+
     public clsBeTrans_picking_enc() {
     }
 
     public clsBeTrans_picking_enc(int IdPickingEnc, int IdBodega, int IdPropietarioBodega, int IdUbicacionPicking,
                                   String Fecha_picking, String Hora_ini, String Hora_fin, String Estado,
                                   String User_agr, String Fec_agr, String User_mod, String Fec_mod,
-                                  boolean Detalle_operador, boolean Activo, boolean verifica_auto, boolean procesado_bof,
+                                  boolean Detalle_operador, boolean Activo,
+                                  boolean verifica_auto,boolean procesado_bof, boolean Requiere_Preparacion,String Tipo_Preparacion,
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc
+
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -68,7 +73,8 @@ public class clsBeTrans_picking_enc {
         this.NombreBodega=NombreBodega;
         this.NombrePropietarioPicking=NombrePropietarioPicking;
         this.IdPedidoEnc=IdPedidoEnc;
-
+        this.Requiere_Preparacion=Requiere_Preparacion;
+        this.Tipo_Preparacion=Tipo_Preparacion;
     }
 
 
@@ -216,6 +222,16 @@ public class clsBeTrans_picking_enc {
     public void setIdPedidoEnc(int value) {
         IdPedidoEnc=value;
     }
+    public void setRequiere_Preparacion(boolean value) {
+        Requiere_Preparacion=value;
+    }
+    public String getTipo_Preparacion() {
+        return Tipo_Preparacion;
+    }
+    public void setTipo_Preparacion(String value) {
+        Tipo_Preparacion=value;
+    }
 
 }
+
 

@@ -51,26 +51,21 @@ public class XMLObject  {
 
     }
 
-    public <T> T getresult(Class<? extends T> type, String source) throws Exception
-    {
+    public <T> T getresult(Class<? extends T> type, String source) throws Exception {
         String xnode="";
 
-        try{
-
+        try {
             xnode=getXMLRegion(source+"Result");
-
             Serializer serializer = new Persister();
 
-            if (!xnode.isEmpty())
-            {
-                if(xnode.contains("CustomError")){
+            if (!xnode.isEmpty()) {
+                if (xnode.contains("CustomError")){
                     clsBeCustomError typeErr= new clsBeCustomError();
                     return (T) serializer.read(typeErr, xnode);
-                }else{
+                } else {
                     return serializer.read(type, xnode);
                 }
-            }else
-            {
+            } else {
                 //#EJC20210612ñ
                 Log.i("porque","vacio, .. asumo algun error ocurrió");
                 if(xnode.contains("CustomError")){
@@ -79,8 +74,7 @@ public class XMLObject  {
                 }
             }
 
-        }catch (Exception e)
-        {
+        } catch (Exception e)  {
             throw new Exception(" XMLObject Error: " + e.getMessage() + " GetResult:" +ws.xmlresult);
         }
         return null;

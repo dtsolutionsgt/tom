@@ -94,6 +94,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblHoraInicial.setTextColor(R.style.titlestyle);
             holder.lblHoraFinal.setText("HoraFinal");
             holder.lblHoraFinal.setTextColor(R.style.titlestyle);
+
         }else{
 
             holder.lblIdPickingEnc.setText("0");

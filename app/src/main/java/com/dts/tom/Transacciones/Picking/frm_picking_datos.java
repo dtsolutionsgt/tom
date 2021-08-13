@@ -1703,14 +1703,12 @@ public class frm_picking_datos extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
 
     @Override
     protected void onResume() {
 
         try{
-
             super.onResume();
 
             if (browse==1){

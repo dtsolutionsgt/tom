@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -27,7 +27,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Transacciones.Recepcion.frm_rec_ftos"></activity>
+        <activity
+            android:name=".Transacciones.Packing.frm_lista_packing_lotes"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity android:name=".Transacciones.Packing.frm_preparacion_packing_bulto" />
+        <activity android:name=".Transacciones.Packing.frm_preparacion_packing" />
+        <activity android:name=".Transacciones.Packing.frm_lista_packing" />
+        <activity android:name=".Transacciones.Recepcion.frm_rec_ftos" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_guardar" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_nuevo" />
         <activity android:name=".Transacciones.InventarioCiclico.frm_inv_cic_conteo" />
@@ -82,7 +88,6 @@
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -115,6 +120,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
