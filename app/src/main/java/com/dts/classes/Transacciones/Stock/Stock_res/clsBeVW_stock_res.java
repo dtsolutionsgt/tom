@@ -743,8 +743,5 @@ public class clsBeVW_stock_res {
   public void setDocumento_Ingreso(String value) {
     Documento_Ingreso=value;
   }
-
-
-
 }
 
