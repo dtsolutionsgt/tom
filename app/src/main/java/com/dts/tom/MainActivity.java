@@ -923,7 +923,8 @@ public class MainActivity extends PBase {
             gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
 
             //Llama al metodo del WS Get_cantidad_decimales_calculo
-            execws(6);
+            //GT 16082021: no lo ejecuta!! se traslado a processVersiones
+            //execws(6);
 
         } catch (Exception e)
         {
@@ -938,6 +939,7 @@ public class MainActivity extends PBase {
                 validaVersion();
             }
             idle=true;
+            execws(6);
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
