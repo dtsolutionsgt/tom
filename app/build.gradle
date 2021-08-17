@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 23
