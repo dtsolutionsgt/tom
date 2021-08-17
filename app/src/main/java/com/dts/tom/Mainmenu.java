@@ -22,6 +22,7 @@ import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
+import com.dts.tom.Transacciones.Packing.frm_lista_packing;
 import com.dts.tom.Transacciones.Recepcion.frm_lista_tareas_recepcion;
 
 import java.io.BufferedReader;
@@ -133,7 +134,7 @@ public class Mainmenu extends PBase {
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=4;item.Icon=4;item.Name="Packing";item.cant=-1;
+                item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -142,6 +143,10 @@ public class Mainmenu extends PBase {
 
                 item = clsCls.new clsMenu();
                 item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -487,6 +492,9 @@ public class Mainmenu extends PBase {
 
                 case 10:// Utilerias
                     menuUtilerias(); break;
+
+                case 11:// Packing
+                    startActivity(new Intent(this, frm_lista_packing.class)); break;
             }
 
         } catch (Exception e){

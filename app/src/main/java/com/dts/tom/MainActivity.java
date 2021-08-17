@@ -612,7 +612,8 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             String ss=e.getMessage();
         }
-*/
+
+        */
 
         try{
 
@@ -685,6 +686,8 @@ public class MainActivity extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
+
 
     }
 

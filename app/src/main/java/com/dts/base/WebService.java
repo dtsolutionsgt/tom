@@ -67,7 +67,9 @@ public class WebService {
         int TIMEOUT = 150000;
         mMethodName = methodName; mResult = "";xmlresult="";
 
-       try{
+        error="";errorflag=false;
+
+        try{
 
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
@@ -126,13 +128,16 @@ public class WebService {
                mResult=mResult.replace("ñ","n");
                xmlresult=mResult;
 
+               errorflag=true;error=parseError();
                throw new Exception("Error al procesar la solicitud :\n " + parseError());
 
            } if (responsecode==404) {
-               throw new Exception("Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.");
+               errorflag=true;error="Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.";
+               throw new Exception(error);
            }
 
        } catch (Exception e)  {
+           errorflag=true;error=e.getMessage();
            throw new Exception(e.getMessage());
        }
     }

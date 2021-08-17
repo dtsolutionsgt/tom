@@ -14,6 +14,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
@@ -85,10 +86,13 @@ public class appGlobals extends Application {
     public String gLoteAnterior="";
     public String gProductoAnterior = "";
     public String gFechaVenceAnterior="";
+    public String gLP="";
     public boolean Carga_Producto_x_Pallet=false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
     public boolean gCapturaPalletNoEstandar = false;
     public boolean gCapturaEstibaIngreso = false;
+    public boolean gVerifCascade = false;
+    public int gVCascIdEnc;
 
     //Variables para picking
     public int gIdPickingEnc=0;
@@ -100,6 +104,10 @@ public class appGlobals extends Application {
     public clsBeDetallePedidoAVerificar gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
     public clsBeTrans_picking_ubicList gBePickingUbicList = new clsBeTrans_picking_ubicList();
     //gBePedidoEnc = new clsBeTrans_pe_enc;
+
+    //Variables para packing
+    public int modo_packing;
+    public String paCodigo,paNombre;
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();
