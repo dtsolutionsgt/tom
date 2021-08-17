@@ -1479,6 +1479,7 @@ public class frm_recepcion_datos extends PBase {
                 if (pListBEProductoParametro!=null){
 
                     if (pListBEProductoParametro.items!=null){
+
                     }else{
                         execws(10);
 
