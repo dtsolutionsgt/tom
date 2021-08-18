@@ -260,7 +260,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="4dp"
-                        android:text="04-Ago-2021"
+                        android:text="16-Ago-2021"
                         android:textColor="#FFFFFF" />
                 </RelativeLayout>
             </TableRow>
