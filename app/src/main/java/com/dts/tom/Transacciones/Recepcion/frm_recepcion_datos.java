@@ -175,6 +175,22 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
+    /***** parametros personalizados *****************************************/
+    Integer contar_parametros_p = 0;
+    TextView lblDescripcion_parametro ;
+    TextView lbltipo_numerica         ;
+    TextView lbltipo_texto            ;
+    TextView lbltipo_logica           ;
+    TextView lbltipo_fecha            ;
+
+    /******** tipos de valores del parametro personalizado *******************/
+    EditText txtvalor_n ;
+    EditText txtvalor_t ;
+    EditText txtvalor_f ;
+    EditText txtvalor_b ;
+    CheckBox cb_valor_b ;
+
+
     private int pIdPropietarioBodega=0;
 
     double vFactorNuevaRec=0;
@@ -802,6 +818,8 @@ public class frm_recepcion_datos extends PBase {
 
         int vIndiceParam = -1;
         double vCant;
+        boolean mostrar_parametros_producto = false;
+
         try{
 
 
@@ -857,11 +875,22 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#CKFK 20210308 Agregué este cambio para que los parámetros solo se muestren cuando sea necesario
-           if (existen_parametros_para_mostrar()){
+            //#GT 18022021: Valida los parametros no personalizados, Personalizados ya fueron validados con Pperdonalizados
+            mostrar_parametros_producto = existen_parametros_para_mostrar();
+
+            if (mostrar_parametros_producto) {
                 MuestraParametros1(this );
-            }else{
-               Guardar_Recepcion_Nueva();
+            }else if (Pperzonalizados){
+                MuestraParametros2(this );
+            }else {
+                Guardar_Recepcion_Nueva();
             }
+
+//           if (existen_parametros_para_mostrar()){
+//                MuestraParametros1(this );
+//            }else{
+//               Guardar_Recepcion_Nueva();
+//           }
 
         }catch (Exception e){
             mu.msgbox("Muestra_Propiedades_Producto: "+e.getMessage());
@@ -901,11 +930,13 @@ public class frm_recepcion_datos extends PBase {
                 datos_ingresar +=1;
             }
 
-            if (pListBEProductoParametro!=null){
-                if (pListBEProductoParametro.items!=null){
-                    datos_ingresar +=1;
-                }
-            }
+            //#GT 18082021: Aqui valida si hay parametro personalizado en caso no haya parametros A del BOF
+            // pero esta validación se hizo en una funcionalidad previa, aqui redunda
+//            if (pListBEProductoParametro!=null){
+//                if (pListBEProductoParametro.items!=null){
+//                    datos_ingresar +=1;
+//                }
+//            }
 
             mostrar = datos_ingresar>0;
 
@@ -1173,6 +1204,87 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
         mu.msgbox("MuestraParametros1: "+ e.getMessage());
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void MuestraParametros2(Activity activity){
+
+        try {
+
+
+            dialog = new Dialog(activity);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.frm_parametros_p);
+
+            /******** set de las labels de parametros personalizados *********/
+            lblDescripcion_parametro = dialog.findViewById(R.id.lblDescripcion_p);
+
+            lbltipo_numerica         = dialog.findViewById(R.id.lbltipo_n);
+            lbltipo_texto            = dialog.findViewById(R.id.lbltipo_t);
+            lbltipo_logica           = dialog.findViewById(R.id.lbltipo_b);
+            lbltipo_fecha            = dialog.findViewById(R.id.lbltipo_f);
+
+            /******** tipos de valores del parametro personalizado *******************/
+            txtvalor_n = dialog.findViewById(R.id.txtvalor_n);
+            txtvalor_t = dialog.findViewById(R.id.txtvalor_t);
+            txtvalor_f = dialog.findViewById(R.id.txtvalor_f);
+            cb_valor_b = dialog.findViewById(R.id.cb_valor_b);
+
+            //contar_parametros_p
+
+            for (int i = 0; i < 1; i++) {
+                lblDescripcion_parametro.setText("Ingrese valor para: " + pListBEProductoParametro.items.get(i).TipoParametro.Descripcion);
+
+                String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+
+                switch(tipo) {
+                    case "Númerico":
+                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
+                        txtvalor_n.setText(String.valueOf(valor));
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "Texto":
+                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto);
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "Fecha":
+                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha);
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "Lógico":
+                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).TipoParametro.Valor_logico);
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+        /*    for (int i = pListBEProductoParametro.items.size()-1; i>=0; i--) {
+                if(pListBEProductoParametro.items.get(i).CantidadDisponible>=Cant_Recibida_Actual){
+                    if (!Existe_Lp){
+                        pNumeroLP = pListBeLicensePlate.items.get(i).LicensePlates;
+                    }else{
+                        pNumeroLP = pLp;
+                    }
+                    break;
+                }
+            }*/
+
+
+            Button btnIr_p = dialog.findViewById(R.id.btnIr_p);
+            Button btnBack_p = dialog.findViewById(R.id.btnBack_p);
+
+            btnIr_p.setOnClickListener(v -> BotonIrGuardarParametros());
+            btnBack_p.setOnClickListener(v -> SalirPantallaParametros());
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("MuestraParametros_P: "+ e.getMessage());
+        }
+
     }
 
 
@@ -1451,16 +1563,21 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
+            //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
+            //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
+            Parametros_Ingresados = false;
 
             if (!Parametros_Ingresados){
-                mu.msgbox("¿Está seguro de que no va a ingresar los parámetros obligatorios del producto?");
+
+                MensajeParam= "¿Está seguro de guardar el producto sin los parametros?";
+                msgGuardarsinParametros(MensajeParam);
 
             }
 
-            if (BeProducto.getControl_peso()){
-                Peso_Correcto();
-            }
+            //#GT 18082021: no se que hace esto!
+//            if (BeProducto.getControl_peso()){
+//                Peso_Correcto();
+//            }
 
         }catch (Exception e){
             mu.msgbox("GuardarParamaetros: "+ e.getMessage());
@@ -5455,6 +5572,7 @@ public class frm_recepcion_datos extends PBase {
             if (pListBEProductoParametro!=null){
                 if (pListBEProductoParametro.items!=null){
                     Pperzonalizados = true;
+                    contar_parametros_p = pListBEProductoParametro.items.size();
                 }
             }
 
@@ -6197,4 +6315,87 @@ public class frm_recepcion_datos extends PBase {
         }
     }
     //endregion
+
+    private void msgGuardarsinParametros(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> Guardar_Recepcion_Nueva());
+
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void ocultar_parametros_personalizados(String parametro){
+        try{
+
+            String tipo_parametro = parametro;
+
+            switch(tipo_parametro) {
+                case "Númerico":
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+                case "Texto":
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+                    txtvalor_n.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+                case "Fecha":
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
+                    break;
+                case "Lógico":
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+                default:
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+            }
+        }
+        catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
 }

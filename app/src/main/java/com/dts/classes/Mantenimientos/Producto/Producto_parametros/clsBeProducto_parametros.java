@@ -25,6 +25,7 @@ public class clsBeProducto_parametros {
     @Element(required=false) public String Valor_Unico="";
 
 
+
     public clsBeProducto_parametros() {
     }
 
