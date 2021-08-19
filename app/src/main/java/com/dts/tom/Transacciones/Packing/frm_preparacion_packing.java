@@ -321,13 +321,13 @@ public class frm_preparacion_packing extends PBase {
             if (ss.isEmpty()) return;
 
             for (int i = 0; i <pick.items.size(); i++) {
-               if (pick.items.get(i).Lic_plate.equalsIgnoreCase(ss)) {
+               if (pick.items.get(i).Lic_plate.contains(ss)) {
                    pos=i;break;
                }
             }
 
             if (pos==-1) {
-                msgbox("La licensia no existe");
+                msgbox("La licencia no existe");
                txtLP.selectAll();focusLP();return;
             }
 

@@ -130,7 +130,6 @@ public class frm_list_rec_prod_detalle extends PBase {
 
             });
 
-
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
 
                 selid = 0;
