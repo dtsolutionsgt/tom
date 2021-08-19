@@ -188,6 +188,7 @@ public class frm_recepcion_datos extends PBase {
     EditText txtvalor_t ;
     EditText txtvalor_f ;
     EditText txtvalor_b ;
+    CheckBox cb_valor_b ;
 
 
     private int pIdPropietarioBodega=0;
@@ -1227,7 +1228,7 @@ public class frm_recepcion_datos extends PBase {
             txtvalor_n = dialog.findViewById(R.id.txtvalor_n);
             txtvalor_t = dialog.findViewById(R.id.txtvalor_t);
             txtvalor_f = dialog.findViewById(R.id.txtvalor_f);
-            txtvalor_b = dialog.findViewById(R.id.txtvalor_b);
+            cb_valor_b = dialog.findViewById(R.id.cb_valor_b);
 
             //contar_parametros_p
 
@@ -1242,11 +1243,19 @@ public class frm_recepcion_datos extends PBase {
                         txtvalor_n.setText(String.valueOf(valor));
                         ocultar_parametros_personalizados(tipo);
                         break;
-                    case "":
-                        //setContentView(R.layout.xml1);
+                    case "Texto":
+                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto);
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "Fecha":
+                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha);
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "Lógico":
+                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).TipoParametro.Valor_logico);
+                        ocultar_parametros_personalizados(tipo);
                         break;
                     default:
-                        //setContentView(R.layout.default);
                         break;
                 }
 
@@ -6334,49 +6343,42 @@ public class frm_recepcion_datos extends PBase {
     private void ocultar_parametros_personalizados(String parametro){
         try{
 
-            switch(parametro) {
-                case "Númerico":
+            String tipo_parametro = parametro;
 
+            switch(tipo_parametro) {
+                case "Númerico":
                     lbltipo_texto.setVisibility(View.GONE);
                     lbltipo_logica.setVisibility(View.GONE);
                     lbltipo_fecha.setVisibility(View.GONE);
-
                     txtvalor_t.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
-                    txtvalor_b.setVisibility(View.GONE);
                     break;
                 case "Texto":
-
                     lbltipo_numerica.setVisibility(View.GONE);
                     lbltipo_logica.setVisibility(View.GONE);
                     lbltipo_fecha.setVisibility(View.GONE);
-
                     txtvalor_n.setVisibility(View.GONE);
-                    txtvalor_b.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
                     break;
                 case "Fecha":
-
                     lbltipo_numerica.setVisibility(View.GONE);
                     lbltipo_texto.setVisibility(View.GONE);
                     lbltipo_logica.setVisibility(View.GONE);
-
                     txtvalor_n.setVisibility(View.GONE);
                     txtvalor_t.setVisibility(View.GONE);
-                    txtvalor_b.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
                     break;
-                case "Logico":
-
+                case "Lógico":
                     lbltipo_numerica.setVisibility(View.GONE);
                     lbltipo_texto.setVisibility(View.GONE);
                     lbltipo_fecha.setVisibility(View.GONE);
-
                     txtvalor_n.setVisibility(View.GONE);
                     txtvalor_t.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
                     break;
                 default:
-
                     lbltipo_numerica.setVisibility(View.GONE);
                     lbltipo_texto.setVisibility(View.GONE);
                     lbltipo_logica.setVisibility(View.GONE);
@@ -6384,7 +6386,7 @@ public class frm_recepcion_datos extends PBase {
 
                     txtvalor_n.setVisibility(View.GONE);
                     txtvalor_t.setVisibility(View.GONE);
-                    txtvalor_b.setVisibility(View.GONE);
+                    cb_valor_b.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
                     break;
             }

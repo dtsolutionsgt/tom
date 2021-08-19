@@ -49,13 +49,15 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbltipo_t"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="tipo texto:" />
+                    android:text="escriba texto:" />
+
                 <EditText
                     android:id="@+id/txtvalor_t"
                     android:layout_width="match_parent"
@@ -65,7 +67,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/lbltipo_n"
@@ -73,7 +75,7 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:text="tipo numerico:" />
+                    android:text="digitar valor:" />
 
                 <EditText
                     android:id="@+id/txtvalor_n"
@@ -84,7 +86,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/lbltipo_f"
@@ -92,18 +94,18 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:text="tipo fecha:" />
+                    android:text="indicar fecha:" />
 
                 <EditText
                     android:id="@+id/txtvalor_f"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="datetime" />
+                    android:inputType="date" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/lbltipo_b"
@@ -111,14 +113,17 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:text="tipo bool:" />
+                    android:text="valor lógico:" />
 
-                <EditText
-                    android:id="@+id/txtvalor_b"
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/cb_valor_b"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:digits="01"/>
+                    android:layout_marginStart="50dp"
+                    android:gravity="right|center_vertical"
+                    />
+
+
             </TableRow>
 
         </LinearLayout>
