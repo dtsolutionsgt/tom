@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/reltop"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/color_medium">
+
+                    <TextView
+                        android:id="@+id/lblTituloForma"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:text="Parametros personalizados"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TextView
+                android:id="@+id/lblDescripcion_p"
+                style="@style/StyleText"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/color_light"
+                android:gravity="center"
+                android:text="descripcion" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+                <TextView
+                    android:id="@+id/lbltipo_t"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="tipo texto:" />
+                <EditText
+                    android:id="@+id/txtvalor_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lbltipo_n"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:text="tipo numerico:" />
+
+                <EditText
+                    android:id="@+id/txtvalor_n"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number|numberDecimal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lbltipo_f"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:text="tipo fecha:" />
+
+                <EditText
+                    android:id="@+id/txtvalor_f"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="datetime" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lbltipo_b"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:text="tipo bool:" />
+
+                <EditText
+                    android:id="@+id/txtvalor_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:digits="01"/>
+            </TableRow>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack_p"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back" />
+
+        <Button
+            android:id="@+id/btnIr_p"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/arr_rnd_right" />
+    </RelativeLayout>
+
+</RelativeLayout>

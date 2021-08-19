@@ -1,6 +1,8 @@
 package com.dts.classes.Mantenimientos.Producto.P_parametro;
 
 
+import android.widget.TextView;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeP_parametro {
