@@ -3,7 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_detalle_ingresos.xml" value="0.2" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm__packing.xml" value="0.2" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_cambio_ubicacion_ciega.xml" value="0.2" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_consulta_stock.xml" value="1.2" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_consulta_stock_detalle_c_i.xml" value="0.175" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_danado_picking.xml" value="0.175" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_detalle_ingresos.xml" value="0.264" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_detalle_tareas_picking.xml" value="0.175" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_inv_agrega_prd.xml" value="0.264" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_inv_cic_add.xml" value="0.2" />
+        <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_inv_ini_tramos.xml" value="0.175" />
         <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_list_rec_prod.xml" value="0.2" />
         <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_lista_tareas_recepcion.xml" value="0.13854166666666667" />
         <entry key="..\:/Proyectos_DTS_2020/WMSHHANDROID/app/src/main/res/layout/activity_frm_picking_datos.xml" value="0.2" />
