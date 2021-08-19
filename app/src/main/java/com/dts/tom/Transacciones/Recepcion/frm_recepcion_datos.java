@@ -96,7 +96,7 @@ public class frm_recepcion_datos extends PBase {
     private Button btnCantRecibida;
     private ProgressDialog progress;
     private DatePicker dpResult;
-    private ImageView imgDate, cmdImprimir;
+    private ImageView imgDate, imgDate_p, cmdImprimir;
     private CheckBox chkPaletizar, chkPalletNoEstandar, chkEstiba;
     private TableRow tblEstiba;
     private TableRow tbLPeso;
@@ -187,8 +187,10 @@ public class frm_recepcion_datos extends PBase {
     EditText txtvalor_n ;
     EditText txtvalor_t ;
     EditText txtvalor_f ;
-    EditText txtvalor_b ;
     CheckBox cb_valor_b ;
+
+    /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
+    Boolean parametro_personalizado_valido;
 
 
     private int pIdPropietarioBodega=0;
@@ -1211,7 +1213,7 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-
+            parametro_personalizado_valido = false;
             dialog = new Dialog(activity);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_parametros_p);
@@ -1223,6 +1225,7 @@ public class frm_recepcion_datos extends PBase {
             lbltipo_texto            = dialog.findViewById(R.id.lbltipo_t);
             lbltipo_logica           = dialog.findViewById(R.id.lbltipo_b);
             lbltipo_fecha            = dialog.findViewById(R.id.lbltipo_f);
+            imgDate_p                = dialog.findViewById(R.id.imgDate_p);
 
             /******** tipos de valores del parametro personalizado *******************/
             txtvalor_n = dialog.findViewById(R.id.txtvalor_n);
@@ -1565,11 +1568,13 @@ public class frm_recepcion_datos extends PBase {
 
             //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
             //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
-            Parametros_Ingresados = false;
+            //Parametros_personalizados = Parametros_personalizados_Ingresados();
+
+            Parametros_Ingresados = Validar_Parametros_personalizados();
 
             if (!Parametros_Ingresados){
 
-                MensajeParam= "¿Está seguro de guardar el producto sin los parametros?";
+                MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
                 msgGuardarsinParametros(MensajeParam);
 
             }
@@ -5178,6 +5183,28 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    public void ChangeDate_p(View view) {
+
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        txtvalor_f.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                    }
+                }, year, month, day);
+        datePickerDialog.show();
+    }
+
     //endregion
 
     //region ScaneoBarra
@@ -6353,6 +6380,7 @@ public class frm_recepcion_datos extends PBase {
                     txtvalor_t.setVisibility(View.GONE);
                     cb_valor_b.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
+                    imgDate_p.setVisibility(View.GONE);
                     break;
                 case "Texto":
                     lbltipo_numerica.setVisibility(View.GONE);
@@ -6361,6 +6389,7 @@ public class frm_recepcion_datos extends PBase {
                     txtvalor_n.setVisibility(View.GONE);
                     cb_valor_b.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
+                    imgDate_p.setVisibility(View.GONE);
                     break;
                 case "Fecha":
                     lbltipo_numerica.setVisibility(View.GONE);
@@ -6377,12 +6406,14 @@ public class frm_recepcion_datos extends PBase {
                     txtvalor_n.setVisibility(View.GONE);
                     txtvalor_t.setVisibility(View.GONE);
                     txtvalor_f.setVisibility(View.GONE);
+                    imgDate_p.setVisibility(View.GONE);
                     break;
                 default:
                     lbltipo_numerica.setVisibility(View.GONE);
                     lbltipo_texto.setVisibility(View.GONE);
                     lbltipo_logica.setVisibility(View.GONE);
                     lbltipo_fecha.setVisibility(View.GONE);
+                    imgDate_p.setVisibility(View.GONE);
 
                     txtvalor_n.setVisibility(View.GONE);
                     txtvalor_t.setVisibility(View.GONE);
@@ -6396,6 +6427,55 @@ public class frm_recepcion_datos extends PBase {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
+    }
+
+    private Boolean Validar_Parametros_personalizados(){
+
+        try{
+
+            for (int i = 0; i < 1; i++) {
+
+                String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+
+                switch(tipo) {
+                    case "Númerico":
+
+                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
+                        if (txtvalor_n.equals(valor) || !txtvalor_n.getText().toString().isEmpty()){
+                            parametro_personalizado_valido = false;
+                        }
+                        break;
+                    case "Texto":
+
+                        if (txtvalor_t.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto) || !txtvalor_t.getText().toString().isEmpty()){
+                            parametro_personalizado_valido = false;
+                        }
+                        break;
+                    case "Fecha":
+
+                        if (txtvalor_f.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha) || !txtvalor_f.getText().toString().isEmpty()){
+                            parametro_personalizado_valido = false;
+                        }
+                        break;
+                    case "Lógico":
+
+                        //GT 19082021 no se valida, porque el valor por defecto podria ser el esperado, entonces no hay manera de determinar si esta correcto o no.
+                        parametro_personalizado_valido = true;
+                        break;
+                    default:
+                        parametro_personalizado_valido= false;
+                        break;
+                }
+            }
+
+        }
+        catch (Exception e){
+
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"error en validar p_personalizado");
+        }
+
+        return parametro_personalizado_valido;
     }
 
 }
