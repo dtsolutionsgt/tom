@@ -175,8 +175,19 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
-    /***** parametros personalizados *******/
+    /***** parametros personalizados *****************************************/
     Integer contar_parametros_p = 0;
+    TextView lblDescripcion_parametro ;
+    TextView lbltipo_numerica         ;
+    TextView lbltipo_texto            ;
+    TextView lbltipo_logica           ;
+    TextView lbltipo_fecha            ;
+
+    /******** tipos de valores del parametro personalizado *******************/
+    EditText txtvalor_n ;
+    EditText txtvalor_t ;
+    EditText txtvalor_f ;
+    EditText txtvalor_b ;
 
 
     private int pIdPropietarioBodega=0;
@@ -1205,23 +1216,40 @@ public class frm_recepcion_datos extends PBase {
             dialog.setContentView(R.layout.frm_parametros_p);
 
             /******** set de las labels de parametros personalizados *********/
-            TextView lblDescripcion_parametro = dialog.findViewById(R.id.lblDescripcion_p);
-            TextView lbltipo_numerica         = dialog.findViewById(R.id.txtvalor_n);
-            TextView lbltipo_texto            = dialog.findViewById(R.id.lbltipo_t);
-            TextView lbltipo_logica           = dialog.findViewById(R.id.lbltipo_b);
-            TextView lbltipo_fecha            = dialog.findViewById(R.id.lbltipo_f);
+            lblDescripcion_parametro = dialog.findViewById(R.id.lblDescripcion_p);
+
+            lbltipo_numerica         = dialog.findViewById(R.id.lbltipo_n);
+            lbltipo_texto            = dialog.findViewById(R.id.lbltipo_t);
+            lbltipo_logica           = dialog.findViewById(R.id.lbltipo_b);
+            lbltipo_fecha            = dialog.findViewById(R.id.lbltipo_f);
 
             /******** tipos de valores del parametro personalizado *******************/
-            EditText txtvalor_n = dialog.findViewById(R.id.txtvalor_n);
-            EditText txtvalor_t = dialog.findViewById(R.id.txtvalor_t);
-            EditText txtvalor_f = dialog.findViewById(R.id.txtvalor_f);
-            EditText txtvalor_b = dialog.findViewById(R.id.txtvalor_b);
-
+            txtvalor_n = dialog.findViewById(R.id.txtvalor_n);
+            txtvalor_t = dialog.findViewById(R.id.txtvalor_t);
+            txtvalor_f = dialog.findViewById(R.id.txtvalor_f);
+            txtvalor_b = dialog.findViewById(R.id.txtvalor_b);
 
             //contar_parametros_p
 
             for (int i = 0; i < 1; i++) {
                 lblDescripcion_parametro.setText("Ingrese valor para: " + pListBEProductoParametro.items.get(i).TipoParametro.Descripcion);
+
+                String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+
+                switch(tipo) {
+                    case "Númerico":
+                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
+                        txtvalor_n.setText(String.valueOf(valor));
+                        ocultar_parametros_personalizados(tipo);
+                        break;
+                    case "":
+                        //setContentView(R.layout.xml1);
+                        break;
+                    default:
+                        //setContentView(R.layout.default);
+                        break;
+                }
+
             }
 
         /*    for (int i = pListBEProductoParametro.items.size()-1; i>=0; i--) {
@@ -6297,6 +6325,71 @@ public class frm_recepcion_datos extends PBase {
             dialog.show();
 
         }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void ocultar_parametros_personalizados(String parametro){
+        try{
+
+            switch(parametro) {
+                case "Númerico":
+
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+
+                    txtvalor_t.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    txtvalor_b.setVisibility(View.GONE);
+                    break;
+                case "Texto":
+
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_b.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+                case "Fecha":
+
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    txtvalor_b.setVisibility(View.GONE);
+                    break;
+                case "Logico":
+
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+                default:
+
+                    lbltipo_numerica.setVisibility(View.GONE);
+                    lbltipo_texto.setVisibility(View.GONE);
+                    lbltipo_logica.setVisibility(View.GONE);
+                    lbltipo_fecha.setVisibility(View.GONE);
+
+                    txtvalor_n.setVisibility(View.GONE);
+                    txtvalor_t.setVisibility(View.GONE);
+                    txtvalor_b.setVisibility(View.GONE);
+                    txtvalor_f.setVisibility(View.GONE);
+                    break;
+            }
+        }
+        catch (Exception e){
             addlog(Objects.requireNonNull(new Object() {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
