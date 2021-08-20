@@ -16,6 +16,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Control_Poliza=false;
     @Element(required=false) public boolean Requerir_Documento_Ref=false;
     @Element(required=false) public boolean Es_Poliza_Consolidada=false;
+    @Element(required=false) public boolean Genera_Tarea_Ingreso=false;
 
 
     public clsBeTrans_oc_ti() {
@@ -112,10 +113,18 @@ public class clsBeTrans_oc_ti {
     public boolean getEs_Poliza_Consolidada() {
         return Es_Poliza_Consolidada;
     }
-
     public void setEs_Poliza_Consolidada(boolean value) {
         Es_Poliza_Consolidada=value;
     }
+
+    public boolean getGenera_Tarea_Ingreso() {
+        return Genera_Tarea_Ingreso;
+    }
+    public void setGenera_Tarea_Ingreso(boolean value) {
+        Genera_Tarea_Ingreso=value;
+    }
+
+
 
 }
 

@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="medium">#BA5536</color>
     <color name="rosado">#ffa5a0</color>
+    <color name="title_grid">#FFFFFF</color>
 </resources>

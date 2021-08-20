@@ -199,12 +199,10 @@ public class frm_list_inventario extends PBase {
             for (clsBeTrans_inv_enc BeInv: pListTareas.items){
 
                 vItem = new clsBeTrans_inv_enc();
-
                 vItem= BeInv;
-                vItem.Hora_ini = du.convierteFechaMostar(BeInv.Hora_ini);
+                vItem.Hora_ini = du.convierteFechaMostrar(BeInv.Hora_ini);
                 //vItem.Hora_ini = vItem.Hora_ini;
                 vItem.Transcurrido = String.valueOf((du.DateDiffPos(BeInv.Hora_ini)*24*60));
-
                 BeListInv.add(vItem);
 
             }
@@ -289,7 +287,6 @@ public class frm_list_inventario extends PBase {
             if (pListTareas!=null){
                 if (pListTareas.items!=null){
                     Llena_Lista_Tareas();
-
                     progress.cancel();
 
                 }else{

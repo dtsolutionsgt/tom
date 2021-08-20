@@ -21,7 +21,7 @@
     </style>
 
     <style name="titlestyle" parent="StyleText">
-        <item name="android:textColor">#00FFFEFE</item>
+        <item name="android:textColor">#FFFF</item>
         <item name="android:textStyle">bold</item>
     </style>
 

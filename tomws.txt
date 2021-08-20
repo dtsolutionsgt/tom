@@ -1,0 +1,10 @@
+http://192.168.0.17/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.16/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.17/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.11/wcftom4/tomhhws.asmx
+http://ec2-52-41-114-122.us-west-2.compute.amazonaws.com/WSTOMHH_QA/TOMHHWS.asmx
+http://172.31.98.20/wcftom4/tomhhws.asmx
+http://192.168.126.79/wcftom4/tomhhws.asmx
+http://192.168.0.11/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.15/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.16/WCFTOM4/TOMHHWS.asmx

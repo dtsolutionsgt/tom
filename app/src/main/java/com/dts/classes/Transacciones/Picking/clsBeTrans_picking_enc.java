@@ -23,8 +23,6 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean verifica_auto=false;
     @Element(required=false) public boolean procesado_bof=false;
-    @Element(required=false) public boolean Requiere_Preparacion=false;
-    @Element(required=false) public String Tipo_Preparacion="";
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String NombreUbicacionPicking="";
     @Element(required=false) public clsBeBodega_ubicacion UbicacionPicking=new clsBeBodega_ubicacion();
@@ -33,6 +31,8 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public String NombreBodega="";
     @Element(required=false) public String NombrePropietarioPicking="";
     @Element(required=false) public int IdPedidoEnc=0;
+    @Element(required=false) public boolean Requiere_Preparacion=false;
+    @Element(required=false) public String Tipo_Preparacion="";
 
 
 
@@ -222,9 +222,13 @@ public class clsBeTrans_picking_enc {
     public void setIdPedidoEnc(int value) {
         IdPedidoEnc=value;
     }
+    public boolean getRequiere_Preparacion() {
+        return Requiere_Preparacion;
+    }
     public void setRequiere_Preparacion(boolean value) {
         Requiere_Preparacion=value;
     }
+
     public String getTipo_Preparacion() {
         return Tipo_Preparacion;
     }

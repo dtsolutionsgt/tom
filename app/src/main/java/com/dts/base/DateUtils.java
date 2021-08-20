@@ -507,7 +507,7 @@ public class DateUtils {
 		return vFecha;
 	}
 
-	public String convierteFechaMostar(String Fecha){
+	public String convierteFechaMostrar(String Fecha){
 
 		String vFecha="";
 
@@ -516,6 +516,24 @@ public class DateUtils {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
+	public String convierteFechaMostrarDiagonal(String Fecha){
+
+		String vFecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 			vFecha=dateFormat.format(date);
 

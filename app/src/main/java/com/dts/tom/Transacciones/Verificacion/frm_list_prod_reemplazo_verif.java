@@ -283,7 +283,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     vItem.UMBas = DT.getString(15);
                     vItem.Cant = DT.getDouble(22);
                     vItem.IdUbicacion = DT.getInt(30);
-                    vItem.FechaVence = du.convierteFechaMostar(DT.getString(19));
+                    vItem.FechaVence = du.convierteFechaMostrar(DT.getString(19));
                     vItem.LicPlate = DT.getString(31);
                     vItem.Lote = DT.getString(17);
                     vItem.CodigoProducto = DT.getString(12);

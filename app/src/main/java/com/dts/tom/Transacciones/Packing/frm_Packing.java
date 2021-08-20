@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +20,7 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
@@ -51,7 +50,7 @@ public class frm_Packing extends PBase {
     private EditText txtUbicOr,txtPrd,txtNuevoLp,txtCantidad,txtLpAnt,txtLic_Plate;
     private TextView lblUbicOrigen,lblDesProducto,lblLpAnt,lblIdStock,lblCCant,lblVence,lblLote,
             lblNomDestino, txtUbicDestino;
-    private Spinner cmbPres,cmbLote,cmbVence,cmbEstado;
+    private Spinner cmbPresentacion,cmbLote,cmbVence,cmbEstado;
     private Button btnGuardarDirigida,btnBack;
     private ImageView cmdImprimir;
 
@@ -111,6 +110,7 @@ public class frm_Packing extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm__packing);
         super.InitBase();
@@ -132,7 +132,7 @@ public class frm_Packing extends PBase {
         lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
         txtUbicDestino = findViewById(R.id.txtUbicDestino);
 
-        cmbPres = (Spinner) findViewById(R.id.cmbPres);
+        cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
         cmbLote = (Spinner) findViewById(R.id.cmbLote);
         cmbVence = (Spinner) findViewById(R.id.cmbVence);
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
@@ -142,6 +142,9 @@ public class frm_Packing extends PBase {
 
         ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
         xobj = new XMLObject(ws);
+
+        //#CKFK 20210730 Agregué el Caps al txtLic_Plate
+        txtLic_Plate.setAllCaps(true);
 
         ProgressDialog("Cargando forma");
 
@@ -155,7 +158,6 @@ public class frm_Packing extends PBase {
 
         try{
 
-
             txtLic_Plate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -167,7 +169,7 @@ public class frm_Packing extends PBase {
                 }
             });
 
-            cmbPres.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            cmbPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     try {
@@ -180,7 +182,7 @@ public class frm_Packing extends PBase {
                             spinlabel.setTextSize(18);
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                            cvPresID = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
+                            cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
                             LlenaLotes();
                         }
 
@@ -348,6 +350,7 @@ public class frm_Packing extends PBase {
     }
 
     private void Procesa_Lp() {
+
         try {
 
             progress.setMessage("Cargando datos del producto");
@@ -431,7 +434,16 @@ public class frm_Packing extends PBase {
                 }
 
                 //Get_BeProducto_By_Codigo_For_HH
-                execws(6);
+                if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
+                    Escaneo_Pallet = true;
+                    //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
+                    execws(12);
+                }else{
+                    Escaneo_Pallet = false;
+                    //Llama al método Get_BeProducto_By_Codigo_For_HH
+                    execws(6);
+                }
+
             }
 
         }catch (Exception e){
@@ -497,7 +509,7 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setAdapter(null);
+            cmbPresentacion.setAdapter(null);
             cmbEstado.setAdapter(null);
             cmbVence.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -542,7 +554,7 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setAdapter(null);
+            cmbPresentacion.setAdapter(null);
             cmbEstado.setAdapter(null);
             cmbVence.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -646,8 +658,9 @@ public class frm_Packing extends PBase {
 
             cmbPresentacionList.clear();
 
+            //#EJC20210729: agregué and IdPresentación <> 0
             List AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == gIdProductoOrigen)
+                    .where(c -> c.IdProducto == gIdProductoOrigen && c.IdPresentacion != 0)
                     .toList();
 
             presentacionList.items = AuxList;
@@ -665,25 +678,25 @@ public class frm_Packing extends PBase {
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbPresentacionList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbPres.setAdapter(dataAdapter);
+            cmbPresentacion.setAdapter(dataAdapter);
 
             if (cmbPresentacionList.size() > 0) {
 
                 if (Escaneo_Pallet && ListBeStockPallet !=null ){
                     int sel = cmbPresentacionList.indexOf(BeStockPallet.getIdPresentacion() + " - " +
                             BeStockPallet.getNombre_Presentacion());
-                    cmbPres.setSelection(sel);
-                    cmbPres.setEnabled(false);
+                    cmbPresentacion.setSelection(sel);
+                    cmbPresentacion.setEnabled(false);
                 }else{
-                    cmbPres.setSelection(0);
+                    cmbPresentacion.setSelection(0);
                     if (cmbPresentacionList.size() == 1){
-                        cmbPres.setEnabled(false);
+                        cmbPresentacion.setEnabled(false);
                     }else{
-                        cmbPres.setEnabled(true);
+                        cmbPresentacion.setEnabled(true);
                     }
                 }
 
-                cvPresID =Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
+                cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
 
             }else{
                 LlenaLotes();
@@ -746,9 +759,9 @@ public class frm_Packing extends PBase {
 
                         if (cmbLoteList.size() > 0) {
                             cmbLote.setSelection(0);
-
                             gLoteOrigen = cmbLote.getSelectedItem().toString();
                         }
+
                     }
                 } catch (Exception ex) {
                     gLoteOrigen = "";
@@ -1009,9 +1022,9 @@ public class frm_Packing extends PBase {
                     cmbLote.setSelection(IndexAux);
                 }
 
-                if (gl.gCPresAnterior != -1 && cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0) {
+                if (gl.gCPresAnterior != -1 && cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0) {
                     IndexAux = cmbPresentacionList.indexOf( gl.gCPresAnterior + " - " + gl.gCNomPresAnterior);
-                    cmbPres.setSelection(IndexAux);
+                    cmbPresentacion.setSelection(IndexAux);
                 }
 
             }catch(Exception ex){
@@ -1024,14 +1037,29 @@ public class frm_Packing extends PBase {
 
             //#CKFK 20200414 quité la condiciones de si se había escaneado un pallet porque el license plate se filtra al inicio
             //cuando se obtiene el stockResList
-            AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == gIdProductoOrigen)
-                    .where(c -> c.IdPresentacion == cvPresID)
-                    .where(c -> c.Lote.equals(gLoteOrigen))
-                    .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
-                    .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
-                    .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
-                    .toList();
+            //#CKFK 20210728 Agregué la condición del LP
+            if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("") ){
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .where(c -> c.Lic_plate.equals(txtLic_Plate.getText().toString()))
+                        .toList();
+            }else{
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .toList();
+            }
 
             if (AuxList == null) {
                 return;
@@ -1274,8 +1302,8 @@ public class frm_Packing extends PBase {
             gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
 
-            if(cmbPres.getAdapter()!=null  && cmbPres.getAdapter().getCount()>0){
-                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()));
+            if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
+                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()));
             }else{
                 gMovimientoDet.IdPresentacion = 0;
             }
@@ -1532,6 +1560,12 @@ public class frm_Packing extends PBase {
                                    "pIdBodega",gl.IdBodega,
                                    "nombre_ubicacion",pNombreUbicacionLP);
                         break;
+                    case 12://#CKFK 20210729 Agregué este llamado Get_Stock_By_Lic_Plate_And_Codigo en el WS para buscar con LP y Producto
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
+                                "pLicensePlate",txtLic_Plate.getText().toString(),
+                                "pCodigo",txtPrd.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
                 progress.cancel();
@@ -1584,10 +1618,62 @@ public class frm_Packing extends PBase {
                 case 11:
                     processUbicacionLP();
                     break;
+                case 12:
+                    processStockLP_AndCodigo();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    public static clsBeProducto gBeProducto = new clsBeProducto();
+
+    private void processPresentacionesProducto(){
+
+        try {
+
+            progress.setMessage("Obteniendo presentaciones de producto");
+
+            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProductoBodega");
+
+            Listar_Producto_Presentaciones();
+
+        }catch (Exception e){
+            mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private ArrayList<String> PresList = new ArrayList<String>();
+    private void Listar_Producto_Presentaciones() {
+
+        try {
+            if (gBeProducto.Presentaciones != null) {
+
+                progress.setMessage("Listando presentaciones de producto");
+
+                if (gBeProducto.Presentaciones.items != null) {
+
+                    PresList.clear();
+
+                    for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
+                        PresList.add(gBeProducto.Presentaciones.items.get(i).Nombre);
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PresList);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresentacion.setAdapter(dataAdapter);
+
+                    if (PresList.size() > 0) cmbPresentacion.setSelection(0);
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("Listar_Producto_Presentaciones:" + e.getMessage());
         }
     }
 
@@ -1890,10 +1976,10 @@ public class frm_Packing extends PBase {
                     gl.gCLoteAnterior = "";
                 }
 
-                if (cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0){
-                    gl.gCPresAnterior = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
-                    if (cmbPres.getSelectedItem().toString().split(" - ").length>1){
-                        gl.gCNomPresAnterior = cmbPres.getSelectedItem().toString().split(" - ")[1];
+                if (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0){
+                    gl.gCPresAnterior = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                    if (cmbPresentacion.getSelectedItem().toString().split(" - ").length>1){
+                        gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
                     }
                 }else{
                     gl.gCPresAnterior = -1;
@@ -1972,6 +2058,83 @@ public class frm_Packing extends PBase {
         }catch (Exception e){
             mu.msgbox("processUbicacionLP:"+e.getMessage());
         }
+    }
+
+    private void processStockLP_AndCodigo(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_Codigo");
+
+            if (Escaneo_Pallet && ListBeStockPallet == null) {
+                lblDesProducto.setTextColor(Color.RED);
+                gIdProductoOrigen = 0;
+                lblDesProducto.setText("Código de LP no válido");
+                Limpiar_Valores();
+            }else{
+
+                if (Escaneo_Pallet && ListBeStockPallet != null){
+
+                    List AuxList = stream(ListBeStockPallet.items)
+                            .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                            .toList();
+
+                    if (AuxList.size() == 0) {
+                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDesProducto.setTextColor(Color.RED);
+                        gIdProductoOrigen = 0;
+                        lblDesProducto.setText("LP N.E.E.U");
+                    }else{
+
+                        ListBeStockPallet = new clsBeProductoList();
+                        ListBeStockPallet.items = AuxList;
+
+                        if (AuxList.size() == 1){
+
+                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                            BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                            BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+
+                            lblDesProducto.setTextColor(Color.BLUE);
+                            lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+
+                            cvProd = BeProductoUbicacionOrigen;
+                            gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                            cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                            cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                            gLoteOrigen = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(4);
+
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtPrd.requestFocus();
+                        }
+
+                    }
+
+                }else{
+                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    execws(5);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     public void Imprimir(View view){

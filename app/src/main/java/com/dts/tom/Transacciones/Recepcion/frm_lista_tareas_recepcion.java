@@ -361,7 +361,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombreUbicacionPicking=BePicking.NombreUbicacionPicking;
                         vItem.Estado=BePicking.Estado;
                         vItem.Detalle_operador=BePicking.Detalle_operador;
-                        vItem.Fecha_picking=du.convierteFechaMostar(BePicking.Fecha_picking);
+                        vItem.Fecha_picking=du.convierteFechaMostrar(BePicking.Fecha_picking);
                         vItem.Hora_ini=du.convierteHoraMostar(BePicking.Hora_ini);
                         vItem.Hora_fin=du.convierteHoraMostar(BePicking.Hora_fin);
 
