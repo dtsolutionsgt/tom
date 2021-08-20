@@ -1584,8 +1584,8 @@ public class frm_recepcion_datos extends PBase {
                 ObjStock_parametro.IdStock = 0;
                 ObjStock_parametro.IdStockParametro = 0;
                 ObjStock_parametro.IdProductoParametro = IdProductoParametro;
-                ObjStock_parametro.Fec_agr = du.getFechaActual();
-                ObjStock_parametro.User_agr = gl.gNomOperador;
+                ObjStock_parametro.Fec_agr = String.valueOf(du.getFechaActual());
+                ObjStock_parametro.User_agr = gl.IdOperador+"";
 
                 if (tipo_parametro.equals("Texto")){
                     ObjStock_parametro.Valor_texto = txtvalor_t.getText().toString();
