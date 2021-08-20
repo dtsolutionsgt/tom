@@ -664,6 +664,7 @@ public class frm_preparacion_packing_bulto extends PBase {
         }
     }
 
+
     private void msgAskBorrar(String msg) {
         try {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
