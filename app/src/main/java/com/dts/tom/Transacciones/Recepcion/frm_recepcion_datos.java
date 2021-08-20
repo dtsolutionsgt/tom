@@ -59,6 +59,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detLis
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametros;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametrosList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
+import com.dts.classes.Transacciones.Stock.Parametros.clsBeStock_parametro;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
@@ -189,8 +190,16 @@ public class frm_recepcion_datos extends PBase {
     EditText txtvalor_f ;
     CheckBox cb_valor_b ;
 
+    private clsBeStock_parametro ObjStock_parametro;
+    Integer IdStock,IdProductoParametro;
+    String User_agr,Fec_agr,tipo_parametro;
+
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
+
+
+
+
 
 
     private int pIdPropietarioBodega=0;
@@ -1239,23 +1248,24 @@ public class frm_recepcion_datos extends PBase {
                 lblDescripcion_parametro.setText("Ingrese valor para: " + pListBEProductoParametro.items.get(i).TipoParametro.Descripcion);
 
                 String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+                IdProductoParametro = pListBEProductoParametro.items.get(i).IdProductoParametro;
 
                 switch(tipo) {
                     case "Númerico":
-                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
+                        double valor =  pListBEProductoParametro.items.get(i).Valor_numerico;
                         txtvalor_n.setText(String.valueOf(valor));
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Texto":
-                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto);
+                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).Valor_texto);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Fecha":
-                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha);
+                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).Valor_fecha);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Lógico":
-                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).TipoParametro.Valor_logico);
+                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).Valor_logico);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     default:
@@ -1263,17 +1273,6 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }
-
-        /*    for (int i = pListBEProductoParametro.items.size()-1; i>=0; i--) {
-                if(pListBEProductoParametro.items.get(i).CantidadDisponible>=Cant_Recibida_Actual){
-                    if (!Existe_Lp){
-                        pNumeroLP = pListBeLicensePlate.items.get(i).LicensePlates;
-                    }else{
-                        pNumeroLP = pLp;
-                    }
-                    break;
-                }
-            }*/
 
 
             Button btnIr_p = dialog.findViewById(R.id.btnIr_p);
@@ -1568,7 +1567,6 @@ public class frm_recepcion_datos extends PBase {
 
             //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
             //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
-            //Parametros_personalizados = Parametros_personalizados_Ingresados();
 
             Parametros_Ingresados = Validar_Parametros_personalizados();
 
@@ -1576,6 +1574,43 @@ public class frm_recepcion_datos extends PBase {
 
                 MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
                 msgGuardarsinParametros(MensajeParam);
+
+            }else{
+
+                ObjStock_parametro = new clsBeStock_parametro();
+
+                ObjStock_parametro.IsNew = true;
+                ObjStock_parametro.Activo = true;
+                ObjStock_parametro.IdStock = 0;
+                ObjStock_parametro.IdStockParametro = 0;
+                ObjStock_parametro.IdProductoParametro = IdProductoParametro;
+                ObjStock_parametro.Fec_agr = du.getFechaActual();
+                ObjStock_parametro.User_agr = gl.gNomOperador;
+
+                if (tipo_parametro.equals("Texto")){
+                    ObjStock_parametro.Valor_texto = txtvalor_t.getText().toString();
+                }
+
+                if (tipo_parametro.equals("Númerico")){
+
+                    double valor = Double.parseDouble(txtvalor_n.getText().toString());
+                    ObjStock_parametro.Valor_numerico = valor;
+                }
+                if (tipo_parametro.equals("Fecha")){
+                    ObjStock_parametro.Valor_fecha = txtvalor_f.getText().toString();
+                }
+                if (tipo_parametro.equals("Lógico")){
+
+                    Integer valor_cb = 0;
+
+                    if (cb_valor_b.isChecked()){
+                        valor_cb = 1;
+                    }
+
+                    ObjStock_parametro.Valor_logico = valor_cb;
+                }
+
+                Guardar_Recepcion_Nueva();
 
             }
 
@@ -5387,6 +5422,7 @@ public class frm_recepcion_datos extends PBase {
 
 
                         break;
+
                 }
 
             }catch (Exception e){
@@ -6435,26 +6471,33 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i < 1; i++) {
 
-                String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+                tipo_parametro = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
 
-                switch(tipo) {
+                switch(tipo_parametro) {
                     case "Númerico":
 
-                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
-                        if (txtvalor_n.equals(valor) || !txtvalor_n.getText().toString().isEmpty()){
+                        double valor =  pListBEProductoParametro.items.get(i).Valor_numerico;
+                        if (txtvalor_n.getText().toString().equals(valor) || txtvalor_n.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
                         break;
                     case "Texto":
 
-                        if (txtvalor_t.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto) || !txtvalor_t.getText().toString().isEmpty()){
+                        if (txtvalor_t.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_texto) || txtvalor_t.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
+
                         break;
                     case "Fecha":
 
-                        if (txtvalor_f.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha) || !txtvalor_f.getText().toString().isEmpty()){
+                        if (txtvalor_f.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_fecha) || txtvalor_f.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
                         break;
                     case "Lógico":
