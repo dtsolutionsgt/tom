@@ -53,6 +53,7 @@ import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.LicencePlates.clsBeLicensePlatesList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
@@ -76,6 +77,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -156,7 +158,7 @@ public class frm_recepcion_datos extends PBase {
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
-    private clsBeTrans_re_det_parametrosList plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
+    private clsBeTrans_re_det_parametrosList plistBeReDetParametros  = new clsBeTrans_re_det_parametrosList();
     private clsBeStock_se_recList pListBeStockSeRec = new clsBeStock_se_recList();
     private clsBeStock_recList pListBeStockRec = new clsBeStock_recList();
     private clsBeProducto_palletList pListBeProductoPallet = new clsBeProducto_palletList();
@@ -1562,6 +1564,9 @@ public class frm_recepcion_datos extends PBase {
 
         boolean Parametros_Ingresados;
         MensajeParam="";
+        plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
+        ArrayList<clsBeTrans_re_det_parametros> parametros_personalizados = new ArrayList<>();
+
 
         try{
 
@@ -1577,40 +1582,63 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
 
-                ObjStock_parametro = new clsBeStock_parametro();
+                parametros_personalizados.clear();
 
-                ObjStock_parametro.IsNew = true;
-                ObjStock_parametro.Activo = true;
-                ObjStock_parametro.IdStock = 0;
-                ObjStock_parametro.IdStockParametro = 0;
-                ObjStock_parametro.IdProductoParametro = IdProductoParametro;
-                ObjStock_parametro.Fec_agr = String.valueOf(du.getFechaActual());
-                ObjStock_parametro.User_agr = gl.IdOperador+"";
+                if (pListBEProductoParametro!=null){
 
-                if (tipo_parametro.equals("Texto")){
-                    ObjStock_parametro.Valor_texto = txtvalor_t.getText().toString();
-                }
+                    if (pListBEProductoParametro.items!=null){
 
-                if (tipo_parametro.equals("Númerico")){
+                        for (clsBeProducto_parametros obj: pListBEProductoParametro.items){
 
-                    double valor = Double.parseDouble(txtvalor_n.getText().toString());
-                    ObjStock_parametro.Valor_numerico = valor;
-                }
-                if (tipo_parametro.equals("Fecha")){
-                    ObjStock_parametro.Valor_fecha = txtvalor_f.getText().toString();
-                }
-                if (tipo_parametro.equals("Lógico")){
+                            clsBeTrans_re_det_parametros ObjDP = new clsBeTrans_re_det_parametros();
 
-                    Integer valor_cb = 0;
+                            ObjDP.IdRecepcionDet = pIdRecepcionDet;
+                            ObjDP.IdProductoParametro = obj.IdProductoParametro;
 
-                    if (cb_valor_b.isChecked()){
-                        valor_cb = 1;
+                            ObjDP.IdParametroDet = 0;
+                            ObjDP.IdRecepcionEnc = gl.gIdRecepcionEnc;
+                            ObjDP.ProductoParametro = obj;
+                            ObjDP.TipoParametro = obj.TipoParametro;
+
+                            //#GT 20082021 Validamos que parametro es el que debe llenarse para setearlo correctamente.
+                            if (tipo_parametro.equals("Texto")){
+                                ObjDP.Valor_texto = txtvalor_t.getText().toString();
+                            }
+                            if (tipo_parametro.equals("Númerico")){
+                                double valor = Double.parseDouble(txtvalor_n.getText().toString());
+                                ObjDP.Valor_numerico = valor;
+                            }
+                            if (tipo_parametro.equals("Fecha")){
+                                ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+                            }
+                            if (tipo_parametro.equals("Lógico")){
+                                Boolean valor_cb = false;
+                                if (cb_valor_b.isChecked()){
+                                    valor_cb = true;
+                                }
+                                ObjDP.Valor_logico = valor_cb;
+                            }
+
+                            ObjDP.Valor_Unico = obj.Valor_Unico;
+                            ObjDP.User_agr = gl.IdOperador+"";
+                            ObjDP.Fec_agr = String.valueOf(du.getFechaActual());
+                            ObjDP.IsNew = true;
+
+                            if(gl.mode==1){
+
+                                parametros_personalizados.add(ObjDP);
+                                //plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                            }
+
+                        }
+
                     }
-
-                    ObjStock_parametro.Valor_logico = valor_cb;
                 }
 
-                Guardar_Recepcion_Nueva();
+                if(parametros_personalizados !=null){
+                    plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                    Guardar_Recepcion_Nueva();
+                }
 
             }
 
@@ -3983,7 +4011,11 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (plistBeReDetParametros.items!=null){
-                Objects.requireNonNull(gl.gBeRecepcion.DetalleParametros.items).addAll(plistBeReDetParametros.items);
+
+                //#GT 20082021: omiti el Objects porque gl.gBeRecepcion.DetalleParametros.items da error de no inicializado!
+                //Objects.requireNonNull(gl.gBeRecepcion.DetalleParametros.items).addAll(plistBeReDetParametros.items);
+                gl.gBeRecepcion.DetalleParametros.items = stream(plistBeReDetParametros.items).toList();
+
                 }
 
 
