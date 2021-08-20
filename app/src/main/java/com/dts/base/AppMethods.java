@@ -26,7 +26,6 @@ public class AppMethods {
 	}
 
 	//region Public
-	
 
 
     //endregion

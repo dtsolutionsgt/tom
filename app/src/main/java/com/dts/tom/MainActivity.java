@@ -62,6 +62,7 @@ import static br.com.zbra.androidlinq.Linq.stream;
 
 public class MainActivity extends PBase {
 
+
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
     private TextView lblver,lbldate,lblurl;
@@ -595,7 +596,7 @@ public class MainActivity extends PBase {
 
     private void Valida_Ingreso() {
 
-        /*
+
         try {
             gl.IdEmpresa=1;
             gl.IdBodega=10;
@@ -613,7 +614,7 @@ public class MainActivity extends PBase {
             String ss=e.getMessage();
         }
 
-        */
+        /*
 
         try{
 
@@ -687,7 +688,7 @@ public class MainActivity extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
-
+        */
 
     }
 

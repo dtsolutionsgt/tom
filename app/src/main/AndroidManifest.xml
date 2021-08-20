@@ -29,7 +29,9 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".Transacciones.Packing.frm_lista_packing_lotes"
-            android:windowSoftInputMode="stateAlwaysVisible" />
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+             />
         <activity android:name=".Transacciones.Packing.frm_preparacion_packing_bulto" />
         <activity android:name=".Transacciones.Packing.frm_preparacion_packing" />
         <activity android:name=".Transacciones.Packing.frm_lista_packing" />

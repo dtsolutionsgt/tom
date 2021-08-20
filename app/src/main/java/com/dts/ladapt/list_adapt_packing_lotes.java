@@ -58,7 +58,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.lblLote = (TextView) convertView.findViewById(R.id.lblIdTramo);
-            holder.lblFecha = (TextView) convertView.findViewById(R.id.lblNombreTramo);
+            holder.lblFecha = (TextView) convertView.findViewById(R.id.textView102);
             holder.lblCant = (TextView) convertView.findViewById(R.id.lblEstadoDetalle);
 
             convertView.setTag(holder);
@@ -68,10 +68,10 @@ public class list_adapt_packing_lotes extends BaseAdapter {
         }
 
         holder.lblLote.setText(items.get(position).lote);
-        holder.lblFecha.setText(items.get(position).fecha);
+        holder.lblFecha.setText(fechaCorta(items.get(position).fecha));
         holder.lblCant.setText(items.get(position).disp+" "+items.get(position).presentacion);
 
-        if (selectedIndex!= -1 && position == selectedIndex) {
+        if (selectedIndex != -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
@@ -82,5 +82,14 @@ public class list_adapt_packing_lotes extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblLote, lblFecha, lblCant;
+    }
+
+    private String fechaCorta(String fecha) {
+        try {
+            int pp=fecha.indexOf("T");
+            return fecha.substring(0,pp);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
