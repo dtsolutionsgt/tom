@@ -1609,7 +1609,10 @@ public class frm_recepcion_datos extends PBase {
                                 ObjDP.Valor_numerico = valor;
                             }
                             if (tipo_parametro.equals("Fecha")){
-                                ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+
+                                String la_fecha=  du.convierteFecha(txtvalor_f.getText().toString());
+                                //ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+                                ObjDP.Valor_fecha = la_fecha;
                             }
                             if (tipo_parametro.equals("Lógico")){
                                 Boolean valor_cb = false;
