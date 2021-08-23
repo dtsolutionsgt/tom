@@ -1610,9 +1610,9 @@ public class frm_recepcion_datos extends PBase {
                             }
                             if (tipo_parametro.equals("Fecha")){
 
-                                String la_fecha=  du.convierteFecha(txtvalor_f.getText().toString());
+                                //String la_fecha=  du.convierteFecha(txtvalor_f.getText().toString());
                                 //ObjDP.Valor_fecha = txtvalor_f.getText().toString();
-                                ObjDP.Valor_fecha = la_fecha;
+                                ObjDP.Valor_fecha = txtvalor_f.getText().toString();
                             }
                             if (tipo_parametro.equals("Lógico")){
                                 Boolean valor_cb = false;
@@ -5268,7 +5268,16 @@ public class frm_recepcion_datos extends PBase {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        txtvalor_f.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        String la_fecha = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        String otra_fecha = null;
+                        try {
+                            otra_fecha = du.convierteFecha(la_fecha);
+                            txtvalor_f.setText(otra_fecha);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        //txtvalor_f.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                     }
                 }, year, month, day);
