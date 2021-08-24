@@ -2,27 +2,30 @@ package com.dts.ladapt;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.Recepcion.frm_recepcion_datos;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class list_adapt_detalle_recepcion extends BaseAdapter {
 
     private static ArrayList<clsBeTrans_oc_det> BeDetalleOC;
-
     private int selectedIndex;
-
     private LayoutInflater l_Inflater;
     private boolean Es_Poliza_Consolidada=false;
 
-    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results, boolean pEs_Poliza_Consolidada) {
+    public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results,
+                                        boolean pEs_Poliza_Consolidada) {
         BeDetalleOC = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -81,6 +82,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
@@ -193,16 +196,11 @@ public class frm_recepcion_datos extends PBase {
     CheckBox cb_valor_b ;
 
     private clsBeStock_parametro ObjStock_parametro;
-    Integer IdStock,IdProductoParametro;
-    String User_agr,Fec_agr,tipo_parametro;
+    Integer IdProductoParametro;
+    String tipo_parametro;
 
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
-
-
-
-
-
 
     private int pIdPropietarioBodega=0;
 
@@ -3057,6 +3055,9 @@ public class frm_recepcion_datos extends PBase {
 
             //txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
             //txtCantidadRec.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
+
+            //#GT 24082021: filtro para que el input acepte solo los decimales parametrizados en empresa
+            txtCantidadRec.setFilters(new InputFilter[]{new DecimalFilter(15, gl.gCantDecDespliegue)});
             txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCostoOC.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -6563,6 +6564,21 @@ public class frm_recepcion_datos extends PBase {
         }
 
         return parametro_personalizado_valido;
+    }
+
+
+    class DecimalFilter implements InputFilter {
+        private Pattern mPattern;
+        DecimalFilter(int digitsBeforeZero, int digitsAfterZero) {
+            mPattern = Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
+        }
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            Matcher matcher = mPattern.matcher(dest);
+            if (!matcher.matches())
+                return "";
+            return null;
+        }
     }
 
 }
