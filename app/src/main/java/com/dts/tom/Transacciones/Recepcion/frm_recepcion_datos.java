@@ -3057,7 +3057,7 @@ public class frm_recepcion_datos extends PBase {
             //txtCantidadRec.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
             //#GT 24082021: filtro para que el input acepte solo los decimales parametrizados en empresa
-            txtCantidadRec.setFilters(new InputFilter[]{new DecimalFilter(15, gl.gCantDecDespliegue)});
+            txtCantidadRec.setFilters(new InputFilter[]{new DecimalFilter(15, gl.gCantDecCalculo)});
             txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCostoOC.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
