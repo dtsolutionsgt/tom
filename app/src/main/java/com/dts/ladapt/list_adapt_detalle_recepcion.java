@@ -13,6 +13,9 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.Recepcion.frm_recepcion_datos;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,13 +26,17 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
     private int selectedIndex;
     private LayoutInflater l_Inflater;
     private boolean Es_Poliza_Consolidada=false;
+    private int decimales_redondeo;
+
 
     public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results,
-                                        boolean pEs_Poliza_Consolidada) {
+                                        boolean pEs_Poliza_Consolidada, int pDecimales_redondeo) {
         BeDetalleOC = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
         Es_Poliza_Consolidada = pEs_Poliza_Consolidada;
+        decimales_redondeo = pDecimales_redondeo;
+
     }
 
     public void setSelectedIndex(int ind) {
@@ -151,10 +158,19 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             }
 
             if(BeDetalleOC.get(position).Cantidad_recibida>0){
-                holder.lblCantRec.setText(""+BeDetalleOC.get(position).Cantidad_recibida);
+
+                double input_valor = BeDetalleOC.get(position).Cantidad_recibida;
+                BigDecimal bd = new BigDecimal(input_valor).setScale(decimales_redondeo, RoundingMode.HALF_UP);
+                //holder.lblCantRec.setText(""+BeDetalleOC.get(position).Cantidad_recibida);
+                holder.lblCantRec.setText(""+bd.doubleValue());
             }
 
-            holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad_recibida-BeDetalleOC.get(position).Cantidad));
+            double input_valor = BeDetalleOC.get(position).Cantidad_recibida-BeDetalleOC.get(position).Cantidad;
+            BigDecimal bd = new BigDecimal(input_valor).setScale(decimales_redondeo, RoundingMode.HALF_UP);
+
+            //holder.lblDiferencia.setText(""+(BeDetalleOC.get(position).Cantidad_recibida-BeDetalleOC.get(position).Cantidad));
+                holder.lblDiferencia.setText(""+bd.doubleValue());
+
 
             if(BeDetalleOC.get(position).Costo>0){
                 holder.lblCosto.setText(""+BeDetalleOC.get(position).Costo);
