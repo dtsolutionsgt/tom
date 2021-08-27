@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,12 +54,14 @@ import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.LicencePlates.clsBeLicensePlatesList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametros;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametrosList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
+import com.dts.classes.Transacciones.Stock.Parametros.clsBeStock_parametro;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
@@ -75,9 +78,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
@@ -155,7 +161,7 @@ public class frm_recepcion_datos extends PBase {
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
-    private clsBeTrans_re_det_parametrosList plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
+    private clsBeTrans_re_det_parametrosList plistBeReDetParametros  = new clsBeTrans_re_det_parametrosList();
     private clsBeStock_se_recList pListBeStockSeRec = new clsBeStock_se_recList();
     private clsBeStock_recList pListBeStockRec = new clsBeStock_recList();
     private clsBeProducto_palletList pListBeProductoPallet = new clsBeProducto_palletList();
@@ -189,9 +195,12 @@ public class frm_recepcion_datos extends PBase {
     EditText txtvalor_f ;
     CheckBox cb_valor_b ;
 
+    private clsBeStock_parametro ObjStock_parametro;
+    Integer IdProductoParametro;
+    String tipo_parametro;
+
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
-
 
     private int pIdPropietarioBodega=0;
 
@@ -1239,23 +1248,24 @@ public class frm_recepcion_datos extends PBase {
                 lblDescripcion_parametro.setText("Ingrese valor para: " + pListBEProductoParametro.items.get(i).TipoParametro.Descripcion);
 
                 String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+                IdProductoParametro = pListBEProductoParametro.items.get(i).IdProductoParametro;
 
                 switch(tipo) {
                     case "Númerico":
-                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
+                        double valor =  pListBEProductoParametro.items.get(i).Valor_numerico;
                         txtvalor_n.setText(String.valueOf(valor));
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Texto":
-                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto);
+                        txtvalor_t.setText(pListBEProductoParametro.items.get(i).Valor_texto);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Fecha":
-                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha);
+                        txtvalor_f.setText(pListBEProductoParametro.items.get(i).Valor_fecha);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     case "Lógico":
-                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).TipoParametro.Valor_logico);
+                        cb_valor_b.setChecked(pListBEProductoParametro.items.get(i).Valor_logico);
                         ocultar_parametros_personalizados(tipo);
                         break;
                     default:
@@ -1263,17 +1273,6 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }
-
-        /*    for (int i = pListBEProductoParametro.items.size()-1; i>=0; i--) {
-                if(pListBEProductoParametro.items.get(i).CantidadDisponible>=Cant_Recibida_Actual){
-                    if (!Existe_Lp){
-                        pNumeroLP = pListBeLicensePlate.items.get(i).LicensePlates;
-                    }else{
-                        pNumeroLP = pLp;
-                    }
-                    break;
-                }
-            }*/
 
 
             Button btnIr_p = dialog.findViewById(R.id.btnIr_p);
@@ -1563,12 +1562,14 @@ public class frm_recepcion_datos extends PBase {
 
         boolean Parametros_Ingresados;
         MensajeParam="";
+        plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
+        ArrayList<clsBeTrans_re_det_parametros> parametros_personalizados = new ArrayList<>();
+
 
         try{
 
             //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
             //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
-            //Parametros_personalizados = Parametros_personalizados_Ingresados();
 
             Parametros_Ingresados = Validar_Parametros_personalizados();
 
@@ -1576,6 +1577,69 @@ public class frm_recepcion_datos extends PBase {
 
                 MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
                 msgGuardarsinParametros(MensajeParam);
+
+            }else{
+
+                parametros_personalizados.clear();
+
+                if (pListBEProductoParametro!=null){
+
+                    if (pListBEProductoParametro.items!=null){
+
+                        for (clsBeProducto_parametros obj: pListBEProductoParametro.items){
+
+                            clsBeTrans_re_det_parametros ObjDP = new clsBeTrans_re_det_parametros();
+
+                            ObjDP.IdRecepcionDet = pIdRecepcionDet;
+                            ObjDP.IdProductoParametro = obj.IdProductoParametro;
+
+                            ObjDP.IdParametroDet = 0;
+                            ObjDP.IdRecepcionEnc = gl.gIdRecepcionEnc;
+                            ObjDP.ProductoParametro = obj;
+                            ObjDP.TipoParametro = obj.TipoParametro;
+
+                            //#GT 20082021 Validamos que parametro es el que debe llenarse para setearlo correctamente.
+                            if (tipo_parametro.equals("Texto")){
+                                ObjDP.Valor_texto = txtvalor_t.getText().toString();
+                            }
+                            if (tipo_parametro.equals("Númerico")){
+                                double valor = Double.parseDouble(txtvalor_n.getText().toString());
+                                ObjDP.Valor_numerico = valor;
+                            }
+                            if (tipo_parametro.equals("Fecha")){
+
+                                //String la_fecha=  du.convierteFecha(txtvalor_f.getText().toString());
+                                //ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+                                ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+                            }
+                            if (tipo_parametro.equals("Lógico")){
+                                Boolean valor_cb = false;
+                                if (cb_valor_b.isChecked()){
+                                    valor_cb = true;
+                                }
+                                ObjDP.Valor_logico = valor_cb;
+                            }
+
+                            ObjDP.Valor_Unico = obj.Valor_Unico;
+                            ObjDP.User_agr = gl.IdOperador+"";
+                            ObjDP.Fec_agr = String.valueOf(du.getFechaActual());
+                            ObjDP.IsNew = true;
+
+                            if(gl.mode==1){
+
+                                parametros_personalizados.add(ObjDP);
+                                //plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                            }
+
+                        }
+
+                    }
+                }
+
+                if(parametros_personalizados !=null){
+                    plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                    Guardar_Recepcion_Nueva();
+                }
 
             }
 
@@ -2991,6 +3055,9 @@ public class frm_recepcion_datos extends PBase {
 
             //txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER |InputType.TYPE_NUMBER_FLAG_DECIMAL);
             //txtCantidadRec.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
+
+            //#GT 24082021: filtro para que el input acepte solo los decimales parametrizados en empresa
+            txtCantidadRec.setFilters(new InputFilter[]{new DecimalFilter(15, gl.gCantDecCalculo)});
             txtCostoOC.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCostoOC.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPeso.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -3948,7 +4015,11 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (plistBeReDetParametros.items!=null){
-                Objects.requireNonNull(gl.gBeRecepcion.DetalleParametros.items).addAll(plistBeReDetParametros.items);
+
+                //#GT 20082021: omiti el Objects porque gl.gBeRecepcion.DetalleParametros.items da error de no inicializado!
+                //Objects.requireNonNull(gl.gBeRecepcion.DetalleParametros.items).addAll(plistBeReDetParametros.items);
+                gl.gBeRecepcion.DetalleParametros.items = stream(plistBeReDetParametros.items).toList();
+
                 }
 
 
@@ -5198,7 +5269,16 @@ public class frm_recepcion_datos extends PBase {
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        txtvalor_f.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        String la_fecha = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                        String otra_fecha = null;
+                        try {
+                            otra_fecha = du.convierteFecha(la_fecha);
+                            txtvalor_f.setText(otra_fecha);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        //txtvalor_f.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                     }
                 }, year, month, day);
@@ -5387,6 +5467,7 @@ public class frm_recepcion_datos extends PBase {
 
 
                         break;
+
                 }
 
             }catch (Exception e){
@@ -6435,26 +6516,33 @@ public class frm_recepcion_datos extends PBase {
 
             for (int i = 0; i < 1; i++) {
 
-                String tipo = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
+                tipo_parametro = pListBEProductoParametro.items.get(i).TipoParametro.Tipo;
 
-                switch(tipo) {
+                switch(tipo_parametro) {
                     case "Númerico":
 
-                        double valor =  pListBEProductoParametro.items.get(i).TipoParametro.Valor_numerico;
-                        if (txtvalor_n.equals(valor) || !txtvalor_n.getText().toString().isEmpty()){
+                        double valor =  pListBEProductoParametro.items.get(i).Valor_numerico;
+                        if (txtvalor_n.getText().toString().equals(valor) || txtvalor_n.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
                         break;
                     case "Texto":
 
-                        if (txtvalor_t.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_texto) || !txtvalor_t.getText().toString().isEmpty()){
+                        if (txtvalor_t.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_texto) || txtvalor_t.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
+
                         break;
                     case "Fecha":
 
-                        if (txtvalor_f.equals(pListBEProductoParametro.items.get(i).TipoParametro.Valor_fecha) || !txtvalor_f.getText().toString().isEmpty()){
+                        if (txtvalor_f.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_fecha) || txtvalor_f.getText().toString().isEmpty()){
                             parametro_personalizado_valido = false;
+                        }else{
+                            parametro_personalizado_valido = true;
                         }
                         break;
                     case "Lógico":
@@ -6476,6 +6564,21 @@ public class frm_recepcion_datos extends PBase {
         }
 
         return parametro_personalizado_valido;
+    }
+
+
+    class DecimalFilter implements InputFilter {
+        private Pattern mPattern;
+        DecimalFilter(int digitsBeforeZero, int digitsAfterZero) {
+            mPattern = Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
+        }
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            Matcher matcher = mPattern.matcher(dest);
+            if (!matcher.matches())
+                return "";
+            return null;
+        }
     }
 
 }
