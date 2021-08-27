@@ -2163,7 +2163,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             TienePosiciones = xobj.getresult(Integer.class,"Tiene_Posiciones");
 
             if (TienePosiciones==0){
-                msgAskIngresePosiciones();
+               msgAskIngresePosiciones();
             }else{
                 vPosiciones = TienePosiciones;
                 validaDestino();
@@ -2866,6 +2866,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             pStock.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
             pStock.Fecha_vence = du.convierteFechaDiagonal(cvVence);
             pStock.Lote = cvLote;
+            pStock.Lic_plate = pLicensePlate;
 
             //Es_Pallet_No_Estandar
             execws(19);

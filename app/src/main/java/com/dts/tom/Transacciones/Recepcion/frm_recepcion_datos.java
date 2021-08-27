@@ -4184,7 +4184,7 @@ public class frm_recepcion_datos extends PBase {
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW609\n" +
+                                        "^PW600\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
                                         "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
@@ -4273,7 +4273,7 @@ public class frm_recepcion_datos extends PBase {
                         //Dado que la descripción salía muy pequeña
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW609\n" +
+                                        "^PW600\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
                                         "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
