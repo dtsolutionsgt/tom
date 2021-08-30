@@ -134,8 +134,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW600\n" +
-                                        "^LL0406\n" +
                                         "^LS0\n" +
                                         "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
                                         "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
@@ -217,8 +215,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
                         //Dado que la descripción salía muy pequeña
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW600\n" +
-                                        "^LL0406\n" +
+                                        "^PW609 \n" +
+                                        "^LL0406 \n" +
                                         "^LS0\n" +
                                         "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
                                         "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
