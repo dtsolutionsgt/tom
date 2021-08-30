@@ -82,7 +82,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String ValorTexto="";
   @Element(required=false) public double ValorNumerico=0.0;
   @Element(required=false) public String ValorFecha="1900-01-01T00:00:01";
-  @Element(required=false) public int ValorLogico=0;
+  @Element(required=false) public boolean ValorLogico=false;
   @Element(required=false) public String No_Serie="";
   @Element(required=false) public String No_Serie_Inicial="";
   @Element(required=false) public String No_Serie_Final="";
@@ -118,7 +118,7 @@ public class clsBeVW_stock_res {
                            double LargoUmBas,double AnchoUmBas,boolean acepto,double peso_pickeado,
                            double peso_verificado,double Cantidad_Pickeada,double Cantidad_Verificada,double Cantidad_Despachada,
                            boolean encontrado,clsBeBodega_ubicacion UbicacionActual,double Cantidad_Res,String ValorTexto,
-                           double ValorNumerico,String ValorFecha,int ValorLogico,String No_Serie,
+                           double ValorNumerico,String ValorFecha,boolean ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,String Documento_Ingreso) {
@@ -659,10 +659,10 @@ public class clsBeVW_stock_res {
   public void setValorFecha(String value) {
     ValorFecha=value;
   }
-  public int getValorLogico() {
+  public boolean getValorLogico() {
     return ValorLogico;
   }
-  public void setValorLogico(int value) {
+  public void setValorLogico(boolean value) {
     ValorLogico=value;
   }
   public String getNo_Serie() {
