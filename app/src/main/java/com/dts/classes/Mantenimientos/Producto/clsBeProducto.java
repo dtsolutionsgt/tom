@@ -56,7 +56,7 @@ public class clsBeProducto {
   @Element(required=false) public boolean Kit=false;
   @Element(required=false) public int Tolerancia=0;
   @Element(required=false) public int Ciclo_vida=0;
-  @Element(required=false) public String User_agr="";
+  @Element(required=false) public String UseClienteRapidor_agr="";
   @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
   @Element(required=false) public String User_mod="";
   @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";

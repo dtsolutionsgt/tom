@@ -69,7 +69,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
 
     public clsBeEmpresa(int IdEmpresa,String Nombre,String Direccion,String Telefono,
                         String Email,String Razon_social,String Representante,int Corr_cod_barra,
-                        String Path_printer,boolean Activo,String User_agr,String Fec_agr,
+                        String Path_prverifica_autointer,boolean Activo,String User_agr,String Fec_agr,
                         String User_mod,String Fec_mod,boolean ClienteRapido,
                         boolean Operador_logistico,int Puerto_escaner,boolean Control_presentaciones,boolean Anulaciones_por_supervisor,
                         String Codigo,String Clave,int Intento,int Duracionclave,
