@@ -95,7 +95,8 @@ public class clsBeProducto {
   @Element(required=false) public double Cantidad=0;
   @Element(required=false) public int IdUnidadMedidaCobro=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
-
+  @Element(required=false) public String User_agr="";
+//EJC
 
   public clsBeProducto()
   {
