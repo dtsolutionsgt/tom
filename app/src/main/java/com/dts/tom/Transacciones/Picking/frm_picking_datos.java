@@ -1327,7 +1327,7 @@ public class frm_picking_datos extends PBase {
            // if (trLP)
 
             if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("Ingrese LP del producto");
+                mu.msgbox("InBeTrans_pe_tipogrese LP del producto");
                 txtBarra.setSelectAllOnFocus(true);
                 txtBarra.requestFocus();
                 return;
