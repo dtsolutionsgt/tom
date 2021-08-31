@@ -8,7 +8,7 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public int Idpackingenc;
     @Element(required=false) public int Idbodega;
     @Element(required=false) public int Idpickingenc;
-    @Element(required=false) public int Iddespachoenc;
+    @Element(required=false) public int IdDespachoEnc;;
     @Element(required=false) public int Idproductobodega;
     @Element(required=false) public int Idproductoestado;
     @Element(required=false) public int Idpresentacion;
@@ -41,7 +41,7 @@ public class clsBeTrans_packing_enc {
         this.Idpackingenc=Idpackingenc;
         this.Idbodega=Idbodega;
         this.Idpickingenc=Idpickingenc;
-        this.Iddespachoenc=Iddespachoenc;
+        this.IdDespachoEnc=Iddespachoenc;
         this.Idproductobodega=Idproductobodega;
         this.Idproductoestado=Idproductoestado;
         this.Idpresentacion=Idpresentacion;
@@ -78,12 +78,8 @@ public class clsBeTrans_packing_enc {
     public void setIdpickingenc(int value) {
         Idpickingenc=value;
     }
-    public int getIddespachoenc() {
-        return Iddespachoenc;
-    }
-    public void setIddespachoenc(int value) {
-        Iddespachoenc=value;
-    }
+    public int getIddespachoenc() { return  IdDespachoEnc; }
+    public void setIddespachoenc(int value) {IdDespachoEnc=value;}
     public int getIdproductobodega() {
         return Idproductobodega;
     }

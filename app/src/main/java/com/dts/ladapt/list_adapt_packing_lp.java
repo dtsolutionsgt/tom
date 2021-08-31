@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
 
-public class list_adapt_packing_lotes extends BaseAdapter {
+public class list_adapt_packing_lp extends BaseAdapter {
 
     private static ArrayList<clsBeTrans_packing_lotes> items;
 
@@ -22,7 +21,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
 
     private LayoutInflater l_Inflater;
 
-    public list_adapt_packing_lotes(Context context, ArrayList<clsBeTrans_packing_lotes> results) {
+    public list_adapt_packing_lp(Context context, ArrayList<clsBeTrans_packing_lotes> results) {
         items = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
@@ -54,12 +53,11 @@ public class list_adapt_packing_lotes extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = l_Inflater.inflate(R.layout.activity_list_adapt_packing_lotes, null);
+            convertView = l_Inflater.inflate(R.layout.activity_list_adapt_packing_lp, null);
             holder = new ViewHolder();
 
-            holder.lblLote = (TextView) convertView.findViewById(R.id.lblIdTramo);
-            holder.lblFecha = (TextView) convertView.findViewById(R.id.textView102);
-            holder.lblCant = (TextView) convertView.findViewById(R.id.lblEstadoDetalle);
+            holder.lblProd = (TextView) convertView.findViewById(R.id.lblIdTramo);
+            holder.lblLP = (TextView) convertView.findViewById(R.id.textView102);
 
             convertView.setTag(holder);
 
@@ -67,9 +65,8 @@ public class list_adapt_packing_lotes extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.lblLote.setText("Lote : "+items.get(position).lote);
-        holder.lblFecha.setText("Vence : "+fechaCorta(items.get(position).fecha));
-        holder.lblCant.setText(items.get(position).disp+" / "+items.get(position).cant+" "+items.get(position).presentacion);
+        holder.lblProd.setText(items.get(position).presentacion);
+        holder.lblLP.setText("LP : "+items.get(position).lote);
 
         if (selectedIndex != -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -81,15 +78,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblLote, lblFecha, lblCant;
+        TextView lblProd, lblLP;
     }
 
-    private String fechaCorta(String fecha) {
-        try {
-            int pp=fecha.indexOf("T");
-            return fecha.substring(0,pp);
-        } catch (Exception e) {
-            return "";
-        }
-    }
 }

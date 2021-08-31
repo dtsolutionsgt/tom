@@ -75,7 +75,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position>0){
+        if (position>0) {
 
             holder.lbl1.setText(" ");
             holder.lbl2.setText(" ");
@@ -87,7 +87,16 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl8.setText(" ");
             holder.lbl9.setText(" ");
 
-            ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");ss=ss.substring(0,pp);
+            try {
+                ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");
+                if (pp>=0) {
+                    ss=ss.substring(0,pp);
+                } else {
+                    ss=items.get(position).Fecha_vence;
+                }
+            } catch (Exception e) {
+                ss=items.get(position).Fecha_vence;
+            }
 
             holder.lbl1.setText(""+ items.get(position).No_linea);
             holder.lbl7.setText(""+items.get(position).Lic_plate);

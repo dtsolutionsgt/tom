@@ -22,7 +22,7 @@ import java.util.Comparator;
 public class frm_lista_packing_lotes extends PBase {
 
     private ListView listView;
-    private EditText txtCant,txtBulto,txtCamas;
+    private EditText txtCant,txtBulto,txtCamas,txtLinea;
     private TextView lblNombre;
 
     private list_adapt_packing_lotes adapter;
@@ -41,10 +41,11 @@ public class frm_lista_packing_lotes extends PBase {
         txtCant = findViewById(R.id.editTextNumber2);
         txtBulto = findViewById(R.id.editTextTextPersonName);
         txtCamas = findViewById(R.id.editTextNumber3);txtCamas.setText("1");
+        txtLinea = findViewById(R.id.editTextNumber4);txtLinea.setText(""+gl.paLinea);
         lblNombre = findViewById(R.id.lblTituloForma);lblNombre.setText(gl.paNombre);
 
         codigo=gl.paCodigo;
-        gl.paPickUbicId =0;gl.paCant=0;gl.paCamas=0;gl.paBulto="";
+        gl.paPickUbicId=-1;gl.paCant=0;gl.paCamas=0;gl.paBulto="";
 
         setHandlers();
 
@@ -75,10 +76,9 @@ public class frm_lista_packing_lotes extends PBase {
                     gl.paPickUbicId=sitem.id;
                     cantm=sitem.disp;
                     selidx = position;
-                    adapter.setSelectedIndex(position);
 
-                    //txtCant.setText("");txtBulto.setText("");txtCamas.setText("1");
-                    txtCant.requestFocus();
+                    adapter.setSelectedIndex(position);
+                    focusCant();
                 }
             });
 
@@ -131,7 +131,6 @@ public class frm_lista_packing_lotes extends PBase {
         }
     }
 
-
     //endregion
 
     //region Main
@@ -150,15 +149,7 @@ public class frm_lista_packing_lotes extends PBase {
         selid=-1;
         txtCant.setText("");txtBulto.setText("");txtCamas.setText("1");
 
-        Handler mtimer = new Handler();
-        Runnable mrunner=new Runnable() {
-            @Override
-            public void run() {
-                txtCant.requestFocus();
-            }
-        };
-        mtimer.postDelayed(mrunner,200);
-
+        focusCant();
     }
 
     private void save() {
@@ -170,10 +161,20 @@ public class frm_lista_packing_lotes extends PBase {
     //region Aux
 
     private boolean validaValores() {
-        int val;
+        int val,lin;
 
-        if (gl.paPickUbicId ==0) {
+        if (gl.paPickUbicId==-1) {
             toast("Falta seleccionar un lote");return false;
+        }
+
+        try {
+            lin=Integer.parseInt(txtLinea.getText().toString());
+            if (lin<1 | lin>99) throw new Exception();
+            gl.paLinea=lin;
+        } catch (Exception e) {
+            msgbox("Número de linea incorrecto");
+            txtLinea.selectAll();txtLinea.requestFocus();
+            return false;
         }
 
         try {
@@ -187,6 +188,7 @@ public class frm_lista_packing_lotes extends PBase {
             }
 
             gl.paCant=val;
+
         } catch (Exception e) {
             txtCant.requestFocus();txtCant.selectAll();
             toast("Cantidad incorrecta");return false;
@@ -210,6 +212,17 @@ public class frm_lista_packing_lotes extends PBase {
         public int compare(clsBeTrans_packing_lotes left,clsBeTrans_packing_lotes rigth){
             return left.lote.compareTo(rigth.lote);
         }
+    }
+
+    private void focusCant() {
+        Handler mtimer = new Handler();
+        Runnable mrunner=new Runnable() {
+            @Override
+            public void run() {
+                txtCant.requestFocus();
+            }
+        };
+        mtimer.postDelayed(mrunner,200);
     }
 
     //endregion

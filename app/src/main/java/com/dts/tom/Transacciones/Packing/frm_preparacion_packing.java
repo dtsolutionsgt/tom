@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -19,6 +20,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_encList;
+import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
@@ -49,6 +51,7 @@ public class frm_preparacion_packing extends PBase {
     private ArrayList<clsBeTrans_packing_enc> item_list = new ArrayList<>();
     private clsBeTrans_picking_ubicList pick = new clsBeTrans_picking_ubicList();
     private clsBeTrans_packing_encList itemList ;
+    private clsBeTrans_packing_encList savedList = new clsBeTrans_packing_encList();
 
     private list_adapt_lista_packing adapter;
     private clsBeTrans_packing_enc selitem;
@@ -57,7 +60,7 @@ public class frm_preparacion_packing extends PBase {
     private ProgressDialog progress;
 
     private int idPickingEnc,selidx,pendientes;
-    private String sellp;
+    private String sellp=".";
     private boolean idle=true;
 
 
@@ -111,11 +114,21 @@ public class frm_preparacion_packing extends PBase {
         Load();
     }
 
+    public void doList(View view){
+        creaListaLotes(txtLP.getText().toString());
+        browse=1;
+        startActivity(new Intent(this,frm_lista_packing_lp.class));
+    }
+
     public void guardarTarea(View view) {
+        if (items.size()==0) {
+            msgbox("No se puede finalizar una tarea vacia");return;
+        }
+
         if (pendientes==0) {
-            msgAskSave("Finalizar la tarea");
+            msgAskSave("¿Finalizar la tarea?");
         } else {
-            msgbox("La tarea no se puede finalizar, quedan articulos pendientes");
+            msgAskSave("Quedan articulos pendientes de procesar.\n¿Guardar la tarea y continuar más tarde?");
         }
     }
 
@@ -182,30 +195,41 @@ public class frm_preparacion_packing extends PBase {
 
     private void listItems() {
         clsBeTrans_packing_enc item;
+        int pp;
 
         try {
+
+            if (items.size()>1) Collections.sort(items,new OrdenarPorLinea());
+
             item_list.clear();
 
             item=new clsBeTrans_packing_enc();
             item_list.add(item);
 
             for (int i = 0; i <items.size(); i++) {
-                item_list.add(items.get(i));
-            }
+                item=items.get(i);
 
-            Collections.sort(item_list,new OrdenarPorLinea());
+                item.CodigoProducto=codigoProducto(item.Idproductobodega);
+                item.nom_prod=nombreProducto(item.Idproductobodega);
+                item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
+                item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
+
+                item_list.add(item);
+            }
 
             adapter=new list_adapt_lista_packing(this,item_list);
             listView.setAdapter(adapter);
 
-            if (item_list.size()>1) {
-                for (int i = 1; i <item_list.size(); i++) {
-                    if (item_list.get(i).Lic_plate.equalsIgnoreCase(sellp)) {
-                        adapter.setSelectedIndex(i);
-                        listView.smoothScrollToPosition(i);
+            try {
+                if (item_list.size()>1) {
+                    for (int i = 1; i <item_list.size(); i++) {
+                        if (item_list.get(i).Lic_plate.equalsIgnoreCase(sellp)) {
+                            adapter.setSelectedIndex(i);
+                            listView.smoothScrollToPosition(i);
+                        }
                     }
                 }
-            }
+            } catch (Exception e) {}
 
         } catch (Exception e) {
             mu.msgbox("listItems : "+e.getMessage());
@@ -214,24 +238,75 @@ public class frm_preparacion_packing extends PBase {
         progress.cancel();
 
         lblProc.setText("Procesado : "+(items.size()));
-        pendientes=pick.items.size()-items.size();
+        try {
+            pendientes=pick.items.size()-items.size();
+        } catch (Exception e) {
+            String ss=e.getMessage();
+            pendientes=0;
+        }
         lblPend.setText("Pendiente : "+pendientes);
-
         txtLP.setText("");txtLP.requestFocus();
     }
 
     private void processListUbic(){
         try {
-            progress.setMessage("Obteniendo lista de tareas");
+            progress.setMessage("Obteniendo lista de articulos");
 
-            pick =xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
+            pick=xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
 
-            listItems();
-            idle=true;
+            //listItems();
+            //idle=true;
+            execws(2);
         } catch (Exception e) {
             progress.cancel();
             String ss=e.getMessage();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processListSaved(){
+        try {
+            items.clear();
+
+            progress.setMessage("Obteniendo lista de articulos guardados");
+
+            savedList =xobj.getresult(clsBeTrans_packing_encList.class,"Get_All_Packing_By_IdPicking");
+
+            try {
+                if (savedList!=null) {
+                    if (savedList.items.size()>0) cargaListaGuardados();
+                }
+            } catch (Exception e) {}
+
+            listItems();
+
+       } catch (Exception e) {
+            progress.cancel();
+            String ss=e.getMessage();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+       }
+
+       idle=true;
+    }
+
+    private void cargaListaGuardados() {
+        try {
+
+
+            for (int i = 0; i <savedList.items.size(); i++) {
+
+                clsBeTrans_packing_enc itm=savedList.items.get(i);
+
+                itm.nom_prod="nom_prod";;
+                itm.CodigoProducto="CodigoProducto";
+                itm.ProductoPresentacion="ProductoPresentacion";
+                itm.ProductoUnidadMedida="ProductoUnidadMedida";
+
+                items.add(itm);
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
@@ -274,7 +349,7 @@ public class frm_preparacion_packing extends PBase {
             item.Idpackingenc=items.size()+1;
             item.Idbodega=gl.IdBodega;
             item.Idpickingenc=p.IdPickingEnc;
-            item.Iddespachoenc=0;
+            item.IdDespachoEnc=0;
             item.Idproductobodega=p.IdProductoBodega;
             item.Idproductoestado=0;
             item.Idpresentacion=p.IdPresentacion;
@@ -316,6 +391,8 @@ public class frm_preparacion_packing extends PBase {
         String ss;
         int pos=-1;
 
+        if (pick==null) return;
+
         try {
             ss=txtLP.getText().toString();
             if (ss.isEmpty()) return;
@@ -327,8 +404,9 @@ public class frm_preparacion_packing extends PBase {
             }
 
             if (pos==-1) {
-                msgbox("La licensia no existe");
-               txtLP.selectAll();focusLP();return;
+                txtLP.selectAll();focusLP();
+                msgAskLista("La licensia no existe.\n¿Mostrar la lista?");
+                return;
             }
 
             selidx=-1;
@@ -367,7 +445,7 @@ public class frm_preparacion_packing extends PBase {
             progress.setMessage("Finalizando tarea ...");
             progress.show();
             idle=false;
-            execws(2);
+            execws(3);
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
@@ -384,16 +462,70 @@ public class frm_preparacion_packing extends PBase {
             if (!ws.errorflag) {
                 regs = xobj.getresult(Integer.class,"Inserta_Packing");
                 if (regs>0) {
-                    toast("Tarea finalizada : "+regs);finish();
+                    toast("Tarea finalizada.");finish();
                 } else {
                     mu.msgbox("No se logro finalizar la tarea, por favor repite el proceso.");
                 }
             } else {
-                mu.msgbox("processUbicacionMerma : "+ws.error);
+                mu.msgbox("cantidadRegGuardados : "+ws.error);
             }
         } catch (Exception e){
-            mu.msgbox("processUbicacionMerma : "+e.getMessage());
+            mu.msgbox("cantidadRegGuardados : "+e.getMessage());
         }
+    }
+
+    private void creaListaLotes(String prid) {
+        clsBeTrans_packing_lotes item;
+        boolean flag;
+
+        if (pick==null) return;
+
+        try {
+            gl.packlotes.clear();
+            gl.filtroprod=prid;
+
+            if (pick.items.size()==0) return;
+
+            for (int i = 0; i <pick.items.size(); i++) {
+
+                if (prid.isEmpty() | pick.items.get(i).CodigoProducto.equalsIgnoreCase(prid)) {
+                    item = new clsBeTrans_packing_lotes();
+
+                    item.presentacion = pick.items.get(i).CodigoProducto+" - "+pick.items.get(i).NombreProducto;
+                    item.lote = pick.items.get(i).Lic_plate;
+
+                    flag=false;
+                    if (prid.isEmpty()) {
+                        flag=true;
+                    } else {
+                        if (pick.items.get(i).CodigoProducto.equalsIgnoreCase(prid)) {
+                            flag=true;
+                        }
+                    }
+
+                    if (flag) {
+                        if (items.size()>0) {
+                            for (int j = 0; j <items.size(); j++) {
+                                if (items.get(j).Lic_plate.equalsIgnoreCase(item.lote)) {
+                                    flag=false;break;
+                                }
+                            }
+                        }
+
+                        if (flag) gl.packlotes.add(item);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void agregaLP() {
+        if (gl.paBulto.isEmpty()) return;
+        txtLP.setText(gl.paBulto);
+        GetFila();
     }
 
     //endregion
@@ -415,6 +547,9 @@ public class frm_preparacion_packing extends PBase {
                         callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc);
                         break;
                     case 2:
+                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc);
+                        break;
+                    case 3:
                         callMethod("Inserta_Packing","pTrans_packing_enc",itemList.items);
                         break;
                 }
@@ -437,6 +572,8 @@ public class frm_preparacion_packing extends PBase {
                 case 1:
                     processListUbic();break;
                 case 2:
+                    processListSaved();break;
+                case 3:
                     cantidadRegGuardados();break;
             }
 
@@ -489,6 +626,34 @@ public class frm_preparacion_packing extends PBase {
         mtimer.postDelayed(mrunner,200);
     }
 
+    private String codigoProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoBodega==id) return pick.items.get(j).CodigoProducto;
+       }
+       return "";
+    }
+
+    private String nombreProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoBodega==id) return pick.items.get(j).NombreProducto;
+        }
+        return "";
+    }
+
+    private String productoPresentacion(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdPresentacion==id) return pick.items.get(j).ProductoPresentacion;
+        }
+        return "";
+    }
+
+    private String productoUnidadMedida(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdUnidadMedida==id) return pick.items.get(j).ProductoUnidadMedida;
+        }
+        return "";
+    }
+
     //endregion
 
     //region Dialogs
@@ -530,7 +695,7 @@ public class frm_preparacion_packing extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage( msg);
 
             dialog.setCancelable(false);
 
@@ -583,6 +748,38 @@ public class frm_preparacion_packing extends PBase {
 
     }
 
+    private void msgAskLista(String msg) {
+        try {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    creaListaLotes("");
+                    browse=1;
+                    startActivity(new Intent(frm_preparacion_packing.this,frm_lista_packing_lp.class));
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+
+            dialog.show();
+
+        } catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+
     //endregion
 
     //region Activity Events
@@ -592,6 +789,12 @@ public class frm_preparacion_packing extends PBase {
         try {
             super.onResume();
             txtLP.requestFocus();
+
+            if (browse==1) {
+                browse=0;
+                agregaLP();
+                return;
+            }
         } catch (Exception e) {
             mu.msgbox("OnResume "+e.getMessage());
         }

@@ -49,7 +49,6 @@ public class list_adapt_lista_packing_bulto extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -92,7 +91,18 @@ public class list_adapt_lista_packing_bulto extends BaseAdapter {
             holder.lbl9.setText(" ");
 
             if (regular) {
-                ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");ss=ss.substring(0,pp);
+                //ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");ss=ss.substring(0,pp);
+                try {
+                    ss=items.get(position).Fecha_vence;
+                    pp=ss.indexOf("T");
+                    if (pp>=0) {
+                        ss=ss.substring(0,pp);
+                    } else {
+                        ss=items.get(position).Fecha_vence;
+                    }
+                } catch (Exception e) {
+                    ss=items.get(position).Fecha_vence;
+                }
 
                 holder.lbl1.setText(""+ items.get(position).No_linea);
                 holder.lbl7.setText(""+items.get(position).Referencia);

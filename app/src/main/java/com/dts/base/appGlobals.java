@@ -108,10 +108,9 @@ public class appGlobals extends Application {
     //gBePedidoEnc = new clsBeTrans_pe_enc;
 
     //Variables para packing
-    public int modo_packing, paPickUbicId,paCant,paCamas;
-    public String paCodigo,paNombre,paBulto;
+    public int modo_packing, paPickUbicId,paCant,paCamas, paLinea;
+    public String paCodigo,paNombre,paBulto,filtroprod,paLote,paFecha,paPres;
     public ArrayList<clsBeTrans_packing_lotes> packlotes = new ArrayList<clsBeTrans_packing_lotes>();
-
 
     //variable para row seleccionado del inventario ciclico
     public clsBe_inv_reconteo_data inv_ciclico = new clsBe_inv_reconteo_data();

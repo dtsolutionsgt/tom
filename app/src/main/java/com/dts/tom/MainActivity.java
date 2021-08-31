@@ -596,8 +596,8 @@ public class MainActivity extends PBase {
 
     private void Valida_Ingreso() {
 
-
         try {
+
             gl.IdEmpresa=1;
             gl.IdBodega=10;
             gl.IdOperador=1;
@@ -609,6 +609,23 @@ public class MainActivity extends PBase {
             op.setNombres("Op");
             op.setApellidos("1");
             gl.OperadorBodega.setOperador(op);
+
+/*
+            gl.IdEmpresa=1;
+            gl.IdBodega=5;
+            gl.IdOperador=1;
+            gl.CodigoBodega="E14";
+            gl.OperadorBodega.IdOperadorBodega=3;
+
+            clsBeOperador op=new clsBeOperador();
+            op.setCodigo("3");
+            op.setNombres("Op");
+            op.setApellidos("1");
+            gl.OperadorBodega.setOperador(op);
+
+
+ */
+
             ejecuta();
         } catch (Exception e) {
             String ss=e.getMessage();
