@@ -34,8 +34,6 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public boolean Requiere_Preparacion=false;
     @Element(required=false) public String Tipo_Preparacion="";
 
-
-
     public clsBeTrans_picking_enc() {
     }
 

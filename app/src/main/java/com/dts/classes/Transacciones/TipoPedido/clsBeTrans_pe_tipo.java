@@ -16,13 +16,23 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Generar_pedido_ingreso_bodega_destino =false;
     @Element(required=false) public int IdTipoIngresoOC=1;
     @Element(required=false) public boolean Control_Poliza=false;
+    @Element(required=false) public boolean Trasladar_Lotes_Doc_Ingreso=false;
+    @Element(required=false) public boolean Activo=false;
 
     public clsBeTrans_pe_tipo() {
     }
 
-    public clsBeTrans_pe_tipo(int IdTipoPedido,String Nombre,String Descripcion,boolean Preparar,
-                              boolean Verificar,boolean ReservaStock,boolean ImprimeBarrasPicking,boolean ImprimeBarrasPacking,
-                              boolean Requerir_Documento_Ref,boolean Generar_pedido_ingreso_bodega_destino,int IdTipoIngresoOC,
+    public clsBeTrans_pe_tipo(int IdTipoPedido,
+                              String Nombre,
+                              String Descripcion,
+                              boolean Preparar,
+                              boolean Verificar,
+                              boolean ReservaStock,
+                              boolean ImprimeBarrasPicking,
+                              boolean ImprimeBarrasPacking,
+                              boolean Requerir_Documento_Ref,
+                              boolean Generar_pedido_ingreso_bodega_destino,
+                              int IdTipoIngresoOC,
                               boolean Control_Poliza
     ) {
 
@@ -118,6 +128,18 @@ public class clsBeTrans_pe_tipo {
         Control_Poliza=value;
     }
 
+    public boolean getTrasladar_Lotes_Doc_Ingreso() {
+        return Trasladar_Lotes_Doc_Ingreso;
+    }
+    public void setTrasladar_Lotes_Doc_Ingreso(boolean value) {
+        Trasladar_Lotes_Doc_Ingreso=value;
+    }
+
+    public boolean getActivo() {
+        return Activo;
+    }
+    public void setActivo(boolean value) {
+        Activo=value;
+    }
+
 }
-
-

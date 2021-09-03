@@ -109,8 +109,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 if (printerIns.isConnected()){
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
                     //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
-
-                    String zpl = "";
+                    String zpl="";
 
                     if (gl.existencia.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
@@ -128,28 +127,28 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                gl.existencia.Codigo+"");
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                        gl.gNomEmpresa,
+                                        "$"+gl.existencia.Codigo,
+                                        gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW609\n" +
-                                        "^LL0406\n" +
                                         "^LS0\n" +
-                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
-                                        "^FO2,450^GB670,14,14^FS\n" +
-                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                        "^FD%1$s^FS\n" +
+                                        "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                        "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                gl.existencia.Codigo+"");
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$"+gl.existencia.Codigo,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }
 
                     zPrinterIns.sendCommand(zpl);
@@ -163,17 +162,22 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
 
-
-            }else{
-                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
             }
 
         }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
+            }else{
+                mu.msgbox("Imprimir_barra: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
         }
     }
 
     private void Imprimir_Licencia(){
+
         try{
 
             if (gl.existencia.Codigo!="0"){
@@ -185,12 +189,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
                     //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
-                    String zpl = "";
+                    String zpl="";
 
                     if (gl.existencia.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
-                                        "^PW700 \n" +
+                                        "^PW609 \n" +
                                         "^LL0406 \n" +
                                         "^LS0 \n" +
                                         "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
@@ -205,26 +209,29 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                (gl.existencia.LicPlate !="" )?gl.existencia.LicPlate:gl.existencia.Codigo+"");
+                                "$"+gl.existencia.getLicPlate());
                     }else if (gl.existencia.IdTipoEtiqueta==2){
+                        //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
+                        //Dado que la descripción salía muy pequeña
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
-                                        "^PW609\n" +
-                                        "^LL0406\n" +
+                                        "^PW609 \n" +
+                                        "^LL0406 \n" +
                                         "^LS0\n" +
-                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS  License Number^FS\n" +
-                                        "^FO2,450^GB670,14,14^FS\n" +
-                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                        "^FD%1$s^FS\n" +
+                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                (gl.existencia.LicPlate !="" )?gl.existencia.LicPlate:gl.existencia.Codigo+"");
+                                "$"+gl.existencia.getLicPlate());
                     }
 
                     zPrinterIns.sendCommand(zpl);
@@ -238,13 +245,17 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
 
-
-            }else{
-                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
             }
 
         }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
+            }else{
+                mu.msgbox("Imprimir_licencia: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
         }
     }
 
