@@ -18,8 +18,8 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Es_Poliza_Consolidada=false;
     @Element(required=false) public boolean Genera_Tarea_Ingreso=false;
 
-
     public clsBeTrans_oc_ti() {
+
     }
 
     public clsBeTrans_oc_ti(int IdTipoIngresoOC,

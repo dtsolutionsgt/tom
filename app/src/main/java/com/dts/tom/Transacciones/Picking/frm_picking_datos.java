@@ -1029,6 +1029,14 @@ public class frm_picking_datos extends PBase {
 
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
 
+            //#GT 18082021: si la lp digitada coincide con la del producto, se debe setear el producto a pCodigo
+            // sino marcara que el producto no existe, porque pCodigo se envia vacio
+            if (!txtCodigoProducto.getText().toString().isEmpty()){
+
+                pCodigo = txtCodigoProducto.getText().toString();
+            }
+
+
             CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
@@ -1319,7 +1327,7 @@ public class frm_picking_datos extends PBase {
            // if (trLP)
 
             if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("Ingrese LP del producto");
+                mu.msgbox("InBeTrans_pe_tipogrese LP del producto");
                 txtBarra.setSelectAllOnFocus(true);
                 txtBarra.requestFocus();
                 return;

@@ -1,6 +1,8 @@
 package com.dts.classes.Mantenimientos.Producto.P_parametro;
 
 
+import android.widget.TextView;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeP_parametro {
@@ -11,7 +13,7 @@ public class clsBeP_parametro {
     @Element(required=false) public String Valor_texto="";
     @Element(required=false) public double Valor_numerico=0;
     @Element(required=false) public String Valor_fecha="1900-01-01T00:00:01";
-    @Element(required=false) public int Valor_logico=0;
+    @Element(required=false) public boolean Valor_logico=false;
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
@@ -23,7 +25,7 @@ public class clsBeP_parametro {
     }
 
     public clsBeP_parametro(int IdParametro,String Tipo,String Descripcion,String Valor_texto,
-                            double Valor_numerico,String Valor_fecha,int Valor_logico,boolean Activo,
+                            double Valor_numerico,String Valor_fecha,boolean Valor_logico,boolean Activo,
                             String User_agr,String Fec_agr,String User_mod,String Fec_mod
     ) {
 
@@ -79,10 +81,10 @@ public class clsBeP_parametro {
     public void setValor_fecha(String value) {
         Valor_fecha=value;
     }
-    public int getValor_logico() {
+    public boolean getValor_logico() {
         return Valor_logico;
     }
-    public void setValor_logico(int value) {
+    public void setValor_logico(boolean value) {
         Valor_logico=value;
     }
     public boolean getActivo() {

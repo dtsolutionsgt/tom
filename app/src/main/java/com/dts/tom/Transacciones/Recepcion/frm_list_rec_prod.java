@@ -848,7 +848,7 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada);
+            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
             listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
