@@ -356,7 +356,7 @@ public class frm_preparacion_packing extends PBase {
             item.Idunidadmedida=p.IdUnidadMedida;
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
-            item.Lic_plate=p.Lic_plate;sellp=p.Lic_plate;
+            item.Lic_plate=""+p.Lic_plate;sellp=p.Lic_plate;
             item.No_linea=lin;
             item.Cantidad_bultos_packing=p.Cantidad_Recibida;
             item.Cantidad_camas_packing=1;

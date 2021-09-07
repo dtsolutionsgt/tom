@@ -65,7 +65,11 @@ public class frm_lista_packing_lp extends PBase {
                     clsBeTrans_packing_lotes sitem = (clsBeTrans_packing_lotes) lvObj;
                     gl.paBulto=sitem.lote;
 
-                    finish();
+                    if (sitem.lote.isEmpty()) {
+                        msgbox("No se pueden adicionar productos sin licencia al empaque por tarima");
+                    } else {
+                        finish();
+                    }
                 }
             });
 
