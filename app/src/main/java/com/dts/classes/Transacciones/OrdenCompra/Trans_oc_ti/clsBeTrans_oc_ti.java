@@ -17,6 +17,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Requerir_Documento_Ref=false;
     @Element(required=false) public boolean Es_Poliza_Consolidada=false;
     @Element(required=false) public boolean Genera_Tarea_Ingreso=false;
+    @Element(required=false) public boolean Requerir_Proveedor_Es_Bodega_WMS=false;
 
     public clsBeTrans_oc_ti() {
 
@@ -31,7 +32,8 @@ public class clsBeTrans_oc_ti {
                             String Fec_mod,
                             boolean Activo,
                             boolean Control_Poliza,
-                            boolean requerir_documento_ref
+                            boolean requerir_documento_ref,
+                            boolean Requerir_Proveedor_Es_Bodega_WMS
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -44,6 +46,7 @@ public class clsBeTrans_oc_ti {
         this.Activo=Activo;
         this.Control_Poliza=Control_Poliza;
         this.Requerir_Documento_Ref = requerir_documento_ref;
+        this.Requerir_Proveedor_Es_Bodega_WMS = Requerir_Proveedor_Es_Bodega_WMS;
     }
 
 
@@ -124,7 +127,12 @@ public class clsBeTrans_oc_ti {
         Genera_Tarea_Ingreso=value;
     }
 
-
+    public boolean getRequerir_Proveedor_Es_Bodega_WMS() {
+        return Requerir_Proveedor_Es_Bodega_WMS;
+    }
+    public void setRequerir_Proveedor_Es_Bodega_WMS(boolean value) {
+        Requerir_Proveedor_Es_Bodega_WMS=value;
+    }
 
 }
 
