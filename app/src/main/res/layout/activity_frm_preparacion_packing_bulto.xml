@@ -192,7 +192,7 @@
             android:clickable="true"
             android:onClick="doLP"
             android:padding="5dp"
-            android:src="@drawable/btn_lupa" />
+            android:src="@drawable/scan" />
 
         <ImageView
             android:id="@+id/imageView3"

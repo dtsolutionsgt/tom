@@ -3,12 +3,12 @@ package com.dts.classes.Transacciones.Packing;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeTrans_packing_enc {
+public class clsBeTrans_packing_enc_bulto {
 
     @Element(required=false) public int Idpackingenc;
     @Element(required=false) public int Idbodega;
     @Element(required=false) public int Idpickingenc;
-    @Element(required=false) public int IdDespachoEnc;;
+    @Element(required=false) public int Iddespachoenc;
     @Element(required=false) public int Idproductobodega;
     @Element(required=false) public int Idproductoestado;
     @Element(required=false) public int Idpresentacion;
@@ -29,19 +29,21 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public String ProductoPresentacion="";
     @Element(required=false) public String ProductoUnidadMedida="";
 
-    public clsBeTrans_packing_enc() {
+    @Element(required=false) public int bandera;
+
+    public clsBeTrans_packing_enc_bulto() {
     }
 
-    public clsBeTrans_packing_enc(int Idpackingenc,int Idbodega,int Idpickingenc,int Iddespachoenc,
-                                  int Idproductobodega,int Idproductoestado,int Idpresentacion,int Idunidadmedida,
-                                  String Lote,String Fecha_vence,String Lic_plate,int No_linea,
-                                  double Cantidad_bultos_packing,double Cantidad_camas_packing,int Idoperadorbodega,int Idempresaservicio,
-                                  String Referencia,String Fecha_packing) {
+    public clsBeTrans_packing_enc_bulto(int Idpackingenc, int Idbodega, int Idpickingenc, int Iddespachoenc,
+                                        int Idproductobodega, int Idproductoestado, int Idpresentacion, int Idunidadmedida,
+                                        String Lote, String Fecha_vence, String Lic_plate, int No_linea,
+                                        double Cantidad_bultos_packing, double Cantidad_camas_packing, int Idoperadorbodega, int Idempresaservicio,
+                                        String Referencia, String Fecha_packing) {
 
         this.Idpackingenc=Idpackingenc;
         this.Idbodega=Idbodega;
         this.Idpickingenc=Idpickingenc;
-        this.IdDespachoEnc=Iddespachoenc;
+        this.Iddespachoenc=Iddespachoenc;
         this.Idproductobodega=Idproductobodega;
         this.Idproductoestado=Idproductoestado;
         this.Idpresentacion=Idpresentacion;
@@ -78,8 +80,12 @@ public class clsBeTrans_packing_enc {
     public void setIdpickingenc(int value) {
         Idpickingenc=value;
     }
-    public int getIddespachoenc() { return  IdDespachoEnc; }
-    public void setIddespachoenc(int value) {IdDespachoEnc=value;}
+    public int getIddespachoenc() {
+        return Iddespachoenc;
+    }
+    public void setIddespachoenc(int value) {
+        Iddespachoenc=value;
+    }
     public int getIdproductobodega() {
         return Idproductobodega;
     }

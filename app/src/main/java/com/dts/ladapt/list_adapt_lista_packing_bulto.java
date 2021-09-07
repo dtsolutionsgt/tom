@@ -9,19 +9,20 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc;
+import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc_bulto;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
 
-public class list_adapt_lista_packing extends BaseAdapter {
+public class list_adapt_lista_packing_bulto extends BaseAdapter {
 
-    private static ArrayList<clsBeTrans_packing_enc> items;
+    private static ArrayList<clsBeTrans_packing_enc_bulto> items;
 
     private int selectedIndex;
 
     private LayoutInflater l_Inflater;
 
-    public list_adapt_lista_packing(Context context, ArrayList<clsBeTrans_packing_enc> results) {
+    public list_adapt_lista_packing_bulto(Context context, ArrayList<clsBeTrans_packing_enc_bulto> results) {
         items = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
@@ -48,15 +49,15 @@ public class list_adapt_lista_packing extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         String ss;
         int pp;
+        boolean regular=true;
 
         if (convertView == null) {
-            convertView = l_Inflater.inflate(R.layout.activity_list_adapt_lista_packing, null);
+            convertView = l_Inflater.inflate(R.layout.activity_list_adapt_lista_packing_bulto, null);
             holder = new ViewHolder();
 
             holder.lbl1 = convertView.findViewById(R.id.lbl1);
@@ -77,6 +78,8 @@ public class list_adapt_lista_packing extends BaseAdapter {
 
         if (position>0) {
 
+            regular=items.get(position).bandera==0;
+
             holder.lbl1.setText(" ");
             holder.lbl2.setText(" ");
             holder.lbl3.setText(" ");
@@ -87,38 +90,51 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl8.setText(" ");
             holder.lbl9.setText(" ");
 
-            try {
-                ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");
-                if (pp>=0) {
-                    ss=ss.substring(0,pp);
-                } else {
+            if (regular) {
+                //ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");ss=ss.substring(0,pp);
+                try {
+                    ss=items.get(position).Fecha_vence;
+                    pp=ss.indexOf("T");
+                    if (pp>=0) {
+                        ss=ss.substring(0,pp);
+                    } else {
+                        ss=items.get(position).Fecha_vence;
+                    }
+                } catch (Exception e) {
                     ss=items.get(position).Fecha_vence;
                 }
-            } catch (Exception e) {
-                ss=items.get(position).Fecha_vence;
+
+                holder.lbl1.setText(""+ items.get(position).No_linea);
+                holder.lbl7.setText(""+items.get(position).Referencia);
+                holder.lbl2.setText(""+items.get(position).CodigoProducto);
+                holder.lbl3.setText(""+items.get(position).nom_prod);
+                holder.lbl4.setText(""+items.get(position).Cantidad_bultos_packing);
+                holder.lbl5.setText(""+ items.get(position).ProductoPresentacion);
+                holder.lbl6.setText(""+ items.get(position).ProductoUnidadMedida);
+                holder.lbl8.setText(""+ ss);
+                holder.lbl9.setText(""+ items.get(position).Lote);
+            } else {
+                holder.lbl1.setText("");
+                holder.lbl3.setText("Total linea "+ items.get(position).No_linea+ " : ");
+                holder.lbl4.setText(""+items.get(position).Cantidad_bultos_packing);
             }
-
-            holder.lbl1.setText(""+ items.get(position).No_linea);
-            holder.lbl7.setText(""+items.get(position).Lic_plate);
-            holder.lbl2.setText(""+items.get(position).CodigoProducto);
-            holder.lbl3.setText(""+items.get(position).nom_prod);
-            holder.lbl4.setText(""+items.get(position).Cantidad_bultos_packing);
-            holder.lbl5.setText(""+ items.get(position).ProductoPresentacion);
-            holder.lbl6.setText(""+ items.get(position).ProductoUnidadMedida);
-            holder.lbl8.setText(""+ ss);
-            holder.lbl9.setText(""+ items.get(position).Lote);
-
-
         }
 
-        if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        if (selectedIndex!= -1 && position == selectedIndex) {
+            if (regular)
+                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+            else
+                convertView.setBackgroundColor(Color.rgb(96, 96, 96));
         } else {
-            if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lbl1.setTextColor(R.style.titlestyle);
+            if (regular) {
+                if (position==0){
+                    convertView.setBackgroundResource(R.drawable.color_medium);
+                    holder.lbl1.setTextColor(R.style.titlestyle);
+                } else {
+                    convertView.setBackgroundColor(Color.TRANSPARENT);
+                }
             } else {
-                convertView.setBackgroundColor(Color.TRANSPARENT);
+                convertView.setBackgroundColor(Color.rgb(192, 192, 192));
             }
         }
 

@@ -1013,6 +1013,10 @@ public class frm_recepcion_datos extends PBase {
 
             cmbPresParams = dialog.findViewById(R.id.cmbPresParams);
 
+
+            /********************** validar que mostrar y que ocultar  ****************************/
+
+            
             cmbPresParams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {

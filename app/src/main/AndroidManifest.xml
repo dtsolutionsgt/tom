@@ -27,9 +27,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Transacciones.Packing.frm_lista_packing_lp"></activity>
         <activity
             android:name=".Transacciones.Packing.frm_lista_packing_lotes"
-            android:windowSoftInputMode="stateAlwaysVisible" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Transacciones.Packing.frm_preparacion_packing_bulto" />
         <activity android:name=".Transacciones.Packing.frm_preparacion_packing" />
         <activity android:name=".Transacciones.Packing.frm_lista_packing" />
@@ -88,6 +90,7 @@
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

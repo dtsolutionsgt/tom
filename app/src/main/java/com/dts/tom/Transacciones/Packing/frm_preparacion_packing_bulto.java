@@ -19,9 +19,11 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_encList;
+import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc_bulto;
+import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
-import com.dts.ladapt.list_adapt_lista_packing;
+import com.dts.ladapt.list_adapt_lista_packing_bulto;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -42,19 +44,20 @@ public class frm_preparacion_packing_bulto extends PBase {
     private XMLObject xobj;
 
     private ArrayList<clsBeTrans_packing_enc> items = new ArrayList<>();
-    private ArrayList<clsBeTrans_packing_enc> item_list = new ArrayList<>();
+    private ArrayList<clsBeTrans_packing_enc_bulto> item_list = new ArrayList<>();
     private clsBeTrans_picking_ubicList pick = new clsBeTrans_picking_ubicList();
-    private clsBeTrans_packing_encList itemList ;
+    private clsBeTrans_packing_encList itemList;
+    private clsBeTrans_packing_encList savedList = new clsBeTrans_packing_encList();
 
-    private list_adapt_lista_packing adapter;
-    private clsBeTrans_packing_enc selitem;
+    private list_adapt_lista_packing_bulto adapter;
+    private clsBeTrans_packing_enc_bulto selitem;
+    private clsBeTrans_picking_ubic selpick;
 
     private ObjectAnimator anim;
     private ProgressDialog progress;
 
-    private int idPickingEnc,selidx,pendientes;
-    private String sellp;
-    private boolean idle=true;
+    private int idPickingEnc,selidx,pendientes,newid,itot,proc;
+    private boolean idle=true,automode=false;
 
 
     @Override
@@ -63,16 +66,16 @@ public class frm_preparacion_packing_bulto extends PBase {
         setContentView(R.layout.activity_frm_preparacion_packing_bulto);
         super.InitBase();
 
-        listView = (ListView) findViewById(R.id.listTareas);
+        listView = findViewById(R.id.listTareas);
         txtLP = findViewById(R.id.editText8);
         txtLinea = findViewById(R.id.editTextNumber);txtLinea.setText("1");
         lblProc = findViewById(R.id.btnRegsList);
         lblPend = findViewById(R.id.btnRegsList2);
-        pbar = (ProgressBar) findViewById(R.id.pgrtareas2);
+        pbar =  findViewById(R.id.pgrtareas2);
 
         idPickingEnc=gl.gIdPickingEnc;
 
-        anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
+        anim = ObjectAnimator.ofInt(pbar,"progress",0,100);
         ProgressDialog("Cargando forma");
 
         ws = new WebServiceHandler(frm_preparacion_packing_bulto.this, gl.wsurl);
@@ -81,6 +84,7 @@ public class frm_preparacion_packing_bulto extends PBase {
         setHandlers();
 
         Load();
+        items.clear();
         focusLP();
     }
 
@@ -100,6 +104,7 @@ public class frm_preparacion_packing_bulto extends PBase {
     }
 
     public void doLP(View view){
+        automode=false;
         GetFila();
     }
 
@@ -108,10 +113,14 @@ public class frm_preparacion_packing_bulto extends PBase {
     }
 
     public void guardarTarea(View view) {
+        if (items.size()==0) {
+            msgbox("No se puede finalizar una tarea vacia");return;
+        }
+
         if (pendientes==0) {
-            msgAskSave("Finalizar la tarea");
+            msgAskSave("¿Finalizar la tarea?");
         } else {
-            msgbox("La tarea no se puede finalizar, quedan articulos pendientes");
+            msgAskSave("Quedan articulos pendientes de procesar.\n¿Guardar la tarea y continuar más tarde?");
         }
     }
 
@@ -129,13 +138,11 @@ public class frm_preparacion_packing_bulto extends PBase {
                     selid = 0;
                     if (position > 0){
                         Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
+                        clsBeTrans_packing_enc_bulto sitem = (clsBeTrans_packing_enc_bulto) lvObj;
                         selitem = sitem;
                         selid = sitem.Idpackingenc;
                         selidx = position;
                         adapter.setSelectedIndex(position);
-
-                        //procesar_registro();
                     }
                 }
             });
@@ -146,12 +153,12 @@ public class frm_preparacion_packing_bulto extends PBase {
                     selid = 0;
                     if (position > 0){
                         Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                        selitem = sitem;
-                        sellp = selitem.Lic_plate;
+                        clsBeTrans_packing_enc_bulto sitem = (clsBeTrans_packing_enc_bulto) lvObj;
+                        selid = sitem.Idpackingenc;
                         adapter.setSelectedIndex(position);
 
-                        msgAskBorrar("Eliminar registro");
+                        int i=items.size();
+                        if (sitem.bandera==0) msgAskBorrar("Eliminar registro");
                     }
                     return true;
                 }
@@ -177,31 +184,79 @@ public class frm_preparacion_packing_bulto extends PBase {
     //region Main
 
     private void listItems() {
-        clsBeTrans_packing_enc item;
+        clsBeTrans_packing_enc_bulto item,itemt;
+        clsBeTrans_packing_enc enc;
+        int bult=0,linea=0;
 
         try {
-            item_list.clear();
+            item_list.clear();proc=0;
 
-            item=new clsBeTrans_packing_enc();
+            Collections.sort(items,new OrdenarPorLinea());
+
+            item=new clsBeTrans_packing_enc_bulto();
             item_list.add(item);
 
             for (int i = 0; i <items.size(); i++) {
-                item_list.add(items.get(i));
-            }
 
-            Collections.sort(item_list,new OrdenarPorLinea());
+                item=new clsBeTrans_packing_enc_bulto();
+                enc=items.get(i);
 
-            adapter=new list_adapt_lista_packing(this,item_list);
-            listView.setAdapter(adapter);
+                if (i==0) linea=enc.No_linea;
 
-            if (item_list.size()>1) {
-                for (int i = 1; i <item_list.size(); i++) {
-                    if (item_list.get(i).Lic_plate.equalsIgnoreCase(sellp)) {
-                        adapter.setSelectedIndex(i);
-                        listView.smoothScrollToPosition(i);
-                    }
+                item.Idpackingenc=enc.Idpackingenc;
+                item.Idbodega=enc.Idbodega;
+                item.Idpickingenc=enc.Idpickingenc;
+                item.Iddespachoenc=enc.IdDespachoEnc;
+                item.Idproductobodega=enc.Idproductobodega;
+                item.Idproductoestado=enc.Idproductoestado;
+                item.Idpresentacion=enc.Idpresentacion;
+                item.Idunidadmedida=enc.Idunidadmedida;
+                item.Lote=enc.Lote;
+                item.Fecha_vence=enc.Fecha_vence;
+                item.Lic_plate=enc.Lic_plate;
+                item.No_linea=enc.No_linea;
+                item.Cantidad_bultos_packing=enc.Cantidad_bultos_packing;
+                item.Cantidad_camas_packing=enc.Cantidad_camas_packing;
+                item.Idoperadorbodega=enc.Idoperadorbodega;
+                item.Idempresaservicio=enc.Idempresaservicio;
+                item.Referencia=enc.Referencia;
+                item.Fecha_packing=enc.Fecha_packing;
+
+                item.CodigoProducto=codigoProducto(item.Idproductobodega);
+                item.nom_prod=nombreProducto(item.Idproductobodega);
+                item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
+                item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
+
+                item.bandera=0;
+
+                if (linea==enc.No_linea) {
+                    bult+=(int) enc.Cantidad_bultos_packing;
+                } else {
+                    itemt=new clsBeTrans_packing_enc_bulto();
+                    itemt.No_linea=linea;
+                    itemt.Cantidad_bultos_packing=bult;
+                    itemt.bandera=1;
+                    item_list.add(itemt);
+
+                    linea=enc.No_linea;
+                    bult=(int) enc.Cantidad_bultos_packing;
                 }
+
+                item_list.add(item);
+
+                proc+=item.Cantidad_bultos_packing;
             }
+
+            if (bult>0) {
+                itemt=new clsBeTrans_packing_enc_bulto();
+                itemt.No_linea=linea;
+                itemt.Cantidad_bultos_packing=bult;
+                itemt.bandera=1;
+                item_list.add(itemt);
+            }
+
+            adapter=new list_adapt_lista_packing_bulto(this,item_list);
+            listView.setAdapter(adapter);
 
         } catch (Exception e) {
             mu.msgbox("listItems : "+e.getMessage());
@@ -209,18 +264,61 @@ public class frm_preparacion_packing_bulto extends PBase {
 
         progress.cancel();
 
-        lblProc.setText("Procesado : "+(items.size()));
-        pendientes=pick.items.size()-items.size();
+        lblProc.setText("Procesado : "+proc);
+        try {
+            pendientes=itot-proc;
+        } catch (Exception e) {
+            String ss=e.getMessage();
+            pendientes=0;
+        }
         lblPend.setText("Pendiente : "+pendientes);
 
-        txtLP.setText("");txtLP.requestFocus();
+        txtLP.selectAll();txtLP.requestFocus();
     }
 
     private void processListUbic(){
+        String ss;
+
         try {
             progress.setMessage("Obteniendo lista de tareas");
 
-            pick =xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
+            pick =xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc_Group");
+
+            if (pick!=null && pick.items.size()>0) {
+                itot=0;
+                for (int i = 0; i <pick.items.size(); i++) {
+                    pick.items.get(i).IdPickingUbic=i;
+                    itot+=pick.items.get(i).Cantidad_Solicitada;
+                    ss=pick.items.get(i).Fecha_Vence;
+                    ss=ss+"";
+                }
+            }
+
+            //listItems();
+            //idle=true;
+            execws(2);
+        } catch (Exception e) {
+            progress.cancel();
+            ss=e.getMessage();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+        idle=true;
+    }
+
+    private void processListSaved(){
+        try {
+            items.clear();
+
+            progress.setMessage("Obteniendo lista de articulos guardados");
+
+            savedList =xobj.getresult(clsBeTrans_packing_encList.class,"Get_All_Packing_By_IdPicking");
+
+            try {
+                if (savedList!=null) {
+                    if (savedList.items.size()>0) cargaListaGuardados();
+                }
+            } catch (Exception e) {}
 
             listItems();
             idle=true;
@@ -228,6 +326,32 @@ public class frm_preparacion_packing_bulto extends PBase {
             progress.cancel();
             String ss=e.getMessage();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+        idle=true;
+    }
+
+    private void cargaListaGuardados() {
+        String ss;
+
+        try {
+
+            for (int i = 0; i <savedList.items.size(); i++) {
+
+                clsBeTrans_packing_enc itm=savedList.items.get(i);
+
+                ss=itm.Fecha_vence;
+
+                itm.nom_prod="nom_prod";
+                itm.CodigoProducto="CodigoProducto";
+                itm.ProductoPresentacion="ProductoPresentacion";
+                itm.ProductoUnidadMedida="ProductoUnidadMedida";
+
+                items.add(itm);
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
@@ -246,44 +370,47 @@ public class frm_preparacion_packing_bulto extends PBase {
         }
     }
 
-    private void addItem() {
+    private void newItem() {
+        if (gl.paPickUbicId==-1) return;
+
+        txtLinea.setText(""+gl.paLinea);
+
+        try {
+            selpick=cargaPickUbic();
+            newid=getNewID()+1;
+
+            addItem(selpick);
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void addItem(clsBeTrans_picking_ubic p) {
         clsBeTrans_packing_enc item;
-        clsBeTrans_picking_ubic p;
         int lin;
 
-        try {
-            lin=Integer.parseInt(txtLinea.getText().toString());
-            if (lin<1 | lin>99) {
-                msgbox("Número de linea incorrecto");return;
-            }
-        } catch (Exception e) {
-            lin=1;txtLinea.setText("1");
-        }
-
-        if (selidx<0) return;
+        lin=Integer.parseInt(txtLinea.getText().toString());
 
         try {
-
             item=new clsBeTrans_packing_enc();
-            p=pick.items.get(selidx);
 
-            item.Idpackingenc=items.size()+1;
+            item.Idpackingenc=newid;
             item.Idbodega=gl.IdBodega;
-            item.Idpickingenc=p.IdPickingEnc;
-            item.Iddespachoenc=0;
-            item.Idproductobodega=p.IdProductoBodega;
+            item.Idpickingenc=p.IdPickingEnc;  //
+            item.IdDespachoEnc=gl.paPickUbicId;
+            item.Idproductobodega=p.IdProductoBodega; //
             item.Idproductoestado=0;
-            item.Idpresentacion=p.IdPresentacion;
-            item.Idunidadmedida=p.IdUnidadMedida;
+            item.Idpresentacion=p.IdPresentacion; //
+            item.Idunidadmedida=p.IdUnidadMedida; //
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
-            item.Lic_plate=p.Lic_plate;sellp=p.Lic_plate;
+            item.Lic_plate="";
             item.No_linea=lin;
-            item.Cantidad_bultos_packing=p.Cantidad_Recibida;
-            item.Cantidad_camas_packing=1;
+            item.Cantidad_bultos_packing=gl.paCant;
+            item.Cantidad_camas_packing=gl.paCamas;
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
             item.Idempresaservicio=gl.IdEmpresa;
-            item.Referencia="";
+            item.Referencia=gl.paBulto;
             item.Fecha_packing=du.univfecha(du.getActDateTime());
 
             item.nom_prod=p.NombreProducto;
@@ -294,6 +421,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             items.add(item);
 
             listItems();
+            GetFila();
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -301,7 +429,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     private void delItem() {
         for (int i = 0; i <items.size(); i++) {
-            if (items.get(i).Lic_plate.equalsIgnoreCase(sellp)) {
+            if (items.get(i).Idpackingenc==selid) {
                 items.remove(i);
                 listItems();return;
             }
@@ -310,53 +438,97 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     private void GetFila() {
         String ss;
-        int pos=-1;
+        int lin,pos=-1;
 
         try {
             ss=txtLP.getText().toString();
             if (ss.isEmpty()) return;
 
+            try {
+                lin=Integer.parseInt(txtLinea.getText().toString());
+                if (lin<1 | lin>99) {
+                    msgbox("Número de linea incorrecto");return;
+                }
+            } catch (Exception e) {
+                lin=1;txtLinea.setText("1");
+            }
+
+            creaListaLotes(ss);
+            if (gl.packlotes.size()==0) {
+                if (automode) {
+                    txtLP.setText("");txtLP.requestFocus();
+                } else {
+                    toast("No existe ninguno lote disponible");
+                }
+                return;
+            }
+
+            gl.paLinea =lin;
+            browse=1;automode=true;
+            startActivity(new Intent(this,frm_lista_packing_lotes.class));
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void creaListaLotes(String prid) {
+        clsBeTrans_packing_lotes item;
+        int cantu;
+
+        if (pick==null | pick.items.size()==0) return;
+
+        try {
+            gl.packlotes.clear();
+
             for (int i = 0; i <pick.items.size(); i++) {
-                if (pick.items.get(i).CodigoProducto.equalsIgnoreCase(ss)) {
-                    pos=i;break;
+
+                if (pick.items.get(i).CodigoProducto.equalsIgnoreCase(prid)) {
+
+                    gl.paNombre=pick.items.get(i).CodigoProducto+" - "+pick.items.get(i).NombreProducto;
+
+                    cantu=cantIdPackUbic(pick.items.get(i).IdPickingUbic);
+
+                    item = new clsBeTrans_packing_lotes();
+
+                    item.id = pick.items.get(i).IdPickingUbic;
+                    item.lote = pick.items.get(i).Lote;
+                    item.fecha = pick.items.get(i).Fecha_Vence;
+                    item.presentacion = pick.items.get(i).ProductoPresentacion;
+                    item.disp = (int) pick.items.get(i).Cantidad_Solicitada-cantu;
+                    item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
+
+                    if (item.disp>0) gl.packlotes.add(item);
                 }
             }
 
-            if (pos==-1) {
-                msgbox("Código no existe");
-                txtLP.selectAll();focusLP();return;
-            }
-
-            selidx=-1;
-            for (int i = 0; i <items.size(); i++) {
-                if (items.get(i).CodigoProducto.equalsIgnoreCase(ss)) {
-                    gl.paCodigo=ss;
-                    gl.paNombre=items.get(i).nom_prod;
-                    browse=1;
-                    startActivity(new Intent(this,frm_lista_packing_lotes.class));
-                }
-            }
-
-            //focusLP();
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
     private void guardar() {
+        String ss;
 
         if (items.size()==0) {
             msgbox("La lista de empaque está vacía, no se puede finalizar");return;
         }
 
         try {
+            for (int i = 0; i <items.size(); i++) {
+                items.get(i).IdDespachoEnc=0;
+                items.get(i).Fecha_vence=du.univfecha(du.getActDateTime());
+                ss=items.get(i).Fecha_vence;
+                ss=ss+"";
+            }
+
             itemList = new clsBeTrans_packing_encList();
             itemList.items = stream(items).toList();
 
             progress.setMessage("Finalizando tarea ...");
             progress.show();
             idle=false;
-            execws(2);
+            execws(3);
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
@@ -373,7 +545,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             if (!ws.errorflag) {
                 regs = xobj.getresult(Integer.class,"Inserta_Packing");
                 if (regs>0) {
-                    toast("Tarea finalizada : "+regs);finish();
+                    toast("Tarea finalizada : "+regs+" registros");finish();
                 } else {
                     mu.msgbox("No se logro finalizar la tarea, por favor repite el proceso.");
                 }
@@ -401,9 +573,12 @@ public class frm_preparacion_packing_bulto extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc);
+                        callMethod("Get_All_PickingUbic_By_PickingEnc_Group","pIdPickingEnc",idPickingEnc);
                         break;
                     case 2:
+                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc);
+                        break;
+                    case 3:
                         callMethod("Inserta_Packing","pTrans_packing_enc",itemList.items);
                         break;
                 }
@@ -426,6 +601,8 @@ public class frm_preparacion_packing_bulto extends PBase {
                 case 1:
                     processListUbic();break;
                 case 2:
+                    processListSaved();break;
+                case 3:
                     cantidadRegGuardados();break;
             }
 
@@ -440,6 +617,41 @@ public class frm_preparacion_packing_bulto extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    //endregion
+
+    //region Aux Lista
+
+    private clsBeTrans_picking_ubic cargaPickUbic() {
+        for (int i = 0; i <pick.items.size(); i++) {
+            if (pick.items.get(i).IdPickingUbic==gl.paPickUbicId) return pick.items.get(i);
+        }
+
+        return null;
+    }
+
+    private int getNewID() {
+        int val,maxx=-1;
+
+        if (items.size()==0) return 0;
+        for (int i = 0; i <items.size(); i++) {
+            val=items.get(i).Idpackingenc;
+            if (val>maxx) maxx=val;
+        }
+
+        return maxx;
+    }
+
+    private int cantIdPackUbic(int IdPickingUbic) {
+        int val=0;
+
+        if (items.size()==0) return 0;
+        for (int i = 0; i <items.size(); i++) {
+            if (items.get(i).IdDespachoEnc==IdPickingUbic) val+=items.get(i).Cantidad_bultos_packing;
+        }
+
+        return val;
     }
 
     //endregion
@@ -476,6 +688,34 @@ public class frm_preparacion_packing_bulto extends PBase {
             }
         };
         mtimer.postDelayed(mrunner,200);
+    }
+
+    private String codigoProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoBodega==id) return pick.items.get(j).CodigoProducto;
+        }
+        return "";
+    }
+
+    private String nombreProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoBodega==id) return pick.items.get(j).NombreProducto;
+        }
+        return "";
+    }
+
+    private String productoPresentacion(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdPresentacion==id) return pick.items.get(j).ProductoPresentacion;
+        }
+        return "";
+    }
+
+    private String productoUnidadMedida(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdUnidadMedida==id) return pick.items.get(j).ProductoUnidadMedida;
+        }
+        return "";
     }
 
     //endregion
@@ -540,7 +780,6 @@ public class frm_preparacion_packing_bulto extends PBase {
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
 
     private void msgAskBorrar(String msg) {
@@ -584,6 +823,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
             if (browse==1) {
                 browse=0;
+                newItem();
                 return;
             }
 
