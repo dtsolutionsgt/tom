@@ -396,12 +396,12 @@ public class frm_preparacion_packing_bulto extends PBase {
 
             item.Idpackingenc=newid;
             item.Idbodega=gl.IdBodega;
-            item.Idpickingenc=p.IdPickingEnc;  //
+            item.Idpickingenc=p.IdPickingEnc;
             item.IdDespachoEnc=gl.paPickUbicId;
-            item.Idproductobodega=p.IdProductoBodega; //
-            item.Idproductoestado=0;
-            item.Idpresentacion=p.IdPresentacion; //
-            item.Idunidadmedida=p.IdUnidadMedida; //
+            item.Idproductobodega=p.IdProductoBodega;
+            item.Idproductoestado=p.IdProductoEstado;
+            item.Idpresentacion=p.IdPresentacion;
+            item.Idunidadmedida=p.IdUnidadMedida;
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
             item.Lic_plate="";
