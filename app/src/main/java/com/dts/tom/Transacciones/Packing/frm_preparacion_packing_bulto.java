@@ -120,7 +120,7 @@ public class frm_preparacion_packing_bulto extends PBase {
         if (pendientes==0) {
             msgAskSave("¿Finalizar la tarea?");
         } else {
-            msgAskSave("Quedan articulos pendientes de procesar.\n¿Guardar la tarea y continuar más tarde?");
+            msgAskSave("Aún hay productos pendientes de packing.\n¿Finalizar tarea?");
         }
     }
 
@@ -759,7 +759,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage(msg);
 
             dialog.setCancelable(false);
 
