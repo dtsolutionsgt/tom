@@ -97,7 +97,7 @@ public class frm_recepcion_datos extends PBase {
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
     private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
-    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion;
+    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
     private ProgressDialog progress;
@@ -974,34 +974,67 @@ public class frm_recepcion_datos extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_parametros1);
 
+            //#GT 03092021
+
+            clsBeProducto_Presentacion bePresentacion= new clsBeProducto_Presentacion();
+
+            /********* encabezado de la forma           ****************************/
             TextView lblPrducto = dialog.findViewById(R.id.lblTituloForma);
-            lblSerialP = dialog.findViewById(R.id.textView7);
-            TextView lblLicPlate = dialog.findViewById(R.id.textView5);
-            TextView lblFManufact = dialog.findViewById(R.id.textView77);
-            TextView lblAnada = dialog.findViewById(R.id.label1);
+
+            /********  labels e inputs de tipo Parametros A  ***********************/
+
+            lblParametrosA = dialog.findViewById(R.id.lblPropPrd2);
+            lblParametrosA.setText("Parametros A");
+
+            //parametro licence plate
+            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
+            txtLicPlate = dialog.findViewById(R.id.txtLicPlate);
+
+            //parametro captura serial
+            lblSerialP = dialog.findViewById(R.id.lblSerial);
+            txtSerial = dialog.findViewById(R.id.txtSerial);
+
+            //parametro captura añada
+            TextView lblAnada = dialog.findViewById(R.id.lblAnada);
+            txtAnada = dialog.findViewById(R.id.txtAnada);
+
+            //parametro fecha manufactura
+            TextView lblFManufact = dialog.findViewById(R.id.lblFechaManu);
+            txtFechaManu = dialog.findViewById(R.id.txtFechaManu);
+
+            EditText txtFechaIng = dialog.findViewById(R.id.txtFechaIng);
+
+            /**************************************************************************/
+
+            //labels e inputs de temperatura
+            lblTempTit = dialog.findViewById(R.id.lblTempTit);
             lblTempEsta = dialog.findViewById(R.id.textView8);
+            txtTempEsta = dialog.findViewById(R.id.txtTempEsta);
             lblTempReal = dialog.findViewById(R.id.textView91);
+            txtTempReal = dialog.findViewById(R.id.txtTempReal);
+
+            //labels e inputs de peso
+            lblPesoTit = dialog.findViewById(R.id.lblPesoTit);
             lblPresParam = dialog.findViewById(R.id.textView92);
             lblPesoEsta = dialog.findViewById(R.id.textView93);
             lblPesoReal = dialog.findViewById(R.id.textView94);
-            lblSerialIni = dialog.findViewById(R.id.textView95);
-            lblSerialFin = dialog.findViewById(R.id.textView96);
-            lblTempTit = dialog.findViewById(R.id.lblTempTit);
-            lblPesoTit = dialog.findViewById(R.id.lblPesoTit);
-            //Objeto para dialogo de parametros
-
-            txtLicPlate = dialog.findViewById(R.id.txtLicPlate);
-            txtSerial = dialog.findViewById(R.id.txtSerial);
-            txtAnada = dialog.findViewById(R.id.txtAnada);
-            txtFechaManu = dialog.findViewById(R.id.txtFechaManu);
-            EditText txtFechaIng = dialog.findViewById(R.id.txtFechaIng);
-            txtTempEsta = dialog.findViewById(R.id.txtTempEsta);
-            txtTempReal = dialog.findViewById(R.id.txtTempReal);
             txtPesoEsta = dialog.findViewById(R.id.txtPesoEsta);
             txtPesoReal = dialog.findViewById(R.id.txtPesoReal);
+            cmbPresParams = dialog.findViewById(R.id.cmbPresParams);
+
+            //labels e inputs serie rango
+            lblSerialIni = dialog.findViewById(R.id.textView95);
+            lblSerialFin = dialog.findViewById(R.id.textView96);
             txtSerieIni = dialog.findViewById(R.id.txtSerieIni);
             txtSerieFin = dialog.findViewById(R.id.txtSerieFin);
 
+
+            /***************************************************************************************/
+            /**************************** set de los inputs ****************************************/
+
+            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+
+            //Objeto para dialogo de parametros
             txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtTempReal.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -1011,33 +1044,85 @@ public class frm_recepcion_datos extends PBase {
             txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoEsta.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
-            cmbPresParams = dialog.findViewById(R.id.cmbPresParams);
-
 
             /********************** validar que mostrar y que ocultar  ****************************/
 
-            
-            cmbPresParams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
 
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                lblFManufact.setVisibility(View.VISIBLE);
+                txtFechaManu.setVisibility(View.VISIBLE);
 
-                    TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+            }else {
+                lblFManufact.setVisibility(View.GONE);
+                txtFechaManu.setVisibility(View.GONE);
+            }
 
-                    IdPreseSelectParam=BeProducto.Presentaciones.items.get(position).IdPresentacion;
+            if (BeProducto.Capturar_aniada){
 
-                }
+                txtAnada.setText("0");
+                lblAnada.setVisibility(View.VISIBLE);
+                txtAnada.setVisibility(View.VISIBLE);
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
+            } else {
+                lblAnada.setVisibility(View.GONE);
+                txtAnada.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Peso_recepcion){
+
+                cmbPresParams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                        TextView spinlabel = (TextView) parentView.getChildAt(0);
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                        IdPreseSelectParam=BeProducto.Presentaciones.items.get(position).IdPresentacion;
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
 
 
-            });
+                });
+                Valida_Peso();
 
-            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+            }else {
+                lblPresParam.setVisibility(View.GONE);
+                cmbPresParams.setVisibility(View.GONE);
+                lblPesoTit.setVisibility(View.GONE);
+                lblPesoEsta.setVisibility(View.GONE);
+                txtPesoEsta.setVisibility(View.GONE);
+                lblPesoReal.setVisibility(View.GONE);
+                txtPesoReal.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Serializado){
+                Valida_Perfil_Serializado();
+            }else {
+                lblSerialP.setVisibility(View.GONE);
+                txtSerial.setVisibility(View.GONE);
+                lblSerialIni.setVisibility(View.GONE);
+                txtSerieIni.setVisibility(View.GONE);
+                lblSerialFin.setVisibility(View.GONE);
+                txtSerieFin.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Temperatura_recepcion){
+                //Valida_Temperatura();
+                txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia,  gl.gCantDecCalculo)+"");
+            }else{
+                lblTempTit.setVisibility(View.GONE);
+                lblTempEsta.setVisibility(View.GONE);
+                lblTempReal.setVisibility(View.GONE);
+                txtTempEsta.setVisibility(View.GONE);
+                txtTempReal.setVisibility(View.GONE);
+            }
+
 
             if (pListBeStockRec!=null){
                 if (pListBeStockRec.items!=null){
@@ -1048,8 +1133,6 @@ public class frm_recepcion_datos extends PBase {
 
             IndexPresentacion = IndexPresSelected;
 
-              clsBeProducto_Presentacion bePresentacion= new clsBeProducto_Presentacion();
-
             if (IndexPresentacion!= -1){
                 bePresentacion = BeProducto.Presentaciones.items.get(IndexPresentacion);
             }
@@ -1058,7 +1141,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if((bePresentacion.EsPallet||chkPaletizar.isChecked())&&
                         (bePresentacion.CamasPorTarima ==0|| bePresentacion.CajasPorCama==0)){
-                   // mu.msgbox("La presentación no tiene los valores necesarios para recepcionar pallets");
+
                     txtLicPlate.setFocusable(false);
                     txtLicPlate.setFocusableInTouchMode(false);
                     txtLicPlate.setClickable(false);
@@ -1130,34 +1213,10 @@ public class frm_recepcion_datos extends PBase {
                 txtLicPlate.setVisibility(View.GONE);
             }
 
-            if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
-                lblFManufact.setVisibility(View.VISIBLE);
-                txtFechaManu.setVisibility(View.VISIBLE);
 
-            }else{
-                lblFManufact.setVisibility(View.GONE);
-                txtFechaManu.setVisibility(View.GONE);
-            }
 
-            txtAnada.setText("0");
-
-            if (!BeProducto.Capturar_aniada){
-                lblAnada.setVisibility(View.GONE);
-                txtAnada.setVisibility(View.GONE);
-            }else{
-                lblAnada.setVisibility(View.VISIBLE);
-                txtAnada.setVisibility(View.VISIBLE);
-            }
-
-            //ValidaPeso
-            Valida_Peso();
-
-            //ValidaTemperatura
-            Valida_Temperatura();
-
-            Valida_Perfil_Serializado();
-
-            Carga_Parametros_Personalizados();
+            //GT 02092021 esto ya se hizo al cargar la recepción en una validación para mostrar o no.
+            //Carga_Parametros_Personalizados();
 
             final Calendar c = Calendar.getInstance();
             year = c.get(Calendar.YEAR);
@@ -1200,7 +1259,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if (BeProducto.Temperatura_recepcion){
-                txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura,  gl.gCantDecCalculo)+"");
+                    txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura,  gl.gCantDecCalculo)+"");
                 }
 
             }
@@ -1209,11 +1268,8 @@ public class frm_recepcion_datos extends PBase {
             Button btnBack = dialog.findViewById(R.id.btnBack);
 
             btnIr.setOnClickListener(v -> BotonIrGuardarParametros());
-
             btnBack.setOnClickListener(v -> SalirPantallaParametros());
-
             dialog.show();
-
             mu.msgbox(MensajeParam);
 
         }catch (Exception e){
@@ -1448,7 +1504,6 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (BeProducto.Serializado){
                 switch (BeProducto.IdPerfilSerializado){
 
                     case 1:
@@ -1474,14 +1529,7 @@ public class frm_recepcion_datos extends PBase {
                         txtSerieFin.setVisibility(View.GONE);
                         break;
                 }
-            }else{
-                lblSerialP.setVisibility(View.GONE);
-                txtSerial.setVisibility(View.GONE);
-                lblSerialIni.setVisibility(View.GONE);
-                txtSerieIni.setVisibility(View.GONE);
-                lblSerialFin.setVisibility(View.GONE);
-                txtSerieFin.setVisibility(View.GONE);
-            }
+
         }catch (Exception e){
             mu.msgbox("Valida_Perfil_Serializado"+e.getMessage());
         }
@@ -1509,8 +1557,6 @@ public class frm_recepcion_datos extends PBase {
     private void Valida_Peso(){
 
         try{
-
-            if (BeProducto.Peso_recepcion){
 
                 txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
 
@@ -1545,16 +1591,6 @@ public class frm_recepcion_datos extends PBase {
                     int IndexPresentacion = AuxPresParam.indexOf(IdPreseSelect);
                     cmbPresParams.setSelection(IndexPresentacion);
                 }
-
-            }else{
-                lblPresParam.setVisibility(View.GONE);
-                cmbPresParams.setVisibility(View.GONE);
-                lblPesoTit.setVisibility(View.GONE);
-                lblPesoEsta.setVisibility(View.GONE);
-                txtPesoEsta.setVisibility(View.GONE);
-                lblPesoReal.setVisibility(View.GONE);
-                txtPesoReal.setVisibility(View.GONE);
-            }
 
         }catch (Exception e){
             mu.msgbox("Valida Peso: "+e.getMessage());
