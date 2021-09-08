@@ -720,6 +720,12 @@ public class frm_picking_datos extends PBase {
 
                     gBeProducto = new clsBeProducto();
                     gBeProducto.Codigo = pCodigo;
+
+                    //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
                     //Get_BeProducto_By_Codigo_For_HH (Primera vez)
                     execws(4);
                 }
@@ -914,9 +920,14 @@ public class frm_picking_datos extends PBase {
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
                    gBeProducto = new clsBeProducto();
-                    gBeProducto.Codigo = pCodigo;
+                   gBeProducto.Codigo = pCodigo;
 
-                   execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+                   //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
+                    execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
 
 //                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
 //                    btnConfirmarPk.setEnabled(false);
@@ -1054,8 +1065,15 @@ public class frm_picking_datos extends PBase {
 
                 //#EJC20200610: No me gusta como se ve esto, pero tengo demo ma;ana
                 gBeProducto = new clsBeProducto();
+
+                //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                if (pCodigo.isEmpty()){
+                    pCodigo = pLP;
+                }
+
                 //Get_BeProducto_By_Codigo_For_HH (Tercera vez)
                 execws(4);
+
                 return;
             }
 
