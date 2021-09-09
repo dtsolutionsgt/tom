@@ -1600,7 +1600,7 @@ public class frm_recepcion_datos extends PBase {
 
     private void GuardarParametros(){
 
-        boolean Parametros_Ingresados;
+        boolean Parametros_Ingresados=true;
         MensajeParam="";
         plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
         ArrayList<clsBeTrans_re_det_parametros> parametros_personalizados = new ArrayList<>();
@@ -1611,7 +1611,9 @@ public class frm_recepcion_datos extends PBase {
             //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
             //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
 
-            Parametros_Ingresados = Validar_Parametros_personalizados();
+            if (pListBEProductoParametro !=null){
+                Parametros_Ingresados = Validar_Parametros_personalizados();
+            }
 
             if (!Parametros_Ingresados){
 
