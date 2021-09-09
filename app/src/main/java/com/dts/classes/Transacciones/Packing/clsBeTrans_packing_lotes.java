@@ -6,6 +6,7 @@ public class clsBeTrans_packing_lotes {
     public String lote="";
     public String fecha="";
     public String presentacion="";
+    public String estado="";
     public int disp=0;
     public int cant=0;
 

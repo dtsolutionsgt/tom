@@ -226,6 +226,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                 item.nom_prod=nombreProducto(item.Idproductobodega);
                 item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
                 item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
+                item.ProductoEstado=estadoProducto(item.Idproductoestado);
 
                 item.bandera=0;
 
@@ -340,12 +341,11 @@ public class frm_preparacion_packing_bulto extends PBase {
 
                 clsBeTrans_packing_enc itm=savedList.items.get(i);
 
-                ss=itm.Fecha_vence;
-
-                itm.nom_prod="nom_prod";
-                itm.CodigoProducto="CodigoProducto";
-                itm.ProductoPresentacion="ProductoPresentacion";
-                itm.ProductoUnidadMedida="ProductoUnidadMedida";
+                itm.CodigoProducto=codigoProducto(itm.Idproductobodega);
+                itm.nom_prod=nombreProducto(itm.Idproductobodega);
+                itm.ProductoPresentacion=productoPresentacion(itm.Idpresentacion);
+                itm.ProductoUnidadMedida=productoUnidadMedida(itm.Idunidadmedida);
+                itm.ProductoEstado=estadoProducto(itm.Idproductoestado);
 
                 items.add(itm);
             }
@@ -417,6 +417,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             item.CodigoProducto=p.CodigoProducto;
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
+            item.ProductoEstado=p.ProductoEstado;
 
             items.add(item);
 
@@ -487,7 +488,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
                     gl.paNombre=pick.items.get(i).CodigoProducto+" - "+pick.items.get(i).NombreProducto;
 
-                    cantu=cantIdPackUbic(pick.items.get(i).IdPickingUbic);
+                    //cantu=cantIdPackUbic(pick.items.get(i).IdPickingUbic);
 
                     item = new clsBeTrans_packing_lotes();
 
@@ -495,6 +496,10 @@ public class frm_preparacion_packing_bulto extends PBase {
                     item.lote = pick.items.get(i).Lote;
                     item.fecha = pick.items.get(i).Fecha_Vence;
                     item.presentacion = pick.items.get(i).ProductoPresentacion;
+                    item.estado=pick.items.get(i).ProductoEstado;
+
+                    cantu=cantProc(item);
+
                     item.disp = (int) pick.items.get(i).Cantidad_Solicitada-cantu;
                     item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
 
@@ -517,9 +522,6 @@ public class frm_preparacion_packing_bulto extends PBase {
         try {
             for (int i = 0; i <items.size(); i++) {
                 items.get(i).IdDespachoEnc=0;
-                items.get(i).Fecha_vence=du.univfecha(du.getActDateTime());
-                ss=items.get(i).Fecha_vence;
-                ss=ss+"";
             }
 
             itemList = new clsBeTrans_packing_encList();
@@ -625,7 +627,9 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     private clsBeTrans_picking_ubic cargaPickUbic() {
         for (int i = 0; i <pick.items.size(); i++) {
-            if (pick.items.get(i).IdPickingUbic==gl.paPickUbicId) return pick.items.get(i);
+            if (pick.items.get(i).IdPickingUbic==gl.paPickUbicId) {
+                return pick.items.get(i);
+            }
         }
 
         return null;
@@ -641,6 +645,31 @@ public class frm_preparacion_packing_bulto extends PBase {
         }
 
         return maxx;
+    }
+
+    private int cantProc(clsBeTrans_packing_lotes it) {
+        int val=0;
+        String s1,s2;
+
+        if (items.size()==0) return 0;
+
+        for (int i = 0; i <items.size(); i++) {
+            s1=items.get(i).Lote;s2=it.lote;
+            if (items.get(i).Lote.equalsIgnoreCase(it.lote)) {
+                s1=items.get(i).Fecha_vence;s2=it.fecha;
+                if (items.get(i).Fecha_vence.equalsIgnoreCase(it.fecha)) {
+                    s1=items.get(i).ProductoPresentacion;s2=it.presentacion;
+                    if (items.get(i).ProductoPresentacion.equalsIgnoreCase(it.presentacion)) {
+                        s1=items.get(i).ProductoEstado;s2=it.estado;
+                        if (items.get(i).ProductoEstado.equalsIgnoreCase(it.estado)) {
+                            val+=items.get(i).Cantidad_bultos_packing;
+                        }
+                    }
+                }
+            }
+        }
+
+        return val;
     }
 
     private int cantIdPackUbic(int IdPickingUbic) {
@@ -714,6 +743,13 @@ public class frm_preparacion_packing_bulto extends PBase {
     private String productoUnidadMedida(int id) {
         for (int j = 0; j <pick.items.size(); j++) {
             if (pick.items.get(j).IdUnidadMedida==id) return pick.items.get(j).ProductoUnidadMedida;
+        }
+        return "";
+    }
+
+    private String estadoProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoEstado==id) return pick.items.get(j).ProductoEstado;
         }
         return "";
     }

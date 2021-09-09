@@ -57,9 +57,10 @@ public class list_adapt_packing_lotes extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_packing_lotes, null);
             holder = new ViewHolder();
 
-            holder.lblLote = (TextView) convertView.findViewById(R.id.lblIdTramo);
-            holder.lblFecha = (TextView) convertView.findViewById(R.id.textView102);
-            holder.lblCant = (TextView) convertView.findViewById(R.id.lblEstadoDetalle);
+            holder.lblLote =  convertView.findViewById(R.id.lblIdTramo);
+            holder.lblFecha = convertView.findViewById(R.id.textView102);
+            holder.lblCant =  convertView.findViewById(R.id.lblEstadoDetalle);
+            holder.lblEst =   convertView.findViewById(R.id.textView121);
 
             convertView.setTag(holder);
 
@@ -70,6 +71,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
         holder.lblLote.setText("Lote : "+items.get(position).lote);
         holder.lblFecha.setText("Vence : "+fechaCorta(items.get(position).fecha));
         holder.lblCant.setText(items.get(position).disp+" / "+items.get(position).cant+" "+items.get(position).presentacion);
+        holder.lblEst.setText(""+items.get(position).estado);
 
         if (selectedIndex != -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -81,7 +83,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblLote, lblFecha, lblCant;
+        TextView lblLote, lblFecha, lblCant, lblEst;
     }
 
     private String fechaCorta(String fecha) {

@@ -28,6 +28,7 @@ public class clsBeTrans_packing_enc_bulto {
     @Element(required=false) public String CodigoProducto;
     @Element(required=false) public String ProductoPresentacion="";
     @Element(required=false) public String ProductoUnidadMedida="";
+    @Element(required=false) public String ProductoEstado="";
 
     @Element(required=false) public int bandera;
 

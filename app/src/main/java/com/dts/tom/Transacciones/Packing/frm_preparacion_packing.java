@@ -351,7 +351,7 @@ public class frm_preparacion_packing extends PBase {
             item.Idpickingenc=p.IdPickingEnc;
             item.IdDespachoEnc=0;
             item.Idproductobodega=p.IdProductoBodega;
-            item.Idproductoestado=0;
+            item.Idproductoestado=p.IdProductoEstado;
             item.Idpresentacion=p.IdPresentacion;
             item.Idunidadmedida=p.IdUnidadMedida;
             item.Lote=p.Lote;
