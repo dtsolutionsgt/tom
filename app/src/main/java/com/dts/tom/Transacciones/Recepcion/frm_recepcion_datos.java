@@ -1615,14 +1615,14 @@ public class frm_recepcion_datos extends PBase {
 
             }else {
 
-                //GT 08092021 1730: Si hay un parametro A del bof y no se ha validado
+                //GT 08092021 1730: Si hay un parametro A del bof y la funcion nos dice si estan correctos o no
                 if (mostrar_parametros_producto && !Parametros_Obligatorios_Ingresados() ){
 
                     MensajeParam= "¿El atributo tiene el valor por defecto o, no asigno ningúno, desea continuar?";
                     msgGuardarsinParametros(MensajeParam);
 
 
-                    //GT 08092021 1730: Si hay un parametro personalizado y no se ha validado, pregunta
+                    //GT 08092021 1730: Si hay un parametro personalizado, la funcion nos dice si se setearon correctamente.
                 }else if(Pperzonalizados && !Validar_Parametros_personalizados() ){
 
                     MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
