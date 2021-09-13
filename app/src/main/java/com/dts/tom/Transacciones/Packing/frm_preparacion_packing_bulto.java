@@ -373,13 +373,14 @@ public class frm_preparacion_packing_bulto extends PBase {
     private void newItem() {
         if (gl.paPickUbicId==-1) return;
 
-        txtLinea.setText(""+gl.paLinea);
+        txtLinea.setText(""+gl.paLinea);focusLP();
 
         try {
             selpick=cargaPickUbic();
             newid=getNewID()+1;
 
             addItem(selpick);
+            focusLP();
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -713,6 +714,7 @@ public class frm_preparacion_packing_bulto extends PBase {
         Runnable mrunner=new Runnable() {
             @Override
             public void run() {
+                txtLP.selectAll();
                 txtLP.requestFocus();
             }
         };
@@ -855,7 +857,7 @@ public class frm_preparacion_packing_bulto extends PBase {
     protected void onResume() {
         try {
             super.onResume();
-            txtLP.requestFocus();
+            focusLP();
 
             if (browse==1) {
                 browse=0;

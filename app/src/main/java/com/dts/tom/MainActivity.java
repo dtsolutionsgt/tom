@@ -588,8 +588,8 @@ public class MainActivity extends PBase {
     }
 
     private void Licencia_Valida() {
-        try{
-        }catch (Exception e){
+        try {
+        } catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
         }
     }
@@ -615,8 +615,8 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             String ss=e.getMessage();
         }
-
         */
+
 
         try{
 
@@ -647,22 +647,22 @@ public class MainActivity extends PBase {
                                         stream(impres)
                                                 .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                            if (BeImpresora.size()>0) {
-                                gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
-                                    progress.cancel();
-                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                if (BeImpresora.size()>0) {
+                                    gl.gImpresora = BeImpresora;
+                                    if (gl.gImpresora.get(0).Direccion_Ip =="") {
+                                        progress.cancel();
+                                        mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                    } else {
+                                        //#CKFK 20201021 Agregué este else para agregar_marcaje
+                                        //execws(7);
+                                        //#EJC20210504> Validar resolucion LP antes de ingresar.
+                                        execws(9);
+                                    }
                                 } else {
-                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
-                                    //execws(7);
-                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
+                                    progress.cancel();
+                                    //CKFK 20201021 Cambié mensaje para que sea un si o no
+                                    msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
                                 }
-                            } else  {
-                                progress.cancel();
-                                //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
-                            }
                             } else {
                                 progress.cancel();
                                 mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
@@ -676,11 +676,11 @@ public class MainActivity extends PBase {
                         progress.cancel();
                         mu.msgbox("No se ha seleccionado un operador válido");
                     }
-                }else {
+                } else {
                     progress.cancel();
                     mu.msgbox("No se ha seleccionado una bodega válida");
                 }
-            }else  {
+            } else  {
                 progress.cancel();
                 mu.msgbox("No se ha seleccionado una empresa válida");
             }

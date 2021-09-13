@@ -109,7 +109,7 @@ public class appGlobals extends Application {
 
     //Variables para packing
     public int modo_packing, paPickUbicId,paCant,paCamas, paLinea;
-    public String paCodigo,paNombre,paBulto,filtroprod,paLote,paFecha,paPres;
+    public String paCodigo,paNombre,paBulto,filtroprod,paLote,paEstado;
     public ArrayList<clsBeTrans_packing_lotes> packlotes = new ArrayList<clsBeTrans_packing_lotes>();
 
     //variable para row seleccionado del inventario ciclico

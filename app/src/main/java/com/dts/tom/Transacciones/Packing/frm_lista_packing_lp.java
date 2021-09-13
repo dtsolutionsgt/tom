@@ -64,6 +64,7 @@ public class frm_lista_packing_lp extends PBase {
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_packing_lotes sitem = (clsBeTrans_packing_lotes) lvObj;
                     gl.paBulto=sitem.lote;
+                    gl.paEstado=sitem.estado;
 
                     if (sitem.lote.isEmpty()) {
                         msgbox("No se pueden adicionar productos sin licencia al empaque por tarima");
