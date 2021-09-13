@@ -1692,12 +1692,11 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            //#GT 18082021: no se que hace esto!
+            //#GT 18082021: no se si va aca, pero al ejecutarse, pide una nueva LP!
 //            if (BeProducto.getControl_peso()){
 //                Peso_Correcto();
 //            }
 
-            Peso_Correcto();
 
         }catch (Exception e){
             mu.msgbox("GuardarParamaetros: "+ e.getMessage());
@@ -2200,7 +2199,9 @@ public class frm_recepcion_datos extends PBase {
 
             if(BeProducto.IdPerfilSerializado == 2){
 
-                ObjNS.NoSerie = "";
+                //#GT 13092021 1109: el perfil 2 es igual a solo 1 serial, no una serie?
+                //ObjNS.NoSerie = "";
+                ObjNS.NoSerie = txtSerial.getText().toString();
                 ObjNS.NoSerieInicial = txtSerieIni.getText().toString();
                 ObjNS.NoSerieFinal = txtSerieFin.getText().toString();
                 ObjNS.User_agr = gl.IdOperador+"";
@@ -2379,8 +2380,9 @@ public class frm_recepcion_datos extends PBase {
 
     public boolean Parametros_Obligatorios_Ingresados() {
 
-        try{
+        try {
 
+            //Valida_Peso();
 
 
         }catch (Exception e){
@@ -3874,6 +3876,11 @@ public class frm_recepcion_datos extends PBase {
                 //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
                 BeStock_rec.IdPropietarioBodega =pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 BeStock_rec.IdProductoBodega = BeProducto.IdProductoBodega;
+                //#GT 13092021 Se añade el serial a la clase Stock_rec si el producto tiene parametro
+                if (mostrar_parametros_producto)
+                 {
+                    BeStock_rec.Serial = txtSerial.getText().toString();
+                }
                 BeStock_rec.IsNew = true;
 
                 if (IdPreseSelect>0){
