@@ -578,6 +578,9 @@ public class MainActivity extends PBase {
                 case 10:
                     processLicencia();
                     break;
+                case 11:
+                    processServidor();
+                    break;
             }
 
             progress.cancel();
@@ -668,7 +671,9 @@ public class MainActivity extends PBase {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
                                     //execws(7);
                                     //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
+                                    //execws(9);
+                                    //#CKFK 20210914 Validar licencia antes de ingresar.Método loginHH
+                                    execws(10);
                                 }
                             } else  {
                                 progress.cancel();
@@ -975,23 +980,40 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processLicencia() {
+    private boolean processLicencia() {
+        boolean rslt=false;
         try {
-            CryptUtil cu = new CryptUtil();
-            Cursor dt;
-            String lic, lickey;
-            Integer msgLic = 0;
 
-            lickey = cu.encrypt(gl.deviceId);
+            Integer msgLic = 0;
 
             msgLic =(Integer) xobj.getSingle("loginHandHeldResult",Integer.class);
 
-            if (msgLic !=null){
-                //#EJC20210504: Registra ingreso y carga menú principal.
-                execws(7);
-            }else{
-                msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
+            if (msgLic == 0){
+                msgbox("Licencia inactiva");
+                rslt= false;
+            }else if (msgLic < 0){
+                //Llama al método nombreServidorLicencias
+               execws(11);
+               rslt= false;
+            } else{
+                rslt= true;
+                //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
+                execws(9);
             }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return rslt;
+    }
+
+    private void processServidor() {
+        String servidor="";
+        try {
+
+            servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
+            msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -1246,6 +1268,9 @@ public class MainActivity extends PBase {
                         callMethod("loginHandHeld",
                                 "idHandHeld",gl.deviceId,
                                 "nombreHanHeld",gl.devicename);
+                        break;
+                    case 11:
+                        callMethod("nombreServidorLicencias");
                         break;
                 }
             } catch (Exception e)  {
