@@ -44,6 +44,7 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.dts.tom.util.CryptUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -135,6 +136,7 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
                 setHandlers();
                 gl.deviceId =androidid();
+                gl.devicename = getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
@@ -573,6 +575,9 @@ public class MainActivity extends PBase {
                 case 9:
                     processResolucionLP();
                     break;
+                case 10:
+                    processLicencia();
+                    break;
             }
 
             progress.cancel();
@@ -585,13 +590,6 @@ public class MainActivity extends PBase {
 
     private void ejecuta(){
         startActivity(new Intent(this,Mainmenu.class));
-    }
-
-    private void Licencia_Valida() {
-        try{
-        }catch (Exception e){
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
-        }
     }
 
     private void Valida_Ingreso() {
@@ -632,10 +630,6 @@ public class MainActivity extends PBase {
         }
 
          */
-
-
-
-
         try{
 
             if (gl.IdEmpresa>0) {
@@ -981,6 +975,28 @@ public class MainActivity extends PBase {
         }
     }
 
+    private void processLicencia() {
+        try {
+            CryptUtil cu = new CryptUtil();
+            Cursor dt;
+            String lic, lickey;
+            Integer msgLic = 0;
+
+            lickey = cu.encrypt(gl.deviceId);
+
+            msgLic =(Integer) xobj.getSingle("loginHandHeldResult",Integer.class);
+
+            if (msgLic !=null){
+                //#EJC20210504: Registra ingreso y carga menú principal.
+                execws(7);
+            }else{
+                msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
     //endregion
 
     //region Spinners
@@ -1225,6 +1241,11 @@ public class MainActivity extends PBase {
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
                                 "pIdOperador",gl.IdOperador,
                                 "pIdBodega",gl.IdBodega);
+                        break;
+                    case 10:
+                        callMethod("loginHandHeld",
+                                "idHandHeld",gl.deviceId,
+                                "nombreHanHeld",gl.devicename);
                         break;
                 }
             } catch (Exception e)  {

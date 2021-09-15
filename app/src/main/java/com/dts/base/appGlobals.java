@@ -138,7 +138,7 @@ public class appGlobals extends Application {
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
     public int gCantDecDespliegue=0;
     public int gCantDecCalculo=0;
-    public String deviceId="";
+    public String deviceId="", devicename="";
     public int mode=0;
     public boolean bloquear_lp_hh = false;
     public int IdResolucionLpOperador=0;
