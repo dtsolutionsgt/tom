@@ -2459,7 +2459,8 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso tipo Orden de producción (6)
+                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso
+                            // tipo Orden de producción (6)
                             clsBeTrans_oc_det_loteList vence;
                             vence=gl.gBeOrdenCompra.DetalleLotes;
 
