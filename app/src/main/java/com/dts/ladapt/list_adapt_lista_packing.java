@@ -68,10 +68,11 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl7 = convertView.findViewById(R.id.lbl7);
             holder.lbl8 = convertView.findViewById(R.id.lbl8);
             holder.lbl9 = convertView.findViewById(R.id.lbl9);
+            holder.lbl10 = convertView.findViewById(R.id.lbl10);
 
             convertView.setTag(holder);
 
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -86,6 +87,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl7.setText(" ");
             holder.lbl8.setText(" ");
             holder.lbl9.setText(" ");
+            holder.lbl10.setText(" ");
 
             try {
                 ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");
@@ -107,7 +109,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl6.setText(""+ items.get(position).ProductoUnidadMedida);
             holder.lbl8.setText(""+ ss);
             holder.lbl9.setText(""+ items.get(position).Lote);
-
+            holder.lbl10.setText(""+ items.get(position).ProductoEstado);
 
         }
 
@@ -126,7 +128,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lbl1,lbl2,lbl3,lbl4, lbl5,lbl6,lbl7,lbl8,lbl9;
+        TextView lbl1,lbl2,lbl3,lbl4, lbl5,lbl6,lbl7,lbl8,lbl9,lbl10;
     }
 
 }

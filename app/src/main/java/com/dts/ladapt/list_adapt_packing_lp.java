@@ -66,7 +66,7 @@ public class list_adapt_packing_lp extends BaseAdapter {
         }
 
         holder.lblProd.setText(items.get(position).presentacion);
-        holder.lblLP.setText("LP : "+items.get(position).lote);
+        holder.lblLP.setText("LP : "+items.get(position).lote+" - "+items.get(position).estado);
 
         if (selectedIndex != -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));

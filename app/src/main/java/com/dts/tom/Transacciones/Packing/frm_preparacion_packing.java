@@ -195,10 +195,8 @@ public class frm_preparacion_packing extends PBase {
 
     private void listItems() {
         clsBeTrans_packing_enc item;
-        int pp;
 
         try {
-
             if (items.size()>1) Collections.sort(items,new OrdenarPorLinea());
 
             item_list.clear();
@@ -213,9 +211,11 @@ public class frm_preparacion_packing extends PBase {
                 item.nom_prod=nombreProducto(item.Idproductobodega);
                 item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
                 item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
+                item.ProductoEstado=estadoProducto(item.Idproductoestado);
 
                 item_list.add(item);
             }
+
 
             adapter=new list_adapt_lista_packing(this,item_list);
             listView.setAdapter(adapter);
@@ -245,7 +245,7 @@ public class frm_preparacion_packing extends PBase {
             pendientes=0;
         }
         lblPend.setText("Pendiente : "+pendientes);
-        txtLP.setText("");txtLP.requestFocus();
+        txtLP.setText("");focusLP();
     }
 
     private void processListUbic(){
@@ -297,10 +297,11 @@ public class frm_preparacion_packing extends PBase {
 
                 clsBeTrans_packing_enc itm=savedList.items.get(i);
 
-                itm.nom_prod="nom_prod";;
-                itm.CodigoProducto="CodigoProducto";
-                itm.ProductoPresentacion="ProductoPresentacion";
-                itm.ProductoUnidadMedida="ProductoUnidadMedida";
+                itm.CodigoProducto=codigoProducto(itm.Idproductobodega);
+                itm.nom_prod=nombreProducto(itm.Idproductobodega);
+                itm.ProductoPresentacion=productoPresentacion(itm.Idpresentacion);
+                itm.ProductoUnidadMedida=productoUnidadMedida(itm.Idunidadmedida);
+                itm.ProductoEstado=estadoProducto(itm.Idproductoestado);
 
                 items.add(itm);
             }
@@ -351,12 +352,12 @@ public class frm_preparacion_packing extends PBase {
             item.Idpickingenc=p.IdPickingEnc;
             item.IdDespachoEnc=0;
             item.Idproductobodega=p.IdProductoBodega;
-            item.Idproductoestado=0;
+            item.Idproductoestado=p.IdProductoEstado;
             item.Idpresentacion=p.IdPresentacion;
             item.Idunidadmedida=p.IdUnidadMedida;
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
-            item.Lic_plate=p.Lic_plate;sellp=p.Lic_plate;
+            item.Lic_plate=""+p.Lic_plate;sellp=p.Lic_plate;
             item.No_linea=lin;
             item.Cantidad_bultos_packing=p.Cantidad_Recibida;
             item.Cantidad_camas_packing=1;
@@ -369,8 +370,11 @@ public class frm_preparacion_packing extends PBase {
             item.CodigoProducto=p.CodigoProducto;
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
+            item.ProductoEstado=p.ProductoEstado;
 
             items.add(item);
+
+            txtLP.setText("");
 
             listItems();
         } catch (Exception e) {
@@ -380,7 +384,8 @@ public class frm_preparacion_packing extends PBase {
 
     private void delItem() {
         for (int i = 0; i <items.size(); i++) {
-            if (items.get(i).Lic_plate.equalsIgnoreCase(sellp)) {
+            if (items.get(i).Lic_plate.equalsIgnoreCase(selitem.Lic_plate)
+                & items.get(i).ProductoEstado.equalsIgnoreCase(selitem.ProductoEstado)) {
                 items.remove(i);
                 listItems();return;
             }
@@ -388,8 +393,9 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void GetFila() {
+        clsBeTrans_packing_enc it;
         String ss;
-        int pos=-1;
+        boolean exist,flag=false;
 
         if (pick==null) return;
 
@@ -399,31 +405,23 @@ public class frm_preparacion_packing extends PBase {
 
             for (int i = 0; i <pick.items.size(); i++) {
                if (pick.items.get(i).Lic_plate.equalsIgnoreCase(ss)) {
-                   pos=i;break;
-               }
+                   exist=false;selidx=i;flag=true;
+
+                   for (int j = 0; j <items.size(); j++) {
+                       it=items.get(j);
+                       if (it.Lic_plate.equalsIgnoreCase(ss) & it.Idproductoestado==pick.items.get(i).IdProductoEstado) {
+                           exist=true;break;
+                       }
+                   }
+
+                   if (!exist) addItem();
+                }
             }
 
-            if (pos==-1) {
+            if (!flag) {
                 txtLP.selectAll();focusLP();
-                msgAskLista("La licensia no existe.\n¿Mostrar la lista?");
+                msgAskLista("La licensia no existe.\n¿Mostrar la lista?");focusLP();
                 return;
-            }
-
-            selidx=-1;
-            for (int i = 0; i <items.size(); i++) {
-                if (items.get(i).Lic_plate.equalsIgnoreCase(ss)) {
-                    selidx=i;break;
-                }
-            }
-
-            if (selidx==-1) {
-                selidx=pos;
-                addItem();
-            } else {
-                if (selidx>-1) {
-                    sellp=ss;toast("Registro agregado anteriormente");
-                    listItems();
-                }
             }
 
             focusLP();
@@ -493,6 +491,7 @@ public class frm_preparacion_packing extends PBase {
 
                     item.presentacion = pick.items.get(i).CodigoProducto+" - "+pick.items.get(i).NombreProducto;
                     item.lote = pick.items.get(i).Lic_plate;
+                    item.estado=estadoProducto(pick.items.get(i).IdProductoEstado);
 
                     flag=false;
                     if (prid.isEmpty()) {
@@ -506,7 +505,8 @@ public class frm_preparacion_packing extends PBase {
                     if (flag) {
                         if (items.size()>0) {
                             for (int j = 0; j <items.size(); j++) {
-                                if (items.get(j).Lic_plate.equalsIgnoreCase(item.lote)) {
+                                if (items.get(j).Lic_plate.equalsIgnoreCase(item.lote)
+                                    & items.get(j).ProductoEstado.equalsIgnoreCase(item.estado)) {
                                     flag=false;break;
                                 }
                             }
@@ -523,9 +523,17 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void agregaLP() {
+        focusLP();
         if (gl.paBulto.isEmpty()) return;
-        txtLP.setText(gl.paBulto);
-        GetFila();
+
+        for (int i = 0; i <pick.items.size(); i++) {
+            if (pick.items.get(i).Lic_plate.equalsIgnoreCase(gl.paBulto)
+            & pick.items.get(i).ProductoEstado.equalsIgnoreCase(gl.paEstado)) {
+                selidx=i;
+                addItem();
+                return;
+            }
+        }
     }
 
     //endregion
@@ -654,6 +662,15 @@ public class frm_preparacion_packing extends PBase {
         return "";
     }
 
+    private String estadoProducto(int id) {
+        for (int j = 0; j <pick.items.size(); j++) {
+            if (pick.items.get(j).IdProductoEstado==id) {
+                return pick.items.get(j).ProductoEstado;
+            }
+        }
+        return "";
+    }
+
     //endregion
 
     //region Dialogs
@@ -745,7 +762,6 @@ public class frm_preparacion_packing extends PBase {
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
 
     private void msgAskLista(String msg) {
