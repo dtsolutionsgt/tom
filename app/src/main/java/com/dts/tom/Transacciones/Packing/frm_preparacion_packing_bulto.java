@@ -505,7 +505,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                     item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
 
                     if (item.disp>0) {
-                        if (item.disp!=item.cant)  gl.packlotes.add(item);
+                        if (item.disp!=item.cant)  gl.packlotes.add(item); // JP20210922
                     }
                 }
             }
