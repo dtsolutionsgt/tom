@@ -1094,6 +1094,7 @@ public class frm_recepcion_datos extends PBase {
 
 
                 });
+                //GT 21092021 valida que, exista un peso real y estadistico unitario asignado desde el bof
                 Valida_Peso();
 
             }else {
@@ -2458,7 +2459,8 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso tipo Orden de producción (6)
+                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso
+                            // tipo Orden de producción (6)
                             clsBeTrans_oc_det_loteList vence;
                             vence=gl.gBeOrdenCompra.DetalleLotes;
 
@@ -3880,8 +3882,12 @@ public class frm_recepcion_datos extends PBase {
                 if (mostrar_parametros_producto)
                  {
                     BeStock_rec.Serial = txtSerial.getText().toString();
+                    //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
+                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
                 }
                 BeStock_rec.IsNew = true;
+
 
                 if (IdPreseSelect>0){
                     BeStock_rec.Presentacion = new clsBeProducto_Presentacion();
