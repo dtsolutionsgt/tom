@@ -97,7 +97,8 @@ public class frm_recepcion_datos extends PBase {
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
     private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
-    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion;
+    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit;
+    private TextView lblFecIngreso;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
     private ProgressDialog progress;
@@ -140,6 +141,7 @@ public class frm_recepcion_datos extends PBase {
     private XMLObject xobj;
 
     private boolean Mostro_Propiedades,Escaneo_Pallet;
+    private boolean mostrar_parametros_producto;
     private boolean Mostrar_Propiedades_Parametros = false;
     private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
@@ -829,7 +831,7 @@ public class frm_recepcion_datos extends PBase {
 
         int vIndiceParam = -1;
         double vCant;
-        boolean mostrar_parametros_producto = false;
+        mostrar_parametros_producto = false;
 
         try{
 
@@ -974,34 +976,70 @@ public class frm_recepcion_datos extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_parametros1);
 
+            //#GT 03092021
+
+            clsBeProducto_Presentacion bePresentacion= new clsBeProducto_Presentacion();
+
+            /********* encabezado de la forma           ****************************/
             TextView lblPrducto = dialog.findViewById(R.id.lblTituloForma);
-            lblSerialP = dialog.findViewById(R.id.textView7);
-            TextView lblLicPlate = dialog.findViewById(R.id.textView5);
-            TextView lblFManufact = dialog.findViewById(R.id.textView77);
-            TextView lblAnada = dialog.findViewById(R.id.label1);
+
+            /********  labels e inputs de tipo Parametros A  ***********************/
+
+            lblParametrosA = dialog.findViewById(R.id.lblPropPrd2);
+            lblParametrosA.setText("Parametros A");
+
+            //parametro licence plate
+            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
+            txtLicPlate = dialog.findViewById(R.id.txtLicPlate);
+
+            //parametro captura serial
+            lblSerieTit = dialog.findViewById(R.id.lblSerieTit);
+            lblSerialP = dialog.findViewById(R.id.lblSerial);
+            txtSerial = dialog.findViewById(R.id.txtSerial);
+
+
+            //parametro captura añada
+            TextView lblAnada = dialog.findViewById(R.id.lblAnada);
+            txtAnada = dialog.findViewById(R.id.txtAnada);
+
+            //parametro fecha manufactura
+            TextView lblFManufact = dialog.findViewById(R.id.lblFechaManu);
+            txtFechaManu = dialog.findViewById(R.id.txtFechaManu);
+
+            EditText txtFechaIng = dialog.findViewById(R.id.txtFechaIng);
+            lblFecIngreso = dialog.findViewById(R.id.lblFecIngreso);
+
+            /**************************************************************************/
+
+            //labels e inputs de temperatura
+            lblTempTit = dialog.findViewById(R.id.lblTempTit);
             lblTempEsta = dialog.findViewById(R.id.textView8);
+            txtTempEsta = dialog.findViewById(R.id.txtTempEsta);
             lblTempReal = dialog.findViewById(R.id.textView91);
+            txtTempReal = dialog.findViewById(R.id.txtTempReal);
+
+            //labels e inputs de peso
+            lblPesoTit = dialog.findViewById(R.id.lblPesoTit);
             lblPresParam = dialog.findViewById(R.id.textView92);
             lblPesoEsta = dialog.findViewById(R.id.textView93);
             lblPesoReal = dialog.findViewById(R.id.textView94);
-            lblSerialIni = dialog.findViewById(R.id.textView95);
-            lblSerialFin = dialog.findViewById(R.id.textView96);
-            lblTempTit = dialog.findViewById(R.id.lblTempTit);
-            lblPesoTit = dialog.findViewById(R.id.lblPesoTit);
-            //Objeto para dialogo de parametros
-
-            txtLicPlate = dialog.findViewById(R.id.txtLicPlate);
-            txtSerial = dialog.findViewById(R.id.txtSerial);
-            txtAnada = dialog.findViewById(R.id.txtAnada);
-            txtFechaManu = dialog.findViewById(R.id.txtFechaManu);
-            EditText txtFechaIng = dialog.findViewById(R.id.txtFechaIng);
-            txtTempEsta = dialog.findViewById(R.id.txtTempEsta);
-            txtTempReal = dialog.findViewById(R.id.txtTempReal);
             txtPesoEsta = dialog.findViewById(R.id.txtPesoEsta);
             txtPesoReal = dialog.findViewById(R.id.txtPesoReal);
+            cmbPresParams = dialog.findViewById(R.id.cmbPresParams);
+
+            //labels e inputs serie rango
+            lblSerialIni = dialog.findViewById(R.id.textView95);
+            lblSerialFin = dialog.findViewById(R.id.textView96);
             txtSerieIni = dialog.findViewById(R.id.txtSerieIni);
             txtSerieFin = dialog.findViewById(R.id.txtSerieFin);
 
+
+            /***************************************************************************************/
+            /**************************** set de los inputs ****************************************/
+
+            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+
+            //Objeto para dialogo de parametros
             txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtTempReal.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -1011,29 +1049,88 @@ public class frm_recepcion_datos extends PBase {
             txtPesoEsta.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoEsta.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
-            cmbPresParams = dialog.findViewById(R.id.cmbPresParams);
 
-            cmbPresParams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /********************** validar que mostrar y que ocultar  ****************************/
 
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
 
-                    TextView spinlabel = (TextView) parentView.getChildAt(0);
-                    spinlabel.setTextColor(Color.BLACK);
-                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
-                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+                lblFManufact.setVisibility(View.VISIBLE);
+                txtFechaManu.setVisibility(View.VISIBLE);
 
-                    IdPreseSelectParam=BeProducto.Presentaciones.items.get(position).IdPresentacion;
+            }else {
+                lblFManufact.setVisibility(View.GONE);
+                txtFechaManu.setVisibility(View.GONE);
+            }
 
-                }
+            if (BeProducto.Capturar_aniada){
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
+                txtAnada.setText("0");
+                lblAnada.setVisibility(View.VISIBLE);
+                txtAnada.setVisibility(View.VISIBLE);
+
+            } else {
+                lblAnada.setVisibility(View.GONE);
+                txtAnada.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Peso_recepcion){
+
+                cmbPresParams.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                        TextView spinlabel = (TextView) parentView.getChildAt(0);
+                        spinlabel.setTextColor(Color.BLACK);
+                        spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                        IdPreseSelectParam=BeProducto.Presentaciones.items.get(position).IdPresentacion;
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
 
 
-            });
+                });
+                //GT 21092021 valida que, exista un peso real y estadistico unitario asignado desde el bof
+                Valida_Peso();
 
-            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+            }else {
+                lblPresParam.setVisibility(View.GONE);
+                cmbPresParams.setVisibility(View.GONE);
+                lblPesoTit.setVisibility(View.GONE);
+                lblPesoEsta.setVisibility(View.GONE);
+                txtPesoEsta.setVisibility(View.GONE);
+                lblPesoReal.setVisibility(View.GONE);
+                txtPesoReal.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Serializado){
+                Valida_Perfil_Serializado();
+            }else {
+                lblSerieTit.setVisibility(View.GONE);
+                lblSerialP.setVisibility(View.GONE);
+                txtSerial.setVisibility(View.GONE);
+                lblSerialIni.setVisibility(View.GONE);
+                txtSerieIni.setVisibility(View.GONE);
+                lblSerialFin.setVisibility(View.GONE);
+                txtSerieFin.setVisibility(View.GONE);
+            }
+
+            if (BeProducto.Temperatura_recepcion){
+                //Valida_Temperatura();
+                //GT 08092021 1609: Se elimino la funcion porque no contenia nada distinto a lo que esta en esta validación
+                txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia,  gl.gCantDecCalculo)+"");
+            }else{
+                lblTempTit.setVisibility(View.GONE);
+                lblTempEsta.setVisibility(View.GONE);
+                lblTempReal.setVisibility(View.GONE);
+                txtTempEsta.setVisibility(View.GONE);
+                txtTempReal.setVisibility(View.GONE);
+            }
+
 
             if (pListBeStockRec!=null){
                 if (pListBeStockRec.items!=null){
@@ -1044,8 +1141,6 @@ public class frm_recepcion_datos extends PBase {
 
             IndexPresentacion = IndexPresSelected;
 
-              clsBeProducto_Presentacion bePresentacion= new clsBeProducto_Presentacion();
-
             if (IndexPresentacion!= -1){
                 bePresentacion = BeProducto.Presentaciones.items.get(IndexPresentacion);
             }
@@ -1054,7 +1149,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if((bePresentacion.EsPallet||chkPaletizar.isChecked())&&
                         (bePresentacion.CamasPorTarima ==0|| bePresentacion.CajasPorCama==0)){
-                   // mu.msgbox("La presentación no tiene los valores necesarios para recepcionar pallets");
+
                     txtLicPlate.setFocusable(false);
                     txtLicPlate.setFocusableInTouchMode(false);
                     txtLicPlate.setClickable(false);
@@ -1126,34 +1221,10 @@ public class frm_recepcion_datos extends PBase {
                 txtLicPlate.setVisibility(View.GONE);
             }
 
-            if (BeProducto.Fechamanufactura && BeProducto.Materia_prima){
-                lblFManufact.setVisibility(View.VISIBLE);
-                txtFechaManu.setVisibility(View.VISIBLE);
 
-            }else{
-                lblFManufact.setVisibility(View.GONE);
-                txtFechaManu.setVisibility(View.GONE);
-            }
 
-            txtAnada.setText("0");
-
-            if (!BeProducto.Capturar_aniada){
-                lblAnada.setVisibility(View.GONE);
-                txtAnada.setVisibility(View.GONE);
-            }else{
-                lblAnada.setVisibility(View.VISIBLE);
-                txtAnada.setVisibility(View.VISIBLE);
-            }
-
-            //ValidaPeso
-            Valida_Peso();
-
-            //ValidaTemperatura
-            Valida_Temperatura();
-
-            Valida_Perfil_Serializado();
-
-            Carga_Parametros_Personalizados();
+            //GT 02092021 esto ya se hizo al cargar la recepción en una validación para mostrar o no.
+            //Carga_Parametros_Personalizados();
 
             final Calendar c = Calendar.getInstance();
             year = c.get(Calendar.YEAR);
@@ -1164,6 +1235,11 @@ public class frm_recepcion_datos extends PBase {
                     // Month is 0 based, just add 1
                     .append(day).append("-").append(month).append("-")
                     .append(year).append(" "));
+
+            //GT 08092021: se oculta el campo de la fecha
+
+            txtFechaIng.setVisibility(View.GONE);
+            lblFecIngreso.setVisibility(View.GONE);
 
             if  (pIndexStock>=0){
 
@@ -1196,7 +1272,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if (BeProducto.Temperatura_recepcion){
-                txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura,  gl.gCantDecCalculo)+"");
+                    txtTempReal.setText(mu.round(pListBeStockRec.items.get(pIndexStock).Temperatura,  gl.gCantDecCalculo)+"");
                 }
 
             }
@@ -1205,11 +1281,8 @@ public class frm_recepcion_datos extends PBase {
             Button btnBack = dialog.findViewById(R.id.btnBack);
 
             btnIr.setOnClickListener(v -> BotonIrGuardarParametros());
-
             btnBack.setOnClickListener(v -> SalirPantallaParametros());
-
             dialog.show();
-
             mu.msgbox(MensajeParam);
 
         }catch (Exception e){
@@ -1444,7 +1517,6 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (BeProducto.Serializado){
                 switch (BeProducto.IdPerfilSerializado){
 
                     case 1:
@@ -1456,12 +1528,19 @@ public class frm_recepcion_datos extends PBase {
                         txtSerieFin.setVisibility(View.GONE);
                         break;
                     case 2:
-                        lblSerialP.setVisibility(View.GONE);
-                        txtSerial.setVisibility(View.GONE);
+                        //lblSerialP.setVisibility(View.GONE);
+                        //txtSerial.setVisibility(View.GONE);
+                        lblSerieTit.setVisibility(View.GONE);
+                        lblSerialIni.setVisibility(View.GONE);
+                        txtSerieIni.setVisibility(View.GONE);
+                        lblSerialFin.setVisibility(View.GONE);
+                        txtSerieFin.setVisibility(View.GONE);
+
                         break;
                     case 3:
                         txtSerial.setText(BeProducto.Noserie);
                     default:
+                        lblSerieTit.setVisibility(View.GONE);
                         lblSerialP.setVisibility(View.GONE);
                         txtSerial.setVisibility(View.GONE);
                         lblSerialIni.setVisibility(View.GONE);
@@ -1470,43 +1549,16 @@ public class frm_recepcion_datos extends PBase {
                         txtSerieFin.setVisibility(View.GONE);
                         break;
                 }
-            }else{
-                lblSerialP.setVisibility(View.GONE);
-                txtSerial.setVisibility(View.GONE);
-                lblSerialIni.setVisibility(View.GONE);
-                txtSerieIni.setVisibility(View.GONE);
-                lblSerialFin.setVisibility(View.GONE);
-                txtSerieFin.setVisibility(View.GONE);
-            }
+
         }catch (Exception e){
             mu.msgbox("Valida_Perfil_Serializado"+e.getMessage());
         }
     }
 
-    private void Valida_Temperatura(){
-
-        try{
-
-            if (BeProducto.Temperatura_recepcion){
-                txtTempEsta.setText( mu.round(BeProducto.Temperatura_referencia,  gl.gCantDecCalculo)+"");
-            }else{
-                lblTempTit.setVisibility(View.GONE);
-                lblTempEsta.setVisibility(View.GONE);
-                lblTempReal.setVisibility(View.GONE);
-                txtTempEsta.setVisibility(View.GONE);
-                txtTempReal.setVisibility(View.GONE);
-            }
-
-        }catch (Exception e){
-            mu.msgbox("Valida_Temperatura: "+e.getMessage());
-        }
-    }
 
     private void Valida_Peso(){
 
         try{
-
-            if (BeProducto.Peso_recepcion){
 
                 txtPesoEsta.setText(mu.round(BeProducto.Peso_referencia,  gl.gCantDecCalculo)+"");
 
@@ -1542,16 +1594,6 @@ public class frm_recepcion_datos extends PBase {
                     cmbPresParams.setSelection(IndexPresentacion);
                 }
 
-            }else{
-                lblPresParam.setVisibility(View.GONE);
-                cmbPresParams.setVisibility(View.GONE);
-                lblPesoTit.setVisibility(View.GONE);
-                lblPesoEsta.setVisibility(View.GONE);
-                txtPesoEsta.setVisibility(View.GONE);
-                lblPesoReal.setVisibility(View.GONE);
-                txtPesoReal.setVisibility(View.GONE);
-            }
-
         }catch (Exception e){
             mu.msgbox("Valida Peso: "+e.getMessage());
         }
@@ -1560,7 +1602,6 @@ public class frm_recepcion_datos extends PBase {
 
     private void GuardarParametros(){
 
-        boolean Parametros_Ingresados;
         MensajeParam="";
         plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
         ArrayList<clsBeTrans_re_det_parametros> parametros_personalizados = new ArrayList<>();
@@ -1568,85 +1609,95 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            //#GT 18082021: Se devuelve false, porque aun no existe la validación de si se llenaron los parametros
-            //Parametros_Ingresados =Parametros_Obligatorios_Ingresados();
+            //GT 0809202101648: Pregunta si hay parametros A o personalizados del bof
+            if( !mostrar_parametros_producto && !Pperzonalizados){
 
-            Parametros_Ingresados = Validar_Parametros_personalizados();
+                Guardar_Recepcion_Nueva();
 
-            if (!Parametros_Ingresados){
+            }else {
 
-                MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
-                msgGuardarsinParametros(MensajeParam);
+                //GT 08092021 1730: Si hay un parametro A del bof y la funcion nos dice si estan correctos o no
+                if (mostrar_parametros_producto && !Parametros_Obligatorios_Ingresados() ){
 
-            }else{
+                    MensajeParam= "¿El atributo tiene el valor por defecto o, no asigno ningúno, desea continuar?";
+                    msgGuardarsinParametros(MensajeParam);
 
-                parametros_personalizados.clear();
 
-                if (pListBEProductoParametro!=null){
+                    //GT 08092021 1730: Si hay un parametro personalizado, la funcion nos dice si se setearon correctamente.
+                }else if(Pperzonalizados && !Validar_Parametros_personalizados() ){
 
-                    if (pListBEProductoParametro.items!=null){
+                    MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
+                    msgGuardarsinParametros(MensajeParam);
 
-                        for (clsBeProducto_parametros obj: pListBEProductoParametro.items){
+                }else {
 
-                            clsBeTrans_re_det_parametros ObjDP = new clsBeTrans_re_det_parametros();
+                    parametros_personalizados.clear();
 
-                            ObjDP.IdRecepcionDet = pIdRecepcionDet;
-                            ObjDP.IdProductoParametro = obj.IdProductoParametro;
+                    //GT 08092021 1732: si hubiera parametro personalizado, se asocia a la clase correspondiente, sino la clase irá en null
+                    if (pListBEProductoParametro!=null){
 
-                            ObjDP.IdParametroDet = 0;
-                            ObjDP.IdRecepcionEnc = gl.gIdRecepcionEnc;
-                            ObjDP.ProductoParametro = obj;
-                            ObjDP.TipoParametro = obj.TipoParametro;
+                        if (pListBEProductoParametro.items!=null){
 
-                            //#GT 20082021 Validamos que parametro es el que debe llenarse para setearlo correctamente.
-                            if (tipo_parametro.equals("Texto")){
-                                ObjDP.Valor_texto = txtvalor_t.getText().toString();
-                            }
-                            if (tipo_parametro.equals("Númerico")){
-                                double valor = Double.parseDouble(txtvalor_n.getText().toString());
-                                ObjDP.Valor_numerico = valor;
-                            }
-                            if (tipo_parametro.equals("Fecha")){
+                            for (clsBeProducto_parametros obj: pListBEProductoParametro.items){
 
-                                //String la_fecha=  du.convierteFecha(txtvalor_f.getText().toString());
-                                //ObjDP.Valor_fecha = txtvalor_f.getText().toString();
-                                ObjDP.Valor_fecha = txtvalor_f.getText().toString();
-                            }
-                            if (tipo_parametro.equals("Lógico")){
-                                Boolean valor_cb = false;
-                                if (cb_valor_b.isChecked()){
-                                    valor_cb = true;
+                                clsBeTrans_re_det_parametros ObjDP = new clsBeTrans_re_det_parametros();
+
+                                ObjDP.IdRecepcionDet = pIdRecepcionDet;
+                                ObjDP.IdProductoParametro = obj.IdProductoParametro;
+
+                                ObjDP.IdParametroDet = 0;
+                                ObjDP.IdRecepcionEnc = gl.gIdRecepcionEnc;
+                                ObjDP.ProductoParametro = obj;
+                                ObjDP.TipoParametro = obj.TipoParametro;
+
+                                //#GT 20082021 Validamos que parametro es el que debe llenarse para setearlo correctamente.
+                                if (tipo_parametro.equals("Texto")){
+                                    ObjDP.Valor_texto = txtvalor_t.getText().toString();
                                 }
-                                ObjDP.Valor_logico = valor_cb;
+                                if (tipo_parametro.equals("Númerico")){
+                                    double valor = Double.parseDouble(txtvalor_n.getText().toString());
+                                    ObjDP.Valor_numerico = valor;
+                                }
+                                if (tipo_parametro.equals("Fecha")){
+                                    ObjDP.Valor_fecha = txtvalor_f.getText().toString();
+                                }
+                                if (tipo_parametro.equals("Lógico")){
+                                    Boolean valor_cb = false;
+                                    if (cb_valor_b.isChecked()){
+                                        valor_cb = true;
+                                    }
+                                    ObjDP.Valor_logico = valor_cb;
+                                }
+
+                                ObjDP.Valor_Unico = obj.Valor_Unico;
+                                ObjDP.User_agr = gl.IdOperador+"";
+                                ObjDP.Fec_agr = String.valueOf(du.getFechaActual());
+                                ObjDP.IsNew = true;
+
+                                if(gl.mode==1){
+                                    parametros_personalizados.add(ObjDP);
+                                }
+
                             }
 
-                            ObjDP.Valor_Unico = obj.Valor_Unico;
-                            ObjDP.User_agr = gl.IdOperador+"";
-                            ObjDP.Fec_agr = String.valueOf(du.getFechaActual());
-                            ObjDP.IsNew = true;
-
-                            if(gl.mode==1){
-
-                                parametros_personalizados.add(ObjDP);
-                                //plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                            if( parametros_personalizados.size() !=0 ){
+                                plistBeReDetParametros.items = stream(parametros_personalizados).toList();
+                                //Guardar_Recepcion_Nueva();
                             }
 
                         }
-
                     }
-                }
 
-                if(parametros_personalizados !=null){
-                    plistBeReDetParametros.items = stream(parametros_personalizados).toList();
                     Guardar_Recepcion_Nueva();
                 }
 
             }
 
-            //#GT 18082021: no se que hace esto!
+            //#GT 18082021: no se si va aca, pero al ejecutarse, pide una nueva LP!
 //            if (BeProducto.getControl_peso()){
 //                Peso_Correcto();
 //            }
+
 
         }catch (Exception e){
             mu.msgbox("GuardarParamaetros: "+ e.getMessage());
@@ -2149,7 +2200,9 @@ public class frm_recepcion_datos extends PBase {
 
             if(BeProducto.IdPerfilSerializado == 2){
 
-                ObjNS.NoSerie = "";
+                //#GT 13092021 1109: el perfil 2 es igual a solo 1 serial, no una serie?
+                //ObjNS.NoSerie = "";
+                ObjNS.NoSerie = txtSerial.getText().toString();
                 ObjNS.NoSerieInicial = txtSerieIni.getText().toString();
                 ObjNS.NoSerieFinal = txtSerieFin.getText().toString();
                 ObjNS.User_agr = gl.IdOperador+"";
@@ -2328,8 +2381,9 @@ public class frm_recepcion_datos extends PBase {
 
     public boolean Parametros_Obligatorios_Ingresados() {
 
-        try{
+        try {
 
+            //Valida_Peso();
 
 
         }catch (Exception e){
@@ -2405,7 +2459,8 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
-                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso tipo Orden de producción (6)
+                            //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso
+                            // tipo Orden de producción (6)
                             clsBeTrans_oc_det_loteList vence;
                             vence=gl.gBeOrdenCompra.DetalleLotes;
 
@@ -3823,7 +3878,16 @@ public class frm_recepcion_datos extends PBase {
                 //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
                 BeStock_rec.IdPropietarioBodega =pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
                 BeStock_rec.IdProductoBodega = BeProducto.IdProductoBodega;
+                //#GT 13092021 Se añade el serial a la clase Stock_rec si el producto tiene parametro
+                if (mostrar_parametros_producto)
+                 {
+                    BeStock_rec.Serial = txtSerial.getText().toString();
+                    //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
+                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                }
                 BeStock_rec.IsNew = true;
+
 
                 if (IdPreseSelect>0){
                     BeStock_rec.Presentacion = new clsBeProducto_Presentacion();

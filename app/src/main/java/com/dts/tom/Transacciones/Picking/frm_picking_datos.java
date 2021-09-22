@@ -254,7 +254,7 @@ public class frm_picking_datos extends PBase {
                 vPeso = gBePickingUbic.Peso_solicitado;
                 vCantidad = gBePickingUbic.Cantidad_Solicitada;
 
-                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString());
+                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString().replace(",",""));
 
                 if (vCantidad>0){
                     vPesoUni = vPeso/vCantidad;
@@ -720,6 +720,12 @@ public class frm_picking_datos extends PBase {
 
                     gBeProducto = new clsBeProducto();
                     gBeProducto.Codigo = pCodigo;
+
+                    //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
                     //Get_BeProducto_By_Codigo_For_HH (Primera vez)
                     execws(4);
                 }
@@ -914,9 +920,14 @@ public class frm_picking_datos extends PBase {
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
                    gBeProducto = new clsBeProducto();
-                    gBeProducto.Codigo = pCodigo;
+                   gBeProducto.Codigo = pCodigo;
 
-                   execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+                   //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
+                    execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
 
 //                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
 //                    btnConfirmarPk.setEnabled(false);
@@ -1054,8 +1065,15 @@ public class frm_picking_datos extends PBase {
 
                 //#EJC20200610: No me gusta como se ve esto, pero tengo demo ma;ana
                 gBeProducto = new clsBeProducto();
+
+                //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                if (pCodigo.isEmpty()){
+                    pCodigo = pLP;
+                }
+
                 //Get_BeProducto_By_Codigo_For_HH (Tercera vez)
                 execws(4);
+
                 return;
             }
 
@@ -1183,7 +1201,7 @@ public class frm_picking_datos extends PBase {
 
                 if (TipoLista==2){
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida);
+                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
 
                     if (vDif<0){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1274,7 +1292,7 @@ public class frm_picking_datos extends PBase {
 
             }else{
 
-                Cantidad = Double.parseDouble(txtCantidadPick.getText().toString());
+                Cantidad = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
                 pSubListPickingU = new clsBeTrans_picking_ubicList();
 
@@ -1309,7 +1327,7 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
             msgReemplazo("¿Marcar producto para reemplazo?");
 
@@ -1340,7 +1358,7 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
             msgReemplazo("¿Marcar producto como No Encontrado?");
 
@@ -1437,7 +1455,7 @@ public class frm_picking_datos extends PBase {
                         break;
                     case 9:
                         callMethod("Actualiza_Picking_Consolidado","pBePickingUbicList",pSubListPickingU.items,
-                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString()),
+                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet.Stock);
                         break;
                 }
@@ -1619,7 +1637,7 @@ public class frm_picking_datos extends PBase {
         try{
 
             BePickingDet = xobj.getresultSingle(clsBeTrans_picking_det.class,"oBeTrans_picking_det");
-            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString());
+            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
             BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
             BePickingDet.Fec_mod =  du.getFechaActual();
 
