@@ -595,7 +595,7 @@ public class MainActivity extends PBase {
     }
 
     private void Valida_Ingreso() {
-
+/*
 
         try {
 
@@ -617,7 +617,7 @@ public class MainActivity extends PBase {
         }
 
 
-/*
+*/
         try{
 
             if (gl.IdEmpresa>0) {
@@ -689,8 +689,6 @@ public class MainActivity extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
- */
 
     }
 
