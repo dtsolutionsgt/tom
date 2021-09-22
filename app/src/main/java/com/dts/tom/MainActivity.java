@@ -44,6 +44,7 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.dts.tom.util.CryptUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -135,6 +136,7 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
                 setHandlers();
                 gl.deviceId =androidid();
+                gl.devicename = getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
@@ -573,6 +575,12 @@ public class MainActivity extends PBase {
                 case 9:
                     processResolucionLP();
                     break;
+                case 10:
+                    processLicencia();
+                    break;
+                case 11:
+                    processServidor();
+                    break;
             }
 
             progress.cancel();
@@ -585,13 +593,6 @@ public class MainActivity extends PBase {
 
     private void ejecuta(){
         startActivity(new Intent(this,Mainmenu.class));
-    }
-
-    private void Licencia_Valida() {
-        try{
-        }catch (Exception e){
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
-        }
     }
 
     private void Valida_Ingreso() {
@@ -632,10 +633,6 @@ public class MainActivity extends PBase {
         }
 
          */
-
-
-
-
         try{
 
             if (gl.IdEmpresa>0) {
@@ -674,7 +671,9 @@ public class MainActivity extends PBase {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
                                     //execws(7);
                                     //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
+                                    //execws(9);
+                                    //#CKFK 20210914 Validar licencia antes de ingresar.Método loginHH
+                                    execws(10);
                                 }
                             } else  {
                                 progress.cancel();
@@ -981,6 +980,45 @@ public class MainActivity extends PBase {
         }
     }
 
+    private boolean processLicencia() {
+        boolean rslt=false;
+        try {
+
+            Integer msgLic = 0;
+
+            msgLic =(Integer) xobj.getSingle("loginHandHeldResult",Integer.class);
+
+            if (msgLic == 0){
+                msgbox("Licencia inactiva");
+                rslt= false;
+            }else if (msgLic < 0){
+                //Llama al método nombreServidorLicencias
+               execws(11);
+               rslt= false;
+            } else{
+                rslt= true;
+                //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
+                execws(9);
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return rslt;
+    }
+
+    private void processServidor() {
+        String servidor="";
+        try {
+
+            servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
+            msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
     //endregion
 
     //region Spinners
@@ -1225,6 +1263,14 @@ public class MainActivity extends PBase {
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
                                 "pIdOperador",gl.IdOperador,
                                 "pIdBodega",gl.IdBodega);
+                        break;
+                    case 10:
+                        callMethod("loginHandHeld",
+                                "idHandHeld",gl.deviceId,
+                                "nombreHanHeld",gl.devicename);
+                        break;
+                    case 11:
+                        callMethod("nombreServidorLicencias");
                         break;
                 }
             } catch (Exception e)  {
