@@ -56,7 +56,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean captura_pallet_no_estandar = false;*/
     @Element(required=false) public float valor_porcentaje_iva = 0;
     @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
-
+    @Element(required=false) public boolean control_banderas_cliente = false;
 
     public clsBeBodega() {
     }
@@ -73,7 +73,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        clsBeBodega_sectorList Sectores,clsBeBodega_tramoList Tramos,clsBeBodega_ubicacionList Ubicaciones,
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
                        boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
-                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado
+                       boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado, boolean control_banderas_cliente
 
     ) {
 
@@ -124,7 +124,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Id_Motivo_Ubic_Reabasto=Id_Motivo_Ubic_Reabasto;
         this.Es_Bodega_Fiscal = Es_Bodega_Fiscal;
         this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
-
+        this.control_banderas_cliente=control_banderas_cliente;
     }
 
     public int getIdPais() {
@@ -403,10 +403,17 @@ public class clsBeBodega extends clsBeBodegaBase {
     public boolean getPermitir_Verificacion_Consolidada() {
         return Permitir_Verificacion_Consolidada;
     }
+
     public void setPermitir_Verificacion_Consolidada(boolean value) {
         Permitir_Verificacion_Consolidada=value;
     }
 
+    public boolean getcontrol_banderas_cliente() {
+        return control_banderas_cliente;
+    }
+    public void setcontrol_banderas_cliente(boolean value) {
+        control_banderas_cliente=value;
+    }
 
 }
 
