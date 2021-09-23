@@ -460,7 +460,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                 if (automode) {
                     txtLP.setText("");txtLP.requestFocus();
                 } else {
-                    toast("No existe ninguno lote disponible");
+                    toast("No encontre producto "+ss);
                 }
                 return;
             }
@@ -478,7 +478,9 @@ public class frm_preparacion_packing_bulto extends PBase {
         clsBeTrans_packing_lotes item;
         int cantu;
 
-        if (pick==null | pick.items.size()==0) return;
+        if (pick==null | pick.items.size()==0) {
+            return;
+        }
 
         try {
             gl.packlotes.clear();
@@ -505,7 +507,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                     item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
 
                     if (item.disp>0) {
-                        if (item.disp!=item.cant)  gl.packlotes.add(item); // JP20210922
+                        if (item.disp!=cantu)  gl.packlotes.add(item); // JP20210922
                     }
                 }
             }

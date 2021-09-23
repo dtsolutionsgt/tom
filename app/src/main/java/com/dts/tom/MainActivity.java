@@ -616,8 +616,7 @@ public class MainActivity extends PBase {
             String ss=e.getMessage();
         }
 
-
-*/
+        */
         try{
 
             if (gl.IdEmpresa>0) {
