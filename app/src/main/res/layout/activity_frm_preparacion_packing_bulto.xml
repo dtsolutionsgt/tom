@@ -109,18 +109,18 @@
 
         </RelativeLayout>
 
-        <EditText
-            android:id="@+id/editText8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/reltop"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="60dp"
-            android:inputType="number|textPersonName"
-            android:textStyle="bold" />
+    <EditText
+        android:id="@+id/editText8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="number|textPersonName"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView55"
@@ -178,36 +178,50 @@
             android:inputType="number"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/editText8"
-            android:layout_alignBottom="@+id/editText8"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0dp"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:onClick="doLP"
-            android:padding="5dp"
-            android:src="@drawable/scan" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText8"
+        android:layout_alignBottom="@+id/editText8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:onClick="doLP"
+        android:padding="5dp"
+        android:src="@drawable/scan" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/editTextNumber"
-            android:layout_alignBottom="@+id/editTextNumber"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@+id/editTextNumber"
-            android:clickable="true"
-            android:onClick="doAdd"
-            android:padding="5dp"
-            android:src="@drawable/btn_agregar" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editTextNumber"
+        android:layout_alignBottom="@+id/editTextNumber"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/editTextNumber"
+        android:clickable="true"
+        android:onClick="doAdd"
+        android:padding="5dp"
+        android:src="@drawable/btn_agregar" />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView2"
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="5dp"
+        android:clickable="true"
+        android:onClick="doList"
+        android:padding="5dp"
+        android:src="@drawable/btn_lupa" />
 
 
-    </RelativeLayout>
+</RelativeLayout>
