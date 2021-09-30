@@ -194,7 +194,7 @@ public class frm_list_rec_prod extends PBase {
                              }
 
                              pLP = txtCodigoProductoRecepcion.getText().toString().replace("$", "");
-
+                             //Quitar los +1  20210924
                              vCodigoBodegaBarraPallet = pLP.substring(0, vLongitudBodegaOrigen);
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
@@ -1125,7 +1125,7 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
 
-           // ValidaEstadoPallet();
+            ValidaEstadoPallet();
 
             if (lBeINavBarraPallet!=null){
                 if (lBeINavBarraPallet.items!=null){
