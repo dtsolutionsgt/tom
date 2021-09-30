@@ -581,6 +581,7 @@ public class MainActivity extends PBase {
                 case 11:
                     processServidor();
                     break;
+
             }
 
             progress.cancel();
@@ -600,7 +601,7 @@ public class MainActivity extends PBase {
         try {
 
             gl.IdEmpresa=1;
-            gl.IdBodega=10;
+            gl.IdBodega=9;
             gl.IdOperador=1;
             gl.CodigoBodega="10";
             gl.OperadorBodega.IdOperadorBodega=1;
@@ -610,22 +611,6 @@ public class MainActivity extends PBase {
             op.setNombres("Op");
             op.setApellidos("1");
             gl.OperadorBodega.setOperador(op);
-
-/*
-            gl.IdEmpresa=1;
-            gl.IdBodega=5;
-            gl.IdOperador=1;
-            gl.CodigoBodega="E14";
-            gl.OperadorBodega.IdOperadorBodega=3;
-
-            clsBeOperador op=new clsBeOperador();
-            op.setCodigo("3");
-            op.setNombres("Op");
-            op.setApellidos("1");
-            gl.OperadorBodega.setOperador(op);
-
-
-
 
             ejecuta();
         } catch (Exception e) {
@@ -706,6 +691,7 @@ public class MainActivity extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
 
     }
 

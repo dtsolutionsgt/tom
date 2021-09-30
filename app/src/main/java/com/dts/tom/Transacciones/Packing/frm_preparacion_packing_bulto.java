@@ -48,6 +48,8 @@ public class frm_preparacion_packing_bulto extends PBase {
     private clsBeTrans_picking_ubicList pick = new clsBeTrans_picking_ubicList();
     private clsBeTrans_packing_encList itemList;
     private clsBeTrans_packing_encList savedList = new clsBeTrans_packing_encList();
+    private ArrayList<String> lcode = new ArrayList<String>();
+    private ArrayList<String> lname = new ArrayList<String>();
 
     private list_adapt_lista_packing_bulto adapter;
     private clsBeTrans_packing_enc_bulto selitem;
@@ -106,6 +108,10 @@ public class frm_preparacion_packing_bulto extends PBase {
     public void doLP(View view){
         automode=false;
         GetFila();
+    }
+
+    public void doList(View view) {
+        muestraListaProductos();
     }
 
     public void doLoad(View view){
@@ -286,6 +292,9 @@ public class frm_preparacion_packing_bulto extends PBase {
             pick =xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc_Group");
 
             if (pick!=null && pick.items.size()>0) {
+
+                Collections.sort(pick.items,new OrdenarPickPorNombre());
+
                 itot=0;
                 for (int i = 0; i <pick.items.size(); i++) {
                     pick.items.get(i).IdPickingUbic=i;
@@ -460,7 +469,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                 if (automode) {
                     txtLP.setText("");txtLP.requestFocus();
                 } else {
-                    toast("No existe ninguno lote disponible");
+                    toast("No encontre producto "+ss);
                 }
                 return;
             }
@@ -478,7 +487,9 @@ public class frm_preparacion_packing_bulto extends PBase {
         clsBeTrans_packing_lotes item;
         int cantu;
 
-        if (pick==null | pick.items.size()==0) return;
+        if (pick==null | pick.items.size()==0) {
+            return;
+        }
 
         try {
             gl.packlotes.clear();
@@ -505,7 +516,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                     item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
 
                     if (item.disp>0) {
-                        if (item.disp!=item.cant)  gl.packlotes.add(item); // JP20210922
+                        if (item.disp!=cantu)  gl.packlotes.add(item); // JP20210922
                     }
                 }
             }
@@ -702,6 +713,12 @@ public class frm_preparacion_packing_bulto extends PBase {
         }
     }
 
+    public class OrdenarPickPorNombre implements Comparator<clsBeTrans_picking_ubic> {
+        public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
+            return left.NombreProducto.compareTo(rigth.NombreProducto);
+        }
+    }
+
     public void ProgressDialog(String mensaje){
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
@@ -756,6 +773,60 @@ public class frm_preparacion_packing_bulto extends PBase {
             if (pick.items.get(j).IdProductoEstado==id) return pick.items.get(j).ProductoEstado;
         }
         return "";
+    }
+
+    private void muestraListaProductos() {
+        String code,name;
+
+        try {
+            if (pick==null | pick.items.size()==0) {
+                toast("La tarea no contiene ninguno producto");return;
+            }
+
+            lcode.clear(); lname.clear();
+
+
+            for (int ii = 0; ii <pick.items.size(); ii++) {
+                code=pick.items.get(ii).CodigoProducto;
+                name=pick.items.get(ii).NombreProducto;
+
+                if (!lcode.contains(code)) {
+                    lcode.add(code); lname.add(name);
+                }
+            }
+
+            final AlertDialog Dialog;
+
+            final String[] selitems = new String[lname.size()];
+            for (int i = 0; i < lname.size(); i++) {
+                selitems[i] = lname.get(i)+"\nCodigo : "+lcode.get(i);
+            }
+
+            AlertDialog.Builder mMenuDlg = new AlertDialog.Builder(this);
+            mMenuDlg.setTitle("Seleccione un producto");
+
+            mMenuDlg.setItems(selitems , new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                    try {
+                        txtLP.setText(lcode.get(item));
+                        doLP(null);
+                    } catch (Exception e) {}
+                }
+            });
+
+            mMenuDlg.setNegativeButton("Regresar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            Dialog = mMenuDlg.create();
+            Dialog.show();
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+
     }
 
     //endregion
