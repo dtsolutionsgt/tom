@@ -37,7 +37,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     private ListView listView;
     private EditText txtLP,txtLinea;
-    private TextView lblProc,lblPend;
+    private TextView lblProc,lblPend,lblTituloForma;
     private ProgressBar pbar;
 
     private WebServiceHandler ws;
@@ -74,8 +74,11 @@ public class frm_preparacion_packing_bulto extends PBase {
         lblProc = findViewById(R.id.btnRegsList);
         lblPend = findViewById(R.id.btnRegsList2);
         pbar =  findViewById(R.id.pgrtareas2);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
 
         idPickingEnc=gl.gIdPickingEnc;
+
+        lblTituloForma.setText("Preparación - Granel - No. Picking: "+idPickingEnc);
 
         anim = ObjectAnimator.ofInt(pbar,"progress",0,100);
         ProgressDialog("Cargando forma");

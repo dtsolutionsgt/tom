@@ -75,6 +75,7 @@ public class frm_preparacion_packing extends PBase {
         txtLinea = findViewById(R.id.editTextNumber);txtLinea.setText("1");
         lblProc = findViewById(R.id.btnRegsList);
         lblPend = findViewById(R.id.btnRegsList2);
+
         pbar = (ProgressBar) findViewById(R.id.pgrtareas2);
 
         idPickingEnc=gl.gIdPickingEnc;
