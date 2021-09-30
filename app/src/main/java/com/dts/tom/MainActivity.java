@@ -597,7 +597,8 @@ public class MainActivity extends PBase {
     }
 
     private void Valida_Ingreso() {
-/*
+
+        /*
         try {
 
             gl.IdEmpresa=1;
@@ -618,6 +619,8 @@ public class MainActivity extends PBase {
         }
 
          */
+
+
         try{
 
             if (gl.IdEmpresa>0) {

@@ -381,6 +381,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     private void newItem() {
         if (gl.paPickUbicId==-1) return;
+        if (gl.paCant<1) return;
 
         txtLinea.setText(""+gl.paLinea);focusLP();
 
@@ -516,7 +517,8 @@ public class frm_preparacion_packing_bulto extends PBase {
                     item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
 
                     if (item.disp>0) {
-                        if (item.disp!=cantu)  gl.packlotes.add(item); // JP20210922
+                        //if (item.disp!=cantu)
+                        gl.packlotes.add(item); // JP20210922
                     }
                 }
             }
@@ -784,7 +786,6 @@ public class frm_preparacion_packing_bulto extends PBase {
             }
 
             lcode.clear(); lname.clear();
-
 
             for (int ii = 0; ii <pick.items.size(); ii++) {
                 code=pick.items.get(ii).CodigoProducto;
