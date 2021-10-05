@@ -1,3 +1,4 @@
+http://192.168.126.79/wcftom4/tomhhws.asmx
 http://192.168.1.7/WCFTOM4/TOMHHWS.asmx
 http://192.168.0.17/WCFTOM4/TOMHHWS.asmx
 http://192.168.0.16/WCFTOM4/TOMHHWS.asmx

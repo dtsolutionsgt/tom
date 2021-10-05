@@ -81,6 +81,7 @@ public class frm_picking_datos extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_picking_datos);
 
@@ -1640,9 +1641,7 @@ public class frm_picking_datos extends PBase {
             BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
             BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
             BePickingDet.Fec_mod =  du.getFechaActual();
-
             BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
-
             execws(6);
 
         }catch (Exception e){
@@ -1655,7 +1654,6 @@ public class frm_picking_datos extends PBase {
         try{
 
             BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"pBeStock_res");
-
             BeStockRes.Estado = "PICKEADO";
             BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
             BeStockRes.Fec_mod = du.getFechaActual();
@@ -1678,30 +1676,25 @@ public class frm_picking_datos extends PBase {
 
 
     private void msgAskExit(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     doExit();
                 }
             });
-
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     return;
                 }
             });
-
             dialog.show();
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
