@@ -421,7 +421,7 @@ public class frm_preparacion_packing extends PBase {
 
             if (!flag) {
                 txtLP.selectAll();focusLP();
-                msgAskLista("La licensia no existe.\n¿Mostrar la lista?");focusLP();
+                msgAskLista("La licencia no existe.\n¿Mostrar lista?");focusLP();
                 return;
             }
 
@@ -463,7 +463,7 @@ public class frm_preparacion_packing extends PBase {
                 if (regs>0) {
                     toast("Tarea finalizada.");finish();
                 } else {
-                    mu.msgbox("No se logro finalizar la tarea, por favor repite el proceso.");
+                    mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
                 }
             } else {
                 mu.msgbox("cantidadRegGuardados : "+ws.error);

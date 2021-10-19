@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.Packing;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,17 +23,12 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.ladapt.list_adapt_tareashh_picking;
-import com.dts.tom.R;
 import com.dts.tom.PBase;
-import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
-import com.dts.tom.Transacciones.Recepcion.frm_detalle_ingresos;
-import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
+import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import static br.com.zbra.androidlinq.Linq.stream;
 
 public class frm_lista_packing extends PBase {
 
@@ -47,7 +44,6 @@ public class frm_lista_packing extends PBase {
     private clsBeTrans_picking_encList pListBeTareasPickingHH = new clsBeTrans_picking_encList();
     private ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
     private ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
-    private clsBeTrans_picking_enc selitempicking;
     private list_adapt_tareashh_picking adapterPicking;
 
     private ObjectAnimator anim;
@@ -71,12 +67,18 @@ public class frm_lista_packing extends PBase {
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
         ProgressDialog("Cargando forma");
 
-        setHandlers();
+        try {
 
-        ws = new WebServiceHandler(frm_lista_packing.this, gl.wsurl);
-        xobj = new XMLObject(ws);
+            setHandlers();
 
-        Load();
+            ws = new WebServiceHandler(frm_lista_packing.this, gl.wsurl);
+            xobj = new XMLObject(ws);
+
+            Load();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //region Events
@@ -102,7 +104,6 @@ public class frm_lista_packing extends PBase {
                     if (position > 0){
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
-                        selitempicking = sitem;
 
                         selid = sitem.IdPickingEnc;
                         selidx = position;
@@ -160,10 +161,10 @@ public class frm_lista_packing extends PBase {
                         vItem.NombrePropietarioPicking=BePicking.NombrePropietarioPicking;
                         vItem.NombreUbicacionPicking=BePicking.NombreUbicacionPicking;
                         vItem.Estado=BePicking.Estado;
-                        vItem.Detalle_operador=BePicking.Detalle_operador;
                         vItem.Fecha_picking=du.convierteFechaMostaryy(BePicking.Fecha_picking);
-                        vItem.Hora_ini=du.convierteHoraMostarhm(BePicking.Hora_ini);
-                        vItem.Hora_fin=du.convierteHoraMostarhm(BePicking.Hora_fin);
+//                        vItem.Detalle_operador=BePicking.Detalle_operador;
+//                        vItem.Hora_ini=du.convierteHoraMostarhm(BePicking.Hora_ini);
+//                        vItem.Hora_fin=du.convierteHoraMostarhm(BePicking.Hora_fin);
                         vItem.Tipo_Preparacion=BePicking.Tipo_Preparacion;
 
                         BeListTareasPicking.add(vItem);
@@ -181,6 +182,7 @@ public class frm_lista_packing extends PBase {
             listView.setAdapter(adapterPicking);
 
             progress.cancel();
+
         } catch (Exception e) {
             mu.msgbox("listItems : "+e.getMessage());
         }
@@ -205,6 +207,7 @@ public class frm_lista_packing extends PBase {
         if (!idle) return;
 
         try {
+
             idle=false;
             progress.setMessage("Cargando tareas ...");
             progress.show();
@@ -231,6 +234,9 @@ public class frm_lista_packing extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_All_Picking_Para_Empaque_By_IdBodega","pIdBodega",gl.IdBodega);
+                        break;
+                    case 2:
+                        callMethod("Set_Estado_Pendiente_Packing","pIdPickingEnc",gl.gIdPickingEnc);
                         break;
                 }
 
@@ -268,22 +274,31 @@ public class frm_lista_packing extends PBase {
     //region Aux
 
     private void procesar_registro() {
+
         String tipoprep;
 
         try {
+
             gl.gIdPickingEnc = selid; gl.gVerifCascade =false;
 
             for (int i = 0; i <BeListTareasPicking.size(); i++) {
+
                 if (BeListTareasPicking.get(i).IdPickingEnc==gl.gIdPickingEnc) {
+
                     tipoprep=BeListTareasPicking.get(i).Tipo_Preparacion;
 
                     browse=1;
+
+                    execws(2);
+
                     if (tipoprep.equalsIgnoreCase("Tarima")) {
                         startActivity(new Intent(this, frm_preparacion_packing.class));
                     } else if (tipoprep.equalsIgnoreCase("Granel")) {
                         startActivity(new Intent(this, frm_preparacion_packing_bulto.class));
                     }
+
                     break;
+
                 }
             }
 
@@ -293,9 +308,11 @@ public class frm_lista_packing extends PBase {
     }
 
     private void GetFila() {
+
         int vIdTarea=0;
 
         try {
+
             if (txtTarea.getText().toString().isEmpty()) return;
 
             selid = Integer.parseInt(txtTarea.getText().toString());
@@ -305,7 +322,10 @@ public class frm_lista_packing extends PBase {
                 procesar_registro();
                 return;
             }
-        } catch (Exception e){}
+
+        } catch (Exception e){
+
+        }
 
         mu.msgbox("No existe la tarea "+selid);
         txtTarea.selectAll();txtTarea.requestFocus();
@@ -334,7 +354,9 @@ public class frm_lista_packing extends PBase {
     //region Dialogs
 
     private void msgAskExit(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -369,7 +391,9 @@ public class frm_lista_packing extends PBase {
     //region Activity Events
 
     protected void onResume() {
+
         try {
+
             super.onResume();
 
             txtTarea.requestFocus();

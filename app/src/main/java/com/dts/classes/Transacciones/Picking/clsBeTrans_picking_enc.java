@@ -33,6 +33,9 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public int IdPedidoEnc=0;
     @Element(required=false) public boolean Requiere_Preparacion=false;
     @Element(required=false) public String Tipo_Preparacion="";
+    @Element(required=false) public String Estado_Preparacion="";
+    @Element(required=false) public String Fecha_Inicio_Preparacion="";
+    @Element(required=false) public String Fecha_Fin_Preparacion="";
 
     public clsBeTrans_picking_enc() {
     }
@@ -232,6 +235,28 @@ public class clsBeTrans_picking_enc {
     }
     public void setTipo_Preparacion(String value) {
         Tipo_Preparacion=value;
+    }
+
+    public String getEstado_Preparacion() {
+        return Estado_Preparacion;
+    }
+    public void setEstado_Preparacion(String value) {
+        Estado_Preparacion=value;
+    }
+
+    public String getFecha_Inicio_Preparacion() {
+        return Fecha_Inicio_Preparacion;
+    }
+
+    public void setFecha_Inicio_Preparacion(String value) {
+        Fecha_Inicio_Preparacion=value;
+    }
+
+    public String getFecha_Fin_Preparacion() {
+        return Fecha_Fin_Preparacion;
+    }
+    public void setFecha_Fin_Preparacion(String value) {
+        Fecha_Fin_Preparacion=value;
     }
 
 }

@@ -25,7 +25,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/back"
-                android:onClick="SalirTareas" />
+                android:onClick="SalirTareas"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <Button
                 android:id="@+id/btnDet"
@@ -37,7 +38,8 @@
                 android:background="@drawable/color_medium"
                 android:textColor="@android:color/background_light"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="SpeakableTextPresentCheck" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -55,7 +57,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:text="Tareas de preparación"
+                android:text="@string/tareas_de_preparaci_n"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -72,7 +74,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/textView55"
-        android:inputType="number|textPersonName" />
+        android:importantForAutofill="no"
+        android:inputType="number|textPersonName"
+        android:minHeight="48dp"
+        tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/textView55"
@@ -81,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/reltop"
             android:layout_marginTop="25dp"
-            android:text="Tarea:"
+            android:text="@string/tarea"
             android:textStyle="bold" />
 
         <Button
@@ -93,7 +98,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/color_medium"
-            android:text="Nueva"
+            android:text="@string/nueva"
             android:textColor="@android:color/background_light"
             android:textSize="18sp"
             android:visibility="invisible" />
@@ -109,9 +114,10 @@
         android:background="@drawable/color_medium"
         android:clickable="true"
         android:onClick="doLoad"
-        android:text="Regs: 0"
+        android:text="@string/regs_0"
         android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:focusable="true" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"

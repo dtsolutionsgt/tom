@@ -63,12 +63,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblIdPickingEnc = (TextView) convertView.findViewById(R.id.lblIdPickingEnc);
             holder.lblBodegaPick = (TextView) convertView.findViewById(R.id.lblBodegaPick);
             holder.lblPropietarioPick = (TextView) convertView.findViewById(R.id.lblPropietarioPick);
-            holder.lblUbicacionPick = (TextView) convertView.findViewById(R.id.lblUbicacionPick);
+//            holder.lblUbicacionPick = (TextView) convertView.findViewById(R.id.lblUbicacionPick);
             holder.lblEstadoPick = (TextView) convertView.findViewById(R.id.lblEstadoPick);
-            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
             holder.lblFechaPick = (TextView) convertView.findViewById(R.id.lblFechaPick);
-            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
-            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);
+//            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
+//            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
+//            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);
 
             convertView.setTag(holder);
 
@@ -82,30 +82,30 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblBodegaPick.setTextColor(R.style.titlestyle);
             holder.lblPropietarioPick.setText("Propietario");
             holder.lblPropietarioPick.setTextColor(R.style.titlestyle);
-            holder.lblUbicacionPick.setText("Ubicación");
-            holder.lblUbicacionPick.setTextColor(R.style.titlestyle);
+//            holder.lblUbicacionPick.setText("Ubicación");
+//            holder.lblUbicacionPick.setTextColor(R.style.titlestyle);
             holder.lblEstadoPick.setText("Estado");
             holder.lblEstadoPick.setTextColor(R.style.titlestyle);
-            holder.lblOperadorPick.setText("DetalleOperador");
-            holder.lblOperadorPick.setTextColor(R.style.titlestyle);
             holder.lblFechaPick.setText("Fecha");
-            holder.lblFechaPick.setTextColor(R.style.titlestyle);
-            holder.lblHoraInicial.setText("HoraInicial");
-            holder.lblHoraInicial.setTextColor(R.style.titlestyle);
-            holder.lblHoraFinal.setText("HoraFinal");
-            holder.lblHoraFinal.setTextColor(R.style.titlestyle);
+//            holder.lblOperadorPick.setText("DetalleOperador");
+//            holder.lblOperadorPick.setTextColor(R.style.titlestyle);
+//            holder.lblFechaPick.setTextColor(R.style.titlestyle);
+//            holder.lblHoraInicial.setText("HoraInicial");
+//            holder.lblHoraInicial.setTextColor(R.style.titlestyle);
+//            holder.lblHoraFinal.setText("HoraFinal");
+//            holder.lblHoraFinal.setTextColor(R.style.titlestyle);
 
         }else{
 
             holder.lblIdPickingEnc.setText("0");
             holder.lblBodegaPick.setText("0");
             holder.lblPropietarioPick.setText("--");
-            holder.lblUbicacionPick.setText("--");
+//            holder.lblUbicacionPick.setText("--");
             holder.lblEstadoPick.setText("--");
-            holder.lblOperadorPick.setText("--");
             holder.lblFechaPick.setText("1900-01-01");
-            holder.lblHoraInicial.setText("00:00:01");
-            holder.lblHoraFinal.setText("00:00:01");
+//            holder.lblOperadorPick.setText("--");
+//            holder.lblHoraInicial.setText("00:00:01");
+//            holder.lblHoraFinal.setText("00:00:01");
 
             if (BeListTareasHH.get(position).IdPickingEnc>0){
                 holder.lblIdPickingEnc.setText(""+BeListTareasHH.get(position).IdPickingEnc);
@@ -119,29 +119,29 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
                 holder.lblPropietarioPick.setText(BeListTareasHH.get(position).NombrePropietarioPicking);
             }
 
-            if (!BeListTareasHH.get(position).NombreUbicacionPicking.isEmpty()){
-                holder.lblUbicacionPick.setText(BeListTareasHH.get(position).NombreUbicacionPicking);
-            }
+//            if (!BeListTareasHH.get(position).NombreUbicacionPicking.isEmpty()){
+//                holder.lblUbicacionPick.setText(BeListTareasHH.get(position).NombreUbicacionPicking);
+//            }
 
             if (!BeListTareasHH.get(position).Estado.isEmpty()){
                 holder.lblEstadoPick.setText(BeListTareasHH.get(position).Estado);
             }
 
-            if (BeListTareasHH.get(position).Detalle_operador){
-                holder.lblOperadorPick.setText(""+BeListTareasHH.get(position).Detalle_operador);
-            }
+//            if (BeListTareasHH.get(position).Detalle_operador){
+//                holder.lblOperadorPick.setText(""+BeListTareasHH.get(position).Detalle_operador);
+//            }
 
             if (!BeListTareasHH.get(position).Fecha_picking.isEmpty()){
                 holder.lblFechaPick.setText(""+BeListTareasHH.get(position).Fecha_picking);
             }
-
-            if (!BeListTareasHH.get(position).Hora_ini.isEmpty()){
-                holder.lblHoraInicial.setText(""+BeListTareasHH.get(position).Hora_ini);
-            }
-
-            if (!BeListTareasHH.get(position).Hora_fin.isEmpty()){
-                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
-            }
+//
+//            if (!BeListTareasHH.get(position).Hora_ini.isEmpty()){
+//                holder.lblHoraInicial.setText(""+BeListTareasHH.get(position).Hora_ini);
+//            }
+//
+//            if (!BeListTareasHH.get(position).Hora_fin.isEmpty()){
+//                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
+//            }
 
         }
 
@@ -161,7 +161,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblUbicacionPick,lblEstadoPick,lblOperadorPick,lblFechaPick,lblHoraInicial,lblHoraFinal;
+        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick;
     }
 
 }
