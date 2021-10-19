@@ -78,6 +78,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
         idPickingEnc=gl.gIdPickingEnc;
 
+        //#CKFK 20210930 Agregué el IdPicking en el titulo
         lblTituloForma.setText("Preparación - Granel - No. Picking: "+idPickingEnc);
 
         anim = ObjectAnimator.ofInt(pbar,"progress",0,100);
