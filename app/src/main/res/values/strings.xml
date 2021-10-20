@@ -3,7 +3,6 @@
     <string name="buscar">Buscar</string>
     <string name="consulta_de_existencia_trx8">Consulta de Existencia - TRX8</string>
     <string name="estado">Estado:</string>
-    <string name="todo">TODO</string>
     <string name="c_digo">Código:</string>
     <string name="title_activity_frm_inv_cic_conteo">frm_inv_cic_conteo</string>
     <!--
@@ -17,6 +16,13 @@
     <string name="nueva">Nueva</string>
     <string name="tareas_de_preparaci_n">Tareas de preparación</string>
     <string name="tarea">Tarea:</string>
+    <string name="tom_wms">TOM WMS</string>
+    <string name="_19_oct_2021a">19-Oct-2021A</string>
+    <string name="textview">TextView</string>
+    <string name="todo">TODO</string>
+    <string name="inicio_de_sesi_n">Inicio de sesión</string>
+    <string name="version_name">19-Oct-2021</string>
+    <string name="versi_n_4_5_16">Versión 4.5.16</string>
 
     <string-array name="filtros">
         <item>Código</item>

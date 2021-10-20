@@ -38,13 +38,10 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
-import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
-import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
-import com.dts.tom.util.CryptUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -123,9 +120,9 @@ public class MainActivity extends PBase {
             spinprint = (Spinner) findViewById(R.id.spinner3);
             spinuser = (Spinner) findViewById(R.id.spinner4);
             txtpass = (EditText) findViewById(R.id.editText3);
-            lblver=(TextView)  findViewById(R.id.textView4);
-            lbldate=(TextView)  findViewById(R.id.textView3);
-            lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
+            lblver=(TextView)  findViewById(R.id.txtNoVersion);
+            lbldate=(TextView)  findViewById(R.id.txtFechaVersion);
+            lblurl=(TextView)  findViewById(R.id.txtURLWS);lblurl.setText("");
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
 

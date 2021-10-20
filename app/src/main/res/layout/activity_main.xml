@@ -43,7 +43,7 @@
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:paddingTop="5dp"
-                        android:text="Inicio de sesión"
+                        android:text="@string/inicio_de_sesi_n"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -56,7 +56,7 @@
                 <ImageView
                     android:id="@+id/imageView6"
                     android:layout_width="56dp"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="1dp"
@@ -67,10 +67,11 @@
                 <Spinner
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:layout_marginEnd="5dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -80,7 +81,7 @@
                 <ImageView
                     android:id="@+id/imageView7"
                     android:layout_width="56dp"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
                     android:alpha="0.65"
@@ -90,10 +91,11 @@
                 <Spinner
                     android:id="@+id/spinner2"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="0dp" />
+                    android:layout_marginEnd="0dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -103,7 +105,7 @@
                 <ImageView
                     android:id="@+id/imageView9"
                     android:layout_width="56dp"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
                     android:alpha="0.85"
@@ -113,9 +115,10 @@
                 <Spinner
                     android:id="@+id/spinner3"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="0dp" />
+                    android:layout_marginEnd="0dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -125,7 +128,7 @@
                 <ImageView
                     android:id="@+id/imageView10"
                     android:layout_width="56dp"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
                     android:padding="10dp"
@@ -134,10 +137,11 @@
                 <Spinner
                     android:id="@+id/spinner4"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp" />
+                    android:layout_marginEnd="5dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -147,7 +151,7 @@
                 <ImageView
                     android:id="@+id/imageView8"
                     android:layout_width="56dp"
-                    android:layout_height="28dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="10dp"
                     android:paddingTop="12dp"
@@ -162,18 +166,22 @@
                     android:layout_marginEnd="5dp"
                     android:ems="10"
                     android:inputType="textPassword"
+                    android:minHeight="48dp"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="SpeakableTextPresentCheck"
+                    android:importantForAutofill="no" />
 
                 <ImageView
                     android:id="@+id/imageView11"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="3dp"
                     android:layout_marginEnd="3dp"
                     android:clickable="true"
                     android:onClick="doLogin"
-                    android:src="@drawable/arr_rnd_right" />
+                    android:src="@drawable/arr_rnd_right"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -182,15 +190,16 @@
                 android:layout_marginTop="50dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/txtURLWS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center_horizontal"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="TextView"
-                    android:textSize="12sp"
+                    android:text="@android:string/copyUrl"
+                    android:textColor="#616161"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -206,7 +215,7 @@
                     android:background="@drawable/color_medium">
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/txtNoVersion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -214,7 +223,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="22dp"
-                        android:text="Versión 4.5.16"
+                        android:text="@string/versi_n_4_5_16"
                         android:textColor="#FFFFFF" />
 
                     <ImageView
@@ -252,7 +261,7 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/txtFechaVersion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -260,7 +269,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="4dp"
-                        android:text="19-Oct-2021"
+                        android:text="@string/version_name"
                         android:textColor="#FFFFFF" />
                 </RelativeLayout>
             </TableRow>
@@ -290,7 +299,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="TOM WMS"
+            android:text="@string/tom_wms"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -327,7 +336,8 @@
             android:layout_height="match_parent"
             android:onClick="recargar"
             android:scaleType="center"
-            android:src="@drawable/tom_logo" />
+            android:src="@drawable/tom_logo"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </RelativeLayout>
 
