@@ -38,7 +38,7 @@ public class clsBeBodega_tramo {
     @Element(required=false) public Object Tag=new Object();
     @Element(required=false) public clsBeFont_Enc pFont=new clsBeFont_Enc();
     @Element(required=false) public int Nivel=0;
-
+    @Element(required=false) public boolean Orden_Descendente=false;
 
     public clsBeBodega_tramo() {
     }
@@ -50,7 +50,7 @@ public class clsBeBodega_tramo {
                              double Margen_superior,double Margen_inferior,String Codigo,int Indice_x,
                              int Orientacion,int IdTipoProductoDefault,int IdFontEnc,int IdTipoRack,
                              boolean Es_Rack,boolean Horizontal,double VolumenUtilizado,double CantidadUtilizada,
-                             Object Tag,clsBeFont_Enc pFont,int Nivel) {
+                             Object Tag,clsBeFont_Enc pFont,int Nivel,boolean Orden_Descendente) {
 
         this.IdTramo=IdTramo;
         this.IdSector=IdSector;
@@ -83,6 +83,7 @@ public class clsBeBodega_tramo {
         this.Tag=Tag;
         this.pFont=pFont;
         this.Nivel=Nivel;
+        this.Orden_Descendente=Orden_Descendente;
 
     }
 
@@ -272,6 +273,12 @@ public class clsBeBodega_tramo {
     }
     public void setNivel(int value) {
         Nivel=value;
+    }
+    public boolean getOrden_Descendente() {
+        return Orden_Descendente;
+    }
+    public void setOrden_Descendente(boolean value) {
+        Orden_Descendente=value;
     }
 
 }
