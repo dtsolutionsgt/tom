@@ -21,8 +21,8 @@
     <string name="textview">TextView</string>
     <string name="todo">TODO</string>
     <string name="inicio_de_sesi_n">Inicio de sesión</string>
-    <string name="version_name">19-Oct-2021</string>
-    <string name="versi_n_4_5_16">Versión 4.5.16</string>
+    <string name="fecha_version">27-Oct-2021</string>
+    <string name="no_version">Versión 4.5.17</string>
 
     <string-array name="filtros">
         <item>Código</item>

@@ -223,7 +223,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="22dp"
-                        android:text="@string/versi_n_4_5_16"
+                        android:text="@string/no_version"
                         android:textColor="#FFFFFF" />
 
                     <ImageView
@@ -269,7 +269,7 @@
                         android:layout_centerVertical="false"
                         android:layout_marginStart="10dp"
                         android:layout_marginBottom="4dp"
-                        android:text="@string/version_name"
+                        android:text="@string/fecha_version"
                         android:textColor="#FFFFFF" />
                 </RelativeLayout>
             </TableRow>

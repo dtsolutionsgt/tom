@@ -572,7 +572,7 @@ public class frm_recepcion_datos extends PBase {
                     if (!hasFocus) {
                         String valor= txtNoLP.getText().toString();
                         try{
-                            Procesa_Barra_Producto();
+                            //Procesa_Barra_Producto();
                         }catch(Exception e){
                             cmbVenceRec.setText(du.getActDateStr());
                         }
@@ -3204,18 +3204,20 @@ public class frm_recepcion_datos extends PBase {
             cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(BeINavBarraPallet.Fecha_Vence));
 
             if (!EsTransferenciaInternaWMS){
-//                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_UMP,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.setText(BeINavBarraPallet.Cantidad_UMP+"");
                 txtCantidadRec.requestFocus();
             }else{
-//                txtCantidadRec.setText(mu.frmdecimal(BeINavBarraPallet.Cantidad_Presentacion,gl.gCantDecDespliegue));
                 txtCantidadRec.setText(BeINavBarraPallet.Cantidad_Presentacion+"");
                 txtCantidadRec.requestFocus();
             }
 
             List AuxList = stream(BeProducto.Presentaciones.items).select(c->c.Codigo_barra).toList();
 
-            int indxPres=AuxList.indexOf(BeINavBarraPallet.UM_Producto);
+            int indxPres=-1;
+
+            if (BeINavBarraPallet.UM_Producto != null){
+                indxPres=AuxList.indexOf(BeINavBarraPallet.UM_Producto);
+            }
 
             if (indxPres>-1){
                 cmbPresRec.setSelection(indxPres);
@@ -3240,12 +3242,24 @@ public class frm_recepcion_datos extends PBase {
 
             double vCantidad  = BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
 
-            String vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
-                    +"Cant: "+vCantidad +"\n "
-                    +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
-                    +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
-                    +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                    +"¿El producto está completo y en buen estado?";
+            String vMensaje1 ="";
+
+            if (indxPres !=-1){
+                vMensaje1= "Código: "+BeINavBarraPallet.Codigo+"\n "
+                        +"Cant: "+vCantidad +"\n "
+                        +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
+                        +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                        +"Lote: "+BeINavBarraPallet.Lote +"\n"
+                        +"¿El producto está completo y en buen estado?";
+            }else{
+                 vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
+                        +"Cant: "+vCantidad +"\n "
+                        +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
+                        +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                        +"Lote: "+BeINavBarraPallet.Lote +"\n"
+                        +"¿El producto está completo y en buen estado?";
+            }
+
 
             msgValidaProductoPallet(vMensaje1);
 
@@ -3391,6 +3405,8 @@ public class frm_recepcion_datos extends PBase {
             String finalSelectedLote = SelectedLote;
             String finalFechaVence = FechaVence;
 
+            String LpOrigen = pLp;
+
             if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
                 BeUbicaciones = stream(ubic.items)
@@ -3398,7 +3414,8 @@ public class frm_recepcion_datos extends PBase {
                                 c.No_linea == BeOcDet.No_Linea &&
                                 c.IdOrdenCompraDet == pIdOrdenCompraDet &&
                                 c.Lote.equals(finalSelectedLote)  &&
-                                c.Fecha_vence.equals(finalFechaVence))
+                                c.Fecha_vence.equals(finalFechaVence) &&
+                                c.Lic_Plate.equals(LpOrigen))
                         .toList();
 
             }else{
@@ -3410,24 +3427,34 @@ public class frm_recepcion_datos extends PBase {
                         .toList();
             }
 
-            double CantRec;
+            double CantRec=0;
+            double CantTotal =0;
+            double DifCantUbic =0;
 
             for (int i = 0; i <BeUbicaciones.size(); i++)
             {
                 valor = BeUbicaciones.get(i).Ubicacion;
                 CantRec =BeUbicaciones.get(i).Cantidad_recibida;
+                CantTotal=BeUbicaciones.get(i).Cantidad;
 
                 if (!UbicLotesList.contains(valor)){
-                    if (CantRec ==0){
-                        UbicLotesList.add(valor);
-                    }
+                    UbicLotesList.add(valor);
                 }
             }
 
+            CantTotal=mu.round2(CantTotal/ BeProducto.Presentacion.Factor);
+            CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
+            DifCantUbic = CantTotal - CantRec;
+
             if (UbicLotesList.size()>0){
+
                 ubiDetLote = UbicLotesList.get(0);
+
                 if (ubiDetLote!=null){
-                    if(!ubiDetLote.isEmpty()) lblUbicacion.setText("Doc: -> " + ubiDetLote);
+                    if(!ubiDetLote.isEmpty()) {
+                        lblUbicacion.setText("Ubic: " + ubiDetLote + "\n Pend:" + DifCantUbic + "\n Rec: "+ CantRec );
+                        tblUbicacion.setVisibility(View.VISIBLE);
+                    }
                 }else {
                     tblUbicacion.setVisibility(View.GONE);
                 }
@@ -6238,17 +6265,17 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void msgAskExisteLp(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", (dialog12, which) -> {
+
                 if (BeProducto.Control_vencimiento){
                     cmbVenceRec.setSelectAllOnFocus(true);
                     cmbVenceRec.requestFocus();
@@ -6258,6 +6285,9 @@ public class frm_recepcion_datos extends PBase {
                 }else {
                     txtCantidadRec.requestFocus();
                 }
+
+                fillUbicacion();
+
             });
 
             dialog.setNegativeButton("No", (dialog1, which) -> {
@@ -6388,7 +6418,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (Existe_Lp){
-                msgAskExisteLp("El Lp:"+pLp+" ya existe, desea agregarlo al producto:"+BeProducto.Codigo);
+                msgAskExisteLp("El Lp: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
             }else{
                 if (BeProducto.Control_vencimiento){
                     cmbVenceRec.setSelectAllOnFocus(true);
@@ -6399,6 +6429,7 @@ public class frm_recepcion_datos extends PBase {
                 }else {
                     txtCantidadRec.requestFocus();
                 }
+                fillUbicacion();
             }
 
         }catch (Exception e){

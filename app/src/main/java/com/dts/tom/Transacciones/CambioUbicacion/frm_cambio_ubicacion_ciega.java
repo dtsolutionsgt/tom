@@ -1374,7 +1374,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Tiene_Posiciones","pStock",pStock);
                         break;
                     case 21:
-                        callMethod("Ubicacion_Es_Valida","pIdProducto",BeProductoUbicacion.IdProductoBodega,
+                        callMethod("Ubicacion_Es_Valida",
+                                "pIdProducto",BeProductoUbicacion.IdProducto,
                                 "pIdUbicacion",txtUbicDestino.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
 
@@ -2123,7 +2124,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (Existe_Lp){
                 progress.cancel();
                 txtCodigoPrd.requestFocus();
-
                 //Get_Stock_By_Lic_Plate
                 execws(5);
             }else{
@@ -2132,7 +2132,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtLicPlate.selectAll();
                 txtLicPlate.requestFocus();
             }
-
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());

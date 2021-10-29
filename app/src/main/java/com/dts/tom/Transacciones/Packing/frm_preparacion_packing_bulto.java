@@ -300,9 +300,10 @@ public class frm_preparacion_packing_bulto extends PBase {
                 Collections.sort(pick.items,new OrdenarPickPorNombre());
 
                 itot=0;
+
                 for (int i = 0; i <pick.items.size(); i++) {
                     pick.items.get(i).IdPickingUbic=i;
-                    itot+=pick.items.get(i).Cantidad_Solicitada;
+                    itot+=pick.items.get(i).Cantidad_Recibida;
                     ss=pick.items.get(i).Fecha_Vence;
                     ss=ss+"";
                 }
@@ -517,8 +518,8 @@ public class frm_preparacion_packing_bulto extends PBase {
 
                     cantu=cantProc(item);
 
-                    item.disp = (int) pick.items.get(i).Cantidad_Solicitada-cantu;
-                    item.cant = (int) pick.items.get(i).Cantidad_Solicitada;
+                    item.disp = (int) pick.items.get(i).getCantidad_Recibida()-cantu;
+                    item.cant = (int) pick.items.get(i).getCantidad_Recibida();
 
                     if (item.disp>0) {
                         //if (item.disp!=cantu)

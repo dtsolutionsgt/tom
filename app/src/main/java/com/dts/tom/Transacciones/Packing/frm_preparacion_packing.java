@@ -195,9 +195,11 @@ public class frm_preparacion_packing extends PBase {
     //region Main
 
     private void listItems() {
+
         clsBeTrans_packing_enc item;
 
         try {
+
             if (items.size()>1) Collections.sort(items,new OrdenarPorLinea());
 
             item_list.clear();
@@ -207,13 +209,11 @@ public class frm_preparacion_packing extends PBase {
 
             for (int i = 0; i <items.size(); i++) {
                 item=items.get(i);
-
                 item.CodigoProducto=codigoProducto(item.Idproductobodega);
                 item.nom_prod=nombreProducto(item.Idproductobodega);
                 item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
                 item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
                 item.ProductoEstado=estadoProducto(item.Idproductoestado);
-
                 item_list.add(item);
             }
 
@@ -297,7 +297,6 @@ public class frm_preparacion_packing extends PBase {
             for (int i = 0; i <savedList.items.size(); i++) {
 
                 clsBeTrans_packing_enc itm=savedList.items.get(i);
-
                 itm.CodigoProducto=codigoProducto(itm.Idproductobodega);
                 itm.nom_prod=nombreProducto(itm.Idproductobodega);
                 itm.ProductoPresentacion=productoPresentacion(itm.Idpresentacion);
@@ -366,7 +365,6 @@ public class frm_preparacion_packing extends PBase {
             item.Idempresaservicio=gl.IdEmpresa;
             item.Referencia="";
             item.Fecha_packing=du.univfecha(du.getActDateTime());
-
             item.nom_prod=p.NombreProducto;
             item.CodigoProducto=p.CodigoProducto;
             item.ProductoPresentacion=p.ProductoPresentacion;
@@ -394,6 +392,7 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void GetFila() {
+
         clsBeTrans_packing_enc it;
         String ss;
         boolean exist,flag=false;
