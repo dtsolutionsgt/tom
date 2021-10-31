@@ -3406,39 +3406,53 @@ public class frm_recepcion_datos extends PBase {
             String finalFechaVence = FechaVence;
 
             String LpOrigen = pLp;
+            //#CKFK 20211030 Inicialcé esta variable de ubicaciones
+            BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
             if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
-                BeUbicaciones = stream(ubic.items)
-                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                c.No_linea == BeOcDet.No_Linea &&
-                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                c.Lote.equals(finalSelectedLote)  &&
-                                c.Fecha_vence.equals(finalFechaVence) &&
-                                c.Lic_Plate.equals(LpOrigen))
-                        .toList();
+                //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                if (ubic.items!=null){
+                    BeUbicaciones = stream(ubic.items)
+                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                    c.No_linea == BeOcDet.No_Linea &&
+                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                    c.Lote.equals(finalSelectedLote)  &&
+                                    c.Fecha_vence.equals(finalFechaVence) &&
+                                    c.Lic_Plate.equals(LpOrigen))
+                            .toList();
+                }
 
             }else{
-                BeUbicaciones = stream(ubic.items)
-                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                c.No_linea == BeOcDet.No_Linea &&
-                                c.Lote.equals(finalSelectedLote)  &&
-                                c.IdOrdenCompraDet == pIdOrdenCompraDet)
-                        .toList();
+                //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                if (ubic.items!=null){
+                    BeUbicaciones = stream(ubic.items)
+                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                    c.No_linea == BeOcDet.No_Linea &&
+                                    c.Lote.equals(finalSelectedLote)  &&
+                                    c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                            .toList();
+                }
             }
 
             double CantRec=0;
             double CantTotal =0;
             double DifCantUbic =0;
 
-            for (int i = 0; i <BeUbicaciones.size(); i++)
-            {
-                valor = BeUbicaciones.get(i).Ubicacion;
-                CantRec =BeUbicaciones.get(i).Cantidad_recibida;
-                CantTotal=BeUbicaciones.get(i).Cantidad;
+            //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
+            if (BeUbicaciones!=null){
+                //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
+                if (BeUbicaciones.size()>0){
+                    for (int i = 0; i <BeUbicaciones.size(); i++)
+                    {
+                        valor = BeUbicaciones.get(i).Ubicacion;
+                        CantRec =BeUbicaciones.get(i).Cantidad_recibida;
+                        CantTotal=BeUbicaciones.get(i).Cantidad;
 
-                if (!UbicLotesList.contains(valor)){
-                    UbicLotesList.add(valor);
+                        if (!UbicLotesList.contains(valor)){
+                            UbicLotesList.add(valor);
+                        }
+                    }
                 }
             }
 
