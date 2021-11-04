@@ -129,7 +129,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
-                                        "$"+gl.existencia.Codigo,
+                                        gl.existencia.Codigo,
                                         gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
@@ -147,7 +147,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                 gl.gNomEmpresa,
-                                "$"+gl.existencia.Codigo,
+                                gl.existencia.Codigo,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }
 
