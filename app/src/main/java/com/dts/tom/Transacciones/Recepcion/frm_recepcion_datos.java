@@ -4285,7 +4285,7 @@ public class frm_recepcion_datos extends PBase {
                                     "^PQ1,0,1,Y " +
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            "$"+BeProducto.Codigo_barra);
+                            BeProducto.Codigo_barra);
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -4304,7 +4304,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
-                                        "$"+BeProducto.Codigo_barra,
+                                        BeProducto.Codigo_barra,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre);
                 }
 
@@ -4344,70 +4344,74 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-                //CM_20210112: Impresión de barras.
-                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-                printerIns.open();
+            if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
+                msgbox("No se puede imprimir el LP porque no está configurado automático");
+                return;
+            }
+            //CM_20210112: Impresión de barras.
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+            printerIns.open();
 
-                if (printerIns.isConnected()){
-                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+            if (printerIns.isConnected()){
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
-                    String zpl="";
+                String zpl="";
 
-                    if (BeProducto.IdTipoEtiqueta==1){
-                        zpl = String.format("^XA \n" +
-                                        "^MMT \n" +
-                                        "^PW609 \n" +
-                                        "^LL0406 \n" +
-                                        "^LS0 \n" +
-                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
-                                        "^FO2,340^GB670,0,14^FS \n" +
-                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                        "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                "$"+pNumeroLP);
-                    }else if (BeProducto.IdTipoEtiqueta==2){
-                        //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
-                        //Dado que la descripción salía muy pequeña
-                        zpl = String.format("^XA\n" +
-                                        "^MMT\n" +
-                                        "^PW600\n" +
-                                        "^LL0406\n" +
-                                        "^LS0\n" +
-                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
-                                        "^FD%3$s^FS\n" +
-                                        "^PQ1,0,1,Y \n" +
-                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                        "^FO2,440^GB670,14,14^FS\n" +
-                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
-                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                        gl.gNomEmpresa,
-                                        "$"+pNumeroLP,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre);
-                    }
-
-                    zPrinterIns.sendCommand(zpl);
-
-                    Thread.sleep(500);
-
-                    // Close the connection to release resources.
-                    printerIns.close();
-
-                }else{
-                    mu.msgbox("No se pudo obtener conexión con la impresora");
+                if (BeProducto.IdTipoEtiqueta==1){
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW609 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            "$"+pNumeroLP);
+                }else if (BeProducto.IdTipoEtiqueta==2){
+                    //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
+                    //Dado que la descripción salía muy pequeña
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW600\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+                                    "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,440^GB670,14,14^FS\n" +
+                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    "$"+pNumeroLP,
+                                    BeProducto.Codigo+" - "+BeProducto.Nombre);
                 }
+
+                zPrinterIns.sendCommand(zpl);
+
+                Thread.sleep(500);
+
+                // Close the connection to release resources.
+                printerIns.close();
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
 
             if (!imprimirDesdeBoton){
                 msgAskImprimir("Imprimir licencia de producto");
