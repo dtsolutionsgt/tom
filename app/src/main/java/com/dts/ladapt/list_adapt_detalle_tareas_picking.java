@@ -65,6 +65,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             holder.lblUmbasDet = (TextView) convertView.findViewById(R.id.lblUmbasDet);
             holder.lblPresDet = (TextView) convertView.findViewById(R.id.lblPresDet);
             holder.lblSol = (TextView) convertView.findViewById(R.id.lblSol);
+            holder.lblTarima = (TextView) convertView.findViewById(R.id.lblTarima);
             holder.lblRec = (TextView) convertView.findViewById(R.id.lblRec);
             holder.lblLoteDet = (TextView) convertView.findViewById(R.id.lblLoteDet);
             holder.lblLpDet = (TextView) convertView.findViewById(R.id.lblLpDet);
@@ -103,6 +104,8 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             holder.lblPresDet.setTextColor(R.style.titlestyle);
             holder.lblSol.setText("Sol");
             holder.lblSol.setTextColor(R.style.titlestyle);
+            holder.lblTarima.setText("Tarima");
+            holder.lblTarima.setTextColor(R.style.titlestyle);
             holder.lblRec.setText("Rec");
             holder.lblRec.setTextColor(R.style.titlestyle);
             holder.lblLoteDet.setText("Lote");
@@ -191,6 +194,10 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
                 holder.lblSol.setText(""+BeListTareasHH.get(position).Cantidad_Solicitada);
             }
 
+            if (BeListTareasHH.get(position).Tarima > 0){
+                holder.lblTarima.setText(""+BeListTareasHH.get(position).Tarima);
+            }
+
             if (BeListTareasHH.get(position).Cantidad_Recibida>0){
                 holder.lblRec.setText(""+BeListTareasHH.get(position).Cantidad_Recibida);
             }
@@ -263,7 +270,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblUbicDetPick,lblNomUbicDet,lblCodigoDet,lblProductoDet,lblUmbasDet,lblPresDet,lblSol,lblRec,lblLoteDet,lblLpDet,lblVenceDet
-                ,lblNomEstadoDet,lblPesoDet,lblIdPresDet,lblIdEstadoDet,lblIdPedidoEnc,lblPedidoDet,lblIdPickingDet,lblProductoBodegaDet,lblPickingUbic,lblStock,lblStockRes;
+                ,lblNomEstadoDet,lblPesoDet,lblIdPresDet,lblIdEstadoDet,lblIdPedidoEnc,lblPedidoDet,lblIdPickingDet,lblProductoBodegaDet,lblPickingUbic,lblStock,lblStockRes, lblTarima;
     }
 
 }
