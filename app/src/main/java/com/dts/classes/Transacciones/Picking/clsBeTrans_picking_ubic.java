@@ -66,7 +66,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdUbicacion_reemplazo=0;
     @Element(required=false) public int IdStock_reemplazo=0;
     @Element(required=false) public int IdBodega=0;
-
+    @Element(required=false) public double Tarima =0;
 
     public clsBeTrans_picking_ubic() {
     }
@@ -85,7 +85,7 @@ public class clsBeTrans_picking_ubic {
                                    String ProductoEstado, int IdProductoBodega, int IdProductoEstado, int IdPresentacion,
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
-                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega) {
+                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.IdPickingUbic=IdPickingUbic;
@@ -146,6 +146,7 @@ public class clsBeTrans_picking_ubic {
         this.IdUbicacion_reemplazo=IdUbicacion_reemplazo;
         this.IdStock_reemplazo=IdStock_reemplazo;
         this.IdBodega=IdBodega;
+        this.Tarima=Tarima;
 
     }
 
@@ -504,6 +505,11 @@ public class clsBeTrans_picking_ubic {
     public void setIdBodega(int value) {
         IdBodega=value;
     }
-
+    public double getTarima() {
+        return Tarima;
+    }
+    public void setIdBodega(double value) {
+        Tarima=value;
+    }
 }
 
