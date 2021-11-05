@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
@@ -74,6 +75,10 @@ public class frm_picking_datos extends PBase {
     public static double CantReemplazar=0;
     public static boolean ReemplazoLP=false;
     public static int Tipo=0;
+
+    public clsBeProducto_Presentacion gBePresentacion = new clsBeProducto_Presentacion();
+    public double vCajasPorCamas =0;
+    public double vCamasPorTarima = 0;
 
     private int DifDias = 0;
 
@@ -1084,6 +1089,13 @@ public class frm_picking_datos extends PBase {
                         List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                         cmbPresentacion.setSelection(inx);
+
+                        //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
+                        gBePresentacion= stream(gBeProducto.Presentaciones.items).
+                                where(z -> z.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+                        vCajasPorCamas = gBePresentacion.CajasPorCama;
+                        vCamasPorTarima = gBePresentacion.CamasPorTarima;
+
                     }
                 }
             }
@@ -1092,7 +1104,12 @@ public class frm_picking_datos extends PBase {
             if (CantARec<=0){
                 txtCantidadPick.setText(""+0);
             }else{
-                txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
+                if(vCajasPorCamas>0 && vCamasPorTarima>0){
+                    txtCantidadPick.setText(vCamasPorTarima*vCajasPorCamas+"");
+                }else{
+                    txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                }
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
