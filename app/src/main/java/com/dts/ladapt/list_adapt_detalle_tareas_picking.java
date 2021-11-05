@@ -146,6 +146,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             holder.lblUmbasDet.setText("--");
             holder.lblPresDet.setText("--");
             holder.lblSol.setText("0");
+            holder.lblTarima.setText("0");
             holder.lblRec.setText("0");
             holder.lblLoteDet.setText("--");
             holder.lblLpDet.setText("--");
