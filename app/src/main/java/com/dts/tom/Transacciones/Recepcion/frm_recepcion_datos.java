@@ -4306,6 +4306,7 @@ public class frm_recepcion_datos extends PBase {
                                         gl.gNomEmpresa,
                                         BeProducto.Codigo_barra,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre);
+
                 }
 
                 zPrinterIns.sendCommand(zpl);
