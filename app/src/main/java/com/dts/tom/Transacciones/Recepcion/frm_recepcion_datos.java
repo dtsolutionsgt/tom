@@ -3931,8 +3931,8 @@ public class frm_recepcion_datos extends PBase {
                  {
                     BeStock_rec.Serial = txtSerial.getText().toString();
                     //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
-                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
-                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                    BeStock_rec.Peso =  Double.parseDouble((txtPesoReal.getText().toString().isEmpty()?"0":txtPesoReal.getText().toString()));
+                    BeStock_rec.Temperatura = Double.parseDouble((txtTempReal.getText().toString().isEmpty()?"0":txtTempReal.getText().toString()));
                 }
                 BeStock_rec.IsNew = true;
 
@@ -4150,6 +4150,7 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("DespuesDeValidarCantidad"+e.getMessage());
+
         }
     }
 
@@ -4896,6 +4897,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (stream(listaStock.items).count()==0){
                     mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                    progress.cancel();
                     return;
                 }
 
@@ -6544,7 +6546,15 @@ public class frm_recepcion_datos extends PBase {
 
             try {
 
-                procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+                if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
+
+                    procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+
+                }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
+
+                    procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB");
+
+                }
 
                 if (procesada){
                     MensajeAdicionalParaImpresion = "Recepción de compra procesada en ERP";
