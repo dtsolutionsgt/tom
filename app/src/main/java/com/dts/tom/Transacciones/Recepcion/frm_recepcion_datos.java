@@ -4281,10 +4281,10 @@ public class frm_recepcion_datos extends PBase {
                                     "^PW700 \n" +
                                     "^LL0406 \n" +
                                     "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                     "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                     "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
                                     "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
@@ -4353,10 +4353,22 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            if (!txtNoLP.getText().toString().isEmpty()){
+                pNumeroLP = txtNoLP.getText().toString();
+            }
+
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
+
                 msgbox("No se puede imprimir el LP porque no está configurado automático");
+
+                if (!imprimirDesdeBoton){
+                    progress.setMessage("Actualizando valores DI");
+                    progress.show();
+                    Actualiza_Valores_Despues_Imprimir(true);
+                }
                 return;
             }
+
             //CM_20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
             printerIns.open();
@@ -4370,13 +4382,13 @@ public class frm_recepcion_datos extends PBase {
                 if (BeProducto.IdTipoEtiqueta==1){
                     zpl = String.format("^XA \n" +
                                     "^MMT \n" +
-                                    "^PW609 \n" +
+                                    "^PW700 \n" +
                                     "^LL0406 \n" +
                                     "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                     "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                     "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
                                     "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
