@@ -54,6 +54,7 @@ import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsDataContractDI;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.LicencePlates.clsBeLicensePlatesList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
@@ -139,6 +140,7 @@ public class frm_recepcion_datos extends PBase {
 
     private WebServiceHandler ws;
     private XMLObject xobj;
+    private clsDataContractDI dataContractDI;
 
     private boolean Mostro_Propiedades,Escaneo_Pallet;
     private boolean mostrar_parametros_producto;
@@ -240,6 +242,7 @@ public class frm_recepcion_datos extends PBase {
 
         ws = new WebServiceHandler(frm_recepcion_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
+        dataContractDI = new clsDataContractDI();
 
         cmbEstadoProductoRec = findViewById(R.id.cmbEstadoProductoRec);
         cmbPresRec = findViewById(R.id.cmbPresRec);
@@ -3390,90 +3393,94 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-            UbicLotesList.clear();
+            if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
 
-            clsBeTrans_oc_det_loteList ubic;
-            ubic=gl.gBeOrdenCompra.DetalleLotes;
-            List<clsBeTrans_oc_det_lote> BeUbicaciones;
+                UbicLotesList.clear();
 
-            String SelectedLote;
-            String FechaVence;
+                clsBeTrans_oc_det_loteList ubic;
+                ubic=gl.gBeOrdenCompra.DetalleLotes;
+                List<clsBeTrans_oc_det_lote> BeUbicaciones;
 
-            SelectedLote = txtLoteRec.getText().toString().trim();
-            FechaVence = du.convierteFecha(cmbVenceRec.getText().toString());
+                String SelectedLote;
+                String FechaVence;
 
-            String finalSelectedLote = SelectedLote;
-            String finalFechaVence = FechaVence;
+                SelectedLote = txtLoteRec.getText().toString().trim();
+                FechaVence = du.convierteFecha(cmbVenceRec.getText().toString());
 
-            String LpOrigen = pLp;
-            //#CKFK 20211030 Inicialcé esta variable de ubicaciones
-            BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
+                String finalSelectedLote = SelectedLote;
+                String finalFechaVence = FechaVence;
 
-            if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+                String LpOrigen = pLp;
+                //#CKFK 20211030 Inicialcé esta variable de ubicaciones
+                BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
-                //#CKFK 20211030 Validé que ubic.items no fuera nulo
-                if (ubic.items!=null){
-                    BeUbicaciones = stream(ubic.items)
-                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                    c.No_linea == BeOcDet.No_Linea &&
-                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                    c.Lote.equals(finalSelectedLote)  &&
-                                    c.Fecha_vence.equals(finalFechaVence) &&
-                                    c.Lic_Plate.equals(LpOrigen))
-                            .toList();
+                if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+
+                    //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                    if (ubic.items!=null){
+                        BeUbicaciones = stream(ubic.items)
+                                .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                        c.No_linea == BeOcDet.No_Linea &&
+                                        c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                        c.Lote.equals(finalSelectedLote)  &&
+                                        c.Fecha_vence.equals(finalFechaVence) &&
+                                        c.Lic_Plate.equals(LpOrigen))
+                                .toList();
+                    }
+
+                }else{
+                    //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                    if (ubic.items!=null){
+                        BeUbicaciones = stream(ubic.items)
+                                .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                        c.No_linea == BeOcDet.No_Linea &&
+                                        c.Lote.equals(finalSelectedLote)  &&
+                                        c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                                .toList();
+                    }
                 }
 
-            }else{
-                //#CKFK 20211030 Validé que ubic.items no fuera nulo
-                if (ubic.items!=null){
-                    BeUbicaciones = stream(ubic.items)
-                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                    c.No_linea == BeOcDet.No_Linea &&
-                                    c.Lote.equals(finalSelectedLote)  &&
-                                    c.IdOrdenCompraDet == pIdOrdenCompraDet)
-                            .toList();
-                }
-            }
+                double CantRec=0;
+                double CantTotal =0;
+                double DifCantUbic =0;
 
-            double CantRec=0;
-            double CantTotal =0;
-            double DifCantUbic =0;
+                //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
+                if (BeUbicaciones!=null){
+                    //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
+                    if (BeUbicaciones.size()>0){
+                        for (int i = 0; i <BeUbicaciones.size(); i++)
+                        {
+                            valor = BeUbicaciones.get(i).Ubicacion;
+                            CantRec =BeUbicaciones.get(i).Cantidad_recibida;
+                            CantTotal=BeUbicaciones.get(i).Cantidad;
 
-            //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
-            if (BeUbicaciones!=null){
-                //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
-                if (BeUbicaciones.size()>0){
-                    for (int i = 0; i <BeUbicaciones.size(); i++)
-                    {
-                        valor = BeUbicaciones.get(i).Ubicacion;
-                        CantRec =BeUbicaciones.get(i).Cantidad_recibida;
-                        CantTotal=BeUbicaciones.get(i).Cantidad;
-
-                        if (!UbicLotesList.contains(valor)){
-                            UbicLotesList.add(valor);
+                            if (!UbicLotesList.contains(valor)){
+                                UbicLotesList.add(valor);
+                            }
                         }
                     }
                 }
-            }
 
-            CantTotal=mu.round2(CantTotal/ BeProducto.Presentacion.Factor);
-            CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
-            DifCantUbic = CantTotal - CantRec;
+                CantTotal=mu.round2(CantTotal/ BeProducto.Presentacion.Factor);
+                CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
+                DifCantUbic = CantTotal - CantRec;
 
-            if (UbicLotesList.size()>0){
+                if (UbicLotesList.size()>0){
 
-                ubiDetLote = UbicLotesList.get(0);
+                    ubiDetLote = UbicLotesList.get(0);
 
-                if (ubiDetLote!=null){
-                    if(!ubiDetLote.isEmpty()) {
-                        lblUbicacion.setText("Ubic: " + ubiDetLote + "\n Pend:" + DifCantUbic + "\n Rec: "+ CantRec );
-                        tblUbicacion.setVisibility(View.VISIBLE);
+                    if (ubiDetLote!=null){
+                        if(!ubiDetLote.isEmpty()) {
+                            lblUbicacion.setText("Ubic: " + ubiDetLote + "\n Pend:" + DifCantUbic + "\n Rec: "+ CantRec );
+                            tblUbicacion.setVisibility(View.VISIBLE);
+                        }
+                    }else {
+                        tblUbicacion.setVisibility(View.GONE);
                     }
-                }else {
+                }else{
                     tblUbicacion.setVisibility(View.GONE);
                 }
-            }else{
-                tblUbicacion.setVisibility(View.GONE);
+
             }
 
         } catch (Exception e) {
@@ -3923,17 +3930,9 @@ public class frm_recepcion_datos extends PBase {
                 if (mostrar_parametros_producto)
                  {
                     BeStock_rec.Serial = txtSerial.getText().toString();
-                    //#GT 21092021 si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
-                     if( !txtPesoReal.getText().toString().equals("") ){
-                         BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
-                     }
-                     if (!txtTempReal.getText().toString().equals("")){
-                         BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
-                     }
-                     if(!txtAnada.getText().toString().equals("")){
-                         BeStock_rec.Anada = Integer.parseInt(txtAnada.getText().toString());
-                     }
-
+                    //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
+                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
                 }
                 BeStock_rec.IsNew = true;
 
@@ -4153,6 +4152,7 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("DespuesDeValidarCantidad"+e.getMessage());
+
         }
     }
 
@@ -4283,10 +4283,10 @@ public class frm_recepcion_datos extends PBase {
                                     "^PW700 \n" +
                                     "^LL0406 \n" +
                                     "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                     "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                     "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
                                     "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
@@ -4355,10 +4355,22 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            if (!txtNoLP.getText().toString().isEmpty()){
+                pNumeroLP = txtNoLP.getText().toString();
+            }
+
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
+
                 msgbox("No se puede imprimir el LP porque no está configurado automático");
+
+                if (!imprimirDesdeBoton){
+                    progress.setMessage("Actualizando valores DI");
+                    progress.show();
+                    Actualiza_Valores_Despues_Imprimir(true);
+                }
                 return;
             }
+
             //CM_20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
             printerIns.open();
@@ -4372,13 +4384,13 @@ public class frm_recepcion_datos extends PBase {
                 if (BeProducto.IdTipoEtiqueta==1){
                     zpl = String.format("^XA \n" +
                                     "^MMT \n" +
-                                    "^PW609 \n" +
+                                    "^PW700 \n" +
                                     "^LL0406 \n" +
                                     "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                     "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                     "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                     "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
                                     "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
@@ -4788,30 +4800,68 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#CKFK 20210412 Llenar tabla de detalle lotes
+
             clsBeTrans_oc_det_loteList detalle_lotes;
             detalle_lotes=gl.gBeOrdenCompra.DetalleLotes;
 
             if (detalle_lotes.items != null ){
+
                 if (detalle_lotes.items.size()>0){
 
-                    BeDetalleLotes = stream(detalle_lotes.items)
-                            .where(c -> {
-                                try {
-                                    return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                            c.No_linea == BeOcDet.No_Linea &&
-                                            c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                            c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
-                                            c.Ubicacion.equals(ubiDetLote) &&
-                                            c.Lote.equals(cmbLote.getSelectedItem().toString());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                return false;
-                            })
-                            .first();
-                    BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
-                    BeDetalleLotes.IsNew = true;
+                    if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
+
+
+                        try {
+                            BeDetalleLotes = stream(detalle_lotes.items)
+                                    .where(c -> {
+                                        try {
+                                            return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                    c.No_linea == BeOcDet.No_Linea &&
+                                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
+                                                    c.Ubicacion.equals(ubiDetLote) &&
+                                                    c.Lote.equals(cmbLote.getSelectedItem().toString());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    })
+                                    .first();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta){
+
+                        try {
+                            BeDetalleLotes = stream(detalle_lotes.items)
+                                    .where(c -> {
+                                        try {
+                                            return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                    c.No_linea == BeOcDet.No_Linea &&
+                                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
+                                                    c.Lote.equals(cmbLote.getSelectedItem().toString());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    })
+                                    .first();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    if (BeDetalleLotes != null){
+                        BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
+                        BeDetalleLotes.IsNew = true;
+                    }
                 }
+
             }else{
                 BeDetalleLotes = null;
             }
@@ -4861,6 +4911,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (stream(listaStock.items).count()==0){
                     mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                    progress.cancel();
                     return;
                 }
 
@@ -5570,16 +5621,33 @@ public class frm_recepcion_datos extends PBase {
                                BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
                            }
 
-                            callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
-                                    "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
-                                    "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
-                                    "NoLinea", BeTransReDet.No_Linea,
-                                    "CodigoProducto",BeProducto.Codigo,
-                                    "Cantidad", BeTransReDet.cantidad_recibida,
-                                    "NoLote",   BeTransReDet.Lote,
-                                    "FechaVence",BeTransReDet.Fecha_vence,
-                                    "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
-                            ;
+                           if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
+
+                               callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
+                                       "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
+                                       "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                       "NoLinea", BeTransReDet.No_Linea,
+                                       "CodigoProducto",BeProducto.Codigo,
+                                       "Cantidad", BeTransReDet.cantidad_recibida,
+                                       "NoLote",   BeTransReDet.Lote,
+                                       "FechaVence",BeTransReDet.Fecha_vence,
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                               ;
+
+                           }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
+
+                               callMethod("Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB",
+                                       "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
+                                       "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                       "NoLinea", BeTransReDet.No_Linea,
+                                       "CodigoProducto",BeProducto.Codigo,
+                                       "Cantidad", BeTransReDet.cantidad_recibida,
+                                       "NoLote",   BeTransReDet.Lote,
+                                       "FechaVence",BeTransReDet.Fecha_vence,
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                               ;
+                           }
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -5594,7 +5662,7 @@ public class frm_recepcion_datos extends PBase {
                 progress.hide();
                 mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }finally{
-                //progress.hide();
+                progress.cancel();
             }
 
         }
@@ -6492,7 +6560,19 @@ public class frm_recepcion_datos extends PBase {
 
             try {
 
-                procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+                if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
+
+                    procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+
+                }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
+
+                    procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB");
+
+                }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
+
+                    procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB");
+
+                }
 
                 if (procesada){
                     MensajeAdicionalParaImpresion = "Recepción de compra procesada en ERP";
