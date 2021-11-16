@@ -115,6 +115,5 @@ public class clsBeTrans_inv_stock_prod {
         idubicacion=value;
     }
 
-
 }
 
