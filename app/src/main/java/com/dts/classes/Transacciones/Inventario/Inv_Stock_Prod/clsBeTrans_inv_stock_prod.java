@@ -18,7 +18,6 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public int idbodega=0;
     @Element(required=false) public int idubicacion=0;
 
-
     public clsBeTrans_inv_stock_prod() {
     }
 
