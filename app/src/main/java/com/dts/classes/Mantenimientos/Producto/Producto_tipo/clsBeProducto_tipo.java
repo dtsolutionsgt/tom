@@ -10,6 +10,7 @@ public class clsBeProducto_tipo {
     @Element(required=false) public int IdTipoProducto=0;
     @Element(required=false) public int IdPropietario=0;
     @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
+    @Element(required=false) public String Codigo="";
     @Element(required=false) public String NombreTipoProducto="";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String User_agr="";
@@ -64,6 +65,12 @@ public class clsBeProducto_tipo {
     }
     public void setPropietario(clsBePropietarios value) {
         Propietario=value;
+    }
+    public String getCodigo() {
+        return Codigo;
+    }
+    public void setCodigo(String value) {
+        Codigo=value;
     }
     public String getNombreTipoProducto() {
         return NombreTipoProducto;

@@ -9,6 +9,7 @@ public class clsBeProducto_familia {
 
     @Element(required=false) public int IdFamilia=0;
     @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
+    @Element(required=false) public String Codigo="";
     @Element(required=false) public String Nombre="";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String User_agr="";
@@ -49,6 +50,12 @@ public class clsBeProducto_familia {
     }
     public void setPropietario(clsBePropietarios value) {
         Propietario=value;
+    }
+    public String getCodigo() {
+        return Codigo;
+    }
+    public void setCodigo(String value) {
+        Codigo=value;
     }
     public String getNombre() {
         return Nombre;
