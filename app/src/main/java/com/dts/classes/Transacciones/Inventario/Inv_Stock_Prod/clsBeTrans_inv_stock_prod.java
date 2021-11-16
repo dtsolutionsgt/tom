@@ -15,6 +15,8 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public String Lote="";
     @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public String Codigo="";
+    @Element(required=false) public int idbodega=0;
+    @Element(required=false) public int idubicacion=0;
 
 
     public clsBeTrans_inv_stock_prod() {
@@ -22,7 +24,7 @@ public class clsBeTrans_inv_stock_prod {
 
     public clsBeTrans_inv_stock_prod(int Idinventario,int Idinvstockprod,int IdProducto,int IdPresentacion,
                                      double Cant,double Peso,int IdUnidadMedida,String Lote,
-                                     String Fecha_vence,String Codigo) {
+                                     String Fecha_vence,String Codigo, int idbodega, int idubicacion) {
 
         this.Idinventario=Idinventario;
         this.Idinvstockprod=Idinvstockprod;
@@ -34,6 +36,8 @@ public class clsBeTrans_inv_stock_prod {
         this.Lote=Lote;
         this.Fecha_vence=Fecha_vence;
         this.Codigo=Codigo;
+        this.idbodega=idbodega;
+        this.idubicacion=idubicacion;
 
     }
 
@@ -98,6 +102,19 @@ public class clsBeTrans_inv_stock_prod {
     public void setCodigo(String value) {
         Codigo=value;
     }
+    public int getIdBodega() {
+        return idbodega;
+    }
+    public void setIdBodega(int value) {
+        idbodega=value;
+    }
+    public int getIdubicacion() {
+        return idubicacion;
+    }
+    public void setIdubicacion(int value) {
+        idubicacion=value;
+    }
+
 
 }
 

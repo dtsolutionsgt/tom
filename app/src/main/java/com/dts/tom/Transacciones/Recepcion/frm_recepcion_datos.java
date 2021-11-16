@@ -3923,9 +3923,17 @@ public class frm_recepcion_datos extends PBase {
                 if (mostrar_parametros_producto)
                  {
                     BeStock_rec.Serial = txtSerial.getText().toString();
-                    //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
-                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
-                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                    //#GT 21092021 si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
+                     if( !txtPesoReal.getText().toString().equals("") ){
+                         BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                     }
+                     if (!txtTempReal.getText().toString().equals("")){
+                         BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                     }
+                     if(!txtAnada.getText().toString().equals("")){
+                         BeStock_rec.Anada = Integer.parseInt(txtAnada.getText().toString());
+                     }
+
                 }
                 BeStock_rec.IsNew = true;
 
@@ -3969,6 +3977,8 @@ public class frm_recepcion_datos extends PBase {
                 }else{
                     pListBeStockRec.items.get(pIndiceListaStock).Serial = "";
                 }
+
+
                 pListBeStockRec.items.get(pIndiceListaStock).Anada = 0;
                 pListBeStockRec.items.get(pIndiceListaStock).Fec_agr = String.valueOf(du.getFechaActual());
                 pListBeStockRec.items.get(pIndiceListaStock).User_agr = gl.IdOperador+"";
