@@ -1,6 +1,5 @@
 package com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod;
 
-
 import org.simpleframework.xml.Element;
 
 public class clsBeTrans_inv_stock_prod {
@@ -39,7 +38,6 @@ public class clsBeTrans_inv_stock_prod {
         this.idubicacion=idubicacion;
 
     }
-
 
     public int getIdinventario() {
         return Idinventario;
