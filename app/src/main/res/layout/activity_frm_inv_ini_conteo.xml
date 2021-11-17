@@ -134,6 +134,23 @@
                 android:layout_height="match_parent" >
 
                 <TextView
+                    android:id="@+id/lblLotes"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Lote:" />
+
+                <Spinner
+                    android:id="@+id/cmbLotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
                     android:id="@+id/textView36"
                     style="@style/StyleText"
                     android:layout_width="150dp"
@@ -153,6 +170,23 @@
                     android:layout_height="wrap_content"
                     android:inputType="date|number" />
 
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lblVenceList"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Vence:" />
+
+                <Spinner
+                    android:id="@+id/cmbFechasVence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
             </TableRow>
 
             <TableRow

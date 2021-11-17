@@ -73,6 +73,11 @@ public class frm_list_inventario extends PBase {
 
                     if (position > 0) {
 
+
+
+                        /************ falta capturar tipo de inventario, para validar en frm_inv_ini_conteo ******/
+                        /***************************************************************************************************/
+
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_inv_enc sitem = (clsBeTrans_inv_enc) lvObj;
                         BeInvEnc = new clsBeTrans_inv_enc();
