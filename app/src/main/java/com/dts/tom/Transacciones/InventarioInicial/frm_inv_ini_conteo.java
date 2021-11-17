@@ -771,6 +771,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeProducto.Control_vencimiento){
 
+                //GT 17112021: si tiene control lote, y existe más de un lote al mismo producto
                 if(tiene_fechas){
                     ditem.Fecha_vence = FechaSelect;
                 }else{
