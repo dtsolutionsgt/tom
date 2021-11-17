@@ -5646,6 +5646,18 @@ public class frm_recepcion_datos extends PBase {
                                        "FechaVence",BeTransReDet.Fecha_vence,
                                        "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
                                ;
+                           }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
+
+                               callMethod("Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB",
+                                       "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
+                                       "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                       "NoLinea", BeTransReDet.No_Linea,
+                                       "CodigoProducto",BeProducto.Codigo,
+                                       "Cantidad", BeTransReDet.cantidad_recibida,
+                                       "NoLote",   BeTransReDet.Lote,
+                                       "FechaVence",BeTransReDet.Fecha_vence,
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                               ;
                            }
 
 
