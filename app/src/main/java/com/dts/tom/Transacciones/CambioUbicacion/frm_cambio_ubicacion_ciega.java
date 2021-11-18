@@ -142,7 +142,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private double vCantidadAUbicar, vCantidadDisponible, vPesoAUbicar, vPesoDisponible;
 
     private TextToSpeech mTTS;
-    private String text = "";
+    private String textToSpeeach = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1635,38 +1635,67 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
                         @Override
                         public void onInit(int status) {
+
                             if(status == TextToSpeech.SUCCESS){
+
                                 Locale locSpanish = new Locale("spa", "MEX");
                                 int result =mTTS.setLanguage(locSpanish);
+
+                                textToSpeeach = "";
+
                                 if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
                                     Log.e("tts","Lenguaje no soportado :(");
                                 }else{
 
                                     String[] cadena_ubicacion = bodega_ubicacion_destino.getDescripcion().split("-");
-                                    String rack = cadena_ubicacion[0].trim().substring(0);
-                                    String columna = cadena_ubicacion[1].trim().substring(1);
-                                    String tramo = cadena_ubicacion[2].trim().substring(1);
-                                    String nivel = cadena_ubicacion[3].trim().substring(1);
-                                    String pos = cadena_ubicacion[4].trim().substring(3);
-                                    String ubicacion = cadena_ubicacion[5].trim().substring(1);
+                                    String rack, columna, tramo, nivel, pos, ubicacion;
 
-                                    text = "Lleve producto a " + rack + ". "
-                                         + " Tramo: " + tramo + "."
-                                         + " Columna: " + columna + "."
-                                         + " Nivel: " + nivel + "."
-                                         + " Posición: " + pos + "."
-                                         + " Y Escanee: " + ubicacion;
+                                    if (cadena_ubicacion.length==6){
+
+                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        columna = cadena_ubicacion[1].trim().substring(1);
+                                        tramo = cadena_ubicacion[2].trim().substring(1);
+                                        nivel = cadena_ubicacion[3].trim().substring(1);
+                                        pos = cadena_ubicacion[4].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[5].trim().substring(1);
+
+                                        textToSpeeach = "Lleve producto a " + rack + ". "
+                                                + " Tramo: " + tramo + "."
+                                                + " Columna: " + columna + "."
+                                                + " Nivel: " + nivel + "."
+                                                + " Posición: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
+
+                                    }else if (cadena_ubicacion.length==5){
+
+                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        columna = cadena_ubicacion[1].trim().substring(1);
+                                        nivel = cadena_ubicacion[2].trim().substring(1);
+                                        pos = cadena_ubicacion[3].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[4].trim().substring(1);
+
+                                        textToSpeeach = "Lleve producto a " + rack + ". "
+                                                + " Columna: " + columna + "."
+                                                + " Nivel: " + nivel + "."
+                                                + " Posición: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
+                                    }
 
                                     float speed = 1f;
                                     float pitch = 1f;
                                     mTTS.setPitch(pitch);
                                     mTTS.setSpeechRate(speed);
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
-                                    } else {
-                                        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                                    if (textToSpeeach.isEmpty()){
+                                     textToSpeeach = "Enseñame por favor donde ubicar el producto";
                                     }
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        mTTS.speak(textToSpeeach,TextToSpeech.QUEUE_FLUSH,null,null);
+                                    } else {
+                                        mTTS.speak(textToSpeeach, TextToSpeech.QUEUE_FLUSH, null);
+                                    }
+
                                 }
                             }else{
                                 Log.e("tts","No he podido inicializar el TTS :(");
