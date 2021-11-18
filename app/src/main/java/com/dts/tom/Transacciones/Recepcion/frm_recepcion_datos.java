@@ -4327,7 +4327,11 @@ public class frm_recepcion_datos extends PBase {
 
                 }
 
-                zPrinterIns.sendCommand(zpl);
+                if (!zpl.isEmpty()){
+                    zPrinterIns.sendCommand(zpl);
+                }else{
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                }
 
                 Thread.sleep(500);
 

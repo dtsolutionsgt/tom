@@ -385,7 +385,11 @@ public class frm_consulta_stock extends PBase {
                             txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
                             (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
 
-                    zPrinterIns.sendCommand(zpl);
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
 
                     Thread.sleep(500);
 
