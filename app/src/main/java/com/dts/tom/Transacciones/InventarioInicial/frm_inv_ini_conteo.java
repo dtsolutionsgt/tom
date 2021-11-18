@@ -234,8 +234,6 @@ public class frm_inv_ini_conteo extends PBase {
 
                     LoteSelect=InvTeorico.items.get(position).Lote;
 
-                    mu.msgbox("Lote seleccionado: " + LoteSelect);
-
                 }
 
                 @Override
@@ -254,7 +252,6 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     FechaSelect=InvTeorico.items.get(position).Fecha_vence;
-                    mu.msgbox("Fecha seleccionado: " + FechaSelect);
 
                 }
 
