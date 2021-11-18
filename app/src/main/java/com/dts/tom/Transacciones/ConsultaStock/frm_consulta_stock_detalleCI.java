@@ -243,15 +243,15 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }else if (gl.existencia.IdTipoEtiqueta==4){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
-                                        "^PW700 \n" +
-                                        "^LL609 \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
                                         "^LS0 \n" +
-                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
