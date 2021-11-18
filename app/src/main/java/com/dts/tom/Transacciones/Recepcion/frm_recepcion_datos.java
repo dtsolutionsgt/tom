@@ -50,6 +50,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametrosList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
+import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_lote;
@@ -183,6 +184,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeTrans_oc_det beTransOCDet =new clsBeTrans_oc_det();
     private  clsBeStock_rec ObjS = new clsBeStock_rec();
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
+    private clsBeTipo_etiqueta pBeTipo_etiqueta;
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
     /***** parametros personalizados *****************************************/
@@ -321,6 +323,8 @@ public class frm_recepcion_datos extends PBase {
         }else{
             pIdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
         }
+
+        pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
         if(!gl.Escaneo_Pallet){
             execws(1);
@@ -3160,6 +3164,10 @@ public class frm_recepcion_datos extends PBase {
                 Llena_beStock_Anterior();
             }
 
+            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+            execws(27);
+
             progress.cancel();
 
         }catch (Exception e){
@@ -4454,7 +4462,7 @@ public class frm_recepcion_datos extends PBase {
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);
                 }else{
-                    //#EJC2211117> Colocar mensaje aquí que no se genero la etiqueta porque el tipo de etiqueta no está definido.
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
 
                 Thread.sleep(500);
@@ -5697,7 +5705,9 @@ public class frm_recepcion_datos extends PBase {
 
 
                         break;
-
+                    case 27://Obtiene el Tipo de Etiqueta del producto
+                        callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
+                        break;
                 }
 
             }catch (Exception e){
@@ -5801,6 +5811,9 @@ public class frm_recepcion_datos extends PBase {
                 case 26:
                     process_Recepcion_Compra_Nav_BYB();
                     break;
+                case 27:
+                    processTipoEtiqueta();
+                    break;
             }
 
         } catch (Exception e) {
@@ -5818,7 +5831,9 @@ public class frm_recepcion_datos extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
-            Load();
+            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+            execws(27);
 
         } catch (Exception e) {
             progress.cancel();
@@ -6025,6 +6040,11 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
             }
+
+
+            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+            execws(27);
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP: "+e.getMessage());
@@ -6640,6 +6660,20 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    private void processTipoEtiqueta(){
+
+        try {
+
+            progress.setMessage("Obteniendo tipo de etiqueta del producto");
+
+            pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
+
+        } catch (Exception e) {
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
     public void msgboxErrorOnWS2(String msg) {
         try{
             ExDialog dialog = new ExDialog(this);

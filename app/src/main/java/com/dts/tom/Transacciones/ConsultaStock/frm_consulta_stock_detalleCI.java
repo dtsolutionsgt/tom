@@ -9,8 +9,14 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dts.base.WebService;
+import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -19,13 +25,19 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
 
+    private frm_consulta_stock_detalleCI.WebServiceHandler ws;
+    private XMLObject xobj;
     private ProgressDialog progress;
+    private clsBeTipo_etiqueta pBeTipo_etiqueta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_consulta_stock_detalle_c_i);
         super.InitBase();
+
+        ws = new frm_consulta_stock_detalleCI.WebServiceHandler(frm_consulta_stock_detalleCI.this, gl.wsurl);
+        xobj = new XMLObject(ws);
 
         lblcodigo = findViewById(R.id.lblcodigoCI);
         lbldescripcion = findViewById(R.id.lbldescripcionCI);
@@ -40,8 +52,25 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblnomUbic = findViewById(R.id.lblnomUbicCI);
         lblLicPlate= findViewById(R.id.lblLicPlate);
 
+        ProgressDialog();
+
         asignarDatos();
 
+        //Aquí llamamos al método del WS Get_Tipo_Etiqueta_By_IdTipoEtiqueta
+        pBeTipo_etiqueta = new clsBeTipo_etiqueta();
+        pBeTipo_etiqueta.IdTipoEtiqueta= gl.existencia.getIdTipoEtiqueta();
+
+        execws(1);
+
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void asignarDatos() {
@@ -90,6 +119,63 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
 
 
+        }
+
+    }
+
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
+        try {
+            if (throwing) throw new Exception(errmsg);
+
+            switch (ws.callback) {
+                case 1:
+                    processTipoEtiqueta();
+                    break;
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1://Obtiene el Tipo de Etiqueta del producto
+                        callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
+                        break;
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
+    private void processTipoEtiqueta(){
+
+        try {
+
+            progress.setMessage("Obteniendo tipo de etiqueta del producto");
+
+            pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
+
+        } catch (Exception e) {
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
     }
@@ -177,7 +263,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     if (!zpl.isEmpty()){
                         zPrinterIns.sendCommand(zpl);
                     }else{
-                        //#EJC2211117> Colocar mensaje aquí que no se genero la etiqueta porque el tipo de etiqueta no está definido.
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
 
                     Thread.sleep(500);

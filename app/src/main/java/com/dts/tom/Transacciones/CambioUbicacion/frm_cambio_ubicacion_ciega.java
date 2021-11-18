@@ -1261,7 +1261,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
-
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
