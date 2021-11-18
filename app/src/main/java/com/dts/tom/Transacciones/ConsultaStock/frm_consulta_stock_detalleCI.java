@@ -104,7 +104,10 @@ public class frm_consulta_stock_detalleCI extends PBase {
             if (gl.existencia.Codigo!= "0"){
                 //CM_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-                printerIns.open();
+
+                if (!printerIns.isConnected()){
+                    printerIns.open();
+                }
 
                 if (printerIns.isConnected()){
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
@@ -113,24 +116,24 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
                     if (gl.existencia.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
-                                        "^MMT \n" +
-                                        "^PW700 \n" +
-                                        "^LL0406 \n" +
-                                        "^LS0 \n" +
-                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
-                                        "^FO2,340^GB670,0,14^FS \n" +
-                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                        "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                        gl.gNomEmpresa,
-                                        gl.existencia.Codigo,
-                                        gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+                                            "^MMT \n" +
+                                            "^PW700 \n" +
+                                            "^LL0406 \n" +
+                                            "^LS0 \n" +
+                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                            gl.gNomEmpresa,
+                                            gl.existencia.Codigo,
+                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -149,9 +152,33 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                 gl.gNomEmpresa,
                                 gl.existencia.Codigo,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+                    }else if (gl.existencia.IdTipoEtiqueta==4){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0609 \n" +
+                                        "^LS0 \n" +
+                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                gl.existencia.Codigo,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }
 
-                    zPrinterIns.sendCommand(zpl);
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        //#EJC2211117> Colocar mensaje aquí que no se genero la etiqueta porque el tipo de etiqueta no está definido.
+                    }
 
                     Thread.sleep(500);
 
