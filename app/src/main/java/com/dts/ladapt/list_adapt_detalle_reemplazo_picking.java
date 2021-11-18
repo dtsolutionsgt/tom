@@ -21,6 +21,8 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
 
     private LayoutInflater l_Inflater;
 
+    public list_adapt_detalle_reemplazo_picking(){}
+
     public list_adapt_detalle_reemplazo_picking(Context context, ArrayList<clsBeStockReemplazo> results) {
         BeListTareasHH = results;
         l_Inflater = LayoutInflater.from(context);
