@@ -2149,7 +2149,7 @@ public class frm_Packing extends PBase {
     }
 
     public void Imprimir(View view){
-        msgAskImprimir("Imprimir licencia de implosión");
+        msgAskImprimir("¿Imprimir licencia?");
     }
 
     //#CKFK 20210617: Agregué funcionalidad de impresion
@@ -2160,16 +2160,16 @@ public class frm_Packing extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Licencia de implosión", (dialog12, which) -> {
+            dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo licencia de packing");
                 progress.show();
                 Imprimir_Licencia();
             });
 
-            dialog.setNegativeButton("Salir", (dialog13, which) -> {
+            dialog.setNegativeButton("No gracias", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Imprimiendo licencia");
                     progress.show();
@@ -2192,11 +2192,14 @@ public class frm_Packing extends PBase {
     }
 
     private void Imprimir_Licencia(){
+
         try{
 
-            //CM_20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-            printerIns.open();
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
 
             if (printerIns.isConnected()){
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
@@ -2241,7 +2244,7 @@ public class frm_Packing extends PBase {
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
                             "$"+NuevoLp);
-                }else if (gl.existencia.IdTipoEtiqueta==4){
+                }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
                     zpl = String.format("^XA \n" +
                                     "^MMT \n" +
                                     "^PW812 \n" +
@@ -2278,15 +2281,16 @@ public class frm_Packing extends PBase {
             }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir licencia de packing");
+                msgAskImprimir("Imprimir licencia");
             }
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
@@ -2304,12 +2308,9 @@ public class frm_Packing extends PBase {
             progress.setMessage("Validando imprimir barra");
 
             if (gl.IdImpresora>0){
-
                 progress.cancel();
                 imprimirDesdeBoton=false;
-
-                msgAskImprimir("Imprimir Licencia de Packing");
-
+                msgAskImprimir("¿Imprimir Licencia?");
             }
 
         }catch (Exception e){
@@ -2317,7 +2318,7 @@ public class frm_Packing extends PBase {
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra: "+e.getMessage());

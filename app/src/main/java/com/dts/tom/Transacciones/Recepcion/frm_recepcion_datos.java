@@ -4240,16 +4240,16 @@ public class frm_recepcion_datos extends PBase {
 //            dialogT.setCanceledOnTouchOutside(false);
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Código de Producto", (dialog1, which) -> {
+            dialog.setPositiveButton("Código de producto", (dialog1, which) -> {
                 progress.setMessage("Imprimiendo código producto");
                 progress.show();
                 Imprimir_Barra();
             });
 
-            dialog.setNegativeButton("Licencia de Producto", (dialog12, which) -> {
+            dialog.setNegativeButton("Licencia", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
                 Imprimir_Licencia();
@@ -4257,7 +4257,7 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setNeutralButton("Salir", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
-                    progress.setMessage("Actualizando valores OC");
+                    progress.setMessage("Actualizando valores D.I.");
                     progress.show();
                     Actualiza_Valores_Despues_Imprimir(true);
                 }
@@ -4369,10 +4369,10 @@ public class frm_recepcion_datos extends PBase {
 
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
 
-                msgbox("No se puede imprimir el LP porque no está configurado automático");
+                msgbox("No se puede imprimir la licencia porque no está configurada como automática");
 
                 if (!imprimirDesdeBoton){
-                    progress.setMessage("Actualizando valores DI");
+                    progress.setMessage("Actualizando valores D.I.");
                     progress.show();
                     Actualiza_Valores_Despues_Imprimir(true);
                 }
@@ -4475,7 +4475,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir licencia de producto");
+                msgAskImprimir("¿Imprimir licencia?");
             }
             //Solo voy a llamar a esta opción cuando seleccione al salir
            // Actualiza_Valores_Despues_Imprimir();
