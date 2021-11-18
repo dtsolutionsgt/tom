@@ -402,11 +402,11 @@ public class frm_consulta_stock extends PBase {
         try{
             if(!Escaneo_Pallet){
 
-                //Get_Stock_Por_Producto_Ubicacion
+                //Get_Stock_Por_Producto_Ubicacion_CI
                 execws(4);
             }else{
 
-                //Get_Stock_Por_Pallet
+                //Get_Stock_Por_Pallet_CI
                 execws(5);
             }
 
