@@ -23,6 +23,8 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
     private LayoutInflater l_Inflater;
     private Filter filter;
 
+    public list_adapter_detalle_cambio_ubic(){}
+
     public list_adapter_detalle_cambio_ubic(Context context, ArrayList<clsBeTrans_ubic_hh_det> results) {
         pBeTransUbicHhDetListArray = results;
         l_Inflater = LayoutInflater.from(context);
@@ -33,7 +35,6 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
         selectedIndex = ind;
         notifyDataSetChanged();
     }
-
 
     public void refreshItems() {
         notifyDataSetChanged();

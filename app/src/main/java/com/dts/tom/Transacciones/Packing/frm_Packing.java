@@ -73,7 +73,7 @@ public class frm_Packing extends PBase {
     private String Lic_Plate_Ant="";
     private String NuevoLp="";
 
-    //GT 29012021 variables para Lic Plate
+    //EFREN29012021 variables para Lic Plate
     private boolean escaneoPallet;
     private String pLicensePlate;
     private int cvEstOrigen = 0;
@@ -115,42 +115,48 @@ public class frm_Packing extends PBase {
         setContentView(R.layout.activity_frm__packing);
         super.InitBase();
 
-        txtUbicOr = (EditText)findViewById(R.id.txtUbicOr);
-        txtPrd = (EditText)findViewById(R.id.txtPrd);
-        txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
-        txtCantidad = (EditText)findViewById(R.id.txtCantidad);
-        txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
-        txtLic_Plate = findViewById(R.id.txtLic_Plate);
+        try {
 
-        lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
-        lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
-        lblLpAnt = (TextView)findViewById(R.id.textView64);
-        lblIdStock = (TextView)findViewById(R.id.textView65);
-        lblCCant = (TextView)findViewById(R.id.textView66);
-        lblLote= (TextView)findViewById(R.id.textView59);
-        lblVence= (TextView)findViewById(R.id.textView60);
-        lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
-        txtUbicDestino = findViewById(R.id.txtUbicDestino);
+            txtUbicOr = (EditText)findViewById(R.id.txtUbicOr);
+            txtPrd = (EditText)findViewById(R.id.txtPrd);
+            txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
+            txtCantidad = (EditText)findViewById(R.id.txtCantidad);
+            txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
+            txtLic_Plate = findViewById(R.id.txtLic_Plate);
 
-        cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
-        cmbLote = (Spinner) findViewById(R.id.cmbLote);
-        cmbVence = (Spinner) findViewById(R.id.cmbVence);
-        cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
+            lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
+            lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
+            lblLpAnt = (TextView)findViewById(R.id.textView64);
+            lblIdStock = (TextView)findViewById(R.id.textView65);
+            lblCCant = (TextView)findViewById(R.id.textView66);
+            lblLote= (TextView)findViewById(R.id.textView59);
+            lblVence= (TextView)findViewById(R.id.textView60);
+            lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+            txtUbicDestino = findViewById(R.id.txtUbicDestino);
 
-        btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
-        cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
+            cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
+            cmbLote = (Spinner) findViewById(R.id.cmbLote);
+            cmbVence = (Spinner) findViewById(R.id.cmbVence);
+            cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
-        ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
-        xobj = new XMLObject(ws);
+            btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
+            cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
 
-        //#CKFK 20210730 Agregué el Caps al txtLic_Plate
-        txtLic_Plate.setAllCaps(true);
+            ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
+            xobj = new XMLObject(ws);
 
-        ProgressDialog("Cargando forma");
+            //#CKFK 20210730 Agregué el Caps al txtLic_Plate
+            txtLic_Plate.setAllCaps(true);
 
-        setHandles();
+            ProgressDialog("Cargando forma");
 
-        execws(1);
+            setHandles();
+
+            execws(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -1040,6 +1046,8 @@ public class frm_Packing extends PBase {
             //#CKFK 20210728 Agregué la condición del LP
             if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("") ){
 
+                String LpSinComodin = txtLic_Plate.getText().toString().replace("$", "");
+
                 AuxList = stream(stockResList.items)
                         .where(c -> c.IdProducto == gIdProductoOrigen)
                         .where(c -> c.IdPresentacion == cvPresID)
@@ -1047,7 +1055,7 @@ public class frm_Packing extends PBase {
                         .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
                         .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
                         .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
-                        .where(c -> c.Lic_plate.equals(txtLic_Plate.getText().toString()))
+                        .where(c -> c.Lic_plate.equals(LpSinComodin))
                         .toList();
             }else{
 
@@ -1184,7 +1192,7 @@ public class frm_Packing extends PBase {
             if (pUbicacionLP!=0){
                 if (vUbicacionProducto!=pUbicacionLP){
                     progress.cancel();
-                    msgbox("La ubicación del License Plate seleccionado no coincide con la del License Plate destino, no se puede realizar el packing");
+                    msgbox("La ubicación de la licencia seleccionada no coincide con la de la licencia destino, no se puede realizar la implosión");
                     return;
                 }
             }
@@ -1515,8 +1523,9 @@ public class frm_Packing extends PBase {
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
-                                "pIdBodega", gl.IdBodega);
+                        callMethod("Get_Stock_By_Lic_Plate",
+                                         "pLicensePlate",pLicensePlate,
+                                               "pIdBodega", gl.IdBodega);
                         break;
                     case 4:
                         callMethod("Get_Estados_By_IdPropietario",
@@ -1545,7 +1554,9 @@ public class frm_Packing extends PBase {
                                 "pIdResolucionLp", gl.IdResolucionLpOperador);
                         break;
                     case 9:
-                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_By_Licencia_And_IdBodega",
+                                         "pLic_Plate",pLicensePlate,
+                                               "pIdBodega", gl.IdBodega);
                         break;
                     case 10:
                         //#CKFK 20210617 Agregué el llamado a esta función para obtener el LP para el Packing
@@ -1681,7 +1692,7 @@ public class frm_Packing extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_By_Licencia_And_IdBodega");
 
             if (Existe_Lp){
 
@@ -1858,7 +1869,7 @@ public class frm_Packing extends PBase {
 
         try {
 
-            progress.setMessage("Cargando stock de producto con License Plate");
+            progress.setMessage("Buscando el producto por licencia, espere por favor...");
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
@@ -2138,7 +2149,7 @@ public class frm_Packing extends PBase {
     }
 
     public void Imprimir(View view){
-        msgAskImprimir("Imprimir Licencia de Packing");
+        msgAskImprimir("¿Imprimir licencia?");
     }
 
     //#CKFK 20210617: Agregué funcionalidad de impresion
@@ -2149,16 +2160,16 @@ public class frm_Packing extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Licencia de Packing", (dialog12, which) -> {
+            dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo licencia de packing");
                 progress.show();
                 Imprimir_Licencia();
             });
 
-            dialog.setNegativeButton("Salir", (dialog13, which) -> {
+            dialog.setNegativeButton("No gracias", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Imprimiendo licencia");
                     progress.show();
@@ -2181,11 +2192,14 @@ public class frm_Packing extends PBase {
     }
 
     private void Imprimir_Licencia(){
+
         try{
 
-            //CM_20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-            printerIns.open();
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
 
             if (printerIns.isConnected()){
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
@@ -2230,9 +2244,32 @@ public class frm_Packing extends PBase {
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
                             "$"+NuevoLp);
+                }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW812 \n" +
+                                    "^LL630 \n" +
+                                    "^LS0 \n" +
+                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                            "$"+NuevoLp);
                 }
 
-                zPrinterIns.sendCommand(zpl);
+                if (!zpl.isEmpty()){
+                    zPrinterIns.sendCommand(zpl);
+                }else{
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                }
 
                 Thread.sleep(500);
 
@@ -2244,15 +2281,16 @@ public class frm_Packing extends PBase {
             }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir licencia de packing");
+                msgAskImprimir("Imprimir licencia");
             }
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
@@ -2270,12 +2308,9 @@ public class frm_Packing extends PBase {
             progress.setMessage("Validando imprimir barra");
 
             if (gl.IdImpresora>0){
-
                 progress.cancel();
                 imprimirDesdeBoton=false;
-
-                msgAskImprimir("Imprimir Licencia de Packing");
-
+                msgAskImprimir("¿Imprimir Licencia?");
             }
 
         }catch (Exception e){
@@ -2283,7 +2318,7 @@ public class frm_Packing extends PBase {
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra: "+e.getMessage());

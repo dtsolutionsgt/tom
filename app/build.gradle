@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    defaultConfig {
+        defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
@@ -24,7 +24,7 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-    buildToolsVersion '28.0.3'
+    //buildToolsVersion '28.0.3'
 
 }
 
@@ -36,9 +36,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
-
     implementation 'com.android.support:design:28.0.0'
-
     implementation "com.android.support:support-compat:28.0.0"
     implementation('org.simpleframework:simple-xml:2.7.1') {
        exclude group: 'stax', module: 'stax-api'

@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
@@ -90,7 +91,7 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.1";
+    private String version="4.5.6";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1274,18 +1275,20 @@ public class MainActivity extends PBase {
 
         int pp,idemp=0;
 
-
         if (empresas.items.size()==0) return;
 
         try {
+
             pp=spinemp.getSelectedItemPosition();
             idemp=empresas.items.get(pp).IdEmpresa;
 
             if (versiones!=null){
                 for (int i = 0; i <versiones.items.size(); i++) {
                     if (versiones.items.get(i).IdEmpresa==idemp) {
-                        if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
-                            actualizaVersion();return;
+                        String Nueva_Version = versiones.items.get(i).Version;
+                        if (!Nueva_Version.equalsIgnoreCase(version)) {
+                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
+                            return;
                         }
                     }
                 }
@@ -1294,6 +1297,28 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
+
+    }
+
+    private void msgAskActualizarVersion(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    actualizaVersion();
+                } catch (Exception e) {
+                    msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+                }
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        dialog.show();
 
     }
 

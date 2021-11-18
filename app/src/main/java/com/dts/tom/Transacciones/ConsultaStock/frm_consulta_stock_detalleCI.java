@@ -9,8 +9,14 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dts.base.WebService;
+import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
+import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -19,13 +25,19 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
 
+    private frm_consulta_stock_detalleCI.WebServiceHandler ws;
+    private XMLObject xobj;
     private ProgressDialog progress;
+    private clsBeTipo_etiqueta pBeTipo_etiqueta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_consulta_stock_detalle_c_i);
         super.InitBase();
+
+        ws = new frm_consulta_stock_detalleCI.WebServiceHandler(frm_consulta_stock_detalleCI.this, gl.wsurl);
+        xobj = new XMLObject(ws);
 
         lblcodigo = findViewById(R.id.lblcodigoCI);
         lbldescripcion = findViewById(R.id.lbldescripcionCI);
@@ -40,8 +52,25 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblnomUbic = findViewById(R.id.lblnomUbicCI);
         lblLicPlate= findViewById(R.id.lblLicPlate);
 
+        ProgressDialog();
+
         asignarDatos();
 
+        //Aquí llamamos al método del WS Get_Tipo_Etiqueta_By_IdTipoEtiqueta
+        pBeTipo_etiqueta = new clsBeTipo_etiqueta();
+        pBeTipo_etiqueta.IdTipoEtiqueta= gl.existencia.getIdTipoEtiqueta();
+
+        execws(1);
+
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void asignarDatos() {
@@ -94,6 +123,63 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     }
 
+    private void execws(int callbackvalue) {
+        ws.callback=callbackvalue;
+        ws.execute();
+    }
+
+    @Override
+    public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
+        try {
+            if (throwing) throw new Exception(errmsg);
+
+            switch (ws.callback) {
+                case 1:
+                    processTipoEtiqueta();
+                    break;
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    public class WebServiceHandler extends WebService {
+
+        public WebServiceHandler(PBase Parent,String Url) {
+            super(Parent,Url);
+        }
+
+        @Override
+        public void wsExecute(){
+            try {
+                switch (ws.callback) {
+                    case 1://Obtiene el Tipo de Etiqueta del producto
+                        callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
+                        break;
+                }
+
+            } catch (Exception e) {
+                error=e.getMessage();errorflag =true;msgbox(error);
+            }
+        }
+    }
+
+    private void processTipoEtiqueta(){
+
+        try {
+
+            progress.setMessage("Obteniendo tipo de etiqueta del producto");
+
+            pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
+
+        } catch (Exception e) {
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
     public void printBarras(View view){
         msgAskImprimir("Seleccione una opción para imprimir");
     }
@@ -115,25 +201,27 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     String zpl="";
 
                     if (gl.existencia.IdTipoEtiqueta==1){
+
                         zpl = String.format("^XA \n" +
-                                            "^MMT \n" +
-                                            "^PW700 \n" +
-                                            "^LL0406 \n" +
-                                            "^LS0 \n" +
-                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
-                                            "^FO2,340^GB670,0,14^FS \n" +
-                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                            "^FD%4$s^FS \n" +
-                                            "^PQ1,0,1,Y " +
-                                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                            gl.gNomEmpresa,
-                                            gl.existencia.Codigo,
-                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                gl.existencia.Codigo,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -155,15 +243,15 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }else if (gl.existencia.IdTipoEtiqueta==4){
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
-                                        "^PW700 \n" +
-                                        "^LL0609 \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
                                         "^LS0 \n" +
-                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -177,7 +265,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     if (!zpl.isEmpty()){
                         zPrinterIns.sendCommand(zpl);
                     }else{
-                        //#EJC2211117> Colocar mensaje aquí que no se genero la etiqueta porque el tipo de etiqueta no está definido.
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
 
                     Thread.sleep(500);

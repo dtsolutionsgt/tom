@@ -126,27 +126,31 @@ public class frm_consulta_stock extends PBase {
             txtUbic.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
 
-                                lblNombreUbicacion.setText("");
+                    try {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                                if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
-                                ){
-                                    toast("Ubicación de producto no definida!");
-                                } else{
+                            switch (keyCode) {
 
-                                    if(txtUbic.getText().toString().isEmpty()){
-                                        idubic = 0;
+                                case KeyEvent.KEYCODE_ENTER:
+
+                                    lblNombreUbicacion.setText("");
+
+                                    if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()){
+                                        toast("Ubicación de producto no definida!");
+                                    } else{
+                                        if(txtUbic.getText().toString().isEmpty()){
+                                            idubic = 0;
+                                        }
+                                        else{
+                                            ProgressDialog("Cargando existencias");
+                                            execws(1);
+                                        }
                                     }
-                                    else{
-                                        ProgressDialog("Cargando existencias");
-
-                                        execws(1);
-                                    }
-                                }
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     return false;
                 }
@@ -155,43 +159,47 @@ public class frm_consulta_stock extends PBase {
             txtCodigo.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
 
-                                lblNombreProducto.setText("");
+                    try {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                                if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
-                                ) {
-                                    toast("Escane código de producto");
-                                } else {
+                            switch (keyCode) {
 
-                                    if(txtCodigo.getText().toString().isEmpty()){
-                                        idprod = 0;
-                                    }
-                                    else{
+                                case KeyEvent.KEYCODE_ENTER:
 
-                                        String vStarWithParameter = "$";
-                                        //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                                        if (txtCodigo.getText().toString().startsWith("$") ||
-                                                txtCodigo.getText().toString().startsWith("(01)") ||
-                                                txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                                            //Es una barra de pallet válida por tamaño
-                                            int vLengthBarra = txtCodigo.getText().toString().length();
-                                            if (vLengthBarra >= 0) {
-                                                pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+                                    lblNombreProducto.setText("");
 
+                                    if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) {
+                                        toast("Escanee código de producto");
+                                    } else {
+
+                                        if(txtCodigo.getText().toString().isEmpty()){
+                                            idprod = 0;
+                                        }
+                                        else{
+
+                                            String vStarWithParameter = "$";
+                                            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+                                            if (txtCodigo.getText().toString().startsWith("$") ||
+                                                    txtCodigo.getText().toString().startsWith("(01)") ||
+                                                    txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
+                                                //Es una barra de pallet válida por tamaño
+                                                int vLengthBarra = txtCodigo.getText().toString().length();
+                                                if (vLengthBarra >= 0) {
+                                                    pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+                                                    ProgressDialog("Cargando existencias");
+                                                    execws(2);
+                                                }
+                                            } else {
                                                 ProgressDialog("Cargando existencias");
-                                                execws(2);
+                                                execws(3);
                                             }
-                                        } else {
-
-                                            ProgressDialog("Cargando existencias");
-                                            execws(3);
                                         }
                                     }
-                                }
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     return false;
                 }
@@ -207,9 +215,7 @@ public class frm_consulta_stock extends PBase {
 
                     }
                     else {
-
                         Spinner(estado);
-
                     }
 
                 }
@@ -261,7 +267,6 @@ public class frm_consulta_stock extends PBase {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
-
                     toast("No hay orden seleccionado");
                 }
 
@@ -345,16 +350,21 @@ public class frm_consulta_stock extends PBase {
     }
 
     private void Imprimir_Barra(){
+
         try{
 
             if (!txtCodigo.getText().toString().isEmpty()){
-                //CM_20210112: Impresión de barras.
+
+                //EJC_20210112: Impresión de barras.
                 BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-                printerIns.open();
+
+                if (!printerIns.isConnected()){
+                    printerIns.open();
+                }
 
                 if (printerIns.isConnected()){
+
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
                     String zpl = String.format("^XA \n" +
                                     "^MMT \n" +
@@ -375,8 +385,11 @@ public class frm_consulta_stock extends PBase {
                             txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
                             (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
 
-                    zPrinterIns.sendCommand(zpl);
-
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
 
                     Thread.sleep(500);
 
@@ -402,11 +415,11 @@ public class frm_consulta_stock extends PBase {
         try{
             if(!Escaneo_Pallet){
 
-                //Get_Stock_Por_Producto_Ubicacion
+                //Get_Stock_Por_Producto_Ubicacion_CI
                 execws(4);
             }else{
 
-                //Get_Stock_Por_Pallet
+                //Get_Stock_Por_Pallet_CI
                 execws(5);
             }
 
