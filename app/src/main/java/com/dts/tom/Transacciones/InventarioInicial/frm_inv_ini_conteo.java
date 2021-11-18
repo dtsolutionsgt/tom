@@ -758,7 +758,7 @@ public class frm_inv_ini_conteo extends PBase {
                 ditem.Idunidadmedida = -1;
             }
             if (BeProducto.Control_lote){
-
+                //GT 17112021: si existe un lote al producto
                 if(tiene_lotes){
                     ditem.Lote = LoteSelect;
                 }else{
@@ -771,7 +771,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeProducto.Control_vencimiento){
 
-                //GT 17112021: si tiene control lote, y existe más de un lote al mismo producto
+                //GT 17112021: si existe una fecha vencimiento
                 if(tiene_fechas){
                     ditem.Fecha_vence = FechaSelect;
                 }else{
