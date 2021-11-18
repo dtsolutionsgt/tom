@@ -34,7 +34,6 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-
     public void refreshItems() {
         notifyDataSetChanged();
     }
