@@ -174,7 +174,11 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre);
                     }
 
-                    zPrinterIns.sendCommand(zpl);
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        //#EJC2211117> Colocar mensaje aquí que no se genero la etiqueta porque el tipo de etiqueta no está definido.
+                    }
 
                     Thread.sleep(500);
 
