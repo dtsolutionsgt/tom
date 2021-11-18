@@ -1176,6 +1176,7 @@ public class frm_Packing extends PBase {
     }
 
     private void aplicarCambio() {
+
         int vUbicacionProducto;
 
         try{
@@ -2154,14 +2155,13 @@ public class frm_Packing extends PBase {
         if (BeProductoUbicacionOrigen!=null){
             msgAskImprimir("¿Imprimir licencia?");
         }else{
-            mu.msgbox("Escanee el producto origen primero.");
+            msgAskImprimirLicenciaNoHomogenea("¿Imprimir licencia para producto no homogéneo?");
         }
 
 
     }
 
-    //#CKFK 20210617: Agregué funcionalidad de impresion
-    private void msgAskImprimir(String msg) {
+    private void msgAskImprimirLicenciaNoHomogenea(String msg) {
 
         try{
 
@@ -2174,7 +2174,7 @@ public class frm_Packing extends PBase {
             dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo licencia de packing");
                 progress.show();
-                Imprimir_Licencia();
+                Imprimir_Licencia_Producto_No_Homogeneo();
             });
 
             dialog.setNegativeButton("No gracias", (dialog13, which) -> {
@@ -2199,7 +2199,46 @@ public class frm_Packing extends PBase {
 
     }
 
-    private void Imprimir_Licencia(){
+    //#CKFK 20210617: Agregué funcionalidad de impresion
+    private void msgAskImprimir(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
+                progress.setMessage("Imprimiendo licencia de packing");
+                progress.show();
+                Imprimir_Licencia_Producto_Homogeneo();
+            });
+
+            dialog.setNegativeButton("No gracias", (dialog13, which) -> {
+                if (!imprimirDesdeBoton){
+                    progress.setMessage("Imprimiendo licencia");
+                    progress.show();
+                }else{
+                    progress.cancel();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object()
+            {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+            progress.cancel();
+        }finally {
+            progress.cancel();
+        }
+
+    }
+
+    private void Imprimir_Licencia_Producto_Homogeneo(){
 
         try{
 
@@ -2216,6 +2255,8 @@ public class frm_Packing extends PBase {
                 String zpl="";
 
                 if (BeProductoUbicacionOrigen!=null){
+
+                    NuevoLp = txtNuevoLp.getText().toString();
 
                     if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
@@ -2259,7 +2300,91 @@ public class frm_Packing extends PBase {
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW812 \n" +
-                                        "^LL630 \n" +
+                                        "^LL0630 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                "$"+NuevoLp);
+                    }
+
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("Información de producto no definida.");
+                }
+
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+
+            if (!imprimirDesdeBoton){
+                msgAskImprimir("Imprimir licencia");
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
+                if (!imprimirDesdeBoton){
+                    msgAskImprimir("¿Imprimir licencia?");
+                }
+            }else{
+                mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void Imprimir_Licencia_Producto_No_Homogeneo(){
+
+        try{
+
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
+
+            if (printerIns.isConnected()){
+
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+                String zpl="";
+
+                NuevoLp = txtNuevoLp.getText().toString();
+
+                if (NuevoLp!=null && !NuevoLp.isEmpty()){
+
+                    BeProductoUbicacionOrigen = new clsBeProducto();
+                    BeProductoUbicacionOrigen.IdTipoEtiqueta=4;
+
+                    if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
                                         "^LS0 \n" +
                                         "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
@@ -2272,7 +2397,45 @@ public class frm_Packing extends PBase {
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                "#Cod_Multi" + " - Implosion" ,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW609\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                        "^FO2,450^GB670,14,14^FS\n" +
+                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                        "^FD%1$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                "#Cod_Multi" + " - Implosión" ,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                "#Cod_Multi" + " - Implosión" ,
                                 "$"+NuevoLp);
                     }
 
