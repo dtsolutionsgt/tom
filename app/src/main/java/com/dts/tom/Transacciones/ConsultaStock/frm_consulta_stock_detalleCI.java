@@ -118,7 +118,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                         zpl = String.format("^XA \n" +
                                             "^MMT \n" +
                                             "^PW700 \n" +
-                                            "^LL0406 \n" +
+                                            "^LL406 \n" +
                                             "^LS0 \n" +
                                             "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                             "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
@@ -156,7 +156,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW700 \n" +
-                                        "^LL0609 \n" +
+                                        "^LL609 \n" +
                                         "^LS0 \n" +
                                         "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
