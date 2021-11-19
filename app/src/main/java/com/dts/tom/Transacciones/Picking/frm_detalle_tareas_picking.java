@@ -304,6 +304,7 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Lista_Detalle_Picking(){
+
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
 
@@ -671,7 +672,6 @@ public class frm_detalle_tareas_picking extends PBase {
                         procesar_registro();
                         break;
                     }
-
                 }
 
             }else{

@@ -176,7 +176,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN)) {
-
                         if (keyCode == KeyEvent.KEYCODE_ENTER){
                             validaLP();
                         }
@@ -271,7 +270,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             txtUbicOrigen.setHint("" + gl.tareadet.UbicacionOrigen.IdUbicacion);
             txtCodigoPrd.setHint("" + gl.tareadet.Producto.Codigo);
-            txtLicPlate.setHint("" + gl.tareadet.Stock.getLic_plate());
             txtUbicDestino.setHint("" + gl.tareadet.IdUbicacionDestino);
 
             lblDescProd.setText(gl.tareadet.Producto.Nombre);
@@ -307,12 +305,29 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 trLote.setVisibility(View.VISIBLE);
             }
 
-            if (gl.tareadet.getStock().getLic_plate().isEmpty() ||
-                gl.tareadet.getStock().getLic_plate().equals("") ||
-                    gl.tareadet.getStock().getLic_plate().toString() == null  ) {
-                trLP.setVisibility(View.GONE);
+            clsBeStock vStock=new clsBeStock();
+            vStock = gl.tareadet.getStock();
+
+            if (vStock!=null){
+                if (vStock.Lic_plate!=null){
+                    String vLP =vStock.Lic_plate;
+                    if (vLP.isEmpty() ||
+                            vLP.equals("") ||
+                            vLP.equals("0") ||
+                            vLP == null  ) {
+                        txtLicPlate.setHint("");
+                        trLP.setVisibility(View.GONE);
+                    }else{
+                        txtLicPlate.setHint("" + vLP);
+                        trLP.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    txtLicPlate.setHint("");
+                    trLP.setVisibility(View.GONE);
+                }
             }else{
-                trLP.setVisibility(View.VISIBLE);
+                txtLicPlate.setHint("");
+                trLP.setVisibility(View.GONE);
             }
 
             txtEstado.setText(gl.tareadet.Stock.ProductoEstado.Nombre);
@@ -343,7 +358,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-            mu.msgbox( e.getMessage());
+            mu.msgbox("Inicia_Tarea_Detalle_20211119: " + e.getMessage());
         }
 
     }
@@ -387,7 +402,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     }
 
     private void  validaCodProd(){
+
         try{
+
             if (!txtCodigoPrd.getText().toString().equals("") ){
                 if ((!gl.tareadet.Producto.Codigo.equals(txtCodigoPrd.getText().toString())) &&
                         (!gl.tareadet.Producto.Codigo_barra.equals(txtCodigoPrd.getText().toString()))){
@@ -403,32 +420,32 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 txtCodigoPrd.requestFocus();
                 throw new  Exception("Debe ingresar el código del producto");
             }
+
         }catch (Exception ex){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
     }
 
     private void validaLP(){
+
         try{
 
             if (!txtLicPlate.getText().toString().equals("")) {
-
                 String Lp=txtLicPlate.getText().toString().replace("$","");
-
                 if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
                     txtLicPlate.setText("");
                     txtLicPlate.requestFocus();
-
-                    throw new Exception(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                    throw new Exception(String.format("La licencia %s ingresada no es válida", txtLicPlate.getText().toString()));
                 }
             }else  if (txtLicPlate.getText().toString().equals("") ||
                     txtLicPlate.getText().toString().isEmpty() ||
                     txtLicPlate.getText().toString()==null){
                 txtLicPlate.requestFocus();
-                throw new  Exception("Debe ingresar el License Plate del producto");
+                throw new  Exception("Debe ingresar la licencia del producto");
             }
+
         }catch (Exception ex){
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . validaLP - " + ex.getMessage());
         }
     }
 
@@ -749,7 +766,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                                    "oBeTrans_ubic_hh_det", gl.tareadet,
                                    "pMovimiento",gMovimientoDet,
                                    "pPosiciones",vPosiciones,
-                                   "pIdReabastecimientoLog", gl.tareaenc.getIdReabastecimientoLog());
+                                   "pIdReabastecimientoLog", gl.tareaenc.IdReabastecimientoLog);
                         break;
                     case 4:
                         callMethod("Get_Single_By_IdEstado",

@@ -367,23 +367,23 @@ public class frm_consulta_stock extends PBase {
                     ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
 
                     String zpl = String.format("^XA \n" +
-                                    "^MMT \n" +
-                                    "^PW700 \n" +
-                                    "^LL0406 \n" +
-                                    "^LS0 \n" +
-                                    "^FT171,61^A0I,25,14^FH^FD%0$s^FS \n" +
-                                    "^FT550,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                    "^FT670,306^A0I,25,14^FH^FD%2$s^FS \n" +
-                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                    "^FO2,340^GB670,0,14^FS \n" +
-                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                    "^FD%3$s^FS \n" +
-                                    "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                            txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
-                            (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
+                                                "^MMT \n" +
+                                                "^PW700 \n" +
+                                                "^LL0406 \n" +
+                                                "^LS0 \n" +
+                                                "^FT171,61^A0I,25,14^FH^FD%0$s^FS \n" +
+                                                "^FT550,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                                "^FT670,306^A0I,25,14^FH^FD%2$s^FS \n" +
+                                                "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                                "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+                                                "^FO2,340^GB670,0,14^FS \n" +
+                                                "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                                "^FD%3$s^FS \n" +
+                                                "^PQ1,0,1,Y " +
+                                                "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                                                txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
+                                                (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
 
                     if (!zpl.isEmpty()){
                         zPrinterIns.sendCommand(zpl);
