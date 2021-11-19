@@ -2251,7 +2251,7 @@ public class frm_Packing extends PBase {
             if (printerIns.isConnected()){
 
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
                 String zpl="";
 
                 if (BeProductoUbicacionOrigen!=null){
@@ -2278,43 +2278,43 @@ public class frm_Packing extends PBase {
                                 BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
                                 "$"+NuevoLp);
                     }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
-                        zpl = String.format("^XA\n" +
-                                        "^MMT\n" +
-                                        "^PW609\n" +
-                                        "^LL0406\n" +
-                                        "^LS0\n" +
-                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
-                                        "^FO2,450^GB670,14,14^FS\n" +
-                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                        "^FD%1$s^FS\n" +
-                                        "^PQ1,0,1,Y \n" +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                zpl = String.format("^XA\n" +
+                                "^MMT\n" +
+                                "^PW609\n" +
+                                "^LL0406\n" +
+                                "^LS0\n" +
+                                "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                "^FO2,450^GB670,14,14^FS\n" +
+                                "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                "^FD%1$s^FS\n" +
+                                "^PQ1,0,1,Y \n" +
+                                "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
                                 "$"+NuevoLp);
                     }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
                         zpl = String.format("^XA \n" +
-                                        "^MMT \n" +
-                                        "^PW812 \n" +
-                                        "^LL0630 \n" +
-                                        "^LS0 \n" +
-                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
-                                        "^FO2,340^GB670,0,14^FS \n" +
-                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                        "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                                "$"+NuevoLp);
+                                            "^MMT \n" +
+                                            "^PW812 \n" +
+                                            "^LL0630 \n" +
+                                            "^LS0 \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                            "$"+NuevoLp);
                     }
 
                     if (!zpl.isEmpty()){

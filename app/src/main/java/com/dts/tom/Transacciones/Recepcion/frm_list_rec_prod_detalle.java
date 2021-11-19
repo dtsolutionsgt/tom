@@ -355,36 +355,41 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void Imprimir_Licencia(){
         try{
 
-            //CM_20210112: Impresión de barras.
+            //EJC20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-            printerIns.open();
+            
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
 
             if (printerIns.isConnected()){
-                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
 
                 String zpl = String.format("^XA \n" +
-                                "^MMT \n" +
-                                "^PW700 \n" +
-                                "^LL0406 \n" +
-                                "^LS0 \n" +
-                                "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-                                "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-                                "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                "^FO2,340^GB670,0,14^FS \n" +
-                                "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                "^FD%4$s^FS \n" +
-                                "^PQ1,0,1,Y " +
-                                "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                        "$"+pNumeroLP);
+                                           "^MMT \n" +
+                                           "^PW700 \n" +
+                                           "^LL0406 \n" +
+                                           "^LS0 \n" +
+                                           "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                           "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                           "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                           "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                           "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                           "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+                                           "^FO2,340^GB670,0,14^FS \n" +
+                                           "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                           "^FD%4$s^FS \n" +
+                                           "^PQ1,0,1,Y " +
+                                           "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                                            "$"+pNumeroLP);
 
-                zPrinterIns.sendCommand(zpl);
-
+                if (!zpl.isEmpty()){
+                    zPrinterIns.sendCommand(zpl);
+                }else{
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                }
 
                 Thread.sleep(500);
 
@@ -414,7 +419,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         try{
 
-            //CM_20210112: Impresión de barras.
+            //EJC20210112: Impresión de barras.
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
             printerIns.open();
 
@@ -441,8 +446,11 @@ public class frm_list_rec_prod_detalle extends PBase {
                         BeProducto.Codigo+" - "+BeProducto.Nombre,
                         (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
 
-                zPrinterIns.sendCommand(zpl);
-
+                if (!zpl.isEmpty()){
+                    zPrinterIns.sendCommand(zpl);
+                }else{
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                }
 
                 Thread.sleep(500);
 
