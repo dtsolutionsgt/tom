@@ -313,10 +313,12 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                     String vLP =vStock.Lic_plate;
                     if (vLP.isEmpty() ||
                             vLP.equals("") ||
+                            vLP.equals("0") ||
                             vLP == null  ) {
-                        txtLicPlate.setHint("" + vLP);
+                        txtLicPlate.setHint("");
                         trLP.setVisibility(View.GONE);
                     }else{
+                        txtLicPlate.setHint("" + vLP);
                         trLP.setVisibility(View.VISIBLE);
                     }
                 }else{
@@ -764,7 +766,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                                    "oBeTrans_ubic_hh_det", gl.tareadet,
                                    "pMovimiento",gMovimientoDet,
                                    "pPosiciones",vPosiciones,
-                                   "pIdReabastecimientoLog", gl.tareaenc.getIdReabastecimientoLog());
+                                   "pIdReabastecimientoLog", gl.tareaenc.IdReabastecimientoLog);
                         break;
                     case 4:
                         callMethod("Get_Single_By_IdEstado",
