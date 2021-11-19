@@ -21,6 +21,7 @@ import com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos;
 import com.dts.ladapt.list_adapt_tareas_inventario;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class frm_list_inventario extends PBase {
 
@@ -206,7 +207,6 @@ public class frm_list_inventario extends PBase {
                 vItem = new clsBeTrans_inv_enc();
                 vItem= BeInv;
                 vItem.Hora_ini = du.convierteFechaMostrar(BeInv.Hora_ini);
-                //vItem.Hora_ini = vItem.Hora_ini;
                 vItem.Transcurrido = String.valueOf((du.DateDiffPos(BeInv.Hora_ini)*24*60));
                 BeListInv.add(vItem);
 

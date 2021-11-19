@@ -57,7 +57,7 @@ public class frm_inv_ini_conteo extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private boolean verlote, vervence;
+    private boolean verlote, vervence, emptyPres;
     private int codestmalo = 0;
     private int IdEstadoSelect=0;
     private int IdPresSelect=0;
@@ -131,6 +131,7 @@ public class frm_inv_ini_conteo extends PBase {
         tiene_lotes = false;
         LoteSelect = "";
         FechaSelect = "";
+        emptyPres = false;
 
         setCurrentDateOnView();
 
@@ -213,7 +214,17 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                    //IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+
+                    //GT 19112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
+                    if (emptyPres && position ==0 ) {
+                        IdPresSelect = 0;
+
+                    }else if(emptyPres && position> 0){
+                        IdPresSelect=BeListPres.items.get(position-1).IdPresentacion;
+                    }else{
+                        IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                    }
 
                 }
 
@@ -405,7 +416,10 @@ public class frm_inv_ini_conteo extends PBase {
 
             lblUbicDesc.setText(BeProducto.UnidadMedida.Nombre);
 
-            execws(4);
+            //GT 19112021 aqui primero valida que prod no tenga pres para agregar esa opcion al combo
+            //execws(4);
+            execws(6);
+
 
         } catch (Exception e) {
             mu.msgbox("Carga_Det_Producto:" + e.getMessage());
@@ -416,7 +430,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            PresList.clear();
+            //PresList.clear();
 
             for (clsBeProducto_Presentacion BePres : BeListPres.items) {
                 PresList.add(BePres.Nombre);
@@ -653,14 +667,29 @@ public class frm_inv_ini_conteo extends PBase {
                     InvTeoricoPorProducto.items = stream(InvTeorico.items).where(c -> c.Idinventario == BeInvEnc.Idinventarioenc &&
                             c.IdProducto == BeProducto.IdProducto).toList();*/
 
+            PresList.clear();
+
             if (InvTeorico != null) {
                 if (InvTeorico.items != null) {
+
+                    //GT 19112021: si hay un prod sin presentacion, se carga primero op vacia y luego las existentes
+
+                    for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+
+                        if (BeLotes.IdPresentacion ==0) {
+                            PresList.add("Sin Presentación");
+                            emptyPres = true;
+                        }
+                    }
 
                     if(BeProducto.Control_lote){
                         Llena_Lotes();
                     }
                 }
             }
+
+            //GT 19112021: ya validamos si hay prod sin presentación, ahora se carga las presentaciones, lotes y demas
+            execws(4);
 
         }catch (Exception e){
             mu.msgbox("Valida_Inventario_Teorico:"+e.getMessage());
@@ -1294,9 +1323,6 @@ public class frm_inv_ini_conteo extends PBase {
                 return;
             }
 
-            //GT 17112021: Se carga los lotes asociados al producto
-            execws(6);
-
         }catch (Exception e){
             mu.msgbox("");
         }
@@ -1306,7 +1332,6 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            //InvTeoricoPorProducto = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
             InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
 
             Valida_Inventario_Teorico();

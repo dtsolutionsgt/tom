@@ -52,7 +52,7 @@ public class frm_inv_ini_verificacion extends PBase {
     private TextView lblDescVer, lblTituloForma, lblUbicDes;
     private Button btnDetVeri;
 
-    private int IdPresSelect, IdEstadoSelect, IdPresSelectDefault;
+    private int IdPresSelect, IdEstadoSelect;
     private boolean emptyPres;
 
     private clsBeTrans_inv_tramo utramo = new clsBeTrans_inv_tramo();
@@ -89,7 +89,6 @@ public class frm_inv_ini_verificacion extends PBase {
         lblUbicDes = (TextView)findViewById(R.id.lblUbicDes);
 
         emptyPres = false;
-        IdPresSelectDefault = 0;
 
         setHandles();
 
@@ -238,9 +237,9 @@ public class frm_inv_ini_verificacion extends PBase {
 
             lblUbicDes.setText("" + BeUbic.Descripcion);
 
-            txtBarraVer.setSelectAllOnFocus(true);
+           /* txtBarraVer.setSelectAllOnFocus(true);
             txtBarraVer.requestFocus();
-            txtBarraVer.selectAll();
+            txtBarraVer.selectAll();*/
 
         } catch (Exception e) {
             mu.msgbox("Procesa_Ubicacion");
@@ -270,9 +269,8 @@ public class frm_inv_ini_verificacion extends PBase {
 
             txtUmbasVeri.setText(BeProducto.UnidadMedida.Nombre);
 
-            txtUmbasVeri.setFocusable(false);
-
-            txtCantVer.requestFocus();
+            //txtUmbasVeri.setFocusable(false);
+            //txtCantVer.requestFocus();
 
             //GT 18112021 primero validamos prod guardado sin presentacion
             execws(9);
@@ -350,6 +348,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
             PresList.clear();
 
+            //GT 18112021: si hay un prod sin presentacion, se carga primero vacia y luego las existentes
             for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
 
                 if (BeLotes.IdPresentacion ==0) {
@@ -358,7 +357,6 @@ public class frm_inv_ini_verificacion extends PBase {
                 }
             }
 
-            //GT 18112021: si hay un prod sin presentacion, se carga primero vacia y luego las existentes
             execws(4);
 
         } catch (Exception e) {
@@ -505,7 +503,8 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try{
 
-            utramo.Res_inicio = "Finalizado";
+            //utramo.Res_inicio = "Finalizado";
+            utramo.Res_estado="Finalizado";
             utramo.Res_fin = du.getFechaActual();
             utramo.Res_idoperador = gl.OperadorBodega.IdOperador;
             utramo.IdBodega = gl.IdBodega;
