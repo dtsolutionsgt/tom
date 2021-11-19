@@ -2332,7 +2332,6 @@ public class frm_Packing extends PBase {
                     mu.msgbox("Información de producto no definida.");
                 }
 
-
             }else{
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
