@@ -672,7 +672,6 @@ public class frm_detalle_tareas_picking extends PBase {
                         procesar_registro();
                         break;
                     }
-
                 }
 
             }else{

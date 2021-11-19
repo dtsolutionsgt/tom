@@ -1990,6 +1990,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processCambioUbicEstHH(){
+
         try{
 
             boolean resultado = false;
@@ -2037,6 +2038,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
                 progress.cancel();
+
                 msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
 
             }
@@ -2049,6 +2051,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processUbicacionDestSugerida(){
+
         try{
 
             progress.setMessage("Procesando ubicación destino sugerida");
@@ -2090,7 +2093,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (escaneoPallet && productoList == null) {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
-                lblDescProducto.setText ("Código de LP no válido");
+                lblDescProducto.setText ("Licencia no válida");
                 progress.cancel();
             }else{
 
@@ -2260,6 +2263,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTarea(boolean finalizar){
+
         try{
 
             progress.setMessage("Inicializando tarea");
@@ -2329,7 +2333,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTareaSinUbic(){
+
         try{
+
             progress.setMessage("Inicializando tarea");
             progress.show();
 
@@ -2387,7 +2393,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTareaLP(){
+
         try{
+
             progress.setMessage("Inicializando tarea");
             progress.show();
 
@@ -2442,7 +2450,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskExit(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2467,7 +2477,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskExplosionar(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2501,7 +2513,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskImprimirEtiqueta(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2530,7 +2544,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskImpresoraLista(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
