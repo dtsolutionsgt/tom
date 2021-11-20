@@ -29,6 +29,7 @@ public class clsBeProducto_rellenado {
     @Element(required=false) public String Presentacion="";
     @Element(required=false) public String Ubicacion="";
     @Element(required=false) public int IdOperadorDefecto=0;
+    @Element(required=false) public String NomOperador="";
 
     public clsBeProducto_rellenado() {
     }
@@ -214,12 +215,17 @@ public class clsBeProducto_rellenado {
     public void setUbicacion(String value) {
         Ubicacion=value;
     }
-
     public int getIdIdOperadorDefecto() {
         return IdOperadorDefecto;
     }
     public void setIdOperadorDefecto(int value) {
         IdOperadorDefecto=value;
+    }
+    public String getNomOperador() {
+        return NomOperador;
+    }
+    public void setNomOperador(String value) {
+        NomOperador=value;
     }
 
 }
