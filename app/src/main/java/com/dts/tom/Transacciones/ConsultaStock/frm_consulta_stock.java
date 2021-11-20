@@ -42,6 +42,8 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 
 public class frm_consulta_stock extends PBase {
 
@@ -443,7 +445,7 @@ public class frm_consulta_stock extends PBase {
             }else{
                 idubic = 0;
                 lblNombreUbicacion.setTextColor(Color.RED);
-                lblNombreUbicacion.setText("Ubicación no existe en la bodega" + gl.IdBodega);
+                lblNombreUbicacion.setText("Ubicación no existe en la bodega " + gl.IdBodega);
 
                 //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
             }
@@ -1008,7 +1010,6 @@ public class frm_consulta_stock extends PBase {
     public void Exit(View view) {
         msgAskExit("Está seguro de salir");
     }
-
 
 
 }
