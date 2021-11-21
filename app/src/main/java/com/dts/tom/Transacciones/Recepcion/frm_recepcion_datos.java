@@ -3162,10 +3162,6 @@ public class frm_recepcion_datos extends PBase {
                 Llena_beStock_Anterior();
             }
 
-            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
-
-            execws(27);
-
             progress.cancel();
 
         }catch (Exception e){
@@ -3417,7 +3413,7 @@ public class frm_recepcion_datos extends PBase {
                 String finalFechaVence = FechaVence;
 
                 String LpOrigen = pLp;
-                //#CKFK 20211030 Inicialcé esta variable de ubicaciones
+                //#CKFK 20211030 Inicialicé esta variable de ubicaciones
                 BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
                 if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
@@ -3937,8 +3933,17 @@ public class frm_recepcion_datos extends PBase {
                  {
                     BeStock_rec.Serial = txtSerial.getText().toString();
                     //#si hay mas atributos, se setean aca, aunque no tengan valor asignado, el layut se cargará
-                    BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
-                    BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                     if(txtPesoReal.getText().toString().isEmpty()){
+                         BeStock_rec.Peso = 0;
+                     }else {
+                         BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                     }
+
+                    if(txtTempReal.getText().toString().isEmpty()){
+                        BeStock_rec.Temperatura = 0;
+                    }else {
+                        BeStock_rec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                    }
                 }
                 BeStock_rec.IsNew = true;
 
@@ -5856,9 +5861,7 @@ public class frm_recepcion_datos extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
-            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
-
-            execws(27);
+            Load();
 
         } catch (Exception e) {
             progress.cancel();
@@ -6066,10 +6069,9 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
+           pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
-            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
-
-            execws(27);
+           execws(27);
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP: "+e.getMessage());
@@ -6699,6 +6701,7 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
+
     public void msgboxErrorOnWS2(String msg) {
         try{
             ExDialog dialog = new ExDialog(this);

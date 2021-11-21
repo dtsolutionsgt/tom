@@ -1242,7 +1242,6 @@ public class MainActivity extends PBase {
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         //ejecuta();
-                        break;
                     case 8:
                         callMethod("Android_Get_All_Versiones");
                         break;

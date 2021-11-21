@@ -341,7 +341,11 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 lblNomDestino.setText(gl.tareadet.UbicacionDestino.NombreCompleto);
             }
 
-            gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
+            if (gl.tareadet.ProductoPresentacion.IdPresentacion!=0){
+                gl.gCantDisponible = (gl.tareadet.Cantidad - gl.tareadet.Recibido)/gl.tareadet.ProductoPresentacion.Factor;
+            }else  {
+                gl.gCantDisponible = gl.tareadet.Cantidad - gl.tareadet.Recibido;
+            }
             gl.tareadet.Estado = "En proceso";
             gl.tareadet.HoraInicio = app.strFechaHoraXML(fecha_ini);
 

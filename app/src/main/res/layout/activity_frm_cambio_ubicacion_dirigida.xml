@@ -78,7 +78,7 @@
                     android:layout_marginEnd="10dp"
                     android:enabled="true"
                     android:hint="LP"
-                    android:inputType="number"
+                    android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />
