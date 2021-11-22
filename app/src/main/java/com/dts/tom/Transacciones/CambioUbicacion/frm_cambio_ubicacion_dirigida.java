@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
@@ -111,6 +112,10 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         Inicia_Tarea_Detalle();
 
         progress.cancel();
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
     }
 
@@ -544,10 +549,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             Recalcula_Peso();
 
             progress.cancel();
-
-            //#CKFK 20210106 Moví esto para después de ingresar las posiciones en caso de que aplique
-             // msgAsk("Aplicar cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
-
             pStock = new clsBeStock();
             pStock.IdUbicacion = Integer.valueOf(txtUbicOrigen.getText().toString());
             pStock.IdProductoBodega = gl.tareadet.getProducto().IdProductoBodega;
@@ -660,6 +661,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 //Llama al WS para realizar la actualización de los registros. Actualizar_Trans_Ubic_HH_Det
                 execws(3);
             }
+
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

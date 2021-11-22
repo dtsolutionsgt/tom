@@ -235,7 +235,9 @@ public class frm_consulta_stock extends PBase {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
                     if (pListStock2 != null){
+
                         if (pListStock2.items != null){
+
                             if (pListStock2.items.size()>0){
 
                                 String orden = spOrdenar.getSelectedItem().toString();
@@ -433,6 +435,7 @@ public class frm_consulta_stock extends PBase {
     private void processUbicacion() {
 
         try {
+
             cUbic =xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (cUbic != null){
@@ -897,23 +900,27 @@ public class frm_consulta_stock extends PBase {
 
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbic.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                         "pBarra",txtUbic.getText().toString(),
+                                               "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         //ByVal pLicensePlate As String,ByVal pIdBodega As Integer
                         callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
-                                "pIdBodega",gl.IdBodega);
+                                               "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigo.getText().toString(),
-                                "IdBodega",gl.IdBodega);
+                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                         "pCodigo",txtCodigo.getText().toString(),
+                                               "IdBodega",gl.IdBodega);
                         break;
 
                     case 4:
-                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","pidProducto",idprod,
-                                "pIdUbicacion",idubic, "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
+                                               "pidProducto",idprod,
+                                               "pIdUbicacion",idubic,
+                                               "pIdBodega",gl.IdBodega);
                         break;
 
                     case 5:

@@ -22,6 +22,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -91,10 +92,11 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.10";
+    private String version="4.5.12";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
         try {
 
@@ -104,6 +106,10 @@ public class MainActivity extends PBase {
             ProgressDialog("Inicializando...");
 
             grantPermissions();
+
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,6 +222,7 @@ public class MainActivity extends PBase {
 
             alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
+
                     gl.wsurl=input.getText().toString();
 
                     if(!gl.wsurl.isEmpty()){
@@ -225,6 +232,7 @@ public class MainActivity extends PBase {
                         setURL();
                     }
                 }
+
             });
 
             final AlertDialog dialog = alert.create();
