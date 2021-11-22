@@ -283,6 +283,8 @@ public class frm_picking_datos extends PBase {
 
     private void Load() {
 
+        String vUnidadMedida ="";
+
         try {
 
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
@@ -297,7 +299,7 @@ public class frm_picking_datos extends PBase {
                 txtCodigoProducto.requestFocus();
             }
 
-            if(gBePickingUbic.getIdPresentacion()==0){
+            if(gBePickingUbic.getIdPresentacion()!=0){
                 trPresentacion.setVisibility(View.VISIBLE);
             }else{
                 trPresentacion.setVisibility(View.GONE);
@@ -308,12 +310,25 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
             }
+
+            if (gBePickingUbic.IdPresentacion>0){
+                if (gBeProducto.Presentaciones!=null){
+                    if (gBeProducto.Presentaciones.items!=null){
+                        List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
+                        vUnidadMedida = gBePresentacion.Nombre;
+                    }
+                }
+            }else{
+                vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
+            }
+
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " Expira: " + gBePickingUbic.Fecha_Vence :"" )
                     + (!gBePickingUbic.Lote.isEmpty()?"Lote: " + gBePickingUbic.Lote:"") + "\r\n"
                     + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
-                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ gBePickingUbic.ProductoUnidadMedida);
+                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
 
             txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
@@ -1113,7 +1128,7 @@ public class frm_picking_datos extends PBase {
                     vCantUniXTarima = vCamasPorTarima*vCajasPorCamas;
                 }
 
-                if (CantARec >= vCantUniXTarima){
+                if (CantARec >= vCantUniXTarima && vCantUniXTarima>0){
                     txtCantidadPick.setText(""+mu.frmdecimal(vCantUniXTarima,gl.gCantDecDespliegue));
                 }else{
                     txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
