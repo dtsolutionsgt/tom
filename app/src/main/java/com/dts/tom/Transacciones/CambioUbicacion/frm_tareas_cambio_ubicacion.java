@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -48,10 +50,14 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private int index;
 
+    private float x1,x2;
+    static final int MIN_DISTANCE = 150;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try{
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_frm_tareas_cambio_ubicacion);
 
@@ -83,6 +89,31 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                Load();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x2 - x1;
+                if (Math.abs(deltaX) > MIN_DISTANCE)
+                {
+                    Toast.makeText(this, "left2right swipe", Toast.LENGTH_SHORT).show ();
+                }
+                else
+                {
+                    // consider as something else - a screen tap for example
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     public void ProgressDialog(String mensaje){
