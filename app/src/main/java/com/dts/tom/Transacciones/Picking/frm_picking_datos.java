@@ -289,10 +289,12 @@ public class frm_picking_datos extends PBase {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 trLP.setVisibility(View.VISIBLE);
                 txtCodigoProducto.setEnabled(false);
+                txtBarra.requestFocus();
             } else {
                 lblLicPlate.setText("");
                 trLP.setVisibility(View.GONE);
                 txtCodigoProducto.setEnabled(true);
+                txtCodigoProducto.requestFocus();
             }
 
             if(gBePickingUbic.getIdPresentacion()==0){
@@ -1041,6 +1043,7 @@ public class frm_picking_datos extends PBase {
     private void Cargar_Datos_Producto_Picking(){
 
         double CantARec = 0;
+        double vCantUniXTarima = 0;
 
         try{
 
@@ -1104,12 +1107,18 @@ public class frm_picking_datos extends PBase {
             if (CantARec<=0){
                 txtCantidadPick.setText(""+0);
             }else{
+
                 //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                 if(vCajasPorCamas>0 && vCamasPorTarima>0){
-                    txtCantidadPick.setText(vCamasPorTarima*vCajasPorCamas+"");
+                    vCantUniXTarima = vCamasPorTarima*vCajasPorCamas;
+                }
+
+                if (CantARec >= vCantUniXTarima){
+                    txtCantidadPick.setText(""+mu.frmdecimal(vCantUniXTarima,gl.gCantDecDespliegue));
                 }else{
                     txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
                 }
+
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
@@ -1585,6 +1594,13 @@ public class frm_picking_datos extends PBase {
                     Listar_Producto_Estado();
                     Listar_Producto_Presentaciones();
                     Set_dias_Vence();
+
+                    if (!gBePickingUbic.Lic_plate.isEmpty()) {
+                        txtBarra.requestFocus();
+                    } else {
+                        txtCodigoProducto.requestFocus();
+                    }
+
                 }else{
                     execws(3);
                 }
@@ -1609,6 +1625,12 @@ public class frm_picking_datos extends PBase {
             Listar_Producto_Estado();
             Listar_Producto_Presentaciones();
             Set_dias_Vence();
+
+            if (!gBePickingUbic.Lic_plate.isEmpty()) {
+               txtBarra.requestFocus();
+            } else {
+                txtCodigoProducto.requestFocus();
+            }
 
         }catch (Exception e){
             mu.msgbox("processPresentacionesProducto:"+e.getMessage());
