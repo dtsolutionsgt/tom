@@ -92,7 +92,7 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.12";
+    private String version="4.5.13";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +132,8 @@ public class MainActivity extends PBase {
             lblurl=(TextView)  findViewById(R.id.txtURLWS);lblurl.setText("");
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
+
+            lblver.setText("Versión: " + version);
 
             getURL();
 
@@ -573,7 +575,10 @@ public class MainActivity extends PBase {
                     processGetDecimalesDespliegue();
                     break;
                 case 7:
-                    startActivity(new Intent(this,Mainmenu.class));
+                    Intent i = new Intent(this, Mainmenu.class);
+                    i.putExtra("version", version);
+                    startActivity(i);
+                    //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
                     processVersiones();

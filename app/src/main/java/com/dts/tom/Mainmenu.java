@@ -35,6 +35,7 @@ public class Mainmenu extends PBase {
 
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
+    private TextView lblVersion;
 
     private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;
@@ -58,6 +59,7 @@ public class Mainmenu extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
 
@@ -69,6 +71,30 @@ public class Mainmenu extends PBase {
         gridView = (GridView) findViewById(R.id.gridView1);
         lblBodega = (TextView) findViewById(R.id.lblBodegaName);
         lblUsuario = (TextView) findViewById(R.id.lblUsuarioName);
+        lblVersion= (TextView) findViewById(R.id.lblVersion);
+
+        try {
+
+            String versionparam;
+
+            if (savedInstanceState == null) {
+
+                Bundle extras = getIntent().getExtras();
+
+                if(extras == null) {
+                    versionparam= null;
+                } else {
+                    versionparam= extras.getString("version");
+                }
+
+            } else {
+                versionparam= (String) savedInstanceState.getSerializable("version");
+            }
+
+            lblVersion.setText("Version: " + versionparam);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         int ori=this.getResources().getConfiguration().orientation; // 1 - portrait , 2 - landscape
         horizpos=ori==2;
@@ -624,7 +650,9 @@ public class Mainmenu extends PBase {
     //region Dialogs
 
     private void msgAskUbicNoDirigida(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -635,14 +663,14 @@ public class Mainmenu extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
-                    startActivity(intent);
+                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
                 }
             });
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                    startActivity(intent);
                 }
             });
 
