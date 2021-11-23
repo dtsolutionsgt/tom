@@ -443,14 +443,14 @@ public class Mainmenu extends PBase {
 
                     gl.IdTareaUbicEnc =0;
                     gl.modo_cambio = 1;
-                    msgAskUbicNoDirigida("Ubicación no dirigida");
+                    msgAskUbicNoDirigida("Ubicación dirigida");
 
                     break;
 
                 case 3://Cambio de Estado
 
                     gl.modo_cambio = 2;
-                    msgAskUbicNoDirigida("Cambio de estado no dirigido");
+                    msgAskUbicNoDirigida("Cambio de estado dirigido");
 
                     break;
 
@@ -635,10 +635,8 @@ public class Mainmenu extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
                     Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
                     startActivity(intent);
-
                 }
             });
 

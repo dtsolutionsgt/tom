@@ -1033,7 +1033,8 @@ public class MainActivity extends PBase {
                 dir.mkdir();
             }
 
-            for (int i = 0; i <empresas.items.size(); i++)             {
+            for (int i = 0; i <empresas.items.size(); i++){
+
                 vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
                 emplist.add(empresas.items.get(i).Nombre);
 
