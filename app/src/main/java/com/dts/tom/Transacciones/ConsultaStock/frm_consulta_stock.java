@@ -529,7 +529,6 @@ public class frm_consulta_stock extends PBase {
 
             }
 
-
             if(pListStock2 != null){
 
                 conteo = pListStock2.items.size();

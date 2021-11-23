@@ -168,6 +168,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
 
+            progress.cancel();
+
         } catch (Exception e) {
             msgbox(new Object() {
             }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
