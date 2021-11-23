@@ -469,7 +469,7 @@ public class frm_consulta_stock extends PBase {
     private void processUbicacion2(){
         //Llama al método del WS Get_Stock_By_Lic_Plate
         try {
-            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
+            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_IdUbicacion");
 
             if (ListBeStockPallet != null){
                 Escaneo_Pallet = true;
@@ -519,7 +519,16 @@ public class frm_consulta_stock extends PBase {
 
             items_stock.clear();
 
-            pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+            switch (ws.callback) {
+                case 2:
+                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet_By_IdUbicacion_CI");
+                    break;
+                case 4:
+                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+                    break;
+
+            }
+
 
             if(pListStock2 != null){
 
@@ -862,7 +871,11 @@ public class frm_consulta_stock extends PBase {
                 if(txtCodigo.getText().toString().isEmpty()){
                     idprod = 0;
                 }else{
-                    idprod = Integer.valueOf(txtCodigo.getText().toString());
+                    try {
+                        idprod = Integer.valueOf(txtCodigo.getText().toString());
+                    }catch (Exception e){
+                        idprod = -1;
+                    }
                 }
                 if(txtUbic.getText().toString().isEmpty()){
                     idubic = 0;
@@ -922,8 +935,8 @@ public class frm_consulta_stock extends PBase {
                         break;
                     case 2:
                         //ByVal pLicensePlate As String,ByVal pIdBodega As Integer
-                        callMethod("Get_Stock_By_Lic_Plate_And_IdUbicacion",
-                                "pLicensePlate",(pLicensePlate==null?0:pLicensePlate),
+                        callMethod("Get_Stock_Por_Pallet_By_IdUbicacion_CI",
+                                "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
                                 "pIdBodega",gl.IdBodega,
                                 "pIdUbicacion",idubic);
                         break;
@@ -971,7 +984,7 @@ public class frm_consulta_stock extends PBase {
                     processUbicacion();
                     break;
                 case 2:
-                    processUbicacion2();
+                    listaStock();
                     break;
                 case 3:
                     processScanProducto();
