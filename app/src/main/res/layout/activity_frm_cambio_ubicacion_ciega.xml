@@ -180,6 +180,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/tblPresentacion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -200,6 +201,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginEnd="0dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblExplosionar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tblPresentacion"
+                android:paddingStart="100dp">
+
+                <CheckBox
+                    android:id="@+id/chkExplosionar"
+                    android:layout_width="129dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Explosionar"
+                    android:textSize="18sp" />
+
             </TableRow>
 
             <TableRow

@@ -62,11 +62,11 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
-    private TextView lblTituloForma, lblLicPlate;
+    private TextView lblTituloForma, lblLicPlate, lblEstiba;
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
     private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
@@ -77,7 +77,7 @@ public class frm_picking_datos extends PBase {
     public static int Tipo=0;
 
     public clsBeProducto_Presentacion gBePresentacion = new clsBeProducto_Presentacion();
-    public double vCajasPorCamas =0;
+    public double vCajasPorCama =0;
     public double vCamasPorTarima = 0;
 
     private int DifDias = 0;
@@ -105,6 +105,7 @@ public class frm_picking_datos extends PBase {
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
+        lblEstiba = (TextView) findViewById(R.id.lblEstiba);
 
         btnFechaVence = (Button) findViewById(R.id.btnFechaVence);
         btnConfirmarPk = (Button) findViewById(R.id.btnConfirmarPk);
@@ -118,6 +119,7 @@ public class frm_picking_datos extends PBase {
         trPeso = (TableRow) findViewById(R.id.trPeso);
         trLote = (TableRow) findViewById(R.id.trLote);
         trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
+        tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -1111,9 +1113,16 @@ public class frm_picking_datos extends PBase {
                         //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                         gBePresentacion= stream(gBeProducto.Presentaciones.items).
                                 where(z -> z.IdPresentacion == gBePickingUbic.IdPresentacion).first();
-                        vCajasPorCamas = gBePresentacion.CajasPorCama;
+                        vCajasPorCama = gBePresentacion.CajasPorCama;
                         vCamasPorTarima = gBePresentacion.CamasPorTarima;
 
+                        if (vCajasPorCama > 0 && vCamasPorTarima > 0){
+                            tblEstiba.setVisibility(View.VISIBLE);
+                            lblEstiba.setText("Camas por Tarima: " + vCamasPorTarima + " Cajas por cama: " +  vCajasPorCama);
+                        }else{
+                            tblEstiba.setVisibility(View.GONE);
+                            lblEstiba.setText("");
+                        }
                     }
                 }
             }
@@ -1124,8 +1133,8 @@ public class frm_picking_datos extends PBase {
             }else{
 
                 //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
-                if(vCajasPorCamas>0 && vCamasPorTarima>0){
-                    vCantUniXTarima = vCamasPorTarima*vCajasPorCamas;
+                if(vCajasPorCama>0 && vCamasPorTarima>0){
+                    vCantUniXTarima = vCamasPorTarima*vCajasPorCama;
                 }
 
                 if (CantARec >= vCantUniXTarima && vCantUniXTarima>0){
