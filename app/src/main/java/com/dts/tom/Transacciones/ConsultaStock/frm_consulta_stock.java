@@ -423,8 +423,10 @@ public class frm_consulta_stock extends PBase {
                 execws(4);
             }else{
 
-                //Get_Stock_Por_Pallet_CI
-                execws(5);
+/*                //Get_Stock_Por_Pallet_CI
+                execws(5);*/
+                //Get_Stock_By_Lic_Plate_And_IdUbicacion
+                execws(3);
             }
 
         }catch (Exception e){
@@ -880,7 +882,7 @@ public class frm_consulta_stock extends PBase {
                     }
                 }else if(idprod!=0 && idubic!=0){
                     ProgressDialog("Cargando existencias");
-                    execws(2);
+                    execws(4);
                 }
             }
         }catch (Exception ex){
@@ -901,19 +903,21 @@ public class frm_consulta_stock extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
-                                         "pBarra",txtUbic.getText().toString(),
-                                               "pIdBodega",gl.IdBodega);
+                                "pBarra",txtUbic.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         //ByVal pLicensePlate As String,ByVal pIdBodega As Integer
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
-                                               "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Stock_By_Lic_Plate_And_IdUbicacion",
+                                "pLicensePlate",(pLicensePlate==null?0:pLicensePlate),
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUbicacion",idubic);
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                         "pCodigo",txtCodigo.getText().toString(),
-                                               "IdBodega",gl.IdBodega);
+                                "pCodigo",txtCodigo.getText().toString(),
+                                "IdBodega",gl.IdBodega);
                         break;
 
                     case 4:
@@ -924,7 +928,13 @@ public class frm_consulta_stock extends PBase {
                         break;
 
                     case 5:
-                        callMethod("Get_Stock_Por_Pallet_CI","pLicPlate",pLicensePlate, "pIdBodega",gl.IdBodega);
+                       /* callMethod("Get_Stock_Por_Pallet_CI",
+                                "pLicPlate",pLicensePlate,
+                                "pIdBodega",gl.IdBodega);*/
+                        callMethod("Get_Stock_By_Lic_Plate_And_IdUbicacion",
+                                "pLicensePlate",pLicensePlate,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUbicacion",idubic);
                         break;
                 }
 
