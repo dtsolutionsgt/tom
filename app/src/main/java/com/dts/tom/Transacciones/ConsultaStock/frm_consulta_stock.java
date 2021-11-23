@@ -136,7 +136,8 @@ public class frm_consulta_stock extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
 
-                                    lblNombreUbicacion.setText("");
+                                    busca_stock();
+                                    /*lblNombreUbicacion.setText("");
 
                                     if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()){
                                         toast("Ubicación de producto no definida!");
@@ -148,7 +149,7 @@ public class frm_consulta_stock extends PBase {
                                             ProgressDialog("Cargando existencias");
                                             execws(1);
                                         }
-                                    }
+                                    }*/
                             }
                         }
                     } catch (Exception e) {
@@ -171,7 +172,9 @@ public class frm_consulta_stock extends PBase {
 
                                     lblNombreProducto.setText("");
 
-                                    if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) {
+                                    busca_stock();
+
+                                    /*if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) {
                                         toast("Escanee código de producto");
                                     } else {
 
@@ -197,7 +200,7 @@ public class frm_consulta_stock extends PBase {
                                                 execws(3);
                                             }
                                         }
-                                    }
+                                    }*/
                             }
                         }
                     } catch (Exception e) {
@@ -834,6 +837,17 @@ public class frm_consulta_stock extends PBase {
     }
 
     public void buscarStock(View view){
+
+        try{
+
+            busca_stock();
+
+        }catch (Exception ex){
+
+        }
+    }
+
+    private void busca_stock(){
 
         try{
 
