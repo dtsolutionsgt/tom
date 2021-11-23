@@ -88,7 +88,9 @@ public class srvCantTareas extends srvBaseJob {
             if (file.exists()) return false;
 
             try {
+
                 px=tname.substring(0,1);
+
                 if (px.equalsIgnoreCase("R")) {
                     nx=tname.replace("R","Recepción #");
                 } else if (px.equalsIgnoreCase("P")) {
@@ -106,17 +108,20 @@ public class srvCantTareas extends srvBaseJob {
                 writer = new BufferedWriter(wfile);
                 writer.write(tname);writer.write("\r\n");
                 writer.close();writer = null;
+
             } catch (IOException e) {
                 return false;
             }
 
             return true;
+
         } catch (Exception e) {
             return false;
         }
     }
 
     private void procesaLista(String lista) {
+
         FileWriter wfile=null;
         BufferedWriter writer=null;
 
