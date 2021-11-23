@@ -26,6 +26,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_consulta_stock_detalle_c_i);
@@ -170,6 +171,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             progress.cancel();
 
+            lblcodigo.requestFocus();
+
         } catch (Exception e) {
             msgbox(new Object() {
             }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -178,7 +181,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     }
 
     public void printBarras(View view){
-        msgAskImprimir("Seleccione una opción para imprimir");
+        msgAskImprimir("Imprimir");
     }
 
     private void Imprimir_Codigo_Barra_Producto(){
@@ -349,6 +352,25 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                             "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                             gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                             "$"+gl.existencia.getLicPlate());
+                    }else if (gl.existencia.IdTipoEtiqueta==4){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                gl.existencia.Codigo +" - "+gl.existencia.Nombre,
+                                "$"+gl.existencia.LicPlate);
                     }
 
                     if (!zpl.isEmpty()){
@@ -387,7 +409,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg );
+            dialog.setMessage( msg + "\n\n Impresora: " + gl.MacPrinter);
 
             dialog.setCancelable(false);
 
@@ -399,13 +421,13 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 }
             });
 
-            dialog.setNegativeButton("Licencia de Producto", new DialogInterface.OnClickListener() {
+            dialog.setNegativeButton("Licencia", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Imprimir_Licencia();
                 }
             });
 
-            dialog.setNeutralButton("No imprimir", new DialogInterface.OnClickListener() {
+            dialog.setNeutralButton("No Gracias", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {}
             });
 

@@ -98,6 +98,8 @@ public class frm_consulta_stock extends PBase {
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
 
         setHandlers();
+
+        txtUbic.requestFocus();
     }
 
     private void setHandlers() {
@@ -136,20 +138,24 @@ public class frm_consulta_stock extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
 
-                                    busca_stock();
-                                    /*lblNombreUbicacion.setText("");
+                                    new Thread(new Runnable() {
 
-                                    if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()){
-                                        toast("Ubicación de producto no definida!");
-                                    } else{
-                                        if(txtUbic.getText().toString().isEmpty()){
-                                            idubic = 0;
+                                        public void run() {
+
+                                            try {
+
+                                                // Initialize
+                                                Looper.prepare();
+                                          busca_stock();
+                                                Looper.myLooper().quit();
+
+                                            } catch (Exception e) {
+                                                // Handle communications error here
+                                                e.printStackTrace();
+                                            }
                                         }
-                                        else{
-                                            ProgressDialog("Cargando existencias");
-                                            execws(1);
-                                        }
-                                    }*/
+                                    }).start();
+
                             }
                         }
                     } catch (Exception e) {
@@ -419,9 +425,9 @@ public class frm_consulta_stock extends PBase {
     }
 
     public void Listar_Existencias(){
+
         try{
             if(!Escaneo_Pallet){
-
                 //Get_Stock_Por_Producto_Ubicacion_CI
                 execws(4);
             }else{
@@ -836,12 +842,16 @@ public class frm_consulta_stock extends PBase {
     }
 
     public void ProgressDialog(String mensaje) {
-        progress = new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
+        try {
+            progress = new ProgressDialog(this);
+            progress.setMessage(mensaje);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.setIndeterminate(true);
+            progress.setProgress(0);
+            progress.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void buscarStock(View view){
@@ -886,6 +896,7 @@ public class frm_consulta_stock extends PBase {
                     ProgressDialog("Cargando existencias");
 
                     execws(1);
+
                 }else if(idprod!=0 && idubic==0){
 
                     String vStarWithParameter = "$";
