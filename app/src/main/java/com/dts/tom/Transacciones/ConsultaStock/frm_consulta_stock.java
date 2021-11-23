@@ -138,23 +138,7 @@ public class frm_consulta_stock extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
 
-                                    new Thread(new Runnable() {
-
-                                        public void run() {
-
-                                            try {
-
-                                                // Initialize
-                                                Looper.prepare();
-                                          busca_stock();
-                                                Looper.myLooper().quit();
-
-                                            } catch (Exception e) {
-                                                // Handle communications error here
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }).start();
+                                    execws(1);
 
                             }
                         }
@@ -180,33 +164,6 @@ public class frm_consulta_stock extends PBase {
 
                                     busca_stock();
 
-                                    /*if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) {
-                                        toast("Escanee código de producto");
-                                    } else {
-
-                                        if(txtCodigo.getText().toString().isEmpty()){
-                                            idprod = 0;
-                                        }
-                                        else{
-
-                                            String vStarWithParameter = "$";
-                                            //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                                            if (txtCodigo.getText().toString().startsWith("$") ||
-                                                    txtCodigo.getText().toString().startsWith("(01)") ||
-                                                    txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                                                //Es una barra de pallet válida por tamaño
-                                                int vLengthBarra = txtCodigo.getText().toString().length();
-                                                if (vLengthBarra >= 0) {
-                                                    pLicensePlate = txtCodigo.getText().toString().replace("$", "");
-                                                    ProgressDialog("Cargando existencias");
-                                                    execws(2);
-                                                }
-                                            } else {
-                                                ProgressDialog("Cargando existencias");
-                                                execws(3);
-                                            }
-                                        }
-                                    }*/
                             }
                         }
                     } catch (Exception e) {
@@ -424,25 +381,6 @@ public class frm_consulta_stock extends PBase {
         }
     }
 
-    public void Listar_Existencias(){
-
-        try{
-            if(!Escaneo_Pallet){
-                //Get_Stock_Por_Producto_Ubicacion_CI
-                execws(4);
-            }else{
-
-/*                //Get_Stock_Por_Pallet_CI
-                execws(5);*/
-                //Get_Stock_By_Lic_Plate_And_IdUbicacion
-                execws(3);
-            }
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-    }
-
     private void processUbicacion() {
 
         try {
@@ -464,33 +402,13 @@ public class frm_consulta_stock extends PBase {
                 //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
             }
 
-            Listar_Existencias();
+            //Listar_Existencias();
+            busca_stock();
 
         } catch (Exception e) {
             //progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-    }
-
-    private void processUbicacion2(){
-        //Llama al método del WS Get_Stock_By_Lic_Plate
-        try {
-            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_IdUbicacion");
-
-            if (ListBeStockPallet != null){
-                Escaneo_Pallet = true;
-                //toast("Pallet si existe en la bodega");
-            }else {
-                idubic = 0;
-                throw new Exception("Pallet no existe en la bodega: " + gl.IdBodega);
-            }
-
-            Listar_Existencias();
-
-        } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-        }
-
     }
 
     private void processScanProducto(){
@@ -509,7 +427,7 @@ public class frm_consulta_stock extends PBase {
                 throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
             }
 
-            Listar_Existencias();
+           busca_stock();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -577,6 +495,14 @@ public class frm_consulta_stock extends PBase {
                         item.ingreso= pListStock2.items.get(i).ingreso;
                         item.IdTipoEtiqueta=pListStock2.items.get(i).IdTipoEtiqueta;
                         items_stock.add(item);
+
+                        if (i==0){
+                            if (!txtCodigo.getText().toString().isEmpty()){
+                                if (!txtCodigo.getText().toString().equals("0")){
+                                    lblNombreProducto.setText(item.Codigo + " " + item.Nombre);
+                                }
+                            }
+                        }
                     }
 
                     adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
@@ -660,92 +586,6 @@ public class frm_consulta_stock extends PBase {
 
         }catch (Exception ex){
 
-        }
-    }
-
-    private void listaStock2() {
-
-        clsBeVW_stock_res_CI vItem;
-
-        try {
-
-            items_stock.clear();
-            clsBeVW_stock_res_CI item;
-
-            pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
-
-            if(pListStock2 != null){
-
-                vItem = new clsBeVW_stock_res_CI();
-                items_stock.add(vItem);
-
-                conteo = pListStock2.items.size();
-
-                if(conteo == 0 || pListStock2.items.isEmpty()){
-
-                    lblNombreUbicacion.setText("U.S.P");
-                    idle = true;
-                }
-                else{
-
-                    //lbldescripcion.setText("");
-
-                }
-
-                registros.setText("REGISTROS: "+ conteo);
-
-                for (int i = 0; i < pListStock2.items.size(); i++) {
-
-                    item = new clsBeVW_stock_res_CI();
-                    item.Codigo = pListStock2.items.get(i).Codigo;
-                    item.Nombre = pListStock2.items.get(i).Nombre;
-                    item.UM = pListStock2.items.get(i).UM;
-                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                    item.Pres = pListStock2.items.get(i).Pres;
-                    item.ExistPres = pListStock2.items.get(i).ExistPres;
-                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                    item.Lote = pListStock2.items.get(i).Lote;
-                    item.Vence = pListStock2.items.get(i).Vence;
-                    item.Estado = pListStock2.items.get(i).Estado;
-                    item.Ubic = pListStock2.items.get(i).Ubic;
-                    item.idUbic = pListStock2.items.get(i).idUbic;
-                    item.Pedido = pListStock2.items.get(i).Pedido;
-                    item.Pick = pListStock2.items.get(i).Pick;
-                    item.LicPlate = pListStock2.items.get(i).LicPlate;
-                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                    item.factor = pListStock2.items.get(i).factor;
-                    item.ingreso = pListStock2.items.get(i).ingreso;
-                    item.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
-                    items_stock.add(item);
-                }
-
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
-
-                /***************************LLENAR COMBOBOX *******************************/
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
-
-                    List<String> categories = new ArrayList<String>();
-                    categories.add("");
-
-                    ListaEstados.forEach((k, v) -> {
-                        //System.out.printf("%s : %d%n", k, v);
-                        categories.add(k);
-                    });
-
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    cmbEstadoExist.setAdapter(dataAdapter);
-                }
-
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
         }
     }
 
@@ -892,35 +732,25 @@ public class frm_consulta_stock extends PBase {
                     idubic = Integer.valueOf(txtUbic.getText().toString());
                 }
 
-                if (idprod==0 && idubic!=0){
-                    ProgressDialog("Cargando existencias");
-
-                    execws(1);
-
-                }else if(idprod!=0 && idubic==0){
-
-                    String vStarWithParameter = "$";
-                    //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                    if (txtCodigo.getText().toString().startsWith("$") ||
-                            txtCodigo.getText().toString().startsWith("(01)") ||
-                            txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                        //Es una barra de pallet válida por tamaño
-                        int vLengthBarra = txtCodigo.getText().toString().length();
-                        if (vLengthBarra >= 0) {
-                            pLicensePlate = txtCodigo.getText().toString().replace("$", "");
-
-                            ProgressDialog("Cargando existencias");
-                            execws(2);
-                        }
-                    } else {
+                String vStarWithParameter = "$";
+                //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+                if (txtCodigo.getText().toString().startsWith("$") ||
+                        txtCodigo.getText().toString().startsWith("(01)") ||
+                        txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
+                    //Es una barra de pallet válida por tamaño
+                    int vLengthBarra = txtCodigo.getText().toString().length();
+                    if (vLengthBarra >= 0) {
+                        pLicensePlate = txtCodigo.getText().toString().replace("$", "");
 
                         ProgressDialog("Cargando existencias");
-                        execws(3);
+                        execws(2);
                     }
-                }else if(idprod!=0 && idubic!=0){
+                } else {
+
                     ProgressDialog("Cargando existencias");
                     execws(4);
                 }
+
             }
         }catch (Exception ex){
 
@@ -964,15 +794,6 @@ public class frm_consulta_stock extends PBase {
                                                "pIdBodega",gl.IdBodega);
                         break;
 
-                    case 5:
-                       /* callMethod("Get_Stock_Por_Pallet_CI",
-                                "pLicPlate",pLicensePlate,
-                                "pIdBodega",gl.IdBodega);*/
-                        callMethod("Get_Stock_By_Lic_Plate_And_IdUbicacion",
-                                "pLicensePlate",pLicensePlate,
-                                "pIdBodega",gl.IdBodega,
-                                "pIdUbicacion",idubic);
-                        break;
                 }
 
                 progress.cancel();
@@ -1002,9 +823,7 @@ public class frm_consulta_stock extends PBase {
                 case 4:
                     listaStock();
                     break;
-                case 5:
-                    listaStock2();
-                    break;
+
             }
 
         } catch (Exception e) {
