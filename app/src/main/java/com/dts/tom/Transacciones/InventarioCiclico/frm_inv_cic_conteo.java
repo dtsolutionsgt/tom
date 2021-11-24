@@ -789,9 +789,7 @@ public class frm_inv_cic_conteo extends PBase {
             else if (BeInvEnc.multi_propietario){
                 gl.multipropietario = BeInvEnc.multi_propietario;
                 execws(6);
-            }
-
-            else{
+            }else{
                 msgbox("El inventario no tiene asignado un propietario.");
             }
 
