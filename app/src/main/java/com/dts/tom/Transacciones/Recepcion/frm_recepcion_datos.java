@@ -554,9 +554,12 @@ public class frm_recepcion_datos extends PBase {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         String valor= cmbVenceRec .getText().toString();
+                        //#AT 20211123 Se ajusta el formato a la fecha
+                        String fecha_ajustada =  du.convierteFechaSinHora(valor);
+
                         try{
 
-                            if (!du.EsFecha(valor)){
+                            if (!du.EsFecha(fecha_ajustada)){
                                 msgbox("No es una fecha válida, se colocará la fecha actual");
                                 cmbVenceRec.setText(du.getActDateStr());
                             }
