@@ -182,13 +182,18 @@ public class frm_consulta_stock extends PBase {
 
                     Looper.prepare();
 
-                    String estado = cmbEstadoExist.getSelectedItem().toString();
+                    try{
+                        String estado = cmbEstadoExist.getSelectedItem().toString();
 
-                    if(estado.isEmpty() && selest ==0){
+                        if(estado.isEmpty() && selest ==0){
 
-                    }
-                    else {
-                        Spinner(estado);
+                        }
+                        else {
+                            Spinner(estado);
+                        }
+
+                    }catch (Exception e){
+                        msgbox("Error " + e.getMessage());
                     }
 
                     Looper.loop();
