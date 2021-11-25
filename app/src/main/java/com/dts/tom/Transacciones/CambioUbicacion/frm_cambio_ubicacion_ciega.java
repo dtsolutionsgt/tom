@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -58,7 +60,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
-    private TableRow trPeso;
+    private TableRow trPeso,tblExplosionar,tblPresentacion;
+    private CheckBox chkExplosionar;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -115,6 +118,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean vProcesar =false;
 
     private boolean Es_Explosion = false;
+    private boolean Es_Explosion_Manual = false;
     private int vIdStockNuevo = 0;
     private int vIdMovimientoNuevo= 0;
     private int vPosiciones=0;
@@ -181,9 +185,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoOrigen = (Spinner) findViewById(R.id.cmbEstadoOrigen);
             cmbEstadoDestino = (Spinner) findViewById(R.id.cmbEstadoDestino);
 
+            chkExplosionar = (CheckBox)  findViewById(R.id.chkExplosionar);
+
             btnGuardarCiega = (Button) findViewById(R.id.btnGuardarCiega);
 
             trPeso = (TableRow)findViewById(R.id.trPeso);
+            tblExplosionar = (TableRow)findViewById(R.id.tblExplosionar);
+            tblPresentacion = (TableRow)findViewById(R.id.tblPresentacion);
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -544,6 +552,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 return false;
             }
         });
+
+        chkExplosionar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+
+                    Es_Explosion_Manual = true;
+                   // ProgressDialog("Explosionar mercancía.");
+
+                } else {
+
+                    Es_Explosion_Manual = false;
+
+                }
+            }
+        });
+
     }
 
     private void LlenaPresentaciones() {
@@ -593,7 +618,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
 
+                tblExplosionar.setVisibility(View.VISIBLE);
+
             }else{
+                tblExplosionar.setVisibility(View.GONE);
                 LlenaLotes();
             }
 
@@ -2350,6 +2378,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino.setAdapter(null);
             txtUbicSug.setText("");
             txtUbicDestino.setHint("");
+            chkExplosionar.setChecked(false);
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2841,6 +2870,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 vStockRes.CantidadUmBas = vCantidadAUbicar * vFactorPres;
             }
 
+            if (Es_Explosion_Manual){
+                gMovimientoDet.IdTipoTarea = 20;
+            }
+
             //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
             execws(14);
 
@@ -3041,7 +3074,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if(EsCambioEstado ) {
                 gMovimientoDet.IdTipoTarea = 3;
             }else{
-                gMovimientoDet.IdTipoTarea = 2;
+                if (!Es_Explosion && !Es_Explosion_Manual){
+                    gMovimientoDet.IdTipoTarea = 2;
+                }else{
+                    if (Es_Explosion_Manual){
+                       gMovimientoDet.IdTipoTarea = 20;
+                    }
+                }
             }
 
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;

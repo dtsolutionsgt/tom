@@ -123,6 +123,9 @@ public class frm_picking_datos extends PBase {
 
         ProgressDialog("Cargando datos de producto picking");
 
+        lblEstiba.setText("");
+        tblEstiba.setVisibility(View.GONE);
+
         if (selitem != null) {
             gBePickingUbic = selitem;
             gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
