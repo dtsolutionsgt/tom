@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -2756,6 +2757,39 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             btnGuardarCiega.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private void msgAskImprimir(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de estado", (dialog1, which) -> {
+                progress.setMessage("Imprimiendo Estado");
+                progress.show();
+                progress.cancel();
+            });
+
+            dialog.setNeutralButton("Salir", (dialog13, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object()
+            {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void Imprimir(View view){
+        msgAskImprimir("Imprimir Estado");
     }
 
     private void aplicarCambio() {

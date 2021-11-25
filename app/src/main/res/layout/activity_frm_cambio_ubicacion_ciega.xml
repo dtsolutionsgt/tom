@@ -323,7 +323,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="17sp" />
             </TableRow>
---PEso
+--Peso
 
             <TableRow
                 android:id="@+id/trPeso"
@@ -364,7 +364,9 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:onClick="Imprimir"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/lblDestino"
@@ -396,7 +398,9 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:onClick="Imprimir"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/lblUbicCompDestino"
@@ -428,8 +432,18 @@
 
                 <Spinner
                     android:id="@+id/cmbEstadoDestino"
-                    android:layout_width="match_parent"
+                    android:layout_width="189dp"
                     android:layout_height="45dp" />
+
+                <ImageView
+                    android:id="@+id/cmdImprimir"
+                    android:layout_width="70dp"
+                    android:layout_height="54dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="0dp"
+                    android:onClick="Imprimir"
+                    android:padding="10dp"
+                    android:src="@drawable/login_printer" />
 
             </TableRow>
 
