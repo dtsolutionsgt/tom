@@ -105,18 +105,18 @@ public class frm_consulta_stock extends PBase {
     private void setHandlers() {
         try{
 
-            txtUbic.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    lblNombreUbicacion.setText("");
-                    registros.setText("REGISTROS: "+ 0);
-                    selest = 0;
-                    items_stock2.clear();
-                }
-            });
+//            txtUbic.addTextChangedListener(new TextWatcher() {
+//                public void afterTextChanged(Editable s) {}
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    lblNombreUbicacion.setText("");
+//                    registros.setText("REGISTROS: "+ 0);
+//                    selest = 0;
+//                    items_stock2.clear();
+//                }
+//            });
 
-            txtCodigo.addTextChangedListener(new TextWatcher() {
+            /*txtCodigo.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {}
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -125,13 +125,14 @@ public class frm_consulta_stock extends PBase {
                     selest = 0;
                     items_stock2.clear();
                 }
-            });
+            });*/
 
             txtUbic.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                     try {
+
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
                             switch (keyCode) {
@@ -154,6 +155,7 @@ public class frm_consulta_stock extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                     try {
+
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
                             switch (keyCode) {
@@ -509,6 +511,7 @@ public class frm_consulta_stock extends PBase {
                     listView.setAdapter(adapter_stock);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
                         Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
                                 .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
 
@@ -534,6 +537,10 @@ public class frm_consulta_stock extends PBase {
 
                 }
 
+            }else{
+                //limpiar el grid.
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
             }
 
         } catch (Exception e) {
@@ -753,7 +760,7 @@ public class frm_consulta_stock extends PBase {
 
             }
         }catch (Exception ex){
-
+            ex.printStackTrace();
         }
     }
 
