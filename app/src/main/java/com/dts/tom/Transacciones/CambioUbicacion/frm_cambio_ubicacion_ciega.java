@@ -2693,16 +2693,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+
                 public void onClick(DialogInterface dialog, int which) {
 
                     if( escaneoPallet && productoList != null){
                         //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material
-                        if (BeStockPallet.getIdPresentacion()!=0){
-                            if( BeStockPallet.CantidadPresentacion != vCantidadAUbicar){
+                        if (BeStockPallet.getIdPresentacion()!=0) {
+
+                            if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
                                 msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
-                            }else{
+                            } else {
                                 inicializaTarea(true);
                             }
+
                         }else{
                             if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
                                 msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
