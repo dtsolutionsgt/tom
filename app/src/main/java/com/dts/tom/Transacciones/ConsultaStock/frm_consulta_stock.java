@@ -180,7 +180,6 @@ public class frm_consulta_stock extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    Looper.prepare();
 
                     try{
                         String estado = cmbEstadoExist.getSelectedItem().toString();
@@ -196,7 +195,6 @@ public class frm_consulta_stock extends PBase {
                         msgbox("Error " + e.getMessage());
                     }
 
-                    Looper.loop();
 
                 }
 
@@ -662,6 +660,9 @@ public class frm_consulta_stock extends PBase {
             if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
             ) {
+                items_stock.clear();
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
                 toast("Ingrese código de producto y/o ubicación");
             } else {
 
