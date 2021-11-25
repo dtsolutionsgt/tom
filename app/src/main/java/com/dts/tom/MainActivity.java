@@ -64,7 +64,7 @@ public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl;
+    private TextView lblver,lbldate,lblurl, lblVersion;
     private ProgressDialog progress;
     private ImageView imgIngresar;
     private ImageView imgEmpresaLogin;
@@ -129,10 +129,12 @@ public class MainActivity extends PBase {
             lblver=(TextView)  findViewById(R.id.txtNoVersion);
             lbldate=(TextView)  findViewById(R.id.txtFechaVersion);
             lblurl=(TextView)  findViewById(R.id.txtURLWS);lblurl.setText("");
+            lblVersion = (TextView) findViewById(R.id.lblVersion);
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
 
             lblver.setText("Versión: " + version);
+            lblVersion.setText("V. "+version);
 
             getURL();
 
