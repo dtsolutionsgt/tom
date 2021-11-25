@@ -193,6 +193,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             tblExplosionar = (TableRow)findViewById(R.id.tblExplosionar);
             tblPresentacion = (TableRow)findViewById(R.id.tblPresentacion);
 
+            tblExplosionar.setVisibility(View.GONE);
+
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
@@ -618,7 +620,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
 
-                tblExplosionar.setVisibility(View.VISIBLE);
+                if (cvPresID ==0){
+                    tblExplosionar.setVisibility(View.GONE);
+                }else{
+                    tblExplosionar.setVisibility(View.VISIBLE);
+                }
 
             }else{
                 tblExplosionar.setVisibility(View.GONE);
@@ -2309,6 +2315,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino.setAdapter(null);
             txtUbicSug.setText("");
             txtUbicDestino.setHint("");
+            chkExplosionar.setChecked(false);
+            tblExplosionar.setVisibility(View.GONE);
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2379,6 +2387,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicSug.setText("");
             txtUbicDestino.setHint("");
             chkExplosionar.setChecked(false);
+            tblExplosionar.setVisibility(View.GONE);
 
             cvProdID = 0;
             cvPresID = 0;
