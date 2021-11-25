@@ -308,6 +308,7 @@ public class frm_picking_datos extends PBase {
                 trPresentacion.setVisibility(View.VISIBLE);
             }else{
                 trPresentacion.setVisibility(View.GONE);
+                tblEstiba.setVisibility(View.GONE);
             }
 
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
@@ -315,6 +316,8 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
             }
+
+            vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
 
             if (gBePickingUbic.IdPresentacion>0){
                 if (gBeProducto.Presentaciones!=null){
@@ -324,8 +327,6 @@ public class frm_picking_datos extends PBase {
                         vUnidadMedida = gBePresentacion.Nombre;
                     }
                 }
-            }else{
-                vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
             }
 
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
@@ -1128,6 +1129,9 @@ public class frm_picking_datos extends PBase {
                         }
                     }
                 }
+            }else{
+                tblEstiba.setVisibility(View.GONE);
+                lblEstiba.setText("");
             }
 
             txtUniBas.setText(gBePickingUbic.ProductoUnidadMedida);
