@@ -69,6 +69,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_inv_ini_verificacion);
         super.InitBase();
@@ -164,15 +165,39 @@ public class frm_inv_ini_verificacion extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    //GT 18112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
-                    if (emptyPres && position ==0 ) {
-                        IdPresSelect = 0;
+                    try {
+                        //GT 18112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
+                        if (emptyPres && position ==0 ) {
+                            IdPresSelect = 0;
 
-                    }else if(emptyPres && position> 0){
-                        IdPresSelect=BeListPres.items.get(position-1).IdPresentacion;
-                    }else{
-                        IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+
+                        }else if(emptyPres && position> 0){
+
+                            int Registros =IdPresSelect=BeListPres.items.size();
+
+                            if(Registros > position){
+                                IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                            }else{
+                                IdPresSelect=BeListPres.items.get(position - 1).IdPresentacion;
+                            }
+
+                        }else{
+
+                            int Registros =IdPresSelect=BeListPres.items.size();
+
+                            if(Registros > position){
+                                IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                            }else{
+                                IdPresSelect=BeListPres.items.get(position -1).IdPresentacion;
+                            }
+
+                            //IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
 
                 @Override
@@ -273,8 +298,8 @@ public class frm_inv_ini_verificacion extends PBase {
             //txtCantVer.requestFocus();
 
             //GT 18112021 primero validamos prod guardado sin presentacion
-            execws(9);
-            //execws(4);
+            //execws(9);
+            execws(4);
 
         } catch (Exception e) {
             mu.msgbox("Carga_Det_Producto:" + e.getMessage());
