@@ -286,10 +286,12 @@ public class frm_inv_ini_conteo extends PBase {
         day = c.get(Calendar.DAY_OF_MONTH);
 
         // set current date into textview
-        txtVenceInvIni.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(day).append("-").append(month).append("-")
-                .append(year).append(" "));
+        StringBuilder tmpFecha =  new StringBuilder().append(day)
+                .append("-").append(month).append("-").append(year)
+                .append(" ");
+
+        // #AT 20211126 Se da formato a la fecha
+        setFecha(tmpFecha);
 
         // set current date into datepicker
         dpResult.init(year, month, day, null);
@@ -309,9 +311,12 @@ public class frm_inv_ini_conteo extends PBase {
             month = selectedMonth+1;
             day = selectedDay;
             // set selected date into textview
-            txtVenceInvIni.setText(new StringBuilder().append(day)
+            StringBuilder tmpFecha =  new StringBuilder().append(day)
                     .append("-").append(month).append("-").append(year)
-                    .append(" "));
+                    .append(" ");
+
+            // #AT 20211126 Se da formato a la fecha
+            setFecha(tmpFecha);
 
             // set selected date into datepicker also
             dpResult.init(year, month, day, null);
@@ -332,6 +337,12 @@ public class frm_inv_ini_conteo extends PBase {
                         year, month,day);
         }
         return null;
+    }
+
+    // #AT 20211126 Se da formato a la fecha
+    public void setFecha(StringBuilder tmpFecha) {
+        String fecha = du.convierteFechaSinHora(String.valueOf(tmpFecha));
+        txtVenceInvIni.setText(fecha);
     }
 
     private void Load() {
@@ -361,7 +372,10 @@ public class frm_inv_ini_conteo extends PBase {
             lblPeso.setVisibility(View.GONE);
             txtPesoInvIni.setVisibility(View.GONE);
 
-            txtVenceInvIni.setText(du.convierteFechaMostrar(du.getFechaActual()));
+            // #AT 20211126 Se da formato a la fecha
+            String tmpFecha = du.convierteFechaMostrar(du.getFechaActual());
+            String fecha = du.convierteFechaSinHora(tmpFecha);
+            txtVenceInvIni.setText(fecha);
 
             pIdTramo=0;
 
