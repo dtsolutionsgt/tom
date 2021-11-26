@@ -91,7 +91,7 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.24";
+    private String version="4.5.25";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
