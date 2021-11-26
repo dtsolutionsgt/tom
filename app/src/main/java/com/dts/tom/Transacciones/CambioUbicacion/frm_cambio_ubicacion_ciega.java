@@ -460,6 +460,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
         });
 
+        //#AT 20211125 Agregué este evento para que detecte cuando el usuario presione enter
+        txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+
         txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
 
             @Override
@@ -467,7 +470,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_ENTER:
-                            AplicarCambioBoton();
+                            if (txtUbicDestino.getText().toString().length() > 0)
+                                AplicarCambioBoton();
+                            else
+                                toast("Debe ingresar la ubicación destino");
                     }
                 }
                 return false;
@@ -515,7 +521,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                                     Recalcula_Peso();
 
-                                    if (txtPeso.getVisibility()==View.VISIBLE){
+                                    if (trPeso.getVisibility()==View.VISIBLE){
                                         txtPeso.requestFocus();
                                     }else{
                                         txtUbicDestino.requestFocus();
