@@ -175,17 +175,17 @@ public class frm_picking_datos extends PBase {
                             }
 
                             if (!gBePickingUbic.Lote.isEmpty()){
-                                 text += " Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                 text += " Código: " + gBePickingUbic.CodigoProducto +  "."
                                         + " Tome: " + vCantidad + "."
                                         + " Verifíque lote: " + gBePickingUbic.Lote;
                             }else{
-                                 text += "Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                 text += "Código: " + gBePickingUbic.CodigoProducto +  "."
                                         + " Tome: " + vCantidad + ", "
                                         + " de cualquier lote. ";
                             }
 
                             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
-                                text +=" Verifique vencimiento: " +gBePickingUbic.Fecha_Vence;
+                                text +=" Verifique vencimiento: " + gBePickingUbic.Fecha_Vence;
                             }
 
                             float speed = 1f;
