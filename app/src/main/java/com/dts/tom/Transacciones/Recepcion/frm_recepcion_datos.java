@@ -233,6 +233,11 @@ public class frm_recepcion_datos extends PBase {
 
     private String MensajeAdicionalParaImpresion="";
 
+    /**Variables para las cantidad por lotes de ubicación de las órdenes de producción**/
+    private double CantRec=0;
+    private double CantTotal =0;
+    private double DifCantUbic =0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -3445,9 +3450,9 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
-                double CantRec=0;
-                double CantTotal =0;
-                double DifCantUbic =0;
+                CantRec=0;
+                CantTotal =0;
+                DifCantUbic =0;
 
                 //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
                 if (BeUbicaciones!=null){
@@ -5374,6 +5379,19 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.mode==2){
                 Cant_Pendiente =mu.round(Cant_Pendiente + Cant_Recibida_Anterior,gl.gCantDecCalculo);
+            }
+
+            //#CKFK 20211129 Agregué validación para saber si la cantidad ingresada es mayor a la
+            // cantidad permitida en la ubicación
+            if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
+                if (ubiDetLote!=null) {
+                    if (!ubiDetLote.isEmpty()) {
+                        if (DifCantUbic<Cantidad){
+                            msgbox("Excede la cantidad permitida en la ubicación  " + ubiDetLote);
+                            return;
+                        }
+                    }
+                }
             }
 
             if (Cant_Pendiente > Cantidad){
