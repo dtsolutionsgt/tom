@@ -1,6 +1,5 @@
 package com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod;
 
-
 import org.simpleframework.xml.Element;
 
 public class clsBeTrans_inv_stock_prod {
@@ -15,14 +14,15 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public String Lote="";
     @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public String Codigo="";
-
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public int IdUbicacion=0;
 
     public clsBeTrans_inv_stock_prod() {
     }
 
     public clsBeTrans_inv_stock_prod(int Idinventario,int Idinvstockprod,int IdProducto,int IdPresentacion,
                                      double Cant,double Peso,int IdUnidadMedida,String Lote,
-                                     String Fecha_vence,String Codigo) {
+                                     String Fecha_vence,String Codigo, int IdBodega, int IdUbicacion) {
 
         this.Idinventario=Idinventario;
         this.Idinvstockprod=Idinvstockprod;
@@ -34,9 +34,10 @@ public class clsBeTrans_inv_stock_prod {
         this.Lote=Lote;
         this.Fecha_vence=Fecha_vence;
         this.Codigo=Codigo;
+        this.IdBodega=IdBodega;
+        this.IdUbicacion=IdUbicacion;
 
     }
-
 
     public int getIdinventario() {
         return Idinventario;
@@ -97,6 +98,18 @@ public class clsBeTrans_inv_stock_prod {
     }
     public void setCodigo(String value) {
         Codigo=value;
+    }
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
+    }
+    public int getIdubicacion() {
+        return IdUbicacion;
+    }
+    public void setIdubicacion(int value) {
+        IdUbicacion=value;
     }
 
 }

@@ -33,7 +33,6 @@ import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -88,6 +87,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         setHandlers();
 
+        gl.gVerifCascade =false;
         Load();
 
     }
@@ -237,6 +237,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     case 4:
                         callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
+                    case 5:
+                        callMethod("Get_Pedido_A_Verificar_By_LP","pLP",gl.gLP);
+                        break;
                 }
 
                 anim.cancel();
@@ -262,8 +265,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processListTareasPicking();
                     break;
                 case 4:
-                    processListTareasVerificacion();
-                    break;
+                    processListTareasVerificacion();break;
+                case 5:
+                    recibeLP();break;
             }
 
         } catch (Exception e) {
@@ -320,18 +324,13 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void processListTareasVerificacion(){
-
-        try{
-
+        try {
             pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_All_Pedidos_A_Verificar_By_IdBodega");
-
             Llena_Tareas_Verificacion();
-
-        }catch (Exception e){
+        } catch (Exception e){
             mu.msgbox("processListTareasPicking:"+e.getMessage());
             progress.cancel();
         }
-
     }
 
     private void Llena_Tareas_Picking(){
@@ -362,7 +361,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombreUbicacionPicking=BePicking.NombreUbicacionPicking;
                         vItem.Estado=BePicking.Estado;
                         vItem.Detalle_operador=BePicking.Detalle_operador;
-                        vItem.Fecha_picking=du.convierteFechaMostar(BePicking.Fecha_picking);
+                        vItem.Fecha_picking=du.convierteFechaMostrar(BePicking.Fecha_picking);
                         vItem.Hora_ini=du.convierteHoraMostar(BePicking.Hora_ini);
                         vItem.Hora_fin=du.convierteHoraMostar(BePicking.Hora_fin);
 
@@ -536,7 +535,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         try {
 
-            gl.gIdRecepcionEnc=0;
+            gl.gIdRecepcionEnc=0; gl.gVerifCascade =false;
 
             switch (gl.tipoTarea) {
 
@@ -567,7 +566,32 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     private void buscaLP(String lp) {
+        gl.gLP=lp;
+        execws(5);
+    }
 
+    private void recibeLP() {
+        try {
+            pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_Pedido_A_Verificar_By_LP");
+            progress.cancel();
+
+            try {
+                if (pListBeTransPeEnc.items.size()==0) throw new Exception();
+            } catch (Exception e){
+                toast("LP no existe");return;
+            }
+
+            gl.gVerifCascade=true;
+            gl.gVCascIdEnc=pListBeTransPeEnc.items.get(0).IdPedidoEnc;
+
+            browse=6;
+            txtTarea.setText("");
+            gl.pIdPedidoEnc=gl.gVCascIdEnc;
+            startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
+
+        } catch (Exception e){
+            mu.msgbox("processListTareasPicking:"+e.getMessage());progress.cancel();
+        }
     }
 
     public void BotonNueva(View view){
@@ -685,6 +709,10 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             super.onResume();
 
+            try {
+                txtTarea.requestFocus();
+            } catch (Exception e) {}
+
             if (browse==1){
                 browse=0;
                 Load();
@@ -723,6 +751,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.gVerifCascade=false;
                     doExit();
                 }
             });

@@ -59,10 +59,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeProducto_estadoList lProductoEstadoDañado = new clsBeProducto_estadoList();
 
     private clsBeTrans_pe_enc gBePedido = new clsBeTrans_pe_enc();
+    private clsBeDetallePedidoAVerificar selitem;
 
     private double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false;
     private boolean finalizar = true;
+    private int selidx = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +104,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private void Load(){
 
-        try{
-
+        try {
             progress.setMessage("Actualizado detalle de tareas de verificación...");
             progress.show();
 
@@ -144,26 +145,19 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     adapter.setSelectedIndex(position);
-
                     int index = position;
-
                     Procesa_Registro(vItem);
-
                     adapter.refreshItems();
-
                 }
             });
 
             txtCodProd.setOnKeyListener(new View.OnKeyListener(){
-
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-
                                 GetFila();
-
                                 return true;
                         }
                     }
@@ -174,13 +168,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
             btnConsultaDa.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     mostrar_Reemplazados();
-
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
@@ -337,7 +329,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             Intent intent = new Intent(this, frm_verificacion_datos.class);
             startActivity(intent);
 
-        }catch (Exception e){
+        } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
@@ -396,11 +388,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             listDetVeri.setAdapter(null);
 
-            if(pListaPedidoDet!=null){
-                if(pListaPedidoDet.items!=null){
-                    Lista_Detalle_Pedido();
-                }
-            }else{
+            if (pListaPedidoDet!=null){
+                if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
+            } else {
                 btnNoVerificado.setText("Verificado");
                 btnNoVerificado.setBackgroundColor(Color.GREEN);
                 progress.cancel();
@@ -573,21 +563,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
     }
 
     private void Lista_Detalle_Pedido(){
-
         try {
 
             progress.setMessage("Listando detalle de pedido para verificación en HH...");
 
             clsBeDetallePedidoAVerificar vItem;
-            pListBeTareasVerificacionHH.clear();
+            pListBeTareasVerificacionHH.clear();selidx = -1;
 
             try{
 
                 progress.setMessage("Cargando tareas de verificación");
 
-                if(pListaPedidoDet != null) {
+                if (pListaPedidoDet!= null) {
 
-                    if(pListaPedidoDet.items!=null ){
+                    if (pListaPedidoDet.items!=null ){
 
                         for (int i = 0; i<=pListaPedidoDet.items.size()-1; i++) {
 
@@ -611,8 +600,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
                             vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
+
                             pListBeTareasVerificacionHH.add(vItem);
 
+                            if (vItem.LicPlate.equalsIgnoreCase(gl.gLP)) {
+                                selitem=vItem;
+                                selidx = i;
+                            }
                         }
 
                         btnRegs.setText("Regs: "+pListaPedidoDet.items.size());
@@ -622,20 +616,32 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         listDetVeri.setAdapter(adapter);
 
                         if (pListaPedidoDet.items.size()>0){
-
                             adapter.setSelectedIndex(-1);
                             index = -1;
-
                             btnNoVerificado.setText("No Verificado");
                             btnNoVerificado.setBackgroundColor(Color.RED);
-
-                        }else{
+                        } else {
                             btnNoVerificado.setText("Verificado");
                             btnNoVerificado.setBackgroundColor(Color.GREEN);
                         }
+
+                        if ( gl.gVerifCascade && selidx>-1) {
+                            try{
+                                gl.pIdPedidoDet =selitem.IdPedidoDet;
+                                gl.gBePedidoDetVerif=selitem;
+                                gl.gBePickingUbicList=plistPickingUbic;
+
+                                browse = 1;
+                                Intent intent = new Intent(this, frm_verificacion_datos.class);
+                                startActivity(intent);
+                            } catch (Exception e){
+                                mu.msgbox( e.getMessage());
+                            }
+                        }
+
                     }
 
-                }else{
+                } else {
                     listDetVeri.setAdapter(null);
                 }
 
@@ -749,6 +755,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.gVerifCascade=false;
                     frm_detalle_tareas_verificacion.super.finish();
                 }
             });

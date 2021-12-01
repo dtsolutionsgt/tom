@@ -42,6 +42,8 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 
 public class frm_consulta_stock extends PBase {
 
@@ -96,23 +98,25 @@ public class frm_consulta_stock extends PBase {
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
 
         setHandlers();
+
+        txtUbic.requestFocus();
     }
 
     private void setHandlers() {
         try{
 
-            txtUbic.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    lblNombreUbicacion.setText("");
-                    registros.setText("REGISTROS: "+ 0);
-                    selest = 0;
-                    items_stock2.clear();
-                }
-            });
+//            txtUbic.addTextChangedListener(new TextWatcher() {
+//                public void afterTextChanged(Editable s) {}
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    lblNombreUbicacion.setText("");
+//                    registros.setText("REGISTROS: "+ 0);
+//                    selest = 0;
+//                    items_stock2.clear();
+//                }
+//            });
 
-            txtCodigo.addTextChangedListener(new TextWatcher() {
+            /*txtCodigo.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable s) {}
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -121,32 +125,27 @@ public class frm_consulta_stock extends PBase {
                     selest = 0;
                     items_stock2.clear();
                 }
-            });
+            });*/
 
             txtUbic.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
 
-                                lblNombreUbicacion.setText("");
+                    try {
 
-                                if (txtUbic.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
-                                ){
-                                    toast("Ubicación de producto no definida!");
-                                } else{
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                                    if(txtUbic.getText().toString().isEmpty()){
-                                        idubic = 0;
-                                    }
-                                    else{
-                                        ProgressDialog("Cargando existencias");
+                            switch (keyCode) {
 
-                                        execws(1);
-                                    }
-                                }
+                                case KeyEvent.KEYCODE_ENTER:
+
+                                    //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
+                                    execws(1);
+
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     return false;
                 }
@@ -155,43 +154,23 @@ public class frm_consulta_stock extends PBase {
             txtCodigo.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
 
-                                lblNombreProducto.setText("");
+                    try {
 
-                                if (txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()
-                                ) {
-                                    toast("Escane código de producto");
-                                } else {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                                    if(txtCodigo.getText().toString().isEmpty()){
-                                        idprod = 0;
-                                    }
-                                    else{
+                            switch (keyCode) {
 
-                                        String vStarWithParameter = "$";
-                                        //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                                        if (txtCodigo.getText().toString().startsWith("$") ||
-                                                txtCodigo.getText().toString().startsWith("(01)") ||
-                                                txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                                            //Es una barra de pallet válida por tamaño
-                                            int vLengthBarra = txtCodigo.getText().toString().length();
-                                            if (vLengthBarra >= 0) {
-                                                pLicensePlate = txtCodigo.getText().toString().replace("$", "");
+                                case KeyEvent.KEYCODE_ENTER:
 
-                                                ProgressDialog("Cargando existencias");
-                                                execws(2);
-                                            }
-                                        } else {
+                                    lblNombreProducto.setText("");
 
-                                            ProgressDialog("Cargando existencias");
-                                            execws(3);
-                                        }
-                                    }
-                                }
+                                    busca_stock();
+
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     return false;
                 }
@@ -201,16 +180,21 @@ public class frm_consulta_stock extends PBase {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                    String estado = cmbEstadoExist.getSelectedItem().toString();
 
-                    if(estado.isEmpty() && selest ==0){
+                    try{
+                        String estado = cmbEstadoExist.getSelectedItem().toString();
 
+                        if(estado.isEmpty() && selest ==0){
+
+                        }
+                        else {
+                            Spinner(estado);
+                        }
+
+                    }catch (Exception e){
+                        msgbox("Error " + e.getMessage());
                     }
-                    else {
 
-                        Spinner(estado);
-
-                    }
 
                 }
 
@@ -227,7 +211,9 @@ public class frm_consulta_stock extends PBase {
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
                     if (pListStock2 != null){
+
                         if (pListStock2.items != null){
+
                             if (pListStock2.items.size()>0){
 
                                 String orden = spOrdenar.getSelectedItem().toString();
@@ -261,7 +247,6 @@ public class frm_consulta_stock extends PBase {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
-
                     toast("No hay orden seleccionado");
                 }
 
@@ -340,84 +325,10 @@ public class frm_consulta_stock extends PBase {
         }
     }
 
-    public void printBarra(View view){
-        Imprimir_Barra();
-    }
-
-    private void Imprimir_Barra(){
-        try{
-
-            if (!txtCodigo.getText().toString().isEmpty()){
-                //CM_20210112: Impresión de barras.
-                BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-                printerIns.open();
-
-                if (printerIns.isConnected()){
-                    ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                    //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
-
-                    String zpl = String.format("^XA \n" +
-                                    "^MMT \n" +
-                                    "^PW700 \n" +
-                                    "^LL0406 \n" +
-                                    "^LS0 \n" +
-                                    "^FT171,61^A0I,25,14^FH^FD%0$s^FS \n" +
-                                    "^FT550,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                    "^FT670,306^A0I,25,14^FH^FD%2$s^FS \n" +
-                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                    "^FO2,340^GB670,0,14^FS \n" +
-                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                    "^FD%3$s^FS \n" +
-                                    "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                            txtCodigo.getText().toString()+" - "+lblNombreProducto.getText().toString(),
-                            (pLicensePlate !=null )?pLicensePlate:txtCodigo.getText().toString());
-
-                    zPrinterIns.sendCommand(zpl);
-
-
-                    Thread.sleep(500);
-
-                    // Close the connection to release resources.
-                    printerIns.close();
-
-                }else{
-                    mu.msgbox("No se pudo obtener conexión con la impresora");
-                }
-
-                Looper.myLooper().quit();
-
-            }else{
-                mu.msgbox("Realice la búsqueda de un producto con existencia para imprimir etiqueta");
-            }
-
-        }catch (Exception e){
-            mu.msgbox("Imprimir_barra: "+e.getMessage());
-        }
-    }
-
-    public void Listar_Existencias(){
-        try{
-            if(!Escaneo_Pallet){
-
-                //Get_Stock_Por_Producto_Ubicacion
-                execws(4);
-            }else{
-
-                //Get_Stock_Por_Pallet
-                execws(5);
-            }
-
-        }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-    }
-
     private void processUbicacion() {
 
         try {
+
             cUbic =xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (cUbic != null){
@@ -426,42 +337,19 @@ public class frm_consulta_stock extends PBase {
                 lblNombreUbicacion.setTextColor(Color.BLUE);
                 lblNombreUbicacion.setText(cUbic.getDescripcion());
 
-                //toast("ubicación encontrada " +  cUbic.getDescripcion());
             }else{
                 idubic = 0;
                 lblNombreUbicacion.setTextColor(Color.RED);
-                lblNombreUbicacion.setText("Ubicación no existe en la bodega" + gl.IdBodega);
-
-                //throw new Exception("La ubicación no existe en la bodega: " + gl.IdBodega);
+                lblNombreUbicacion.setText("Ubicación no existe en la bodega " + gl.IdBodega);
             }
 
-            Listar_Existencias();
+            //Listar_Existencias();
+            busca_stock();
 
         } catch (Exception e) {
             //progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-    }
-
-    private void processUbicacion2(){
-        //Llama al método del WS Get_Stock_By_Lic_Plate
-        try {
-            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate");
-
-            if (ListBeStockPallet != null){
-                Escaneo_Pallet = true;
-                //toast("Pallet si existe en la bodega");
-            }else {
-                idubic = 0;
-                throw new Exception("Pallet no existe en la bodega: " + gl.IdBodega);
-            }
-
-            Listar_Existencias();
-
-        } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-        }
-
     }
 
     private void processScanProducto(){
@@ -480,7 +368,7 @@ public class frm_consulta_stock extends PBase {
                 throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
             }
 
-            Listar_Existencias();
+           busca_stock();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -496,7 +384,15 @@ public class frm_consulta_stock extends PBase {
 
             items_stock.clear();
 
-            pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+            switch (ws.callback) {
+                case 2:
+                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet_By_IdUbicacion_CI");
+                    break;
+                case 4:
+                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+                    break;
+
+            }
 
             if(pListStock2 != null){
 
@@ -540,12 +436,21 @@ public class frm_consulta_stock extends PBase {
                         item.ingreso= pListStock2.items.get(i).ingreso;
                         item.IdTipoEtiqueta=pListStock2.items.get(i).IdTipoEtiqueta;
                         items_stock.add(item);
+
+                        if (i==0){
+                            if (!txtCodigo.getText().toString().isEmpty()){
+                                if (!txtCodigo.getText().toString().equals("0")){
+                                    lblNombreProducto.setText(item.Codigo + " " + item.Nombre);
+                                }
+                            }
+                        }
                     }
 
                     adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
                     listView.setAdapter(adapter_stock);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
                         Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
                                 .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
 
@@ -571,6 +476,10 @@ public class frm_consulta_stock extends PBase {
 
                 }
 
+            }else{
+                //limpiar el grid.
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
             }
 
         } catch (Exception e) {
@@ -623,92 +532,6 @@ public class frm_consulta_stock extends PBase {
 
         }catch (Exception ex){
 
-        }
-    }
-
-    private void listaStock2() {
-
-        clsBeVW_stock_res_CI vItem;
-
-        try {
-
-            items_stock.clear();
-            clsBeVW_stock_res_CI item;
-
-            pListStock2 = xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet");
-
-            if(pListStock2 != null){
-
-                vItem = new clsBeVW_stock_res_CI();
-                items_stock.add(vItem);
-
-                conteo = pListStock2.items.size();
-
-                if(conteo == 0 || pListStock2.items.isEmpty()){
-
-                    lblNombreUbicacion.setText("U.S.P");
-                    idle = true;
-                }
-                else{
-
-                    //lbldescripcion.setText("");
-
-                }
-
-                registros.setText("REGISTROS: "+ conteo);
-
-                for (int i = 0; i < pListStock2.items.size(); i++) {
-
-                    item = new clsBeVW_stock_res_CI();
-                    item.Codigo = pListStock2.items.get(i).Codigo;
-                    item.Nombre = pListStock2.items.get(i).Nombre;
-                    item.UM = pListStock2.items.get(i).UM;
-                    item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
-                    item.Pres = pListStock2.items.get(i).Pres;
-                    item.ExistPres = pListStock2.items.get(i).ExistPres;
-                    item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                    item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
-                    item.Lote = pListStock2.items.get(i).Lote;
-                    item.Vence = pListStock2.items.get(i).Vence;
-                    item.Estado = pListStock2.items.get(i).Estado;
-                    item.Ubic = pListStock2.items.get(i).Ubic;
-                    item.idUbic = pListStock2.items.get(i).idUbic;
-                    item.Pedido = pListStock2.items.get(i).Pedido;
-                    item.Pick = pListStock2.items.get(i).Pick;
-                    item.LicPlate = pListStock2.items.get(i).LicPlate;
-                    item.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
-                    item.factor = pListStock2.items.get(i).factor;
-                    item.ingreso = pListStock2.items.get(i).ingreso;
-                    item.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
-                    items_stock.add(item);
-                }
-
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
-
-                /***************************LLENAR COMBOBOX *******************************/
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Map<String, List<clsBeVW_stock_res_CI>> ListaEstados = pListStock2.items.stream()
-                            .collect(groupingBy(clsBeVW_stock_res_CI::getEstado));
-
-                    List<String> categories = new ArrayList<String>();
-                    categories.add("");
-
-                    ListaEstados.forEach((k, v) -> {
-                        //System.out.printf("%s : %d%n", k, v);
-                        categories.add(k);
-                    });
-
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    cmbEstadoExist.setAdapter(dataAdapter);
-                }
-
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
         }
     }
 
@@ -805,15 +628,30 @@ public class frm_consulta_stock extends PBase {
     }
 
     public void ProgressDialog(String mensaje) {
-        progress = new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
+        try {
+            progress = new ProgressDialog(this);
+            progress.setMessage(mensaje);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.setIndeterminate(true);
+            progress.setProgress(0);
+            progress.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void buscarStock(View view){
+
+        try{
+
+            busca_stock();
+
+        }catch (Exception ex){
+
+        }
+    }
+
+    private void busca_stock(){
 
         try{
 
@@ -822,13 +660,20 @@ public class frm_consulta_stock extends PBase {
             if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
             ) {
+                items_stock.clear();
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
                 toast("Ingrese código de producto y/o ubicación");
             } else {
 
                 if(txtCodigo.getText().toString().isEmpty()){
                     idprod = 0;
                 }else{
-                    idprod = Integer.valueOf(txtCodigo.getText().toString());
+                    try {
+                        idprod = Integer.valueOf(txtCodigo.getText().toString());
+                    }catch (Exception e){
+                        idprod = -1;
+                    }
                 }
                 if(txtUbic.getText().toString().isEmpty()){
                     idubic = 0;
@@ -836,37 +681,30 @@ public class frm_consulta_stock extends PBase {
                     idubic = Integer.valueOf(txtUbic.getText().toString());
                 }
 
-                if (idprod==0 && idubic!=0){
-                    ProgressDialog("Cargando existencias");
-
-                    execws(1);
-                }else if(idprod!=0 && idubic==0){
-
-                    String vStarWithParameter = "$";
-                    //Comentario: La barra de pallet puede comenzar con $ y no con (01)
-                    if (txtCodigo.getText().toString().startsWith("$") ||
-                            txtCodigo.getText().toString().startsWith("(01)") ||
-                            txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
-                        //Es una barra de pallet válida por tamaño
-                        int vLengthBarra = txtCodigo.getText().toString().length();
-                        if (vLengthBarra >= 0) {
-                            pLicensePlate = txtCodigo.getText().toString().replace("$", "");
-
-                            ProgressDialog("Cargando existencias");
-                            execws(2);
-                        }
-                    } else {
+                String vStarWithParameter = "$";
+                //Comentario: La barra de pallet puede comenzar con $ y no con (01)
+                if (txtCodigo.getText().toString().startsWith("$") ||
+                        txtCodigo.getText().toString().startsWith("(01)") ||
+                        txtCodigo.getText().toString().startsWith(vStarWithParameter)) {
+                    //Es una barra de pallet válida por tamaño
+                    int vLengthBarra = txtCodigo.getText().toString().length();
+                    if (vLengthBarra >= 0) {
+                        pLicensePlate = txtCodigo.getText().toString().replace("$", "");
 
                         ProgressDialog("Cargando existencias");
-                        execws(3);
+                        //Get_Stock_Por_Pallet_By_IdUbicacion_CI
+                        execws(2);
                     }
-                }else if(idprod!=0 && idubic!=0){
+                } else {
+
                     ProgressDialog("Cargando existencias");
-                    execws(2);
+                    //Get_Stock_Por_Producto_Ubicacion_CI
+                    execws(4);
                 }
+
             }
         }catch (Exception ex){
-
+            ex.printStackTrace();
         }
     }
 
@@ -882,28 +720,31 @@ public class frm_consulta_stock extends PBase {
 
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbic.getText().toString(),
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbic.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         //ByVal pLicensePlate As String,ByVal pIdBodega As Integer
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
-                                "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Stock_Por_Pallet_By_IdUbicacion_CI",
+                                "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUbicacion",idubic);
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigo.getText().toString(),
+                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                "pCodigo",txtCodigo.getText().toString(),
                                 "IdBodega",gl.IdBodega);
                         break;
 
                     case 4:
-                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","pidProducto",idprod,
-                                "pIdUbicacion",idubic, "pIdBodega",gl.IdBodega);
+                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
+                                               "pidProducto",idprod,
+                                               "pIdUbicacion",idubic,
+                                               "pIdBodega",gl.IdBodega);
                         break;
 
-                    case 5:
-                        callMethod("Get_Stock_Por_Pallet_CI","pLicPlate",pLicensePlate, "pIdBodega",gl.IdBodega);
-                        break;
                 }
 
                 progress.cancel();
@@ -925,7 +766,7 @@ public class frm_consulta_stock extends PBase {
                     processUbicacion();
                     break;
                 case 2:
-                    processUbicacion2();
+                    listaStock();
                     break;
                 case 3:
                     processScanProducto();
@@ -933,9 +774,7 @@ public class frm_consulta_stock extends PBase {
                 case 4:
                     listaStock();
                     break;
-                case 5:
-                    listaStock2();
-                    break;
+
             }
 
         } catch (Exception e) {
@@ -995,7 +834,6 @@ public class frm_consulta_stock extends PBase {
     public void Exit(View view) {
         msgAskExit("Está seguro de salir");
     }
-
 
 
 }

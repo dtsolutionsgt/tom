@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +20,7 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
@@ -51,7 +50,7 @@ public class frm_Packing extends PBase {
     private EditText txtUbicOr,txtPrd,txtNuevoLp,txtCantidad,txtLpAnt,txtLic_Plate;
     private TextView lblUbicOrigen,lblDesProducto,lblLpAnt,lblIdStock,lblCCant,lblVence,lblLote,
             lblNomDestino, txtUbicDestino;
-    private Spinner cmbPres,cmbLote,cmbVence,cmbEstado;
+    private Spinner cmbPresentacion,cmbLote,cmbVence,cmbEstado;
     private Button btnGuardarDirigida,btnBack;
     private ImageView cmdImprimir;
 
@@ -74,7 +73,7 @@ public class frm_Packing extends PBase {
     private String Lic_Plate_Ant="";
     private String NuevoLp="";
 
-    //GT 29012021 variables para Lic Plate
+    //EFREN29012021 variables para Lic Plate
     private boolean escaneoPallet;
     private String pLicensePlate;
     private int cvEstOrigen = 0;
@@ -111,50 +110,59 @@ public class frm_Packing extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm__packing);
         super.InitBase();
 
-        txtUbicOr = (EditText)findViewById(R.id.txtUbicOr);
-        txtPrd = (EditText)findViewById(R.id.txtPrd);
-        txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
-        txtCantidad = (EditText)findViewById(R.id.txtCantidad);
-        txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
-        txtLic_Plate = findViewById(R.id.txtLic_Plate);
+        try {
 
-        lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
-        lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
-        lblLpAnt = (TextView)findViewById(R.id.textView64);
-        lblIdStock = (TextView)findViewById(R.id.textView65);
-        lblCCant = (TextView)findViewById(R.id.textView66);
-        lblLote= (TextView)findViewById(R.id.textView59);
-        lblVence= (TextView)findViewById(R.id.textView60);
-        lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
-        txtUbicDestino = findViewById(R.id.txtUbicDestino);
+            txtUbicOr = (EditText)findViewById(R.id.txtUbicOr);
+            txtPrd = (EditText)findViewById(R.id.txtPrd);
+            txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
+            txtCantidad = (EditText)findViewById(R.id.txtCantidad);
+            txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
+            txtLic_Plate = findViewById(R.id.txtLic_Plate);
 
-        cmbPres = (Spinner) findViewById(R.id.cmbPres);
-        cmbLote = (Spinner) findViewById(R.id.cmbLote);
-        cmbVence = (Spinner) findViewById(R.id.cmbVence);
-        cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
+            lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
+            lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
+            lblLpAnt = (TextView)findViewById(R.id.textView64);
+            lblIdStock = (TextView)findViewById(R.id.textView65);
+            lblCCant = (TextView)findViewById(R.id.textView66);
+            lblLote= (TextView)findViewById(R.id.textView59);
+            lblVence= (TextView)findViewById(R.id.textView60);
+            lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+            txtUbicDestino = findViewById(R.id.txtUbicDestino);
 
-        btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
-        cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
+            cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
+            cmbLote = (Spinner) findViewById(R.id.cmbLote);
+            cmbVence = (Spinner) findViewById(R.id.cmbVence);
+            cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
-        ws = new frm_Packing.WebServiceHandler(frm_Packing.this, gl.wsurl);
-        xobj = new XMLObject(ws);
+            btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
+            cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
 
-        ProgressDialog("Cargando forma");
+            ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
+            xobj = new XMLObject(ws);
 
-        setHandles();
+            //#CKFK 20210730 Agregué el Caps al txtLic_Plate
+            txtLic_Plate.setAllCaps(true);
 
-        execws(1);
+            ProgressDialog("Cargando forma");
+
+            setHandles();
+
+            execws(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     private void setHandles(){
 
         try{
-
 
             txtLic_Plate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -167,7 +175,7 @@ public class frm_Packing extends PBase {
                 }
             });
 
-            cmbPres.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            cmbPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     try {
@@ -180,7 +188,7 @@ public class frm_Packing extends PBase {
                             spinlabel.setTextSize(18);
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                            cvPresID = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
+                            cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
                             LlenaLotes();
                         }
 
@@ -348,6 +356,7 @@ public class frm_Packing extends PBase {
     }
 
     private void Procesa_Lp() {
+
         try {
 
             progress.setMessage("Cargando datos del producto");
@@ -431,7 +440,16 @@ public class frm_Packing extends PBase {
                 }
 
                 //Get_BeProducto_By_Codigo_For_HH
-                execws(6);
+                if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
+                    Escaneo_Pallet = true;
+                    //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
+                    execws(12);
+                }else{
+                    Escaneo_Pallet = false;
+                    //Llama al método Get_BeProducto_By_Codigo_For_HH
+                    execws(6);
+                }
+
             }
 
         }catch (Exception e){
@@ -497,7 +515,7 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setAdapter(null);
+            cmbPresentacion.setAdapter(null);
             cmbEstado.setAdapter(null);
             cmbVence.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -542,7 +560,7 @@ public class frm_Packing extends PBase {
         try{
 
             idle=false;
-            cmbPres.setAdapter(null);
+            cmbPresentacion.setAdapter(null);
             cmbEstado.setAdapter(null);
             cmbVence.setAdapter(null);
             cmbLote.setAdapter(null);
@@ -646,8 +664,9 @@ public class frm_Packing extends PBase {
 
             cmbPresentacionList.clear();
 
+            //#EJC20210729: agregué and IdPresentación <> 0
             List AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == gIdProductoOrigen)
+                    .where(c -> c.IdProducto == gIdProductoOrigen && c.IdPresentacion != 0)
                     .toList();
 
             presentacionList.items = AuxList;
@@ -665,25 +684,25 @@ public class frm_Packing extends PBase {
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbPresentacionList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbPres.setAdapter(dataAdapter);
+            cmbPresentacion.setAdapter(dataAdapter);
 
             if (cmbPresentacionList.size() > 0) {
 
                 if (Escaneo_Pallet && ListBeStockPallet !=null ){
                     int sel = cmbPresentacionList.indexOf(BeStockPallet.getIdPresentacion() + " - " +
                             BeStockPallet.getNombre_Presentacion());
-                    cmbPres.setSelection(sel);
-                    cmbPres.setEnabled(false);
+                    cmbPresentacion.setSelection(sel);
+                    cmbPresentacion.setEnabled(false);
                 }else{
-                    cmbPres.setSelection(0);
+                    cmbPresentacion.setSelection(0);
                     if (cmbPresentacionList.size() == 1){
-                        cmbPres.setEnabled(false);
+                        cmbPresentacion.setEnabled(false);
                     }else{
-                        cmbPres.setEnabled(true);
+                        cmbPresentacion.setEnabled(true);
                     }
                 }
 
-                cvPresID =Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
+                cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
 
             }else{
                 LlenaLotes();
@@ -746,9 +765,9 @@ public class frm_Packing extends PBase {
 
                         if (cmbLoteList.size() > 0) {
                             cmbLote.setSelection(0);
-
                             gLoteOrigen = cmbLote.getSelectedItem().toString();
                         }
+
                     }
                 } catch (Exception ex) {
                     gLoteOrigen = "";
@@ -1009,9 +1028,9 @@ public class frm_Packing extends PBase {
                     cmbLote.setSelection(IndexAux);
                 }
 
-                if (gl.gCPresAnterior != -1 && cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0) {
+                if (gl.gCPresAnterior != -1 && cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0) {
                     IndexAux = cmbPresentacionList.indexOf( gl.gCPresAnterior + " - " + gl.gCNomPresAnterior);
-                    cmbPres.setSelection(IndexAux);
+                    cmbPresentacion.setSelection(IndexAux);
                 }
 
             }catch(Exception ex){
@@ -1024,14 +1043,31 @@ public class frm_Packing extends PBase {
 
             //#CKFK 20200414 quité la condiciones de si se había escaneado un pallet porque el license plate se filtra al inicio
             //cuando se obtiene el stockResList
-            AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == gIdProductoOrigen)
-                    .where(c -> c.IdPresentacion == cvPresID)
-                    .where(c -> c.Lote.equals(gLoteOrigen))
-                    .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
-                    .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
-                    .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
-                    .toList();
+            //#CKFK 20210728 Agregué la condición del LP
+            if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("") ){
+
+                String LpSinComodin = txtLic_Plate.getText().toString().replace("$", "");
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .where(c -> c.Lic_plate.equals(LpSinComodin))
+                        .toList();
+            }else{
+
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == gIdProductoOrigen)
+                        .where(c -> c.IdPresentacion == cvPresID)
+                        .where(c -> c.Lote.equals(gLoteOrigen))
+                        .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                        .where(c -> (cvEstEst > 0 ? c.IdProductoEstado == cvEstEst : c.IdProductoEstado >= 0))
+                        .where(c -> (BeProductoUbicacionOrigen.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
+                        .toList();
+            }
 
             if (AuxList == null) {
                 return;
@@ -1140,6 +1176,7 @@ public class frm_Packing extends PBase {
     }
 
     private void aplicarCambio() {
+
         int vUbicacionProducto;
 
         try{
@@ -1156,7 +1193,7 @@ public class frm_Packing extends PBase {
             if (pUbicacionLP!=0){
                 if (vUbicacionProducto!=pUbicacionLP){
                     progress.cancel();
-                    msgbox("La ubicación del License Plate seleccionado no coincide con la del License Plate destino, no se puede realizar el packing");
+                    msgbox("La ubicación de la licencia seleccionada no coincide con la de la licencia destino, no se puede realizar la implosión");
                     return;
                 }
             }
@@ -1274,8 +1311,8 @@ public class frm_Packing extends PBase {
             gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
 
-            if(cmbPres.getAdapter()!=null  && cmbPres.getAdapter().getCount()>0){
-                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString()));
+            if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
+                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()));
             }else{
                 gMovimientoDet.IdPresentacion = 0;
             }
@@ -1487,8 +1524,9 @@ public class frm_Packing extends PBase {
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
-                                "pIdBodega", gl.IdBodega);
+                        callMethod("Get_Stock_By_Lic_Plate",
+                                         "pLicensePlate",pLicensePlate,
+                                               "pIdBodega", gl.IdBodega);
                         break;
                     case 4:
                         callMethod("Get_Estados_By_IdPropietario",
@@ -1517,7 +1555,9 @@ public class frm_Packing extends PBase {
                                 "pIdResolucionLp", gl.IdResolucionLpOperador);
                         break;
                     case 9:
-                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_By_Licencia_And_IdBodega",
+                                         "pLic_Plate",pLicensePlate,
+                                               "pIdBodega", gl.IdBodega);
                         break;
                     case 10:
                         //#CKFK 20210617 Agregué el llamado a esta función para obtener el LP para el Packing
@@ -1531,6 +1571,12 @@ public class frm_Packing extends PBase {
                                    "pLic_Plate",txtNuevoLp.getText().toString(),
                                    "pIdBodega",gl.IdBodega,
                                    "nombre_ubicacion",pNombreUbicacionLP);
+                        break;
+                    case 12://#CKFK 20210729 Agregué este llamado Get_Stock_By_Lic_Plate_And_Codigo en el WS para buscar con LP y Producto
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
+                                "pLicensePlate",txtLic_Plate.getText().toString(),
+                                "pCodigo",txtPrd.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
                         break;
                 }
 
@@ -1584,6 +1630,9 @@ public class frm_Packing extends PBase {
                 case 11:
                     processUbicacionLP();
                     break;
+                case 12:
+                    processStockLP_AndCodigo();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1591,11 +1640,60 @@ public class frm_Packing extends PBase {
         }
     }
 
+    public static clsBeProducto gBeProducto = new clsBeProducto();
+
+    private void processPresentacionesProducto(){
+
+        try {
+
+            progress.setMessage("Obteniendo presentaciones de producto");
+
+            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProductoBodega");
+
+            Listar_Producto_Presentaciones();
+
+        }catch (Exception e){
+            mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private ArrayList<String> PresList = new ArrayList<String>();
+    private void Listar_Producto_Presentaciones() {
+
+        try {
+            if (gBeProducto.Presentaciones != null) {
+
+                progress.setMessage("Listando presentaciones de producto");
+
+                if (gBeProducto.Presentaciones.items != null) {
+
+                    PresList.clear();
+
+                    for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
+                        PresList.add(gBeProducto.Presentaciones.items.get(i).Nombre);
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PresList);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresentacion.setAdapter(dataAdapter);
+
+                    if (PresList.size() > 0) cmbPresentacion.setSelection(0);
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("Listar_Producto_Presentaciones:" + e.getMessage());
+        }
+    }
+
     private void processExisteLp() {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_By_Licencia_And_IdBodega");
 
             if (Existe_Lp){
 
@@ -1772,7 +1870,7 @@ public class frm_Packing extends PBase {
 
         try {
 
-            progress.setMessage("Cargando stock de producto con License Plate");
+            progress.setMessage("Buscando el producto por licencia, espere por favor...");
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
@@ -1801,6 +1899,7 @@ public class frm_Packing extends PBase {
             BeProductoUbicacionOrigen = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
 
             if (BeProductoUbicacionOrigen != null){
+
                 gIdProductoOrigen=BeProductoUbicacionOrigen.getIdProducto();
 
                 lblDesProducto.setTextColor(Color.BLUE);
@@ -1890,10 +1989,10 @@ public class frm_Packing extends PBase {
                     gl.gCLoteAnterior = "";
                 }
 
-                if (cmbPres.getAdapter()!=null && cmbPres.getAdapter().getCount()>0){
-                    gl.gCPresAnterior = Integer.valueOf( cmbPres.getSelectedItem().toString().split(" - ")[0].toString());
-                    if (cmbPres.getSelectedItem().toString().split(" - ").length>1){
-                        gl.gCNomPresAnterior = cmbPres.getSelectedItem().toString().split(" - ")[1];
+                if (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0){
+                    gl.gCPresAnterior = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                    if (cmbPresentacion.getSelectedItem().toString().split(" - ").length>1){
+                        gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
                     }
                 }else{
                     gl.gCPresAnterior = -1;
@@ -1974,28 +2073,111 @@ public class frm_Packing extends PBase {
         }
     }
 
-    public void Imprimir(View view){
-        msgAskImprimir("Imprimir Licencia de Packing");
+    private void processStockLP_AndCodigo(){
+
+        try {
+
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            ListBeStockPallet = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_Codigo");
+
+            if (Escaneo_Pallet && ListBeStockPallet == null) {
+                lblDesProducto.setTextColor(Color.RED);
+                gIdProductoOrigen = 0;
+                lblDesProducto.setText("Código de LP no válido");
+                Limpiar_Valores();
+            }else{
+
+                if (Escaneo_Pallet && ListBeStockPallet != null){
+
+                    List AuxList = stream(ListBeStockPallet.items)
+                            .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                            .toList();
+
+                    if (AuxList.size() == 0) {
+                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDesProducto.setTextColor(Color.RED);
+                        gIdProductoOrigen = 0;
+                        lblDesProducto.setText("LP N.E.E.U");
+                    }else{
+
+                        ListBeStockPallet = new clsBeProductoList();
+                        ListBeStockPallet.items = AuxList;
+
+                        if (AuxList.size() == 1){
+
+                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                            BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                            BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+
+                            lblDesProducto.setTextColor(Color.BLUE);
+                            lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+
+                            cvProd = BeProductoUbicacionOrigen;
+                            gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                            cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                            cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                            gLoteOrigen = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(4);
+
+                        }else{
+                            progress.cancel();
+                            msgbox("Escanee el producto que a ubicar");
+                            txtPrd.requestFocus();
+                        }
+
+                    }
+
+                }else{
+                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    execws(5);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
-    //#CKFK 20210617: Agregué funcionalidad de impresion
-    private void msgAskImprimir(String msg) {
+    public void Imprimir(View view){
+
+        if (BeProductoUbicacionOrigen!=null){
+            msgAskImprimir("¿Imprimir licencia?");
+        }else{
+            msgAskImprimirLicenciaNoHomogenea("¿Imprimir licencia para producto no homogéneo?");
+        }
+
+
+    }
+
+    private void msgAskImprimirLicenciaNoHomogenea(String msg) {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Licencia de Packing", (dialog12, which) -> {
+            dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo licencia de packing");
                 progress.show();
-                Imprimir_Licencia();
+                Imprimir_Licencia_Producto_No_Homogeneo();
             });
 
-            dialog.setNegativeButton("Salir", (dialog13, which) -> {
+            dialog.setNegativeButton("No gracias", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Imprimiendo licencia");
                     progress.show();
@@ -2017,79 +2199,276 @@ public class frm_Packing extends PBase {
 
     }
 
-    private void Imprimir_Licencia(){
+    //#CKFK 20210617: Agregué funcionalidad de impresion
+    private void msgAskImprimir(String msg) {
+
         try{
 
-            //CM_20210112: Impresión de barras.
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Sí por favor", (dialog12, which) -> {
+                progress.setMessage("Imprimiendo licencia de packing");
+                progress.show();
+                Imprimir_Licencia_Producto_Homogeneo();
+            });
+
+            dialog.setNegativeButton("No gracias", (dialog13, which) -> {
+                if (!imprimirDesdeBoton){
+                    progress.setMessage("Imprimiendo licencia");
+                    progress.show();
+                }else{
+                    progress.cancel();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object()
+            {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+            progress.cancel();
+        }finally {
+            progress.cancel();
+        }
+
+    }
+
+    private void Imprimir_Licencia_Producto_Homogeneo(){
+
+        try{
+
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
-            printerIns.open();
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
 
             if (printerIns.isConnected()){
+
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
-                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+
                 String zpl="";
 
-                if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
-                    zpl = String.format("^XA \n" +
-                                    "^MMT \n" +
-                                    "^PW700 \n" +
-                                    "^LL0406 \n" +
-                                    "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
-                                    "^FO2,340^GB670,0,14^FS \n" +
-                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                    "^FD%4$s^FS \n" +
-                                    "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                            "$"+NuevoLp);
-                }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
-                    zpl = String.format("^XA\n" +
-                                    "^MMT\n" +
-                                    "^PW609\n" +
-                                    "^LL0406\n" +
-                                    "^LS0\n" +
-                                    "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                    "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                    "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                    "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                    "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                    "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
-                                    "^FO2,450^GB670,14,14^FS\n" +
-                                    "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                    "^FD%1$s^FS\n" +
-                                    "^PQ1,0,1,Y \n" +
-                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                            "$"+NuevoLp);
+                if (BeProductoUbicacionOrigen!=null){
+
+                    NuevoLp = txtNuevoLp.getText().toString();
+
+                    if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
+                                zpl = String.format("^XA\n" +
+                                "^MMT\n" +
+                                "^PW609\n" +
+                                "^LL0406\n" +
+                                "^LS0\n" +
+                                "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                "^FO2,450^GB670,14,14^FS\n" +
+                                "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                "^FD%1$s^FS\n" +
+                                "^PQ1,0,1,Y \n" +
+                                "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
+                        zpl = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW812 \n" +
+                                            "^LL0630 \n" +
+                                            "^LS0 \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                            "$"+NuevoLp);
+                    }
+
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("Información de producto no definida.");
                 }
-
-                zPrinterIns.sendCommand(zpl);
-
-                Thread.sleep(500);
-
-                // Close the connection to release resources.
-                printerIns.close();
 
             }else{
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
 
             if (!imprimirDesdeBoton){
-                msgAskImprimir("Imprimir licencia de packing");
+                msgAskImprimir("Imprimir licencia");
             }
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
+                }
+            }else{
+                mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
+        }
+    }
+
+    private void Imprimir_Licencia_Producto_No_Homogeneo(){
+
+        try{
+
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
+
+            if (printerIns.isConnected()){
+
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+                //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
+                String zpl="";
+
+                NuevoLp = txtNuevoLp.getText().toString();
+
+                if (NuevoLp!=null && !NuevoLp.isEmpty()){
+
+                    BeProductoUbicacionOrigen = new clsBeProducto();
+                    BeProductoUbicacionOrigen.IdTipoEtiqueta=4;
+
+                    if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                "#Cod_Multi" + " - Implosion" ,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW609\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                        "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                        "^FO2,450^GB670,14,14^FS\n" +
+                                        "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                        "^FD%1$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                "#Cod_Multi" + " - Implosión" ,
+                                "$"+NuevoLp);
+                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                "#Cod_Multi" + " - Implosión" ,
+                                "$"+NuevoLp);
+                    }
+
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("Información de producto no definida.");
+                }
+
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+
+            if (!imprimirDesdeBoton){
+                msgAskImprimir("Imprimir licencia");
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir el código de barra del packing. No existe conexión a la impresora: "+ gl.MacPrinter);
+                if (!imprimirDesdeBoton){
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra de packing: "+e.getMessage());
@@ -2107,12 +2486,9 @@ public class frm_Packing extends PBase {
             progress.setMessage("Validando imprimir barra");
 
             if (gl.IdImpresora>0){
-
                 progress.cancel();
                 imprimirDesdeBoton=false;
-
-                msgAskImprimir("Imprimir Licencia de Packing");
-
+                msgAskImprimir("¿Imprimir Licencia?");
             }
 
         }catch (Exception e){
@@ -2120,7 +2496,7 @@ public class frm_Packing extends PBase {
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir el código de barra. No existe conexión a la impresora: "+ gl.MacPrinter);
                 if (!imprimirDesdeBoton){
-                    msgAskImprimir("Imprimir licencia de packing");
+                    msgAskImprimir("¿Imprimir licencia?");
                 }
             }else{
                 mu.msgbox("Imprimir_barra: "+e.getMessage());

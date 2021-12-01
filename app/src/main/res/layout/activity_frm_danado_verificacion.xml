@@ -43,7 +43,7 @@
 
         <Button
             android:id="@+id/btnBackVeri"
-            android:layout_width="61dp"
+            android:layout_width="74dp"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="false"
@@ -51,7 +51,7 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
             android:layout_alignParentBottom="false"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:layout_toStartOf="@+id/btnGuardarDanadoVeri"
             android:background="@drawable/back"
@@ -59,7 +59,7 @@
 
         <Button
             android:id="@+id/btnGuardarDanadoVeri"
-            android:layout_width="296dp"
+            android:layout_width="355dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:background="@drawable/color_medium"

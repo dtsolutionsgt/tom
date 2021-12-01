@@ -304,6 +304,7 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Lista_Detalle_Picking(){
+
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
 
@@ -324,7 +325,7 @@ public class frm_detalle_tareas_picking extends PBase {
                         if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
 
                             vItem = new  clsBeTrans_picking_ubic();
-                            obj.Fecha_Vence = du.convierteFechaMostar(obj.Fecha_Vence);
+                            obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
                             vItem = obj;
 
                             BeListPickingUbic.add(vItem);
@@ -639,7 +640,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            progress.setMessage("Finalizando actualiación de estado...");
+            progress.setMessage("Finalizando actualización de estado...");
 
             int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
 
@@ -671,7 +672,6 @@ public class frm_detalle_tareas_picking extends PBase {
                         procesar_registro();
                         break;
                     }
-
                 }
 
             }else{
@@ -697,6 +697,16 @@ public class frm_detalle_tareas_picking extends PBase {
                 execws(3);
             }
 
+            if (browse==2){
+                doExit();
+            }else{
+                try {
+                    txtUbicacionFiltro.requestFocus();
+                } catch (Exception e) {
+
+                }
+            }
+
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());
         }
@@ -717,10 +727,11 @@ public class frm_detalle_tareas_picking extends PBase {
             gBePicking = new clsBeTrans_picking_enc();
             plistPickingUbi = new clsBeTrans_picking_ubicList();
             gbePickingDet = new clsBeTrans_picking_det();
-            BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+            BeListPickingUbic = new ArrayList<>();
             selitem = new clsBeTrans_picking_ubic();
-            browse = 0;
-            super.finish();
+            browse = 2;
+            //super.finish();
+            finish();
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }

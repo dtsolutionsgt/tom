@@ -3,7 +3,6 @@
     <string name="buscar">Buscar</string>
     <string name="consulta_de_existencia_trx8">Consulta de Existencia - TRX8</string>
     <string name="estado">Estado:</string>
-    <string name="todo">TODO</string>
     <string name="c_digo">Código:</string>
     <string name="title_activity_frm_inv_cic_conteo">frm_inv_cic_conteo</string>
     <!--
@@ -13,6 +12,17 @@
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_frm_consulta_stock_detalle_c_i">frm_consulta_stock_detalleCI
     </string>
+    <string name="regs_0">Regs: 0</string>
+    <string name="nueva">Nueva</string>
+    <string name="tareas_de_preparaci_n">Tareas de preparación</string>
+    <string name="tarea">Tarea:</string>
+    <string name="tom_wms">TOM WMS</string>
+    <string name="_19_oct_2021a">19-Oct-2021A</string>
+    <string name="textview">TextView</string>
+    <string name="todo">TODO</string>
+    <string name="inicio_de_sesi_n">Inicio de sesión</string>
+    <string name="fecha_version">23-Nov-2021</string>
+    <string name="no_version">Versión</string>
 
     <string-array name="filtros">
         <item>Código</item>

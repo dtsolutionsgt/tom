@@ -28,6 +28,8 @@ public class clsBeProducto_rellenado {
     @Element(required=false) public String Estado="";
     @Element(required=false) public String Presentacion="";
     @Element(required=false) public String Ubicacion="";
+    @Element(required=false) public int IdOperadorDefecto=0;
+    @Element(required=false) public String NomOperador="";
 
     public clsBeProducto_rellenado() {
     }
@@ -37,7 +39,7 @@ public class clsBeProducto_rellenado {
                                    String Fec_agr,String User_mod,String Fec_mod,boolean Activo,
                                    int IdProductoBodega,int IdBodega,int IdUnidadMedidaBasica,int IdUmBasAbastercerCon,
                                    int IdPresentacionAbastercerCon,String NomPresentacionRellenarCon,String NomUmBasAbastecerCon,int IdPropietario,
-                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion
+                                   boolean IsNew,String Estado,String Presentacion,String Ubicacion, int IdOperadorDefecto
     ) {
 
         this.IdRellenado=IdRellenado;
@@ -64,6 +66,7 @@ public class clsBeProducto_rellenado {
         this.Estado=Estado;
         this.Presentacion=Presentacion;
         this.Ubicacion=Ubicacion;
+        this.IdOperadorDefecto = IdOperadorDefecto;
 
     }
 
@@ -211,6 +214,18 @@ public class clsBeProducto_rellenado {
     }
     public void setUbicacion(String value) {
         Ubicacion=value;
+    }
+    public int getIdIdOperadorDefecto() {
+        return IdOperadorDefecto;
+    }
+    public void setIdOperadorDefecto(int value) {
+        IdOperadorDefecto=value;
+    }
+    public String getNomOperador() {
+        return NomOperador;
+    }
+    public void setNomOperador(String value) {
+        NomOperador=value;
     }
 
 }

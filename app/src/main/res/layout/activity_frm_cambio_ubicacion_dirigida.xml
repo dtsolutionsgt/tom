@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Transacciones.CambioUbicacion.frm_cambio_ubicacion_dirigida">
+    tools:context=".Transacciones.CambioUbicacion.frm_cambio_ubicacion_dirigida"
+    android:windowSoftInputMode="stateAlwaysHidden">
 
     <ScrollView
         android:id="@+id/scrollCiego"
@@ -78,7 +79,7 @@
                     android:layout_marginEnd="10dp"
                     android:enabled="true"
                     android:hint="LP"
-                    android:inputType="number"
+                    android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />

@@ -16,14 +16,26 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Generar_pedido_ingreso_bodega_destino =false;
     @Element(required=false) public int IdTipoIngresoOC=1;
     @Element(required=false) public boolean Control_Poliza=false;
+    @Element(required=false) public boolean Trasladar_Lotes_Doc_Ingreso=false;
+    @Element(required=false) public boolean Activo=false;
+    @Element(required=false) public boolean Requerir_Cliente_Es_Bodega_WMS=false;
 
     public clsBeTrans_pe_tipo() {
     }
 
-    public clsBeTrans_pe_tipo(int IdTipoPedido,String Nombre,String Descripcion,boolean Preparar,
-                              boolean Verificar,boolean ReservaStock,boolean ImprimeBarrasPicking,boolean ImprimeBarrasPacking,
-                              boolean Requerir_Documento_Ref,boolean Generar_pedido_ingreso_bodega_destino,int IdTipoIngresoOC,
-                              boolean Control_Poliza
+    public clsBeTrans_pe_tipo(int IdTipoPedido,
+                              String Nombre,
+                              String Descripcion,
+                              boolean Preparar,
+                              boolean Verificar,
+                              boolean ReservaStock,
+                              boolean ImprimeBarrasPicking,
+                              boolean ImprimeBarrasPacking,
+                              boolean Requerir_Documento_Ref,
+                              boolean Generar_pedido_ingreso_bodega_destino,
+                              int IdTipoIngresoOC,
+                              boolean Control_Poliza,
+                              boolean Requerir_Cliente_Es_Bodega_WMS
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -38,6 +50,7 @@ public class clsBeTrans_pe_tipo {
         this.Generar_pedido_ingreso_bodega_destino= Generar_pedido_ingreso_bodega_destino;
         this.IdTipoIngresoOC = IdTipoIngresoOC;
         this.Control_Poliza = Control_Poliza;
+        this.Requerir_Cliente_Es_Bodega_WMS=Requerir_Cliente_Es_Bodega_WMS;
 
     }
 
@@ -118,6 +131,25 @@ public class clsBeTrans_pe_tipo {
         Control_Poliza=value;
     }
 
+    public boolean getTrasladar_Lotes_Doc_Ingreso() {
+        return Trasladar_Lotes_Doc_Ingreso;
+    }
+    public void setTrasladar_Lotes_Doc_Ingreso(boolean value) {
+        Trasladar_Lotes_Doc_Ingreso=value;
+    }
+
+    public boolean getActivo() {
+        return Activo;
+    }
+    public void setActivo(boolean value) {
+        Activo=value;
+    }
+
+    public boolean getRequerir_Cliente_Es_Bodega_WMS() {
+        return Requerir_Cliente_Es_Bodega_WMS;
+    }
+    public void setRequerir_Cliente_Es_Bodega_WMS(boolean value) {
+        Requerir_Cliente_Es_Bodega_WMS=value;
+    }
+
 }
-
-

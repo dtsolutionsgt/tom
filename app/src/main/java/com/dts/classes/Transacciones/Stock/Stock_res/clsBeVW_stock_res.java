@@ -82,7 +82,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String ValorTexto="";
   @Element(required=false) public double ValorNumerico=0.0;
   @Element(required=false) public String ValorFecha="1900-01-01T00:00:01";
-  @Element(required=false) public int ValorLogico=0;
+  @Element(required=false) public boolean ValorLogico=false;
   @Element(required=false) public String No_Serie="";
   @Element(required=false) public String No_Serie_Inicial="";
   @Element(required=false) public String No_Serie_Final="";
@@ -93,6 +93,9 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String NombreTipoProducto="";
   @Element(required=false) public Boolean Pallet_No_Estandar=false;
   @Element(required=false) public int Posiciones=0;
+  @Element(required=false) public String codigo_poliza="";
+  @Element(required=false) public String numero_orden="";
+  @Element(required=false) public String Documento_Ingreso="";
 
   public clsBeVW_stock_res() {
   }
@@ -115,10 +118,10 @@ public class clsBeVW_stock_res {
                            double LargoUmBas,double AnchoUmBas,boolean acepto,double peso_pickeado,
                            double peso_verificado,double Cantidad_Pickeada,double Cantidad_Verificada,double Cantidad_Despachada,
                            boolean encontrado,clsBeBodega_ubicacion UbicacionActual,double Cantidad_Res,String ValorTexto,
-                           double ValorNumerico,String ValorFecha,int ValorLogico,String No_Serie,
+                           double ValorNumerico,String ValorFecha,boolean ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
-                           Boolean Pallet_No_Estandar,int Posiciones) {
+                           Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,String Documento_Ingreso) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -205,6 +208,9 @@ public class clsBeVW_stock_res {
     this.NombreTipoProducto=NombreTipoProducto;
     this.Pallet_No_Estandar=Pallet_No_Estandar;
     this.Posiciones = Posiciones;
+    this.codigo_poliza = codigo_poliza;
+    this.numero_orden = numero_orden;
+    this.Documento_Ingreso = Documento_Ingreso;
 
   }
 
@@ -653,10 +659,10 @@ public class clsBeVW_stock_res {
   public void setValorFecha(String value) {
     ValorFecha=value;
   }
-  public int getValorLogico() {
+  public boolean getValorLogico() {
     return ValorLogico;
   }
-  public void setValorLogico(int value) {
+  public void setValorLogico(boolean value) {
     ValorLogico=value;
   }
   public String getNo_Serie() {
@@ -718,6 +724,24 @@ public class clsBeVW_stock_res {
   }
   public void setPosiciones(int value) {
     Posiciones=value;
+  }
+  public String getCodigo_poliza() {
+    return codigo_poliza;
+  }
+  public void setCodigo_poliza(String value) {
+    codigo_poliza=value;
+  }
+  public String getNumero_orden() {
+    return numero_orden;
+  }
+  public void setNumero_orden(String value) {
+    numero_orden=value;
+  }
+  public String getDocumento_Ingreso() {
+    return Documento_Ingreso;
+  }
+  public void setDocumento_Ingreso(String value) {
+    Documento_Ingreso=value;
   }
 }
 

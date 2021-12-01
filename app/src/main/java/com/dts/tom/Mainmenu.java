@@ -22,6 +22,7 @@ import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
+import com.dts.tom.Transacciones.Packing.frm_lista_packing;
 import com.dts.tom.Transacciones.Recepcion.frm_lista_tareas_recepcion;
 
 import java.io.BufferedReader;
@@ -34,6 +35,7 @@ public class Mainmenu extends PBase {
 
     private GridView gridView;
     private TextView lblBodega,lblUsuario;
+    private TextView lblVersion;
 
     private Mainmenu.WebServiceHandler ws;
     private XMLObject xobj;
@@ -57,6 +59,7 @@ public class Mainmenu extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
 
@@ -68,6 +71,30 @@ public class Mainmenu extends PBase {
         gridView = (GridView) findViewById(R.id.gridView1);
         lblBodega = (TextView) findViewById(R.id.lblBodegaName);
         lblUsuario = (TextView) findViewById(R.id.lblUsuarioName);
+        lblVersion= (TextView) findViewById(R.id.lblVersion);
+
+        try {
+
+            String versionparam;
+
+            if (savedInstanceState == null) {
+
+                Bundle extras = getIntent().getExtras();
+
+                if(extras == null) {
+                    versionparam= null;
+                } else {
+                    versionparam= extras.getString("version");
+                }
+
+            } else {
+                versionparam= (String) savedInstanceState.getSerializable("version");
+            }
+
+            lblVersion.setText("Version: " + versionparam);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         int ori=this.getResources().getConfiguration().orientation; // 1 - portrait , 2 - landscape
         horizpos=ori==2;
@@ -133,7 +160,7 @@ public class Mainmenu extends PBase {
                 items.add(item);
 
                 item = clsCls.new clsMenu();
-                item.ID=4;item.Icon=4;item.Name="Packing";item.cant=-1;
+                item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -142,6 +169,10 @@ public class Mainmenu extends PBase {
 
                 item = clsCls.new clsMenu();
                 item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
                 items.add(item);
 
                 item = clsCls.new clsMenu();
@@ -290,7 +321,7 @@ public class Mainmenu extends PBase {
 
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            //msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
@@ -438,14 +469,14 @@ public class Mainmenu extends PBase {
 
                     gl.IdTareaUbicEnc =0;
                     gl.modo_cambio = 1;
-                    msgAskUbicNoDirigida("Ubicación no dirigida");
+                    msgAskUbicNoDirigida("Ubicación dirigida");
 
                     break;
 
                 case 3://Cambio de Estado
 
                     gl.modo_cambio = 2;
-                    msgAskUbicNoDirigida("Cambio de estado no dirigido");
+                    msgAskUbicNoDirigida("Cambio de estado dirigido");
 
                     break;
 
@@ -487,6 +518,9 @@ public class Mainmenu extends PBase {
 
                 case 10:// Utilerias
                     menuUtilerias(); break;
+
+                case 11:// Packing
+                    startActivity(new Intent(this, frm_lista_packing.class)); break;
             }
 
         } catch (Exception e){
@@ -616,7 +650,9 @@ public class Mainmenu extends PBase {
     //region Dialogs
 
     private void msgAskUbicNoDirigida(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -627,16 +663,14 @@ public class Mainmenu extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
-                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
-                    startActivity(intent);
-
+                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
                 }
             });
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                    Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                    startActivity(intent);
                 }
             });
 

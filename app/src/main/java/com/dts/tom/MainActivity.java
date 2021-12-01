@@ -22,6 +22,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
@@ -38,11 +40,9 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
-import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
-import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operadorList;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
 
 import java.io.BufferedOutputStream;
@@ -64,7 +64,7 @@ public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl;
+    private TextView lblver,lbldate,lblurl, lblVersion;
     private ProgressDialog progress;
     private ImageView imgIngresar;
     private ImageView imgEmpresaLogin;
@@ -91,10 +91,11 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.1";
+    private String version="4.5.25";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
         try {
 
@@ -104,6 +105,10 @@ public class MainActivity extends PBase {
             ProgressDialog("Inicializando...");
 
             grantPermissions();
+
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,11 +126,15 @@ public class MainActivity extends PBase {
             spinprint = (Spinner) findViewById(R.id.spinner3);
             spinuser = (Spinner) findViewById(R.id.spinner4);
             txtpass = (EditText) findViewById(R.id.editText3);
-            lblver=(TextView)  findViewById(R.id.textView4);
-            lbldate=(TextView)  findViewById(R.id.textView3);
-            lblurl=(TextView)  findViewById(R.id.textView9);lblurl.setText("");
+            lblver=(TextView)  findViewById(R.id.txtNoVersion);
+            lbldate=(TextView)  findViewById(R.id.txtFechaVersion);
+            lblurl=(TextView)  findViewById(R.id.txtURLWS);lblurl.setText("");
+            lblVersion = (TextView) findViewById(R.id.lblVersion);
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
+
+            lblver.setText("Versión: " + version);
+            lblVersion.setText("V. "+version);
 
             getURL();
 
@@ -134,6 +143,7 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
                 setHandlers();
                 gl.deviceId =androidid();
+                gl.devicename = getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 setURL();
@@ -189,7 +199,7 @@ public class MainActivity extends PBase {
 
     private void setURL(){
 
-        String url="http://192.168.0.103/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="http://192.168.0.98/WSTOMHH_QA/TOMHHWS.asmx";
 
         try{
 
@@ -215,6 +225,7 @@ public class MainActivity extends PBase {
 
             alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
+
                     gl.wsurl=input.getText().toString();
 
                     if(!gl.wsurl.isEmpty()){
@@ -224,6 +235,7 @@ public class MainActivity extends PBase {
                         setURL();
                     }
                 }
+
             });
 
             final AlertDialog dialog = alert.create();
@@ -564,7 +576,10 @@ public class MainActivity extends PBase {
                     processGetDecimalesDespliegue();
                     break;
                 case 7:
-                    startActivity(new Intent(this,Mainmenu.class));
+                    Intent i = new Intent(this, Mainmenu.class);
+                    i.putExtra("version", version);
+                    startActivity(i);
+                    //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
                     processVersiones();
@@ -572,6 +587,13 @@ public class MainActivity extends PBase {
                 case 9:
                     processResolucionLP();
                     break;
+                case 10:
+                    processLicencia();
+                    break;
+                case 11:
+                    processServidor();
+                    break;
+
             }
 
             progress.cancel();
@@ -586,19 +608,13 @@ public class MainActivity extends PBase {
         startActivity(new Intent(this,Mainmenu.class));
     }
 
-    private void Licencia_Valida() {
-        try{
-        }catch (Exception e){
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + "Licencia Valida:"+e.getMessage());
-        }
-    }
-
     private void Valida_Ingreso() {
 
         /*
         try {
+
             gl.IdEmpresa=1;
-            gl.IdBodega=10;
+            gl.IdBodega=9;
             gl.IdOperador=1;
             gl.CodigoBodega="10";
             gl.OperadorBodega.IdOperadorBodega=1;
@@ -608,11 +624,14 @@ public class MainActivity extends PBase {
             op.setNombres("Op");
             op.setApellidos("1");
             gl.OperadorBodega.setOperador(op);
+
             ejecuta();
         } catch (Exception e) {
             String ss=e.getMessage();
         }
-*/
+
+         */
+
 
         try{
 
@@ -652,7 +671,9 @@ public class MainActivity extends PBase {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
                                     //execws(7);
                                     //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
+                                    //execws(9);
+                                    //#CKFK 20210914 Validar licencia antes de ingresar.Método loginHH
+                                    execws(10);
                                 }
                             } else  {
                                 progress.cancel();
@@ -685,6 +706,7 @@ public class MainActivity extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+
 
     }
 
@@ -923,7 +945,8 @@ public class MainActivity extends PBase {
             gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
 
             //Llama al metodo del WS Get_cantidad_decimales_calculo
-            execws(6);
+            //GT 16082021: no lo ejecuta!! se traslado a processVersiones
+            //execws(6);
 
         } catch (Exception e)
         {
@@ -938,6 +961,7 @@ public class MainActivity extends PBase {
                 validaVersion();
             }
             idle=true;
+            execws(6);
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -952,6 +976,45 @@ public class MainActivity extends PBase {
             }else{
                 msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
             }
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private boolean processLicencia() {
+        boolean rslt=false;
+        try {
+
+            Integer msgLic = 0;
+
+            msgLic =(Integer) xobj.getSingle("loginHandHeldResult",Integer.class);
+
+            if (msgLic == 0){
+                msgbox("Licencia inactiva");
+                rslt= false;
+            }else if (msgLic < 0){
+                //Llama al método nombreServidorLicencias
+               execws(11);
+               rslt= false;
+            } else{
+                rslt= true;
+                //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
+                execws(9);
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return rslt;
+    }
+
+    private void processServidor() {
+        String servidor="";
+        try {
+
+            servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
+            msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -976,7 +1039,8 @@ public class MainActivity extends PBase {
                 dir.mkdir();
             }
 
-            for (int i = 0; i <empresas.items.size(); i++)             {
+            for (int i = 0; i <empresas.items.size(); i++){
+
                 vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
                 emplist.add(empresas.items.get(i).Nombre);
 
@@ -1193,7 +1257,6 @@ public class MainActivity extends PBase {
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         //ejecuta();
-                        break;
                     case 8:
                         callMethod("Android_Get_All_Versiones");
                         break;
@@ -1201,6 +1264,14 @@ public class MainActivity extends PBase {
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
                                 "pIdOperador",gl.IdOperador,
                                 "pIdBodega",gl.IdBodega);
+                        break;
+                    case 10:
+                        callMethod("loginHandHeld",
+                                "idHandHeld",gl.deviceId,
+                                "nombreHanHeld",gl.devicename);
+                        break;
+                    case 11:
+                        callMethod("nombreServidorLicencias");
                         break;
                 }
             } catch (Exception e)  {
@@ -1218,18 +1289,20 @@ public class MainActivity extends PBase {
 
         int pp,idemp=0;
 
-
         if (empresas.items.size()==0) return;
 
         try {
+
             pp=spinemp.getSelectedItemPosition();
             idemp=empresas.items.get(pp).IdEmpresa;
 
             if (versiones!=null){
                 for (int i = 0; i <versiones.items.size(); i++) {
                     if (versiones.items.get(i).IdEmpresa==idemp) {
-                        if (!versiones.items.get(i).Version.equalsIgnoreCase(version)) {
-                            actualizaVersion();return;
+                        String Nueva_Version = versiones.items.get(i).Version;
+                        if (!Nueva_Version.equalsIgnoreCase(version)) {
+                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
+                            return;
                         }
                     }
                 }
@@ -1238,6 +1311,28 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
+
+    }
+
+    private void msgAskActualizarVersion(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    actualizaVersion();
+                } catch (Exception e) {
+                    msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+                }
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        dialog.show();
 
     }
 

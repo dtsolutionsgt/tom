@@ -507,7 +507,7 @@ public class DateUtils {
 		return vFecha;
 	}
 
-	public String convierteFechaMostar(String Fecha){
+	public String convierteFechaMostrar(String Fecha){
 
 		String vFecha="";
 
@@ -525,7 +525,43 @@ public class DateUtils {
 		return vFecha;
 	}
 
-	public int DateDiff(String pFecha) throws ParseException{
+	public String convierteFechaMostrarDiagonal(String Fecha){
+
+		String vFecha="";
+
+		try{
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+			vFecha=dateFormat.format(date);
+
+		}catch (Exception e){
+
+		}
+		return vFecha;
+	}
+
+    public String convierteFechaMostaryy(String Fecha){
+
+        String vFecha="";
+
+        try{
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = dateFormat.parse(Fecha);
+            dateFormat = new SimpleDateFormat("dd-MM-yy");
+
+            vFecha=dateFormat.format(date);
+
+        }catch (Exception e){
+
+        }
+        return vFecha;
+    }
+
+    public int DateDiff(String pFecha) throws ParseException{
 
 		int Dif=0;
 		String fechaS,vFecha;
@@ -599,7 +635,6 @@ public class DateUtils {
 		return Dif;
 	}
 
-
 	public String convierteHoraMostar(String Fecha){
 		String vFecha="";
 
@@ -617,7 +652,24 @@ public class DateUtils {
 		return vFecha;
 	}
 
-	public String getFechaActual() throws ParseException {
+    public String convierteHoraMostarhm(String Fecha){
+        String vFecha="";
+
+        try{
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = dateFormat.parse(Fecha);
+            dateFormat = new SimpleDateFormat("HH:mm");
+
+            vFecha=dateFormat.format(date);
+
+        }catch (Exception e){
+
+        }
+        return vFecha;
+    }
+
+    public String getFechaActual() throws ParseException {
 
 		String fechaS,vFecha;
 		int cyear,cmonth,cday,ch,cm;

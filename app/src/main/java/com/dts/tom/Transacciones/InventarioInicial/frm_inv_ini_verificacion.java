@@ -26,6 +26,8 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
+import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen;
 import com.dts.tom.PBase;
@@ -51,12 +53,14 @@ public class frm_inv_ini_verificacion extends PBase {
     private Button btnDetVeri;
 
     private int IdPresSelect, IdEstadoSelect;
+    private boolean emptyPres;
 
     private clsBeTrans_inv_tramo utramo = new clsBeTrans_inv_tramo();
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
     private clsBeProducto_estadoList BeListEstado = new clsBeProducto_estadoList();
     private clsBeTrans_inv_resumen vitem = new clsBeTrans_inv_resumen();
+    private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
@@ -65,6 +69,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_inv_ini_verificacion);
         super.InitBase();
@@ -83,6 +88,8 @@ public class frm_inv_ini_verificacion extends PBase {
         lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
         lblDescVer = (TextView)findViewById(R.id.lblDescVer);
         lblUbicDes = (TextView)findViewById(R.id.lblUbicDes);
+
+        emptyPres = false;
 
         setHandles();
 
@@ -158,7 +165,38 @@ public class frm_inv_ini_verificacion extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                    try {
+                        //GT 18112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
+                        if (emptyPres && position ==0 ) {
+                            IdPresSelect = 0;
+
+
+                        }else if(emptyPres && position> 0){
+
+                            int Registros =IdPresSelect=BeListPres.items.size();
+
+                            if(Registros > position){
+                                IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                            }else{
+                                IdPresSelect=BeListPres.items.get(position - 1).IdPresentacion;
+                            }
+
+                        }else{
+
+                            int Registros =IdPresSelect=BeListPres.items.size();
+
+                            if(Registros > position){
+                                IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                            }else{
+                                IdPresSelect=BeListPres.items.get(position -1).IdPresentacion;
+                            }
+
+                            //IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -224,9 +262,9 @@ public class frm_inv_ini_verificacion extends PBase {
 
             lblUbicDes.setText("" + BeUbic.Descripcion);
 
-            txtBarraVer.setSelectAllOnFocus(true);
+           /* txtBarraVer.setSelectAllOnFocus(true);
             txtBarraVer.requestFocus();
-            txtBarraVer.selectAll();
+            txtBarraVer.selectAll();*/
 
         } catch (Exception e) {
             mu.msgbox("Procesa_Ubicacion");
@@ -256,10 +294,11 @@ public class frm_inv_ini_verificacion extends PBase {
 
             txtUmbasVeri.setText(BeProducto.UnidadMedida.Nombre);
 
-            txtUmbasVeri.setFocusable(false);
+            //txtUmbasVeri.setFocusable(false);
+            //txtCantVer.requestFocus();
 
-            txtCantVer.requestFocus();
-
+            //GT 18112021 primero validamos prod guardado sin presentacion
+            //execws(9);
             execws(4);
 
         } catch (Exception e) {
@@ -271,7 +310,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try {
 
-            PresList.clear();
+            //PresList.clear();
 
             for (clsBeProducto_Presentacion BePres : BeListPres.items) {
                 PresList.add(BePres.Nombre);
@@ -308,6 +347,48 @@ public class frm_inv_ini_verificacion extends PBase {
             mu.msgbox("Llena_Det_Estados_Producto:" + e.getMessage());
         }
     }
+
+
+    private void processInvTeorico(){
+
+        try {
+
+            InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
+
+            if (InvTeorico != null) {
+                if (InvTeorico.items != null) {
+                    Valida_presentaciones();
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processInvTeorico:"+e.getMessage());
+        }
+    }
+
+
+    private void Valida_presentaciones() {
+
+        try {
+
+            PresList.clear();
+
+            //GT 18112021: si hay un prod sin presentacion, se carga primero vacia y luego las existentes
+            for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+
+                if (BeLotes.IdPresentacion ==0) {
+                    PresList.add("Sin Presentación");
+                    emptyPres = true;
+                }
+            }
+
+            execws(4);
+
+        } catch (Exception e) {
+            mu.msgbox("Llena_Lotes:" + e.getMessage());
+        }
+    }
+
 
     public void BotonGuardarVerificacion(View view){
         Guardar_Verificacion();
@@ -447,7 +528,8 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try{
 
-            utramo.Res_inicio = "Finalizado";
+            //utramo.Res_inicio = "Finalizado";
+            utramo.Res_estado="Finalizado";
             utramo.Res_fin = du.getFechaActual();
             utramo.Res_idoperador = gl.OperadorBodega.IdOperador;
             utramo.IdBodega = gl.IdBodega;
@@ -526,6 +608,10 @@ public class frm_inv_ini_verificacion extends PBase {
                         break;
                     case 8:
                         callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",utramo);
+
+                    case 9:
+                        callMethod("Get_Inventario_Teorico_By_Codigo","IdInventarioEnc",BeInvEnc.Idinventarioenc,
+                                "IdProducto",BeProducto.IdProducto);
                 }
 
                 progress.cancel();
@@ -569,6 +655,10 @@ public class frm_inv_ini_verificacion extends PBase {
                 case 8:
                     Limpia_Valores();
                     super.finish();
+                case 9:
+                    processInvTeorico();
+                    break;
+
             }
 
         } catch (Exception e) {
@@ -618,6 +708,9 @@ public class frm_inv_ini_verificacion extends PBase {
             BeProducto = xobj.getresult(clsBeProducto.class, "Get_BeProducto_By_Codigo_For_HH");
 
             if (BeProducto != null) {
+
+                PresList.clear();
+                PresList.add("Sin Presentación");
 
                 Carga_Datos_Producto();
 

@@ -77,6 +77,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public int Correlativo=0;
     @Element(required=false) public clsBeTrans_pe_pol ObjPoliza= new clsBeTrans_pe_pol();
     @Element(required=false) public int IdTipoPedido=0;
+    @Element(required=false) public String No_Picking_ERP="";
 
     public clsBeTrans_pe_enc() {
     }
@@ -565,6 +566,11 @@ public class clsBeTrans_pe_enc {
         IdTipoPedido=value;
     }
 
+    public String getNo_Picking_ERP() {
+        return No_Picking_ERP;
+    }
+    public void setNo_Picking_ERP(String value) {
+        No_Picking_ERP=value;
+    }
+
 }
-
-

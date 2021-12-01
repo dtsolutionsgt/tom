@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/txtOrdenar"
-            android:layout_width="126dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
@@ -27,38 +27,31 @@
 
         <Spinner
             android:id="@+id/spOrdenar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:entries="@array/filtros"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:scrollbarSize="4dp" />
 
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tbAgrupar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tblOrdenar">
-
         <CheckBox
             android:id="@+id/chkAgrupar"
             android:layout_width="129dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="Agrupar"
             android:textSize="18sp" />
+
     </TableRow>
 
     <HorizontalScrollView
         android:id="@+id/scrollExistencia"
         android:layout_width="match_parent"
-        android:layout_height="288dp"
+        android:layout_height="333dp"
         android:layout_above="@id/btnRegs2"
-        android:layout_below="@id/tbAgrupar"
-        android:layout_marginTop="5dp">
+        android:layout_below="@+id/tblOrdenar"
+        android:layout_marginTop="2dp">
 
         <ListView
             android:id="@+id/listExist"
@@ -72,7 +65,7 @@
     <TextView
         android:id="@+id/lblNombreProducto"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/txtCodigo1"
         android:layout_alignParentStart="false"
         android:layout_marginStart="0dp"
@@ -85,12 +78,12 @@
 
     <ImageView
         android:id="@+id/imgPrint"
-        android:layout_width="65dp"
-        android:layout_height="45dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/cmbEstadoExist"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="3dp"
         android:contentDescription="@string/todo"
         android:src="@drawable/printimg"
         android:visibility="invisible" />
@@ -98,7 +91,7 @@
     <Button
         android:id="@+id/btnRegs2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="26dp"
         android:layout_above="@+id/relbot"
         android:layout_marginStart="250dp"
         android:layout_marginBottom="5dp"
@@ -107,7 +100,7 @@
         android:paddingEnd="20dp"
         android:text="Registros: 0"
         android:textColor="@android:color/background_light"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -148,7 +141,7 @@
     <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:background="@drawable/color_medium">
@@ -156,7 +149,7 @@
         <TextView
             android:id="@+id/lblTituloForma"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
@@ -170,15 +163,15 @@
     <EditText
         android:id="@+id/txtUbic1"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="172dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:autofillHints=""
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/lblUbicacionT"
@@ -198,8 +191,8 @@
         android:layout_alignEnd="@+id/txtUbic1"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
-        android:autofillHints=""
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/lblCodigoProductoT"
@@ -217,7 +210,7 @@
     <Spinner
         android:id="@+id/cmbEstadoExist"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/lblNombreProducto"
         android:layout_alignStart="@+id/txtCodigo1"
         android:layout_alignEnd="@+id/txtCodigo1"
@@ -241,14 +234,13 @@
     <TextView
         android:id="@+id/lblNombreUbicacion"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/txtUbic1"
         android:layout_alignParentStart="false"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:paddingStart="5dp"
-        android:text="-"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
 

@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -44,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -57,7 +60,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
-    private TableRow trPeso;
+    private TableRow trPeso,tblExplosionar,tblPresentacion;
+    private CheckBox chkExplosionar;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -114,6 +118,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean vProcesar =false;
 
     private boolean Es_Explosion = false;
+    private boolean Es_Explosion_Manual = false;
     private int vIdStockNuevo = 0;
     private int vIdMovimientoNuevo= 0;
     private int vPosiciones=0;
@@ -142,7 +147,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private double vCantidadAUbicar, vCantidadDisponible, vPesoAUbicar, vPesoDisponible;
 
     private TextToSpeech mTTS;
-    private String text = "";
+    private String textToSpeeach = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,9 +185,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoOrigen = (Spinner) findViewById(R.id.cmbEstadoOrigen);
             cmbEstadoDestino = (Spinner) findViewById(R.id.cmbEstadoDestino);
 
+            chkExplosionar = (CheckBox)  findViewById(R.id.chkExplosionar);
+
             btnGuardarCiega = (Button) findViewById(R.id.btnGuardarCiega);
 
             trPeso = (TableRow)findViewById(R.id.trPeso);
+            tblExplosionar = (TableRow)findViewById(R.id.tblExplosionar);
+            tblPresentacion = (TableRow)findViewById(R.id.tblPresentacion);
+
+            tblExplosionar.setVisibility(View.GONE);
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -449,6 +460,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
         });
 
+        //#AT 20211125 Agregué este evento para que detecte cuando el usuario presione enter
+        txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+
         txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
 
             @Override
@@ -456,7 +470,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_ENTER:
-                            AplicarCambioBoton();
+                            if (txtUbicDestino.getText().toString().length() > 0)
+                                AplicarCambioBoton();
+                            else
+                                toast("Debe ingresar la ubicación destino");
                     }
                 }
                 return false;
@@ -504,7 +521,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                                     Recalcula_Peso();
 
-                                    if (txtPeso.getVisibility()==View.VISIBLE){
+                                    if (trPeso.getVisibility()==View.VISIBLE){
                                         txtPeso.requestFocus();
                                     }else{
                                         txtUbicDestino.requestFocus();
@@ -543,6 +560,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 return false;
             }
         });
+
+        chkExplosionar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+
+                    Es_Explosion_Manual = true;
+                   // ProgressDialog("Explosionar mercancía.");
+
+                } else {
+
+                    Es_Explosion_Manual = false;
+
+                }
+            }
+        });
+
     }
 
     private void LlenaPresentaciones() {
@@ -592,7 +626,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
 
+                if (cvPresID ==0){
+                    tblExplosionar.setVisibility(View.GONE);
+                }else{
+                    tblExplosionar.setVisibility(View.VISIBLE);
+                }
+
             }else{
+                tblExplosionar.setVisibility(View.GONE);
                 LlenaLotes();
             }
 
@@ -1261,7 +1302,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
-
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -1374,7 +1414,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Tiene_Posiciones","pStock",pStock);
                         break;
                     case 21:
-                        callMethod("Ubicacion_Es_Valida","pIdProducto",BeProductoUbicacion.IdProductoBodega,
+                        callMethod("Ubicacion_Es_Valida",
+                                "pIdProducto",BeProductoUbicacion.IdProducto,
                                 "pIdUbicacion",txtUbicDestino.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
 
@@ -1634,38 +1675,67 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
                         @Override
                         public void onInit(int status) {
+
                             if(status == TextToSpeech.SUCCESS){
+
                                 Locale locSpanish = new Locale("spa", "MEX");
                                 int result =mTTS.setLanguage(locSpanish);
+
+                                textToSpeeach = "";
+
                                 if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
                                     Log.e("tts","Lenguaje no soportado :(");
                                 }else{
 
                                     String[] cadena_ubicacion = bodega_ubicacion_destino.getDescripcion().split("-");
-                                    String rack = cadena_ubicacion[0].trim().substring(0);
-                                    String columna = cadena_ubicacion[1].trim().substring(1);
-                                    String tramo = cadena_ubicacion[2].trim().substring(1);
-                                    String nivel = cadena_ubicacion[3].trim().substring(1);
-                                    String pos = cadena_ubicacion[4].trim().substring(3);
-                                    String ubicacion = cadena_ubicacion[5].trim().substring(1);
+                                    String rack, columna, tramo, nivel, pos, ubicacion;
 
-                                    text = "Lleve producto a " + rack + ". "
-                                         + " Tramo: " + tramo + "."
-                                         + " Columna: " + columna + "."
-                                         + " Nivel: " + nivel + "."
-                                         + " Posición: " + pos + "."
-                                         + " Y Escanee: " + ubicacion;
+                                    if (cadena_ubicacion.length==6){
+
+                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        columna = cadena_ubicacion[1].trim().substring(1);
+                                        tramo = cadena_ubicacion[2].trim().substring(1);
+                                        nivel = cadena_ubicacion[3].trim().substring(1);
+                                        pos = cadena_ubicacion[4].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[5].trim().substring(1);
+
+                                        textToSpeeach = "Lleve producto a " + rack + ". "
+                                                + " Tramo: " + tramo + "."
+                                                + " Columna: " + columna + "."
+                                                + " Nivel: " + nivel + "."
+                                                + " Posición: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
+
+                                    }else if (cadena_ubicacion.length==5){
+
+                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        columna = cadena_ubicacion[1].trim().substring(1);
+                                        nivel = cadena_ubicacion[2].trim().substring(1);
+                                        pos = cadena_ubicacion[3].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[4].trim().substring(1);
+
+                                        textToSpeeach = "Lleve producto a " + rack + ". "
+                                                + " Columna: " + columna + "."
+                                                + " Nivel: " + nivel + "."
+                                                + " Posición: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
+                                    }
 
                                     float speed = 1f;
                                     float pitch = 1f;
                                     mTTS.setPitch(pitch);
                                     mTTS.setSpeechRate(speed);
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
-                                    } else {
-                                        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                                    if (textToSpeeach.isEmpty()){
+                                     textToSpeeach = "Enseñame por favor donde ubicar el producto";
                                     }
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        mTTS.speak(textToSpeeach,TextToSpeech.QUEUE_FLUSH,null,null);
+                                    } else {
+                                        mTTS.speak(textToSpeeach, TextToSpeech.QUEUE_FLUSH, null);
+                                    }
+
                                 }
                             }else{
                                 Log.e("tts","No he podido inicializar el TTS :(");
@@ -1961,6 +2031,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processCambioUbicEstHH(){
+
         try{
 
             boolean resultado = false;
@@ -2008,6 +2079,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
                 progress.cancel();
+
                 msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
 
             }
@@ -2020,6 +2092,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processUbicacionDestSugerida(){
+
         try{
 
             progress.setMessage("Procesando ubicación destino sugerida");
@@ -2061,7 +2134,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (escaneoPallet && productoList == null) {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
-                lblDescProducto.setText ("Código de LP no válido");
+                lblDescProducto.setText ("Licencia no válida");
                 progress.cancel();
             }else{
 
@@ -2123,7 +2196,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (Existe_Lp){
                 progress.cancel();
                 txtCodigoPrd.requestFocus();
-
                 //Get_Stock_By_Lic_Plate
                 execws(5);
             }else{
@@ -2132,7 +2204,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtLicPlate.selectAll();
                 txtLicPlate.requestFocus();
             }
-
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
@@ -2163,7 +2234,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             TienePosiciones = xobj.getresult(Integer.class,"Tiene_Posiciones");
 
             if (TienePosiciones==0){
-                msgAskIngresePosiciones();
+               msgAskIngresePosiciones();
             }else{
                 vPosiciones = TienePosiciones;
                 validaDestino();
@@ -2233,6 +2304,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTarea(boolean finalizar){
+
         try{
 
             progress.setMessage("Inicializando tarea");
@@ -2249,6 +2321,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino.setAdapter(null);
             txtUbicSug.setText("");
             txtUbicDestino.setHint("");
+            chkExplosionar.setChecked(false);
+            tblExplosionar.setVisibility(View.GONE);
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2302,7 +2376,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTareaSinUbic(){
+
         try{
+
             progress.setMessage("Inicializando tarea");
             progress.show();
 
@@ -2316,6 +2392,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestino.setAdapter(null);
             txtUbicSug.setText("");
             txtUbicDestino.setHint("");
+            chkExplosionar.setChecked(false);
+            tblExplosionar.setVisibility(View.GONE);
 
             cvProdID = 0;
             cvPresID = 0;
@@ -2360,7 +2438,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTareaLP(){
+
         try{
+
             progress.setMessage("Inicializando tarea");
             progress.show();
 
@@ -2415,7 +2495,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskExit(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2440,7 +2522,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskExplosionar(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2474,7 +2558,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskImprimirEtiqueta(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2503,7 +2589,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void msgAskImpresoraLista(String msg){
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -2649,16 +2737,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+
                 public void onClick(DialogInterface dialog, int which) {
 
                     if( escaneoPallet && productoList != null){
                         //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material
-                        if (BeStockPallet.getIdPresentacion()!=0){
-                            if( BeStockPallet.CantidadPresentacion != vCantidadAUbicar){
+                        if (BeStockPallet.getIdPresentacion()!=0) {
+
+                            if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
                                 msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
-                            }else{
+                            } else {
                                 inicializaTarea(true);
                             }
+
                         }else{
                             if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
                                 msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
@@ -2715,6 +2806,39 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    private void msgAskImprimir(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Código de estado", (dialog1, which) -> {
+                progress.setMessage("Imprimiendo Estado");
+                progress.show();
+                progress.cancel();
+            });
+
+            dialog.setNeutralButton("Salir", (dialog13, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object()
+            {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void Imprimir(View view){
+        msgAskImprimir("Imprimir Estado");
+    }
+
     private void aplicarCambio() {
 
         try{
@@ -2759,6 +2883,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }else if ( cvPresID != 0){
                 vStockRes.CantidadUmBas = vCantidadAUbicar * vFactorPres;
+            }
+
+            if (Es_Explosion_Manual){
+                gMovimientoDet.IdTipoTarea = 20;
             }
 
             //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
@@ -2866,6 +2994,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             pStock.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
             pStock.Fecha_vence = du.convierteFechaDiagonal(cvVence);
             pStock.Lote = cvLote;
+            //#CKFK 20210827 Se le agregó a la clase el LicPlate
+            pStock.Lic_plate = pLicensePlate;
 
             //Es_Pallet_No_Estandar
             execws(19);
@@ -2959,7 +3089,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if(EsCambioEstado ) {
                 gMovimientoDet.IdTipoTarea = 3;
             }else{
-                gMovimientoDet.IdTipoTarea = 2;
+                if (!Es_Explosion && !Es_Explosion_Manual){
+                    gMovimientoDet.IdTipoTarea = 2;
+                }else{
+                    if (Es_Explosion_Manual){
+                       gMovimientoDet.IdTipoTarea = 20;
+                    }
+                }
             }
 
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;

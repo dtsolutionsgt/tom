@@ -122,6 +122,7 @@
         android:layout_alignStart="@+id/cmbOrdenadorPor"
         android:layout_alignEnd="@+id/cmbOrdenadorPor"
         android:layout_marginTop="10dp"
+        android:importantForAutofill="no"
         android:inputType="textPersonName" />
 
     <TextView

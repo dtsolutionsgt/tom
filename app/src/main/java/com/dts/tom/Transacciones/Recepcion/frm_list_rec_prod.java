@@ -88,6 +88,8 @@ public class frm_list_rec_prod extends PBase {
     private  int vIdOrdenCompra=0;
     private double vTipoDiferencia=0;
     private boolean Finalizar=false;
+    //#CKFK 20211116 Agregué esta variable pora poder enviar el backorder de la OC
+    private boolean backorder = false;
     private Dialog dialog;
     private Bitmap FirmaPiloto;
     private byte[] firmByte;
@@ -194,7 +196,7 @@ public class frm_list_rec_prod extends PBase {
                              }
 
                              pLP = txtCodigoProductoRecepcion.getText().toString().replace("$", "");
-
+                             //Quitar los +1  20210924
                              vCodigoBodegaBarraPallet = pLP.substring(0, vLongitudBodegaOrigen);
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
@@ -716,6 +718,9 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+            //#CKFK 20211116 Inicializo la variable de backorder de la OC
+            backorder = false;
+
             progress.setMessage("Validando estado de recepción");
 
             if (gBeOrdenCompra.DetalleOC.items!=null){
@@ -731,6 +736,8 @@ public class frm_list_rec_prod extends PBase {
 
                         if (vTipoDiferencia<0){
 
+                            //#CKFK 20211116 Coloco la variable en true si la recepción está incompleta
+                            backorder = true;
                             btnCompletaRec.setText("DIF - (NEG)");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FFA5A0"));
                             progress.cancel();
@@ -848,7 +855,7 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada);
+            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
             listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
@@ -1001,7 +1008,7 @@ public class frm_list_rec_prod extends PBase {
 
                         callMethod("Finalizar_Recepcion",
                                             "pRecEnc",gl.gBeRecepcion,
-                                            "backOrder",false,
+                                            "backOrder",backorder,
                                             "pIdOrdenCompraEnc",vIdOrdenCompra,
                                             "pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                             "pIdEmpresa", gl.IdEmpresa,
@@ -1125,7 +1132,7 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
 
-           // ValidaEstadoPallet();
+            ValidaEstadoPallet();
 
             if (lBeINavBarraPallet!=null){
                 if (lBeINavBarraPallet.items!=null){

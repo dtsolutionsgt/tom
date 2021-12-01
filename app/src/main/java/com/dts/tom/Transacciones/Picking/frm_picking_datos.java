@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
@@ -61,11 +62,11 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
-    private TextView lblTituloForma, lblLicPlate;
+    private TextView lblTituloForma, lblLicPlate, lblEstiba;
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
     private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
@@ -75,12 +76,17 @@ public class frm_picking_datos extends PBase {
     public static boolean ReemplazoLP=false;
     public static int Tipo=0;
 
+    public clsBeProducto_Presentacion gBePresentacion = new clsBeProducto_Presentacion();
+    public double vCajasPorCama =0;
+    public double vCamasPorTarima = 0;
+
     private int DifDias = 0;
 
     private TextToSpeech mTTS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_picking_datos);
 
@@ -99,6 +105,7 @@ public class frm_picking_datos extends PBase {
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
+        lblEstiba = (TextView) findViewById(R.id.lblEstiba);
 
         btnFechaVence = (Button) findViewById(R.id.btnFechaVence);
         btnConfirmarPk = (Button) findViewById(R.id.btnConfirmarPk);
@@ -112,8 +119,12 @@ public class frm_picking_datos extends PBase {
         trPeso = (TableRow) findViewById(R.id.trPeso);
         trLote = (TableRow) findViewById(R.id.trLote);
         trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
+        tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
 
         ProgressDialog("Cargando datos de producto picking");
+
+        lblEstiba.setText("");
+        tblEstiba.setVisibility(View.GONE);
 
         if (selitem != null) {
             gBePickingUbic = selitem;
@@ -164,17 +175,17 @@ public class frm_picking_datos extends PBase {
                             }
 
                             if (!gBePickingUbic.Lote.isEmpty()){
-                                 text += " Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                 text += " Código: " + gBePickingUbic.CodigoProducto +  "."
                                         + " Tome: " + vCantidad + "."
                                         + " Verifíque lote: " + gBePickingUbic.Lote;
                             }else{
-                                 text += "Código: " + gBePickingUbic.CodigoProducto + ", Producto: " + gBePickingUbic.NombreProducto + "."
+                                 text += "Código: " + gBePickingUbic.CodigoProducto +  "."
                                         + " Tome: " + vCantidad + ", "
                                         + " de cualquier lote. ";
                             }
 
                             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
-                                text +=" Verifique vencimiento: " +gBePickingUbic.Fecha_Vence;
+                                text +=" Verifique vencimiento: " + gBePickingUbic.Fecha_Vence;
                             }
 
                             float speed = 1f;
@@ -254,7 +265,7 @@ public class frm_picking_datos extends PBase {
                 vPeso = gBePickingUbic.Peso_solicitado;
                 vCantidad = gBePickingUbic.Cantidad_Solicitada;
 
-                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString());
+                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString().replace(",",""));
 
                 if (vCantidad>0){
                     vPesoUni = vPeso/vCantidad;
@@ -277,22 +288,27 @@ public class frm_picking_datos extends PBase {
 
     private void Load() {
 
+        String vUnidadMedida ="";
+
         try {
 
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 trLP.setVisibility(View.VISIBLE);
                 txtCodigoProducto.setEnabled(false);
+                txtBarra.requestFocus();
             } else {
                 lblLicPlate.setText("");
                 trLP.setVisibility(View.GONE);
                 txtCodigoProducto.setEnabled(true);
+                txtCodigoProducto.requestFocus();
             }
 
-            if(gBePickingUbic.getIdPresentacion()==0){
+            if(gBePickingUbic.getIdPresentacion()!=0){
                 trPresentacion.setVisibility(View.VISIBLE);
             }else{
                 trPresentacion.setVisibility(View.GONE);
+                tblEstiba.setVisibility(View.GONE);
             }
 
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
@@ -300,12 +316,25 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
             }
+
+            vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
+
+            if (gBePickingUbic.IdPresentacion>0){
+                if (gBeProducto.Presentaciones!=null){
+                    if (gBeProducto.Presentaciones.items!=null){
+                        List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
+                        vUnidadMedida = gBePresentacion.Nombre;
+                    }
+                }
+            }
+
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " Expira: " + gBePickingUbic.Fecha_Vence :"" )
                     + (!gBePickingUbic.Lote.isEmpty()?"Lote: " + gBePickingUbic.Lote:"") + "\r\n"
                     + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
-                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ gBePickingUbic.ProductoUnidadMedida);
+                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
 
             txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
@@ -720,6 +749,12 @@ public class frm_picking_datos extends PBase {
 
                     gBeProducto = new clsBeProducto();
                     gBeProducto.Codigo = pCodigo;
+
+                    //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
                     //Get_BeProducto_By_Codigo_For_HH (Primera vez)
                     execws(4);
                 }
@@ -914,9 +949,14 @@ public class frm_picking_datos extends PBase {
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
                    gBeProducto = new clsBeProducto();
-                    gBeProducto.Codigo = pCodigo;
+                   gBeProducto.Codigo = pCodigo;
 
-                   execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
+                   //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                    if (pCodigo.isEmpty()){
+                        pCodigo = pLP;
+                    }
+
+                    execws(4); //Get_BeProducto_By_Codigo_For_HH (Segunda vez)
 
 //                    msgbox("El código de licencia no es válido, ingréselo nuevamente");
 //                    btnConfirmarPk.setEnabled(false);
@@ -1024,10 +1064,19 @@ public class frm_picking_datos extends PBase {
     private void Cargar_Datos_Producto_Picking(){
 
         double CantARec = 0;
+        double vCantUniXTarima = 0;
 
         try{
 
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
+
+            //#GT 18082021: si la lp digitada coincide con la del producto, se debe setear el producto a pCodigo
+            // sino marcara que el producto no existe, porque pCodigo se envia vacio
+            if (!txtCodigoProducto.getText().toString().isEmpty()){
+
+                pCodigo = txtCodigoProducto.getText().toString();
+            }
+
 
             CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
 
@@ -1046,8 +1095,15 @@ public class frm_picking_datos extends PBase {
 
                 //#EJC20200610: No me gusta como se ve esto, pero tengo demo ma;ana
                 gBeProducto = new clsBeProducto();
+
+                //#EJC20210907: Corrrección para que permita pickear sin código de producto.
+                if (pCodigo.isEmpty()){
+                    pCodigo = pLP;
+                }
+
                 //Get_BeProducto_By_Codigo_For_HH (Tercera vez)
                 execws(4);
+
                 return;
             }
 
@@ -1057,15 +1113,43 @@ public class frm_picking_datos extends PBase {
                         List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                         cmbPresentacion.setSelection(inx);
+
+                        //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
+                        gBePresentacion= stream(gBeProducto.Presentaciones.items).
+                                where(z -> z.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+                        vCajasPorCama = gBePresentacion.CajasPorCama;
+                        vCamasPorTarima = gBePresentacion.CamasPorTarima;
+
+                        if (vCajasPorCama > 0 && vCamasPorTarima > 0){
+                            tblEstiba.setVisibility(View.VISIBLE);
+                            lblEstiba.setText("Camas por Tarima: " + vCamasPorTarima + " Cajas por cama: " +  vCajasPorCama);
+                        }else{
+                            tblEstiba.setVisibility(View.GONE);
+                            lblEstiba.setText("");
+                        }
                     }
                 }
+            }else{
+                tblEstiba.setVisibility(View.GONE);
+                lblEstiba.setText("");
             }
 
             txtUniBas.setText(gBePickingUbic.ProductoUnidadMedida);
             if (CantARec<=0){
                 txtCantidadPick.setText(""+0);
             }else{
-                txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+
+                //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
+                if(vCajasPorCama>0 && vCamasPorTarima>0){
+                    vCantUniXTarima = vCamasPorTarima*vCajasPorCama;
+                }
+
+                if (CantARec >= vCantUniXTarima && vCantUniXTarima>0){
+                    txtCantidadPick.setText(""+mu.frmdecimal(vCantUniXTarima,gl.gCantDecDespliegue));
+                }else{
+                    txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                }
+
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
@@ -1175,7 +1259,7 @@ public class frm_picking_datos extends PBase {
 
                 if (TipoLista==2){
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString()) + gBePickingUbic.Cantidad_Recibida);
+                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
 
                     if (vDif<0){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1245,7 +1329,8 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
 
                 if (gBePickingUbic.Fecha_Vence.isEmpty()){
-                    mu.msgbox("Guardar_Picking:"+ "fecha vacia");
+                    //mu.msgbox("Guardar_Picking:"+ "fecha vacia");
+                    gBePickingUbic.Fecha_Vence = "1900-01-01T00:00:01";
                 }
 
 
@@ -1265,7 +1350,7 @@ public class frm_picking_datos extends PBase {
 
             }else{
 
-                Cantidad = Double.parseDouble(txtCantidadPick.getText().toString());
+                Cantidad = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
                 pSubListPickingU = new clsBeTrans_picking_ubicList();
 
@@ -1300,7 +1385,7 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
             msgReemplazo("¿Marcar producto para reemplazo?");
 
@@ -1318,7 +1403,7 @@ public class frm_picking_datos extends PBase {
            // if (trLP)
 
             if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("Ingrese LP del producto");
+                mu.msgbox("InBeTrans_pe_tipogrese LP del producto");
                 txtBarra.setSelectAllOnFocus(true);
                 txtBarra.requestFocus();
                 return;
@@ -1331,7 +1416,7 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString());
+            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
             msgReemplazo("¿Marcar producto como No Encontrado?");
 
@@ -1428,7 +1513,7 @@ public class frm_picking_datos extends PBase {
                         break;
                     case 9:
                         callMethod("Actualiza_Picking_Consolidado","pBePickingUbicList",pSubListPickingU.items,
-                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString()),
+                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet.Stock);
                         break;
                 }
@@ -1540,6 +1625,13 @@ public class frm_picking_datos extends PBase {
                     Listar_Producto_Estado();
                     Listar_Producto_Presentaciones();
                     Set_dias_Vence();
+
+                    if (!gBePickingUbic.Lic_plate.isEmpty()) {
+                        txtBarra.requestFocus();
+                    } else {
+                        txtCodigoProducto.requestFocus();
+                    }
+
                 }else{
                     execws(3);
                 }
@@ -1564,6 +1656,12 @@ public class frm_picking_datos extends PBase {
             Listar_Producto_Estado();
             Listar_Producto_Presentaciones();
             Set_dias_Vence();
+
+            if (!gBePickingUbic.Lic_plate.isEmpty()) {
+               txtBarra.requestFocus();
+            } else {
+                txtCodigoProducto.requestFocus();
+            }
 
         }catch (Exception e){
             mu.msgbox("processPresentacionesProducto:"+e.getMessage());
@@ -1610,12 +1708,10 @@ public class frm_picking_datos extends PBase {
         try{
 
             BePickingDet = xobj.getresultSingle(clsBeTrans_picking_det.class,"oBeTrans_picking_det");
-            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString());
+            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
             BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
             BePickingDet.Fec_mod =  du.getFechaActual();
-
             BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
-
             execws(6);
 
         }catch (Exception e){
@@ -1628,7 +1724,6 @@ public class frm_picking_datos extends PBase {
         try{
 
             BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"pBeStock_res");
-
             BeStockRes.Estado = "PICKEADO";
             BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
             BeStockRes.Fec_mod = du.getFechaActual();
@@ -1651,30 +1746,25 @@ public class frm_picking_datos extends PBase {
 
 
     private void msgAskExit(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     doExit();
                 }
             });
-
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     return;
                 }
             });
-
             dialog.show();
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -1703,14 +1793,12 @@ public class frm_picking_datos extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
 
     @Override
     protected void onResume() {
 
         try{
-
             super.onResume();
 
             if (browse==1){

@@ -21,17 +21,32 @@ public class clsBeBodega_area {
     @Element(required=false) public double Margen_derecho=0;
     @Element(required=false) public double Margen_superior=0;
     @Element(required=false) public double Margen_inferior=0;
+    @Element(required=false) public String Grupo="";
     @Element(required=false) public boolean Is=false;
 
 
     public clsBeBodega_area() {
     }
 
-    public clsBeBodega_area(int IdArea,int IdBodega,String Descripcion,boolean Sistema,
-                            String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                            String Codigo,boolean Activo,double Alto,double Largo,
-                            double Ancho,double Margen_izquierdo,double Margen_derecho,double Margen_superior,
-                            double Margen_inferior,boolean Is) {
+    public clsBeBodega_area(int IdArea,
+                            int IdBodega,
+                            String Descripcion,
+                            boolean Sistema,
+                            String User_agr,
+                            String Fec_agr,
+                            String User_mod,
+                            String Fec_mod,
+                            String Codigo,
+                            boolean Activo,
+                            double Alto,
+                            double Largo,
+                            double Ancho,
+                            double Margen_izquierdo,
+                            double Margen_derecho,
+                            double Margen_superior,
+                            double Margen_inferior,
+                            boolean Is,
+                            String Grupo) {
 
         this.IdArea=IdArea;
         this.IdBodega=IdBodega;
@@ -51,6 +66,7 @@ public class clsBeBodega_area {
         this.Margen_superior=Margen_superior;
         this.Margen_inferior=Margen_inferior;
         this.Is=Is;
+        this.Grupo = Grupo;
 
     }
 
@@ -162,6 +178,14 @@ public class clsBeBodega_area {
     }
     public void setIs(boolean value) {
         Is=value;
+    }
+
+    public void setGrupo(String value) {
+        Grupo=value;
+    }
+
+    public String getGrupo() {
+        return Grupo;
     }
 
 }

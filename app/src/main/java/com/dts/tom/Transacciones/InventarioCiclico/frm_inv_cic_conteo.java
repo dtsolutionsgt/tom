@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBeTrans_inv_enc_reconteoList;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.ladapt.InventarioCiclico.list_adapt_consulta_ciclico;
@@ -55,7 +56,7 @@ public class frm_inv_cic_conteo extends PBase {
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
     private clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
     private Object item;
-
+    private clsBeProducto BeProducto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,7 +268,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                data_rec.Fecha_Vence =  du.convierteFechaMostar(DT.getString(9));
+                                data_rec.Fecha_Vence =  du.convierteFechaMostrar(DT.getString(9));
                             }else{
                                 data_rec.Fecha_Vence = "";
                             }
@@ -785,8 +786,11 @@ public class frm_inv_cic_conteo extends PBase {
             if (BeInvEnc.Idpropietario >0){
                 execws(5);
             }
-            else{
-                msgbox("No existe el propietario (podra ser un consolidador?)");
+            else if (BeInvEnc.multi_propietario){
+                gl.multipropietario = BeInvEnc.multi_propietario;
+                execws(6);
+            }else{
+                msgbox("El inventario no tiene asignado un propietario.");
             }
 
         }
@@ -851,6 +855,9 @@ public class frm_inv_cic_conteo extends PBase {
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
 
+                    case 6:
+                        callMethod("Get_BeProducto_By_IdProducto","pIdProducto",gl.pprod.IdProducto);
+                        break;
                 }
 
                 //progress.cancel();
@@ -884,11 +891,36 @@ public class frm_inv_cic_conteo extends PBase {
                 case 5:
                     Llena_Estado();
                     break;
+
+                case 6:
+                    Llena_Producto();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void Llena_Producto() {
+
+        try{
+
+            BeProducto = new clsBeProducto();
+
+
+            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_IdProducto");
+
+            if (BeProducto != null){
+
+                BeInvEnc.Idpropietario =  BeProducto.IdPropietario;
+                execws(5);
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processBeProductoRes:"+e.getMessage());
+        }
+
     }
 
 

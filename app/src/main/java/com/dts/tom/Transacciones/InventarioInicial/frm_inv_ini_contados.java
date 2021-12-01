@@ -464,7 +464,7 @@ public class frm_inv_ini_contados extends PBase {
             if (BBeProducto.Control_vencimiento){
                 txtVenceDetalle.setVisibility(View.VISIBLE);
                 lblVenceDetalle.setVisibility(View.VISIBLE);
-                txtVenceDetalle.setText(du.convierteFechaMostar(dditem.Fecha_vence));
+                txtVenceDetalle.setText(du.convierteFechaMostrar(dditem.Fecha_vence));
             }else{
                 txtVenceDetalle.setVisibility(View.GONE);
                 lblVenceDetalle.setVisibility(View.VISIBLE);

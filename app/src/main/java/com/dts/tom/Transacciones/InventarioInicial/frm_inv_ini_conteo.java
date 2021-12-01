@@ -1,7 +1,5 @@
 package com.dts.tom.Transacciones.InventarioInicial;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.transition.Visibility;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +28,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalle;
@@ -39,6 +37,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -49,20 +48,23 @@ import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.Ing
 public class frm_inv_ini_conteo extends PBase {
 
     private EditText txtUbicInv, txtCodBarra, txtLoteInvIni, txtVenceInvIni, txtCantInvIni, txtPesoInvIni;
-    private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote, lblPeso, lblTituloForma, lblVence;
+    private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote,lblLotes, lblPeso, lblTituloForma, lblVence, lblVenceList;
     private Button btnGuardarConteo, btnCompletar, btnBack;
-    private Spinner cmbPresInvIni, cmbEstadoInvIni;
+    private Spinner cmbPresInvIni, cmbEstadoInvIni, cmbLotes,cmbFechasVence;
     private DatePicker dpResult;
     private ImageView imgDate;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private boolean verlote, vervence;
+    private boolean verlote, vervence, emptyPres;
     private int codestmalo = 0;
     private int IdEstadoSelect=0;
     private int IdPresSelect=0;
     public static String CodBarra="";
+
+    private boolean tiene_lotes,tiene_fechas;
+    private String LoteSelect,FechaSelect;
 
     // date
     private int year;
@@ -76,9 +78,12 @@ public class frm_inv_ini_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_detalle  ditem = new clsBeTrans_inv_detalle();
+    private clsBeTrans_inv_stock_prod BeLotes = new clsBeTrans_inv_stock_prod();
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
+    private ArrayList<String> LoteList = new ArrayList<String>();
+    private ArrayList<String> FechasVenceList = new ArrayList<String>();
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -115,13 +120,22 @@ public class frm_inv_ini_conteo extends PBase {
         btnCompletar = (Button) findViewById(R.id.btnCompletar);
         btnBack = (Button) findViewById(R.id.btnBack);
 
-        dpResult = (DatePicker)findViewById(R.id.datePicker3);
+        dpResult = (DatePicker) findViewById(R.id.datePicker3);
+        imgDate = (ImageView) findViewById(R.id.imgDate2);
 
-        imgDate = (ImageView)findViewById(R.id.imgDate2);
-
-        setHandles();
+        cmbLotes = findViewById(R.id.cmbLotes);
+        lblLotes = findViewById(R.id.lblLotes);
+        lblVenceList = findViewById(R.id.lblVenceList);
+        cmbFechasVence = findViewById(R.id.cmbFechasVence);
+        tiene_fechas = false;
+        tiene_lotes = false;
+        LoteSelect = "";
+        FechaSelect = "";
+        emptyPres = false;
 
         setCurrentDateOnView();
+
+        setHandles();
 
         Load();
 
@@ -200,7 +214,17 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                    //IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+
+                    //GT 19112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
+                    if (emptyPres && position ==0 ) {
+                        IdPresSelect = 0;
+
+                    }else if(emptyPres && position> 0){
+                        IdPresSelect=BeListPres.items.get(position-1).IdPresentacion;
+                    }else{
+                        IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                    }
 
                 }
 
@@ -211,6 +235,43 @@ public class frm_inv_ini_conteo extends PBase {
 
             });
 
+            cmbLotes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTextColor(Color.BLACK);
+                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    LoteSelect=InvTeorico.items.get(position).Lote;
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
+                }
+
+            });
+
+            cmbFechasVence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTextColor(Color.BLACK);
+                    spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
+                    FechaSelect=InvTeorico.items.get(position).Fecha_vence;
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    return;
+                }
+
+            });
 
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
@@ -232,6 +293,9 @@ public class frm_inv_ini_conteo extends PBase {
 
         // set current date into datepicker
         dpResult.init(year, month, day, null);
+
+        txtUbicInv.setFocusable(true);
+        txtUbicInv.requestFocus();
 
     }
 
@@ -288,10 +352,16 @@ public class frm_inv_ini_conteo extends PBase {
             txtLoteInvIni.setVisibility(View.GONE);
             lblLote.setVisibility(View.GONE);
 
+            lblLotes.setVisibility(View.GONE);
+            cmbLotes.setVisibility(View.GONE);
+
+            lblVenceList.setVisibility(View.GONE);
+            cmbFechasVence.setVisibility(View.GONE);
+
             lblPeso.setVisibility(View.GONE);
             txtPesoInvIni.setVisibility(View.GONE);
 
-            txtVenceInvIni.setText(du.convierteFechaMostar(du.getFechaActual()));
+            txtVenceInvIni.setText(du.convierteFechaMostrar(du.getFechaActual()));
 
             pIdTramo=0;
 
@@ -332,9 +402,6 @@ public class frm_inv_ini_conteo extends PBase {
 
             lblUbicDesc.setText("" + BeUbic.Descripcion);
 
-            txtCodBarra.setSelectAllOnFocus(true);
-            txtCodBarra.requestFocus();
-            txtCodBarra.selectAll();
 
         } catch (Exception e) {
             mu.msgbox("Procesa_Ubicacion");
@@ -349,7 +416,10 @@ public class frm_inv_ini_conteo extends PBase {
 
             lblUbicDesc.setText(BeProducto.UnidadMedida.Nombre);
 
-            execws(4);
+            //GT 19112021 aqui primero valida que prod no tenga pres para agregar esa opcion al combo
+            //execws(4);
+            execws(6);
+
 
         } catch (Exception e) {
             mu.msgbox("Carga_Det_Producto:" + e.getMessage());
@@ -360,7 +430,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            PresList.clear();
+            //PresList.clear();
 
             for (clsBeProducto_Presentacion BePres : BeListPres.items) {
                 PresList.add(BePres.Nombre);
@@ -401,11 +471,99 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+
+    private void Llena_Lotes() {
+
+        try {
+
+            LoteList.clear();
+
+            for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+
+                LoteList.add(BeLotes.Lote);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, LoteList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbLotes.setAdapter(dataAdapter);
+
+            if (LoteList.size() > 0) {
+
+                tiene_lotes = true;
+                lblLotes.setVisibility(View.VISIBLE);
+                cmbLotes.setVisibility(View.VISIBLE);
+                cmbLotes.setSelection(0);
+
+                lblLote.setVisibility(View.GONE);
+                txtLoteInvIni.setVisibility(View.GONE);
+
+                Llena_FechasVence();
+
+            }else{
+                tiene_lotes = false;
+                lblLotes.setVisibility(View.GONE);
+                cmbLotes.setVisibility(View.GONE);
+
+            }
+
+
+        } catch (Exception e) {
+            mu.msgbox("Llena_Lotes:" + e.getMessage());
+        }
+    }
+
+    private void Llena_FechasVence() {
+
+        try {
+
+            FechasVenceList.clear();
+
+            for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+
+                //Date date = du.convierteFechaMostrar(BeLotes.Fecha_vence);
+                String date = du.convierteFechaMostrar(BeLotes.Fecha_vence);
+
+                FechasVenceList.add(date);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FechasVenceList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbFechasVence.setAdapter(dataAdapter);
+
+            if (FechasVenceList.size() > 0) {
+
+                tiene_fechas = true;
+                lblVenceList.setVisibility(View.VISIBLE);
+                cmbFechasVence.setVisibility(View.VISIBLE);
+                cmbFechasVence.setSelection(0);
+
+                lblVence.setVisibility(View.GONE);
+                txtVenceInvIni.setVisibility(View.GONE);
+                imgDate.setVisibility(View.GONE);
+
+                cmbFechasVence.requestFocus();
+                cmbFechasVence.setFocusable(true);
+
+            }else{
+
+                tiene_fechas = false;
+                txtLoteInvIni.requestFocus();
+                txtLoteInvIni.setFocusable(true);
+
+                lblVenceList.setVisibility(View.GONE);
+                cmbFechasVence.setVisibility(View.GONE);
+            }
+
+
+        } catch (Exception e) {
+            mu.msgbox("Llena_Lotes:" + e.getMessage());
+        }
+    }
+
+
     private void Carga_Datos_Producto(){
 
         try{
-
-            Carga_Det_Producto();
 
             mostrarlote(BeProducto.Control_lote);
 
@@ -419,20 +577,27 @@ public class frm_inv_ini_conteo extends PBase {
 
             txtPesoInvIni.setText("");
 
-            if (InvTeorico != null) {
-                if (InvTeorico.items != null) {
+            Carga_Det_Producto();
 
-                    InvTeoricoPorProducto.items = new ArrayList<>();
-                    InvTeoricoPorProducto.items = stream(InvTeorico.items).where(c -> c.Idinventario == BeInvEnc.Idinventarioenc &&
-                            c.IdProducto == BeProducto.IdProducto).toList();
 
-                    if (InvTeoricoPorProducto != null) {
-                        if (InvTeoricoPorProducto.items != null) {
-                            execws(6);
-                        }
-                    }
-                }
-            }
+
+            //GT 17112021: se llama a inv teorico porque, el objeto InvTeorico esta vacio y nunca entrara a la validación
+            //execws(6);
+
+//            if (InvTeorico != null) {
+//                if (InvTeorico.items != null) {
+//
+//                    InvTeoricoPorProducto.items = new ArrayList<>();
+//                    InvTeoricoPorProducto.items = stream(InvTeorico.items).where(c -> c.Idinventario == BeInvEnc.Idinventarioenc &&
+//                            c.IdProducto == BeProducto.IdProducto).toList();
+//
+//                    if (InvTeoricoPorProducto != null) {
+//                        if (InvTeoricoPorProducto.items != null) {
+//                            execws(6);
+//                        }
+//                    }
+//                }
+//            }
 
         }catch (Exception e){
             mu.msgbox("Carga_Datos_Producto:"+e.getMessage());
@@ -498,6 +663,33 @@ public class frm_inv_ini_conteo extends PBase {
         try{
 
             //Falta agregar un combo de lote y llenarlo con el inventario teorico
+            /* InvTeoricoPorProducto.items = new ArrayList<>();
+                    InvTeoricoPorProducto.items = stream(InvTeorico.items).where(c -> c.Idinventario == BeInvEnc.Idinventarioenc &&
+                            c.IdProducto == BeProducto.IdProducto).toList();*/
+
+            PresList.clear();
+
+            if (InvTeorico != null) {
+                if (InvTeorico.items != null) {
+
+                    //GT 19112021: si hay un prod sin presentacion, se carga primero op vacia y luego las existentes
+
+                    for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+
+                        if (BeLotes.IdPresentacion ==0) {
+                            PresList.add("Sin Presentación");
+                            emptyPres = true;
+                        }
+                    }
+
+                    if(BeProducto.Control_lote){
+                        Llena_Lotes();
+                    }
+                }
+            }
+
+            //GT 19112021: ya validamos si hay prod sin presentación, ahora se carga las presentaciones, lotes y demas
+            execws(4);
 
         }catch (Exception e){
             mu.msgbox("Valida_Inventario_Teorico:"+e.getMessage());
@@ -592,13 +784,26 @@ public class frm_inv_ini_conteo extends PBase {
                 ditem.Idunidadmedida = -1;
             }
             if (BeProducto.Control_lote){
-                ditem.Lote = txtLoteInvIni.getText().toString();
+                //GT 17112021: si existe un lote al producto
+                if(tiene_lotes){
+                    ditem.Lote = LoteSelect;
+                }else{
+                    ditem.Lote = txtLoteInvIni.getText().toString();
+                }
+
             }else{
                 ditem.Lote="";
             }
 
             if (BeProducto.Control_vencimiento){
-                ditem.Fecha_vence = du.convierteFecha(txtVenceInvIni.getText().toString());
+
+                //GT 17112021: si existe una fecha vencimiento
+                if(tiene_fechas){
+                    ditem.Fecha_vence = FechaSelect;
+                }else{
+                    ditem.Fecha_vence = du.convierteFecha(txtVenceInvIni.getText().toString());
+                }
+
             }else{
                 ditem.Fecha_vence="1900-01-01T00:00:01";
             }
@@ -690,6 +895,11 @@ public class frm_inv_ini_conteo extends PBase {
             lblPeso.setVisibility(View.VISIBLE);
             txtPesoInvIni.setVisibility(View.VISIBLE);
 
+            lblVenceList.setVisibility(View.GONE);
+            lblLotes.setVisibility(View.GONE);
+            cmbLotes.setVisibility(View.GONE);
+            cmbFechasVence.setVisibility(View.GONE);
+
            BeProducto = new clsBeProducto();
            BeListPres = new clsBeProducto_PresentacionList();
            BeListEstado = new clsBeProducto_estadoList();
@@ -711,10 +921,16 @@ public class frm_inv_ini_conteo extends PBase {
             codestmalo = 0;
             IdPresSelect = 0;
             IdEstadoSelect = 0;
+            //GT 17112021 variables usadas cuando hay varios lotes y fechas vencimiento
+            FechaSelect="";
+            LoteSelect="";
+            tiene_fechas = false;
+            tiene_lotes = false;
 
             setCurrentDateOnView();
 
             IngUbic = false;
+
 
         }catch (Exception e){
             mu.msgbox("Limpiar_Campos:"+e.getMessage());
@@ -1116,7 +1332,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            InvTeoricoPorProducto = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
+            InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
 
             Valida_Inventario_Teorico();
 

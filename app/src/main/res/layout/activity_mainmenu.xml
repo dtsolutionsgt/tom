@@ -41,17 +41,35 @@
 
         <TextView
             android:id="@+id/lblBodegaName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="172dp"
+            android:layout_height="27dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="false"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="21dp"
             android:layout_toStartOf="@+id/imageView4"
-            android:gravity="center"
+            android:gravity="center_horizontal|top"
+            android:paddingTop="2dp"
             android:text="Nombre bodega"
             android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/lblVersion"
+            android:layout_width="172dp"
+            android:layout_height="27dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="false"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_toStartOf="@+id/imageView4"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/no_version"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/imageView4"

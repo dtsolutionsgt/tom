@@ -24,6 +24,8 @@ public class list_adapt_tareas_inventario extends BaseAdapter {
 
     private LayoutInflater l_Inflater;
 
+    public list_adapt_tareas_inventario(){}
+
     public list_adapt_tareas_inventario(Context context, ArrayList<clsBeTrans_inv_enc> results) {
         pListInv = results;
         l_Inflater = LayoutInflater.from(context);

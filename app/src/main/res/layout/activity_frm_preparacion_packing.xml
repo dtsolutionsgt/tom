@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Transacciones.Packing.frm_preparacion_packing">
+
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_alignBottom="@+id/imageView3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="0dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:onClick="doList"
+        android:padding="5dp"
+        android:src="@drawable/btn_lupa" />
+
+    <Button
+        android:id="@+id/btnRegsList2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_medium"
+        android:clickable="true"
+        android:onClick="doLoad"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Pendiente : 0"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+        <ProgressBar
+            android:id="@+id/pgrtareas2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="158dp"
+            android:indeterminate="false"
+            android:max="48"
+            android:progress="1"
+            android:progressDrawable="@drawable/progress_bar_circular_style"
+            android:visibility="invisible" />
+
+        <TextView
+        android:id="@+id/textView105"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="No. Línea"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+            android:id="@+id/relbot"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/color_medium">
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="61dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="0dp"
+                android:background="@drawable/back"
+                android:onClick="SalirTareas" />
+
+        <Button
+            android:id="@+id/btnDet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:clickable="true"
+            android:onClick="guardarTarea"
+            android:text="FINALIZAR"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/reltop"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/color_medium">
+
+            <TextView
+                android:id="@+id/lblTituloForma"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Proceso de preparación - Tarima"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    <EditText
+        android:id="@+id/editText8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="70dp"
+        android:inputType="number|textPersonName"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView55"
+        style="@style/StyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText8"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:text="Licencia"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnRegsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_medium"
+        android:clickable="true"
+        android:onClick="doLoad"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Procesado : 0"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnRegsList"
+        android:layout_below="@id/editText8"
+        android:layout_marginBottom="10dp">
+
+        <ListView
+            android:id="@+id/listTareas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal" />
+    </HorizontalScrollView>
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignStart="@+id/editText8"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText8"
+        android:layout_alignBottom="@+id/editText8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:onClick="doLP"
+        android:padding="5dp"
+        android:src="@drawable/scan" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editTextNumber"
+        android:layout_alignBottom="@+id/editTextNumber"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/editTextNumber"
+        android:clickable="true"
+        android:onClick="doAdd"
+        android:padding="5dp"
+        android:src="@drawable/btn_agregar" />
+
+
+</RelativeLayout>

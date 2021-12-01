@@ -613,6 +613,7 @@ public class frm_verificacion_datos extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.gVerifCascade=false;
                     frm_verificacion_datos.super.finish();
                 }
             });

@@ -2,15 +2,18 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    defaultConfig {
+        defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 23
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         renderscriptTargetApi 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,26 +24,25 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    //buildToolsVersion '28.0.3'
 
 }
 
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.android.support:appcompat-v7:+'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
-
     implementation 'com.android.support:design:28.0.0'
-
     implementation "com.android.support:support-compat:28.0.0"
     implementation('org.simpleframework:simple-xml:2.7.1') {
        exclude group: 'stax', module: 'stax-api'
        exclude group: 'xpp3', module: 'xpp3'
     }
-    implementation 'androidx.wear:wear:1.1.0'
+    implementation 'androidx.wear:wear:1.2.0'
     implementation files('libs\\ZSDK_ANDROID_API.jar')
     implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\commons-net-3.1.jar')
@@ -52,13 +54,14 @@ dependencies {
     implementation files('libs\\opencsv-2.2.jar')
     implementation files('libs\\snmp6_1.jar')
     implementation files('libs\\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
+    implementation 'com.google.android.material:material:1.3.0'
     //implementation files('libs\\ksoap2-android-assembly-3.6.3')
 
     //implementation 'androidx.wear:wear:1.0.0'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
     //compileOnly 'com.google.android.wearable:wearable:2.6.0'
     //implementation 'br.com.zbra:android-linq:1.1.0'

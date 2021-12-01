@@ -99,7 +99,6 @@ public class frm_inv_cic_add extends PBase {
         lblUbic1 = findViewById(R.id.lblUbic1);
         lblProd = findViewById(R.id.lblProd);
 
-
         cboEstado = findViewById(R.id.cboEstado);
         cboPres = findViewById(R.id.cboPres);
         txtLote1 = findViewById(R.id.txtLote1);
@@ -109,7 +108,6 @@ public class frm_inv_cic_add extends PBase {
         txtCantContada = findViewById(R.id.txtCantContada);
         txtPesoContado = findViewById(R.id.txtPesoContado);
         lblUM = findViewById(R.id.lblUM);
-
 
         txtlote_cic = findViewById(R.id.lblNLote);
         txtFecha_cic = findViewById(R.id.lblNVence);
@@ -298,6 +296,7 @@ public class frm_inv_cic_add extends PBase {
                     {
                         if(gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
                         index= gl.lista_estados.items.get(j).IdEstado;
+                        //index= 2;
                     }
                 }
             }
@@ -305,7 +304,13 @@ public class frm_inv_cic_add extends PBase {
             ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
             EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboEstado.setAdapter(EstadosAdapter);
-            if (bodlist.size()>0) cboEstado.setSelection(index-1);
+            //el IdEstado de la bd no funciona para multipropietario, porque cada propietario tiene su propio estado y el index cambia
+            if (bodlist.size()>0 && gl.multipropietario){
+                //cboEstado.setSelection(1);
+            }
+            else if (bodlist.size()>0 && !gl.multipropietario){
+                cboEstado.setSelection(index-1);
+            }
 
             //llama a ws para cargar spinner con presentaciones del producto
              execws(4);
