@@ -533,7 +533,7 @@ public class frm_inv_cic_add extends PBase {
 
                     cboEstado.requestFocus();
                     respuesta = true;
-                    txtProd.setText(gl.inv_ciclico.Codigo);
+                    txtProd.setText(gl.inv_ciclico.Licence_plate);
 
                 }else{
 
