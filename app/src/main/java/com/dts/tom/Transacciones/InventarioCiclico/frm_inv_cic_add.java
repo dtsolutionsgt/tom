@@ -150,9 +150,9 @@ public class frm_inv_cic_add extends PBase {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
 
-
                         codigo_producto = txtProd.getText().toString().trim();
 
+                        //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
                        if(Scan_Codigo_Producto()){
 
                            btGuardar.setEnabled(true);
@@ -160,14 +160,8 @@ public class frm_inv_cic_add extends PBase {
 
                        }
                        else{
-                            //GT02122021: si el codigo ingresado no es codigo_producto, se valida como LP
-                           if(Scan_por_LP()){
-                               btGuardar.setEnabled(true);
-                               respuesta_producto = false;
-                           }else{
-                               respuesta_producto = false;
-                           }
 
+                           respuesta_producto = false;
                        }
                     }
 
@@ -455,9 +449,18 @@ public class frm_inv_cic_add extends PBase {
 
                     }else{
 
-                        respuesta = false;
+                        //respuesta = false;
                         //txtProd.setText("");
                         //mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+
+                        //GT03122021: Al no encontrar match por cod_producto, se busca como LP
+                        if(Scan_por_LP()){
+                            respuesta = true;
+                        }else{
+                            respuesta = false;
+                            mu.msgbox("Producto o LP no asignado para conteo. Intente con otro!");
+                        }
+
                     }
                 }
 
@@ -525,10 +528,6 @@ public class frm_inv_cic_add extends PBase {
         boolean respuesta = false;
 
         try{
-
-            //el código digitado no es de un producto, sino de LP
-            if(!codigo_producto.isEmpty()){
-
                 if(gl.inv_ciclico.Licence_plate.equals(codigo_producto)){
 
                     cboEstado.requestFocus();
@@ -548,15 +547,9 @@ public class frm_inv_cic_add extends PBase {
 
                         respuesta = false;
                         txtProd.setText("");
-                        mu.msgbox("Licence plate no asignado para conteo. Intente con otra!");
+                        //mu.msgbox("Licence plate no asignado para conteo. Intente con otra!");
                     }
                 }
-
-            }else {
-
-                mu.msgbox("No ha ingresado una License Plate valida.");
-            }
-
         }
         catch (Exception e){
             respuesta = false;
