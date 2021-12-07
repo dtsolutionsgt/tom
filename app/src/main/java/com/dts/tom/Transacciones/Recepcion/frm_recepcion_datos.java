@@ -5285,7 +5285,7 @@ public class frm_recepcion_datos extends PBase {
                 BeProdPallet.Fec_agr = String.valueOf(du.getFechaActual());
                 BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
                 BeProdPallet.Lote = vBeStockRec.Lote;
-                BeProdPallet.User_agr = gl.OperadorBodega+"";
+                BeProdPallet.User_agr = gl.OperadorBodega.IdOperadorBodega+"";
                 BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
                 BeProdPallet.IsNew = gl.mode == 1;
 
