@@ -185,11 +185,11 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
-                   /* if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Implosión")) {
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Implosión")) {
                         item = clsCls.new clsMenu();
                         item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
                         items.add(item);
-                    }*/
+                    }
 
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Picking")) {
@@ -207,13 +207,11 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
-                  /*  if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Lista Empaque")) {
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Empaque")) {
                         item = clsCls.new clsMenu();
                         item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
                         items.add(item);
-                    }*/
-
-
+                    }
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Inventario")) {
                         item = clsCls.new clsMenu();
@@ -246,10 +244,10 @@ public class Mainmenu extends PBase {
                 item.ID=3;item.Icon=3;item.Name="Cambio de estado";item.cant=-1;
                 items.add(item);*/
 
-                item = clsCls.new clsMenu();
+              /*  item = clsCls.new clsMenu();
                 item.ID=4;item.Icon=4;item.Name="Implosión";
                 item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
               /*  item = clsCls.new clsMenu();
                 item.ID=5;item.Icon=5;item.Name="Picking\n";item.cant=-1;
@@ -259,10 +257,10 @@ public class Mainmenu extends PBase {
                 item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
                 items.add(item);*/
 
-                item = clsCls.new clsMenu();
+               /* item = clsCls.new clsMenu();
                 item.ID=11;item.Icon=11;item.Name="Lista Empaque";
                 item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
                /* item = clsCls.new clsMenu();
                 item.ID=7;item.Icon=7;item.Name="Inventario";item.cant=-1;
