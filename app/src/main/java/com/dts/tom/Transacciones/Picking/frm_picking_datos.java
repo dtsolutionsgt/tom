@@ -336,8 +336,8 @@ public class frm_picking_datos extends PBase {
                     + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
                     + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
 
-            txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
+            //txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            //txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
             txtPesoPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
