@@ -187,10 +187,6 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }*/
 
-                    //GT10122021: opcion no existe en la bd, se deja por defecto
-                    item = clsCls.new clsMenu();
-                    item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
-                    items.add(item);
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Picking")) {
                         item = clsCls.new clsMenu();
@@ -210,10 +206,7 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }*/
 
-                    //GT10122021: Opcion no existe en la bd
-                    item = clsCls.new clsMenu();
-                    item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
-                    items.add(item);
+
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Inventario")) {
                         item = clsCls.new clsMenu();
@@ -227,57 +220,48 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
-                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Utilerias")) {
-                        item = clsCls.new clsMenu();
-                        item.ID=10;item.Icon=10;item.Name="Utilerias";item.cant=-1;
-                        items.add(item);
-                    }
-
                 }
 
 
-
-
-
-             /*   item = clsCls.new clsMenu();
+               /* item = clsCls.new clsMenu();
                 item.ID=1;item.Icon=1;item.Name="Recepción\n";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
-                item = clsCls.new clsMenu();
+               /* item = clsCls.new clsMenu();
                 item.ID=2;item.Icon=2;item.Name="Cambio de ubicación";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
-                item = clsCls.new clsMenu();
+               /* item = clsCls.new clsMenu();
                 item.ID=3;item.Icon=3;item.Name="Cambio de estado";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
                 item = clsCls.new clsMenu();
                 item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
                 items.add(item);
 
-                item = clsCls.new clsMenu();
+              /*  item = clsCls.new clsMenu();
                 item.ID=5;item.Icon=5;item.Name="Picking\n";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
-                item = clsCls.new clsMenu();
+              /*  item = clsCls.new clsMenu();
                 item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
                 item = clsCls.new clsMenu();
                 item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
                 items.add(item);
 
-                item = clsCls.new clsMenu();
+               /* item = clsCls.new clsMenu();
                 item.ID=7;item.Icon=7;item.Name="Inventario";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
-                item = clsCls.new clsMenu();
+              /*  item = clsCls.new clsMenu();
                 item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
                 item = clsCls.new clsMenu();
                 item.ID=10;item.Icon=10;item.Name="Utilerias";item.cant=-1;
-                items.add(item);*/
+                items.add(item);
 
                 item = clsCls.new clsMenu();
                 item.ID=9;item.Icon=9;item.Name="Cambio usuario";item.cant=-1;
@@ -300,11 +284,37 @@ public class Mainmenu extends PBase {
 
     private void updateList() {
         try {
-            items.get(0).cant=cantRecep;
+
+
+            for (int i = 0; i < items.size(); i++) {
+
+                if (items.get(i).Name.equals("Recepción")){
+                    items.get(i).cant = cantRecep;
+                }
+
+                if (items.get(i).Name.equals("Cambio de ubicación")){
+                    items.get(i).cant = cantCambioUbic;
+                }
+
+                if (items.get(i).Name.equals("Cambio de estado")){
+                    items.get(i).cant = cantCambioEst;
+                }
+
+                if (items.get(i).Name.equals("Picking")){
+                    items.get(i).cant = cantPicking;
+                }
+
+                if (items.get(i).Name.equals("Verificación")){
+                    items.get(i).cant = cantVerif;
+                }
+
+            }
+
+          /*  items.get(0).cant=cantRecep;
             items.get(1).cant=cantCambioUbic;
             items.get(2).cant=cantCambioEst;
             items.get(4).cant=cantPicking;
-            items.get(5).cant=cantVerif;
+            items.get(5).cant=cantVerif;*/
 
             adaptergrid.notifyDataSetChanged();
         } catch (Exception e) {
@@ -384,9 +394,6 @@ public class Mainmenu extends PBase {
                                 "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
 
-                    case 6:
-                        callMethod("Get_Menu_By_IdRolOperador_For_HH",
-                                "IdRolOperador",gl.beOperador.IdRolOperador);
                 }
 
             }catch (Exception e){
