@@ -43,6 +43,8 @@ public class clsBeStock_res {
     @Element(required=false) public boolean Control_Ultimo_Lote=false;
     @Element(required=false) public String Ultimo_Lote="";
     @Element(required=false) public Boolean Pallet_no_estandar=false;
+    @Element(required=false) public String Codigo_Producto="";
+    @Element(required=false) public String No_Pedido="";
 
     public clsBeStock_res() {
     }
@@ -56,7 +58,7 @@ public class clsBeStock_res {
                           int IdPicking, int IdPedido, int IdDespacho, String User_agr,
                           String Fec_agr, String User_mod, String Fec_mod, String Host,
                           int anada, String Fecha_manufactura, String Atributo_Variante_1, boolean Control_Ultimo_Lote,
-                          String Ultimo_Lote, Boolean Pallet_no_estandar) {
+                          String Ultimo_Lote, Boolean Pallet_no_estandar, String Codigo_Producto, String No_Pedido) {
 
         this.IdStockRes=IdStockRes;
         this.IdTransaccion=IdTransaccion;
@@ -96,6 +98,8 @@ public class clsBeStock_res {
         this.Control_Ultimo_Lote=Control_Ultimo_Lote;
         this.Ultimo_Lote=Ultimo_Lote;
         this.Pallet_no_estandar=Pallet_no_estandar;
+        this.Codigo_Producto=Codigo_Producto;
+        this.No_Pedido=No_Pedido;
     }
 
 
@@ -326,6 +330,18 @@ public class clsBeStock_res {
     }
     public void setPallet_No_Estandar(boolean value) {
         Pallet_no_estandar=value;
+    }
+    public String getCodigo_Producto() {
+        return Codigo_Producto;
+    }
+    public void setCodigo_Producto(String value) {
+        Codigo_Producto=value;
+    }
+    public String getNo_Pedido() {
+        return No_Pedido;
+    }
+    public void setNo_Pedido(String value) {
+        No_Pedido=value;
     }
 }
 

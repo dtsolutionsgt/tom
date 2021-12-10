@@ -159,7 +159,9 @@ public class frm_recepcion_datos extends PBase {
     private int vPresentacion;
     private String vLote;
     private String pLp="";
+    private String pSerie="";
     private boolean Existe_Lp=false;
+    private boolean Existe_Serie=false;
     private String ubiDetLote="";
 
     private clsBeTrans_oc_det BeOcDet;
@@ -1010,7 +1012,6 @@ public class frm_recepcion_datos extends PBase {
             lblSerialP = dialog.findViewById(R.id.lblSerial);
             txtSerial = dialog.findViewById(R.id.txtSerial);
 
-
             //parametro captura añada
             TextView lblAnada = dialog.findViewById(R.id.lblAnada);
             txtAnada = dialog.findViewById(R.id.txtAnada);
@@ -1233,8 +1234,6 @@ public class frm_recepcion_datos extends PBase {
                 txtLicPlate.setClickable(false);
                 txtLicPlate.setVisibility(View.GONE);
             }
-
-
 
             //GT 02092021 esto ya se hizo al cargar la recepción en una validación para mostrar o no.
             //Carga_Parametros_Personalizados();
@@ -1701,7 +1700,17 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
 
-                    Guardar_Recepcion_Nueva();
+                    if (BeProducto.Serializado){
+                        if (BeProducto.IdPerfilSerializado==2){
+                            pSerie = txtSerial.getText().toString();
+                            //Llama al método Existe_Serie
+                            execws(28);
+                        }else{
+                            Guardar_Recepcion_Nueva();
+                        }
+                    }else{
+                        Guardar_Recepcion_Nueva();
+                    }
                 }
 
             }
@@ -5759,6 +5768,12 @@ public class frm_recepcion_datos extends PBase {
                     case 27://Obtiene el Tipo de Etiqueta del producto
                         callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
                         break;
+
+                    case 28://Valida si la serie del producto ya existe
+                        callMethod("Existe_Serie",
+                                "pSerie", pSerie,
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
             }catch (Exception e){
@@ -5864,6 +5879,9 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 27:
                     processTipoEtiqueta();
+                    break;
+                case 28:
+                    processExisteSerie();
                     break;
             }
 
@@ -6159,13 +6177,13 @@ public class frm_recepcion_datos extends PBase {
 
     private void processMaxIdStockSeRec(){
 
-        int MaId;
+        int MaxId;
 
         try{
 
-            MaId = xobj.getresult(Integer.class,"MaxIDStockSeRec");
+            MaxId = xobj.getresult(Integer.class,"MaxIDStockSeRec");
 
-            ObjNS.IdStockSeRec = MaId + 1;
+            ObjNS.IdStockSeRec = MaxId + 1;
             ValidaParametrosDespuesSeRec();
 
         }catch (Exception e){
@@ -6641,6 +6659,29 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
+        }
+    }
+
+    private void processExisteSerie(){
+
+        try{
+
+            try {
+                Existe_Serie = xobj.getresult(Boolean.class,"Existe_Serie");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Existe_Serie = xobj.getresult(Boolean.class,"Existe_Serie");
+            }
+
+            if (Existe_Serie){
+                msgbox("La serie: "+pSerie+ " ya existe para el producto: "+BeProducto.Codigo + "?");
+                txtSerial.requestFocus();
+            }else{
+                Guardar_Recepcion_Nueva();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processExisteSerie:"+e.getMessage());
         }
     }
 

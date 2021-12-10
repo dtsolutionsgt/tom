@@ -446,6 +446,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
                 gBePicking.Hora_fin = du.getFechaActual();
 
+                //Llama al método Actualizar_PickingEnc_Procesado
                 execws(4);
 
             }
