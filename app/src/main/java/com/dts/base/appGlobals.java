@@ -3,6 +3,7 @@ package com.dts.base;
 import android.app.Application;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
@@ -145,4 +146,8 @@ public class appGlobals extends Application {
 
     //variable para diferenciar inv cealsa de cualquier otro
     public boolean multipropietario = false;
+
+    //Variable para Operador con su rol y permisos
+    public clsBeOperador beOperador = new clsBeOperador();
+
 }

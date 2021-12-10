@@ -40,6 +40,7 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
@@ -78,7 +79,6 @@ public class MainActivity extends PBase {
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
     private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
     private clsBeResolucion_lp_operador ResolucionLpByBodega = new clsBeResolucion_lp_operador();
-
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
     private ArrayList<String> emplist= new ArrayList<String>();
@@ -486,9 +486,13 @@ public class MainActivity extends PBase {
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                     }
 
+                    clsBeOperador Operador;
+
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
                     NomOperador = users.items.get(position).Nombre_Completo;
+                    Operador = users.items.get(position).Operador;
+                    gl.beOperador = Operador;
                     gl.IdOperador = iduser;
                     gl.gNomOperador = NomOperador;
 

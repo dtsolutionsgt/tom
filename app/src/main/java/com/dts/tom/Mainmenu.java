@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.clsClasses;
+import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_op;
+import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_opList;
+import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.ladapt.list_view_menu2;
 import com.dts.servicios.startCantTareas;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
@@ -56,6 +59,10 @@ public class Mainmenu extends PBase {
 
     private int tiempo_actualizacion=25 * 1000;
     private int cantRecep = 0,cantPicking = 0,cantVerif = 0,cantCambioEst = 0, cantCambioUbic = 0;
+
+    private clsBeMenu_rol_opList menu_rol_opList = new clsBeMenu_rol_opList();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,14 +147,99 @@ public class Mainmenu extends PBase {
     //region Main
 
     public void listItems() {
-        try{
+        try {
             clsClasses.clsMenu item;
 
-            items.clear();selIdx=-1;
+            items.clear();
+            selIdx = -1;
 
             try {
 
-                item = clsCls.new clsMenu();
+                for (int i = 0; i < gl.beOperador.RolOperador.ListMenuRolOp.items.size(); i++) {
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Recepción ciega")){
+                        item = clsCls.new clsMenu();
+                        item.ID = 1;
+                        item.Icon = 1;
+                        item.Name = "Recepción\n";
+                        item.cant = -1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Cambios de Ubicación")) {
+                        item = clsCls.new clsMenu();
+                        item.ID = 2;
+                        item.Icon = 2;
+                        item.Name = "Cambio de ubicación";
+                        item.cant = -1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Cambios de estado")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=3;item.Icon=3;item.Name="Cambio de estado";item.cant=-1;
+                        items.add(item);
+                    }
+
+                   /* if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Implosión")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
+                        items.add(item);
+                    }*/
+
+                    //GT10122021: opcion no existe en la bd, se deja por defecto
+                    item = clsCls.new clsMenu();
+                    item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
+                    items.add(item);
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Picking")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=5;item.Icon=5;item.Name="Picking\n";item.cant=-1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Verificación")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
+                        items.add(item);
+                    }
+
+                  /*  if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Lista Empaque")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
+                        items.add(item);
+                    }*/
+
+                    //GT10122021: Opcion no existe en la bd
+                    item = clsCls.new clsMenu();
+                    item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
+                    items.add(item);
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Inventario")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=7;item.Icon=7;item.Name="Inventario";item.cant=-1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Consulta stock")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Utilerias")) {
+                        item = clsCls.new clsMenu();
+                        item.ID=10;item.Icon=10;item.Name="Utilerias";item.cant=-1;
+                        items.add(item);
+                    }
+
+                }
+
+
+
+
+
+             /*   item = clsCls.new clsMenu();
                 item.ID=1;item.Icon=1;item.Name="Recepción\n";item.cant=-1;
                 items.add(item);
 
@@ -185,7 +277,7 @@ public class Mainmenu extends PBase {
 
                 item = clsCls.new clsMenu();
                 item.ID=10;item.Icon=10;item.Name="Utilerias";item.cant=-1;
-                items.add(item);
+                items.add(item);*/
 
                 item = clsCls.new clsMenu();
                 item.ID=9;item.Icon=9;item.Name="Cambio usuario";item.cant=-1;
@@ -229,8 +321,8 @@ public class Mainmenu extends PBase {
             } catch (Exception e) {}
 
             listItems();
-
             execws(1);
+
         } catch (Exception e){
             mu.msgbox(e.getMessage());
         }
@@ -291,6 +383,10 @@ public class Mainmenu extends PBase {
                                 "pIdBodega",gl.IdBodega,
                                 "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
+
+                    case 6:
+                        callMethod("Get_Menu_By_IdRolOperador_For_HH",
+                                "IdRolOperador",gl.beOperador.IdRolOperador);
                 }
 
             }catch (Exception e){
@@ -317,6 +413,7 @@ public class Mainmenu extends PBase {
                     process_get_count_cambio_ubic();break;
                 case 5:
                     process_get_count_cambio_estado();break;
+
             }
 
         } catch (Exception e) {
