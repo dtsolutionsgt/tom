@@ -297,7 +297,7 @@ public class Mainmenu extends PBase {
     private void updateList() {
         try {
 
-
+            //GT10122021: Actualizo la cantidad de tareas segun la opción dinamica del menú
             for (int i = 0; i < items.size(); i++) {
 
                 if (items.get(i).Name.equals("Recepción")){
