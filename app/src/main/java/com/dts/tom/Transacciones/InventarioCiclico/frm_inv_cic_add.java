@@ -150,9 +150,9 @@ public class frm_inv_cic_add extends PBase {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
 
-
                         codigo_producto = txtProd.getText().toString().trim();
 
+                        //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
                        if(Scan_Codigo_Producto()){
 
                            btGuardar.setEnabled(true);
@@ -161,7 +161,7 @@ public class frm_inv_cic_add extends PBase {
                        }
                        else{
 
-                           respuesta_producto = true;
+                           respuesta_producto = false;
                        }
                     }
 
@@ -449,9 +449,18 @@ public class frm_inv_cic_add extends PBase {
 
                     }else{
 
-                        respuesta = false;
-                        txtProd.setText("");
-                        mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+                        //respuesta = false;
+                        //txtProd.setText("");
+                        //mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+
+                        //GT03122021: Al no encontrar match por cod_producto, se busca como LP
+                        if(Scan_por_LP()){
+                            respuesta = true;
+                        }else{
+                            respuesta = false;
+                            mu.msgbox("Producto o LP no asignado para conteo. Intente con otro!");
+                        }
+
                     }
                 }
 
@@ -490,6 +499,67 @@ public class frm_inv_cic_add extends PBase {
 
         return respuesta;
     }
+
+    private boolean Buscar_lp(String licence_plate){
+
+        boolean respuesta = false;
+
+        for (int i = 0; i < gl.reconteo_list.size() ; i++) {
+
+            String license_p = gl.reconteo_list.get(i).Licence_plate;
+
+            if (license_p.equals(licence_plate) ) {
+
+                gl.inv_ciclico = gl.reconteo_list.get(i);
+                Load();
+
+                respuesta = true;
+                break;
+
+            }
+        }
+
+        return respuesta;
+    }
+
+
+    private boolean Scan_por_LP(){
+
+        boolean respuesta = false;
+
+        try{
+                if(gl.inv_ciclico.Licence_plate.equals(codigo_producto)){
+
+                    cboEstado.requestFocus();
+                    respuesta = true;
+                    txtProd.setText(gl.inv_ciclico.Licence_plate);
+
+                }else{
+
+                    IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
+                    //la LP ingresada no tiene match con el registro seleccionado, se procede a buscar en la lista
+                    if(Buscar_lp(codigo_producto)){
+
+                        respuesta = true;
+
+                    }else{
+
+                        respuesta = false;
+                        txtProd.setText("");
+                        //mu.msgbox("Licence plate no asignado para conteo. Intente con otra!");
+                    }
+                }
+        }
+        catch (Exception e){
+            respuesta = false;
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return respuesta;
+
+    }
+
+
 
 /*    private void Scan_Codigo_Producto1() {
 

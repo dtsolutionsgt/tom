@@ -30,10 +30,12 @@ import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_st
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen;
+import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -166,7 +168,7 @@ public class frm_inv_ini_verificacion extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     try {
-                        //GT 18112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
+                       /* //GT 18112021 si agregamos un registro vacio a la lista presentacion, la posicion 0 es la vacia
                         if (emptyPres && position ==0 ) {
                             IdPresSelect = 0;
 
@@ -177,8 +179,11 @@ public class frm_inv_ini_verificacion extends PBase {
 
                             if(Registros > position){
                                 IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                                nombre=BeListPres.items.get(position).getNombre();
+
                             }else{
                                 IdPresSelect=BeListPres.items.get(position - 1).IdPresentacion;
+                                nombre=BeListPres.items.get(position-1).getNombre();
                             }
 
                         }else{
@@ -187,11 +192,44 @@ public class frm_inv_ini_verificacion extends PBase {
 
                             if(Registros > position){
                                 IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                                nombre=BeListPres.items.get(position).getNombre();
                             }else{
                                 IdPresSelect=BeListPres.items.get(position -1).IdPresentacion;
+                                nombre=BeListPres.items.get(position-1).getNombre();
                             }
 
                             //IdPresSelect=BeListPres.items.get(position).IdPresentacion;
+                        }
+
+                        List AxuListPres = stream(BeListPres.items).select(c->c.IdPresentacion).toList();
+                        newPosition =AxuListPres.indexOf(nombre);
+                        cmbPresVeri.setSelection(newPosition);*/
+
+                        //#CKFK Modifiqué la forma en que se determina el  IdPresentación del producto
+                        //porque el procedimiento anterior ocasionaba error
+                        if (cmbPresVeri.getSelectedItem().equals("Sin Presentación")){
+                            IdPresSelect=0;
+                        }else{
+
+                            if (BeListPres!=null){
+                                if(BeListPres.items!=null){
+
+                                    if ( BeListPres.items.size()==1){
+
+                                        IdPresSelect = BeListPres.items.get(0).IdPresentacion;
+
+                                    }else{
+
+                                        for( clsBeProducto_Presentacion pres : BeListPres.items){
+                                            if(pres.Nombre.equals(cmbPresVeri.getSelectedItem())){
+                                                IdPresSelect=pres.IdPresentacion;
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+
                         }
 
                     } catch (Exception e) {
@@ -297,6 +335,8 @@ public class frm_inv_ini_verificacion extends PBase {
             //txtUmbasVeri.setFocusable(false);
             //txtCantVer.requestFocus();
 
+            //#CKFK 20211127 Tuvimos que poner esto en comentario porque no se cargaban las presentaciones ni los estados
+            //Hacer pruebas para ver si así como quedó esto funciona para ByB
             //GT 18112021 primero validamos prod guardado sin presentacion
             //execws(9);
             execws(4);
@@ -320,7 +360,13 @@ public class frm_inv_ini_verificacion extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbPresVeri.setAdapter(dataAdapter);
 
-            if (PresList.size() > 0) cmbPresVeri.setSelection(0);
+            if (PresList.size() > 0){
+                if (PresList.get(0).contains("Sin Presentación") && PresList.size()>1){
+                    cmbPresVeri.setSelection(1);
+                }else{
+                    cmbPresVeri.setSelection(0);
+                }
+            }
 
         } catch (Exception e) {
             mu.msgbox("llenaDetPresentacionProducto:" + e.getMessage());
@@ -343,11 +389,12 @@ public class frm_inv_ini_verificacion extends PBase {
 
             if (EstadoList.size() > 0) cmbEstadoVeri.setSelection(0);
 
+            txtCantVer.requestFocus();
+
         } catch (Exception e) {
             mu.msgbox("Llena_Det_Estados_Producto:" + e.getMessage());
         }
     }
-
 
     private void processInvTeorico(){
 
@@ -365,7 +412,6 @@ public class frm_inv_ini_verificacion extends PBase {
             mu.msgbox("processInvTeorico:"+e.getMessage());
         }
     }
-
 
     private void Valida_presentaciones() {
 
@@ -388,7 +434,6 @@ public class frm_inv_ini_verificacion extends PBase {
             mu.msgbox("Llena_Lotes:" + e.getMessage());
         }
     }
-
 
     public void BotonGuardarVerificacion(View view){
         Guardar_Verificacion();
@@ -754,10 +799,12 @@ public class frm_inv_ini_verificacion extends PBase {
                     Llena_Det_Estados_Producto();
                 }else{
                     mu.msgbox("Los estados no existen");
+                    txtCantVer.requestFocus();
                     return;
                 }
             }else{
                 mu.msgbox("Los estados no existen");
+                txtCantVer.requestFocus();
                 return;
             }
 

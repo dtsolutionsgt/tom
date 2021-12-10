@@ -159,7 +159,9 @@ public class frm_recepcion_datos extends PBase {
     private int vPresentacion;
     private String vLote;
     private String pLp="";
+    private String pSerie="";
     private boolean Existe_Lp=false;
+    private boolean Existe_Serie=false;
     private String ubiDetLote="";
 
     private clsBeTrans_oc_det BeOcDet;
@@ -232,6 +234,11 @@ public class frm_recepcion_datos extends PBase {
     double CamasPorTarima = 0;
 
     private String MensajeAdicionalParaImpresion="";
+
+    /**Variables para las cantidad por lotes de ubicación de las órdenes de producción**/
+    private double CantRec=0;
+    private double CantTotal =0;
+    private double DifCantUbic =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1005,7 +1012,6 @@ public class frm_recepcion_datos extends PBase {
             lblSerialP = dialog.findViewById(R.id.lblSerial);
             txtSerial = dialog.findViewById(R.id.txtSerial);
 
-
             //parametro captura añada
             TextView lblAnada = dialog.findViewById(R.id.lblAnada);
             txtAnada = dialog.findViewById(R.id.txtAnada);
@@ -1228,8 +1234,6 @@ public class frm_recepcion_datos extends PBase {
                 txtLicPlate.setClickable(false);
                 txtLicPlate.setVisibility(View.GONE);
             }
-
-
 
             //GT 02092021 esto ya se hizo al cargar la recepción en una validación para mostrar o no.
             //Carga_Parametros_Personalizados();
@@ -1696,7 +1700,17 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
 
-                    Guardar_Recepcion_Nueva();
+                    if (BeProducto.Serializado){
+                        if (BeProducto.IdPerfilSerializado==2){
+                            pSerie = txtSerial.getText().toString();
+                            //Llama al método Existe_Serie
+                            execws(28);
+                        }else{
+                            Guardar_Recepcion_Nueva();
+                        }
+                    }else{
+                        Guardar_Recepcion_Nueva();
+                    }
                 }
 
             }
@@ -3445,9 +3459,9 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
-                double CantRec=0;
-                double CantTotal =0;
-                double DifCantUbic =0;
+                CantRec=0;
+                CantTotal =0;
+                DifCantUbic =0;
 
                 //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
                 if (BeUbicaciones!=null){
@@ -5280,7 +5294,7 @@ public class frm_recepcion_datos extends PBase {
                 BeProdPallet.Fec_agr = String.valueOf(du.getFechaActual());
                 BeProdPallet.Fec_mod = String.valueOf(du.getFechaActual());
                 BeProdPallet.Lote = vBeStockRec.Lote;
-                BeProdPallet.User_agr = gl.OperadorBodega+"";
+                BeProdPallet.User_agr = gl.OperadorBodega.IdOperadorBodega+"";
                 BeProdPallet.User_mod = gl.OperadorBodega.IdOperadorBodega+"";
                 BeProdPallet.IsNew = gl.mode == 1;
 
@@ -5374,6 +5388,19 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.mode==2){
                 Cant_Pendiente =mu.round(Cant_Pendiente + Cant_Recibida_Anterior,gl.gCantDecCalculo);
+            }
+
+            //#CKFK 20211129 Agregué validación para saber si la cantidad ingresada es mayor a la
+            // cantidad permitida en la ubicación
+            if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
+                if (ubiDetLote!=null) {
+                    if (!ubiDetLote.isEmpty()) {
+                        if (DifCantUbic<Cantidad){
+                            msgbox("Excede la cantidad permitida en la ubicación  " + ubiDetLote);
+                            return;
+                        }
+                    }
+                }
             }
 
             if (Cant_Pendiente > Cantidad){
@@ -5741,6 +5768,12 @@ public class frm_recepcion_datos extends PBase {
                     case 27://Obtiene el Tipo de Etiqueta del producto
                         callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
                         break;
+
+                    case 28://Valida si la serie del producto ya existe
+                        callMethod("Existe_Serie",
+                                "pSerie", pSerie,
+                                "pIdBodega",gl.IdBodega);
+                        break;
                 }
 
             }catch (Exception e){
@@ -5846,6 +5879,9 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 27:
                     processTipoEtiqueta();
+                    break;
+                case 28:
+                    processExisteSerie();
                     break;
             }
 
@@ -6141,13 +6177,13 @@ public class frm_recepcion_datos extends PBase {
 
     private void processMaxIdStockSeRec(){
 
-        int MaId;
+        int MaxId;
 
         try{
 
-            MaId = xobj.getresult(Integer.class,"MaxIDStockSeRec");
+            MaxId = xobj.getresult(Integer.class,"MaxIDStockSeRec");
 
-            ObjNS.IdStockSeRec = MaId + 1;
+            ObjNS.IdStockSeRec = MaxId + 1;
             ValidaParametrosDespuesSeRec();
 
         }catch (Exception e){
@@ -6623,6 +6659,29 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
+        }
+    }
+
+    private void processExisteSerie(){
+
+        try{
+
+            try {
+                Existe_Serie = xobj.getresult(Boolean.class,"Existe_Serie");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Existe_Serie = xobj.getresult(Boolean.class,"Existe_Serie");
+            }
+
+            if (Existe_Serie){
+                msgbox("La serie: "+pSerie+ " ya existe para el producto: "+BeProducto.Codigo + "?");
+                txtSerial.requestFocus();
+            }else{
+                Guardar_Recepcion_Nueva();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processExisteSerie:"+e.getMessage());
         }
     }
 

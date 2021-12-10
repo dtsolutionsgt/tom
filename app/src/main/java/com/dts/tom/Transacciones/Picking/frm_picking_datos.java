@@ -336,10 +336,10 @@ public class frm_picking_datos extends PBase {
                     + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
                     + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
 
-            txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
-            txtPesoPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            txtPesoPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
+            //txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            //txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
+            //txtPesoPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            //txtPesoPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
             gBeProducto = new clsBeProducto();
 
@@ -1326,7 +1326,8 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString());
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
-                gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperador;
+                //GT0612021: estaba seteado gl.OperadorBodega.IdOperador pero es IdoperadorBodega
+                gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
 
                 if (gBePickingUbic.Fecha_Vence.isEmpty()){
                     //mu.msgbox("Guardar_Picking:"+ "fecha vacia");

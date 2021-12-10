@@ -954,7 +954,10 @@ public class frm_list_rec_prod extends PBase {
                 switch (ws.callback) {
 
                     case 1:
-                        callMethod("Iniciar_Recepcion_OC","oBeTrans_oc_enc",gBeOrdenCompra);
+                        //callMethod("Iniciar_Recepcion_OC","oBeTrans_oc_enc",gBeOrdenCompra);
+                        //GT0712021:Se envian por separado los 2 parametros requeridos, y no una entidad
+                        callMethod("Iniciar_Recepcion_OC","pIdOrdenCompraEnc",gBeOrdenCompra.IdOrdenCompraEnc,
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 2:
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
@@ -1091,6 +1094,7 @@ public class frm_list_rec_prod extends PBase {
             }
 
     }
+
 
     private void processBanderasRecep(){
 
