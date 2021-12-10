@@ -157,12 +157,11 @@ public class Mainmenu extends PBase {
 
                 for (int i = 0; i < gl.beOperador.RolOperador.ListMenuRolOp.items.size(); i++) {
 
-                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Recepción ciega")){
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Recepción")){
                         item = clsCls.new clsMenu();
                         item.ID = 1;
                         item.Icon = 1;
                         item.Name = "Recepción";
-                        //item.Name = "Recepción\n";
                         item.cant = -1;
                         items.add(item);
                     }

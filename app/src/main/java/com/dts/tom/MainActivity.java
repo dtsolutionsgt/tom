@@ -486,13 +486,10 @@ public class MainActivity extends PBase {
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                     }
 
-                    clsBeOperador Operador;
-
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
                     NomOperador = users.items.get(position).Nombre_Completo;
-                    Operador = users.items.get(position).Operador;
-                    gl.beOperador = Operador;
+                    gl.beOperador = users.items.get(position).Operador;
                     gl.IdOperador = iduser;
                     gl.gNomOperador = NomOperador;
 
