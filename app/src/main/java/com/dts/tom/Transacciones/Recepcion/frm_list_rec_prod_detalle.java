@@ -14,10 +14,17 @@ import android.widget.ListView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
+import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
+import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
+import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -59,6 +66,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     private ProgressDialog progress;
 
+    //Activity que muestra la lista del detalle de los productos recepcionados para poderlos modificar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -617,7 +625,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void doExit(){
         try{
 
-            //LimpiaValores();
+            gl.mode=1;
             super.finish();
             gl.Carga_Producto_x_Pallet=false;
         }catch (Exception e){

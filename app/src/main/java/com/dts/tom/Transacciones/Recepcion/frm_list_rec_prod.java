@@ -670,6 +670,8 @@ public class frm_list_rec_prod extends PBase {
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
                 gl.gpListDetalleOC.items = pListDetalleOC.items;
 
+                gl.mode = 1;
+
                 browse=1;
                 startActivity(new Intent(this, frm_recepcion_datos.class));
 

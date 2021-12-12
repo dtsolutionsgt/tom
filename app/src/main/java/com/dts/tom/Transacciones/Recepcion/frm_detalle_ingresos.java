@@ -686,7 +686,7 @@ public class frm_detalle_ingresos extends PBase {
         gl.gFechaVenceAnterior = "";
         gl.gLoteAnterior ="";
         gl.Escaneo_Pallet=false;
-
+        gl.mode=0;
     }
 
     private void doExit(){

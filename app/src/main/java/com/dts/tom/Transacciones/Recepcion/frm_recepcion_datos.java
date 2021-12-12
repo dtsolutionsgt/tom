@@ -163,6 +163,7 @@ public class frm_recepcion_datos extends PBase {
     private boolean Existe_Lp=false;
     private boolean Existe_Serie=false;
     private String ubiDetLote="";
+    private boolean guardando_recepcion = false;
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
@@ -498,6 +499,9 @@ public class frm_recepcion_datos extends PBase {
 
             txtNoLP.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+
+                    guardando_recepcion=false;
+
                     if (BeProducto.Control_vencimiento){
                         cmbVenceRec.setSelectAllOnFocus(true);
                         cmbVenceRec.requestFocus();
@@ -2443,11 +2447,13 @@ public class frm_recepcion_datos extends PBase {
             pLp = "";
 
             if (!txtNoLP.getText().toString().isEmpty()){
-                    pLp = txtNoLP.getText().toString().replace("$", "");
-                    //#EJC20210612: Este valor llegaba vacío a la impresión.
-                    pNumeroLP = pLp;
+
+                pLp = txtNoLP.getText().toString().replace("$", "");
+
+                //#EJC20210612: Este valor llegaba vacío a la impresión.
+                pNumeroLP = pLp;
                 //Llama al método del WS Existe_Lp
-                    execws(24);
+                execws(24);
             }
 
         }catch (Exception e){
@@ -3822,34 +3828,42 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             imprimirDesdeBoton=false;
+            guardando_recepcion=true;
 
-            if (BeProducto!=null){
-                if(ValidaDatosIngresados()){
-                    if (Mostrar_Propiedades_Parametros){
-                        Muestra_Propiedades_Producto();
-                    }else{
+            //if (!ejecuto_existe_lp){
+            //#CKFK 20211211 Valida si ya existe el License Plate
+            Procesa_Barra_Producto();
+           /* }else{
+
+                if (BeProducto!=null){
+                    if(ValidaDatosIngresados()){
+                        if (Mostrar_Propiedades_Parametros){
+                            Muestra_Propiedades_Producto();
+                        }else{
+                            if (!Mostro_Propiedades){
+                                Llena_Stock();
+                                Mostro_Propiedades = true;
+                            }
+                        }
+
                         if (!Mostro_Propiedades){
-                            Llena_Stock();
-                            Mostro_Propiedades = true;
+                            Muestra_Propiedades_Producto();
+                            return;
+                        }
+
+                        if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
+
+                            execws(12);
+
+                        }else{
+                            ContinuaGuardandoRecepcion();
                         }
                     }
-
-                    if (!Mostro_Propiedades){
-                        Muestra_Propiedades_Producto();
-                        return;
-                    }
-
-                    if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
-
-                        execws(12);
-
-                    }else{
-                        ContinuaGuardandoRecepcion();
-                    }
+                }else{
+                    msgbox("No está definido el producto que se va a recepcionar");
                 }
-            }else{
-                msgbox("No está definido el producto que se va a recepcionar");
-            }
+
+            }*/
 
         }catch (Exception e){
             mu.msgbox("Guardar_Recepcion: "+ e.getMessage());
@@ -4163,7 +4177,6 @@ public class frm_recepcion_datos extends PBase {
                 gl.gBeRecepcion.DetalleParametros.items = stream(plistBeReDetParametros.items).toList();
 
                 }
-
 
             if (pListBeStockRec.items.size()==0){
                 mu.msgbox("No se guardó el stock, no se puede continuar");
@@ -5700,7 +5713,9 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Stock_By_IdRecepcionEnc_And_IdRecpecionDet","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdRecepcionDet",pIdRecepcionDet);
                         break;
                     case 24:
-                        callMethod("Existe_Lp","pLic_Plate",pLp);
+                        callMethod("Existe_Lp","pLic_Plate",pLp,
+                                                "pIdBodega",gl.IdBodega,
+                                                "pIdStock",(pListBeStockRec.items==null?0:pListBeStockRec.items.get(0).IdStockRec));
                         break;
                     case 25:
 
@@ -6645,16 +6660,49 @@ public class frm_recepcion_datos extends PBase {
             if (Existe_Lp){
                 msgAskExisteLp("El Lp: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
             }else{
-                if (BeProducto.Control_vencimiento){
-                    cmbVenceRec.setSelectAllOnFocus(true);
-                    cmbVenceRec.requestFocus();
-                }else if (BeProducto.Control_lote){
-                    txtLoteRec.setSelectAllOnFocus(true);
-                    txtLoteRec.requestFocus();
-                }else {
-                    txtCantidadRec.requestFocus();
+                if (guardando_recepcion){
+
+                    if (BeProducto!=null){
+                        if(ValidaDatosIngresados()){
+                            if (Mostrar_Propiedades_Parametros){
+                                Muestra_Propiedades_Producto();
+                            }else{
+                                if (!Mostro_Propiedades){
+                                    Llena_Stock();
+                                    Mostro_Propiedades = true;
+                                }
+                            }
+
+                            if (!Mostro_Propiedades){
+                                Muestra_Propiedades_Producto();
+                                return;
+                            }
+
+                            if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
+
+                                execws(12);
+
+                            }else{
+                                ContinuaGuardandoRecepcion();
+                            }
+                        }
+                    }else{
+                        msgbox("No está definido el producto que se va a recepcionar");
+                    }
+
+                }else{
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.setSelectAllOnFocus(true);
+                        cmbVenceRec.requestFocus();
+                    }else if (BeProducto.Control_lote){
+                        txtLoteRec.setSelectAllOnFocus(true);
+                        txtLoteRec.requestFocus();
+                    }else {
+                        txtCantidadRec.requestFocus();
+                    }
+                    fillUbicacion();
                 }
-                fillUbicacion();
+
             }
 
         }catch (Exception e){
@@ -6935,7 +6983,6 @@ public class frm_recepcion_datos extends PBase {
 
         return parametro_personalizado_valido;
     }
-
 
     class DecimalFilter implements InputFilter {
         private Pattern mPattern;
