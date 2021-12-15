@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
         defaultConfig {
         applicationId "com.dts.tom"
-        minSdkVersion 23
+        minSdkVersion 28
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28
+        targetSdkVersion 31
         renderscriptTargetApi 28
         versionCode 1
         versionName "1.0"

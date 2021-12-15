@@ -1286,7 +1286,7 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.show();
         }catch (Exception e){
-            Log.println(1,"msg",e.getMessage());
+            Log.println(Log.ERROR,"msg",e.getMessage());
             //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 

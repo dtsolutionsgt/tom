@@ -32,7 +32,8 @@
                     android:layout_height="50dp"
                     android:clickable="true"
                     android:onClick="cCamara"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
