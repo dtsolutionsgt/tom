@@ -2521,6 +2521,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    //#CKFK 20211215 Explosionar el producto de presentación a unidades
     private void msgAskExplosionar(String msg){
 
         try{
