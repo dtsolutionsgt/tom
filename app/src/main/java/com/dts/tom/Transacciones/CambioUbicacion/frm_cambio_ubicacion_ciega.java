@@ -1607,7 +1607,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUbicDestID = 0;
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
-                throw new Exception("Ubicación destino incorrecta");
+                progress.cancel();
+                msgbox("Ubicación destino incorrecta");
+                //throw new Exception("Ubicación destino incorrecta");
             }else{
                 execws(21);
             }

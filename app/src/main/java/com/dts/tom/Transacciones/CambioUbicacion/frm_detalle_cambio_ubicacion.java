@@ -492,6 +492,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             progress.setMessage("Finalizando la tarea de cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
             progress.show();
 
+            //Actualizar_Estado_Cambio
             execws(2);
 
         }catch(Exception ex){
