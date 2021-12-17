@@ -326,6 +326,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
                                 "pIdTarea",pIdTarea,
                                 "cambio_estado",!Modo);*/
                         //#CKFK 20210221 Vamos a mandar el operador 0 para que nos liste todas las tareas
+                        //#GT 17122021 se incluye al operadorbodega
                         callMethod("Get_All_Cambio_Ubic_By_IdBodega_And_IdOperador","pIdBodega",gl.IdBodega,
                                 "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
                                 "pIdTarea",pIdTarea,
