@@ -1721,6 +1721,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                                 + " Nivel: " + nivel + "."
                                                 + " Posición: " + pos + "."
                                                 + " Y Escanee: " + ubicacion;
+                                    }else if (cadena_ubicacion.length>0){
+
+                                        pos = cadena_ubicacion[0].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[1].trim().substring(0);
+
+                                        textToSpeeach = "Lleve producto a "
+                                                + " Ubicación: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
                                     }
 
                                     float speed = 1f;
@@ -1728,8 +1736,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                     mTTS.setPitch(pitch);
                                     mTTS.setSpeechRate(speed);
 
-                                    if (textToSpeeach.isEmpty()){
-                                     textToSpeeach = "Enseñame por favor donde ubicar el producto";
+                                    if (cadena_ubicacion.length==0){
+                                     textToSpeeach = "Enséñame por favor, donde ubicar el producto";
                                     }
 
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
