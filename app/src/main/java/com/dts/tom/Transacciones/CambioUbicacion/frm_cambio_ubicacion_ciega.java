@@ -2216,7 +2216,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
+            if (xobj!=null){
+                EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
+            }else{
+                EsPalletNoEstandar=false;
+            }
 
             if (EsPalletNoEstandar){
                 execws(20);
@@ -2225,6 +2229,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         }catch (Exception e){
+            //error=e.getMessage();errorflag =true;msgbox(error);
             mu.msgbox("processPalletNoEstandar:"+e.getMessage());
         }
     }
