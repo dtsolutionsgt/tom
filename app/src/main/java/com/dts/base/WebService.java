@@ -57,6 +57,7 @@ public class WebService {
         {
             parent.wsCallBack(errorflag,error,0);
         } catch (Exception e) {
+            //error = e.getMessage(); errorflag = true;
         }
     }
 
@@ -503,7 +504,9 @@ public class WebService {
         protected Void doInBackground(String... params) {
             try {
                 wsExecute();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
+            }
             return null;
         }
 
@@ -512,6 +515,7 @@ public class WebService {
             try {
                 wsFinished();
             } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
             }
         }
 

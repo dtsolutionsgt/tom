@@ -747,7 +747,9 @@ public class frm_consulta_stock extends PBase {
 
                 }
 
-                progress.cancel();
+                if (progress !=null){
+                    progress.cancel();
+                }
 
             } catch (Exception e) {
                 progress.cancel();

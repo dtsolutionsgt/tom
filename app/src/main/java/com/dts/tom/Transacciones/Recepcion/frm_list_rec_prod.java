@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dts.base.ExDialog;
@@ -62,6 +63,7 @@ public class frm_list_rec_prod extends PBase {
     private DrawingView txtFirma;
     private ProgressDialog progress;
     private CheckBox chkRecepcionados;
+    private RelativeLayout relbot;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
@@ -118,6 +120,8 @@ public class frm_list_rec_prod extends PBase {
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
         listView = (ListView)findViewById(R.id.listRec);
         chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
+
+        relbot = (RelativeLayout)findViewById(R.id.relbot);
 
         txtCodigoProductoRecepcion = (EditText)findViewById(R.id.txtCodigoProductoRecepcion);
 
@@ -595,6 +599,7 @@ public class frm_list_rec_prod extends PBase {
             gl.gFechaVenceAnterior = "";
             gl.gLoteAnterior ="";
             gl.Escaneo_Pallet=false;
+           relbot.setVisibility(View.VISIBLE);
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -870,10 +875,12 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+           relbot.setVisibility(View.INVISIBLE);
             execws(10);
 
         }catch (Exception e){
             mu.msgbox("BotonFinalizarRec"+e.getMessage());
+            relbot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -925,6 +932,7 @@ public class frm_list_rec_prod extends PBase {
             execws(12);
 
         }catch (Exception e){
+            relbot.setVisibility(View.VISIBLE);
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
         }
     }
@@ -1225,6 +1233,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizada | Anulada){
                 onResume();
+               relbot.setVisibility(View.VISIBLE);
             }else{
                 pListTransRecDet = new clsBeTrans_re_detList();
                 execws(11);
@@ -1263,12 +1272,14 @@ public class frm_list_rec_prod extends PBase {
 
             }else{
                 progress.cancel();
+                relbot.setVisibility(View.VISIBLE);
                 Resultado =xobj.ws.xmlresult.replace("<DocumentElement>  <CustomError>    <Error>","").replace("</Error>  </CustomError></DocumentElement>","");
                 msgboxErrorOnWS2("No se pudo finalizar la recepción: " + Resultado);
             }
 
         }catch (Exception e){
             progress.hide();
+            relbot.setVisibility(View.VISIBLE);
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
         }finally {
             //progress.hide();
@@ -1329,14 +1340,15 @@ public class frm_list_rec_prod extends PBase {
                     }
 
                 }else{
-
+                    relbot.setVisibility(View.VISIBLE);
                 }
             }else{
-
+                relbot.setVisibility(View.VISIBLE);
             }
 
         }catch (Exception e){
             mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
+            relbot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1360,6 +1372,7 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
+                   relbot.setVisibility(View.VISIBLE);
                     return;
                 }
             });
@@ -1391,6 +1404,7 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
+                   relbot.setVisibility(View.VISIBLE);
                     return;
                 }
             });
@@ -1414,6 +1428,7 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    relbot.setVisibility(View.INVISIBLE);
                    execws(11);
                 }
             });
@@ -1446,6 +1461,7 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }else{
+                relbot.setVisibility(View.VISIBLE);
                 return;
             }
 
@@ -1494,6 +1510,7 @@ public class frm_list_rec_prod extends PBase {
             btnSalirFirma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    relbot.setVisibility(View.VISIBLE);
                     dialog.cancel();
                 }
             });
@@ -1581,7 +1598,9 @@ public class frm_list_rec_prod extends PBase {
     @Override
     public void onBackPressed() {
         try{
-            msgAskExit("Está seguro de salir");
+            if (relbot.getVisibility()==View.VISIBLE){
+                msgAskExit("Está seguro de salir");
+            }
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
