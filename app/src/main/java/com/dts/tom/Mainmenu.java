@@ -497,6 +497,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de cambio ubicacion");
+            cantCambioUbic = 0;
             cantCambioUbic = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
 
             execws(5);
