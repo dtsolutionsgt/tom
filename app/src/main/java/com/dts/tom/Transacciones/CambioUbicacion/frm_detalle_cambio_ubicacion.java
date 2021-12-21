@@ -547,7 +547,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    msgAskFinalizarSeguro("Está seguro");
+                   //·CKFK 20211221 Erik mandó a quitar la doble validación
+                    // msgAskFinalizarSeguro("Está seguro");
+                    eststr = "Finalizado";
+                    finalizar_tarea();
                 }
             });
 

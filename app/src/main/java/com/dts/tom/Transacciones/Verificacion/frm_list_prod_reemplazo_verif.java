@@ -186,7 +186,8 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                                    "pIdEmpresa", gl.IdEmpresa,
                                    "pIdUbicDestino", IdUbicacionDestino,
                                    "pIdEstadoDestino", IdEstadoDanado,
-                                   "pIdOperador",gl.OperadorBodega.getIdOperador());
+                                   "pIdOperador",gl.OperadorBodega.getIdOperador(),
+                                   "pHostSolicita",gl.devicename);
                         break;
 
                 }

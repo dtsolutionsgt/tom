@@ -493,7 +493,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         callMethod("Genera_Tarea_Cambio_Estado_Por_Producto_Dañado","IdBodega",gl.IdBodega,"IdEmpresa",gl.IdEmpresa,
                                 "IdStock",gBePickingUbic.IdStock,"IdStockRes",gBePickingUbic.IdStockRes,"UsuarioHH",gl.OperadorBodega.IdOperador,
                                 "CantDañada",CantReemplazar,"IdUbicDest",IdUbicacionDestino,"IdEstadoDest",IdEstadoDanadoSelect,"IdPropietarioBodega",
-                                gBePickingUbic.IdPropietarioBodega,"IdPickingUbic",gBePickingUbic.IdPickingUbic,"EsPicking",true);
+                                gBePickingUbic.IdPropietarioBodega,"IdPickingUbic",gBePickingUbic.IdPickingUbic,"EsPicking",true, "pHostSolicita",gl.devicename);
                         break;
                     case 8:
                         callMethod("Marcar_No_Encontrado","IdBodega",gl.IdBodega,"IdEmpresa",gl.IdEmpresa,"IdStock",gBePickingUbic.IdStock,
