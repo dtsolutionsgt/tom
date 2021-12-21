@@ -699,11 +699,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.IdTipoTarea = 2;
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = gl.tareadet.Stock.IdRecepcionEnc;
-            /*if (gMovimientoDet.IdPresentacion!=0){
-                gMovimientoDet.Cantidad = vCantidadAUbicar * gl.tareadet.ProductoPresentacion.Factor;
-            }else{*/
             gMovimientoDet.Cantidad = vCantidadAUbicar;
-           // }
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
