@@ -258,22 +258,21 @@ public class frm_consulta_stock extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    // AT 20211221 lo hace sin importar que la posición sea  = a 0
+                    //if (position > 0) {
+                    gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                        gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+                    try {
 
-                        try {
+                        Intent intent = new Intent(getApplicationContext(), frm_consulta_stock_detalleCI.class);
+                        startActivity(intent);
 
-                            Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
-                            startActivity(intent);
-
-                        }
-                        catch (Exception e) {
-                            msgbox("Error al intentar cargar detalle del producto");
-                            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                        }
-
+                    } catch (Exception e) {
+                        msgbox("Error al intentar cargar detalle del producto");
+                        addlog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
                     }
+                    //}
                 }
 
             });
@@ -407,8 +406,9 @@ public class frm_consulta_stock extends PBase {
 
                     // lbldescripcion.setText("");
 
-                    vItem = new clsBeVW_stock_res_CI();
-                    items_stock.add(vItem);
+                    //AT 20211221 ya no se agrega un item vacío
+                    //vItem = new clsBeVW_stock_res_CI();
+                    //items_stock.add(vItem);
 
                     registros.setText("REGISTROS: "+ conteo);
 
@@ -496,8 +496,9 @@ public class frm_consulta_stock extends PBase {
 
             items_stock.clear();
 
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock.add(vItem);
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock.add(vItem);
 
             registros.setText("REGISTROS: "+ conteo);
 
@@ -549,8 +550,9 @@ public class frm_consulta_stock extends PBase {
 
         if(estado == "" && selest>0){
 
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock2.add(vItem);
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock2.add(vItem);
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -581,14 +583,14 @@ public class frm_consulta_stock extends PBase {
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
 
-            conteo = items_stock2.size()-1;
+            // AT20211221 ya no se resta -1
+            conteo = items_stock2.size();
             registros.setText("REGISTROS: "+ conteo);
 
-        }
-        else{
-
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock2.add(vItem);
+        } else {
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock2.add(vItem);
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -620,7 +622,8 @@ public class frm_consulta_stock extends PBase {
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
 
-            conteo = items_stock2.size()-1;
+            // AT20211221 ya no se resta 1
+            conteo = items_stock2.size();
             registros.setText("REGISTROS: "+ conteo);
 
         }
