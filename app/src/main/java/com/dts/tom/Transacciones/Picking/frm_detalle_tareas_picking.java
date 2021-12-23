@@ -98,20 +98,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    //AT 20211222 No importa que la posición sea = a 0
+                    //if (position > 0) {
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                    selitem = new clsBeTrans_picking_ubic();
+                    selitem = BeListPickingUbic.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
-                        selitem = new clsBeTrans_picking_ubic();
-                        selitem = BeListPickingUbic.get(position);
+                    selid = sitem.IdPickingUbic;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        selid = sitem.IdPickingUbic;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-
-                        procesar_registro();
-
-                    }
+                    procesar_registro();
+                   //}
 
                 }
 
@@ -316,9 +315,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (plistPickingUbi.items!=null){
 
-                    vItem = new  clsBeTrans_picking_ubic();
-
-                    BeListPickingUbic.add(vItem);
+                    //AT 20211222 Ya no se agrega un item vacío
+                    //vItem = new  clsBeTrans_picking_ubic();
+                    //BeListPickingUbic.add(vItem);
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
@@ -334,7 +333,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     }
 
-                    int count =BeListPickingUbic.size()-1;
+                    //AT 20211222 Ya no se resta 1 para obtener el registro total
+                    int count =BeListPickingUbic.size();
                     btnPendientes.setText("Regs: "+count);
 
                 }
