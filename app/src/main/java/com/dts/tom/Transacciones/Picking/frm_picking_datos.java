@@ -1518,7 +1518,7 @@ public class frm_picking_datos extends PBase {
                     case 9:
                         callMethod("Actualiza_Picking_Consolidado","pBePickingUbicList",pSubListPickingU.items,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
-                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet.Stock);
+                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);
                         break;
                 }
 
