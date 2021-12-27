@@ -1187,8 +1187,11 @@ public class frm_picking_datos extends PBase {
         try{
 
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
-            CantSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
-            CantRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
+            /*CantSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
+            CantRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);*/
+
+            CantSol = gBePickingUbic.Cantidad_Solicitada;
+            CantRec = gBePickingUbic.Cantidad_Recibida;
 
             CantARec = CantSol - CantRec;
 
