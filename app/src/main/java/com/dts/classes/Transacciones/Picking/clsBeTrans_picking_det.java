@@ -53,7 +53,8 @@ public class clsBeTrans_picking_det {
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
     @Element(required=false) public clsBeTrans_picking_det_parametrosList ListaDetalleParametro=new clsBeTrans_picking_det_parametrosList();
     @Element(required=false) public clsBeTrans_picking_ubicList ListaDetalleUbicacion=new clsBeTrans_picking_ubicList();
-
+    @Element(required=false) public String Lic_Plate="";
+    @Element(required=false) public String Lote="";
 
     public clsBeTrans_picking_det() {
     }
@@ -68,7 +69,8 @@ public class clsBeTrans_picking_det {
                                   String Fecha_Vence,String Presetacion,double Factorx,double CantidadReservada,
                                   double Cantidad_Pickeada,double Cantidad_Verificada,double Cantidad_Stock,int IdUbicacion,
                                   String UMBas,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,clsBeProducto_estado ProductoEstado,
-                                  clsBeUnidad_medida UnidadMedida,clsBeTrans_picking_det_parametrosList ListaDetalleParametro,clsBeTrans_picking_ubicList ListaDetalleUbicacion) {
+                                  clsBeUnidad_medida UnidadMedida,clsBeTrans_picking_det_parametrosList ListaDetalleParametro,clsBeTrans_picking_ubicList ListaDetalleUbicacion,
+                                  String Lic_Plate, String Lote) {
 
         this.IdPickingDet=IdPickingDet;
         this.IdPickingEnc=IdPickingEnc;
@@ -113,9 +115,10 @@ public class clsBeTrans_picking_det {
         this.UnidadMedida=UnidadMedida;
         this.ListaDetalleParametro=ListaDetalleParametro;
         this.ListaDetalleUbicacion=ListaDetalleUbicacion;
+        this.Lic_Plate=Lic_Plate;
+        this.Lote=Lote;
 
     }
-
 
     public int getIdPickingDet() {
         return IdPickingDet;
@@ -375,6 +378,17 @@ public class clsBeTrans_picking_det {
     public void setListaDetalleUbicacion(clsBeTrans_picking_ubicList value) {
         ListaDetalleUbicacion=value;
     }
-
+    public String getLic_Plate() {
+        return Lic_Plate;
+    }
+    public void setLic_Plate(String value) {
+        Lic_Plate=value;
+    }
+    public String getLote() {
+        return Lote;
+    }
+    public void setLote(String value) {
+        Lote=value;
+    }
 }
 

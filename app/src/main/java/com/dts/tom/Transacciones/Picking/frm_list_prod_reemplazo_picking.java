@@ -449,22 +449,35 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet","pIdPedidoDet",gBePickingUbic.IdPedidoDet,
-                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,"gIdBodega",gl.IdBodega,"CantReemplazar",CantReemplazar,"vCant",vCant);
+                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
+                                "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
+                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
+                                "gIdBodega",gl.IdBodega,"CantReemplazar",
+                                CantReemplazar,"vCant",vCant);
                         break;
                     case 2:
                         //callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
                           //      "pStockRes",StockResC);
                         break;
                     case 3:
-                        callMethod("Reservar_Stock_By_IdStock","IdStock",selitem.IdStock,"CantSol",CantReemplazar,
-                                "MaquinaQueSolicita","1","IdPickingEnc",gBePickingUbic.IdPickingEnc,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
-                                "IdUsuarioHH",gl.OperadorBodega.IdOperador,"IdPedidoDet",gBePickingUbic.IdPedidoDet,"IdPickingUbic",gBePickingUbic.IdPickingUbic,
-                                "EsPicking",true,"IdPresentacionPedido",gBePickingUbic.IdPresentacion, "Tipo", Tipo);
+                        callMethod("Reservar_Stock_By_IdStock",
+                                "IdStock",selitem.IdStock,
+                                "CantSol",CantReemplazar,
+                                "MaquinaQueSolicita","1",
+                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
+                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
+                                "IdUsuarioHH",gl.OperadorBodega.IdOperador,
+                                "IdPedidoDet",gBePickingUbic.IdPedidoDet,
+                                "IdPickingUbic",gBePickingUbic.IdPickingUbic,
+                                "EsPicking",true,"IdPresentacionPedido",
+                                gBePickingUbic.IdPresentacion,
+                                "Tipo", Tipo);
                         break;
                     case 4:
-                        callMethod("Get_All_Reemplazo_By_IdPedidoDet","pIdPedidoDet",gBePickingUbic.IdPedidoDet,
-                                "pIdPropietarioBodega",gBePickingUbic.IdPropietarioBodega,"pIdPickingEnc",gBePickingUbic.IdPickingEnc,
+                        callMethod("Get_All_Reemplazo_By_IdPedidoDet",
+                                "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
+                                "pIdPropietarioBodega",gBePickingUbic.IdPropietarioBodega,
+                                "pIdPickingEnc",gBePickingUbic.IdPickingEnc,
                                 "pIdPedidoEnc",gBePickingUbic.IdPedidoEnc);
                         break;
                     case 5:
@@ -484,21 +497,44 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "EsPicking",true);
                         break;
                     case 6:
-                        callMethod("Sustituir_Producto_NE_Picking","IdPickingEnc",gBePickingUbic.IdPickingEnc,
-                                "IdPickingDet",gBePickingUbic.IdPickingDet,"CantSol",CantReemplazar,"MaquinaQueSolicita","1","UsuarioHH",gl.OperadorBodega.IdOperador,
-                                "lBeStockRes",lBeStockResAux.items,"IdBodega",gl.IdBodega,"IdEmpresa",gl.IdEmpresa,"IdStockProductoNE",gBePickingUbic.IdStock,
-                                "IdStockResProductoNE",gBePickingUbic.IdStockRes,"Resultado",resultado);
+                        callMethod("Sustituir_Producto_NE_Picking",
+                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
+                                "IdPickingDet",gBePickingUbic.IdPickingDet,
+                                "CantSol",CantReemplazar,
+                                "MaquinaQueSolicita","1",
+                                "UsuarioHH",gl.OperadorBodega.IdOperador,
+                                "lBeStockRes",lBeStockResAux.items,
+                                "IdBodega",gl.IdBodega,
+                                "IdEmpresa",gl.IdEmpresa,
+                                "IdStockProductoNE",gBePickingUbic.IdStock,
+                                "IdStockResProductoNE",gBePickingUbic.IdStockRes,
+                                "Resultado",resultado);
                         break;
                     case 7:
-                        callMethod("Genera_Tarea_Cambio_Estado_Por_Producto_Dañado","IdBodega",gl.IdBodega,"IdEmpresa",gl.IdEmpresa,
-                                "IdStock",gBePickingUbic.IdStock,"IdStockRes",gBePickingUbic.IdStockRes,"UsuarioHH",gl.OperadorBodega.IdOperador,
-                                "CantDañada",CantReemplazar,"IdUbicDest",IdUbicacionDestino,"IdEstadoDest",IdEstadoDanadoSelect,"IdPropietarioBodega",
-                                gBePickingUbic.IdPropietarioBodega,"IdPickingUbic",gBePickingUbic.IdPickingUbic,"EsPicking",true, "pHostSolicita",gl.devicename);
+                        callMethod("Genera_Tarea_Cambio_Estado_Por_Producto_Dañado",
+                                "IdBodega",gl.IdBodega,
+                                "IdEmpresa",gl.IdEmpresa,
+                                "IdStock",gBePickingUbic.IdStock,
+                                "IdStockRes",gBePickingUbic.IdStockRes,
+                                "UsuarioHH",gl.OperadorBodega.IdOperador,
+                                "CantDañada",CantReemplazar,
+                                "IdUbicDest",IdUbicacionDestino,
+                                "IdEstadoDest",IdEstadoDanadoSelect,
+                                "IdPropietarioBodega", gBePickingUbic.IdPropietarioBodega,
+                                "IdPickingUbic",gBePickingUbic.IdPickingUbic,
+                                "EsPicking",true,
+                                "pHostSolicita",gl.devicename);
                         break;
                     case 8:
-                        callMethod("Marcar_No_Encontrado","IdBodega",gl.IdBodega,"IdEmpresa",gl.IdEmpresa,"IdStock",gBePickingUbic.IdStock,
-                                "IdStockRes",gBePickingUbic.IdStockRes,"UsuarioHH",gl.OperadorBodega.IdOperador,"CantNoEncontrada",CantReemplazar,
-                                "IdPropietarioBodega",gl.OperadorBodega.IdOperador,"IdPickingUbic",gBePickingUbic.IdPickingUbic);
+                        callMethod("Marcar_No_Encontrado",
+                                "IdBodega",gl.IdBodega,
+                                "IdEmpresa",gl.IdEmpresa,
+                                "IdStock",gBePickingUbic.IdStock,
+                                "IdStockRes",gBePickingUbic.IdStockRes,
+                                "UsuarioHH",gl.OperadorBodega.IdOperador,
+                                "CantNoEncontrada",CantReemplazar,
+                                "IdPropietarioBodega",gl.OperadorBodega.IdOperador,
+                                "IdPickingUbic",gBePickingUbic.IdPickingUbic);
                         break;
                 }
 
