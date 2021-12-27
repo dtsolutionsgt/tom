@@ -382,7 +382,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            if (btnRes_Det.getText().toString().equals("R")){
+            if (btnRes_Det.getText().toString().equals("R.")){
 
                 btnRes_Det.setText("D.");
 
