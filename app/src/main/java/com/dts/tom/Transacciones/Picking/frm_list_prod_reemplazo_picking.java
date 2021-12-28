@@ -33,7 +33,7 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic
 
 public class frm_list_prod_reemplazo_picking extends PBase {
 
-    private TextView lblTituloForma,lblCantRegs;
+    private TextView lblTituloForma,lblCantRegs, lbldDetProducto;
     private ListView listDispProd;
     private Button btnActualizaPickingDet,btnBack;
     private ProgressDialog progress;
@@ -74,12 +74,15 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
         lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
+        lbldDetProducto = (TextView) findViewById(R.id.lbldDetProducto);
 
         listDispProd = (ListView)findViewById(R.id.listDispProd);
 
         btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
         btnBack = (Button)findViewById(R.id.btnBack);
 
+        lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
+                "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
         setHandles();
 
         ProgressDialog("Listando existencias de producto:"+gBePickingUbic.CodigoProducto);

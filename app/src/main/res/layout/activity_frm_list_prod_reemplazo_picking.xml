@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Picking.frm_list_prod_reemplazo_picking">
 
+    <TextView
+        android:id="@+id/lbldDetProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="Detalle Producto"
+        android:textColor="@color/medium"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <RelativeLayout
         android:id="@+id/relbot"
         android:layout_width="match_parent"
@@ -38,6 +56,7 @@
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -46,6 +65,7 @@
         android:layout_height="48dp"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
         android:background="@drawable/color_medium">
 
         <TextView
@@ -67,15 +87,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
-        android:layout_below="@+id/reltop"
+        android:layout_below="@+id/lbldDetProducto"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp">
 
         <HorizontalScrollView
             android:id="@+id/hrPicking"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/lblCantRegs">
+            android:layout_above="@+id/lblCantRegs"
+            android:layout_marginBottom="0dp">
 
             <ListView
                 android:id="@+id/listDispProd"

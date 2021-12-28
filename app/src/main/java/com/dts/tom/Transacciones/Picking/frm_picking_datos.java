@@ -51,6 +51,7 @@ public class frm_picking_datos extends PBase {
     private XMLObject xobj;
 
     public static clsBeTrans_picking_ubic gBePickingUbic;
+    public static clsBeProducto tmpgBeProducto = new clsBeProducto();
     public static clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstadoIngreso = new clsBeProducto_estadoList();
     private clsBeProductoList ListBeStockPalletEscaneado = new clsBeProductoList();
@@ -747,8 +748,11 @@ public class frm_picking_datos extends PBase {
 
                 }else{
 
-                    gBeProducto = new clsBeProducto();
-                    gBeProducto.Codigo = pCodigo;
+                    /*gBeProducto = new clsBeProducto();
+                    gBeProducto.Codigo = pCodigo;*/
+
+                    tmpgBeProducto = new clsBeProducto();
+                    tmpgBeProducto.Codigo = pCodigo;
 
                     //#EJC20210907: Corrrección para que permita pickear sin código de producto.
                     if (pCodigo.isEmpty()){
@@ -1279,8 +1283,11 @@ public class frm_picking_datos extends PBase {
                     double vCantidadRec = 0;
                     double vCantidadSol = 0;
 
-                    vCantidadRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
-                    vCantidadSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
+                    /*vCantidadRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
+                    vCantidadSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);*/
+
+                    vCantidadRec = gBePickingUbic.Cantidad_Recibida;
+                    vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
 
                     if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1432,7 +1439,6 @@ public class frm_picking_datos extends PBase {
     private void Continua_reemplazo(){
 
         try {
-
             if (Tipo == 1) {
                 browse = 1;
                 startActivity(new Intent(this, frm_danado_picking.class));
@@ -1679,12 +1685,11 @@ public class frm_picking_datos extends PBase {
     private void processProductoForHH(){
 
         try {
+            tmpgBeProducto = xobj.getresult(clsBeProducto.class, "Get_BeProducto_By_Codigo_For_HH");
 
-            gBeProducto = xobj.getresult(clsBeProducto.class, "Get_BeProducto_By_Codigo_For_HH");
+            if (tmpgBeProducto!=null){
 
-            if (gBeProducto!=null){
-
-                if (gBeProducto.Codigo.equals(gBePickingUbic.CodigoProducto)){
+                if (tmpgBeProducto.Codigo.equals(gBePickingUbic.CodigoProducto)){
                     if (TipoLista==1){
                         Cargar_Datos_Producto_Picking_Consolidado();
                     }else{
