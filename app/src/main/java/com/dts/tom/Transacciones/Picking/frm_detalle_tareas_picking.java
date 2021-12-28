@@ -413,15 +413,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
             progress.setMessage("Finalizando picking...");
 
-            for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
+            if (plistPickingUbi != null){
+                if (plistPickingUbi.items != null){
+                    for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
 
-                if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
+                        if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
 
-                    PreguntoPorDiferencia = true;
-                    msgAskPicIncompleto("El picking está incompleto, Finalizar de todas formas?");
-                    break;
+                            PreguntoPorDiferencia = true;
+                            msgAskPicIncompleto("El picking está incompleto, Finalizar de todas formas?");
+                            break;
+                        }
+
+                    }
                 }
-
             }
 
             if (Finalizar&&!PreguntoPorDiferencia){
