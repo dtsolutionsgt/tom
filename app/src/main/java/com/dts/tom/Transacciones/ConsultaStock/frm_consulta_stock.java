@@ -58,7 +58,7 @@ public class frm_consulta_stock extends PBase {
     private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
-    private String pLicensePlate;
+    private String pLicensePlate, codProducto;
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
     private TextView lblNombreUbicacion;
@@ -354,6 +354,8 @@ public class frm_consulta_stock extends PBase {
     private void processScanProducto(){
 
         idubic = 0;
+        idprod = 0;
+        codProducto = "";
 
         try {
 
@@ -362,6 +364,7 @@ public class frm_consulta_stock extends PBase {
             if (BeProducto != null){
                 idprod = BeProducto.IdProducto;
                 lblNombreProducto.setText(BeProducto.getNombre());
+                codProducto=BeProducto.Codigo;
                 //toast("ubicación encontrada por HH");
             }else{
                 throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
@@ -671,8 +674,10 @@ public class frm_consulta_stock extends PBase {
 
                 if(txtCodigo.getText().toString().isEmpty()){
                     idprod = 0;
+                    codProducto = "";
                 }else{
                     try {
+                        codProducto = txtCodigo.getText().toString();
                         idprod = Integer.valueOf(txtCodigo.getText().toString());
                     }catch (Exception e){
                         idprod = -1;
@@ -743,7 +748,7 @@ public class frm_consulta_stock extends PBase {
 
                     case 4:
                         callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
-                                               "pidProducto",idprod,
+                                               "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
                                                "pIdBodega",gl.IdBodega);
                         break;
