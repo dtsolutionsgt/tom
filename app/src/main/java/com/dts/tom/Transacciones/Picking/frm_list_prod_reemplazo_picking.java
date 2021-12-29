@@ -97,7 +97,15 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         StockResReemplazo.IdPresentacion = gBePickingUbic.IdPresentacion;
         StockResReemplazo.IdUnidadMedida = gBePickingUbic.IdUnidadMedida;
         StockResReemplazo.IdProductoEstado = gBePickingUbic.IdProductoEstado;
-        StockResReemplazo.Fecha_vence = gBePickingUbic.Fecha_Vence;
+        try {
+            if (! gBePickingUbic.Fecha_Vence.contains("T")){
+                StockResReemplazo.Fecha_vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        StockResReemplazo.IdBodega=gBePickingUbic.IdBodega;
+        StockResReemplazo.IdUbicacion=gBePickingUbic.IdUbicacion;
 
         execws(1);
 
@@ -464,16 +472,16 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        /*callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
+/*                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet_Original",
                                 "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
                                 "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
                                 "gIdBodega",gl.IdBodega,"CantReemplazar",
                                 CantReemplazar,"vCant",vCant);*/
 
                         callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
-                                "pBeStockRes", StockResReemplazo,
-                                      "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
-                                      "gIdBodega", gl.IdBodega);
+                                   "pBeStockRes", StockResReemplazo,
+                                   "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
+                                   "gIdBodega", gl.IdBodega);
                         break;
                     case 2:
                         //callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
@@ -608,7 +616,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             DT = xobj.filldt();
 
-            vCant = xobj.getresultSingle(Double.class,"vCant");
+            //#CKFK 20211228 Después tenemos que analizar si necesitamos esta variable
+            //vCant = xobj.getresultSingle(Double.class,"vCant");
 
             if (DT.getCount()>0){
                 Load();
