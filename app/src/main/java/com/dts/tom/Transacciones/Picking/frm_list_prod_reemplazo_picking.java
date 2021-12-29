@@ -45,6 +45,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private clsBeStockList vStock = new clsBeStockList();
     private clsBeStock_resList  BeListStockRes = new clsBeStock_resList();
     private clsBeStock_res StockResC=new clsBeStock_res();
+    private clsBeStock_res StockResReemplazo=new clsBeStock_res();
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_picking adapter;
@@ -86,6 +87,17 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         setHandles();
 
         ProgressDialog("Listando existencias de producto:"+gBePickingUbic.CodigoProducto);
+
+        // #AT 20211228 Creacón de objeto para obtener el stock para reemplazo
+
+        StockResReemplazo = new clsBeStock_res();
+
+        StockResReemplazo.IdProductoBodega = gBePickingUbic.IdProductoBodega;
+        StockResReemplazo.Lote = gBePickingUbic.Lote;
+        StockResReemplazo.IdPresentacion = gBePickingUbic.IdPresentacion;
+        StockResReemplazo.IdUnidadMedida = gBePickingUbic.IdUnidadMedida;
+        StockResReemplazo.IdProductoEstado = gBePickingUbic.IdProductoEstado;
+        StockResReemplazo.Fecha_vence = gBePickingUbic.Fecha_Vence;
 
         execws(1);
 
@@ -452,11 +464,16 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
+                        /*callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
                                 "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
                                 "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
                                 "gIdBodega",gl.IdBodega,"CantReemplazar",
-                                CantReemplazar,"vCant",vCant);
+                                CantReemplazar,"vCant",vCant);*/
+
+                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
+                                "pBeStockRes", StockResReemplazo,
+                                      "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
+                                      "gIdBodega", gl.IdBodega);
                         break;
                     case 2:
                         //callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
@@ -660,7 +677,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private void processReservaStock(){
 
         try{
-
             execws(4);
 
         }catch (Exception e){
