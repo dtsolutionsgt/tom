@@ -3605,16 +3605,69 @@ public class frm_recepcion_datos extends PBase {
                     vBeStockRecPallet.ProductoEstado.IdEstado = IdEstadoSelect;
                     vBeStockRecPallet.IdProductoEstado = IdEstadoSelect;
 
-                    if (LProductoEstado.items.size()>0){
+                    if (LProductoEstado.items.size()> 0){
 
-                        if (stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).select(c->c.Danado).first()){
-                            execws(20);
+                        clsBeProducto_estado BeEstado;
+
+                        BeEstado = stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).first();
+
+                        //#CKFK20220107 Busco la ubicación en base al estado del producto
+                        int vIdUbicacion = 0;
+
+                        if (BeEstado.IdUbicacionBodegaDefecto>0){
+                                vIdUbicacion = BeEstado.IdUbicacionBodegaDefecto;
+                        }else if (BeEstado.IdUbicacionDefecto>0){
+                             vIdUbicacion = BeEstado.IdUbicacionDefecto;
                         }else{
-                            vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                            if (BeEstado.Danado){
+                                if (!gl.gUbicMerma.isEmpty()){
+                                    vIdUbicacion = Integer.valueOf(gl.gUbicMerma);
+                                }
+                            }
+                        }
+
+                        //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
+                        //Si el parametro está en true y el estado no es dañado se manda
+                        //la ubicación de la tarea de recepción
+                        //en caso contrario se manda la ubicación del estado o la ubicación de merma
+                        // si no existe ninguna de ellas se manda la ubicación de la tarea de recepción
+                        if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
+                            if (BeEstado.Danado){
+                                if (vIdUbicacion==0){
+                                    vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                }
+                            }else{
+                                vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                            }
+                        }else{
+                            //Si el parametro está en false se manda la ubicación del estado
+                            //Si la ubicación del estado no existe
+                            //Se manda la ubicación de la tarea de recepción
+                            if (vIdUbicacion==0){
+                                vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                            }else{
+                                vBeStockRecPallet.IdUbicacion = vIdUbicacion;
+                            }
                         }
 
                     }
+/*
+                    //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
+                    if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
+                        vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                    }else{
+                        if (LProductoEstado.items.size()>0){
 
+                            if (stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).select(c->c.Danado).first()){
+                                execws(20);
+                                return;
+                            }else{
+
+                                vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                            }
+
+                        }
+                    }*/
                 }
 
                 Continua_Llenando_Stock_Pallet_Proveedor();
@@ -5030,28 +5083,60 @@ public class frm_recepcion_datos extends PBase {
 
                             BeEstado = stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).first();
 
+                            //#CKFK20220107 Busco la ubicación en base al estado del producto
+                            int vIdUbicacion = 0;
+
                             if (BeEstado.IdUbicacionBodegaDefecto>0){
-                                BeStockRecNuevaRec = BeStockRec;
+                                /*BeStockRecNuevaRec = BeStockRec;
                                 vCantNuevaRec = vCant;
                                 vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
+                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;*/
+                                vIdUbicacion = BeEstado.IdUbicacionBodegaDefecto;
+                            }else if (BeEstado.IdUbicacionDefecto>0){
+                                BeStockRecNuevaRec = BeStockRec;
+                                /*vCantNuevaRec = vCant;
+                                vFactorNuevaRec = Factor;
+                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionDefecto;*/
+                                vIdUbicacion = BeEstado.IdUbicacionDefecto;
                             }else{
-                                BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                if (BeEstado.Danado){
+                                    if (!gl.gUbicMerma.isEmpty()){
+                                        vIdUbicacion = Integer.valueOf(gl.gUbicMerma);
+                                    }
+                                }
                             }
-                            /*if (BeEstado.Danado){
-                                BeStockRecNuevaRec = BeStockRec;
-                                vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
-                                BeStockRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;
-                                *//*execws(13); //m_proxy.Get_IdUbicMerma_By_IdBodega(gIdBodega)
-                                return;*//*
+
+                            //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
+                            //Si el parametro está en true y el estado no es dañado se manda
+                            //la ubicación de la tarea de recepción
+                            //en caso contrario se manda la ubicación del estado o la ubicación de merma
+                            // si no existe ninguna de ellas se manda la ubicación de la tarea de recepción
+                            if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
+                                if (BeEstado.Danado){
+                                    if (vIdUbicacion==0){
+                                        BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                    }else{
+                                        BeStockRec.IdUbicacion = vIdUbicacion;
+                                    }
+                                }else{
+                                    BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                }
                             }else{
-                                BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;//CInt(txtIdUbicacion.Text.Trim)
-                            }*/
+                                //Si el parametro está en false se manda la ubicación del estado
+                                //Si la ubicación del estado no existe
+                                //Se manda la ubicación de la tarea de recepción
+                                if (vIdUbicacion==0){
+                                    BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                }else{
+                                    BeStockRec.IdUbicacion = vIdUbicacion;
+                                }
+                            }
 
                         }
 
+                    }else{
+                        msgbox("Debe seleccionar el estado del producto " + BeProducto.Codigo);
+                        return;
                     }
 
                     Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
@@ -5078,7 +5163,6 @@ public class frm_recepcion_datos extends PBase {
             BeTransReDet.MotivoDevolucion = new  clsBeMotivo_devolucion();
 
             BeTransReDet.Atributo_Variante_1 = "";
-
 
         }catch (Exception e){
             progress.cancel();
@@ -6825,8 +6909,8 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.show();
         }catch (Exception e){
-            Log.println(1,"msg",e.getMessage());
-            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            //Log.println(1,"msg",e.getMessage());
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }

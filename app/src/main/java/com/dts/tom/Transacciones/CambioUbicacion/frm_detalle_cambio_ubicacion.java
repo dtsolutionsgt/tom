@@ -332,6 +332,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                             if (pBeTransUbicHhDetList.items.get(i).getIdOperadorBodega()==gl.OperadorBodega.getIdOperadorBodega()){
                                 listCompUser += 1;
                             }
+                        }else{
 
                             listCompTot += 1;
                         }
@@ -515,7 +516,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    eststr="Incompleto";
+                    eststr="Finalizado parcial";
                     msgAskFinalizarSeguro("Está seguro");
                 }
             });
@@ -581,7 +582,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    eststr = "Finalizado";
+                    eststr = "Finalizado Parcial";
                     finalizar_tarea();
                 }
             });

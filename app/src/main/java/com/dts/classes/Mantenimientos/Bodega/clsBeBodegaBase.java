@@ -12,6 +12,8 @@ public class clsBeBodegaBase
     @Element(required=false) public boolean bloquear_lp_hh= false;
     @Element(required=false) public boolean captura_estiba_ingreso= false;
     @Element(required=false) public boolean captura_pallet_no_estandar= false;
+    @Element(required=false) public boolean priorizar_ubicrec_sobre_ubicest =false;
+    @Element(required=false) public String ubic_merma="";
 
     public int getIdBodega() {
         return IdBodega;
@@ -59,4 +61,13 @@ public class clsBeBodegaBase
         captura_estiba_ingreso=value;
     }
 
+    public boolean getpriorizar_ubicrec_sobre_ubicest() {return priorizar_ubicrec_sobre_ubicest;}
+    public void setpriorizar_ubicrec_sobre_ubicest(boolean value) {priorizar_ubicrec_sobre_ubicest=value;}
+
+    public String getUbic_merma() {
+        return ubic_merma;
+    }
+    public void setUbic_merma(String value) {
+        ubic_merma=value;
+    }
 }
