@@ -184,9 +184,9 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
-                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Packing")) {
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Implosión")) {
                         item = clsCls.new clsMenu();
-                        item.ID=4;item.Icon=4;item.Name="Packing";item.cant=-1;
+                        item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
                         items.add(item);
                     }
 
@@ -208,7 +208,7 @@ public class Mainmenu extends PBase {
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Empaque")) {
                         item = clsCls.new clsMenu();
-                        item.ID=11;item.Icon=11;item.Name="Lista Empaque";item.cant=-1;
+                        item.ID=11;item.Icon=11;item.Name="Empaque";item.cant=-1;
                         items.add(item);
                     }
 
@@ -596,7 +596,7 @@ public class Mainmenu extends PBase {
 
                     break;
 
-                case 4://Packing
+                case 4://Implosión   //antes tenia packing
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_Packing.class));
 
