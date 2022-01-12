@@ -186,7 +186,7 @@ public class Mainmenu extends PBase {
 
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Packing")) {
                         item = clsCls.new clsMenu();
-                        item.ID=4;item.Icon=4;item.Name="Implosión";item.cant=-1;
+                        item.ID=4;item.Icon=4;item.Name="Packing";item.cant=-1;
                         items.add(item);
                     }
 
