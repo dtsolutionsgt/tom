@@ -96,6 +96,8 @@ public class appGlobals extends Application {
     public boolean gCapturaEstibaIngreso = false;
     public boolean gVerifCascade = false;
     public int gVCascIdEnc;
+    public boolean gPriorizar_UbicRec_Sobre_UbicEst=false;
+    public String gUbicMerma = "";
 
     //Variables para picking
     public int gIdPickingEnc=0;

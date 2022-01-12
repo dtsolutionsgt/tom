@@ -1,1 +1,1 @@
-http://192.168.0.12/WCFTOM4/TOMHHWS.asmx
+http://192.168.0.15/WCFTOM4/TOMHHWS.asmx

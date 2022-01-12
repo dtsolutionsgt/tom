@@ -58,6 +58,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
     @Element(required=false) public boolean control_banderas_cliente = false;
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
+    @Element(required=false) public boolean priorizar_ubicrec_sobre_ubicest =false;
 
     public clsBeBodega() {
     }
@@ -75,7 +76,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
                        boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
                        boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
-                       boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto) {
+                       boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
+                       boolean priorizar_ubicrec_sobre_ubicest) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -126,6 +128,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
         this.control_banderas_cliente=control_banderas_cliente;
         this.IdTamanoEtiquetaUbicacionDefecto = IdTamanoEtiquetaUbicacionDefecto;
+        this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
     }
 
     public int getIdPais() {
@@ -404,7 +407,6 @@ public class clsBeBodega extends clsBeBodegaBase {
     public boolean getPermitir_Verificacion_Consolidada() {
         return Permitir_Verificacion_Consolidada;
     }
-
     public void setPermitir_Verificacion_Consolidada(boolean value) {
         Permitir_Verificacion_Consolidada=value;
     }
@@ -423,6 +425,12 @@ public class clsBeBodega extends clsBeBodegaBase {
         IdTamanoEtiquetaUbicacionDefecto=value;
     }
 
+    public boolean getpriorizar_ubicrec_sobre_ubicest() {
+        return priorizar_ubicrec_sobre_ubicest;
+    }
+    public void setpriorizar_ubicrec_sobre_ubicest(boolean value) {
+        priorizar_ubicrec_sobre_ubicest=value;
+    }
 
 }
 
