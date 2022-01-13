@@ -97,6 +97,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String numero_orden="";
   @Element(required=false) public String Documento_Ingreso="";
   @Element(required=false) public boolean ubicacion_picking=false;
+  @Element(required=false) public String Host="";
 
 
   public clsBeVW_stock_res() {
@@ -751,5 +752,12 @@ public class clsBeVW_stock_res {
   public void setubicacion_picking(boolean value) {
     ubicacion_picking=value;
   }
+  public String getHost() {
+    return Host;
+  }
+  public void setHost(String value) {
+    Host=value;
+  }
+
 }
 

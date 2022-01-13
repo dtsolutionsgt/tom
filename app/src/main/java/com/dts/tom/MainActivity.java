@@ -45,6 +45,7 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -91,7 +92,9 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.39";
+    private String version="4.6.2";
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +112,25 @@ public class MainActivity extends PBase {
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
 
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    //#EJC20220110: To log especific events.
+//    private void LogFireBase(){
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//
+//    }
+
+
 
     private void startApplication() {
 
@@ -421,6 +439,8 @@ public class MainActivity extends PBase {
                     gl.gNomBodega = NomBodega;
                     gl.gCapturaEstibaIngreso = bodegas.items.get(position).captura_estiba_ingreso;
                     gl.gCapturaPalletNoEstandar = bodegas.items.get(position).captura_pallet_no_estandar;
+                    gl.gPriorizar_UbicRec_Sobre_UbicEst = bodegas.items.get(position).priorizar_ubicrec_sobre_ubicest;
+                    gl.gUbicMerma = bodegas.items.get(position).ubic_merma;
                     idimpres=0;
                     execws(3);
 

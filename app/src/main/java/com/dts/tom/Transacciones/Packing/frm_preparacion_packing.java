@@ -345,8 +345,8 @@ public class frm_preparacion_packing extends PBase {
         try {
 
             item=new clsBeTrans_packing_enc();
-            p=pick.items.get(selidx);
 
+            p=pick.items.get(selidx);
             item.Idpackingenc=items.size()+1;
             item.Idbodega=gl.IdBodega;
             item.Idpickingenc=p.IdPickingEnc;
@@ -370,18 +370,19 @@ public class frm_preparacion_packing extends PBase {
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
             item.ProductoEstado=p.ProductoEstado;
-
             items.add(item);
 
             txtLP.setText("");
 
             listItems();
+
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
     private void delItem() {
+
         for (int i = 0; i <items.size(); i++) {
             if (items.get(i).Lic_plate.equalsIgnoreCase(selitem.Lic_plate)
                 & items.get(i).ProductoEstado.equalsIgnoreCase(selitem.ProductoEstado)) {
@@ -389,6 +390,7 @@ public class frm_preparacion_packing extends PBase {
                 listItems();return;
             }
         }
+
     }
 
     private void GetFila() {
