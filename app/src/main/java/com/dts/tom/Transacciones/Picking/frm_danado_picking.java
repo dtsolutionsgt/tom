@@ -88,6 +88,11 @@ public class frm_danado_picking extends PBase {
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
                     txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
+                    BeUbicDestino = new clsBeBodega_ubicacion();
+                    BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                    IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                    execws(2);
+
                 }
 
                 @Override
@@ -102,10 +107,14 @@ public class frm_danado_picking extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicDest.getText().toString().isEmpty()){
-                            BeUbicDestino = new clsBeBodega_ubicacion();
+                            /*BeUbicDestino = new clsBeBodega_ubicacion();
                             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-                            execws(2);
+                            execws(2);*/
+                            msgMover("Producto: "+gBeProducto.Nombre
+                                    + "\n Destino: "+lblNomUbic.getText().toString()
+                                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                                    + "\n ¿Mover?");
                         }
                     }
 
@@ -308,10 +317,10 @@ public class frm_danado_picking extends PBase {
                 return;
             }
 
-            msgMover("Producto: "+gBeProducto.Nombre
+            /*msgMover("Producto: "+gBeProducto.Nombre
                             + "\n Destino: "+lblNomUbic.getText().toString()
                             + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
-                            + "\n ¿Mover?");
+                            + "\n ¿Mover?");*/
 
 
         }catch (Exception e){

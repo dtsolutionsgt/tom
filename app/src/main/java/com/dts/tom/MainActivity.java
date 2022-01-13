@@ -92,7 +92,7 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.6.1";
+    private String version="4.6.2";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
