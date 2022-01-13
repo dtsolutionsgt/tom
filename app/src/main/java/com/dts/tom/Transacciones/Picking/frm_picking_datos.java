@@ -333,7 +333,7 @@ public class frm_picking_datos extends PBase {
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " Expira: " + gBePickingUbic.Fecha_Vence :"" )
-                    + (!gBePickingUbic.Lote.isEmpty()?"Lote: " + gBePickingUbic.Lote:"") + "\r\n"
+                    + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:"") + "\r\n"
                     + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
                     + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
 

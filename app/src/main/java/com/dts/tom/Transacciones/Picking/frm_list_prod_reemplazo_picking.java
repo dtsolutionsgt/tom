@@ -29,6 +29,7 @@ import static com.dts.tom.Transacciones.Picking.frm_danado_picking.IdEstadoDanad
 import static com.dts.tom.Transacciones.Picking.frm_danado_picking.IdUbicacionDestino;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
+import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 
 public class frm_list_prod_reemplazo_picking extends PBase {
@@ -46,6 +47,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private clsBeStock_resList  BeListStockRes = new clsBeStock_resList();
     private clsBeStock_res StockResC=new clsBeStock_res();
     private clsBeStock_res StockResReemplazo=new clsBeStock_res();
+    private clsBeStock_res tmpBeStock_Res  = new clsBeStock_res();
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_picking adapter;
@@ -60,7 +62,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private boolean Completo=false;
     private boolean Distinto=false;
     private String resultado="";
-    private double CantidadPendiente=0;
+    private double CantidadPendiente=0, CantPendSel = 0;
 
     private Cursor DT;
 
@@ -108,7 +110,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         StockResReemplazo.IdUbicacion=gBePickingUbic.IdUbicacion;
 
         execws(1);
-
     }
 
     public void ProgressDialog(String mensaje) {
@@ -142,7 +143,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         adapter.setSelectedIndex(position);
 
                         procesar_registro();
-
                     }
 
                 }
@@ -211,64 +211,89 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private void Continua_procesando_registro(){
 
         try{
+            CantPendSel = 0;
 
             if (selitem.Cant>=CantReemplazar){
+                tmpBeStock_Res = new clsBeStock_res();
 
-                //if (selitem.IdStock!=gBePickingUbic.IdStock){
+                tmpBeStock_Res.IdPresentacion = selitem.IdPresentacion;
+                tmpBeStock_Res.IdProductoEstado = selitem.IdEstado;
+                tmpBeStock_Res.IdUbicacion = selitem.IdUbicacion;
+                tmpBeStock_Res.Lic_plate = selitem.LicPlate;
+                tmpBeStock_Res.Lote = selitem.Lote;
+                tmpBeStock_Res.Fecha_vence = du.convierteFecha(selitem.FechaVence);
+                tmpBeStock_Res.IdProductoBodega = selitem.IdProductoBodega;
+                tmpBeStock_Res.IdUnidadMedida = selitem.IdUnidadMedida;
 
-                    Distinto =false;
 
-                    if (Tipo == 1) {
-                        if (selitem.IdStock!=gBePickingUbic.IdStock){
-                            progress.show();
-                            progress.setMessage("Reservando el stock seleccionado...");
-                            //Reservar_Stock_By_IdStock
-                            execws(3);
-                        }
-                    }else{
-                        progress.show();
-                        progress.setMessage("Reservando el stock seleccionado...");
+                Distinto =false;
+
+                if (Tipo == 1) {
+                    progress.show();
+                    progress.setMessage("Reservando el stock seleccionado...");
+
+                    if (TipoLista == 1) {
+                        //Reemplazar_ListaPu_By_Stock
+                        execws(4);
+                    } else {
                         //Reservar_Stock_By_IdStock
                         execws(3);
                     }
-
-
-                //}else{
-
+                }else{
                     progress.show();
-
-                    if(Tipo==1){
-
-                        progress.setMessage("Generando la tarea de cambio de estado...");
-                        execws(7);
-
-                    }else{
-
-                        progress.setMessage("Marcando el producto no encontrado...");
-                        execws(8);
-                    //}
+                    progress.setMessage("Reservando el stock seleccionado...");
+                    //Reservar_Stock_By_IdStock
+                    execws(3);
                 }
+
 
             }else{
 
                 Distinto =true;
 
-                BePickingUbic = new clsBeTrans_picking_ubic();
-                BePickingUbic.IdStock = selitem.IdStock;
+                tmpBeStock_Res = new clsBeStock_res();
 
-                CantidadPendiente = CantReemplazar - selitem.Cant;
+                tmpBeStock_Res.IdPresentacion = selitem.IdPresentacion;
+                tmpBeStock_Res.IdProductoEstado = selitem.IdEstado;
+                tmpBeStock_Res.IdUbicacion = selitem.IdUbicacion;
+                tmpBeStock_Res.Lic_plate = selitem.LicPlate;
+                tmpBeStock_Res.Lote = selitem.Lote;
+                tmpBeStock_Res.Fecha_vence = du.convierteFecha(selitem.FechaVence);
+                tmpBeStock_Res.IdProductoBodega = selitem.IdProductoBodega;
+                tmpBeStock_Res.IdUnidadMedida = selitem.IdUnidadMedida;
 
-                if (CantidadPendiente>0){
-                    BePickingUbic.CantidadDanada = selitem.Cant;
+                CantPendSel = CantReemplazar - selitem.Cant;
+                CantReemplazar = selitem.Cant;
+
+                if (Tipo == 1) {
+                    progress.show();
+                    progress.setMessage("Reservando el stock seleccionado...");
+                    //Reservar_Stock_By_IdStock
+                    execws(3);
                 }else{
-                    BePickingUbic.CantidadDanada = CantReemplazar;
+                    progress.show();
+                    progress.setMessage("Reservando el stock seleccionado...");
+                    //Reservar_Stock_By_IdStock
+                    execws(3);
                 }
 
-                CantReemplazar -=BePickingUbic.CantidadDanada;
-
-                if (CantReemplazar!=0){
-
-                }
+                //#AT 20220111 Lo estamos poniendo comentario para validar cuando la cantidad a reemplazar sea mayor a la disponible
+//                BePickingUbic = new clsBeTrans_picking_ubic();
+//                BePickingUbic.IdStock = selitem.IdStock;
+//
+//                CantidadPendiente = CantReemplazar - selitem.Cant;
+//
+//                if (CantidadPendiente>0){
+//                    BePickingUbic.CantidadDanada = selitem.Cant;
+//                }else{
+//                    BePickingUbic.CantidadDanada = CantReemplazar;
+//                }
+//
+//                CantReemplazar -=BePickingUbic.CantidadDanada;
+//
+//                if (CantReemplazar!=0){
+//
+//                }
 
             }
 
@@ -411,34 +436,38 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                     vItem=new clsBeStockReemplazo();
 
-                    vItem.Codigo = DT.getString(12);
-                    vItem.Producto = DT.getString(14);
-                    vItem.Presentacion = DT.getString(16);
-                    vItem.UMBas = DT.getString(15);
-                    vItem.Cant = DT.getDouble(22);
-                    vItem.IdUbicacion = DT.getInt(30);
+                    vItem.Codigo = DT.getString(0);
+                    vItem.Producto = DT.getString(1);
+                    vItem.Presentacion = DT.getString(2);
+                    vItem.UMBas = DT.getString(3);
+                    vItem.Cant = DT.getDouble(4);
+                    vItem.IdUbicacion = DT.getInt(5);
 
-                    if (DT.getString(19)!=null){
-                        vItem.FechaVence = du.convierteFechaMostrar(DT.getString(19));
+                    if (DT.getString(6)!=null){
+                        vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));
                     }else{
                         vItem.FechaVence = "";
                     }
 
-                    if (DT.getString(31)!=null){
-                        vItem.LicPlate = DT.getString(31);
+                    if (DT.getString(7)!=null){
+                        vItem.LicPlate = DT.getString(7);
                     }else{
                         vItem.LicPlate = "";
                     }
-                    if (DT.getString(17)!=null){
-                        vItem.Lote = DT.getString(17);
+                    if (DT.getString(8)!=null){
+                        vItem.Lote = DT.getString(8);
                     }else{
                         vItem.Lote = "";
                     }
-                    vItem.CodigoProducto = DT.getString(12);
-                    vItem.Peso = DT.getDouble(23);
-                    vItem.Estado = DT.getString(25);
-                    vItem.IdStock = DT.getInt(5);
-                    vItem.Despachar = DT.getString(56);
+                    vItem.CodigoProducto = DT.getString(0);
+                    vItem.Peso = DT.getDouble(9);
+                    vItem.Estado = DT.getString(10);
+                    vItem.IdStock = 0; //DT.getInt(11);
+                    vItem.Despachar = DT.getString(11);
+                    vItem.IdEstado = DT.getInt(12);
+                    vItem.IdPresentacion = DT.getInt(13) ;
+                    vItem.IdProductoBodega = DT.getInt(14);
+                    vItem.IdUnidadMedida = DT.getInt(20);
 
                     BeListStock.add(vItem);
 
@@ -472,24 +501,14 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-/*                        callMethod("Get_All_Stock_Especifico_By_IdPedidoDet_Original",
-                                "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
-                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
-                                "gIdBodega",gl.IdBodega,"CantReemplazar",
-                                CantReemplazar,"vCant",vCant);*/
-
                         callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
                                    "pBeStockRes", StockResReemplazo,
                                    "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
                                    "gIdBodega", gl.IdBodega);
                         break;
-                    case 2:
-                        //callMethod("Get_All_Stock_Especifico_HH","IdBodega",gl.IdBodega,"IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
-                          //      "pStockRes",StockResC);
-                        break;
                     case 3:
                         callMethod("Reservar_Stock_By_IdStock",
-                                "IdStock",selitem.IdStock,
+                                "pBeStock_res",tmpBeStock_Res,
                                 "CantSol",CantReemplazar,
                                 "MaquinaQueSolicita","1",
                                 "IdPickingEnc",gBePickingUbic.IdPickingEnc,
@@ -497,32 +516,28 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "IdUsuarioHH",gl.OperadorBodega.IdOperador,
                                 "IdPedidoDet",gBePickingUbic.IdPedidoDet,
                                 "IdPickingUbic",gBePickingUbic.IdPickingUbic,
-                                "EsPicking",true,"IdPresentacionPedido",
-                                gBePickingUbic.IdPresentacion,
-                                "Tipo", Tipo);
+                                "EsPicking",true,
+                                "Tipo", Tipo,
+                                "IdUbicDestino",IdUbicacionDestino,
+                                "IdEstDestino",IdEstadoDanadoSelect);
                         break;
                     case 4:
-                        callMethod("Get_All_Reemplazo_By_IdPedidoDet",
-                                "pIdPedidoDet",gBePickingUbic.IdPedidoDet,
-                                "pIdPropietarioBodega",gBePickingUbic.IdPropietarioBodega,
-                                "pIdPickingEnc",gBePickingUbic.IdPickingEnc,
-                                "pIdPedidoEnc",gBePickingUbic.IdPedidoEnc);
-                        break;
-                    case 5:
-                        callMethod("Reemplazo_Producto_En_Picking",
-                                "IdStockCambioEst",gBePickingUbic.IdStock,
-                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
-                                "IdPickingDet",gBePickingUbic.IdPickingDet,
+                        //Obtener la lista ListPickingUbic
+                        gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+
+                        callMethod("Reemplazar_ListaPu_By_Stock",
+                                "pBeStock_res",tmpBeStock_Res,
                                 "CantSol",CantReemplazar,
                                 "MaquinaQueSolicita","1",
-                                "UsuarioHH",gl.OperadorBodega.IdOperador,
-                                "lBeStockRes",lBeStockResAux.items,
-                                "IdBodega",gl.IdBodega,
-                                "IdEmpresa",gl.IdEmpresa,
+                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
+                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
+                                "IdUsuarioHH",gl.OperadorBodega.IdOperador,
+                                "IdPedidoDet",gBePickingUbic.IdPedidoDet,
+                                "BePickingUbic",gBePickingUbic,
+                                "EsPicking",true,
+                                "Tipo", Tipo,
                                 "IdUbicDestino",IdUbicacionDestino,
-                                "IdEstDestino",IdEstadoDanadoSelect,
-                                "IdStockResCambioEst",gBePickingUbic.IdStockRes,
-                                "EsPicking",true);
+                                "IdEstDestino",IdEstadoDanadoSelect);
                         break;
                     case 6:
                         callMethod("Sustituir_Producto_NE_Picking",
@@ -537,21 +552,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "IdStockProductoNE",gBePickingUbic.IdStock,
                                 "IdStockResProductoNE",gBePickingUbic.IdStockRes,
                                 "Resultado",resultado);
-                        break;
-                    case 7:
-                        callMethod("Genera_Tarea_Cambio_Estado_Por_Producto_Dañado",
-                                "IdBodega",gl.IdBodega,
-                                "IdEmpresa",gl.IdEmpresa,
-                                "IdStock",gBePickingUbic.IdStock,
-                                "IdStockRes",gBePickingUbic.IdStockRes,
-                                "UsuarioHH",gl.OperadorBodega.IdOperador,
-                                "CantDañada",CantReemplazar,
-                                "IdUbicDest",IdUbicacionDestino,
-                                "IdEstadoDest",IdEstadoDanadoSelect,
-                                "IdPropietarioBodega", gBePickingUbic.IdPropietarioBodega,
-                                "IdPickingUbic",gBePickingUbic.IdPickingUbic,
-                                "EsPicking",true,
-                                "pHostSolicita",gl.devicename);
                         break;
                     case 8:
                         callMethod("Marcar_No_Encontrado",
@@ -588,7 +588,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     processReservaStock();
                     break;
                 case 4:
-                    procesStockResAux();
+                    processReservaStockPu();
                     break;
                 case 5:
                 case 6:
@@ -625,7 +625,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 progress.cancel();
             }
 
-            if (vCant == 0) {
+            if (DT.getCount() == 0) {
 
                 if (Tipo==1){
                     msgMarcarDanado("No hay existencia de este producto en otra ubicación"+
@@ -685,11 +685,84 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
     private void processReservaStock(){
 
-        try{
-            execws(4);
+        try {
+
+            progress.cancel();
+
+            boolean StockReservado = false;
+
+            StockReservado  = xobj.getresult(Boolean.class,"Reservar_Stock_By_IdStock");
+            CantidadPendiente = (Double) xobj.getSingle("CantPend",Double.class);
+
+            if (CantidadPendiente == 0 && CantPendSel > 0) {
+                CantidadPendiente = CantPendSel;
+            }
+
+            if (StockReservado) {
+
+                if (CantidadPendiente == 0) {
+                    msgAskReemplazado("Stock reemplazado correctamente");
+                } else {
+                    CantReemplazar = CantidadPendiente;
+
+                    lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
+                            "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
+
+                    progress.setMessage("Obteniendo inventario disponible para reemplazo");
+                    execws(1);
+                }
+            }
 
         }catch (Exception e){
             mu.msgbox("processReservaStock:"+e.getMessage());
+        }
+    }
+
+    private void processReservaStockPu(){
+
+        try {
+
+            progress.cancel();
+
+            boolean StockReservado = false;
+
+            StockReservado  = xobj.getresult(Boolean.class,"Reemplazar_ListaPu_By_Stock");
+            CantidadPendiente = (Double) xobj.getSingle("CantPend",Double.class);
+
+            if (CantidadPendiente == 0 && CantPendSel > 0) {
+                CantidadPendiente = CantPendSel;
+            }
+
+            if (StockReservado) {
+
+                if (CantidadPendiente == 0) {
+                    msgAskReemplazado("Stock reemplazado correctamente");
+                } else {
+                    CantReemplazar = CantidadPendiente;
+
+                    lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
+                            "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
+
+                    progress.setMessage("Obteniendo inventario disponible para reemplazo");
+                    execws(1);
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processReservaStock:"+e.getMessage());
+        }
+    }
+
+    private void processNoEncontrado(){
+
+        try{
+
+            String resultado = xobj.getresultSingle(String.class,"resultado");
+
+            msgbox(resultado);
+
+        }catch (Exception e){
+            mu.msgbox("processUbicacion:"+e.getMessage());
         }
     }
 
@@ -731,22 +804,31 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         }
     }
 
-    private void processNoEncontrado(){
-
-        try{
-
-            String resultado = xobj.getresultSingle(String.class,"resultado");
-
-            msgbox(resultado);
-
-        }catch (Exception e){
-            mu.msgbox("processUbicacion:"+e.getMessage());
-        }
-    }
-
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void msgAskReemplazado(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ok48);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    doExit();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     private void doExit(){

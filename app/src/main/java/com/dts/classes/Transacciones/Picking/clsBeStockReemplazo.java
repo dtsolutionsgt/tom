@@ -16,5 +16,9 @@ public class clsBeStockReemplazo {
     public String Estado="";
     public int IdStock=0;
     public String Despachar="No";
+    public int IdPresentacion = 0;
+    public int IdEstado = 0;
+    public int IdProductoBodega = 0;
+    public int IdUnidadMedida = 0;
 
 }
