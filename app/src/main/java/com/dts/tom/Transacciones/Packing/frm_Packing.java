@@ -168,7 +168,15 @@ public class frm_Packing extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        Procesa_Lp();
+
+                        if(!txtLic_Plate.getText().toString().equals("")){
+                            Procesa_Lp();
+                        }else{
+
+                            mu.msgbox("el campo LP esta vacio");
+                            txtLic_Plate.selectAll();
+                            txtLic_Plate.requestFocus();
+                        }
                     }
 
                     return false;
@@ -379,8 +387,8 @@ public class frm_Packing extends PBase {
 
             pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-            //Llama al método del WS Existe_LP
-            execws(9);
+                //Llama al método del WS Existe_LP
+                execws(9);
 
             progress.cancel();
 
@@ -1188,7 +1196,13 @@ public class frm_Packing extends PBase {
 
             if (!ValidaDatos())return;
 
-            vUbicacionProducto = BeStockPallet.IdUbicacion;
+            if(BeStockPallet == null){
+                vUbicacionProducto = cUbicOrig.IdUbicacion;
+            }else{
+                vUbicacionProducto = BeStockPallet.IdUbicacion;
+            }
+
+
 
             if (pUbicacionLP!=0){
                 if (vUbicacionProducto!=pUbicacionLP){
@@ -1388,6 +1402,11 @@ public class frm_Packing extends PBase {
     public void Asociar(View view){
 
         try{
+
+            //#GT13012022: cuando no hay LP se utiliza la destino como origen
+            if (txtLic_Plate.getText().toString().equals("")){
+
+            }
 
             AplicaPacking();
 
@@ -1751,6 +1770,10 @@ public class frm_Packing extends PBase {
                 lblUbicOrigen.setText(cUbicOrig.Descripcion);
                 cvUbicDestID = cvUbicOrigID;
 
+                //#GT13012022: el origen se setea en el destino porque no cambia de ubicación la mercaderia
+                lblNomDestino.setText(cUbicOrig.Descripcion + "");
+                txtUbicDestino.setText(cUbicOrig.IdUbicacion+ "");
+
                 txtLic_Plate.setSelectAllOnFocus(true);
                 txtLic_Plate.requestFocus();
 
@@ -2061,9 +2084,13 @@ public class frm_Packing extends PBase {
             pUbicacionLP = xobj.getresult(Integer.class,"Get_Ubicacion_LP");
             pNombreUbicacionLP = xobj.getresultSingle(String.class,"nombre_ubicacion");
 
-            if (pUbicacionLP>0){
-                txtUbicDestino.setText(pUbicacionLP+"");
+            if (pUbicacionLP>0) {
+                txtUbicDestino.setText(pUbicacionLP + "");
                 lblNomDestino.setText(pNombreUbicacionLP);
+            }else{
+
+                lblNomDestino.setText(cUbicOrig.Descripcion+ "");
+                txtUbicDestino.setText(cUbicOrig.IdUbicacion+ "");
             }
 
             aplicarCambio();
