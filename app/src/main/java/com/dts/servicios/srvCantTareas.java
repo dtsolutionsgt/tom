@@ -14,19 +14,24 @@ public class srvCantTareas extends srvBaseJob {
 
     private int idbodega, idoperador, nuevas;
     private String params, ntext, listatareas="";
-    private String fname = Environment.getExternalStorageDirectory().getPath()  + "/tom_tareas.txt";
-    private String taskdir= Environment.getExternalStorageDirectory().getPath() + "/tomtask";
 
+    //#EJC20220118: Android 11
+    private String fname = ""; //Environment.getExternalStorageDirectory().getPath()  + "/tom_tareas.txt";
+    private String taskdir= ""; //Environment.getExternalStorageDirectory().getPath() + "/tomtask";
+
+    public void srvCantTareas() {
+
+        fname = this.getApplicationContext().getFilesDir().getPath()+ "/tom_tareas.txt";
+        taskdir= this.getApplicationContext().getFilesDir().getPath() + "/tomtask";
+    }
 
     @Override
     public void execute() {
 
-        rnListaTareas = new Runnable() {
-            public void run() {
-                listatareas =ws.retval;
-                procesaTareas();
-                startCantTareas.startService(getApplicationContext(),params);
-            }
+        rnListaTareas = () -> {
+            listatareas =ws.retval;
+            procesaTareas();
+            startCantTareas.startService(getApplicationContext(),params);
         };
 
         ws=new wsCantTareas(URL,idbodega,idoperador);

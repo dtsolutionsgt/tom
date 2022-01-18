@@ -3,6 +3,7 @@ package com.dts.tom;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,11 +24,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -55,6 +60,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -66,8 +73,9 @@ public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl, lblVersion;
-    private ProgressDialog progress;
+    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog;
+    //private ProgressDialog progress;
+    Dialog progress;
     private ImageView imgIngresar;
     private ImageView imgEmpresaLogin;
 
@@ -96,6 +104,8 @@ public class MainActivity extends PBase {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    private String mensaje_progress ="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -114,6 +124,10 @@ public class MainActivity extends PBase {
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+            //#EJC20220118:Path para Android 11.
+            gl.PathDataDir=this.getApplicationContext().getDataDir().getPath();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,8 +143,6 @@ public class MainActivity extends PBase {
 //        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 //
 //    }
-
-
 
     private void startApplication() {
 
@@ -163,15 +175,19 @@ public class MainActivity extends PBase {
                 gl.devicename = getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
-                setURL();
+                //#EJC20220118: Ya se llamó en getURL
+                //setURL();
             }
 
             try {
-                String orddir=Environment.getExternalStorageDirectory().getPath() + "/tomtask";
+
+                String orddir=gl.PathDataDir + "/tomtask";
                 File directory = new File(orddir);
                 directory.mkdirs();
-            } catch (Exception e) {}
 
+            } catch (Exception e) {
+
+            }
             //Load();
 
         } catch (Exception e) {
@@ -183,7 +199,7 @@ public class MainActivity extends PBase {
 
         try{
 
-            progress.setMessage("Cargando empresas...");
+            progress_setMessage("Cargando empresas...");
             progress.show();
 
             LimpiarControles();
@@ -192,7 +208,7 @@ public class MainActivity extends PBase {
             if (!gl.wsurl.isEmpty()){
                 execws(1);
             }else{
-                progress.cancel();
+                //progress.cancel();
             }
 
         } catch (Exception e) {
@@ -216,7 +232,7 @@ public class MainActivity extends PBase {
 
     private void setURL(){
 
-        String url="http://192.168.0.98/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="";
 
         try{
 
@@ -231,8 +247,9 @@ public class MainActivity extends PBase {
             input.setText(url);
             input.setInputType(InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-
+            input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
             alert.setView(input);
+            input.requestFocus();
 
             alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -272,7 +289,7 @@ public class MainActivity extends PBase {
 
         try {
 
-            String fname = Environment.getExternalStorageDirectory()+"/tomws.txt";
+            String fname = gl.PathDataDir+"/tomws.txt";
             File archivo= new File(fname);
 
             if (archivo.exists()){
@@ -358,13 +375,23 @@ public class MainActivity extends PBase {
         }
     }
 
-    public void doLogin(View view)     {
+    public void setUrlOntxtURLWSClic(View view){
+
+        try {
+            setURL();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void doLogin(View view){
+
         try{
 
             imgIngresar.setVisibility(View.INVISIBLE);
 
             progress.show();
-            progress.setMessage("Ingresando....");
+            progress_setMessage("Ingresando....");
 
             Valida_Ingreso();
             //startActivity(new Intent(this,Mainmenu.class));
@@ -572,28 +599,31 @@ public class MainActivity extends PBase {
 
             switch (ws.callback) {
                 case 1:
-                    progress.setMessage("Cargando empresas");
+                    progress_setMessage("Cargando empresas");
                     processEmpresas();break;
                 case 2:
-                    progress.setMessage("Cargando bodegas");
+                    progress_setMessage("Cargando bodegas");
                     processBodegas();break;
                 case 3:
-                    progress.setMessage("Cargando impresoras");
+                    progress_setMessage("Cargando impresoras");
                     processImpresoras();
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
-                    progress.setMessage("Cargando usuarios");
+                    progress_setMessage("Cargando usuarios");
                     processUsers();
                     //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
                     break;
                 case 5:
+                    progress_setMessage("Obteniendo Parámetros A");
                     processGetDecimalesCalculo();
                     execws(8);
                     break;
                 case 6:
+                    progress_setMessage("Obteniendo Parámetros B");
                     processGetDecimalesDespliegue();
+                    progress.cancel(); //#EJC20220118: Terminó el proceso de carga de combos login
                     break;
                 case 7:
                     Intent i = new Intent(this, Mainmenu.class);
@@ -602,6 +632,7 @@ public class MainActivity extends PBase {
                     //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
+                    progress_setMessage("Validando versión");
                     processVersiones();
                     break;
                 case 9:
@@ -613,14 +644,13 @@ public class MainActivity extends PBase {
                 case 11:
                     processServidor();
                     break;
-
             }
-
-            progress.cancel();
 
         } catch (Exception e)  {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }finally {
+            //progress.cancel();
         }
     }
 
@@ -685,7 +715,7 @@ public class MainActivity extends PBase {
                             if (BeImpresora.size()>0) {
                                 gl.gImpresora = BeImpresora;
                                 if (gl.gImpresora.get(0).Direccion_Ip =="") {
-                                    progress.cancel();
+                                    //progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 } else {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
@@ -696,7 +726,7 @@ public class MainActivity extends PBase {
                                     execws(10);
                                 }
                             } else  {
-                                progress.cancel();
+                                //progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
                                 msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
                             }
@@ -1190,13 +1220,18 @@ public class MainActivity extends PBase {
 
     private void getURL() {
 
-        gl.wsurl = "http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
-
         gl.wsurl="";
 
         try {
 
-            File file1 = new File(Environment.getExternalStorageDirectory(), "/tomws.txt");
+            //#EJC20220118: reemplazo, por Android 11, context datadir.
+            //Environment.getExternalStorageDirectory()
+            if (gl.PathDataDir.isEmpty()){
+                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+            }
+
+            String pathText = gl.PathDataDir + "/tomws.txt";
+            File file1 = new File(pathText);
 
             if (file1.exists())
             {
@@ -1204,6 +1239,8 @@ public class MainActivity extends PBase {
                 BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
                 gl.wsurl = myReader.readLine();
                 myReader.close();
+            }else{
+                setURL();
             }
 
         } catch (Exception e)
@@ -1218,13 +1255,66 @@ public class MainActivity extends PBase {
         }
     }
 
+    private Runnable mUpdate = new Runnable() {
+
+        public void run() {
+
+            txtMensajeDialog.setText(mensaje_progress);
+            txtMensajeDialog.postDelayed(this, 1000);
+
+        }
+    };
+
+    public void progress_setMessage(String mensaje){
+        try {
+            if(progress!=null){
+                runOnUiThread(() -> {
+                    txtMensajeDialog = progress.findViewById(R.id.txtMensajeDialog);
+                    if(txtMensajeDialog!=null){
+                        txtMensajeDialog.setText(mensaje);
+                        mensaje_progress = mensaje;
+                        txtMensajeDialog.postDelayed(mUpdate,0);
+                    }
+                });
+            }else{
+                Log.println(Log.DEBUG,"Progress","Isnull");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void ProgressDialog(String mensaje){
-        progress=new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
+
+        progress= new Dialog(this);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        Window window=progress.getWindow();
+
+        if(window!=null){
+            window.setBackgroundDrawable(new ColorDrawable(0));
+        }
+
+        runOnUiThread(() -> {
+            txtMensajeDialog= progress.findViewById(R.id.txtMensajeDialog);
+            if(txtMensajeDialog!=null){
+                txtMensajeDialog.setText(mensaje);
+            }
+        });
+
         progress.show();
+
+//        progress=new ProgressDialog(this);
+//        progress.setMessage(mensaje);
+//        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progress.setIndeterminate(true);
+//        progress.setProgress(0);
+//        progress.show();
+
+//        ProgressBar progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+//        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        //layout.addView(progressBar, params);
     }
 
     private void execws(int callbackvalue) {
@@ -1317,10 +1407,27 @@ public class MainActivity extends PBase {
             idemp=empresas.items.get(pp).IdEmpresa;
 
             if (versiones!=null){
+
                 for (int i = 0; i <versiones.items.size(); i++) {
+
                     if (versiones.items.get(i).IdEmpresa==idemp) {
+
+                        //#EJC20220118: Saber si la versión en FB es mayor.
                         String Nueva_Version = versiones.items.get(i).Version;
-                        if (!Nueva_Version.equalsIgnoreCase(version)) {
+                        String[] versionOnFirebase = Nueva_Version.split("\\.");
+                        String[] versionActual = version.split("\\.");
+
+                        int vActualMajor =Integer.parseInt(versionActual[0]);
+                        int vActualMedium =Integer.parseInt(versionActual[1]);
+                        int vActualMinor =Integer.parseInt(versionActual[2]);
+
+                        int vFBaseMajor =Integer.parseInt(versionOnFirebase[0]);
+                        int vFBaseMedium =Integer.parseInt(versionOnFirebase[1]);
+                        int vFBaseMinor =Integer.parseInt(versionOnFirebase[2]);
+
+
+                        if(vFBaseMinor > vActualMinor && vFBaseMedium > vActualMedium && vFBaseMajor > vActualMajor)
+                        {
                             msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
                             return;
                         }

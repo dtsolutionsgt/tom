@@ -9,7 +9,9 @@ import android.os.PersistableBundle;
 public class startCantTareas {
 
     public static void startService(Context context, String params) {
+
         try {
+
             ComponentName serviceComponent = new ComponentName(context, srvCantTareas.class);
 
             PersistableBundle extras = new PersistableBundle();
@@ -21,6 +23,7 @@ public class startCantTareas {
 
             JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);
             jobScheduler.schedule(builder.build());
+
         } catch (Exception e) {
             String ss=e.getMessage();
         }

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dts.tom.PBase;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -80,9 +81,21 @@ public class WebService {
            conn.setDoOutput(true);
            conn.setRequestProperty("mArch", "Andr");
 
-           OutputStream ostream = conn.getOutputStream();
+            OutputStream ostream = null;
 
-           OutputStreamWriter wr = new OutputStreamWriter(ostream);
+            try {
+                ostream = conn.getOutputStream();
+            } catch (IOException e) {
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=e.getMessage();
+                throw new Exception("Error al conectar con el webservice:\n " + error);
+
+            }
+
+            OutputStreamWriter wr = new OutputStreamWriter(ostream);
 
            String body = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +

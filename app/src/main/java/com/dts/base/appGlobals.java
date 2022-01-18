@@ -24,6 +24,7 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class appGlobals extends Application {
 
     public String wsurl;
     public clsBeOperador_bodega seloper=new clsBeOperador_bodega();
-
+    public String PathDataDir="";
 
     //Variable para mostrar cambio de estado o cambio de ubicación
     //1 cambio de ubicación
