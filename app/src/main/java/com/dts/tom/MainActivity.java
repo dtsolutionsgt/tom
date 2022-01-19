@@ -1293,9 +1293,9 @@ public class MainActivity extends PBase {
         progress.setCancelable(false);
         Window window=progress.getWindow();
 
-        if(window!=null){
+       /* if(window!=null){
             window.setBackgroundDrawable(new ColorDrawable(0));
-        }
+        }*/
 
         runOnUiThread(() -> {
             txtMensajeDialog= progress.findViewById(R.id.txtMensajeDialog);

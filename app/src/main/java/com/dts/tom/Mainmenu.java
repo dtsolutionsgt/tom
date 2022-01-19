@@ -62,8 +62,6 @@ public class Mainmenu extends PBase {
 
     private clsBeMenu_rol_opList menu_rol_opList = new clsBeMenu_rol_opList();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
