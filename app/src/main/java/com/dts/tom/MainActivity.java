@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -173,7 +174,7 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
                 setHandlers();
                 gl.deviceId =androidid();
-                gl.devicename = getLocalBluetoothName();
+                gl.devicename = getDeviceName();//getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
                 //#EJC20220118: Ya se llamó en getURL
@@ -194,6 +195,35 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+    }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+        String phrase = "";
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase += Character.toUpperCase(c);
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase += c;
+        }
+        return phrase;
     }
 
     private void Load(){
@@ -909,12 +939,15 @@ public class MainActivity extends PBase {
         }
 
         try {
+
             impres.clear();
 
             dt=xobj.filldt();
 
             if (dt.getCount()>0) {
+
                 dt.moveToFirst();
+
                 while (!dt.isAfterLast()) {
 
                     imp=new clsBeImpresora();
@@ -930,6 +963,7 @@ public class MainActivity extends PBase {
             }
 
             fillSpinImpres();
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -976,7 +1010,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processGetDecimalesDespliegue()     {
+    private void processGetDecimalesDespliegue() {
         try
         {
 
@@ -1065,7 +1099,7 @@ public class MainActivity extends PBase {
 
             progress.cancel();
             servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
-            msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
+            msgbox("El dispositivo: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
