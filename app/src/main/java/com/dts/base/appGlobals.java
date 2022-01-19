@@ -30,7 +30,7 @@ import java.util.List;
 
 public class appGlobals extends Application {
 
-    public String wsurl;
+    public String wsurl="";
     public clsBeOperador_bodega seloper=new clsBeOperador_bodega();
     public String PathDataDir="";
 

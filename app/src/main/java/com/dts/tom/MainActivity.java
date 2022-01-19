@@ -114,6 +114,8 @@ public class MainActivity extends PBase {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
+            //super.InitBase();
+
             ProgressDialog("Inicializando...");
 
             grantPermissions();
@@ -126,7 +128,6 @@ public class MainActivity extends PBase {
 
             //#EJC20220118:Path para Android 11.
             gl.PathDataDir=this.getApplicationContext().getDataDir().getPath();
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,7 +209,7 @@ public class MainActivity extends PBase {
             if (!gl.wsurl.isEmpty()){
                 execws(1);
             }else{
-                //progress.cancel();
+                progress.cancel();
             }
 
         } catch (Exception e) {
@@ -1240,6 +1241,7 @@ public class MainActivity extends PBase {
                 gl.wsurl = myReader.readLine();
                 myReader.close();
             }else{
+                progress.cancel();
                 setURL();
             }
 
