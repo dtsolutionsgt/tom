@@ -1063,6 +1063,7 @@ public class MainActivity extends PBase {
         String servidor="";
         try {
 
+            progress.cancel();
             servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
             msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
 
