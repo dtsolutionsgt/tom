@@ -205,6 +205,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeStock_parametro ObjStock_parametro;
     Integer IdProductoParametro;
     String tipo_parametro;
+    private String pRespuesta="";
 
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
@@ -5008,7 +5009,12 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     if (BeDetalleLotes != null){
-                        BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
+                        if (BeTransReDet.IdPresentacion!=0){
+                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString())*Factor;
+                        }else{
+                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
+                        }
+
                         BeDetalleLotes.IsNew = true;
                     }
                 }
@@ -5806,7 +5812,11 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
-                                   "Cantidad", vCantidad);
+                                   "Cantidad", vCantidad,
+                                   "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                   "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                   "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                   "pRespuesta", pRespuesta);
                         break;
 
                     case 26:
@@ -5828,7 +5838,11 @@ public class frm_recepcion_datos extends PBase {
                                        "Cantidad", BeTransReDet.cantidad_recibida,
                                        "NoLote",   BeTransReDet.Lote,
                                        "FechaVence",BeTransReDet.Fecha_vence,
-                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida,
+                                       "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                       "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                       "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                       "pRespuesta", pRespuesta)
                                ;
 
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
@@ -5841,7 +5855,11 @@ public class frm_recepcion_datos extends PBase {
                                        "Cantidad", BeTransReDet.cantidad_recibida,
                                        "NoLote",   BeTransReDet.Lote,
                                        "FechaVence",BeTransReDet.Fecha_vence,
-                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida,
+                                       "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                       "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                       "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                       "pRespuesta", pRespuesta)
                                ;
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
 
@@ -5853,7 +5871,11 @@ public class frm_recepcion_datos extends PBase {
                                        "Cantidad", BeTransReDet.cantidad_recibida,
                                        "NoLote",   BeTransReDet.Lote,
                                        "FechaVence",BeTransReDet.Fecha_vence,
-                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida)
+                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida,
+                                       "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                       "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                       "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                       "pRespuesta", pRespuesta)
                                ;
                            }
 
@@ -6822,12 +6844,16 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             boolean procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Produccion_To_NAV_For_BYB");
+            String respuesta =(String) xobj.getSingle("pRespuesta",String.class);
 
             if (procesada){
                 MensajeAdicionalParaImpresion = "Recepción de Producción procesada en ERP";
-                //toastlong("Recepción de Producción procesada en ERP");
+                Imprime_Barra_Despues_Guardar();
+            }else{
+                if (!respuesta.isEmpty() || !respuesta.equals("")){
+                    msgboxErrorPush("No se puedo registrar la recepción " + respuesta);
+                }
             }
-            Imprime_Barra_Despues_Guardar();
 
         }catch (Exception e){
             mu.msgbox("process_Recepcion_To_Nav:"+e.getMessage());
@@ -6846,19 +6872,27 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
 
                     procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
+                    MensajeAdicionalParaImpresion = "Recepción de Pedido de Compra procesada en ERP";
 
                 }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
 
                     procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB");
+                    MensajeAdicionalParaImpresion = "Recepción de Devolución de Venta procesada en ERP";
 
                 }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
 
                     procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB");
+                    MensajeAdicionalParaImpresion = "Recepción de Transferencia de Ingreso procesada en ERP";
 
                 }
+                String respuesta =(String) xobj.getSingle("pRespuesta",String.class);
 
                 if (procesada){
-                    MensajeAdicionalParaImpresion = "Recepción de compra procesada en ERP";
+                    Imprime_Barra_Despues_Guardar();
+                }else{
+                    if (!respuesta.isEmpty() || !respuesta.equals("")){
+                        msgboxErrorPush("No se puedo registrar la recepción " + respuesta);
+                    }
                 }
 
                 Imprime_Barra_Despues_Guardar();
@@ -6904,6 +6938,25 @@ public class frm_recepcion_datos extends PBase {
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            //Log.println(1,"msg",e.getMessage());
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void msgboxErrorPush(String msg) {
+        try{
+            ExDialog dialog = new ExDialog(this);
+            dialog.setMessage(msg);
+
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Imprime_Barra_Despues_Guardar();
                 }
             });
 
