@@ -129,6 +129,12 @@ public class frm_picking_datos extends PBase {
 
         if (selitem != null) {
             gBePickingUbic = selitem;
+
+            //#AT 20220124 Se cambia el formato de fecha para mostrar
+            if (gBePickingUbic.Fecha_Vence.contains("T")) {
+                gBePickingUbic.Fecha_Vence = du.convierteFechaMostrar(selitem.Fecha_Vence);
+            }
+
             gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
         }
 

@@ -23,7 +23,7 @@
                 style="@style/StyleText"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="80dp"
                 android:gravity="center"
                 android:text="Producto: 1000100250 - Kellogs 4grs Expira: 31-03-2011 Lote: 1 Dañado: 1 Caja" />
 
@@ -67,9 +67,9 @@
                 android:id="@+id/lblNomUbic"
                 style="@style/StyleText"
                 android:layout_width="match_parent"
-                android:layout_height="123dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="150dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="Nombre completo de ubicación"
                 android:textColor="#0119A2"
