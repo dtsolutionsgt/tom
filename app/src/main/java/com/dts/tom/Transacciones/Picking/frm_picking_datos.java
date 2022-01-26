@@ -321,7 +321,8 @@ public class frm_picking_datos extends PBase {
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
-
+                trCaducidad.setVisibility(View.VISIBLE);
+                txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
             }
 
             vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
@@ -1382,31 +1383,63 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    //#AT 20220126 Cree esta función para validar campos y que permita realizar el reemplazo y PordNoEnc
+    public boolean ValidaCampos() {
+
+        try {
+
+            if (!txtBarra.getText().toString().isEmpty() || !txtCodigoProducto.getText().toString().isEmpty()) {
+
+                if (txtCantidadPick.getText().toString().equals("0") ||
+                    txtCantidadPick.getText().toString().equals("0.00") ||
+                    txtCantidadPick.getText().toString().isEmpty() ||
+                    txtCantidadPick.getText().toString().equals("")) {
+
+                    mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                    txtCantidadPick.setSelectAllOnFocus(true);
+                    txtCantidadPick.requestFocus();
+                    return false;
+                } else {
+                    CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",", ""));
+                    return true;
+                }
+
+            } else {
+
+                if (trLP.getVisibility() == View.VISIBLE && txtBarra.getText().toString().isEmpty()) {
+                    mu.msgbox("Ingrese LP del producto");
+                    txtBarra.setSelectAllOnFocus(true);
+                    txtBarra.requestFocus();
+                    return false;
+                }
+
+                if (trLP.getVisibility() == View.GONE && txtCodigoProducto.getText().toString().isEmpty()) {
+                    mu.msgbox("Ingrese código del producto");
+                    txtCodigoProducto.setSelectAllOnFocus(true);
+                    txtCodigoProducto.requestFocus();
+                    return false;
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("ValidaciónCampos Reemplazo y NoEnc: " + e.getMessage());
+        }
+
+        return false;
+    }
+
     public void BotonReemplazo(View view){
 
         try {
 
             Tipo=1;
-
-            if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("Ingrese código del producto");
-                txtBarra.setSelectAllOnFocus(true);
-                txtBarra.requestFocus();
+            if (ValidaCampos()) {
+                msgReemplazo("¿Marcar producto para reemplazo?");
+            } else {
                 return;
             }
 
-            if (txtCantidadPick.getText().toString().equals("0")||txtCantidadPick.getText().toString().isEmpty()||txtCantidadPick.getText().toString().equals("")){
-                mu.msgbox("Ingrese la cantidad de producto a reemplazar");
-                txtCantidadPick.setSelectAllOnFocus(true);
-                txtCantidadPick.requestFocus();
-                return;
-            }
-
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
-
-            msgReemplazo("¿Marcar producto para reemplazo?");
-
-        }catch (Exception e){
+        } catch (Exception e) {
             mu.msgbox("BotonReemplazo:"+e.getMessage());
         }
     }
@@ -1416,28 +1449,13 @@ public class frm_picking_datos extends PBase {
         try {
 
             Tipo=2;
-
-           // if (trLP)
-
-            if (txtBarra.getText().toString().isEmpty()){
-                mu.msgbox("InBeTrans_pe_tipogrese LP del producto");
-                txtBarra.setSelectAllOnFocus(true);
-                txtBarra.requestFocus();
+            if (ValidaCampos()) {
+                msgReemplazo("¿Marcar producto como No Encontrado?");
+            } else {
                 return;
             }
 
-            if (txtCantidadPick.getText().toString().equals("0")||txtCantidadPick.getText().toString().isEmpty()||txtCantidadPick.getText().toString().equals("")){
-                mu.msgbox("Ingrese la cantidad de producto a reemplazar");
-                txtCantidadPick.setSelectAllOnFocus(true);
-                txtCantidadPick.requestFocus();
-                return;
-            }
-
-            CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
-
-            msgReemplazo("¿Marcar producto como No Encontrado?");
-
-        }catch (Exception e){
+        } catch (Exception e) {
             mu.msgbox("BotonReemplazo:"+e.getMessage());
         }
     }

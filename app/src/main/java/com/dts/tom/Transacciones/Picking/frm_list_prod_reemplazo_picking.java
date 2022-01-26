@@ -660,9 +660,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 if (CantidadPendiente == 0) {
                     msgAskReemplazado(Tipo == 1? "Stock reemplazado correctamente":"Stock reemplazado(No Encontrado) correctamente");
                 } else {
-
-                    msgAskCantPendiente(Tipo == 1 ? "Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")": "Cantidad de reemplazo(No encontrado) pendiente para completar el proceso: "+ "("+CantReemplazar+")");
                     CantReemplazar = CantidadPendiente;
+                    msgAskCantPendiente(Tipo == 1 ? "Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")": "Cantidad de reemplazo(No encontrado) pendiente para completar el proceso: "+ "("+CantReemplazar+")");
 
                     lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
                             "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
