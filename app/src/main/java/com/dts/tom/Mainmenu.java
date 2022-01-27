@@ -62,6 +62,8 @@ public class Mainmenu extends PBase {
 
     private clsBeMenu_rol_opList menu_rol_opList = new clsBeMenu_rol_opList();
 
+    private static String PathDataDir = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -114,6 +116,8 @@ public class Mainmenu extends PBase {
 
         String params=gl.wsurl+"#"+gl.IdBodega+"#"+gl.OperadorBodega.IdOperadorBodega;
         startCantTareas.startService(this,params);
+
+        PathDataDir = gl.PathDataDir;
 
         ProgressDialog("Cargando forma");
     }
@@ -745,7 +749,8 @@ public class Mainmenu extends PBase {
     }
 
     public static String readServiceFile() throws Exception {
-        String fname = Environment.getExternalStorageDirectory().getPath()+"/tom_tareas.txt";
+
+        String fname = PathDataDir +"/tom_tareas.txt";
         String aBuffer = "";
 
         File myFile = new File(fname);

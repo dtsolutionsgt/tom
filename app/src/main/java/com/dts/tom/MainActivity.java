@@ -39,6 +39,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.base.ExDialog;
+import com.dts.base.NetWorkInfoUtility;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
@@ -101,11 +102,15 @@ public class MainActivity extends PBase {
     private boolean idle=false;
 
     private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.6.2";
+    private String version="4.6.3";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private String mensaje_progress ="";
+
+    NetWorkInfoUtility netWorkInfoUtility = new NetWorkInfoUtility();
+
+    private boolean IsNetWorkAvailable =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +129,15 @@ public class MainActivity extends PBase {
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
+
+//            if (gl.wsurl!=null){
+//
+//                IsNetWorkAvailable= netWorkInfoUtility.isNetWorkAvailableNow(this.getApplicationContext(), gl.wsurl);
+//
+//                if (IsNetWorkAvailable){
+//                    lblurl.setText(netWorkInfoUtility.gIpAdress);
+//                }
+//            }
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -378,6 +392,7 @@ public class MainActivity extends PBase {
                                     Manifest.permission.WAKE_LOCK,
                                     Manifest.permission.READ_PHONE_STATE
                             }, 1);
+                    startApplication();
                 }
             }
 
