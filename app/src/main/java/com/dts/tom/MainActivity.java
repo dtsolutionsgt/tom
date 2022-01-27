@@ -1,11 +1,11 @@
 package com.dts.tom;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,10 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -31,8 +29,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,7 +43,6 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
-import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
@@ -62,14 +57,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import static br.com.zbra.androidlinq.Linq.stream;
 
 public class MainActivity extends PBase {
 
@@ -101,7 +92,6 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
     private String version="4.6.3";
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -873,17 +863,6 @@ public class MainActivity extends PBase {
 
     }
 
-    public String getLocalBluetoothName() {
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null)
-        {
-            return "";
-        } else
-        {
-            return mBluetoothAdapter.getName();
-        }
-    }
-
     @SuppressLint("MissingPermission")
     private String androidid()  {
         String uniqueID="";
@@ -985,8 +964,6 @@ public class MainActivity extends PBase {
     }
 
     private void processUsers() {
-
-        String rootdir=Environment.getExternalStorageDirectory()+"/WMSFotos/";
 
         class UserSort implements Comparator<clsBeOperador_bodega>
         {
