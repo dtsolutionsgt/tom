@@ -39,7 +39,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private TextView lblTituloForma,lblCantRegs;
+    private TextView lblTituloForma,lblCantRegs,lbldDetProducto;
     private ListView listDispProd;
     private Button btnActualizaPickingDet,btnBack;
 
@@ -52,7 +52,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     //private clsBeStock_res lBeStockRes = new clsBeStock_res();
     //private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
-    private double vCant=0;
+    private double vCant=0, CantidadPendiente=0, CantPendSel=0;
     private boolean Distinto=false;
 
     public static boolean reemplazoCorrecto=false;
@@ -72,6 +72,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
         lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
+        lbldDetProducto = (TextView)findViewById(R.id.lbldDetProducto);
 
         listDispProd = (ListView)findViewById(R.id.listDispProd);
 
@@ -98,6 +99,9 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             e.printStackTrace();
         }
         StockResReemplazo.IdBodega=gl.IdBodega;
+
+        lbldDetProducto.setText(BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto+
+                "\n Cant. Reemplazar: "+CantReemplazar+" "+BePedidoDetVerif.Nom_Unid_Med);
 
         //Llama el método del WS Get_All_Stock_Especifico_By_IdPedidoDet
         execws(1);
@@ -163,20 +167,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        /*callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
-                                    "pIdPedidoDet",BePedidoDetVerif.IdPedidoDet,
-                                    "IdPedidoEnc",BePedidoDetVerif.IdPedidoEnc,
-                                    "gIdBodega",gl.IdBodega,
-                                    "CantReemplazar", CantReemplazar,
-                                    "vCant",vCant);*/
                         callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
                                 "pBeStockRes", StockResReemplazo,
                                 "IdPedidoEnc", BePedidoDetVerif.IdPedidoEnc,
                                 "gIdBodega", gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Reemplaza_Producto_Dannado_Mayor_Igual",
-                                   "plistPickingUbi", pSubListPickingU.items,
+                        callMethod("Reemplazar_ListPickingUbic_Verificacion",
+                                   "plistPickingUbi", BePickingUbic,
                                    "pBeStockRes", tmpBeStock_Res,
                                    "pIdPickingEnc", pSubListPickingU.items.get(0).getIdPickingEnc(),
                                    "pIdOperador", gl.OperadorBodega.getIdOperador(),
@@ -234,7 +232,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     processListStockRes();
                     break;
                 case 2:
-                    processReemplazoMayorIgual();
+                    processReemplazo();
                     break;
                 case 3:
                     processReemplazoMenor();
@@ -272,12 +270,11 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 progress.cancel();
             }
 
+            //#AT Pendiente de validar para aplicar No Encontrado en la Verificación
             /*if (vCant == 0) {
                 msgAskMarcarDanado("No hay existencia de este producto en otra ubicación"+
                             "\n¿Marcar como producto para reemplazo de todas formas?");
-
             }*/
-
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processListStockRes:"+e.getMessage());
@@ -359,25 +356,33 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
     }
 
-    private void  processReemplazoMayorIgual(){
+    private void  processReemplazo(){
+        try {
+            
+            boolean StockReservado = false;
+            progress.cancel();
 
-        Boolean vResultado;
+            StockReservado = xobj.getresult(Boolean.class,"Reemplazar_ListPickingUbic_Verificacion");
+            CantidadPendiente = (Double) xobj.getSingle("CantPend",Double.class);
 
-        try{
+            if (CantidadPendiente == 0 && CantPendSel > 0) {
+                CantidadPendiente = CantPendSel;
+            }
 
-                progress.setMessage("Reemplazando producto de una idStock con una cantidad mayor o igual");
+            if (StockReservado) {
+                if (CantidadPendiente == 0) {
+                    msgAskReemplazado("Stock reemplazado correctamente");
+                } else {
+                    CantReemplazar = CantidadPendiente;
+                    msgAskCantPendiente("Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")");
 
-                DT = xobj.filldt();
+                    lbldDetProducto.setText(BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto+
+                            "\n Cant. Reemplazar: "+CantReemplazar+" "+BePedidoDetVerif.Nom_Unid_Med);
 
-                vResultado = xobj.getresultSingle(Boolean.class,"Reemplaza_Producto_Dannado_Mayor_IgualResult");
-
-                if (vResultado){
-                    reemplazoCorrecto = true;
-                    super.finish();
-                }else{
-                    reemplazoCorrecto = false;
-                    progress.cancel();
+                    progress.setMessage("Obteniendo inventario disponible para reemplazo");
+                    execws(1);
                 }
+            }
 
         }catch (Exception e){
             progress.cancel();
@@ -458,18 +463,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private void Continua_procesando_registro(){
 
         try{
+            CantPendSel = 0;
 
             progress.setMessage("Procesando el reemplazo de producto...");
             progress.show();
 
-            List AuxList = stream(pSubListPickingU.items)
-                    .where (z -> z.getIdPedidoDet() == BePedidoDetVerif.getIdPedidoDet())
-                    .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() !=  0)
-                    .toList();
+            BePickingUbic = pSubListPickingU.items.get(0);
 
-            pSubListPickingU.items = AuxList;
-
-            if (selitem.Cant>=CantReemplazar){
+            if (CantReemplazar > 0) {
                 tmpBeStock_Res = new clsBeStock_res();
 
                 tmpBeStock_Res.IdPresentacion = selitem.IdPresentacion;
@@ -481,16 +482,15 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 tmpBeStock_Res.IdProductoBodega = selitem.IdProductoBodega;
                 tmpBeStock_Res.IdUnidadMedida = selitem.IdUnidadMedida;
 
-                //Llama al método del WS Reemplaza_Producto_Dannado_Mayor_Igual
+                if (selitem.Cant >= CantReemplazar) {
+
+                } else {
+                    CantPendSel = CantReemplazar - selitem.Cant;
+                    CantReemplazar = selitem.Cant;
+                }
+
                 execws(2);
-
-            }else{
-
-                //Llama al método del WS Reemplaza_Producto_Dannado_Menor
-                execws(3);
-
             }
-
 
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -630,6 +630,54 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    private void msgAskReemplazado(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ok48);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    salir();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskCantPendiente(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ok48);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void salir () {
+        super.finish();
     }
 
     public void Regresar(View view){

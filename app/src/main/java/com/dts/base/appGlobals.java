@@ -99,6 +99,8 @@ public class appGlobals extends Application {
     public int gVCascIdEnc;
     public boolean gPriorizar_UbicRec_Sobre_UbicEst=false;
     public String gUbicMerma = "";
+    public int gUbicProdNe;
+    public int IdProductoEstadoNE;
 
     //Variables para picking
     public int gIdPickingEnc=0;

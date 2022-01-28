@@ -321,8 +321,7 @@ public class frm_picking_datos extends PBase {
             DifDias = du.DateDiff(gBePickingUbic.Fecha_Vence);
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
-                trCaducidad.setVisibility(View.VISIBLE);
-                txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
+
             }
 
             vUnidadMedida = gBePickingUbic.ProductoUnidadMedida;
@@ -959,8 +958,9 @@ public class frm_picking_datos extends PBase {
                     //#CKFK 20210210 Puse esto en comentario porque inicializaba el producto, y daba error
                     // porque no se puede buscar en la vista VW_ProductoSI por LicPlate
 
-                   gBeProducto = new clsBeProducto();
-                   gBeProducto.Codigo = pCodigo;
+                    //#AT 20220126 Cambie de gBeProducto a tmpgBeProducto para no perder los datos de gBeProducto
+                    tmpgBeProducto = new clsBeProducto();
+                    tmpgBeProducto.Codigo = pCodigo;
 
                    //#EJC20210907: Corrrección para que permita pickear sin código de producto.
                     if (pCodigo.isEmpty()){
@@ -1466,9 +1466,15 @@ public class frm_picking_datos extends PBase {
             if (Tipo == 1) {
                 browse = 1;
                 startActivity(new Intent(this, frm_danado_picking.class));
-            }else{
+            }else {
                 browse = 1;
-                startActivity(new Intent(this, frm_list_prod_reemplazo_picking.class));
+                //#AT Se valida si existe estado/ubicación para marcar un producto No encontrado, si no debe mostrar un mensaje
+                if (gl.gUbicProdNe > 0 && gl.IdProductoEstadoNE > 0) {
+                    startActivity(new Intent(this, frm_list_prod_reemplazo_picking.class));
+                } else {
+                    msgProdNe("No existe un estado/ubicación disponible para marcar como no encontrado al producto: "+
+                            "\n \n"+gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto);
+                }
             }
 
         }catch (Exception e){
@@ -1495,6 +1501,29 @@ public class frm_picking_datos extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgProdNe(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.back);
+
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
 
@@ -1709,10 +1738,10 @@ public class frm_picking_datos extends PBase {
     private void processProductoForHH(){
 
         try {
+
             tmpgBeProducto = xobj.getresult(clsBeProducto.class, "Get_BeProducto_By_Codigo_For_HH");
 
             if (tmpgBeProducto!=null){
-
                 if (tmpgBeProducto.Codigo.equals(gBePickingUbic.CodigoProducto)){
                     if (TipoLista==1){
                         Cargar_Datos_Producto_Picking_Consolidado();

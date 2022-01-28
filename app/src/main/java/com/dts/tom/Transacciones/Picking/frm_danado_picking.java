@@ -70,7 +70,6 @@ public class frm_danado_picking extends PBase {
         setHandles();
 
         execws(1);
-
     }
 
     private void setHandles(){
@@ -290,6 +289,7 @@ public class frm_danado_picking extends PBase {
     private void processEstadoProducto(){
 
         try{
+            boolean existe = false;
 
             LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
 
@@ -298,17 +298,20 @@ public class frm_danado_picking extends PBase {
                     "\n Lote: "+gBePickingUbic.Lote+
                     "\n Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
 
+            txtUbicDest.setSelectAllOnFocus(true);
+            txtUbicDest.requestFocus();
+            txtUbicDest.selectAll();
+
             //#AT 20220126 Se valida  que LProductoEstadoDanado no sea nulo de ser asi mostrará un mensaje
             if (LProductoEstadoDanado != null) {
+                if (LProductoEstadoDanado.items != null) {
+                    Listar_Producto_Estado();
+                    existe = true;
+                }
+            }
 
-                Listar_Producto_Estado();
-
-                txtUbicDest.setSelectAllOnFocus(true);
-                txtUbicDest.requestFocus();
-                txtUbicDest.selectAll();
-
-            } else {
-                msgProdEstado("No se han encontrado estados disponibles para el producto: "+
+            if (!existe) {
+                msgProdEstado("No se ha encontrado estados disponibles para el producto: "+
                         "\n"+gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto);
             }
 

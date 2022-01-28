@@ -383,9 +383,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             if (DT.getCount()>0) {
 
-                vItem=new clsBeStockReemplazo();
-
-                BeListStock.add(vItem);
+                /*vItem=new clsBeStockReemplazo();
+                BeListStock.add(vItem);*/
 
                 DT.moveToFirst();
 
@@ -431,7 +430,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     DT.moveToNext();
                 }
 
-                int count =BeListStock.size()-1;
+                int count =BeListStock.size();
                 lblCantRegs.setText("No.Reg: "+count);
             }
 

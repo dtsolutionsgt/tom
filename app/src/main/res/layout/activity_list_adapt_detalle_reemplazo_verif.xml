@@ -7,164 +7,18 @@
     tools:context="com.dts.ladapt.Verificacion.list_adapt_detalle_reemplazo_verif">
 
     <LinearLayout
-        android:id="@+id/linearEncCB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/color_medium"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/lblECodigoRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Código"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/lblEProductoRe"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Nombre"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/lblEPresRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Presentación"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/lblEUmbasRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Unidad Medida"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/lblECantRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Disp UM Bas"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/lblEUbicRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Id Ubicacion"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblEVenceRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Vence"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblELpRe"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Lic Plate"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblELoteRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Lote"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblECodPrRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Id Producto Bodega"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblEPesoRe"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Peso"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/lblEEstadoRe"
-            android:layout_width="125dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Nom Estado"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/lblEStock"
-            android:layout_width="125dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Id Stock"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/lblEDespachar"
-            android:layout_width="125dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Aplica"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearDetalleCB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearEncCB"
-        android:orientation="horizontal">
+        android:id="@+id/relView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:addStatesFromChildren="true"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:orientation="horizontal"
+        android:transitionGroup="true">
 
         <TextView
             android:id="@+id/lblCodigoRe"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -176,7 +30,7 @@
 
         <TextView
             android:id="@+id/lblProductoRe"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -188,7 +42,7 @@
 
         <TextView
             android:id="@+id/lblPresRe"
-            android:layout_width="100dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -200,7 +54,7 @@
 
         <TextView
             android:id="@+id/lblUmbasRe"
-            android:layout_width="100dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -235,7 +89,7 @@
 
         <TextView
             android:id="@+id/lblVenceRe"
-            android:layout_width="100dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -261,6 +115,7 @@
             android:id="@+id/lblLoteRe"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:minHeight="50dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -270,7 +125,7 @@
 
         <TextView
             android:id="@+id/lblCodPrRe"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -296,15 +151,17 @@
             android:id="@+id/lblEstadoRe"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/lblStock"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark"
@@ -317,6 +174,7 @@
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark"
-            android:visibility="gone" />
+            android:visibility="visible" />
+
     </LinearLayout>
 </RelativeLayout>

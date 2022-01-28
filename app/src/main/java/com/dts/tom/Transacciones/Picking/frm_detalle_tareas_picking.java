@@ -324,7 +324,9 @@ public class frm_detalle_tareas_picking extends PBase {
                         if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
 
                             vItem = new  clsBeTrans_picking_ubic();
-                            obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                            if (obj.Fecha_Vence.contains("T")) {
+                                obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                            }
                             vItem = obj;
 
                             BeListPickingUbic.add(vItem);

@@ -51,11 +51,11 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        list_adapt_detalle_reemplazo_verif.ViewHolder holder;
+        ViewHolder holder;
 
         if (convertView == null) {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_reemplazo_verif, null);
-            holder = new list_adapt_detalle_reemplazo_verif.ViewHolder();
+            holder = new ViewHolder();
 
             holder.lblCodigoRe = (TextView) convertView.findViewById(R.id.lblCodigoRe);
             holder.lblProductoRe = (TextView) convertView.findViewById(R.id.lblProductoRe);
@@ -75,7 +75,7 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
             convertView.setTag(holder);
 
         }else {
-            holder = (list_adapt_detalle_reemplazo_verif.ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         holder.lblCodigoRe.setText(BeListTareasHH.get(position).Codigo);
@@ -93,13 +93,13 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
         holder.lblStock.setText(""+BeListTareasHH.get(position).IdStock);
         holder.lblDespachar.setText(""+BeListTareasHH.get(position).Despachar);
 
-        LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
+        //LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
 
-        if (position>0){
+       /* if (position>0){
             encabezado.setVisibility(View.GONE);
         }else{
             encabezado.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));

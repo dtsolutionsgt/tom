@@ -3628,18 +3628,11 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                         //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
-                        //Si el parametro está en true y el estado no es dañado se manda
-                        //la ubicación de la tarea de recepción
+                        //Si el parámetro está en true se manda la ubicación de la tarea de recepción
                         //en caso contrario se manda la ubicación del estado o la ubicación de merma
                         // si no existe ninguna de ellas se manda la ubicación de la tarea de recepción
                         if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
-                            if (BeEstado.Danado){
-                                if (vIdUbicacion==0){
-                                    vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                                }
-                            }else{
-                                vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                            }
+                            vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
                         }else{
                             //Si el parametro está en false se manda la ubicación del estado
                             //Si la ubicación del estado no existe
@@ -5113,20 +5106,11 @@ public class frm_recepcion_datos extends PBase {
                             }
 
                             //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
-                            //Si el parametro está en true y el estado no es dañado se manda
-                            //la ubicación de la tarea de recepción
+                            //Si el parámetro está en true se manda la ubicación de la tarea de recepción
                             //en caso contrario se manda la ubicación del estado o la ubicación de merma
                             // si no existe ninguna de ellas se manda la ubicación de la tarea de recepción
                             if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
-                                if (BeEstado.Danado){
-                                    if (vIdUbicacion==0){
-                                        BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                                    }else{
-                                        BeStockRec.IdUbicacion = vIdUbicacion;
-                                    }
-                                }else{
-                                    BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                                }
+                                BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
                             }else{
                                 //Si el parametro está en false se manda la ubicación del estado
                                 //Si la ubicación del estado no existe

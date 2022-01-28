@@ -504,6 +504,8 @@ public class MainActivity extends PBase {
                     gl.gCapturaPalletNoEstandar = bodegas.items.get(position).captura_pallet_no_estandar;
                     gl.gPriorizar_UbicRec_Sobre_UbicEst = bodegas.items.get(position).priorizar_ubicrec_sobre_ubicest;
                     gl.gUbicMerma = bodegas.items.get(position).ubic_merma;
+                    gl.gUbicProdNe = bodegas.items.get(position).ubic_producto_ne;
+                    gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
                     idimpres=0;
                     execws(3);
 
