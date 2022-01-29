@@ -151,7 +151,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         try {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
@@ -1611,7 +1613,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 msgbox("Ubicación destino incorrecta");
                 //throw new Exception("Ubicación destino incorrecta");
             }else{
-                execws(21);
+
+                if (bodega_ubicacion_destino.Disponibilidad_Ubicacion ==1){
+                    msgAskUbicacionOcupadaCompleta();
+                }else if (bodega_ubicacion_destino.Disponibilidad_Ubicacion <1){
+                    msgAskUbicacionParcialmenteCompleta(bodega_ubicacion_destino.Disponibilidad_Ubicacion);
+                }else{
+                    execws(21);
+                }
+
             }
 
         } catch (Exception e) {
@@ -2602,6 +2612,72 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    private void msgAskUbicacionOcupadaCompleta(){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿La disponibilidad de la ubicación parece ser de 0% continuar de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(21);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which){
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskUbicacionParcialmenteCompleta(double PorcentajeOcupacionPosicion){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿La disponibilidad de la ubicación es de:" + PorcentajeOcupacionPosicion + "% continuar de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(21);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which){
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     private void msgAskImpresoraLista(String msg){

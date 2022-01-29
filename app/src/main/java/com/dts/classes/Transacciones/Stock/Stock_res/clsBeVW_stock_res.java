@@ -99,6 +99,11 @@ public class clsBeVW_stock_res {
   @Element(required=false) public boolean ubicacion_picking=false;
   @Element(required=false) public String Host="";
 
+  //#EJC20220129:
+  @Element(required=false) public double CamasPorTarima=0;
+  @Element(required=false) public double CajasPorCama=0;
+  @Element(required=false) public boolean es_rack=false;
+  //
 
   public clsBeVW_stock_res() {
   }
@@ -752,12 +757,35 @@ public class clsBeVW_stock_res {
   public void setubicacion_picking(boolean value) {
     ubicacion_picking=value;
   }
+
   public String getHost() {
     return Host;
   }
   public void setHost(String value) {
     Host=value;
   }
+
+  public double getCamasPorTarima() {
+    return CamasPorTarima;
+  }
+  public void setCamasPorTarima(double value) {
+    CamasPorTarima=value;
+  }
+
+  public double getCajasPorCama() {
+    return CajasPorCama;
+  }
+  public void setCajasPorCama(double value) {
+    CajasPorCama=value;
+  }
+
+  public boolean getes_rack() {
+    return es_rack;
+  }
+  public void setes_rack(boolean value) {
+    es_rack=value;
+  }
+
 
 }
 

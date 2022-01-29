@@ -43,7 +43,7 @@ public class clsBeBodega_ubicacion {
     @Element(required=false) public clsBeBodega_tramo Tramo=new clsBeBodega_tramo();
     @Element(required=false) public clsBeBodega_sector Sector=new clsBeBodega_sector();
     @Element(required=false) public String NombreCompleto="";
-
+    @Element(required=false) public double Disponibilidad_Ubicacion=0;
 
     public clsBeBodega_ubicacion() {
     }
@@ -330,7 +330,11 @@ public class clsBeBodega_ubicacion {
         NombreCompleto=value;
     }
 
+    public double getDisponibilidad_Ubicacion() {
+        return Disponibilidad_Ubicacion;
+    }
+    public void setDisponibilidad_Ubicacion(double value) {
+        Disponibilidad_Ubicacion=value;
+    }
+
 }
-
-
-

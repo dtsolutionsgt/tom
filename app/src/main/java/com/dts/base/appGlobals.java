@@ -30,9 +30,9 @@ import java.util.List;
 
 public class appGlobals extends Application {
 
-    public String wsurl="";
-    public clsBeOperador_bodega seloper=new clsBeOperador_bodega();
-    public String PathDataDir="";
+    public String wsurl = "";
+    public clsBeOperador_bodega seloper = new clsBeOperador_bodega();
+    public String PathDataDir = "";
 
     //Variable para mostrar cambio de estado o cambio de ubicación
     //1 cambio de ubicación
@@ -52,7 +52,7 @@ public class appGlobals extends Application {
     public int IdTareaUbicDet;
 
     //Variables de valores anteriores para cambio de ubicación y de estado
-    public String gCProdAnterior  = "";
+    public String gCProdAnterior = "";
     public int gCEstadoAnterior = -1;
     public String gCNomEstadoAnterior = "";
     public String gCFechaAnterior = "01/01/1900";
@@ -64,10 +64,9 @@ public class appGlobals extends Application {
     //variable y listas publicas para mainActivity
     public int IdEstadoProductoNE;
     public String CodigoBodega;
-    public String MacPrinter="";
+    public String MacPrinter = "";
     public List<clsBeOperador_bodega> gOperadorBodega;
     public List<clsBeImpresora> gImpresora;
-
 
     public clsBeVW_stock_res BeStockPallet;
     public int gIdProductoBuenEstadoPorDefecto;
@@ -81,29 +80,29 @@ public class appGlobals extends Application {
     public clsBeTrans_oc_detList gListDetalleOC = new clsBeTrans_oc_detList();
     public clsBeTrans_re_enc gBeRecepcion = new clsBeTrans_re_enc();
     public boolean gEscaneo_Pallet;
-    public clsBeTrans_oc_det gselitem= new clsBeTrans_oc_det();
+    public clsBeTrans_oc_det gselitem = new clsBeTrans_oc_det();
     public String CodigoRecepcion;
     public clsBeTrans_oc_detList gpListDetalleOC;
     public clsBeTrans_oc_enc gBeOrdenCompra;
-    public double  CantRec=0;
-    public  double CantOC=0;
-    public String gLoteAnterior="";
+    public double CantRec = 0;
+    public double CantOC = 0;
+    public String gLoteAnterior = "";
     public String gProductoAnterior = "";
-    public String gFechaVenceAnterior="";
-    public String gLP="";
-    public boolean Carga_Producto_x_Pallet=false;
+    public String gFechaVenceAnterior = "";
+    public String gLP = "";
+    public boolean Carga_Producto_x_Pallet = false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
     public boolean gCapturaPalletNoEstandar = false;
     public boolean gCapturaEstibaIngreso = false;
     public boolean gVerifCascade = false;
     public int gVCascIdEnc;
-    public boolean gPriorizar_UbicRec_Sobre_UbicEst=false;
+    public boolean gPriorizar_UbicRec_Sobre_UbicEst = false;
     public String gUbicMerma = "";
     public int gUbicProdNe;
     public int IdProductoEstadoNE;
 
     //Variables para picking
-    public int gIdPickingEnc=0;
+    public int gIdPickingEnc = 0;
 
     //Variables para verificación
     public int pIdPedidoEnc;
@@ -114,8 +113,8 @@ public class appGlobals extends Application {
     //gBePedidoEnc = new clsBeTrans_pe_enc;
 
     //Variables para packing
-    public int modo_packing, paPickUbicId,paCant,paCamas, paLinea;
-    public String paCodigo,paNombre,paBulto,filtroprod,paLote,paEstado;
+    public int modo_packing, paPickUbicId, paCant, paCamas, paLinea;
+    public String paCodigo, paNombre, paBulto, filtroprod, paLote, paEstado;
     public ArrayList<clsBeTrans_packing_lotes> packlotes = new ArrayList<clsBeTrans_packing_lotes>();
 
     //variable para row seleccionado del inventario ciclico
@@ -138,16 +137,16 @@ public class appGlobals extends Application {
     public boolean cerrarActividad2 = false;
 
     //Variables globales generales.
-    public int IdBodega,IdOperador,IdEmpresa,IdImpresora;
-    public String gCodigoBodega,gNomOperador,gNomEmpresa, gNomBodega;
+    public int IdBodega, IdOperador, IdEmpresa, IdImpresora;
+    public String gCodigoBodega, gNomOperador, gNomEmpresa, gNomBodega;
     public int tipoTarea;
     public clsBeOperador_bodega OperadorBodega = new clsBeOperador_bodega();
-    public int gCantDecDespliegue=0;
-    public int gCantDecCalculo=0;
-    public String deviceId="", devicename="";
-    public int mode=0;
+    public int gCantDecDespliegue = 0;
+    public int gCantDecCalculo = 0;
+    public String deviceId = "", devicename = "";
+    public int mode = 0;
     public boolean bloquear_lp_hh = false;
-    public int IdResolucionLpOperador=0;
+    public int IdResolucionLpOperador = 0;
 
     //variable para diferenciar inv cealsa de cualquier otro
     public boolean multipropietario = false;
@@ -155,4 +154,7 @@ public class appGlobals extends Application {
     //Variable para Operador con su rol y permisos
     public clsBeOperador beOperador = new clsBeOperador();
 
+    //#EJC20220129: Validar si la ubicación destino tiene producto o está "libre" antes de colocar producto allí
+
+    public boolean validar_disponibilidad_ubicaicon_destino = false;
 }
