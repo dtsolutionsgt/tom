@@ -58,7 +58,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
     @Element(required=false) public boolean control_banderas_cliente = false;
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
-   // @Element(required=false) public boolean priorizar_ubicrec_sobre_ubicest =false;
+    @Element(required=false) public boolean validar_disponibilidad_ubicaicon_destino =false;
 
     public clsBeBodega() {
     }
@@ -424,12 +424,11 @@ public class clsBeBodega extends clsBeBodegaBase {
         IdTamanoEtiquetaUbicacionDefecto=value;
     }
 
-   /* public boolean getpriorizar_ubicrec_sobre_ubicest() {
-        return priorizar_ubicrec_sobre_ubicest;
+   public boolean getvalidar_disponibilidad_ubicaicon_destino() {
+        return validar_disponibilidad_ubicaicon_destino;
     }
-    public void setpriorizar_ubicrec_sobre_ubicest(boolean value) {
-        priorizar_ubicrec_sobre_ubicest=value;
-    }*/
-
+    public void setvalidar_disponibilidad_ubicaicon_destino(boolean value) {
+        validar_disponibilidad_ubicaicon_destino=value;
+    }
 }
 
