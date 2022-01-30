@@ -1615,8 +1615,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 if (bodega_ubicacion_destino.Disponibilidad_Ubicacion ==1){
+                    progress.cancel();
                     msgAskUbicacionOcupadaCompleta();
                 }else if (bodega_ubicacion_destino.Disponibilidad_Ubicacion <1){
+                    progress.cancel();
                     msgAskUbicacionParcialmenteCompleta(bodega_ubicacion_destino.Disponibilidad_Ubicacion);
                 }else{
                     execws(21);
