@@ -16,6 +16,7 @@ public class clsBeBodegaBase
     @Element(required=false) public String ubic_merma="";
     @Element(required=false) public int ubic_producto_ne=0;
     @Element(required=false) public int IdProductoEstadoNE=0;
+    @Element(required=false) public boolean validar_disponibilidad_ubicaicon_destino =false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -85,5 +86,12 @@ public class clsBeBodegaBase
     }
     public void setIdProductoEstadoNE(int value) {
         IdProductoEstadoNE=value;
+    }
+
+    public boolean getvalidar_disponibilidad_ubicaicon_destino() {
+        return validar_disponibilidad_ubicaicon_destino;
+    }
+    public void setvalidar_disponibilidad_ubicaicon_destino(boolean value) {
+        validar_disponibilidad_ubicaicon_destino=value;
     }
 }

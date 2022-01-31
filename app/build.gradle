@@ -6,7 +6,7 @@ android {
     compileSdkVersion 31
         defaultConfig {
         applicationId "com.dts.tom"
-        minSdkVersion 28
+        minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 31
         renderscriptTargetApi 28

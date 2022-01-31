@@ -734,6 +734,9 @@ public class MainActivity extends PBase {
 
                             gl.CodigoBodega = BeBodega.get(0).Codigo;
 
+                            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
+                            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
+
                             List<clsBeOperador_bodega> BeOperadorBodega =
                                     stream(users.items)
                                             .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
