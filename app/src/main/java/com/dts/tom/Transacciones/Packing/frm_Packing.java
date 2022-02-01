@@ -2244,12 +2244,13 @@ public class frm_Packing extends PBase {
             });
 
             dialog.setNegativeButton("No gracias", (dialog13, which) -> {
-                if (!imprimirDesdeBoton){
+                /*if (!imprimirDesdeBoton){
                     progress.setMessage("Imprimiendo licencia");
                     progress.show();
-                }else{
+                } else {
                     progress.cancel();
-                }
+                }*/
+                progress.cancel();
             });
 
             dialog.show();
