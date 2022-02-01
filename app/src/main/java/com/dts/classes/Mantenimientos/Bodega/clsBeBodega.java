@@ -36,8 +36,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdMotivoUbicacionDanadoPicking=0;
     @Element(required=false) public boolean cambio_ubicacion_auto=false;
     @Element(required=false) public String codigo_bodega_erp="";
-    @Element(required=false) public int ubic_producto_ne=0;
-    @Element(required=false) public int IdProductoEstadoNE=0;
+ //   @Element(required=false) public int ubic_producto_ne=0;
+//    @Element(required=false) public int IdProductoEstadoNE=0;
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public clsBeBodega_areaList Areas=new clsBeBodega_areaList();
     @Element(required=false) public clsBeBodega_sectorList Sectores=new clsBeBodega_sectorList();
