@@ -36,15 +36,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdMotivoUbicacionDanadoPicking=0;
     @Element(required=false) public boolean cambio_ubicacion_auto=false;
     @Element(required=false) public String codigo_bodega_erp="";
- //   @Element(required=false) public int ubic_producto_ne=0;
-//    @Element(required=false) public int IdProductoEstadoNE=0;
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public clsBeBodega_areaList Areas=new clsBeBodega_areaList();
     @Element(required=false) public clsBeBodega_sectorList Sectores=new clsBeBodega_sectorList();
     @Element(required=false) public clsBeBodega_tramoList Tramos=new clsBeBodega_tramoList();
     @Element(required=false) public clsBeBodega_ubicacionList Ubicaciones=new clsBeBodega_ubicacionList();
     @Element(required=false) public clsBeBodega_muellesList Muelles=new clsBeBodega_muellesList();
-
     @Element(required=false) public String Cuenta_Ingreso_Mercancias="0";
     @Element(required=false) public String Cuenta_Egreso_Mercancias="0";
     @Element(required=false) public boolean Notificacion_Voz=false;
@@ -52,13 +49,11 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Es_Bodega_Fiscal=false;
     @Element(required=false) public boolean habilitar_ingreso_consolidado=false;
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
-  /*  @Element(required=false) public boolean captura_estiba_ingreso = false;
-    @Element(required=false) public boolean captura_pallet_no_estandar = false;*/
     @Element(required=false) public float valor_porcentaje_iva = 0;
     @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
     @Element(required=false) public boolean control_banderas_cliente = false;
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
-
+    @Element(required=false) public boolean Ubicar_Tarimas_Completas_Reabasto = false;
 
     public clsBeBodega() {
     }
@@ -424,6 +419,10 @@ public class clsBeBodega extends clsBeBodegaBase {
         IdTamanoEtiquetaUbicacionDefecto=value;
     }
 
-
+    public boolean getUbicar_Tarimas_Completas_Reabasto() {
+        return Ubicar_Tarimas_Completas_Reabasto;
+    }
+    public void setUbicar_Tarimas_Completas_Reabasto(boolean value) {
+        Ubicar_Tarimas_Completas_Reabasto=value;
+    }
 }
-

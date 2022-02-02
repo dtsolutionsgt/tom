@@ -487,8 +487,6 @@ public class frm_recepcion_datos extends PBase {
                             progress.cancel();
                         }
                     }
-
-
                 }
 
                 @Override
@@ -5992,7 +5990,7 @@ public class frm_recepcion_datos extends PBase {
 
         } catch (Exception e) {
             msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: " + e.getMessage());
+            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
         }
 
     }

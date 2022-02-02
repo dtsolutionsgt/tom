@@ -1485,6 +1485,7 @@ public class frm_picking_datos extends PBase {
     private void msgReemplazo(String msg) {
 
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -1514,6 +1515,7 @@ public class frm_picking_datos extends PBase {
     private void msgProdNe(String msg) {
 
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
