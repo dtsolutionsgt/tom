@@ -485,6 +485,8 @@ public class frm_recepcion_datos extends PBase {
                             progress.show();
                             execws(6);
                             progress.cancel();
+                        }else{
+                            toastlong("La presentación no genera lp Auto..");
                         }
                     }
                 }
