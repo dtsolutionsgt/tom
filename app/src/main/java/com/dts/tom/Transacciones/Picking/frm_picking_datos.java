@@ -1400,10 +1400,19 @@ public class frm_picking_datos extends PBase {
                     txtCantidadPick.requestFocus();
                     return false;
                 } else {
-                    CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",", ""));
-                    return true;
-                }
+                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
 
+                    if (vDif<0){
+                        mu.msgbox("La cantidad es mayor a la solicitada");
+                        txtCantidadPick.selectAll();
+                        txtCantidadPick.setSelectAllOnFocus(true);
+                        txtCantidadPick.requestFocus();
+                        return false;
+                    } else {
+                        CantReemplazar = Double.parseDouble(txtCantidadPick.getText().toString().replace(",", ""));
+                        return true;
+                    }
+                }
             } else {
 
                 if (trLP.getVisibility() == View.VISIBLE && txtBarra.getText().toString().isEmpty()) {

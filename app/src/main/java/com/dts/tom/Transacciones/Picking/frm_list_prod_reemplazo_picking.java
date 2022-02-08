@@ -138,8 +138,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
-
                         Object lvObj = listDispProd.getItemAtPosition(position);
                         clsBeStockReemplazo sitem = (clsBeStockReemplazo) lvObj;
                         selitem = new clsBeStockReemplazo();
@@ -150,10 +148,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         adapter.setSelectedIndex(position);
 
                         procesar_registro();
-                    }
 
                 }
-
             });
 
         }catch (Exception e){
@@ -253,6 +249,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     //Reservar_Stock_By_IdStock
                     execws(3);
                 }
+
+                progress.cancel();
             }
 
         }catch (Exception e){
@@ -398,6 +396,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.UMBas = DT.getString(3);
                     vItem.Cant = DT.getDouble(4);
                     vItem.IdUbicacion = DT.getInt(5);
+                    vItem.NombreUbicacion = DT.getString(40);
 
                     if (DT.getString(6)!=null){
                         vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));

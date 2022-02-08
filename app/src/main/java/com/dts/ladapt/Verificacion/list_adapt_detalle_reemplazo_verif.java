@@ -83,7 +83,7 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
         holder.lblPresRe.setText(""+BeListTareasHH.get(position).Presentacion);
         holder.lblUmbasRe.setText(""+BeListTareasHH.get(position).UMBas);
         holder.lblCantRe.setText(""+BeListTareasHH.get(position).Cant);
-        holder.lblUbicRe.setText(""+BeListTareasHH.get(position).IdUbicacion);
+        holder.lblUbicRe.setText(""+BeListTareasHH.get(position).NombreUbicacion);
         holder.lblVenceRe.setText(""+BeListTareasHH.get(position).FechaVence);
         holder.lblLpRe.setText(""+BeListTareasHH.get(position).LicPlate);
         holder.lblLoteRe.setText(""+BeListTareasHH.get(position).Lote);

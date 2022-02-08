@@ -305,6 +305,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     vItem.UMBas = DT.getString(3);
                     vItem.Cant = DT.getDouble(4);
                     vItem.IdUbicacion = DT.getInt(5);
+                    vItem.NombreUbicacion = DT.getString(40);
 
                     if (DT.getString(6)!=null){
                         vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));
