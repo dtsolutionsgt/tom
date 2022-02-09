@@ -63,7 +63,7 @@ public class frm_inv_cic_add extends PBase {
     private ArrayList<String> PresList= new ArrayList<String>();
     private ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
 
-    private  clsBeTrans_inv_ciclico_vw pitem;
+    private  clsBeTrans_inv_ciclico pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
 
@@ -657,7 +657,7 @@ public class frm_inv_cic_add extends PBase {
         try{
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
-            pitem = new clsBeTrans_inv_ciclico_vw();
+            pitem = new clsBeTrans_inv_ciclico();
             BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
             txtUbic.setText("");
             txtProd.setText("");
@@ -807,9 +807,9 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 //GT 18012021 set para la clase que se envia como conteo.
-                pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem= new clsBeTrans_inv_ciclico();
 
-                pitem.Idinvciclico = 0;
+                //pitem.Idinvciclico = 0;
                 pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                 pitem.IdUbicacion = gl.inv_ciclico.NoUbic;;
@@ -821,8 +821,9 @@ public class frm_inv_cic_add extends PBase {
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
 
                 if(pitem.IdPresentacion > 0){
 
@@ -844,8 +845,8 @@ public class frm_inv_cic_add extends PBase {
                 //Tarea_Conteo()
             }else{
 
-                pitem= new clsBeTrans_inv_ciclico_vw();
-                pitem.Idinvciclico = 0;
+                pitem= new clsBeTrans_inv_ciclico();
+               // pitem.Idinvciclico = 0;
                 pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
                 pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
@@ -858,8 +859,9 @@ public class frm_inv_cic_add extends PBase {
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
 
                 if(pitem.IdPresentacion > 0){
                     pitem.Cantidad = pitem.Cantidad *vFactor;
@@ -956,7 +958,7 @@ public class frm_inv_cic_add extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Inventario_Ciclico_Actualiza_Conteo","pitem",pitem,"Resultado",Resultado);
+                        callMethod("Inventario_Ciclico_Actualiza_Conteo_Andr","pitem",pitem, "pReconteo",0, "Resultado",Resultado);
                         break;
                     case 2:
                         callMethod("MaxIDInventarioCiclico");
@@ -1057,8 +1059,6 @@ public class frm_inv_cic_add extends PBase {
                 }
             }
 
-
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboPres.setAdapter(dataAdapter);
@@ -1082,7 +1082,7 @@ public class frm_inv_cic_add extends PBase {
     private void Inv_Ciclico_Actualiza_Conteo() {
 
         try {
-            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo");
+            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo_Andr");
 
             if(respuesta !=0){
 
