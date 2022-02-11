@@ -92,7 +92,7 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String version="4.6.6";
+    private String version="4.6.7";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
