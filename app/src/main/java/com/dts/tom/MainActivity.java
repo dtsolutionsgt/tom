@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -132,7 +133,12 @@ public class MainActivity extends PBase {
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
             //#EJC20220118:Path para Android 11.
-            gl.PathDataDir=this.getApplicationContext().getDataDir().getPath();
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
+            if (Build.VERSION.SDK_INT >= 30) {
+                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+            } else {
+                gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1259,9 +1265,15 @@ public class MainActivity extends PBase {
 
             //#EJC20220118: reemplazo, por Android 11, context datadir.
             //Environment.getExternalStorageDirectory()
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
             if (gl.PathDataDir.isEmpty()){
-                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+                if (Build.VERSION.SDK_INT >= 30) {
+                    gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+                } else {
+                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+                }
             }
+
 
             String pathText = gl.PathDataDir + "/tomws.txt";
             File file1 = new File(pathText);

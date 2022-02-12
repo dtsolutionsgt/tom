@@ -52,7 +52,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     //private clsBeStock_res lBeStockRes = new clsBeStock_res();
     //private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
-    private double vCant=0, CantidadPendiente=0, CantPendSel=0;
+    private double vCant=0, CantidadPendiente=0, CantPendSel=0, pCantTotal= 0;
     private boolean Distinto=false;
 
     public static boolean reemplazoCorrecto=false;
@@ -79,6 +79,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
         btnBack = (Button)findViewById(R.id.btnBack);
 
+        pCantTotal = CantReemplazar;
         setHandlers();
 
         ProgressDialog("Listando existencias de producto:"+gBeProducto.Codigo);
@@ -184,7 +185,8 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                                    "pIdUbicDestino", IdUbicacionDestino,
                                    "pIdEstadoDestino", IdEstadoDanado,
                                    "pCantLinea", selitem.Cant,
-                                   "pCantReemplazar", CantReemplazar);
+                                   "pCantReemplazar", CantReemplazar,
+                                   "pCantTotal", pCantTotal);
                         break;
                     case 3:
                         callMethod("Reemplaza_Producto_Dannado_Menor",
@@ -375,6 +377,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     msgAskReemplazado("Stock reemplazado correctamente");
                 } else {
                     CantReemplazar = CantidadPendiente;
+                    pCantTotal = CantidadPendiente;
                     msgAskCantPendiente("Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")");
 
                     lbldDetProducto.setText(BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto+

@@ -140,7 +140,7 @@ public class frm_danado_picking extends PBase {
     }
 
     public void botonAtras(View view){
-        super.finish();
+        regresar();
     }
 
     private void Listar_Producto_Estado() {
@@ -375,6 +375,7 @@ public class frm_danado_picking extends PBase {
 
     private void regresar() {
         super.finish();
+        startActivity(new Intent(this, frm_picking_datos.class));
     }
 
     @Override
@@ -395,4 +396,8 @@ public class frm_danado_picking extends PBase {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        regresar();
+    }
 }

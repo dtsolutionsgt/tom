@@ -79,6 +79,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         lblTituloForma.setText( String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
+        //#AT 20220211 Si Operador_por_linea  = false entonces chkTodos = true
+        if (!gl.tareaenc.Operador_por_linea) {
+            chkTodos.setChecked(true);
+        }
+
         listCompTot = 0;
         listTot = 0;
         listUser = 0;

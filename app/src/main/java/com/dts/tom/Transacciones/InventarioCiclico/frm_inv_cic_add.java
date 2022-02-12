@@ -280,36 +280,35 @@ public class frm_inv_cic_add extends PBase {
 
             idPresentacion = gl.inv_ciclico.IdPresentacion;
 
-         //validaciones para obtener lista de estados por idPropietario
-            if(gl.lista_estados != null){
+           //validaciones para obtener lista de estados por idPropietario
+            if (gl.lista_estados != null) {
 
-                if(gl.lista_estados.items != null){
+                if (gl.lista_estados.items != null) {
 
                     bodlist.clear();
-                    for (int i = 0; i <gl.lista_estados.items.size(); i++)
-                    {
+                    for (int i = 0; i < gl.lista_estados.items.size(); i++) {
                         bodlist.add(gl.lista_estados.items.get(i).IdEstado + " - " + gl.lista_estados.items.get(i).Nombre);
                     }
 
                     //se busca el IdEstado según el estado del registro, para setear el spinner
-                    for (int j = 0; j <gl.lista_estados.items.size(); j++)
-                    {
-                        if(gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
-                        index= gl.lista_estados.items.get(j).IdEstado;
+                    for (int j = 0; j < gl.lista_estados.items.size(); j++) {
+                        if (gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
+                            // #AT 20220211 Ya no se esta asignando el id del estado a index
+                            //index = gl.lista_estados.items.get(j).IdEstado;
+                            index = j+1;
                         //index= 2;
                     }
                 }
             }
 
-            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, bodlist);
             EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboEstado.setAdapter(EstadosAdapter);
             //el IdEstado de la bd no funciona para multipropietario, porque cada propietario tiene su propio estado y el index cambia
-            if (bodlist.size()>0 && gl.multipropietario){
+            if (bodlist.size() > 0 && gl.multipropietario) {
                 //cboEstado.setSelection(1);
-            }
-            else if (bodlist.size()>0 && !gl.multipropietario){
-                cboEstado.setSelection(index-1);
+            } else if (bodlist.size() > 0 && !gl.multipropietario) {
+                cboEstado.setSelection(index - 1);
             }
 
             //llama a ws para cargar spinner con presentaciones del producto
