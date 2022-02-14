@@ -41,6 +41,7 @@ public class srvCantTareas extends srvBaseJob {
 
     @Override
     public boolean loadParams(String paramstr) {
+
         params=paramstr;
 
         try {
