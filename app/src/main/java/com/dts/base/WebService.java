@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dts.tom.PBase;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -57,6 +58,7 @@ public class WebService {
         {
             parent.wsCallBack(errorflag,error,0);
         } catch (Exception e) {
+            //error = e.getMessage(); errorflag = true;
         }
     }
 
@@ -64,7 +66,7 @@ public class WebService {
 
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
-        int TIMEOUT = 150000;
+        int TIMEOUT = 15000;
         mMethodName = methodName; mResult = "";xmlresult="";
 
         error="";errorflag=false;
@@ -79,9 +81,21 @@ public class WebService {
            conn.setDoOutput(true);
            conn.setRequestProperty("mArch", "Andr");
 
-           OutputStream ostream = conn.getOutputStream();
+            OutputStream ostream = null;
 
-           OutputStreamWriter wr = new OutputStreamWriter(ostream);
+            try {
+                ostream = conn.getOutputStream();
+            } catch (IOException e) {
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=e.getMessage();
+                throw new Exception("Error al conectar con el webservice:\n " + error);
+
+            }
+
+            OutputStreamWriter wr = new OutputStreamWriter(ostream);
 
            String body = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
@@ -503,7 +517,9 @@ public class WebService {
         protected Void doInBackground(String... params) {
             try {
                 wsExecute();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
+            }
             return null;
         }
 
@@ -512,6 +528,7 @@ public class WebService {
             try {
                 wsFinished();
             } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
             }
         }
 

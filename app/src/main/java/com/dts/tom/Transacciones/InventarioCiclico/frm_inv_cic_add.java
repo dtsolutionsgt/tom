@@ -63,7 +63,7 @@ public class frm_inv_cic_add extends PBase {
     private ArrayList<String> PresList= new ArrayList<String>();
     private ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
 
-    private  clsBeTrans_inv_ciclico_vw pitem;
+    private  clsBeTrans_inv_ciclico pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
 
@@ -150,9 +150,9 @@ public class frm_inv_cic_add extends PBase {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                     {
 
-
                         codigo_producto = txtProd.getText().toString().trim();
 
+                        //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
                        if(Scan_Codigo_Producto()){
 
                            btGuardar.setEnabled(true);
@@ -161,7 +161,7 @@ public class frm_inv_cic_add extends PBase {
                        }
                        else{
 
-                           respuesta_producto = true;
+                           respuesta_producto = false;
                        }
                     }
 
@@ -280,36 +280,35 @@ public class frm_inv_cic_add extends PBase {
 
             idPresentacion = gl.inv_ciclico.IdPresentacion;
 
-         //validaciones para obtener lista de estados por idPropietario
-            if(gl.lista_estados != null){
+           //validaciones para obtener lista de estados por idPropietario
+            if (gl.lista_estados != null) {
 
-                if(gl.lista_estados.items != null){
+                if (gl.lista_estados.items != null) {
 
                     bodlist.clear();
-                    for (int i = 0; i <gl.lista_estados.items.size(); i++)
-                    {
+                    for (int i = 0; i < gl.lista_estados.items.size(); i++) {
                         bodlist.add(gl.lista_estados.items.get(i).IdEstado + " - " + gl.lista_estados.items.get(i).Nombre);
                     }
 
                     //se busca el IdEstado según el estado del registro, para setear el spinner
-                    for (int j = 0; j <gl.lista_estados.items.size(); j++)
-                    {
-                        if(gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
-                        index= gl.lista_estados.items.get(j).IdEstado;
+                    for (int j = 0; j < gl.lista_estados.items.size(); j++) {
+                        if (gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
+                            // #AT 20220211 Ya no se esta asignando el id del estado a index
+                            //index = gl.lista_estados.items.get(j).IdEstado;
+                            index = j+1;
                         //index= 2;
                     }
                 }
             }
 
-            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bodlist);
+            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, bodlist);
             EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboEstado.setAdapter(EstadosAdapter);
             //el IdEstado de la bd no funciona para multipropietario, porque cada propietario tiene su propio estado y el index cambia
-            if (bodlist.size()>0 && gl.multipropietario){
+            if (bodlist.size() > 0 && gl.multipropietario) {
                 //cboEstado.setSelection(1);
-            }
-            else if (bodlist.size()>0 && !gl.multipropietario){
-                cboEstado.setSelection(index-1);
+            } else if (bodlist.size() > 0 && !gl.multipropietario) {
+                cboEstado.setSelection(index - 1);
             }
 
             //llama a ws para cargar spinner con presentaciones del producto
@@ -449,9 +448,18 @@ public class frm_inv_cic_add extends PBase {
 
                     }else{
 
-                        respuesta = false;
-                        txtProd.setText("");
-                        mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+                        //respuesta = false;
+                        //txtProd.setText("");
+                        //mu.msgbox("Producto no asignado para conteo. Intente con otro!");
+
+                        //GT03122021: Al no encontrar match por cod_producto, se busca como LP
+                        if(Scan_por_LP()){
+                            respuesta = true;
+                        }else{
+                            respuesta = false;
+                            mu.msgbox("Producto o LP no asignado para conteo. Intente con otro!");
+                        }
+
                     }
                 }
 
@@ -490,6 +498,67 @@ public class frm_inv_cic_add extends PBase {
 
         return respuesta;
     }
+
+    private boolean Buscar_lp(String licence_plate){
+
+        boolean respuesta = false;
+
+        for (int i = 0; i < gl.reconteo_list.size() ; i++) {
+
+            String license_p = gl.reconteo_list.get(i).Licence_plate;
+
+            if (license_p.equals(licence_plate) ) {
+
+                gl.inv_ciclico = gl.reconteo_list.get(i);
+                Load();
+
+                respuesta = true;
+                break;
+
+            }
+        }
+
+        return respuesta;
+    }
+
+
+    private boolean Scan_por_LP(){
+
+        boolean respuesta = false;
+
+        try{
+                if(gl.inv_ciclico.Licence_plate.equals(codigo_producto)){
+
+                    cboEstado.requestFocus();
+                    respuesta = true;
+                    txtProd.setText(gl.inv_ciclico.Licence_plate);
+
+                }else{
+
+                    IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+
+                    //la LP ingresada no tiene match con el registro seleccionado, se procede a buscar en la lista
+                    if(Buscar_lp(codigo_producto)){
+
+                        respuesta = true;
+
+                    }else{
+
+                        respuesta = false;
+                        txtProd.setText("");
+                        //mu.msgbox("Licence plate no asignado para conteo. Intente con otra!");
+                    }
+                }
+        }
+        catch (Exception e){
+            respuesta = false;
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+        return respuesta;
+
+    }
+
+
 
 /*    private void Scan_Codigo_Producto1() {
 
@@ -587,7 +656,7 @@ public class frm_inv_cic_add extends PBase {
         try{
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
-            pitem = new clsBeTrans_inv_ciclico_vw();
+            pitem = new clsBeTrans_inv_ciclico();
             BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
             txtUbic.setText("");
             txtProd.setText("");
@@ -737,9 +806,9 @@ public class frm_inv_cic_add extends PBase {
             }else{
 
                 //GT 18012021 set para la clase que se envia como conteo.
-                pitem= new clsBeTrans_inv_ciclico_vw();
+                pitem= new clsBeTrans_inv_ciclico();
 
-                pitem.Idinvciclico = 0;
+                //pitem.Idinvciclico = 0;
                 pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                 pitem.IdUbicacion = gl.inv_ciclico.NoUbic;;
@@ -751,8 +820,9 @@ public class frm_inv_cic_add extends PBase {
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
 
                 if(pitem.IdPresentacion > 0){
 
@@ -774,8 +844,8 @@ public class frm_inv_cic_add extends PBase {
                 //Tarea_Conteo()
             }else{
 
-                pitem= new clsBeTrans_inv_ciclico_vw();
-                pitem.Idinvciclico = 0;
+                pitem= new clsBeTrans_inv_ciclico();
+               // pitem.Idinvciclico = 0;
                 pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
                 pitem.IdStock=0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
@@ -788,8 +858,9 @@ public class frm_inv_cic_add extends PBase {
                 pitem.Cantidad = gl.inv_ciclico.cantidad;
                 pitem.Peso = gl.inv_ciclico.Peso;
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.idPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
 
                 if(pitem.IdPresentacion > 0){
                     pitem.Cantidad = pitem.Cantidad *vFactor;
@@ -886,7 +957,7 @@ public class frm_inv_cic_add extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Inventario_Ciclico_Actualiza_Conteo","pitem",pitem,"Resultado",Resultado);
+                        callMethod("Inventario_Ciclico_Actualiza_Conteo_Andr","pitem",pitem, "pReconteo",0, "Resultado",Resultado);
                         break;
                     case 2:
                         callMethod("MaxIDInventarioCiclico");
@@ -987,8 +1058,6 @@ public class frm_inv_cic_add extends PBase {
                 }
             }
 
-
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, PresList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cboPres.setAdapter(dataAdapter);
@@ -1012,7 +1081,7 @@ public class frm_inv_cic_add extends PBase {
     private void Inv_Ciclico_Actualiza_Conteo() {
 
         try {
-            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo");
+            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo_Andr");
 
             if(respuesta !=0){
 

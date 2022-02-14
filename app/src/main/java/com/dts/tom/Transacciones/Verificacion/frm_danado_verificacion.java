@@ -302,15 +302,26 @@ public class frm_danado_verificacion extends PBase {
     private void processEstadoProducto(){
 
         try{
+            boolean existe = false;
 
             LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
-
-            Listar_Producto_Estado();
 
             lblProdDanadoVeri.setText(BePedidoDetVerif.getCodigo()+" "+BePedidoDetVerif.getNombre_Producto()+
                     "\n Cad: "+BePedidoDetVerif.Fecha_Vence+
                     "\n Lote: "+BePedidoDetVerif.Lote+
                     "\n Reemplazar: "+CantReemplazar+" "+BePedidoDetVerif.getNom_Unid_Med());
+
+            if (LProductoEstadoDanado != null) {
+                if (LProductoEstadoDanado.items != null) {
+                    Listar_Producto_Estado();
+                    existe = true;
+                }
+            }
+
+            if (!existe) {
+                msgProdEstado("No se ha encontrado estados disponibles para el producto: "+
+                        "\n"+BePedidoDetVerif.getCodigo()+" - "+BePedidoDetVerif.getNombre_Producto());
+            }
 
         }catch (Exception e){
             mu.msgbox("processEstadoProducto:"+e.getMessage());
@@ -434,6 +445,31 @@ public class frm_danado_verificacion extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     ;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgProdEstado(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.back);
+
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    frm_danado_verificacion.super.finish();
                 }
             });
 

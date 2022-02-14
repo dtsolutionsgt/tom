@@ -72,6 +72,7 @@ public class clsBeOperador {
         this.IsNew = IsNew;
         this.RolOperador=RolOperador;
         this.Foto = Foto;
+
     }
 
 
@@ -210,7 +211,7 @@ public class clsBeOperador {
     public boolean getIsNew() {
         return IsNew;
     }
-    public void setIsNe(boolean value) {
+    public void setIsNew(boolean value) {
         IsNew =value;
     }
     public clsBeRol_operador getRolOperador() {

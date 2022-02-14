@@ -23,6 +23,7 @@
     <string name="inicio_de_sesi_n">Inicio de sesión</string>
     <string name="fecha_version">23-Nov-2021</string>
     <string name="no_version">Versión</string>
+    <string name="por_favor_espere">Por favor espere...</string>
 
     <string-array name="filtros">
         <item>Código</item>

@@ -12,6 +12,11 @@ public class clsBeBodegaBase
     @Element(required=false) public boolean bloquear_lp_hh= false;
     @Element(required=false) public boolean captura_estiba_ingreso= false;
     @Element(required=false) public boolean captura_pallet_no_estandar= false;
+    @Element(required=false) public boolean priorizar_ubicrec_sobre_ubicest =false;
+    @Element(required=false) public String ubic_merma="";
+    @Element(required=false) public int ubic_producto_ne=0;
+    @Element(required=false) public int IdProductoEstadoNE=0;
+    @Element(required=false) public boolean validar_disponibilidad_ubicaicon_destino =false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -59,4 +64,34 @@ public class clsBeBodegaBase
         captura_estiba_ingreso=value;
     }
 
+    public boolean getpriorizar_ubicrec_sobre_ubicest() {return priorizar_ubicrec_sobre_ubicest;}
+    public void setpriorizar_ubicrec_sobre_ubicest(boolean value) {priorizar_ubicrec_sobre_ubicest=value;}
+
+    public String getUbic_merma() {
+        return ubic_merma;
+    }
+    public void setUbic_merma(String value) {
+        ubic_merma=value;
+    }
+
+    public int getUbic_producto_ne() {
+        return ubic_producto_ne;
+    }
+    public void setUbic_producto_ne(int value) {
+        ubic_producto_ne=value;
+    }
+
+    public int getIdProductoEstadoNE() {
+        return IdProductoEstadoNE;
+    }
+    public void setIdProductoEstadoNE(int value) {
+        IdProductoEstadoNE=value;
+    }
+
+    public boolean getvalidar_disponibilidad_ubicaicon_destino() {
+        return validar_disponibilidad_ubicaicon_destino;
+    }
+    public void setvalidar_disponibilidad_ubicaicon_destino(boolean value) {
+        validar_disponibilidad_ubicaicon_destino=value;
+    }
 }

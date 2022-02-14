@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -25,6 +27,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
@@ -42,7 +45,12 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import br.com.zbra.androidlinq.Grouping;
+import br.com.zbra.androidlinq.Stream;
 
 
 public class frm_consulta_stock extends PBase {
@@ -55,10 +63,11 @@ public class frm_consulta_stock extends PBase {
     private Button btnBack, registros,btnBuscar;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic;
+    private CheckBox chkAgrupar;
     private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
-    private String pLicensePlate;
+    private String pLicensePlate, codProducto;
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
     private TextView lblNombreUbicacion;
@@ -96,6 +105,7 @@ public class frm_consulta_stock extends PBase {
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
+        chkAgrupar=(CheckBox)findViewById(R.id.chkAgrupar);
 
         setHandlers();
 
@@ -104,28 +114,6 @@ public class frm_consulta_stock extends PBase {
 
     private void setHandlers() {
         try{
-
-//            txtUbic.addTextChangedListener(new TextWatcher() {
-//                public void afterTextChanged(Editable s) {}
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    lblNombreUbicacion.setText("");
-//                    registros.setText("REGISTROS: "+ 0);
-//                    selest = 0;
-//                    items_stock2.clear();
-//                }
-//            });
-
-            /*txtCodigo.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    lblNombreProducto.setText("");
-                    registros.setText("REGISTROS: "+ 0);
-                    selest = 0;
-                    items_stock2.clear();
-                }
-            });*/
 
             txtUbic.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -258,24 +246,31 @@ public class frm_consulta_stock extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    // AT 20211221 lo hace sin importar que la posición sea  = a 0
+                    //if (position > 0) {
+                    gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                        gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+                    try {
 
-                        try {
+                        Intent intent = new Intent(getApplicationContext(), frm_consulta_stock_detalleCI.class);
+                        startActivity(intent);
 
-                            Intent intent = new Intent(getApplicationContext(),frm_consulta_stock_detalleCI.class);
-                            startActivity(intent);
-
-                        }
-                        catch (Exception e) {
-                            msgbox("Error al intentar cargar detalle del producto");
-                            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-                        }
-
+                    } catch (Exception e) {
+                        msgbox("Error al intentar cargar detalle del producto");
+                        addlog(new Object() {
+                        }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
                     }
+                    //}
                 }
 
+            });
+
+            chkAgrupar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    busca_stock();
+                }
             });
 
         }
@@ -355,6 +350,8 @@ public class frm_consulta_stock extends PBase {
     private void processScanProducto(){
 
         idubic = 0;
+        idprod = 0;
+        codProducto = "";
 
         try {
 
@@ -363,6 +360,7 @@ public class frm_consulta_stock extends PBase {
             if (BeProducto != null){
                 idprod = BeProducto.IdProducto;
                 lblNombreProducto.setText(BeProducto.getNombre());
+                codProducto=BeProducto.Codigo;
                 //toast("ubicación encontrada por HH");
             }else{
                 throw new Exception("El producto no existe en la bodega: " + gl.IdBodega);
@@ -407,8 +405,9 @@ public class frm_consulta_stock extends PBase {
 
                     // lbldescripcion.setText("");
 
-                    vItem = new clsBeVW_stock_res_CI();
-                    items_stock.add(vItem);
+                    //AT 20211221 ya no se agrega un item vacío
+                    //vItem = new clsBeVW_stock_res_CI();
+                    //items_stock.add(vItem);
 
                     registros.setText("REGISTROS: "+ conteo);
 
@@ -496,8 +495,9 @@ public class frm_consulta_stock extends PBase {
 
             items_stock.clear();
 
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock.add(vItem);
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock.add(vItem);
 
             registros.setText("REGISTROS: "+ conteo);
 
@@ -549,8 +549,9 @@ public class frm_consulta_stock extends PBase {
 
         if(estado == "" && selest>0){
 
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock2.add(vItem);
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock2.add(vItem);
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -581,14 +582,14 @@ public class frm_consulta_stock extends PBase {
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
 
-            conteo = items_stock2.size()-1;
+            // AT20211221 ya no se resta -1
+            conteo = items_stock2.size();
             registros.setText("REGISTROS: "+ conteo);
 
-        }
-        else{
-
-            vItem = new clsBeVW_stock_res_CI();
-            items_stock2.add(vItem);
+        } else {
+            //AT 20211221 ya no se agrega un item vacío
+            //vItem = new clsBeVW_stock_res_CI();
+            //items_stock2.add(vItem);
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -620,7 +621,8 @@ public class frm_consulta_stock extends PBase {
             adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
             listView.setAdapter(adapter_stock);
 
-            conteo = items_stock2.size()-1;
+            // AT20211221 ya no se resta 1
+            conteo = items_stock2.size();
             registros.setText("REGISTROS: "+ conteo);
 
         }
@@ -668,8 +670,10 @@ public class frm_consulta_stock extends PBase {
 
                 if(txtCodigo.getText().toString().isEmpty()){
                     idprod = 0;
+                    codProducto = "";
                 }else{
                     try {
+                        codProducto = txtCodigo.getText().toString();
                         idprod = Integer.valueOf(txtCodigo.getText().toString());
                     }catch (Exception e){
                         idprod = -1;
@@ -729,7 +733,8 @@ public class frm_consulta_stock extends PBase {
                         callMethod("Get_Stock_Por_Pallet_By_IdUbicacion_CI",
                                 "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
                                 "pIdBodega",gl.IdBodega,
-                                "pIdUbicacion",idubic);
+                                "pIdUbicacion",idubic,
+                                "pTipo", chkAgrupar.isChecked());
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
@@ -740,14 +745,17 @@ public class frm_consulta_stock extends PBase {
 
                     case 4:
                         callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
-                                               "pidProducto",idprod,
+                                               "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
-                                               "pIdBodega",gl.IdBodega);
+                                               "pIdBodega",gl.IdBodega,
+                                               "pTipo", chkAgrupar.isChecked());
                         break;
 
                 }
 
-                progress.cancel();
+                if (progress !=null){
+                    progress.cancel();
+                }
 
             } catch (Exception e) {
                 progress.cancel();

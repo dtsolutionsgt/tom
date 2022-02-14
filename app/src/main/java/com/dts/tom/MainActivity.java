@@ -1,10 +1,11 @@
 package com.dts.tom;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +19,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.base.ExDialog;
+import com.dts.base.NetWorkInfoUtility;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
@@ -44,6 +48,7 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -58,14 +63,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static br.com.zbra.androidlinq.Linq.stream;
-
 public class MainActivity extends PBase {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl, lblVersion;
-    private ProgressDialog progress;
+    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog;
+    //private ProgressDialog progress;
+    Dialog progress;
     private ImageView imgIngresar;
     private ImageView imgEmpresaLogin;
 
@@ -78,7 +82,6 @@ public class MainActivity extends PBase {
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
     private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
     private clsBeResolucion_lp_operador ResolucionLpByBodega = new clsBeResolucion_lp_operador();
-
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
     private ArrayList<String> emplist= new ArrayList<String>();
@@ -90,17 +93,25 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String rootdir = Environment.getExternalStorageDirectory() + "/WMSFotos/";
-    private String version="4.5.25";
+    private String version="4.6.7";
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    private String mensaje_progress ="";
+
+    NetWorkInfoUtility netWorkInfoUtility = new NetWorkInfoUtility();
+
+    private boolean IsNetWorkAvailable =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         try {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+
+            //super.InitBase();
 
             ProgressDialog("Inicializando...");
 
@@ -110,10 +121,41 @@ public class MainActivity extends PBase {
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
 
+//            if (gl.wsurl!=null){
+//
+//                IsNetWorkAvailable= netWorkInfoUtility.isNetWorkAvailableNow(this.getApplicationContext(), gl.wsurl);
+//
+//                if (IsNetWorkAvailable){
+//                    lblurl.setText(netWorkInfoUtility.gIpAdress);
+//                }
+//            }
+
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+            //#EJC20220118:Path para Android 11.
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
+           // if (Build.VERSION.SDK_INT >= 30) {
+                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+
+            //} else {
+             //   gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+           // }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    //#EJC20220110: To log especific events.
+//    private void LogFireBase(){
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//
+//    }
 
     private void startApplication() {
 
@@ -143,18 +185,22 @@ public class MainActivity extends PBase {
                 xobj= new XMLObject(ws);
                 setHandlers();
                 gl.deviceId =androidid();
-                gl.devicename = getLocalBluetoothName();
+                gl.devicename = getDeviceName();//getLocalBluetoothName();
             } else {
                 //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
-                setURL();
+                //#EJC20220118: Ya se llamó en getURL
+                //setURL();
             }
 
             try {
-                String orddir=Environment.getExternalStorageDirectory().getPath() + "/tomtask";
+
+                String orddir=gl.PathDataDir + "/tomtask";
                 File directory = new File(orddir);
                 directory.mkdirs();
-            } catch (Exception e) {}
 
+            } catch (Exception e) {
+
+            }
             //Load();
 
         } catch (Exception e) {
@@ -162,11 +208,40 @@ public class MainActivity extends PBase {
         }
     }
 
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+        String phrase = "";
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase += Character.toUpperCase(c);
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase += c;
+        }
+        return phrase;
+    }
+
     private void Load(){
 
         try{
 
-            progress.setMessage("Cargando empresas...");
+            progress_setMessage("Cargando empresas...");
             progress.show();
 
             LimpiarControles();
@@ -199,7 +274,7 @@ public class MainActivity extends PBase {
 
     private void setURL(){
 
-        String url="http://192.168.0.98/WSTOMHH_QA/TOMHHWS.asmx";
+        String url="";
 
         try{
 
@@ -214,8 +289,9 @@ public class MainActivity extends PBase {
             input.setText(url);
             input.setInputType(InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-
+            input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
             alert.setView(input);
+            input.requestFocus();
 
             alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -255,7 +331,7 @@ public class MainActivity extends PBase {
 
         try {
 
-            String fname = Environment.getExternalStorageDirectory()+"/tomws.txt";
+            String fname = gl.PathDataDir+"/tomws.txt";
             File archivo= new File(fname);
 
             if (archivo.exists()){
@@ -313,6 +389,7 @@ public class MainActivity extends PBase {
                                     Manifest.permission.WAKE_LOCK,
                                     Manifest.permission.READ_PHONE_STATE
                             }, 1);
+                    startApplication();
                 }
             }
 
@@ -341,13 +418,23 @@ public class MainActivity extends PBase {
         }
     }
 
-    public void doLogin(View view)     {
+    public void setUrlOntxtURLWSClic(View view){
+
+        try {
+            setURL();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void doLogin(View view){
+
         try{
 
             imgIngresar.setVisibility(View.INVISIBLE);
 
             progress.show();
-            progress.setMessage("Ingresando....");
+            progress_setMessage("Ingresando....");
 
             Valida_Ingreso();
             //startActivity(new Intent(this,Mainmenu.class));
@@ -422,6 +509,10 @@ public class MainActivity extends PBase {
                     gl.gNomBodega = NomBodega;
                     gl.gCapturaEstibaIngreso = bodegas.items.get(position).captura_estiba_ingreso;
                     gl.gCapturaPalletNoEstandar = bodegas.items.get(position).captura_pallet_no_estandar;
+                    gl.gPriorizar_UbicRec_Sobre_UbicEst = bodegas.items.get(position).priorizar_ubicrec_sobre_ubicest;
+                    gl.gUbicMerma = bodegas.items.get(position).ubic_merma;
+                    gl.gUbicProdNe = bodegas.items.get(position).ubic_producto_ne;
+                    gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
                     idimpres=0;
                     execws(3);
 
@@ -489,6 +580,7 @@ public class MainActivity extends PBase {
                     seloper =users.items.get(position);
                     iduser=users.items.get(position).IdOperador;
                     NomOperador = users.items.get(position).Nombre_Completo;
+                    gl.beOperador = users.items.get(position).Operador;
                     gl.IdOperador = iduser;
                     gl.gNomOperador = NomOperador;
 
@@ -552,28 +644,31 @@ public class MainActivity extends PBase {
 
             switch (ws.callback) {
                 case 1:
-                    progress.setMessage("Cargando empresas");
+                    progress_setMessage("Cargando empresas");
                     processEmpresas();break;
                 case 2:
-                    progress.setMessage("Cargando bodegas");
+                    progress_setMessage("Cargando bodegas");
                     processBodegas();break;
                 case 3:
-                    progress.setMessage("Cargando impresoras");
+                    progress_setMessage("Cargando impresoras");
                     processImpresoras();
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
-                    progress.setMessage("Cargando usuarios");
+                    progress_setMessage("Cargando usuarios");
                     processUsers();
                     //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
                     break;
                 case 5:
+                    progress_setMessage("Obteniendo Parámetros A");
                     processGetDecimalesCalculo();
                     execws(8);
                     break;
                 case 6:
+                    progress_setMessage("Obteniendo Parámetros B");
                     processGetDecimalesDespliegue();
+                    progress.cancel(); //#EJC20220118: Terminó el proceso de carga de combos login
                     break;
                 case 7:
                     Intent i = new Intent(this, Mainmenu.class);
@@ -582,6 +677,7 @@ public class MainActivity extends PBase {
                     //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
+                    progress_setMessage("Validando versión");
                     processVersiones();
                     break;
                 case 9:
@@ -593,14 +689,13 @@ public class MainActivity extends PBase {
                 case 11:
                     processServidor();
                     break;
-
             }
-
-            progress.cancel();
 
         } catch (Exception e)  {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }finally {
+            //progress.cancel();
         }
     }
 
@@ -646,6 +741,9 @@ public class MainActivity extends PBase {
 
                             gl.CodigoBodega = BeBodega.get(0).Codigo;
 
+                            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
+                            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
+
                             List<clsBeOperador_bodega> BeOperadorBodega =
                                     stream(users.items)
                                             .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
@@ -665,7 +763,7 @@ public class MainActivity extends PBase {
                             if (BeImpresora.size()>0) {
                                 gl.gImpresora = BeImpresora;
                                 if (gl.gImpresora.get(0).Direccion_Ip =="") {
-                                    progress.cancel();
+                                    //progress.cancel();
                                     mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
                                 } else {
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
@@ -676,7 +774,7 @@ public class MainActivity extends PBase {
                                     execws(10);
                                 }
                             } else  {
-                                progress.cancel();
+                                //progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
                                 msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
                             }
@@ -777,17 +875,6 @@ public class MainActivity extends PBase {
 
     }
 
-    public String getLocalBluetoothName() {
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null)
-        {
-            return "";
-        } else
-        {
-            return mBluetoothAdapter.getName();
-        }
-    }
-
     @SuppressLint("MissingPermission")
     private String androidid()  {
         String uniqueID="";
@@ -813,16 +900,19 @@ public class MainActivity extends PBase {
 
             if(empresas != null){
 
-                class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
-                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
-                        return left.Nombre.compareTo(right.Nombre);
+                if(empresas.items != null){
+
+                    class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
+                        public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
+                            return left.Nombre.compareTo(right.Nombre);
+                        }
                     }
+
+                    Collections.sort(empresas.items, new EmpresaSort());
+
+                    fillSpinemp();
+
                 }
-
-                Collections.sort(empresas.items, new EmpresaSort());
-
-                fillSpinemp();
-
             }
 
         } catch (Exception e) {
@@ -831,16 +921,26 @@ public class MainActivity extends PBase {
     }
 
     private void processBodegas()     {
-        class BodegaSort implements Comparator<clsBeBodegaBase>   {
-            public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
-                return left.IdBodega - right.IdBodega;
-            }
-        }
-
         try  {
+
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
-            Collections.sort(bodegas.items, new BodegaSort());
-            fillSpinBod();
+
+            if(bodegas != null){
+
+                if(bodegas.items != null){
+
+                    class BodegaSort implements Comparator<clsBeBodegaBase>   {
+                        public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
+                            return left.IdBodega - right.IdBodega;
+                        }
+                    }
+
+                    Collections.sort(bodegas.items, new BodegaSort());
+                    fillSpinBod();
+
+                }
+
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -858,12 +958,15 @@ public class MainActivity extends PBase {
         }
 
         try {
+
             impres.clear();
 
             dt=xobj.filldt();
 
             if (dt.getCount()>0) {
+
                 dt.moveToFirst();
+
                 while (!dt.isAfterLast()) {
 
                     imp=new clsBeImpresora();
@@ -879,14 +982,13 @@ public class MainActivity extends PBase {
             }
 
             fillSpinImpres();
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
     private void processUsers() {
-
-        String rootdir=Environment.getExternalStorageDirectory()+"/WMSFotos/";
 
         class UserSort implements Comparator<clsBeOperador_bodega>
         {
@@ -925,7 +1027,7 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processGetDecimalesDespliegue()     {
+    private void processGetDecimalesDespliegue() {
         try
         {
 
@@ -1012,8 +1114,9 @@ public class MainActivity extends PBase {
         String servidor="";
         try {
 
+            progress.cancel();
             servidor =(String) xobj.getSingle("nombreServidorLicenciasResult",String.class);
-            msgbox("El ordenador: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
+            msgbox("El dispositivo: " + gl.devicename + " ha enviado una solicitud de licencia al servidor de licencias: " + servidor);
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -1170,13 +1273,24 @@ public class MainActivity extends PBase {
 
     private void getURL() {
 
-        gl.wsurl = "http://192.168.0.101/WSTOMHH_QA/TOMHHWS.asmx";
-
         gl.wsurl="";
 
         try {
 
-            File file1 = new File(Environment.getExternalStorageDirectory(), "/tomws.txt");
+            //#EJC20220118: reemplazo, por Android 11, context datadir.
+            //Environment.getExternalStorageDirectory()
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
+            if (gl.PathDataDir.isEmpty()){
+//                if (Build.VERSION.SDK_INT >= 30) {
+                  gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+//                } else {
+//                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+//                }
+            }
+
+
+            String pathText = gl.PathDataDir + "/tomws.txt";
+            File file1 = new File(pathText);
 
             if (file1.exists())
             {
@@ -1184,6 +1298,9 @@ public class MainActivity extends PBase {
                 BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
                 gl.wsurl = myReader.readLine();
                 myReader.close();
+            }else{
+                progress.cancel();
+                setURL();
             }
 
         } catch (Exception e)
@@ -1198,13 +1315,66 @@ public class MainActivity extends PBase {
         }
     }
 
+    private Runnable mUpdate = new Runnable() {
+
+        public void run() {
+
+            txtMensajeDialog.setText(mensaje_progress);
+            txtMensajeDialog.postDelayed(this, 1000);
+
+        }
+    };
+
+    public void progress_setMessage(String mensaje){
+        try {
+            if(progress!=null){
+                runOnUiThread(() -> {
+                    txtMensajeDialog = progress.findViewById(R.id.txtMensajeDialog);
+                    if(txtMensajeDialog!=null){
+                        txtMensajeDialog.setText(mensaje);
+                        mensaje_progress = mensaje;
+                        txtMensajeDialog.postDelayed(mUpdate,0);
+                    }
+                });
+            }else{
+                Log.println(Log.DEBUG,"Progress","Isnull");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void ProgressDialog(String mensaje){
-        progress=new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
+
+        progress= new Dialog(this);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        Window window=progress.getWindow();
+
+       /* if(window!=null){
+            window.setBackgroundDrawable(new ColorDrawable(0));
+        }*/
+
+        runOnUiThread(() -> {
+            txtMensajeDialog= progress.findViewById(R.id.txtMensajeDialog);
+            if(txtMensajeDialog!=null){
+                txtMensajeDialog.setText(mensaje);
+            }
+        });
+
         progress.show();
+
+//        progress=new ProgressDialog(this);
+//        progress.setMessage(mensaje);
+//        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progress.setIndeterminate(true);
+//        progress.setProgress(0);
+//        progress.show();
+
+//        ProgressBar progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+//        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        //layout.addView(progressBar, params);
     }
 
     private void execws(int callbackvalue) {
@@ -1297,10 +1467,27 @@ public class MainActivity extends PBase {
             idemp=empresas.items.get(pp).IdEmpresa;
 
             if (versiones!=null){
+
                 for (int i = 0; i <versiones.items.size(); i++) {
+
                     if (versiones.items.get(i).IdEmpresa==idemp) {
+
+                        //#EJC20220118: Saber si la versión en FB es mayor.
                         String Nueva_Version = versiones.items.get(i).Version;
-                        if (!Nueva_Version.equalsIgnoreCase(version)) {
+                        String[] versionOnFirebase = Nueva_Version.split("\\.");
+                        String[] versionActual = version.split("\\.");
+
+                        int vActualMajor =Integer.parseInt(versionActual[0]);
+                        int vActualMedium =Integer.parseInt(versionActual[1]);
+                        int vActualMinor =Integer.parseInt(versionActual[2]);
+
+                        int vFBaseMajor =Integer.parseInt(versionOnFirebase[0]);
+                        int vFBaseMedium =Integer.parseInt(versionOnFirebase[1]);
+                        int vFBaseMinor =Integer.parseInt(versionOnFirebase[2]);
+
+
+                        if(vFBaseMinor > vActualMinor && vFBaseMedium > vActualMedium && vFBaseMajor > vActualMajor)
+                        {
                             msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
                             return;
                         }

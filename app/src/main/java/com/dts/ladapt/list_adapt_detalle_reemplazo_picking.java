@@ -79,39 +79,6 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position==0){
-
-            holder.lblCodigoRe.setText("Código");
-            holder.lblCodigoRe.setTextColor(R.style.titlestyle);
-            holder.lblProductoRe.setText("Producto");
-            holder.lblProductoRe.setTextColor(R.style.titlestyle);
-            holder.lblPresRe.setText("Presentación");
-            holder.lblPresRe.setTextColor(R.style.titlestyle);
-            holder.lblUmbasRe.setText("UMBas");
-            holder.lblUmbasRe.setTextColor(R.style.titlestyle);
-            holder.lblCantRe.setText("Cantidad");
-            holder.lblCantRe.setTextColor(R.style.titlestyle);
-            holder.lblUbicRe.setText("Ubicación");
-            holder.lblUbicRe.setTextColor(R.style.titlestyle);
-            holder.lblVenceRe.setText("Vence");
-            holder.lblVenceRe.setTextColor(R.style.titlestyle);
-            holder.lblLpRe.setText("Lic Plate");
-            holder.lblLpRe.setTextColor(R.style.titlestyle);
-            holder.lblLoteRe.setText("Lote");
-            holder.lblLoteRe.setTextColor(R.style.titlestyle);
-            holder.lblCodPrRe.setText("CodigoProducto");
-            holder.lblCodPrRe.setTextColor(R.style.titlestyle);
-            holder.lblPesoRe.setText("Peso");
-            holder.lblPesoRe.setTextColor(R.style.titlestyle);
-            holder.lblEstadoRe.setText("Estado");
-            holder.lblEstadoRe.setTextColor(R.style.titlestyle);
-            holder.lblStock.setText("IdStock");
-            holder.lblStock.setTextColor(R.style.titlestyle);
-            holder.lblDespachar.setText("Despachar");
-            holder.lblDespachar.setTextColor(R.style.titlestyle);
-
-        }else {
-
             holder.lblCodigoRe.setText("0");
             holder.lblProductoRe.setText("--");
             holder.lblPresRe.setText("--");
@@ -148,7 +115,7 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
             }
 
             if (BeListTareasHH.get(position).IdUbicacion!=0){
-                holder.lblUbicRe.setText(""+BeListTareasHH.get(position).IdUbicacion);
+                 holder.lblUbicRe.setText(""+BeListTareasHH.get(position).NombreUbicacion);
             }
 
             if (!BeListTareasHH.get(position).FechaVence.isEmpty()){
@@ -183,18 +150,12 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
                 holder.lblDespachar.setText(""+BeListTareasHH.get(position).Despachar);
             }
 
-        }
+       // }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
-            if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblCodigoRe.setTextColor(R.style.titlestyle);
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }
-
+            convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         return convertView;

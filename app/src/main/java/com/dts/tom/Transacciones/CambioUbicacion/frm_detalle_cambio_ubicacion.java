@@ -79,6 +79,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         lblTituloForma.setText( String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
+        //#AT 20220211 Si Operador_por_linea  = false entonces chkTodos = true
+        if (!gl.tareaenc.Operador_por_linea) {
+            chkTodos.setChecked(true);
+        }
+
         listCompTot = 0;
         listTot = 0;
         listUser = 0;
@@ -332,6 +337,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                             if (pBeTransUbicHhDetList.items.get(i).getIdOperadorBodega()==gl.OperadorBodega.getIdOperadorBodega()){
                                 listCompUser += 1;
                             }
+                        }else{
 
                             listCompTot += 1;
                         }
@@ -492,6 +498,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
             progress.setMessage("Finalizando la tarea de cambio de "+ (gl.modo_cambio==1?"ubicación":"estado"));
             progress.show();
 
+            //Actualizar_Estado_Cambio
             execws(2);
 
         }catch(Exception ex){
@@ -514,7 +521,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    eststr="Incompleto";
+                    eststr="Finalizado parcial";
                     msgAskFinalizarSeguro("Está seguro");
                 }
             });
@@ -546,7 +553,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    msgAskFinalizarSeguro("Está seguro");
+                   //·CKFK 20211221 Erik mandó a quitar la doble validación
+                    // msgAskFinalizarSeguro("Está seguro");
+                    eststr = "Finalizado";
+                    finalizar_tarea();
                 }
             });
 
@@ -577,7 +587,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    eststr = "Finalizado";
+                    eststr = "Finalizado Parcial";
                     finalizar_tarea();
                 }
             });

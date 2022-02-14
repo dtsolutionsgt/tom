@@ -98,20 +98,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    //AT 20211222 No importa que la posición sea = a 0
+                    //if (position > 0) {
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                    selitem = new clsBeTrans_picking_ubic();
+                    selitem = BeListPickingUbic.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
-                        selitem = new clsBeTrans_picking_ubic();
-                        selitem = BeListPickingUbic.get(position);
+                    selid = sitem.IdPickingUbic;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        selid = sitem.IdPickingUbic;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-
-                        procesar_registro();
-
-                    }
+                    procesar_registro();
+                   //}
 
                 }
 
@@ -316,16 +315,18 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (plistPickingUbi.items!=null){
 
-                    vItem = new  clsBeTrans_picking_ubic();
-
-                    BeListPickingUbic.add(vItem);
+                    //AT 20211222 Ya no se agrega un item vacío
+                    //vItem = new  clsBeTrans_picking_ubic();
+                    //BeListPickingUbic.add(vItem);
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
                         if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
 
                             vItem = new  clsBeTrans_picking_ubic();
-                            obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                            if (obj.Fecha_Vence.contains("T")) {
+                                obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                            }
                             vItem = obj;
 
                             BeListPickingUbic.add(vItem);
@@ -334,7 +335,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     }
 
-                    int count =BeListPickingUbic.size()-1;
+                    //AT 20211222 Ya no se resta 1 para obtener el registro total
+                    int count =BeListPickingUbic.size();
                     btnPendientes.setText("Regs: "+count);
 
                 }
@@ -382,7 +384,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            if (btnRes_Det.getText().toString().equals("R")){
+            if (btnRes_Det.getText().toString().equals("R.")){
 
                 btnRes_Det.setText("D.");
 
@@ -413,15 +415,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
             progress.setMessage("Finalizando picking...");
 
-            for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
+            if (plistPickingUbi != null){
+                if (plistPickingUbi.items != null){
+                    for (clsBeTrans_picking_ubic ubi:plistPickingUbi.items){
 
-                if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
+                        if (ubi.Cantidad_Recibida!=ubi.Cantidad_Solicitada){
 
-                    PreguntoPorDiferencia = true;
-                    msgAskPicIncompleto("El picking está incompleto, Finalizar de todas formas?");
-                    break;
+                            PreguntoPorDiferencia = true;
+                            msgAskPicIncompleto("El picking está incompleto, Finalizar de todas formas?");
+                            break;
+                        }
+
+                    }
                 }
-
             }
 
             if (Finalizar&&!PreguntoPorDiferencia){
@@ -446,6 +452,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
                 gBePicking.Hora_fin = du.getFechaActual();
 
+                //Llama al método Actualizar_PickingEnc_Procesado
                 execws(4);
 
             }

@@ -39,11 +39,11 @@ public class clsBeBodega_ubicacion {
     @Element(required=false) public double Margen_superior=0;
     @Element(required=false) public double Margen_inferior=0;
     @Element(required=false) public String Orientacion_pos="";
-    @Element(required=false) public double ubicacion_ne=0;
+    @Element(required=false) public boolean ubicacion_ne=false;
     @Element(required=false) public clsBeBodega_tramo Tramo=new clsBeBodega_tramo();
     @Element(required=false) public clsBeBodega_sector Sector=new clsBeBodega_sector();
     @Element(required=false) public String NombreCompleto="";
-
+    @Element(required=false) public double Disponibilidad_Ubicacion=0;
 
     public clsBeBodega_ubicacion() {
     }
@@ -56,7 +56,7 @@ public class clsBeBodega_ubicacion {
                                  boolean Danado,boolean Activo,boolean Bloqueada,boolean Acepta_pallet,
                                  boolean Ubicacion_picking,boolean Ubicacion_recepcion,boolean Ubicacion_despacho,boolean Ubicacion_merma,
                                  boolean Ubicacion_Virtual,double Margen_izquierdo,double Margen_derecho,double Margen_superior,
-                                 double Margen_inferior,String Orientacion_pos,double ubicacion_ne,clsBeBodega_tramo Tramo,
+                                 double Margen_inferior,String Orientacion_pos,boolean ubicacion_ne,clsBeBodega_tramo Tramo,
                                  clsBeBodega_sector Sector,String NombreCompleto) {
 
         this.IdUbicacion=IdUbicacion;
@@ -305,10 +305,10 @@ public class clsBeBodega_ubicacion {
     public void setOrientacion_pos(String value) {
         Orientacion_pos=value;
     }
-    public double getubicacion_ne() {
+    public boolean getubicacion_ne() {
         return ubicacion_ne;
     }
-    public void setubicacion_ne(double value) {
+    public void setubicacion_ne(boolean value) {
         ubicacion_ne=value;
     }
     public clsBeBodega_tramo getTramo() {
@@ -330,7 +330,11 @@ public class clsBeBodega_ubicacion {
         NombreCompleto=value;
     }
 
+    public double getDisponibilidad_Ubicacion() {
+        return Disponibilidad_Ubicacion;
+    }
+    public void setDisponibilidad_Ubicacion(double value) {
+        Disponibilidad_Ubicacion=value;
+    }
+
 }
-
-
-

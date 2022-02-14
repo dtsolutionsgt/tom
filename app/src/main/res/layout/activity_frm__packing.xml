@@ -200,7 +200,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Nuevo LP:" />
+                    android:text="LP Destino:" />
 
                 <EditText
                     android:id="@+id/txtNuevoLp"
@@ -227,7 +227,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Lp Anterior:" />
+                    android:text="LP Origen:" />
 
                 <EditText
                     android:id="@+id/txtLpAnt"
@@ -360,7 +360,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Packing"
+            android:text="Implosión"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />

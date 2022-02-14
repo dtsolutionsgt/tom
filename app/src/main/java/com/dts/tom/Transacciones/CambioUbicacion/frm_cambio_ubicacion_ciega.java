@@ -151,7 +151,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         try {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
@@ -1607,9 +1609,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUbicDestID = 0;
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
-                throw new Exception("Ubicación destino incorrecta");
+                progress.cancel();
+                msgbox("Ubicación destino incorrecta");
+                //throw new Exception("Ubicación destino incorrecta");
             }else{
-                execws(21);
+
+                if (bodega_ubicacion_destino.Disponibilidad_Ubicacion ==1){
+                    progress.cancel();
+                    msgAskUbicacionOcupadaCompleta();
+                }else if (bodega_ubicacion_destino.Disponibilidad_Ubicacion <1){
+                    progress.cancel();
+                    msgAskUbicacionParcialmenteCompleta(bodega_ubicacion_destino.Disponibilidad_Ubicacion);
+                }else{
+                    execws(21);
+                }
+
             }
 
         } catch (Exception e) {
@@ -1719,6 +1733,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                                 + " Nivel: " + nivel + "."
                                                 + " Posición: " + pos + "."
                                                 + " Y Escanee: " + ubicacion;
+                                    }else if (cadena_ubicacion.length>0){
+
+                                        pos = cadena_ubicacion[0].trim().substring(0);
+                                        ubicacion = cadena_ubicacion[1].trim().substring(0);
+
+                                        textToSpeeach = "Lleve producto a "
+                                                + " Ubicación: " + pos + "."
+                                                + " Y Escanee: " + ubicacion;
                                     }
 
                                     float speed = 1f;
@@ -1726,8 +1748,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                     mTTS.setPitch(pitch);
                                     mTTS.setSpeechRate(speed);
 
-                                    if (textToSpeeach.isEmpty()){
-                                     textToSpeeach = "Enseñame por favor donde ubicar el producto";
+                                    if (cadena_ubicacion.length==0){
+                                     textToSpeeach = "Enséñame por favor, donde ubicar el producto";
                                     }
 
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -2214,7 +2236,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
+            if (xobj!=null){
+                EsPalletNoEstandar = xobj.getresult(Boolean.class,"Es_Pallet_No_Estandar");
+            }else{
+                EsPalletNoEstandar=false;
+            }
 
             if (EsPalletNoEstandar){
                 execws(20);
@@ -2223,6 +2249,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         }catch (Exception e){
+            //error=e.getMessage();errorflag =true;msgbox(error);
             mu.msgbox("processPalletNoEstandar:"+e.getMessage());
         }
     }
@@ -2521,6 +2548,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    //#CKFK 20211215 Explosionar el producto de presentación a unidades
     private void msgAskExplosionar(String msg){
 
         try{
@@ -2586,6 +2614,72 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    private void msgAskUbicacionOcupadaCompleta(){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿La disponibilidad de la ubicación parece ser de 0% continuar de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(21);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which){
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskUbicacionParcialmenteCompleta(double PorcentajeOcupacionPosicion){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿La disponibilidad de la ubicación es de:" + PorcentajeOcupacionPosicion + "% continuar de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(21);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which){
+
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     private void msgAskImpresoraLista(String msg){

@@ -96,6 +96,8 @@ public class clsBeProducto {
   @Element(required=false) public int IdUnidadMedidaCobro=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
   @Element(required=false) public String User_agr="";
+  @Element(required=false) public int Dias_Inventario_Promedio =90;
+
 //EJC
 
   public clsBeProducto()

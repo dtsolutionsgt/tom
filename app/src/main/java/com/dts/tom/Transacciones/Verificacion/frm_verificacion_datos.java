@@ -783,17 +783,29 @@ public class frm_verificacion_datos extends PBase {
 
         try {
 
+            Double vDif;
+            boolean permite = true;
+
             Double valor = Double.valueOf(txtCantVeri.getText().toString());
+            vDif = BePedidoDetVerif.Cantidad_Recibida - (BePedidoDetVerif.Cantidad_Verificada + valor);
 
             if (valor == 0){
                 mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                permite = false;
+            } else {
+                if (vDif < 0) {
+                    mu.msgbox("La cantidad ingresada es mayor a la recibida");
+                    permite = false;
+                }
+            }
+
+            if (!permite) {
                 txtCantVeri.setSelectAllOnFocus(true);
                 txtCantVeri.requestFocus();
                 return;
             }
 
             CantReemplazar = valor;
-
             msgAskReemplazar("¿Marcar producto para reemplazo?");
 
         }catch (Exception e){

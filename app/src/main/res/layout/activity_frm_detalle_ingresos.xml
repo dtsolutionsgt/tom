@@ -32,7 +32,8 @@
                     android:layout_height="50dp"
                     android:clickable="true"
                     android:onClick="cCamara"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -201,7 +202,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Guía #:" />
+                    android:text="No. Contenedor:" />
 
                 <EditText
                     android:id="@+id/txtGuia"
