@@ -93,7 +93,7 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String version="4.6.7";
+    private String version="4.6.8";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -895,7 +895,9 @@ public class MainActivity extends PBase {
     //region Data Processing
 
     private void processEmpresas() {
+
         try {
+
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             if(empresas != null){
@@ -920,7 +922,8 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()     {
+    private void processBodegas(){
+
         try  {
 
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
@@ -1084,7 +1087,9 @@ public class MainActivity extends PBase {
     }
 
     private boolean processLicencia() {
+
         boolean rslt=false;
+
         try {
 
             Integer msgLic = 0;
@@ -1111,7 +1116,9 @@ public class MainActivity extends PBase {
     }
 
     private void processServidor() {
+
         String servidor="";
+
         try {
 
             progress.cancel();
@@ -1197,6 +1204,7 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinBod() {
+
         String ss;
 
         try {
@@ -1241,8 +1249,9 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinUser() {
-        try
-        {
+
+        try{
+
             userlist.clear();
 
             for (int i = 0; i <users.items.size(); i++)
