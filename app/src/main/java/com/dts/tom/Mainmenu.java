@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -754,12 +755,18 @@ public class Mainmenu extends PBase {
         String aBuffer = "";
 
         File myFile = new File(fname);
-        FileInputStream fIn = new FileInputStream(myFile);
-        BufferedReader txtReader = new BufferedReader(new InputStreamReader(fIn));
-        String aDataRow = "";
-        while ((aDataRow = txtReader.readLine()) != null) aBuffer += aDataRow;
 
-        txtReader.close();
+        if (myFile.exists()){
+            FileInputStream fIn = new FileInputStream(myFile);
+            BufferedReader txtReader = new BufferedReader(new InputStreamReader(fIn));
+            String aDataRow = "";
+            while ((aDataRow = txtReader.readLine()) != null) aBuffer += aDataRow;
+            txtReader.close();
+        }else
+        {
+            //Archivo no existe
+            Log.d("tag_readservicefile","archivo no existe");
+        }
 
         return aBuffer;
     }

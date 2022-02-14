@@ -32,6 +32,7 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public String Fec_mod ="1900-01-01T00:00:01";
     @Element(required=false) public clsBeProducto_Presentacion Presentacion = new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida = new clsBeUnidad_medida();
+    @Element(required=false) public Boolean Reclasificar=false;
 
     public clsBeTrans_oc_det_lote() {
     }
@@ -41,7 +42,7 @@ public class clsBeTrans_oc_det_lote {
                                   String Lote,String Fecha_vence, String Lic_Plate, String Ubicacion,
                                   int IdPresentacion,int IdUnidadMedidaBasica,String User_agr,String Fec_agr,
                                   String User_mod, String Fec_mod, clsBeProducto_Presentacion Presentacion,
-                                  clsBeUnidad_medida UnidadMedida) {
+                                  clsBeUnidad_medida UnidadMedida,Boolean Reclasificar) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -63,6 +64,7 @@ public class clsBeTrans_oc_det_lote {
         this.Fec_mod = Fec_mod;
         this.Presentacion = Presentacion;
         this.UnidadMedida = UnidadMedida;
+        this.Reclasificar = Reclasificar;
     }
 
     public int getIdOrdenCompraEnc() {
@@ -198,12 +200,14 @@ public class clsBeTrans_oc_det_lote {
     public Boolean getIsNew(){
         return IsNew;
     }
-
     public void setIsNew(boolean value){
         IsNew=value;
     }
 
-
+    public Boolean getReclasificar(){
+        return Reclasificar;
+    }
+    public void setReclasificar(boolean value){Reclasificar=value;}
 }
 
 

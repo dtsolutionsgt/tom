@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -25,6 +27,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
@@ -42,7 +45,12 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import br.com.zbra.androidlinq.Grouping;
+import br.com.zbra.androidlinq.Stream;
 
 
 public class frm_consulta_stock extends PBase {
@@ -55,6 +63,7 @@ public class frm_consulta_stock extends PBase {
     private Button btnBack, registros,btnBuscar;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic;
+    private CheckBox chkAgrupar;
     private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
@@ -96,6 +105,7 @@ public class frm_consulta_stock extends PBase {
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
+        chkAgrupar=(CheckBox)findViewById(R.id.chkAgrupar);
 
         setHandlers();
 
@@ -104,28 +114,6 @@ public class frm_consulta_stock extends PBase {
 
     private void setHandlers() {
         try{
-
-//            txtUbic.addTextChangedListener(new TextWatcher() {
-//                public void afterTextChanged(Editable s) {}
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    lblNombreUbicacion.setText("");
-//                    registros.setText("REGISTROS: "+ 0);
-//                    selest = 0;
-//                    items_stock2.clear();
-//                }
-//            });
-
-            /*txtCodigo.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {}
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    lblNombreProducto.setText("");
-                    registros.setText("REGISTROS: "+ 0);
-                    selest = 0;
-                    items_stock2.clear();
-                }
-            });*/
 
             txtUbic.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -275,6 +263,14 @@ public class frm_consulta_stock extends PBase {
                     //}
                 }
 
+            });
+
+            chkAgrupar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    busca_stock();
+                }
             });
 
         }
@@ -737,7 +733,8 @@ public class frm_consulta_stock extends PBase {
                         callMethod("Get_Stock_Por_Pallet_By_IdUbicacion_CI",
                                 "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
                                 "pIdBodega",gl.IdBodega,
-                                "pIdUbicacion",idubic);
+                                "pIdUbicacion",idubic,
+                                "pTipo", chkAgrupar.isChecked());
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
@@ -750,7 +747,8 @@ public class frm_consulta_stock extends PBase {
                         callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
                                                "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
-                                               "pIdBodega",gl.IdBodega);
+                                               "pIdBodega",gl.IdBodega,
+                                               "pTipo", chkAgrupar.isChecked());
                         break;
 
                 }

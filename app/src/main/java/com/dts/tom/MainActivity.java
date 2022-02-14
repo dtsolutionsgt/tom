@@ -134,11 +134,12 @@ public class MainActivity extends PBase {
 
             //#EJC20220118:Path para Android 11.
             //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
-            if (Build.VERSION.SDK_INT >= 30) {
+           // if (Build.VERSION.SDK_INT >= 30) {
                 gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-            } else {
-                gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-            }
+
+            //} else {
+             //   gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+           // }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -899,16 +900,19 @@ public class MainActivity extends PBase {
 
             if(empresas != null){
 
-                class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
-                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
-                        return left.Nombre.compareTo(right.Nombre);
+                if(empresas.items != null){
+
+                    class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
+                        public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
+                            return left.Nombre.compareTo(right.Nombre);
+                        }
                     }
+
+                    Collections.sort(empresas.items, new EmpresaSort());
+
+                    fillSpinemp();
+
                 }
-
-                Collections.sort(empresas.items, new EmpresaSort());
-
-                fillSpinemp();
-
             }
 
         } catch (Exception e) {
@@ -917,16 +921,26 @@ public class MainActivity extends PBase {
     }
 
     private void processBodegas()     {
-        class BodegaSort implements Comparator<clsBeBodegaBase>   {
-            public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
-                return left.IdBodega - right.IdBodega;
-            }
-        }
-
         try  {
+
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
-            Collections.sort(bodegas.items, new BodegaSort());
-            fillSpinBod();
+
+            if(bodegas != null){
+
+                if(bodegas.items != null){
+
+                    class BodegaSort implements Comparator<clsBeBodegaBase>   {
+                        public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
+                            return left.IdBodega - right.IdBodega;
+                        }
+                    }
+
+                    Collections.sort(bodegas.items, new BodegaSort());
+                    fillSpinBod();
+
+                }
+
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -1267,11 +1281,11 @@ public class MainActivity extends PBase {
             //Environment.getExternalStorageDirectory()
             //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
             if (gl.PathDataDir.isEmpty()){
-                if (Build.VERSION.SDK_INT >= 30) {
-                    gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-                } else {
-                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-                }
+//                if (Build.VERSION.SDK_INT >= 30) {
+                  gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+//                } else {
+//                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+//                }
             }
 
 
