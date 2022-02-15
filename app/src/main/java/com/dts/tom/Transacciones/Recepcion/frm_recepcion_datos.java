@@ -3206,8 +3206,8 @@ public class frm_recepcion_datos extends PBase {
                         //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                         //toastlong("GT: fin_carga_prod resolución LP " + valores);
 
-
-                        if (BeProducto.Presentaciones==null){
+                        //GT15022022: si presentacion esta null carga nuevamente NuevoLP
+                        if (BeProducto.Presentaciones.items==null){
                             execws(6);
                             progress.cancel();
                         }
