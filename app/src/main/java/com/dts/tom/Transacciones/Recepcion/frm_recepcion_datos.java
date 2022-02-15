@@ -15,7 +15,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,6 +186,8 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
+
+    private clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
 
     /***** parametros personalizados *****************************************/
     Integer contar_parametros_p = 0;
@@ -483,6 +484,12 @@ public class frm_recepcion_datos extends PBase {
                         if (BeProducto.Presentacion.Genera_lp_auto) {
                             progress.setMessage("Buscando License Plate");
                             progress.show();
+
+
+                            //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                            //toastlong("GT: cmb_pres resolución LP " + valores);
+
+
                             execws(6);
                             progress.cancel();
                         }else{
@@ -1184,6 +1191,10 @@ public class frm_recepcion_datos extends PBase {
                             txtLicPlate.setClickable(true);
 
                             if (!Existe_Lp){
+
+                                //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                                //toastlong("GT: muestra_parametros resolución LP " + valores);
+
                                 execws(6);
                             }else{
                                 pNumeroLP = pLp;
@@ -1203,6 +1214,11 @@ public class frm_recepcion_datos extends PBase {
                         if (Cant_Recibida==0){
                             if (pIndexStock<0){
                                 if (!Existe_Lp){
+
+
+                                    //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                                    //toastlong("GT: muestra_parametros2 resolución LP " + valores);
+
                                     execws(6);
                                 }else{
                                     pNumeroLP = pLp;
@@ -2647,6 +2663,11 @@ public class frm_recepcion_datos extends PBase {
                             txtLicPlate.setFocusableInTouchMode(true);
                             txtLicPlate.setClickable(true);
 
+
+                            //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                            //toastlong("GT: carga_prod_x_pallet resolución LP3 " + valores);
+
+
                             execws(6);
                         }
                     }
@@ -2698,6 +2719,9 @@ public class frm_recepcion_datos extends PBase {
                             txtLicPlate.setFocusable(true);
                             txtLicPlate.setFocusableInTouchMode(true);
                             txtLicPlate.setClickable(true);
+
+                            //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                            //toastlong("GT: carga_datos_producto resolución LP " + valores);
 
                             execws(6);
                         }
@@ -2846,7 +2870,7 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Recibida = gBeStockRec.Uds_lic_plate;
                     Cant_A_Recibir = Factor;
 
-                    FinalizCargaProductos();
+                    FinalizaCargaProductos();
 
                 }else{
 
@@ -2903,7 +2927,7 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }*/
 
-                FinalizCargaProductos();
+                FinalizaCargaProductos();
 
             }
 
@@ -2993,7 +3017,7 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Recibida = gBeStockRec.Uds_lic_plate;
                     Cant_A_Recibir = Factor;
 
-                    FinalizCargaProductos();
+                    FinalizaCargaProductos();
 
                 }else{
 
@@ -3030,7 +3054,7 @@ public class frm_recepcion_datos extends PBase {
 
                 cmbPresRec.setSelection(Indx);
 
-                FinalizCargaProductos();
+                FinalizaCargaProductos();
 
             }
 
@@ -3042,7 +3066,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     @SuppressLint("SetTextI18n")
-    private void FinalizCargaProductos(){
+    private void FinalizaCargaProductos(){
 
         try{
 
@@ -3178,8 +3202,15 @@ public class frm_recepcion_datos extends PBase {
                     if (BeProducto.Genera_lp){
                         progress.setMessage("Generando licencia..");
                         progress.show();
-                        execws(6);
-                        progress.cancel();
+
+                        //String valores = gl.IdOperador +"-"+ gl.IdBodega;
+                        //toastlong("GT: fin_carga_prod resolución LP " + valores);
+
+
+                        if (BeProducto.Presentaciones==null){
+                            execws(6);
+                            progress.cancel();
+                        }
                     }
                 }
             }else{
@@ -6168,57 +6199,65 @@ public class frm_recepcion_datos extends PBase {
 
     private void processNuevoLPA(){
 
+
         try {
 
-            clsBeResolucion_lp_operador resolucionActivaLpByBodega = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            clsBeResolucion_lp_operador nBeResolucion = new clsBeResolucion_lp_operador();
 
-            if (resolucionActivaLpByBodega !=null){
+            nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
 
-                gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
+            //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
 
-                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
+               if (nBeResolucion !=null){
 
-                int intLPSig = (int) pLpSiguiente;
-                int MaxL = (int) largoMaximo;
+                   gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                String str = String.valueOf(intLPSig);
-                StringBuilder sb = new StringBuilder();
+                   float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                   float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
-                    sb.append('0');
-                }
+                   int intLPSig = (int) pLpSiguiente;
+                   int MaxL = (int) largoMaximo;
 
-                sb.append(str);
-                String result = sb.toString();
+                   String str = String.valueOf(intLPSig);
+                   StringBuilder sb = new StringBuilder();
 
-                pNumeroLP= resolucionActivaLpByBodega.Serie + result;
+                   for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
+                       sb.append('0');
+                   }
 
-            }else{
-                gl.IdResolucionLpOperador =0;
-            }
+                   sb.append(str);
+                   String result = sb.toString();
 
-            if (gl.mode==1){
-                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                if (!txtNoLP.getText().toString().isEmpty()){
-                    if (txtLicPlate != null){
-                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
-                    }
-                }else{
-                    if (txtLicPlate != null){
-                        txtLicPlate.setText(pNumeroLP);
-                    }else{
-                        txtNoLP.setText(pNumeroLP);
-                    }
-                }
-            }
+                   pNumeroLP= nBeResolucion.Serie + result;
 
-           pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+               }else{
 
-           execws(27);
+                   toastlong("no hay LP");
+                   gl.IdResolucionLpOperador =0;
+               }
+
+               if (gl.mode==1){
+                   //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                   if (!txtNoLP.getText().toString().isEmpty()){
+                       if (txtLicPlate != null){
+                           txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                       }
+                   }else{
+                       if (txtLicPlate != null){
+                           txtLicPlate.setText(pNumeroLP);
+                       }else{
+                           txtNoLP.setText(pNumeroLP);
+                       }
+                   }
+               }
+
+               pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+               execws(27);
+
 
         }catch (Exception e){
-            mu.msgbox("processNuevoLP: "+e.getMessage());
+            mu.msgbox("processNuevoLP_RE: "+e.getMessage());
         }
 
     }
@@ -6711,7 +6750,7 @@ public class frm_recepcion_datos extends PBase {
                 Cant_Pendiente =mu.round( Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
             }
 
-            FinalizCargaProductos();
+            FinalizaCargaProductos();
 
         }catch (Exception e){
             mu.msgbox("processCantRecConOC"+e.getMessage());

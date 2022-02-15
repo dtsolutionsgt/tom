@@ -18,7 +18,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String Lic_plate="";
     @Element(required=false) public boolean Acepto=false;
     @Element(required=false) public double Peso_solicitado=0;
-    @Element(required=false) public double Peso_recibido=0;
+    @Element(required=false) public double Peso_recibido=0.00;
     @Element(required=false) public double Peso_verificado=0;
     @Element(required=false) public double Peso_despachado=0;
     @Element(required=false) public double Cantidad_Solicitada=0;

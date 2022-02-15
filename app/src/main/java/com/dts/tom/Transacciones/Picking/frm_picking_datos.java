@@ -1334,13 +1334,17 @@ public class frm_picking_datos extends PBase {
                     return;
                 }
 
+                //GT14022022: quitamos el simbolo , a la cantidad
                 gBePickingUbic.Cantidad_Recibida +=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
 
                 if (gBePicking.verifica_auto){
                     gBePickingUbic.Cantidad_Verificada = gBePickingUbic.Cantidad_Recibida;
                 }
 
-                gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString());
+                //gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString());
+                gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString().replace(",",""));
+
+
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
                 //GT0612021: estaba seteado gl.OperadorBodega.IdOperador pero es IdoperadorBodega
