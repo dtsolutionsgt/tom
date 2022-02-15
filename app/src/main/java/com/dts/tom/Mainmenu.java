@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -99,11 +100,12 @@ public class Mainmenu extends PBase {
             }
 
             lblVersion.setText("Version: " + versionparam);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        int ori=this.getResources().getConfiguration().orientation; // 1 - portrait , 2 - landscape
+        int ori=this.getResources().getConfiguration().orientation; //1 - portrait , 2 - landscape
         horizpos=ori==2;
 
         if (horizpos) {
@@ -125,7 +127,9 @@ public class Mainmenu extends PBase {
     //region Events
 
     public void setHandlers(){
+
         try{
+
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -139,6 +143,7 @@ public class Mainmenu extends PBase {
 
                 }
             });
+
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -149,7 +154,9 @@ public class Mainmenu extends PBase {
     //region Main
 
     public void listItems() {
+
         try {
+
             clsClasses.clsMenu item;
 
             items.clear();
@@ -297,6 +304,7 @@ public class Mainmenu extends PBase {
     }
 
     private void updateList() {
+
         try {
 
             //GT10122021: Actualizo la cantidad de tareas segun la opción dinamica del menú
@@ -337,7 +345,9 @@ public class Mainmenu extends PBase {
     }
 
     private void Load(){
+
         try {
+
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
 
             try {
@@ -657,6 +667,7 @@ public class Mainmenu extends PBase {
     }
 
     private void menuUtilerias() {
+
         final AlertDialog Dialog;
         final String[] selitems = {"Actualizar versión"};
 
@@ -697,6 +708,7 @@ public class Mainmenu extends PBase {
     }
 
     private void cargaDatosServicio() {
+
         String vs,ss;
         String[] sp;
 
@@ -754,12 +766,18 @@ public class Mainmenu extends PBase {
         String aBuffer = "";
 
         File myFile = new File(fname);
-        FileInputStream fIn = new FileInputStream(myFile);
-        BufferedReader txtReader = new BufferedReader(new InputStreamReader(fIn));
-        String aDataRow = "";
-        while ((aDataRow = txtReader.readLine()) != null) aBuffer += aDataRow;
 
-        txtReader.close();
+        if (myFile.exists()){
+            FileInputStream fIn = new FileInputStream(myFile);
+            BufferedReader txtReader = new BufferedReader(new InputStreamReader(fIn));
+            String aDataRow = "";
+            while ((aDataRow = txtReader.readLine()) != null) aBuffer += aDataRow;
+            txtReader.close();
+        }else
+        {
+            //Archivo no existe
+            Log.d("tag_readservicefile","archivo no existe");
+        }
 
         return aBuffer;
     }

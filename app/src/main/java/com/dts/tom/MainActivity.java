@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -92,7 +93,7 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String version="4.6.6";
+    private String version="4.6.8";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -132,7 +133,13 @@ public class MainActivity extends PBase {
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
             //#EJC20220118:Path para Android 11.
-            gl.PathDataDir=this.getApplicationContext().getDataDir().getPath();
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
+           // if (Build.VERSION.SDK_INT >= 30) {
+                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+
+            //} else {
+             //   gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+           // }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -888,21 +895,26 @@ public class MainActivity extends PBase {
     //region Data Processing
 
     private void processEmpresas() {
+
         try {
+
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             if(empresas != null){
 
-                class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
-                    public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
-                        return left.Nombre.compareTo(right.Nombre);
+                if(empresas.items != null){
+
+                    class EmpresaSort implements Comparator<clsBeEmpresaBase>                 {
+                        public int compare(clsBeEmpresaBase left, clsBeEmpresaBase right)                    {
+                            return left.Nombre.compareTo(right.Nombre);
+                        }
                     }
+
+                    Collections.sort(empresas.items, new EmpresaSort());
+
+                    fillSpinemp();
+
                 }
-
-                Collections.sort(empresas.items, new EmpresaSort());
-
-                fillSpinemp();
-
             }
 
         } catch (Exception e) {
@@ -910,17 +922,28 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()     {
-        class BodegaSort implements Comparator<clsBeBodegaBase>   {
-            public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
-                return left.IdBodega - right.IdBodega;
-            }
-        }
+    private void processBodegas(){
 
         try  {
+
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
-            Collections.sort(bodegas.items, new BodegaSort());
-            fillSpinBod();
+
+            if(bodegas != null){
+
+                if(bodegas.items != null){
+
+                    class BodegaSort implements Comparator<clsBeBodegaBase>   {
+                        public int compare(clsBeBodegaBase left, clsBeBodegaBase right) {
+                            return left.IdBodega - right.IdBodega;
+                        }
+                    }
+
+                    Collections.sort(bodegas.items, new BodegaSort());
+                    fillSpinBod();
+
+                }
+
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -1064,7 +1087,9 @@ public class MainActivity extends PBase {
     }
 
     private boolean processLicencia() {
+
         boolean rslt=false;
+
         try {
 
             Integer msgLic = 0;
@@ -1091,7 +1116,9 @@ public class MainActivity extends PBase {
     }
 
     private void processServidor() {
+
         String servidor="";
+
         try {
 
             progress.cancel();
@@ -1177,6 +1204,7 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinBod() {
+
         String ss;
 
         try {
@@ -1221,8 +1249,9 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinUser() {
-        try
-        {
+
+        try{
+
             userlist.clear();
 
             for (int i = 0; i <users.items.size(); i++)
@@ -1259,9 +1288,15 @@ public class MainActivity extends PBase {
 
             //#EJC20220118: reemplazo, por Android 11, context datadir.
             //Environment.getExternalStorageDirectory()
+            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
             if (gl.PathDataDir.isEmpty()){
-                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+//                if (Build.VERSION.SDK_INT >= 30) {
+                  gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+//                } else {
+//                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
+//                }
             }
+
 
             String pathText = gl.PathDataDir + "/tomws.txt";
             File file1 = new File(pathText);

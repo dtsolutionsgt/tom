@@ -115,7 +115,7 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
             }
 
             if (BeListTareasHH.get(position).IdUbicacion!=0){
-                holder.lblUbicRe.setText(""+BeListTareasHH.get(position).IdUbicacion);
+                 holder.lblUbicRe.setText(""+BeListTareasHH.get(position).NombreUbicacion);
             }
 
             if (!BeListTareasHH.get(position).FechaVence.isEmpty()){

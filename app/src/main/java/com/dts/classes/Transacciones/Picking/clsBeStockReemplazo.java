@@ -20,5 +20,6 @@ public class clsBeStockReemplazo {
     public int IdEstado = 0;
     public int IdProductoBodega = 0;
     public int IdUnidadMedida = 0;
+    public String NombreUbicacion = "";
 
 }

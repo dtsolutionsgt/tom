@@ -3511,6 +3511,11 @@ public class frm_recepcion_datos extends PBase {
                             CantRec =BeUbicaciones.get(i).Cantidad_recibida;
                             CantTotal=BeUbicaciones.get(i).Cantidad;
 
+                            if (BeUbicaciones.get(i).IdPresentacion!=0){
+                                CantTotal=mu.round2(CantTotal/ BeProducto.Presentacion.Factor);
+                                CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
+                            }
+
                             if (!UbicLotesList.contains(valor)){
                                 UbicLotesList.add(valor);
                             }
@@ -3518,8 +3523,6 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
-                CantTotal=mu.round2(CantTotal/ BeProducto.Presentacion.Factor);
-                CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
                 DifCantUbic = CantTotal - CantRec;
 
                 if (UbicLotesList.size()>0){
@@ -6645,17 +6648,48 @@ public class frm_recepcion_datos extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog12, which) -> {
 
-                if (BeProducto.Control_vencimiento){
-                    cmbVenceRec.setSelectAllOnFocus(true);
-                    cmbVenceRec.requestFocus();
-                }else if (BeProducto.Control_lote){
-                    txtLoteRec.setSelectAllOnFocus(true);
-                    txtLoteRec.requestFocus();
-                }else {
-                    txtCantidadRec.requestFocus();
-                }
+                if (guardando_recepcion){
 
-                fillUbicacion();
+                    if (BeProducto!=null){
+                        if(ValidaDatosIngresados()){
+                            if (Mostrar_Propiedades_Parametros){
+                                Muestra_Propiedades_Producto();
+                            }else{
+                                if (!Mostro_Propiedades){
+                                    Llena_Stock();
+                                    Mostro_Propiedades = true;
+                                }
+                            }
+
+                            if (!Mostro_Propiedades){
+                                Muestra_Propiedades_Producto();
+                                return;
+                            }
+
+                            if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
+
+                                execws(12);
+
+                            }else{
+                                ContinuaGuardandoRecepcion();
+                            }
+                        }
+                    }else{
+                        msgbox("No está definido el producto que se va a recepcionar");
+                    }
+
+                }else{
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.setSelectAllOnFocus(true);
+                        cmbVenceRec.requestFocus();
+                    }else if (BeProducto.Control_lote){
+                        txtLoteRec.setSelectAllOnFocus(true);
+                        txtLoteRec.requestFocus();
+                    }else {
+                        txtCantidadRec.requestFocus();
+                    }
+                    fillUbicacion();
+                }
 
             });
 
@@ -6831,7 +6865,6 @@ public class frm_recepcion_datos extends PBase {
                     }
                     fillUbicacion();
                 }
-
             }
 
         }catch (Exception e){

@@ -59,7 +59,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
     private int CantRes=0, IdUbicDest = 0, IdEstDanadoSelect = 0;;
-    private double vCant=0;
+    private double vCant=0, CantidadTotal = 0;
     private boolean Completo=false;
     private boolean Distinto=false;
     private String resultado="";
@@ -91,6 +91,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         ProgressDialog("Listando existencias de producto:"+gBePickingUbic.CodigoProducto);
 
+        CantidadTotal = CantReemplazar;
         // #AT 20211228 Creacón de objeto para obtener el stock para reemplazo
         StockResReemplazo = new clsBeStock_res();
 
@@ -138,8 +139,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
-
                         Object lvObj = listDispProd.getItemAtPosition(position);
                         clsBeStockReemplazo sitem = (clsBeStockReemplazo) lvObj;
                         selitem = new clsBeStockReemplazo();
@@ -150,10 +149,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         adapter.setSelectedIndex(position);
 
                         procesar_registro();
-                    }
 
                 }
-
             });
 
         }catch (Exception e){
@@ -253,6 +250,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     //Reservar_Stock_By_IdStock
                     execws(3);
                 }
+
+                progress.cancel();
             }
 
         }catch (Exception e){
@@ -398,6 +397,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.UMBas = DT.getString(3);
                     vItem.Cant = DT.getDouble(4);
                     vItem.IdUbicacion = DT.getInt(5);
+                    vItem.NombreUbicacion = DT.getString(40);
 
                     if (DT.getString(6)!=null){
                         vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));
@@ -463,7 +463,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                    "gIdBodega", gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Reservar_Stock_By_IdStock",
+                        callMethod("Reservar_Stock_By_Stock",
                                 "pBeStock_res",tmpBeStock_Res,
                                 "CantSol",CantReemplazar,
                                 "MaquinaQueSolicita","1",
@@ -490,7 +490,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "EsPicking",true,
                                 "Tipo", Tipo,
                                 "IdUbicDestino",IdUbicacionDestino,
-                                "IdEstDestino",IdEstadoDanadoSelect);
+                                "IdEstDestino",IdEstadoDanadoSelect,
+                                "CantidadTotal", CantidadTotal);
                         break;
                     case 6:
                         callMethod("Sustituir_Producto_NE_Picking",
@@ -647,7 +648,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (TipoLista == 1) {
                 StockReservado = xobj.getresult(Boolean.class,"Reemplazar_ListaPu_By_Stock");
             } else {
-                StockReservado = xobj.getresult(Boolean.class,"Reservar_Stock_By_IdStock");
+                StockReservado = xobj.getresult(Boolean.class,"Reservar_Stock_By_Stock");
             }
             CantidadPendiente = (Double) xobj.getSingle("CantPend",Double.class);
 
@@ -660,6 +661,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     msgAskReemplazado(Tipo == 1? "Stock reemplazado correctamente":"Stock reemplazado(No Encontrado) correctamente");
                 } else {
                     CantReemplazar = CantidadPendiente;
+                    CantidadTotal = CantidadPendiente;
                     msgAskCantPendiente(Tipo == 1 ? "Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")": "Cantidad de reemplazo(No encontrado) pendiente para completar el proceso: "+ "("+CantReemplazar+")");
 
                     lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
