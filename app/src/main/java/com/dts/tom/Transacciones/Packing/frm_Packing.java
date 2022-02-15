@@ -2048,7 +2048,7 @@ public class frm_Packing extends PBase {
 
                 gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
 
-                float pLpSiguiente = resolucionActivaLpByBodega.correlativo_actual +1;
+                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
                 float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
 
                 int intLPSig = (int) pLpSiguiente;
