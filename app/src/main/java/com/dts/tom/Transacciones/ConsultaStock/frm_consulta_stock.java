@@ -63,7 +63,7 @@ public class frm_consulta_stock extends PBase {
     private Button btnBack, registros,btnBuscar;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic;
-    private CheckBox chkAgrupar;
+    private CheckBox chkDetalle;
     private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
@@ -105,7 +105,7 @@ public class frm_consulta_stock extends PBase {
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
-        chkAgrupar=(CheckBox)findViewById(R.id.chkAgrupar);
+        chkDetalle=(CheckBox)findViewById(R.id.chkDetalle);
 
         setHandlers();
 
@@ -265,7 +265,7 @@ public class frm_consulta_stock extends PBase {
 
             });
 
-            chkAgrupar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            chkDetalle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -734,7 +734,7 @@ public class frm_consulta_stock extends PBase {
                                 "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
                                 "pIdBodega",gl.IdBodega,
                                 "pIdUbicacion",idubic,
-                                "pTipo", chkAgrupar.isChecked());
+                                "pDetallado", chkDetalle.isChecked());
                         break;
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
@@ -748,7 +748,7 @@ public class frm_consulta_stock extends PBase {
                                                "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
                                                "pIdBodega",gl.IdBodega,
-                                               "pTipo", chkAgrupar.isChecked());
+                                               "pDetallado", chkDetalle.isChecked());
                         break;
 
                 }

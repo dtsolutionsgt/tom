@@ -36,11 +36,11 @@
             android:scrollbarSize="4dp" />
 
         <CheckBox
-            android:id="@+id/chkAgrupar"
+            android:id="@+id/chkDetalle"
             android:layout_width="129dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="Agrupar"
+            android:text="Detalle"
             android:textSize="18sp" />
 
     </TableRow>
