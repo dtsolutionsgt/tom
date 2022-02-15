@@ -434,6 +434,8 @@ public class frm_consulta_stock extends PBase {
                         item.factor = pListStock2.items.get(i).factor;
                         item.ingreso= pListStock2.items.get(i).ingreso;
                         item.IdTipoEtiqueta=pListStock2.items.get(i).IdTipoEtiqueta;
+                        item.ResPres = pListStock2.items.get(i).ResPres;
+                        item.DispPres = pListStock2.items.get(i).DispPres;
                         items_stock.add(item);
 
                         if (i==0){
@@ -524,6 +526,8 @@ public class frm_consulta_stock extends PBase {
                 item.factor = pListStock2.items.get(i).factor;
                 item.ingreso= pListStock2.items.get(i).ingreso;
                 item.IdTipoEtiqueta= pListStock2.items.get(i).IdTipoEtiqueta;//#CKFK 20210716 1846 Agregué el campo IdTipoEtiqueta
+                item.ResPres = pListStock2.items.get(i).ResPres;
+                item.DispPres = pListStock2.items.get(i).DispPres;
                 items_stock.add(item);
             }
 
@@ -576,6 +580,8 @@ public class frm_consulta_stock extends PBase {
                 items.factor = pListStock2.items.get(i).factor;
                 items.ingreso = pListStock2.items.get(i).ingreso;
                 items.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
+                items.ResPres = pListStock2.items.get(i).ResPres;
+                items.DispPres = pListStock2.items.get(i).DispPres;
                 items_stock2.add(items);
 
             }
@@ -615,6 +621,8 @@ public class frm_consulta_stock extends PBase {
                     items.LicPlate = pListStock2.items.get(i).LicPlate;
                     items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                     items.ingreso = pListStock2.items.get(i).ingreso;
+                    items.ResPres = pListStock2.items.get(i).ResPres;
+                    items.DispPres = pListStock2.items.get(i).DispPres;
                     items_stock2.add(items);
                 }
             }

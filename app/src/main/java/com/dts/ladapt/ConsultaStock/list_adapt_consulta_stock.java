@@ -81,6 +81,8 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                         holder.lblIngreso = convertView.findViewById(R.id.lblIngreso);
                         holder.lblIdTipoEtiqueta = convertView.findViewById(R.id.lblIdTipoEtiqueta);
+                        holder.lblResPres = convertView.findViewById(R.id.lblResPres);
+                        holder.lblDispPres = convertView.findViewById(R.id.lblDispPres);
                 convertView.setTag(holder);
 
             }else {
@@ -90,14 +92,16 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             }
 
             //AT 20211221 Ya no se crea el encabezado unicamente se agrega la información
-            holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
-            holder.lblNombre.setText(BeListStock.get(position).Nombre  +"");
+            holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
+            holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
             holder.lblUM.setText(BeListStock.get(position).UM  +"");
             holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
             holder.lblPres.setText(BeListStock.get(position).Pres  +"");
             holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
             holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
             holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
+            holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
+            holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
             holder.lblLote.setText(BeListStock.get(position).Lote  +"");
             holder.lblVence.setText(BeListStock.get(position).Vence  +"");
             holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
@@ -157,6 +161,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
-                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta;
+                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
+                lblResPres, lblDispPres;
     }
 }
