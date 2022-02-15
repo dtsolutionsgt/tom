@@ -679,9 +679,7 @@ public class Mainmenu extends PBase {
                 switch (item) {
                     case 0:
                         msgAskUpdate("Actualizar versión");break;
-
                 }
-
                 dialog.cancel();
             }
         });
