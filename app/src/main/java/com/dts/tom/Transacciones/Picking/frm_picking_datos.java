@@ -1341,10 +1341,8 @@ public class frm_picking_datos extends PBase {
                     gBePickingUbic.Cantidad_Verificada = gBePickingUbic.Cantidad_Recibida;
                 }
 
-                //gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString());
+                //#CKFK20220214 Reemplace la coma en el peso recibibo por solicitud de Efren
                 gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString().replace(",",""));
-
-
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
                 //GT0612021: estaba seteado gl.OperadorBodega.IdOperador pero es IdoperadorBodega
