@@ -6945,6 +6945,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (procesada){
                     Imprime_Barra_Despues_Guardar();
+                    return;
                 }else{
                     if (!respuesta.isEmpty() || !respuesta.equals("")){
                         msgboxErrorPush("No se puedo registrar la recepción " + respuesta);

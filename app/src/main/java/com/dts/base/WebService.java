@@ -67,6 +67,8 @@ public class WebService {
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
         int TIMEOUT = 15000;
+        int READTIMEOUT = 0;
+
         mMethodName = methodName; mResult = "";xmlresult="";
 
         error="";errorflag=false;
@@ -75,7 +77,7 @@ public class WebService {
 
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
-           conn.setReadTimeout(TIMEOUT);
+           conn.setReadTimeout(READTIMEOUT);
            conn.setConnectTimeout(TIMEOUT);
            conn.setDoInput(true);
            conn.setDoOutput(true);
