@@ -111,9 +111,10 @@ public class MainActivity extends PBase {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            //super.InitBase();
-
             ProgressDialog("Inicializando...");
+
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces, la inicializo al entrar
+            browse = 1;
 
             grantPermissions();
 
@@ -121,25 +122,9 @@ public class MainActivity extends PBase {
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
 
-//            if (gl.wsurl!=null){
-//
-//                IsNetWorkAvailable= netWorkInfoUtility.isNetWorkAvailableNow(this.getApplicationContext(), gl.wsurl);
-//
-//                if (IsNetWorkAvailable){
-//                    lblurl.setText(netWorkInfoUtility.gIpAdress);
-//                }
-//            }
-
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-            //#EJC20220118:Path para Android 11.
-            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
-           // if (Build.VERSION.SDK_INT >= 30) {
-                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-
-            //} else {
-             //   gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-           // }
+            gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,7 +186,7 @@ public class MainActivity extends PBase {
             } catch (Exception e) {
 
             }
-            //Load();
+            Load();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
@@ -243,6 +228,9 @@ public class MainActivity extends PBase {
 
             progress_setMessage("Cargando empresas...");
             progress.show();
+
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces, aquí le cambio el valor
+            browse = 2;
 
             LimpiarControles();
 
@@ -407,7 +395,9 @@ public class MainActivity extends PBase {
         {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             {
-                startApplication();
+                //#CKFK20220215 Quité el que se vuelva a iniciar la aplicación por esta opción probé varias veces desinstalando
+                //y no me dio problemas
+               // startApplication();
             } else
             {
                 super.finish();
@@ -1046,12 +1036,7 @@ public class MainActivity extends PBase {
 
         try
         {
-
             gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
-
-            //Llama al metodo del WS Get_cantidad_decimales_calculo
-            //GT 16082021: no lo ejecuta!! se traslado a processVersiones
-            //execws(6);
 
         } catch (Exception e)
         {
@@ -1287,16 +1272,9 @@ public class MainActivity extends PBase {
         try {
 
             //#EJC20220118: reemplazo, por Android 11, context datadir.
-            //Environment.getExternalStorageDirectory()
-            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
             if (gl.PathDataDir.isEmpty()){
-//                if (Build.VERSION.SDK_INT >= 30) {
                   gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-//                } else {
-//                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-//                }
             }
-
 
             String pathText = gl.PathDataDir + "/tomws.txt";
             File file1 = new File(pathText);
@@ -1393,7 +1371,10 @@ public class MainActivity extends PBase {
 
     protected void onResume() {
         try  {
-            Load();
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces
+            if (browse==1){
+                Load();
+            }
             super.onResume();
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
