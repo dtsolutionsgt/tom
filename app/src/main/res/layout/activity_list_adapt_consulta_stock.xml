@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/lblCodigo"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -100,6 +100,30 @@
             android:id="@+id/lblDisponibleUMBas"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblResPres"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblDispPres"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:minHeight="50dp"
             android:paddingTop="5dp"

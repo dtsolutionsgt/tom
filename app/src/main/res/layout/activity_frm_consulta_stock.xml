@@ -66,7 +66,7 @@
 
                 <TextView
                     android:id="@+id/lblCodigo"
-                    android:layout_width="50dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:minHeight="50dp"
@@ -74,7 +74,8 @@
                     android:paddingBottom="5dp"
                     android:text="Código"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblNombre"
@@ -88,7 +89,8 @@
                     android:paddingBottom="5dp"
                     android:text="Nombre"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblUM"
@@ -101,7 +103,8 @@
                     android:paddingBottom="5dp"
                     android:text="UM"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblExistUMBAs"
@@ -114,7 +117,8 @@
                     android:paddingBottom="5dp"
                     android:text="Exist UMB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblPres"
@@ -127,7 +131,8 @@
                     android:paddingBottom="5dp"
                     android:text="Pres"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblExistPres"
@@ -138,9 +143,10 @@
                     android:minHeight="50dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:text="ExistPres"
+                    android:text="Exist  Pres"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
@@ -153,7 +159,8 @@
                     android:paddingBottom="5dp"
                     android:text="Res. UMB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblDisponibleUMBas"
@@ -165,7 +172,30 @@
                     android:paddingBottom="5dp"
                     android:text="Dispo UMB"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lblResPres"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Res   Pres"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lblDispPres"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:text="Dispo Pres"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/lblLote"
@@ -177,7 +207,8 @@
                     android:paddingBottom="5dp"
                     android:text="Lote"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblVence"
@@ -189,7 +220,8 @@
                     android:paddingBottom="5dp"
                     android:text="Vence"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblEstado"
@@ -201,7 +233,8 @@
                     android:paddingBottom="5dp"
                     android:text="Estado"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblUbic"
@@ -213,7 +246,8 @@
                     android:paddingBottom="5dp"
                     android:text="Ubic"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblidUbic"
@@ -225,7 +259,8 @@
                     android:paddingBottom="5dp"
                     android:text="IdUbic"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblPedido"
@@ -237,7 +272,8 @@
                     android:paddingBottom="5dp"
                     android:text="Pedido"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblPick"
@@ -249,7 +285,8 @@
                     android:paddingBottom="5dp"
                     android:text="Pick"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblLicPlate_ci"
@@ -261,7 +298,8 @@
                     android:paddingBottom="5dp"
                     android:text="LicPlate"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblIdProductoBodega"
@@ -273,7 +311,8 @@
                     android:paddingBottom="5dp"
                     android:text="IdProdBod"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblIngreso"
@@ -284,7 +323,8 @@
                     android:paddingBottom="5dp"
                     android:text="Ingreso"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblIdTipoEtiqueta"
@@ -297,7 +337,8 @@
                     android:paddingBottom="5dp"
                     android:text="IdTipoEtiqueta"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <ListView
