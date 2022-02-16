@@ -4126,10 +4126,17 @@ public class frm_recepcion_datos extends PBase {
                 if (pListBeStockRec.items.get(pIndiceListaStock).Peso>0){
                     pListBeStockRec.items.get(pIndiceListaStock).Peso =pListBeStockRec.items.get(pIndiceListaStock).Peso ;
                 }else{
-                    //GT15022022: esta linea es la original
-                    //pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
-                    pListBeStockRec.items.get(pIndiceListaStock).Peso = Double.parseDouble(txtPeso.getText().toString());
 
+                    //GT15022022: esta linea es la original,
+                    //pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
+
+                    //GT16022022: si hay control peso, envio el valor peso (peso bruto)
+                    //de lo contario, envio valor 0
+                    if(BeProducto.Control_peso){
+                        pListBeStockRec.items.get(pIndiceListaStock).Peso = Double.parseDouble(txtPeso.getText().toString());
+                    }else{
+                        pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
+                    }
                 }
 
                 if (pListBeStockRec.items.get(pIndiceListaStock).Temperatura>0){
