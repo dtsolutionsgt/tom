@@ -664,6 +664,7 @@ public class MainActivity extends PBase {
                     Intent i = new Intent(this, Mainmenu.class);
                     i.putExtra("version", version);
                     startActivity(i);
+                    progress.cancel();
                     //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
@@ -687,10 +688,6 @@ public class MainActivity extends PBase {
         }finally {
             //progress.cancel();
         }
-    }
-
-    private void ejecuta(){
-        startActivity(new Intent(this,Mainmenu.class));
     }
 
     private void Valida_Ingreso() {
