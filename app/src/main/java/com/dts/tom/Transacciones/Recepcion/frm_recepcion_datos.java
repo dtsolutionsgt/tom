@@ -755,6 +755,14 @@ public class frm_recepcion_datos extends PBase {
                     if (cant>0){
                         double pesoUni = mu.round(pesoTotal/cant,gl.gCantDecCalculo);
                         txtPesoUnitario.setText(String.valueOf(pesoUni));
+
+                        //GT15022022: si el peso bruto al dividirse entre la cantidad es 0 o menor, entonces alertar
+                        if (txtPesoUnitario.getText().toString().isEmpty() || Double.parseDouble(txtPesoUnitario.getText().toString())<=0 ){
+                            mu.msgbox("el peso unitario no puede ser 0, valide el peso");
+                            txtPesoUnitario.requestFocus();
+                            return false;
+                        }
+
                     }
                 }
             }
@@ -4118,7 +4126,10 @@ public class frm_recepcion_datos extends PBase {
                 if (pListBeStockRec.items.get(pIndiceListaStock).Peso>0){
                     pListBeStockRec.items.get(pIndiceListaStock).Peso =pListBeStockRec.items.get(pIndiceListaStock).Peso ;
                 }else{
-                    pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
+                    //GT15022022: esta linea es la original
+                    //pListBeStockRec.items.get(pIndiceListaStock).Peso = 0;
+                    pListBeStockRec.items.get(pIndiceListaStock).Peso = Double.parseDouble(txtPeso.getText().toString());
+
                 }
 
                 if (pListBeStockRec.items.get(pIndiceListaStock).Temperatura>0){
