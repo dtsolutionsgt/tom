@@ -3215,7 +3215,7 @@ public class frm_recepcion_datos extends PBase {
                         //toastlong("GT: fin_carga_prod resolución LP " + valores);
 
                         //GT15022022: si presentacion esta null carga nuevamente NuevoLP
-                        if (BeProducto.Presentaciones.items==null){
+                        if (BeProducto.Presentaciones.items==null || BeOcDet.IdPresentacion==0){
                             execws(6);
                             progress.cancel();
                         }
@@ -3919,10 +3919,9 @@ public class frm_recepcion_datos extends PBase {
             imprimirDesdeBoton=false;
             guardando_recepcion=true;
 
-            //if (!ejecuto_existe_lp){
-            //#CKFK 20211211 Valida si ya existe el License Plate
-            Procesa_Barra_Producto();
-           /* }else{
+            if (!txtNoLP.getText().toString().isEmpty()){
+                Procesa_Barra_Producto();
+            }else{
 
                 if (BeProducto!=null){
                     if(ValidaDatosIngresados()){
@@ -3952,7 +3951,7 @@ public class frm_recepcion_datos extends PBase {
                     msgbox("No está definido el producto que se va a recepcionar");
                 }
 
-            }*/
+            }
 
         }catch (Exception e){
             mu.msgbox("Guardar_Recepcion: "+ e.getMessage());
@@ -6218,17 +6217,19 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private clsBeResolucion_lp_operador nBeResolucion = null;
+
     private void processNuevoLPA(){
 
 
         try {
 
-            clsBeResolucion_lp_operador nBeResolucion = new clsBeResolucion_lp_operador();
-
-            nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            if (nBeResolucion == null){
+                nBeResolucion = new clsBeResolucion_lp_operador();
+                nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+            }
 
             //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
-
                if (nBeResolucion !=null){
 
                    gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
@@ -6963,6 +6964,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if (procesada){
                     Imprime_Barra_Despues_Guardar();
+                    //#CKFK20220216 Coloqué este return para que no se ejecute el de abajo
                     return;
                 }else{
                     if (!respuesta.isEmpty() || !respuesta.equals("")){

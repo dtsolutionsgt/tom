@@ -1034,6 +1034,7 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }catch (Exception e){
+                relbot.setVisibility(View.VISIBLE);
                 mu.msgbox(e.getClass()+e.getMessage());
             }
 
@@ -1240,10 +1241,9 @@ public class frm_list_rec_prod extends PBase {
                 execws(11);
             }
 
-
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            relbot.setVisibility(View.VISIBLE);
         }
 
     }
@@ -1283,7 +1283,7 @@ public class frm_list_rec_prod extends PBase {
             relbot.setVisibility(View.VISIBLE);
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
         }finally {
-            //progress.hide();
+            relbot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1468,6 +1468,7 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
+            relbot.setVisibility(View.VISIBLE);
         }
     }
 
