@@ -2454,7 +2454,8 @@ public class frm_recepcion_datos extends PBase {
                 Guardar_Recepcion_Nueva();
             }
 
-            Mostrar_Propiedades_Parametros = false;
+            //#CKFK20220217 Voy a poner esto en comentario momentaneamente
+           // Mostrar_Propiedades_Parametros = false;
 
         }catch (Exception e){
 
