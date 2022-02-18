@@ -207,13 +207,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
-            /*if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblUbicDetPick.setTextColor(R.style.titlestyle);
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }*/
-
+            
             convertView.setBackgroundColor(Color.TRANSPARENT);
 
         }
