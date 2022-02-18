@@ -28,14 +28,16 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public int IdTipoEtiqueta=0;//#CKFK 20210716 1846 Agregué el campo IdTipoEtiqueta a la clase clsBeVW_stock_res_CI
   @Element(required=false) public String DispPres = "";
   @Element(required=false) public String ResPres = "";
+  @Element(required=false) public String NombreArea = "";
 
   public clsBeVW_stock_res_CI() {
   }
 
   public clsBeVW_stock_res_CI(String Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
-                              String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,String LicPlate,
-                              String IdProductoEstado,int IdProductoBodega, int factor, String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres) {
+                              String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,
+                              String LicPlate,String IdProductoEstado,int IdProductoBodega, int factor,
+                              String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -60,6 +62,7 @@ public class clsBeVW_stock_res_CI {
     this.IdTipoEtiqueta=IdTipoEtiqueta;
     this.DispPres = DispPres;
     this.ResPres = ResPres;
+    this.NombreArea = NombreArea;
   }
 
   public String getCodigo() {
@@ -186,5 +189,11 @@ public class clsBeVW_stock_res_CI {
   }
   public void setResPres(String value) {
     ResPres=value;
+  }
+  public String getNombreArea() {
+    return NombreArea;
+  }
+  public void setNombreArea(String value) {
+    NombreArea=value;
   }
 }

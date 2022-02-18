@@ -68,6 +68,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public double Tarima =0;
     @Element(required = false) public  boolean No_encontrado = false;
+    @Element(required=false) public String NombreArea = "";
 
     public clsBeTrans_picking_ubic() {
     }
@@ -86,7 +87,8 @@ public class clsBeTrans_picking_ubic {
                                    String ProductoEstado, int IdProductoBodega, int IdProductoEstado, int IdPresentacion,
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
-                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima, boolean No_encontrado) {
+                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
+                                   boolean No_encontrado, String NombreArea) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.IdPickingUbic=IdPickingUbic;
@@ -149,6 +151,7 @@ public class clsBeTrans_picking_ubic {
         this.IdBodega=IdBodega;
         this.Tarima=Tarima;
         this.No_encontrado = No_encontrado;
+        this.NombreArea = NombreArea;
 
     }
 
@@ -518,6 +521,12 @@ public class clsBeTrans_picking_ubic {
     }
     public void setNoEncontrado(boolean value) {
         No_encontrado=value;
+    }
+    public String getNombreArea() {
+        return NombreArea;
+    }
+    public void setNombreArea(String value) {
+        NombreArea=value;
     }
 }
 

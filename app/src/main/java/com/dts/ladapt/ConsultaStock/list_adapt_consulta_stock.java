@@ -83,6 +83,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblIdTipoEtiqueta = convertView.findViewById(R.id.lblIdTipoEtiqueta);
                         holder.lblResPres = convertView.findViewById(R.id.lblResPres);
                         holder.lblDispPres = convertView.findViewById(R.id.lblDispPres);
+                        holder.lblNombreArea = convertView.findViewById(R.id.lblNombreArea);
                 convertView.setTag(holder);
 
             }else {
@@ -113,6 +114,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
             holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
             holder.lblIdTipoEtiqueta.setText(BeListStock.get(position).IdTipoEtiqueta  +"");
+            holder.lblNombreArea.setText(BeListStock.get(position).NombreArea  +"");
 
             holder.lblCodigo.setTextColor(Color.BLACK);
             holder.lblNombre.setTextColor(Color.BLACK);
@@ -133,6 +135,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblIdProductoBodega.setTextColor(Color.BLACK);
             holder.lblIngreso.setTextColor(Color.BLACK);
             holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
+            holder.lblNombreArea.setTextColor(Color.BLACK);
 
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -162,6 +165,6 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
                 lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
-                lblResPres, lblDispPres;
+                lblResPres, lblDispPres,lblNombreArea;
     }
 }

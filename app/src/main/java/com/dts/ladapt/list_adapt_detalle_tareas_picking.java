@@ -81,6 +81,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             holder.lblPickingUbic = (TextView) convertView.findViewById(R.id.lblPickingUbic);
             holder.lblStock = (TextView) convertView.findViewById(R.id.lblStock);
             holder.lblStockRes = (TextView) convertView.findViewById(R.id.lblStockRes);
+            holder.lblNombreArea = (TextView) convertView.findViewById(R.id.lblNombreArea);
 
             convertView.setTag(holder);
 
@@ -200,7 +201,9 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         if (BeListTareasHH.get(position).IdStockRes>0){
             holder.lblStockRes.setText(""+BeListTareasHH.get(position).IdStockRes);
         }
-
+        if (!BeListTareasHH.get(position).NombreArea.isEmpty()){
+            holder.lblNombreArea.setText(""+BeListTareasHH.get(position).NombreArea);
+        }
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
@@ -219,8 +222,10 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblUbicDetPick,lblNomUbicDet,lblCodigoDet,lblProductoDet,lblUmbasDet,lblPresDet,lblSol,lblRec,lblLoteDet,lblLpDet,lblVenceDet
-                ,lblNomEstadoDet,lblPesoDet,lblIdPresDet,lblIdEstadoDet,lblIdPedidoEnc,lblPedidoDet,lblIdPickingDet,lblProductoBodegaDet,lblPickingUbic,lblStock,lblStockRes, lblTarima;
+        TextView lblUbicDetPick,lblNomUbicDet,lblCodigoDet,lblProductoDet,lblUmbasDet,lblPresDet,lblSol,lblRec,
+                lblLoteDet,lblLpDet,lblVenceDet,lblNomEstadoDet,lblPesoDet,lblIdPresDet,lblIdEstadoDet,
+                lblIdPedidoEnc,lblPedidoDet,lblIdPickingDet,lblProductoBodegaDet,lblPickingUbic,lblStock,
+                lblStockRes, lblTarima,lblNombreArea;
     }
 
 }

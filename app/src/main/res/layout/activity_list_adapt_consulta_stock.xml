@@ -252,6 +252,18 @@
             android:text="0"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/lblNombreArea"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblIdTipoEtiqueta"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp"/>
+
 
     </LinearLayout>
 
