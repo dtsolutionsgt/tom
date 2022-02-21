@@ -1460,22 +1460,16 @@ public class MainActivity extends PBase {
                     if (versiones.items.get(i).IdEmpresa==idemp) {
 
                         //#EJC20220118: Saber si la versión en FB es mayor.
-                        String Nueva_Version = versiones.items.get(i).Version;
-                        String[] versionOnFirebase = Nueva_Version.split("\\.");
-                        String[] versionActual = version.split("\\.");
+                        String Nueva_Version_FireBaseConPuntos = versiones.items.get(i).Version;
+                        String Nueva_Version_FireBase = versiones.items.get(i).Version.replace(".","");
+                        String versionActual = version.replace(".","");
 
-                        int vActualMajor =Integer.parseInt(versionActual[0]);
-                        int vActualMedium =Integer.parseInt(versionActual[1]);
-                        int vActualMinor =Integer.parseInt(versionActual[2]);
+                        long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
+                        long vVersionActualHH = Long.parseLong(versionActual);
 
-                        int vFBaseMajor =Integer.parseInt(versionOnFirebase[0]);
-                        int vFBaseMedium =Integer.parseInt(versionOnFirebase[1]);
-                        int vFBaseMinor =Integer.parseInt(versionOnFirebase[2]);
-
-
-                        if(vFBaseMinor > vActualMinor && vFBaseMedium > vActualMedium && vFBaseMajor > vActualMajor)
+                        if(vNuevaVersionFireBase > vVersionActualHH)
                         {
-                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
+                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version_FireBaseConPuntos + "?");
                             return;
                         }
                     }
