@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,17 +16,10 @@ import android.widget.ListView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
-import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
-import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
-import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
-import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
-import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
-import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -39,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static br.com.zbra.androidlinq.Linq.stream;
 
 
 public class frm_list_rec_prod_detalle extends PBase {
