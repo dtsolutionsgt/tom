@@ -487,8 +487,13 @@ public class frm_consulta_stock extends PBase {
 
             }else{
                 //limpiar el grid.
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
+                if (areaprimera) {
+                    adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock2);
+                } else {
+                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock);
+                }
             }
 
         } catch (Exception e) {
@@ -697,8 +702,15 @@ public class frm_consulta_stock extends PBase {
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
             ) {
                 items_stock.clear();
-                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                listView.setAdapter(adapter_stock);
+
+                if (areaprimera) {
+                    adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock2);
+                } else {
+                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                    listView.setAdapter(adapter_stock);
+                }
+
                 toast("Ingrese código de producto y/o ubicación");
             } else {
 

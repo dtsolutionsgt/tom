@@ -728,7 +728,6 @@ public class MainActivity extends PBase {
                                             .toList();
 
                             gl.CodigoBodega = BeBodega.get(0).Codigo;
-                            gl.Mostrar_Area_En_HH = true;
 
                             //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
                             gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
