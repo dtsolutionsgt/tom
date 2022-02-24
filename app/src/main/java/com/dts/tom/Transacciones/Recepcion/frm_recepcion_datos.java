@@ -5860,7 +5860,7 @@ public class frm_recepcion_datos extends PBase {
                         try {
 
                            if(BeTransReDet.Fecha_vence.isEmpty()){
-                               //#ejc20210611: Definir fecha vence por defecto null
+                               //#EJC20210611: Definir fecha vence por defecto null
                                BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
                            }
 
