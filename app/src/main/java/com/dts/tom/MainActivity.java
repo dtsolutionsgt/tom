@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -503,6 +502,8 @@ public class MainActivity extends PBase {
                     gl.gUbicMerma = bodegas.items.get(position).ubic_merma;
                     gl.gUbicProdNe = bodegas.items.get(position).ubic_producto_ne;
                     gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
+                    gl.Mostrar_Area_En_HH = bodegas.items.get(position).Mostrar_Area_En_HH;
+
                     idimpres=0;
                     execws(3);
 
@@ -727,7 +728,7 @@ public class MainActivity extends PBase {
                                             .toList();
 
                             gl.CodigoBodega = BeBodega.get(0).Codigo;
-                            gl.areaprimera = true;
+                            gl.Mostrar_Area_En_HH = true;
 
                             //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
                             gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;

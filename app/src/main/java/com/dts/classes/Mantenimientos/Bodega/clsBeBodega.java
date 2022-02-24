@@ -55,7 +55,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
     @Element(required=false) public boolean Ubicar_Tarimas_Completas_Reabasto = false;
     @Element(required=false) public int IdTipoTransaccionSalida=0;
-    @Element(required=false) public boolean Mostrar_Area_En_HH=false;
+
 
     public clsBeBodega() {
     }
@@ -433,13 +433,6 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setIdTipoTransaccionSalida(int value) {
         IdTipoTransaccionSalida=value;
-    }
-
-    public boolean getMostrar_Area_En_HH() {
-        return Mostrar_Area_En_HH;
-    }
-    public void setMostrar_Area_En_HH(boolean value) {
-        Mostrar_Area_En_HH=value;
     }
 
 }

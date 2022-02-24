@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,16 +25,12 @@ import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
-import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.zebra.sdk.comm.BluetoothConnection;
-import com.zebra.sdk.printer.ZebraPrinter;
-import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,11 +41,6 @@ import java.util.Map;
 import static java.util.stream.Collectors.groupingBy;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import br.com.zbra.androidlinq.Grouping;
-import br.com.zbra.androidlinq.Stream;
 
 
 public class frm_consulta_stock extends PBase {
@@ -92,7 +80,7 @@ public class frm_consulta_stock extends PBase {
 
         appGlobals gll;
         gll=((appGlobals) this.getApplication());
-        areaprimera = gll.areaprimera;
+        areaprimera = gll.Mostrar_Area_En_HH;
 
         if (areaprimera) {
             setContentView(R.layout.activity_frm_consulta_stock2);

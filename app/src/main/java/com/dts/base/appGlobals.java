@@ -158,5 +158,5 @@ public class appGlobals extends Application {
 
     public boolean validar_disponibilidad_ubicaicon_destino = false;
 
-    public boolean areaprimera;
+    public boolean Mostrar_Area_En_HH;
 }

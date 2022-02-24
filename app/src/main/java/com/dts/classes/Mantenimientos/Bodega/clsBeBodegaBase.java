@@ -17,6 +17,7 @@ public class clsBeBodegaBase
     @Element(required=false) public int ubic_producto_ne=0;
     @Element(required=false) public int IdProductoEstadoNE=0;
     @Element(required=false) public boolean validar_disponibilidad_ubicaicon_destino =false;
+    @Element(required=false) public boolean Mostrar_Area_En_HH=false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -93,5 +94,12 @@ public class clsBeBodegaBase
     }
     public void setvalidar_disponibilidad_ubicaicon_destino(boolean value) {
         validar_disponibilidad_ubicaicon_destino=value;
+    }
+
+    public boolean getMostrar_Area_En_HH() {
+        return Mostrar_Area_En_HH;
+    }
+    public void setMostrar_Area_En_HH(boolean value) {
+        Mostrar_Area_En_HH=value;
     }
 }

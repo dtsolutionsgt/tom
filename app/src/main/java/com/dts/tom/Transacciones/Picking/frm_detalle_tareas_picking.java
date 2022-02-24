@@ -75,7 +75,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         appGlobals gll;
         gll=((appGlobals) this.getApplication());
-        areaprimera = gll.areaprimera;
+        areaprimera = gll.Mostrar_Area_En_HH;
 
         if (areaprimera) {
             setContentView(R.layout.activity_frm_detalle_tareas_picking2);
