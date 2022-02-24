@@ -54,6 +54,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean control_banderas_cliente = false;
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
     @Element(required=false) public boolean Ubicar_Tarimas_Completas_Reabasto = false;
+    @Element(required=false) public int IdTipoTransaccionSalida=0;
 
     public clsBeBodega() {
     }
@@ -425,4 +426,14 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setUbicar_Tarimas_Completas_Reabasto(boolean value) {
         Ubicar_Tarimas_Completas_Reabasto=value;
     }
+
+    public int getIdTipoTransaccionSalida() {
+        return IdTipoTransaccionSalida;
+    }
+    public void setIdTipoTransaccionSalida(int value) {
+        IdTipoTransaccionSalida=value;
+    }
+
+
+
 }
