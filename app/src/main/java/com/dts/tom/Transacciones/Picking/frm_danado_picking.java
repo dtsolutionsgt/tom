@@ -107,14 +107,8 @@ public class frm_danado_picking extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicDest.getText().toString().isEmpty()){
-                            existe = false;
 
-                            for(int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
-                                if (LProductoEstadoDanado.items.get(i).IdUbicacionBodegaDefecto == Integer.parseInt(txtUbicDest.getText().toString().trim())) {
-                                    existe = true;
-                                    break;
-                                }
-                            }
+                            validaUbicacion();
 
                             BeUbicDestino = new clsBeBodega_ubicacion();
                             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
@@ -141,14 +135,36 @@ public class frm_danado_picking extends PBase {
         }
     }
 
+    public void validaUbicacion() {
+        existe = false;
+        for(int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
+            if (LProductoEstadoDanado.items.get(i).IdUbicacionBodegaDefecto == Integer.parseInt(txtUbicDest.getText().toString().trim())) {
+                existe = true;
+                break;
+            }
+        }
+    }
+
     public void BotonGuardarDanado(View view){
         if (!txtUbicDest.getText().toString().isEmpty()){
             /*BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
             execws(2);*/
+
+            validaUbicacion();
+
             String destino = "";
-            destino = existe ? lblNomUbic.getText().toString():txtUbicDest.getText().toString();
+
+            if (existe) {
+                destino = lblNomUbic.getText().toString();
+                BeUbicDestino = new clsBeBodega_ubicacion();
+                BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                execws(2);
+            } else {
+                destino = txtUbicDest.getText().toString();
+            }
 
             BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
