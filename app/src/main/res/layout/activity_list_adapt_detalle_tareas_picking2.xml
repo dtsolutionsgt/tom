@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dts.ladapt.list_adapt_detalle_tareas_picking">
+
+    <LinearLayout
+        android:id="@+id/relView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:addStatesFromChildren="true"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:orientation="horizontal"
+        android:transitionGroup="true">
+
+        <TextView
+            android:id="@+id/lblNombreArea"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Área"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblUbicDetPick"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNomUbicDet"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCodigoDet"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="42380"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblProductoDet"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="00000"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblUmbasDet"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UM"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPresDet"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="CAJA"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblSol"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1.0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblTarima"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblRec"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1.0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLoteDet"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="20200421"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLpDet"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblVenceDet"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNomEstadoDet"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPesoDet"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdPresDet"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblIdEstadoDet"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblIdPedidoEnc"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblPedidoDet"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblIdPickingDet"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblProductoBodegaDet"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblPickingUbic"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblStock"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblStockRes"
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TextView"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</RelativeLayout>

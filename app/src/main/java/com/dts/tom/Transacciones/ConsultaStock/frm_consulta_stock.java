@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
@@ -31,6 +32,7 @@ import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
+import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.zebra.sdk.comm.BluetoothConnection;
@@ -76,16 +78,27 @@ public class frm_consulta_stock extends PBase {
     private Integer selest;
     private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
+    private list_adapt_consulta_stock2 adapter_stock2;
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
     //clsBeVW_stock_res_CI  ItemSelected;
 
     private Spinner cmbEstadoExist, spOrdenar;
+    private boolean areaprimera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_consulta_stock);
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.areaprimera;
+
+        if (areaprimera) {
+            setContentView(R.layout.activity_frm_consulta_stock2);
+        } else {
+            setContentView(R.layout.activity_frm_consulta_stock);
+        }
 
         super.InitBase();
 
@@ -448,8 +461,14 @@ public class frm_consulta_stock extends PBase {
                         }
                     }
 
-                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock);
+                    if (areaprimera) {
+                        adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                        listView.setAdapter(adapter_stock2);
+                    } else {
+                        adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                        listView.setAdapter(adapter_stock);
+                    }
+
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
@@ -533,8 +552,13 @@ public class frm_consulta_stock extends PBase {
                 items_stock.add(item);
             }
 
-            adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-            listView.setAdapter(adapter_stock);
+            if (areaprimera) {
+                adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock2);
+            } else {
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
+            }
 
         }catch (Exception ex){
 
@@ -588,8 +612,13 @@ public class frm_consulta_stock extends PBase {
                 items_stock2.add(items);
 
             }
-            adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
-            listView.setAdapter(adapter_stock);
+            if (areaprimera) {
+                adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock2);
+            } else {
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
+            }
 
             // AT20211221 ya no se resta -1
             conteo = items_stock2.size();
@@ -630,8 +659,13 @@ public class frm_consulta_stock extends PBase {
                     items_stock2.add(items);
                 }
             }
-            adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock2);
-            listView.setAdapter(adapter_stock);
+            if (areaprimera) {
+                adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock2);
+            } else {
+                adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
+                listView.setAdapter(adapter_stock);
+            }
 
             // AT20211221 ya no se resta 1
             conteo = items_stock2.size();

@@ -19,12 +19,14 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking;
@@ -55,6 +57,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
+    private list_adapt_detalle_tareas_picking2 adapter2;
+
     public static clsBeTrans_picking_ubic selitem;
 
     private List TipoOrden = new ArrayList();
@@ -63,11 +67,22 @@ public class frm_detalle_tareas_picking extends PBase {
     public static int pOrden=1;
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
+    private boolean areaprimera = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_detalle_tareas_picking);
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.areaprimera;
+
+        if (areaprimera) {
+            setContentView(R.layout.activity_frm_detalle_tareas_picking2);
+        } else {
+            setContentView(R.layout.activity_frm_detalle_tareas_picking);
+        }
+
         super.InitBase();
 
         ws = new WebServiceHandler(frm_detalle_tareas_picking.this, gl.wsurl);
@@ -99,7 +114,6 @@ public class frm_detalle_tareas_picking extends PBase {
                     selid = 0;
 
                     //AT 20211222 No importa que la posición sea = a 0
-                    //if (position > 0) {
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
                     selitem = new clsBeTrans_picking_ubic();
@@ -107,11 +121,14 @@ public class frm_detalle_tareas_picking extends PBase {
 
                     selid = sitem.IdPickingUbic;
                     selidx = position;
-                    adapter.setSelectedIndex(position);
+
+                    if (areaprimera) {
+                        adapter2.setSelectedIndex(position);
+                    } else {
+                        adapter.setSelectedIndex(position);
+                    }
 
                     procesar_registro();
-                   //}
-
                 }
 
             });
@@ -349,8 +366,14 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            adapter=new list_adapt_detalle_tareas_picking(this,BeListPickingUbic);
-            listView.setAdapter(adapter);
+            if (areaprimera) {
+                adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                listView.setAdapter(adapter2);
+            } else {
+                adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                listView.setAdapter(adapter);
+            }
+
 
 
         }catch (Exception e){

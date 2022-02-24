@@ -157,4 +157,6 @@ public class appGlobals extends Application {
     //#EJC20220129: Validar si la ubicación destino tiene producto o está "libre" antes de colocar producto allí
 
     public boolean validar_disponibilidad_ubicaicon_destino = false;
+
+    public boolean areaprimera;
 }
