@@ -60,6 +60,8 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public String Nombre_Propietario ="";
     @Element(required=false) public int IdPedidoCompraDet;
     @Element(required=false) public int IdOrdenCompraDetPadre=0;
+    @Element(required=false) public int IdEmbarcador=0;
+    @Element(required=false) public String Nombre_Embarcador="";
 
     public clsBeTrans_oc_det()
     {
@@ -423,6 +425,19 @@ public class clsBeTrans_oc_det {
         IdOrdenCompraDetPadre  =value;
     }
 
+    public int getIdEmbarcador () {
+        return IdEmbarcador;
+    }
+    public void setIdEmbarcador (int value) {
+        IdEmbarcador=value;
+    }
+
+    public String getNombre_Embarcador() {
+        return Nombre_Embarcador;
+    }
+    public void setNombre_Embarcador(String value) {
+        Nombre_Embarcador =value;
+    }
 
 }
 
