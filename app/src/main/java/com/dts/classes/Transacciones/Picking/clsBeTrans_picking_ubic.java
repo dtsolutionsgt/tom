@@ -73,7 +73,7 @@ public class clsBeTrans_picking_ubic {
     public clsBeTrans_picking_ubic() {
     }
 
-    public clsBeTrans_picking_ubic(int IdPickingEnc, int IdPickingUbic, int IdPickingDet, int IdUbicacion,
+    public clsBeTrans_picking_ubic(int IdPickingEnc, String NombreArea,int IdPickingUbic, int IdPickingDet, int IdUbicacion,
                                    String Lote, String Fecha_Vence, String Fecha_minima, String Serial,
                                    String Lic_plate, boolean Acepto, double Peso_solicitado, double Peso_recibido,
                                    double Peso_verificado, double Peso_despachado, double Cantidad_Solicitada, double Cantidad_Recibida,
@@ -88,9 +88,10 @@ public class clsBeTrans_picking_ubic {
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
                                    int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
-                                   boolean No_encontrado, String NombreArea) {
+                                   boolean No_encontrado) {
 
         this.IdPickingEnc=IdPickingEnc;
+        this.NombreArea = NombreArea;
         this.IdPickingUbic=IdPickingUbic;
         this.IdPickingDet=IdPickingDet;
         this.IdUbicacion=IdUbicacion;
@@ -151,8 +152,6 @@ public class clsBeTrans_picking_ubic {
         this.IdBodega=IdBodega;
         this.Tarima=Tarima;
         this.No_encontrado = No_encontrado;
-        this.NombreArea = NombreArea;
-
     }
 
 

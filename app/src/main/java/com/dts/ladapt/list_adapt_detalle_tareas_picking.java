@@ -57,7 +57,6 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_tareas_picking, null);
             holder = new ViewHolder();
 
-
             holder.lblUbicDetPick = (TextView) convertView.findViewById(R.id.lblUbicDetPick);
             holder.lblNomUbicDet = (TextView) convertView.findViewById(R.id.lblNomUbicDet);
             holder.lblCodigoDet = (TextView) convertView.findViewById(R.id.lblCodigoDet);
@@ -203,7 +202,10 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         }
         if (!BeListTareasHH.get(position).NombreArea.isEmpty()){
             holder.lblNombreArea.setText(""+BeListTareasHH.get(position).NombreArea);
+        }else{
+            holder.lblNombreArea.setText("ND");
         }
+
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {

@@ -82,6 +82,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
             holder.lblIdPropietarioBodega = (TextView) convertView.findViewById(R.id.lblIdPropietarioBodega);
             holder.lblNombrePropietario =  (TextView) convertView.findViewById(R.id.lblNombrePropietario);
+            holder.lblShipper = (TextView) convertView.findViewById(R.id.lblShipper);
+            holder.lblClasificacion = (TextView) convertView.findViewById(R.id.lblClasificacion);
 
             convertView.setTag(holder);
         } else {
@@ -110,6 +112,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblIdPropietarioBodega.setVisibility(View.GONE);
                 holder.lblNombrePropietario.setVisibility(View.GONE);
             }
+            holder.lblShipper.setText("Embarcador");
+            holder.lblClasificacion.setText("Clasificacion");
 
         }else{
 
@@ -196,6 +200,9 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                 holder.lblNombrePropietario.setText(""+BeDetalleOC.get(position).Nombre_Propietario);
             }
 
+            holder.lblShipper.setText(""+ BeDetalleOC.get(position).Nombre_Embarcador);
+            holder.lblClasificacion.setText(""+ BeDetalleOC.get(position).Nombre_clasificacion);
+
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -234,7 +241,9 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                  lblIdOcDet,
                  lblIdOcEnc,
                  lblIdPropietarioBodega,
-                 lblNombrePropietario;
+                 lblNombrePropietario,
+                 lblShipper,
+                 lblClasificacion;
     }
 
 }
