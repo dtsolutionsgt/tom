@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.DecimalDigitsInputFilter;
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
@@ -84,6 +85,7 @@ public class frm_picking_datos extends PBase {
     private int DifDias = 0;
 
     private TextToSpeech mTTS;
+    private boolean confirmar_codigo_en_picking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,8 @@ public class frm_picking_datos extends PBase {
 
         lblEstiba.setText("");
         tblEstiba.setVisibility(View.GONE);
+
+        confirmar_codigo_en_picking = gl.confirmar_codigo_en_picking;
 
         if (selitem != null) {
             gBePickingUbic = selitem;
@@ -236,7 +240,11 @@ public class frm_picking_datos extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        Procesa_Codigo();
+                        if (trLP.getVisibility() == View.GONE) {
+                            Procesa_Codigo();
+                        } else {
+                            confirmarPorCodigo();
+                        }
                     }
 
                     return false;
@@ -258,6 +266,31 @@ public class frm_picking_datos extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("setHandlers:" + e.getMessage());
+        }
+    }
+
+    private void confirmarPorCodigo() {
+        String CodigoProd = txtCodigoProducto.getText().toString();
+
+        try {
+            if (CodigoProd.length() > 0) {
+                if (gBePickingUbic.CodigoProducto.equalsIgnoreCase(CodigoProd)) {
+                    if (TipoLista == 1) {//Resumido
+                        Cargar_Datos_Producto_Picking_Consolidado();
+                    } else {
+                        Cargar_Datos_Producto_Picking();
+                    }
+                } else {
+                    msgCodigoProducto("El código del producto no es válido para esta licencia");
+                    txtCodigoProducto.requestFocus();
+                    txtCodigoProducto.selectAll();
+                }
+            } else {
+                msgCodigoProducto("Debe ingresar el código del producto");
+                txtCodigoProducto.requestFocus();
+            }
+        } catch (Exception e) {
+            mu.msgbox("confirmaPorCodigo "+e.getMessage());
         }
     }
 
@@ -646,7 +679,15 @@ public class frm_picking_datos extends PBase {
                                                     if (plistPickingUbi.items.get(vTempIndex).IdUbicacion==gIdUbicacion){
                                                         gBeProducto = BeStockPallet;
                                                         //Primer llamado
-                                                        Cargar_Datos_Producto_Picking_Consolidado();
+                                                        //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
+                                                        //que se ingrese el código del producto para cargar los datos del picking
+                                                        if (confirmar_codigo_en_picking) {
+                                                            txtCodigoProducto.requestFocus();
+                                                            txtCodigoProducto.setEnabled(true);
+                                                        } else {
+                                                            Cargar_Datos_Producto_Picking_Consolidado();
+                                                        }
+                                                        //Cargar_Datos_Producto_Picking_Consolidado();
                                                         return;
                                                     }else{
                                                         mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
@@ -744,7 +785,14 @@ public class frm_picking_datos extends PBase {
 
                 if (Escaneo_Pallet && vPalletValido){
                     //Segundo llamado
-                    Cargar_Datos_Producto_Picking_Consolidado();
+                    //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
+                    //que se ingrese el código del producto para cargar los datos del picking
+                    if (confirmar_codigo_en_picking) {
+                        txtCodigoProducto.requestFocus();
+                        txtCodigoProducto.setEnabled(true);
+                    } else {
+                        Cargar_Datos_Producto_Picking_Consolidado();
+                    }
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
                         (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtCodigoProducto.getText().toString()))){
@@ -847,7 +895,15 @@ public class frm_picking_datos extends PBase {
                                                     if (plistPickingUbi.items.get(vTempIndex).IdUbicacion==gIdUbicacion){
                                                         gBeProducto = BeStockPallet;
                                                         //Tercer llamado
-                                                        Cargar_Datos_Producto_Picking();
+                                                        //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
+                                                        //que se ingrese el código del producto para cargar los datos del picking
+                                                        if (confirmar_codigo_en_picking) {
+                                                            txtCodigoProducto.requestFocus();
+                                                            txtCodigoProducto.setEnabled(true);
+                                                        } else {
+                                                            Cargar_Datos_Producto_Picking();
+                                                        }
+                                                        //Cargar_Datos_Producto_Picking();
                                                         return;
                                                     }else{
                                                         mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
@@ -945,7 +1001,14 @@ public class frm_picking_datos extends PBase {
 
                 if (Escaneo_Pallet && vPalletValido){
                     //Cuarto llamado
-                    Cargar_Datos_Producto_Picking();
+                    //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
+                    //que se ingrese el código del producto para cargar los datos del picking
+                    if (confirmar_codigo_en_picking) {
+                        txtCodigoProducto.requestFocus();
+                        txtCodigoProducto.setEnabled(true);
+                    } else {
+                        Cargar_Datos_Producto_Picking();
+                    }
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
                         (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtBarra.getText().toString()))){
@@ -1060,11 +1123,16 @@ public class frm_picking_datos extends PBase {
             ReemplazoLP = true;
             gBeProducto = BeStockPallet;
 
-            if (TipoLista==1){
-                Cargar_Datos_Producto_Picking_Consolidado();
-            }else{
-                //Sexto llamado
-                Cargar_Datos_Producto_Picking();
+            if (confirmar_codigo_en_picking) {
+                txtCodigoProducto.requestFocus();
+                txtCodigoProducto.setEnabled(true);
+            } else {
+                if (TipoLista==1){
+                    Cargar_Datos_Producto_Picking_Consolidado();
+                }else{
+                    //Sexto llamado
+                    Cargar_Datos_Producto_Picking();
+                }
             }
 
         }catch (Exception e){
@@ -1847,6 +1915,20 @@ public class frm_picking_datos extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+
+    }
+
+    private void msgCodigoProducto(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
 
     }
 

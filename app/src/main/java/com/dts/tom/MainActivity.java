@@ -503,6 +503,7 @@ public class MainActivity extends PBase {
                     gl.gUbicProdNe = bodegas.items.get(position).ubic_producto_ne;
                     gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
                     gl.Mostrar_Area_En_HH = bodegas.items.get(position).Mostrar_Area_En_HH;
+                    gl.confirmar_codigo_en_picking = bodegas.items.get(position).confirmar_codigo_en_picking;
 
                     idimpres=0;
                     execws(3);

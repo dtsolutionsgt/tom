@@ -32,7 +32,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="LP:" />
+                    android:text="Licencia:" />
 
                 <EditText
                     android:id="@+id/txtLP"
