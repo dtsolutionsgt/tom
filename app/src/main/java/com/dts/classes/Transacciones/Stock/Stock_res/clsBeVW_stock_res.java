@@ -105,6 +105,8 @@ public class clsBeVW_stock_res {
   @Element(required=false) public boolean es_rack=false;
   //
 
+  @Element(required=false) public String Nombre_Clasificacion="";
+
   public clsBeVW_stock_res() {
   }
 
@@ -784,6 +786,13 @@ public class clsBeVW_stock_res {
   }
   public void setes_rack(boolean value) {
     es_rack=value;
+  }
+
+  public String getNombre_Clasificacion() {
+    return Nombre_Clasificacion;
+  }
+  public void setNombre_Clasificacion(String value) {
+    Nombre_Clasificacion=value;
   }
 
 
