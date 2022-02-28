@@ -2,8 +2,6 @@ package com.dts.ladapt;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.Recepcion.frm_recepcion_datos;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class list_adapt_detalle_recepcion extends BaseAdapter {
 
@@ -201,7 +195,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             }
 
             holder.lblShipper.setText(""+ BeDetalleOC.get(position).Nombre_Embarcador);
-            holder.lblClasificacion.setText(""+ BeDetalleOC.get(position).Nombre_clasificacion);
+            holder.lblClasificacion.setText(""+ BeDetalleOC.get(position).Nombre_Clasificacion);
 
         }
 

@@ -62,7 +62,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public int IdOrdenCompraDetPadre=0;
     @Element(required=false) public int IdEmbarcador=0;
     @Element(required=false) public String Nombre_Embarcador="";
-    @Element(required=false) public String Nombre_clasificacion="";
+    @Element(required=false) public String Nombre_Clasificacion ="";
 
     public clsBeTrans_oc_det()
     {
@@ -124,7 +124,7 @@ public class clsBeTrans_oc_det {
         this.Peso_Bruto=Peso_Bruto;
         this.IdPedidoCompraDet=IdPedidoCompraDet;
         this.Nombre_Embarcador = Nombre_Embarcador;
-        this.Nombre_clasificacion = Nombre_clasificacion;
+        this.Nombre_Clasificacion = Nombre_clasificacion;
     }
 
 
@@ -443,10 +443,10 @@ public class clsBeTrans_oc_det {
     }
 
     public String getClasificacion() {
-        return Nombre_clasificacion;
+        return Nombre_Clasificacion;
     }
     public void setClasificacion(String value) {
-        Nombre_clasificacion =value;
+        Nombre_Clasificacion =value;
     }
 
 }

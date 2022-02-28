@@ -825,7 +825,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
                             vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
-                            vItem.Nombre_clasificacion = pListDetalleOC.items.get(i).Nombre_clasificacion;
+                            vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Nombre_Clasificacion;
 
                             BeListDetalleOC.add(vItem);
 
@@ -847,7 +847,7 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
                             vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
-                        vItem.Nombre_clasificacion = pListDetalleOC.items.get(i).Nombre_clasificacion;
+                        vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Nombre_Clasificacion;
 
                             BeListDetalleOC.add(vItem);
 
