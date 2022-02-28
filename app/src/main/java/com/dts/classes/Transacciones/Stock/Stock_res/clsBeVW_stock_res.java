@@ -107,6 +107,8 @@ public class clsBeVW_stock_res {
 
   @Element(required=false) public String Nombre_Clasificacion="";
 
+  @Element(required=false) public String Nombre_clasificacion="";
+
   public clsBeVW_stock_res() {
   }
 
@@ -131,7 +133,8 @@ public class clsBeVW_stock_res {
                            double ValorNumerico,String ValorFecha,boolean ValorLogico,String No_Serie,
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
-                           Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,String Documento_Ingreso) {
+                           Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
+                           String Documento_Ingreso, String Nombre_clasificacion) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -221,7 +224,7 @@ public class clsBeVW_stock_res {
     this.codigo_poliza = codigo_poliza;
     this.numero_orden = numero_orden;
     this.Documento_Ingreso = Documento_Ingreso;
-
+    this.Nombre_clasificacion = Nombre_clasificacion;
   }
 
 
@@ -795,6 +798,12 @@ public class clsBeVW_stock_res {
     Nombre_Clasificacion=value;
   }
 
+  public String getClasificacion() {
+    return Nombre_clasificacion;
+  }
+  public void setClasificacion(String value) {
+    Nombre_clasificacion =value;
+  }
 
 }
 
