@@ -207,6 +207,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.IdProductoBodega = obj.IdProductoBodega;
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
                        vItem.Fecha_vence = du.convierteFechaMostrar(obj.Fecha_vence);
+                       vItem.Lote = obj.Lote;
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
 
