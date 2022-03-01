@@ -765,7 +765,7 @@ public class MainActivity extends PBase {
                             } else  {
                                 //progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
+                                msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
                             }
                             } else {
                                 progress.cancel();
@@ -806,7 +806,7 @@ public class MainActivity extends PBase {
             dialog.setCancelable(false);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage(msg);
 
             dialog.setIcon(R.drawable.printicon);
 
