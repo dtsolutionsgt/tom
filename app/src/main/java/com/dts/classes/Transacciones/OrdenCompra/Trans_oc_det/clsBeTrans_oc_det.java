@@ -78,7 +78,8 @@ public class clsBeTrans_oc_det {
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
                              double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
-                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet,String Nombre_Embarcador, String Nombre_clasificacion) {
+                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet,String Nombre_Embarcador,
+                             String Nombre_Clasificacion) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -124,7 +125,7 @@ public class clsBeTrans_oc_det {
         this.Peso_Bruto=Peso_Bruto;
         this.IdPedidoCompraDet=IdPedidoCompraDet;
         this.Nombre_Embarcador = Nombre_Embarcador;
-        this.Nombre_Clasificacion = Nombre_clasificacion;
+        this.Nombre_Clasificacion = Nombre_Clasificacion;
     }
 
 

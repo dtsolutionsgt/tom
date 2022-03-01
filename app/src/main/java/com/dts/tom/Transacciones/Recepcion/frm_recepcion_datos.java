@@ -962,9 +962,11 @@ public class frm_recepcion_datos extends PBase {
                 datos_ingresar +=1;
             }
 
+            //#GT28022022_1707: control_peso determina el manejo de peso ya no es peso_recepción, pero aca se para para mostrar peso_estadistico
             if (BeProducto.Peso_recepcion){
                 datos_ingresar +=1;
             }
+
 
             if (BeProducto.Temperatura_recepcion){
                 datos_ingresar +=1;
@@ -2057,7 +2059,10 @@ public class frm_recepcion_datos extends PBase {
                     pListBeStockRec.items.get(pIndexStock).IdRecepcionDet = pIdRecepcionDet;
 
                     if (BeProducto.Peso_recepcion){
-                        pListBeStockRec.items.get(pIndexStock).Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                        //#GT28022022_1436PM: El peso a enviar debe ser el bruto, porque en pedidos, toma el peso bruto y lo divide dentro de la cantidad
+                        //a reservar
+                        //pListBeStockRec.items.get(pIndexStock).Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                        pListBeStockRec.items.get(pIndexStock).Peso = Double.parseDouble(txtPeso.getText().toString());
                     }else{
                         pListBeStockRec.items.get(pIndexStock).Peso = 0.0;
                     }
@@ -4056,7 +4061,9 @@ public class frm_recepcion_datos extends PBase {
                      if(txtPesoReal.getText().toString().isEmpty()){
                          BeStock_rec.Peso = 0;
                      }else {
-                         BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                         //#GT28022022_1452: el peso a enviar es el bruto, porque se divide dentro de la cantidad a reservar en un pedido
+                         //BeStock_rec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                         BeStock_rec.Peso = Double.parseDouble(txtPeso.getText().toString());
                      }
 
                     if(txtTempReal.getText().toString().isEmpty()){
@@ -6173,7 +6180,8 @@ public class frm_recepcion_datos extends PBase {
 
             Etapa ++;
 
-            if (BeProducto.Peso_recepcion){
+            //#GT28022022_1706: control_peso es la validación a tomar para validar peso, pero este es el estadistico
+             if (BeProducto.Peso_recepcion){
                 PTiene_Ctrl_Peso = true;
             }
 
