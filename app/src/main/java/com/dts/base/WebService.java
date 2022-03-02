@@ -121,7 +121,7 @@ public class WebService {
            int responsecode = ((HttpURLConnection) conn).getResponseCode();
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
-           //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
+           //#EJC20200331: Es probable que falta incluir algunos otros códigos de respuesta válidos....
            //#EJC20200514: Actualizado
            if (responsecode!=299 && responsecode!=404) {
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));

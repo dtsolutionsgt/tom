@@ -19,6 +19,7 @@ public class clsBeBodegaBase
     @Element(required=false) public boolean validar_disponibilidad_ubicaicon_destino =false;
     @Element(required=false) public boolean Mostrar_Area_En_HH=false;
     @Element(required=false) public boolean confirmar_codigo_en_picking=false;
+    @Element(required=false) public boolean control_operador_ubicacion=false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -110,4 +111,12 @@ public class clsBeBodegaBase
     public void setconfirmar_codigo_en_picking(boolean value) {
         confirmar_codigo_en_picking=value;
     }
+
+    public boolean getcontrol_operador_ubicacion() {
+        return control_operador_ubicacion;
+    }
+    public void setcontrol_operador_ubicacion(boolean value) {
+        control_operador_ubicacion=value;
+    }
+
 }

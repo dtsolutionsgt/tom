@@ -6945,6 +6945,8 @@ public class frm_recepcion_datos extends PBase {
 
             try {
 
+                progress.setMessage("Procesando respuesta de NAV.");
+
                 if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
 
                     procesada = xobj.getresult(Boolean.class,"Push_Recepcion_Pedido_Compra_To_NAV_For_BYB");
@@ -6962,6 +6964,8 @@ public class frm_recepcion_datos extends PBase {
 
                 }
                 String respuesta =(String) xobj.getSingle("pRespuesta",String.class);
+
+                progress.cancel();
 
                 if (procesada){
                     Imprime_Barra_Despues_Guardar();
@@ -6988,8 +6992,10 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210612: Evitar que se quede en la pantalla para evitar error de llave duplicadas.
             msgboxErrorOnWS2("Error al procesar solicitud en ERP: " + e.getMessage());
+
         }
     }
 
