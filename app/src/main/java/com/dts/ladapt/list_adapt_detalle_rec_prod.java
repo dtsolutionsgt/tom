@@ -63,6 +63,7 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblProdBod = (TextView) convertView.findViewById(R.id.lblProdBod);
             holder.lblEstado = (TextView) convertView.findViewById(R.id.lblEstado);
             holder.lblVence = (TextView) convertView.findViewById(R.id.lblVence);
+            holder.lblLote = (TextView) convertView.findViewById(R.id.lblLote);
             holder.lblLp = (TextView) convertView.findViewById(R.id.lblLp);
 
             convertView.setTag(holder);
@@ -79,7 +80,8 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblProdBod.setText("ProdBod");
             holder.lblEstado.setText("Estado");
             holder.lblVence.setText("Vence");
-            holder.lblLp.setText("Lic Plate");
+            holder.lblLote.setText("Lote");
+            holder.lblLp.setText("Licencia");
 
         } else {
 
@@ -90,6 +92,7 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblProdBod.setText("0");
             holder.lblEstado.setText("--");
             holder.lblVence.setText("--");
+            holder.lblLote.setText("--");
             holder.lblLp.setText("--");
 
             if (BeDetalleRec.get(position).Codigo_Producto != null) {
@@ -118,6 +121,10 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
 
             if (!BeDetalleRec.get(position).Fecha_vence.isEmpty()) {
                 holder.lblVence.setText("" + BeDetalleRec.get(position).Fecha_vence);
+            }
+
+            if (!BeDetalleRec.get(position).Lote.isEmpty()) {
+                holder.lblLote.setText("" + BeDetalleRec.get(position).Lote);
             }
 
             if (!BeDetalleRec.get(position).Lic_plate.isEmpty()) {
@@ -159,7 +166,8 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblCodigo,lblPres,lblUmbas,lblCantidad,lblProdBod,lblEstado,lblVence,lblLp, lblDiferencia;
+        TextView lblCodigo,lblPres,lblUmbas,lblCantidad,lblProdBod,lblEstado,
+                 lblVence, lblLote, lblLp, lblDiferencia;
     }
 
 }
