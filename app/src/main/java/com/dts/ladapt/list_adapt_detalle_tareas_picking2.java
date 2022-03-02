@@ -206,8 +206,11 @@ public class list_adapt_detalle_tareas_picking2 extends BaseAdapter {
             holder.lblNombreArea.setText(""+BeListTareasHH.get(position).NombreArea);
         }
 
-        if (!BeListTareasHH.get(position).NombreClasificacion.isEmpty()){
+        if (!BeListTareasHH.get(position).NombreClasificacion.isEmpty() && !BeListTareasHH.get(position).NombreClasificacion.contains("Clasificación") ){
             holder.lblNombreClasificacion.setText(""+BeListTareasHH.get(position).NombreClasificacion);
+        }else
+        {
+            holder.lblNombreClasificacion.setText("ND");
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
