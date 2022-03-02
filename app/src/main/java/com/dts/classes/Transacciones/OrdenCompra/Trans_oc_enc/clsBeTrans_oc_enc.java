@@ -68,9 +68,6 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String No_Documento_Ubicacion_ERP="";
     @Element(required=false) public boolean PutAway_Registrado=false;
 
-    @Element(required=false) public String No_Documento_Ubicacion_ERP="";
-    @Element(required=false) public boolean PutAway_Registrado=false;
-
     public clsBeTrans_oc_enc()
     {
     }
