@@ -5885,8 +5885,7 @@ public class frm_recepcion_datos extends PBase {
                                        "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
                                        "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
                                        "pIdUsuario",gl.OperadorBodega.IdOperador,
-                                       "pRespuesta", pRespuesta)
-                               ;
+                                       "pRespuesta", pRespuesta);
 
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
 
