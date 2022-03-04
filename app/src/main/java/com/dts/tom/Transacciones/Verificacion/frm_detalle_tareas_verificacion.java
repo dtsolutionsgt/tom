@@ -24,6 +24,7 @@ import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
@@ -44,6 +45,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private int index = 0;
 
     private list_adapt_detalle_tareas_verificacion adapter;
+    private list_adapt_detalle_tareas_verificacion2 adapter2;
 
     private ListView listDetVeri;
     private EditText txtCodProd;
@@ -62,7 +64,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeDetallePedidoAVerificar selitem;
 
     private double cantReemplazar = 0;
-    private boolean preguntoPorDiferencia = false;
+    private boolean preguntoPorDiferencia = false, mostrar_area;
     private boolean finalizar = true;
     private int selidx = -1;
 
@@ -70,11 +72,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
     protected void onCreate(Bundle savedInstanceState) {
 
         try{
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
 
             super.InitBase();
+
+            mostrar_area = gl.Mostrar_Area_En_HH;
 
             ws = new frm_detalle_tareas_verificacion.WebServiceHandler(frm_detalle_tareas_verificacion.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -144,10 +147,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     Object lvObj = listDetVeri.getItemAtPosition(position);
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
-                    adapter.setSelectedIndex(position);
+                    if (mostrar_area) {
+                        adapter2.setSelectedIndex(position);
+                    } else {
+                        adapter.setSelectedIndex(position);
+                    }
                     int index = position;
                     Procesa_Registro(vItem);
-                    adapter.refreshItems();
+
+                    if (mostrar_area) {
+                        adapter2.refreshItems();
+                    } else {
+                        adapter.refreshItems();
+                    }
+
                 }
             });
 
@@ -600,6 +613,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
                             vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
+                            vItem.NombreArea = pListaPedidoDet.items.get(i).getNombreArea();
+                            vItem.NombreClasificacion = pListaPedidoDet.items.get(i).getNombreClasificacion();
 
                             pListBeTareasVerificacionHH.add(vItem);
 
@@ -611,12 +626,21 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         btnRegs.setText("Regs: "+pListaPedidoDet.items.size());
 
-                        adapter=new list_adapt_detalle_tareas_verificacion(this,pListBeTareasVerificacionHH);
-
-                        listDetVeri.setAdapter(adapter);
+                        if (mostrar_area) {
+                            adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter2);
+                        } else {
+                            adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter);
+                        }
 
                         if (pListaPedidoDet.items.size()>0){
-                            adapter.setSelectedIndex(-1);
+                            if (mostrar_area) {
+                                adapter2.setSelectedIndex(-1);
+                            } else {
+                                adapter.setSelectedIndex(-1);
+                            }
+
                             index = -1;
                             btnNoVerificado.setText("No Verificado");
                             btnNoVerificado.setBackgroundColor(Color.RED);

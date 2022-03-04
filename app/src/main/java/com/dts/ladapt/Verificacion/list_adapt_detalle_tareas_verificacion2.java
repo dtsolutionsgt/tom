@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.tom.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
+public class list_adapt_detalle_tareas_verificacion2 extends BaseAdapter {
 
     private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
 
@@ -22,7 +24,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
 
     private LayoutInflater l_Inflater;
 
-    public list_adapt_detalle_tareas_verificacion(Context context, ArrayList<clsBeDetallePedidoAVerificar> results) {
+    public list_adapt_detalle_tareas_verificacion2(Context context, ArrayList<clsBeDetallePedidoAVerificar> results) {
         pListBeTareasVerificacionHH = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
@@ -56,7 +58,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
             ViewHolder holder;
 
             if (convertView == null) {
-                convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_tareas_verificacion, null);
+                convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_tareas_verificacion2, null);
                 holder = new ViewHolder();
 
                 holder.lblPedidoEnc = (TextView) convertView.findViewById(R.id.lblPedEnc);
