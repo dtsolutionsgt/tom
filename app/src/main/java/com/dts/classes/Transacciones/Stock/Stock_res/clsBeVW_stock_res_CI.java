@@ -29,6 +29,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String DispPres = "";
   @Element(required=false) public String ResPres = "";
   @Element(required=false) public String NombreArea = "";
+  @Element(required=false) public String Clasificacion = "";
 
   public clsBeVW_stock_res_CI() {
   }
@@ -37,7 +38,7 @@ public class clsBeVW_stock_res_CI {
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
                               String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,
                               String LicPlate,String IdProductoEstado,int IdProductoBodega, int factor,
-                              String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea) {
+                              String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea, String Clasificacion) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -63,6 +64,7 @@ public class clsBeVW_stock_res_CI {
     this.DispPres = DispPres;
     this.ResPres = ResPres;
     this.NombreArea = NombreArea;
+    this.Clasificacion = Clasificacion;
   }
 
   public String getCodigo() {
@@ -196,4 +198,8 @@ public class clsBeVW_stock_res_CI {
   public void setNombreArea(String value) {
     NombreArea=value;
   }
+  public String getClasificacion() {
+    return Clasificacion;
+  }
+  public void setClasificacion(String value) { Clasificacion=value; }
 }

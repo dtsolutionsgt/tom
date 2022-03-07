@@ -438,6 +438,7 @@ public class frm_consulta_stock extends PBase {
                         item.ResPres = pListStock2.items.get(i).ResPres;
                         item.DispPres = pListStock2.items.get(i).DispPres;
                         item.NombreArea = pListStock2.items.get(i).NombreArea;
+                        item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                         items_stock.add(item);
 
                         if (i==0){
@@ -542,6 +543,7 @@ public class frm_consulta_stock extends PBase {
                 item.ResPres = pListStock2.items.get(i).ResPres;
                 item.DispPres = pListStock2.items.get(i).DispPres;
                 item.NombreArea = pListStock2.items.get(i).NombreArea;
+                item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 items_stock.add(item);
             }
 
@@ -602,6 +604,7 @@ public class frm_consulta_stock extends PBase {
                 items.ResPres = pListStock2.items.get(i).ResPres;
                 items.DispPres = pListStock2.items.get(i).DispPres;
                 items.NombreArea = pListStock2.items.get(i).NombreArea;
+                items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 items_stock2.add(items);
 
             }
@@ -649,6 +652,7 @@ public class frm_consulta_stock extends PBase {
                     items.ResPres = pListStock2.items.get(i).ResPres;
                     items.DispPres = pListStock2.items.get(i).DispPres;
                     items.NombreArea = pListStock2.items.get(i).NombreArea;
+                    items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                     items_stock2.add(items);
                 }
             }
