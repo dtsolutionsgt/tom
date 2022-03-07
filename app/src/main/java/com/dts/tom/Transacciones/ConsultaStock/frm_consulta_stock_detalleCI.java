@@ -253,7 +253,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                             "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                             "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                             "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                             "^FO2,340^GB670,0,14^FS \n" +
                             "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                             "^FD%4$s^FS \n" +
@@ -312,47 +312,94 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     String zpl="";
 
                     if (gl.existencia.IdTipoEtiqueta==1){
+
+                        //#EJC20220307: Tomado de recepción.
                         zpl = String.format("^XA \n" +
-                                            "^MMT \n" +
-                                            "^PW609 \n" +
-                                            "^LL0406 \n" +
-                                            "^LS0 \n" +
-                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
-                                            "^FO2,340^GB670,0,14^FS \n" +
-                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                            "^FD%4$s^FS \n" +
-                                            "^PQ1,0,1,Y " +
-                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                            "$"+gl.existencia.getLicPlate());
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+                                "$"+gl.existencia.LicPlate);
+
+                        //#EJC20220307: Así estaba anteriormente.
+//                        zpl = String.format("^XA \n" +
+//                                            "^MMT \n" +
+//                                            "^PW609 \n" +
+//                                            "^LL0406 \n" +
+//                                            "^LS0 \n" +
+//                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+//                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+//                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+//                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+//                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+//                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+//                                            "^FO2,340^GB670,0,14^FS \n" +
+//                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+//                                            "^FD%4$s^FS \n" +
+//                                            "^PQ1,0,1,Y " +
+//                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+//                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+//                                            "$"+gl.existencia.getLicPlate());
+
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
+
                         zpl = String.format("^XA\n" +
-                                            "^MMT\n" +
-                                            "^PW609 \n" +
-                                            "^LL0406 \n" +
-                                            "^LS0\n" +
-                                            "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                            "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                            "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                            "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                            "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                            "^BY3,3,160^FT550,200^BCI,,N,N\n" +
-                                            "^FD%3$s^FS\n" +
-                                            "^PQ1,0,1,Y \n" +
-                                            "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                            "^FO2,440^GB670,14,14^FS\n" +
-                                            "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
-                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                            "$"+gl.existencia.getLicPlate());
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$"+gl.existencia.getLicPlate(),
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+
+//                        zpl = String.format("^XA\n" +
+//                                            "^MMT\n" +
+//                                            "^PW609 \n" +
+//                                            "^LL0406 \n" +
+//                                            "^LS0\n" +
+//                                            "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+//                                            "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+//                                            "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+//                                            "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+//                                            "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+//                                            "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+//                                            "^FD%3$s^FS\n" +
+//                                            "^PQ1,0,1,Y \n" +
+//                                            "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+//                                            "^FO2,440^GB670,14,14^FS\n" +
+//                                            "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+//                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+//                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+//                                            "$"+gl.existencia.getLicPlate());
                     }else if (gl.existencia.IdTipoEtiqueta==4){
+
+                        //#EJC20220307: Tomado de recepción.
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW812 \n" +
@@ -363,14 +410,33 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                gl.existencia.Codigo +" - "+gl.existencia.Nombre,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                 "$"+gl.existencia.LicPlate);
+
+//                        zpl = String.format("^XA \n" +
+//                                        "^MMT \n" +
+//                                        "^PW812 \n" +
+//                                        "^LL0630 \n" +
+//                                        "^LS0 \n" +
+//                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+//                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+//                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+//                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+//                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+//                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+//                                        "^FO2,340^GB670,0,14^FS \n" +
+//                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+//                                        "^FD%4$s^FS \n" +
+//                                        "^PQ1,0,1,Y " +
+//                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+//                                gl.existencia.Codigo +" - "+gl.existencia.Nombre,
+//                                "$"+gl.existencia.LicPlate);
                     }
 
                     if (!zpl.isEmpty()){

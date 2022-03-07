@@ -4571,7 +4571,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -4598,7 +4598,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^PQ1,0,1,Y \n" +
                                         "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
                                         "^FO2,440^GB670,14,14^FS\n" +
-                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         "$"+pNumeroLP,
@@ -4615,7 +4615,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -6734,34 +6734,6 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
-
-//    private void msgAskImprimir(String msg) {
-//        try{
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-//
-//            dialog.setTitle(R.string.app_name);
-//            dialog.setMessage("¿" + msg + "?");
-//
-//            dialog.setCancelable(false);
-//
-//            dialog.setIcon(R.drawable.ic_quest);
-//
-//            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                }
-//            });
-//
-//            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {                }
-//            });
-//
-//            dialog.show();
-//
-//        }catch (Exception e){
-//            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-//        }
-//
-//    }
 
     private void doExit(){
         try{

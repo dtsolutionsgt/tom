@@ -2297,7 +2297,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -2316,7 +2316,7 @@ public class frm_Packing extends PBase {
                                 "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
                                 "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
                                 "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
                                 "^FO2,450^GB670,14,14^FS\n" +
                                 "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
                                 "^FD%1$s^FS\n" +
@@ -2335,7 +2335,7 @@ public class frm_Packing extends PBase {
                                             "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                             "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                             "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                             "^FO2,340^GB670,0,14^FS \n" +
                                             "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                             "^FD%4$s^FS \n" +
@@ -2418,7 +2418,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -2437,7 +2437,7 @@ public class frm_Packing extends PBase {
                                         "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
                                         "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
                                         "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
                                         "^FO2,450^GB670,14,14^FS\n" +
                                         "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
                                         "^FD%1$s^FS\n" +
@@ -2456,7 +2456,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +

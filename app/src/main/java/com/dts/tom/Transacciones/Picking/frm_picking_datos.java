@@ -1413,7 +1413,6 @@ public class frm_picking_datos extends PBase {
                     gBePickingUbic.Peso_verificado = gBePickingUbic.Peso_recibido;
                 }
 
-
                 gBePickingUbic.Acepto = true;
                 gBePickingUbic.Encontrado=true;
                 //GT0612021: estaba seteado gl.OperadorBodega.IdOperador pero es IdoperadorBodega
