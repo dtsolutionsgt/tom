@@ -331,7 +331,7 @@ public class frm_picking_datos extends PBase {
         String vUnidadMedida ="";
 
         try {
-
+            txtCantidadPick.setEnabled(false);
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 trLP.setVisibility(View.VISIBLE);
@@ -1146,7 +1146,7 @@ public class frm_picking_datos extends PBase {
         double vCantUniXTarima = 0;
 
         try{
-
+            txtCantidadPick.setEnabled(true);
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
 
             //#GT 18082021: si la lp digitada coincide con la del producto, se debe setear el producto a pCodigo
@@ -1264,7 +1264,7 @@ public class frm_picking_datos extends PBase {
         double CantRec=0;
 
         try{
-
+            txtCantidadPick.setEnabled(true);
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
             /*CantSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
             CantRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);*/
@@ -1328,7 +1328,24 @@ public class frm_picking_datos extends PBase {
     }
 
     public void BotonGuardar(View view){
+        String CodigoProd = txtCodigoProducto.getText().toString();
+
+        if (confirmar_codigo_en_picking) {
+            if (txtCodigoProducto.getText().toString().isEmpty()) {
+                msgCodigoProducto("Debe ingresar el código del producto");
+                return;
+            } else {
+               if (!gBePickingUbic.CodigoProducto.equalsIgnoreCase(CodigoProd)) {
+                   msgCodigoProducto("El código del producto no es válido para esta licencia");
+                   txtCodigoProducto.requestFocus();
+                   txtCodigoProducto.selectAll();
+                   return;
+               }
+            }
+        }
+
         Procesar_Registro();
+
     }
 
     private void Procesar_Registro(){
