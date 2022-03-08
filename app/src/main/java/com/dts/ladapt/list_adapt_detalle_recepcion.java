@@ -130,6 +130,7 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
             if (!Es_Poliza_Consolidada) {
                 holder.lblIdPropietarioBodega.setVisibility(View.GONE);
+                holder.lblNombrePropietario.setVisibility(View.GONE);
             }
 
             if(BeDetalleOC.get(position).No_Linea>0){
