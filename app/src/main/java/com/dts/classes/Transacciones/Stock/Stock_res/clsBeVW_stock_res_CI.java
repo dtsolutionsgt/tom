@@ -198,8 +198,13 @@ public class clsBeVW_stock_res_CI {
   public void setNombreArea(String value) {
     NombreArea=value;
   }
+
   public String getClasificacion() {
     return Clasificacion;
   }
-  public void setClasificacion(String value) { Clasificacion=value; }
+  public void setClasificacion(String value) {
+    Clasificacion=value;
+  }
+
+
 }

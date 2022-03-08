@@ -5902,6 +5902,15 @@ public class frm_recepcion_datos extends PBase {
 
                            if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
 
+                               //#EJC20220308: Si la recepción es en presentación enviar pres sino, UMBAS.
+                               String vNombreUM ="";
+
+                               if (BeTransReDet.IdPresentacion==0){
+                                   vNombreUM=BeOcDet.Nombre_unidad_medida_basica;
+                               }else{
+                                   vNombreUM=BeTransReDet.Nombre_presentacion;
+                               }
+
                                callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -5910,7 +5919,7 @@ public class frm_recepcion_datos extends PBase {
                                        "Cantidad", BeTransReDet.cantidad_recibida,
                                        "NoLote",   BeTransReDet.Lote,
                                        "FechaVence",BeTransReDet.Fecha_vence,
-                                       "NomUnidadMedida",BeTransReDet.Nombre_unidad_medida,
+                                       "NomUnidadMedida",vNombreUM,
                                        "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
                                        "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
                                        "pIdUsuario",gl.OperadorBodega.IdOperador,

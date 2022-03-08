@@ -74,6 +74,7 @@ public class clsBeTrans_pe_det {
     @Element(required=false) public double valor_flete = 0;
     @Element(required=false) public double Total_linea = 0;
 
+    @Element(required=false) public int IdCliente=0;
 
 
     public clsBeTrans_pe_det() {
@@ -527,6 +528,13 @@ public class clsBeTrans_pe_det {
     }
     public void setTotal_Linea(double value) {
         Total_linea=value;
+    }
+
+    public int getIdCliente() {
+        return IdCliente ;
+    }
+    public void setIdCliente(int value) {
+        IdCliente=value;
     }
 
 }
