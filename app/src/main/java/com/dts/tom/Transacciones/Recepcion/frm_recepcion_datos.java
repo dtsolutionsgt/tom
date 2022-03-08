@@ -334,18 +334,18 @@ public class frm_recepcion_datos extends PBase {
 
         pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
-        if(!gl.Escaneo_Pallet){
-            execws(1);
-        }else{
-            Load();
-        }
-
         if (gl.bloquear_lp_hh) {
             txtNoLP.setEnabled(false);
             txtCantidadRec.requestFocus();
         } else{
             txtNoLP.setEnabled(true);
             txtNoLP.requestFocus();
+        }
+
+        if(!gl.Escaneo_Pallet){
+            execws(1);
+        }else{
+            Load();
         }
 
     }
@@ -2516,6 +2516,15 @@ public class frm_recepcion_datos extends PBase {
 
                     if (BeOcDet!=null) {
 
+                        if (gl.gBeOrdenCompra.Push_To_NAV &&
+                                (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC ||
+                                 dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC)){
+                            if (gl.gBeOrdenCompra.DetalleLotes.items == null) {
+                               msgSinUbicaciones("Este tipo de documentos deben tener definidos los lotes a recibir");
+                               return;
+                            }
+                        }
+
                         if (gl.gBeOrdenCompra.DetalleLotes.items != null) {
 
                             //#CKFK 20210611 Agregué esta validación para lo documentos de ingreso
@@ -2527,6 +2536,7 @@ public class frm_recepcion_datos extends PBase {
                                     .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                             c.No_linea == BeOcDet.No_Linea &&
                                             c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                            c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                             c.Cantidad_recibida < c.Cantidad)
                                     .toList();
 
@@ -2573,6 +2583,7 @@ public class frm_recepcion_datos extends PBase {
                                     .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                             c.No_linea == BeOcDet.No_Linea &&
                                             c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                            c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                             c.Cantidad_recibida < c.Cantidad)
                                     .toList();
 
@@ -2855,20 +2866,27 @@ public class frm_recepcion_datos extends PBase {
                 //Por eso agregué este try catch así.
 
                 try {
-                    EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.EsPallet).first();
-                } catch (NoSuchElementException e) {
+                    if (BeProducto.Presentaciones!=null){
+                        if(BeProducto.Presentaciones.items!=null){
+                            EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.EsPallet).first();
+                        }
+                    }
+                   } catch (NoSuchElementException e) {
                     e.printStackTrace();
                 }
-
 
                 if (EsPallet){
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
                 }
 
-                List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
-                Indx =AxuListPres.indexOf(vPresentacion);
+                if (BeProducto.Presentaciones!=null) {
+                    if (BeProducto.Presentaciones.items != null) {
+                        List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        Indx =AxuListPres.indexOf(vPresentacion);
 
-                cmbPresRec.setSelection(Indx);
+                        cmbPresRec.setSelection(Indx);
+                    }
+                }
 
             }else{
 
@@ -3410,6 +3428,7 @@ public class frm_recepcion_datos extends PBase {
                                 return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                         c.No_linea == BeOcDet.No_Linea &&
                                         c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                        c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                         c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString()));
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -3422,20 +3441,23 @@ public class frm_recepcion_datos extends PBase {
                 BeLotes = stream(lotes.items)
                         .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                 c.No_linea == BeOcDet.No_Linea &&
-                                c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
                         .toList();
             }
 
             double CantRec;
+            double CantSol;
 
             for (int i = 0; i <BeLotes.size(); i++)
             {
 
-                valor = BeLotes.get(i).Lote;
+               valor = BeLotes.get(i).Lote;
                CantRec = BeLotes.get(i).Cantidad_recibida;
+               CantSol = BeLotes.get(i).Cantidad;
 
                 if (!LotesList.contains(valor)){
-                    if (CantRec==0){
+                    if (CantRec!=CantSol){
                         LotesList.add(valor);
                     }
                 }
@@ -3450,6 +3472,8 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 cmbLote.setVisibility(View.GONE);
                 txtLoteRec.setVisibility(View.VISIBLE);
+                msgSinUbicaciones("Este tipo de documentos deben tener definidos los lotes a recibir y ya todos se recibieron");
+                return;
             }
 
         } catch (Exception e) {
@@ -3493,6 +3517,7 @@ public class frm_recepcion_datos extends PBase {
                                 .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                         c.No_linea == BeOcDet.No_Linea &&
                                         c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                        c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                         c.Lote.equals(finalSelectedLote)  &&
                                         c.Fecha_vence.equals(finalFechaVence) &&
                                         c.Lic_Plate.equals(LpOrigen))
@@ -3506,7 +3531,8 @@ public class frm_recepcion_datos extends PBase {
                                 .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                         c.No_linea == BeOcDet.No_Linea &&
                                         c.Lote.equals(finalSelectedLote)  &&
-                                        c.IdOrdenCompraDet == pIdOrdenCompraDet)
+                                        c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                        c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
                                 .toList();
                     }
                 }
@@ -3552,6 +3578,7 @@ public class frm_recepcion_datos extends PBase {
                         tblUbicacion.setVisibility(View.GONE);
                     }
                 }else{
+                    toast("La licencia ingresada no es válida");
                     tblUbicacion.setVisibility(View.GONE);
                 }
 
@@ -5022,6 +5049,7 @@ public class frm_recepcion_datos extends PBase {
                                             return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                                     c.No_linea == BeOcDet.No_Linea &&
                                                     c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                                     c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
                                                     c.Ubicacion.equals(ubiDetLote) &&
                                                     c.Lote.equals(cmbLote.getSelectedItem().toString());
@@ -5046,6 +5074,7 @@ public class frm_recepcion_datos extends PBase {
                                             return c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                                     c.No_linea == BeOcDet.No_Linea &&
                                                     c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
                                                     c.Fecha_vence.equals(du.convierteFecha(cmbVence.getSelectedItem().toString())) &&
                                                     c.Lote.equals(cmbLote.getSelectedItem().toString());
                                         } catch (Exception e) {
@@ -6276,7 +6305,49 @@ public class frm_recepcion_datos extends PBase {
                        if (txtLicPlate != null){
                            txtLicPlate.setText(pNumeroLP);
                        }else{
-                           txtNoLP.setText(pNumeroLP);
+                           clsBeTrans_oc_det_loteList ubic;
+                           ubic=gl.gBeOrdenCompra.DetalleLotes;
+                           List<clsBeTrans_oc_det_lote> BeUbicaciones;
+
+                           //#CKFK20220306 Agregué esta validación para el License Plate
+                           BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
+
+                           if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+
+                               //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                               if (ubic.items!=null){
+                                   BeUbicaciones = stream(ubic.items)
+                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                   c.No_linea == BeOcDet.No_Linea &&
+                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
+                                                   !c.Lic_Plate.isEmpty())
+                                           .toList();
+                               }
+
+                           }else{
+                               //#CKFK 20211030 Validé que ubic.items no fuera nulo
+                               if (ubic.items!=null){
+                                   BeUbicaciones = stream(ubic.items)
+                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                   c.No_linea == BeOcDet.No_Linea &&
+                                                   !c.Lic_Plate.isEmpty()  &&
+                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                           .toList();
+                               }
+                           }
+
+                           //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
+                           if (BeUbicaciones!=null){
+                               //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
+                               if (BeUbicaciones.size()==0){
+                                   txtNoLP.setText(pNumeroLP);
+                               }
+                           }else{
+                               txtNoLP.setText(pNumeroLP);
+                           }
+
                        }
                    }
                }
@@ -6996,6 +7067,7 @@ public class frm_recepcion_datos extends PBase {
     public void msgboxErrorOnWS2(String msg) {
         try{
             ExDialog dialog = new ExDialog(this);
+            dialog.setCancelable(false);
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -7015,6 +7087,7 @@ public class frm_recepcion_datos extends PBase {
     public void msgboxErrorPush(String msg) {
         try{
             ExDialog dialog = new ExDialog(this);
+            dialog.setCancelable(false);
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

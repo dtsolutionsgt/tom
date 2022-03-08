@@ -425,8 +425,9 @@ public class frm_detalle_ingresos extends PBase {
                 progress.setMessage("Obteniendo detalle de ingreso");
 
                 //GT la lista ya viene de frm_lista_tareas_recepcion, porque se obtiene otra vez de aca?
-                //pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
-                pListDetalleOC = gl.gListDetalleOC;
+                pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                //#CKFK 20220302 Puse esto en comentario porque la variable gl.gListDetalleOC no siempre tiene los items.
+                //pListDetalleOC = gl.gListDetalleOC;
 
                 if (pListDetalleOC!=null){
                     gl.gListDetalleOC = pListDetalleOC;

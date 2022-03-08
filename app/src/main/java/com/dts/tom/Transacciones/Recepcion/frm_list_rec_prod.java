@@ -458,7 +458,6 @@ public class frm_list_rec_prod extends PBase {
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
-
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
                     //GT17062021 Se reordena la lista por num_linea
                     Collections.sort(pListDetalleOC.items,new OrdenarItems());
@@ -737,7 +736,7 @@ public class frm_list_rec_prod extends PBase {
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
 
-                    if (Cantidad_recibida>0){
+                    if (Cantidad_recibida>=0){
 
                         vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
 
