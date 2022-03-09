@@ -16,6 +16,7 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -133,6 +134,7 @@ public class frm_recepcion_datos extends PBase {
     private EditText txtSerieIni;
     private EditText txtSerieFin;
     private Spinner cmbPresParams;
+    private Spinner cmbCantidad;
     int pIndexStock=-1;
     double Cant_Recibida_Actual=0;
 
@@ -147,6 +149,7 @@ public class frm_recepcion_datos extends PBase {
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
+    private Integer CantCopias =1;
 
     private boolean PallCorrecto= false;
     private int pIndexProdPallet=-1;
@@ -4400,30 +4403,42 @@ public class frm_recepcion_datos extends PBase {
     private void msgAskImprimir(String msg) {
 
         try{
-
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            setHandlersImpresion();
+            dialog.setView(vistaDialog);
+
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setMessage(msg + "\n\nImpresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Código de producto", (dialog1, which) -> {
                 progress.setMessage("Imprimiendo código producto");
                 progress.show();
-                Imprimir_Codigo_Barra_Producto();
+                new Thread(() -> {
+                    Imprimir_Codigo_Barra_Producto(CantCopias);
+                }).start();
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
-                Imprimir_Licencia();
+                new Thread(() -> {
+                    Imprimir_Licencia(CantCopias);
+                }).start();
             });
 
-            dialog.setNeutralButton("Salir", (dialog13, which) -> {
+            dialog.setNegativeButton("Salir", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Actualizando valores D.I.");
                     progress.show();
-                    Actualiza_Valores_Despues_Imprimir(true);
+                    new Thread(() -> {
+                        Actualiza_Valores_Despues_Imprimir(true);
+                    }).start();
                 }
             });
 
@@ -4437,7 +4452,23 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void Imprimir_Codigo_Barra_Producto(){
+    private void setHandlersImpresion() {
+        Integer[] cantidad = {1,2,4,6,8,10};
+        cmbCantidad.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,cantidad));
+
+        cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                CantCopias = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+
+        });
+    }
+
+    private void Imprimir_Codigo_Barra_Producto(int Copias){
         
         try{
 
@@ -4517,7 +4548,11 @@ public class frm_recepcion_datos extends PBase {
                  }
 
                 if (!zpl.isEmpty()){
-                    zPrinterIns.sendCommand(zpl);
+                    if (Copias > 0) {
+                        for (int i = 0; i < Copias; i++ ) {
+                            zPrinterIns.sendCommand(zpl);
+                        }
+                    }
                 }else{
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
@@ -4552,7 +4587,7 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    private void Imprimir_Licencia(){
+    private void Imprimir_Licencia(int Copias){
 
         try{
 
@@ -4653,7 +4688,11 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if (!zpl.isEmpty()){
-                    zPrinterIns.sendCommand(zpl);
+                    if (Copias > 0) {
+                        for (int i = 0; i < Copias; i++ ) {
+                            zPrinterIns.sendCommand(zpl);
+                        }
+                    }
                 }else{
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
