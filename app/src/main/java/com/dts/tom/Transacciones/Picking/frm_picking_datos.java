@@ -236,6 +236,15 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
+
+            txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+
             txtCodigoProducto.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -273,6 +282,7 @@ public class frm_picking_datos extends PBase {
             mu.msgbox("setHandlers:" + e.getMessage());
         }
     }
+
 
     private void confirmarPorCodigo() {
         String CodigoProd = txtCodigoProducto.getText().toString();
