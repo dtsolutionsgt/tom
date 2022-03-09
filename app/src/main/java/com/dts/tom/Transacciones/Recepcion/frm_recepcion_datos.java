@@ -149,7 +149,7 @@ public class frm_recepcion_datos extends PBase {
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
-    private Integer cant;
+    private Integer CantCopias =1;
 
     private boolean PallCorrecto= false;
     private int pIndexProdPallet=-1;
@@ -4417,30 +4417,28 @@ public class frm_recepcion_datos extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Código de producto", (dialog1, which) -> {
-                if (cant > 0) {
-                    for (int i = 0; i < cant; i++ ) {
-                        progress.setMessage("Imprimiendo código producto");
-                        progress.show();
-                        Imprimir_Codigo_Barra_Producto();
-                    }
-                }
+                progress.setMessage("Imprimiendo código producto");
+                progress.show();
+                new Thread(() -> {
+                    Imprimir_Codigo_Barra_Producto(CantCopias);
+                }).start();
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
-                if (cant > 0) {
-                    for (int i = 0; i < cant; i++ ) {
-                        progress.setMessage("Imprimiendo Licencia");
-                        progress.show();
-                        Imprimir_Licencia();
-                    }
-                }
+                progress.setMessage("Imprimiendo Licencia");
+                progress.show();
+                new Thread(() -> {
+                    Imprimir_Licencia(CantCopias);
+                }).start();
             });
 
-            dialog.setNeutralButton("Salir", (dialog13, which) -> {
+            dialog.setNegativeButton("Salir", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Actualizando valores D.I.");
                     progress.show();
-                    Actualiza_Valores_Despues_Imprimir(true);
+                    new Thread(() -> {
+                        Actualiza_Valores_Despues_Imprimir(true);
+                    }).start();
                 }
             });
 
@@ -4461,7 +4459,7 @@ public class frm_recepcion_datos extends PBase {
         cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                cant = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+                CantCopias = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
             }
 
             @Override
@@ -4470,7 +4468,7 @@ public class frm_recepcion_datos extends PBase {
         });
     }
 
-    private void Imprimir_Codigo_Barra_Producto(){
+    private void Imprimir_Codigo_Barra_Producto(int Copias){
         
         try{
 
@@ -4550,7 +4548,11 @@ public class frm_recepcion_datos extends PBase {
                  }
 
                 if (!zpl.isEmpty()){
-                    zPrinterIns.sendCommand(zpl);
+                    if (Copias > 0) {
+                        for (int i = 0; i < Copias; i++ ) {
+                            zPrinterIns.sendCommand(zpl);
+                        }
+                    }
                 }else{
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
@@ -4585,7 +4587,7 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    private void Imprimir_Licencia(){
+    private void Imprimir_Licencia(int Copias){
 
         try{
 
@@ -4686,7 +4688,11 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if (!zpl.isEmpty()){
-                    zPrinterIns.sendCommand(zpl);
+                    if (Copias > 0) {
+                        for (int i = 0; i < Copias; i++ ) {
+                            zPrinterIns.sendCommand(zpl);
+                        }
+                    }
                 }else{
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
