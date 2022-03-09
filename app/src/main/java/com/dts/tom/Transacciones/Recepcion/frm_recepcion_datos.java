@@ -16,6 +16,7 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -133,6 +134,7 @@ public class frm_recepcion_datos extends PBase {
     private EditText txtSerieIni;
     private EditText txtSerieFin;
     private Spinner cmbPresParams;
+    private Spinner cmbCantidad;
     int pIndexStock=-1;
     double Cant_Recibida_Actual=0;
 
@@ -147,6 +149,7 @@ public class frm_recepcion_datos extends PBase {
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
+    private Integer cant;
 
     private boolean PallCorrecto= false;
     private int pIndexProdPallet=-1;
@@ -4400,23 +4403,37 @@ public class frm_recepcion_datos extends PBase {
     private void msgAskImprimir(String msg) {
 
         try{
-
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            setHandlersImpresion();
+            dialog.setView(vistaDialog);
+
             dialog.setCancelable(false);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setMessage(msg + "\n\nImpresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Código de producto", (dialog1, which) -> {
-                progress.setMessage("Imprimiendo código producto");
-                progress.show();
-                Imprimir_Codigo_Barra_Producto();
+                if (cant > 0) {
+                    for (int i = 0; i < cant; i++ ) {
+                        progress.setMessage("Imprimiendo código producto");
+                        progress.show();
+                        Imprimir_Codigo_Barra_Producto();
+                    }
+                }
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
-                progress.setMessage("Imprimiendo Licencia");
-                progress.show();
-                Imprimir_Licencia();
+                if (cant > 0) {
+                    for (int i = 0; i < cant; i++ ) {
+                        progress.setMessage("Imprimiendo Licencia");
+                        progress.show();
+                        Imprimir_Licencia();
+                    }
+                }
             });
 
             dialog.setNeutralButton("Salir", (dialog13, which) -> {
@@ -4435,6 +4452,22 @@ public class frm_recepcion_datos extends PBase {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
+    }
+
+    private void setHandlersImpresion() {
+        Integer[] cantidad = {1,2,4,6,8,10};
+        cmbCantidad.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,cantidad));
+
+        cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                cant = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+
+        });
     }
 
     private void Imprimir_Codigo_Barra_Producto(){
