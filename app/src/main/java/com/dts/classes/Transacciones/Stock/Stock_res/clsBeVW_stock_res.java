@@ -104,10 +104,9 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double CajasPorCama=0;
   @Element(required=false) public boolean es_rack=false;
   //
-
   @Element(required=false) public String Nombre_Clasificacion="";
 
-  @Element(required=false) public String Nombre_clasificacion="";
+  @Element(required=false) public String Area="";
 
   public clsBeVW_stock_res() {
   }
@@ -224,7 +223,6 @@ public class clsBeVW_stock_res {
     this.codigo_poliza = codigo_poliza;
     this.numero_orden = numero_orden;
     this.Documento_Ingreso = Documento_Ingreso;
-    this.Nombre_clasificacion = Nombre_clasificacion;
   }
 
 
@@ -798,11 +796,11 @@ public class clsBeVW_stock_res {
     Nombre_Clasificacion=value;
   }
 
-  public String getClasificacion() {
-    return Nombre_clasificacion;
+  public String getArea() {
+    return Area;
   }
-  public void setClasificacion(String value) {
-    Nombre_clasificacion =value;
+  public void setArea(String value) {
+    Area=value;
   }
 
 }
