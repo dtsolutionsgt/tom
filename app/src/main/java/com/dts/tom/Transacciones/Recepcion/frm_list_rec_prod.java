@@ -491,7 +491,10 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }else{
-                mu.msgbox("Falta programar");
+                //#EJC20220303:En algunas ocasiones, se pierde el IdtipoTarea...
+                //mu.msgbox("Falta programar");
+                progress.setMessage("Inicializando Oc");
+                execws(1);
             }
 
         }catch (Exception e){

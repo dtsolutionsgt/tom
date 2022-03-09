@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -4403,6 +4404,9 @@ public class frm_recepcion_datos extends PBase {
     private void msgAskImprimir(String msg) {
 
         try{
+
+            progress.cancel();
+
             LayoutInflater inflater = getLayoutInflater();
             View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -4416,29 +4420,23 @@ public class frm_recepcion_datos extends PBase {
             dialog.setMessage(msg + "\n\nImpresora: " + gl.MacPrinter);
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Código de producto", (dialog1, which) -> {
-                progress.setMessage("Imprimiendo código producto");
+            dialog.setPositiveButton("Código", (dialog1, which) -> {
+                progress.setMessage("Imprimiendo Código");
                 progress.show();
-                new Thread(() -> {
-                    Imprimir_Codigo_Barra_Producto(CantCopias);
-                }).start();
+                Imprimir_Codigo_Barra_Producto(CantCopias);
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
-                new Thread(() -> {
-                    Imprimir_Licencia(CantCopias);
-                }).start();
+                Imprimir_Licencia(CantCopias);
             });
 
-            dialog.setNegativeButton("Salir", (dialog13, which) -> {
+            dialog.setNeutralButton("Salir", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
                     progress.setMessage("Actualizando valores D.I.");
                     progress.show();
-                    new Thread(() -> {
-                        Actualiza_Valores_Despues_Imprimir(true);
-                    }).start();
+                    Actualiza_Valores_Despues_Imprimir(true);
                 }
             });
 
@@ -4557,10 +4555,11 @@ public class frm_recepcion_datos extends PBase {
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
 
-                Thread.sleep(500);
+                //#EJC20220309: Que pasa si no se cierra la conexión BT?, será más rápida la próxima impresión?
+                //Thread.sleep(500);
 
                 // Close the connection to release resources.
-                printerIns.close();
+                //printerIns.close();
 
             }else{
                 mu.msgbox("No se pudo obtener conexión con la impresora");
@@ -4583,7 +4582,7 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("Imprimir_barra: "+e.getMessage());
             }
         }finally {
-            progress.cancel();
+            //progress.cancel();
         }
     }
 
@@ -4697,10 +4696,10 @@ public class frm_recepcion_datos extends PBase {
                     msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                 }
 
-                Thread.sleep(500);
-
+                //#EJC20220309: Que pasa si no se cierra la conexión BT?, será más rápida la próxima impresión?
+                //Thread.sleep(500);
                 // Close the connection to release resources.
-                printerIns.close();
+                //printerIns.close();
 
             }else{
                 mu.msgbox("No se pudo obtener conexión con la impresora");
@@ -4713,6 +4712,7 @@ public class frm_recepcion_datos extends PBase {
            // Actualiza_Valores_Despues_Imprimir();
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
@@ -4723,7 +4723,7 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("Imprimir_licencia: "+e.getMessage());
             }
         }finally {
-            progress.cancel();
+            //progress.cancel();
         }
     }
 
