@@ -243,7 +243,12 @@ public class frm_picking_datos extends PBase {
                         if (trLP.getVisibility() == View.GONE) {
                             Procesa_Codigo();
                         } else {
-                            confirmarPorCodigo();
+                            if (!txtBarra.getText().toString().isEmpty()) {
+                                confirmarPorCodigo();
+                            } else {
+                                msgCodigoProducto("Debe ingresar la licencia del producto");
+                                txtBarra.requestFocus();
+                            }
                         }
                     }
 
@@ -790,6 +795,7 @@ public class frm_picking_datos extends PBase {
                     if (confirmar_codigo_en_picking) {
                         txtCodigoProducto.requestFocus();
                         txtCodigoProducto.setEnabled(true);
+                        txtCodigoProducto.setSelectAllOnFocus(true);
                     } else {
                         Cargar_Datos_Producto_Picking_Consolidado();
                     }
@@ -1328,19 +1334,16 @@ public class frm_picking_datos extends PBase {
     }
 
     public void BotonGuardar(View view){
-        String CodigoProd = txtCodigoProducto.getText().toString();
 
         if (confirmar_codigo_en_picking) {
+            if (txtBarra.getText().toString().isEmpty()) {
+                msgCodigoProducto("Debe ingresar la licencia del producto");
+                return;
+            }
+
             if (txtCodigoProducto.getText().toString().isEmpty()) {
                 msgCodigoProducto("Debe ingresar el código del producto");
                 return;
-            } else {
-               if (!gBePickingUbic.CodigoProducto.equalsIgnoreCase(CodigoProd)) {
-                   msgCodigoProducto("El código del producto no es válido para esta licencia");
-                   txtCodigoProducto.requestFocus();
-                   txtCodigoProducto.selectAll();
-                   return;
-               }
             }
         }
 
