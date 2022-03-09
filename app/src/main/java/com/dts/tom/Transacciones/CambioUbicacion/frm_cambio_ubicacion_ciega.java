@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -2102,7 +2103,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 progress.cancel();
 
-                msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
+                //#AT 20220309 Ya no se muestra el mensaje en el cambio de ubicación
+                //msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
+                completaProceso();
 
             }
 
@@ -2864,6 +2867,38 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    private void completaProceso() {
+        if( escaneoPallet && productoList != null){
+            //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material
+            if (BeStockPallet.getIdPresentacion()!=0) {
+
+                if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
+                    Toast.makeText(frm_cambio_ubicacion_ciega.this, "La ubicación parcial de pallet requiere explosionar el material.", Toast.LENGTH_SHORT).show();
+                    Es_Explosion = true;
+                    inicializaTarea(true);
+                    msgAskImprimirEtiqueta("Imprimir etiqueta");
+                    //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                } else {
+                    inicializaTarea(true);
+                }
+
+            }else{
+                if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
+                    Toast.makeText(frm_cambio_ubicacion_ciega.this, "La ubicación parcial de pallet requiere explosionar el material.", Toast.LENGTH_SHORT).show();
+                    Es_Explosion = true;
+                    inicializaTarea(true);
+                    msgAskImprimirEtiqueta("Imprimir etiqueta");
+                    //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                }else{
+                    inicializaTarea(true);
+                }
+            }
+
+        }else{
+            inicializaTarea(true);
+        }
     }
 
     private void msgAskAplicar(String msg) {
