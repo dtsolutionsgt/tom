@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="com.dts.ladapt.list_adapt_detalle_recepcion">
+
+    <LinearLayout
+        android:id="@+id/linDetalleRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblNoLinea"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/lblCodigo"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="420037"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblProducto"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingStart="8dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="XXXXXX"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/lblShipper"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Shipper"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblClasificacion"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Clasificacion"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblPres"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Caja01"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblUmbas"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="UN"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCantidad"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1.0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCantRec"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0.0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblDiferencia"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCosto"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblFactor"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdOcDet"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdOcEnc"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblIdPropietarioBodega"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNombrePropietario"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Nom Propietario"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+
+
+    </LinearLayout>
+</RelativeLayout>
