@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
@@ -39,6 +40,9 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detLis
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
+import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion2;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -102,12 +106,26 @@ public class frm_list_rec_prod extends PBase {
     private clsBeTrans_oc_det selitem;
 
     private list_adapt_detalle_recepcion listdetadapter;
+    private list_adapt_detalle_recepcion2 listdetadapter2;
+
+    private boolean areaprimera = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_list_rec_prod);
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.Mostrar_Area_En_HH;
+
+        if (areaprimera) {
+            setContentView(R.layout.activity_frm_list_rec_prod2);
+        } else {
+            setContentView(R.layout.activity_frm_list_rec_prod);
+        }
+
+        //setContentView(R.layout.activity_frm_list_rec_prod);
 
         super.InitBase();
 
@@ -522,7 +540,15 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        listdetadapter.setSelectedIndex(position);
+
+                        //#GT09032022: si tiene mostrar_area cealsa
+                        if (areaprimera) {
+                            listdetadapter2.setSelectedIndex(position);
+                        } else {
+                            listdetadapter.setSelectedIndex(position);
+                        }
+
+                        //listdetadapter.setSelectedIndex(position);
 
                         procesar_registro();
 
@@ -547,7 +573,15 @@ public class frm_list_rec_prod extends PBase {
 
                         selid = sitem.No_Linea;
                         selidx = position;
-                        listdetadapter.setSelectedIndex(position);
+
+                        //#GT09032022: si tiene mostrar_area cealsa
+                        if (areaprimera) {
+                            listdetadapter2.setSelectedIndex(position);
+                        } else {
+                            listdetadapter.setSelectedIndex(position);
+                        }
+
+                        //listdetadapter.setSelectedIndex(position);
 
                         msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
@@ -868,8 +902,17 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
-            listView.setAdapter(listdetadapter);
+
+            if (areaprimera) {
+                listdetadapter2 = new list_adapt_detalle_recepcion2(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter2);
+            } else {
+                listdetadapter = new list_adapt_detalle_recepcion(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter);
+            }
+
+            //listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+            //listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());

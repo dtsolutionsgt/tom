@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
@@ -73,9 +74,12 @@ public class frm_detalle_ingresos extends PBase {
     private ArrayList<String> tipooclist= new ArrayList<String>();
     private ArrayList<String> vencelist= new ArrayList<String>();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_frm_detalle_ingresos);
 
         super.InitBase();
@@ -664,7 +668,9 @@ public class frm_detalle_ingresos extends PBase {
 
     public void Atender_rece(View view){
         browse=1;
+
         startActivity(new Intent(this, frm_list_rec_prod.class));
+
     }
 
     public void Regresar(View view){
