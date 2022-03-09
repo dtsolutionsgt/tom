@@ -410,10 +410,10 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 }else{
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
-
             }
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
@@ -443,7 +443,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
+            dialog.setPositiveButton("Código", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Imprimir_Codigo_Barra_Producto(CantCopias);
                 }
