@@ -357,7 +357,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
                                         "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
                                         "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                        "^BY2,3,160^FT550,200^BCI,,N,N\n" +
                                         "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
                                         "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +

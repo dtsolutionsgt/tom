@@ -4512,7 +4512,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
                                         "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
                                         "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                        "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
                                         "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
                                         "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
