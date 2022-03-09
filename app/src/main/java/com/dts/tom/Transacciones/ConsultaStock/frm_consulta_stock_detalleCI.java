@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -19,11 +23,12 @@ import com.zebra.sdk.printer.ZebraPrinterFactory;
 public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
-
+    private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
+    private Integer CantCopias =1;
 
     @Override
 
@@ -184,7 +189,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         msgAskImprimir("Imprimir");
     }
 
-    private void Imprimir_Codigo_Barra_Producto(){
+    private void Imprimir_Codigo_Barra_Producto(int Copias){
 
         try{
 
@@ -265,7 +270,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }
 
                     if (!zpl.isEmpty()){
-                        zPrinterIns.sendCommand(zpl);
+                        if (Copias > 0){
+                            for(int i=0; i < Copias; i++){
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+
                     }else{
                         msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
@@ -293,7 +303,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         }
     }
 
-    private void Imprimir_Licencia(){
+    private void Imprimir_Licencia(int Copias){
 
         try{
 
@@ -440,7 +450,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }
 
                     if (!zpl.isEmpty()){
-                        zPrinterIns.sendCommand(zpl);
+                        if (Copias > 0) {
+                            for (int i=0; i < Copias; i++) {
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+
                     }else{
                         msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
@@ -471,11 +486,16 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private void msgAskImprimir(String msg) {
 
         try{
-
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            setHandlersImpresion();
+            dialog.setView(vistaDialog);
+
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setMessage( msg + "\n\nImpresora: " + gl.MacPrinter);
 
             dialog.setCancelable(false);
 
@@ -483,13 +503,19 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Codigo_Barra_Producto();
+                    new Thread(() -> {
+                        Imprimir_Codigo_Barra_Producto(CantCopias);
+                    }).start();
+
                 }
             });
 
             dialog.setNegativeButton("Licencia", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Licencia();
+                    new Thread(()-> {
+                        Imprimir_Licencia(CantCopias);
+                    }).start();
+
                 }
             });
 
@@ -503,6 +529,22 @@ public class frm_consulta_stock_detalleCI extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    private void setHandlersImpresion() {
+        Integer[] cantidad = {1,2,4,6,8,10};
+        cmbCantidad.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,cantidad));
+
+        cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                CantCopias = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+
+        });
     }
 
     public void ProgressDialog(String mensaje) {
