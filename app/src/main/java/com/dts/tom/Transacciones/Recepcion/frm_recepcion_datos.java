@@ -4494,7 +4494,7 @@ public class frm_recepcion_datos extends PBase {
                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Código de Producto^FS \n" +
+                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
                         "^FO2,340^GB670,0,14^FS \n" +
                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                         "^FD%4$s^FS \n" +
@@ -4517,7 +4517,7 @@ public class frm_recepcion_datos extends PBase {
                                         "^PQ1,0,1,Y \n" +
                                         "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
                                         "^FO2,440^GB670,14,14^FS\n" +
-                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  Código de Producto^FS\n" +
+                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         BeProducto.Codigo_barra,
@@ -4538,7 +4538,7 @@ public class frm_recepcion_datos extends PBase {
                                     "^PQ1,0,1,Y \n" +
                                     "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
                                     "^FO2,440^GB670,14,14^FS\n" +
-                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS Código de Producto^FS\n" +
+                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
                                     "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
                                     gl.gNomEmpresa,
                                     BeProducto.Codigo_barra,
