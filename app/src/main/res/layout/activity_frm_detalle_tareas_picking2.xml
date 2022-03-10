@@ -109,7 +109,7 @@
         android:layout_marginBottom="0dp"
         android:background="@color/colorPrimary"
         android:onClick="BotonR"
-        android:text="R."
+        android:text="C."
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold" />
