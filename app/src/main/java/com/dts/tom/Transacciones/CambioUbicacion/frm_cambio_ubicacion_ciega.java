@@ -117,6 +117,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean validarDatos = false;
     private boolean datosCorrectos = false;
     private boolean vProcesar =false;
+    private int tmpUbicId = 0;
 
     private boolean Es_Explosion = false;
     private boolean Es_Explosion_Manual = false;
@@ -422,6 +423,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 return false;
             }
         });
+
+        txtLicPlate.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
 
         txtUbicOrigen.setOnKeyListener(new View.OnKeyListener() {
 
@@ -1458,8 +1461,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (cvUbicOrigID > 0){
                 txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
                 validaOrigen();
-            }else{
-                txtUbicOrigen.setText("");
+            } else {
+                if (tmpUbicId > 0) {
+                    txtUbicOrigen.setText(String.valueOf(tmpUbicId));
+                    validaOrigen();
+                } else {
+                    txtUbicOrigen.setText("");
+                }
                 progress.cancel();
             }
 
@@ -1507,6 +1515,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
                 cvUbicOrigID=bodega_ubicacion_origen.getIdUbicacion();
                 lblUbicCompleta.setText(bodega_ubicacion_origen.getDescripcion());
+                txtLicPlate.requestFocus();
             }
 
             if (validarDatos){
@@ -2754,6 +2763,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (!txtUbicOrigen.getText().toString().isEmpty()){
 
+                //#AT 20220309 Se le asigna el valor de la ubicación de origen
+                tmpUbicId = Integer.valueOf(txtUbicOrigen.getText().toString());
                 bodega_ubicacion_origen = new clsBeBodega_ubicacion();
 
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion origen
