@@ -2888,7 +2888,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgAskImprimirEtiqueta("Imprimir etiqueta");
                     //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
                 } else {
-                    Toast.makeText(frm_cambio_ubicacion_ciega.this, "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
                     inicializaTarea(true);
                 }
 
@@ -2900,15 +2900,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgAskImprimirEtiqueta("Imprimir etiqueta");
                     //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
                 }else{
-                    Toast.makeText(frm_cambio_ubicacion_ciega.this, "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
                     inicializaTarea(true);
                 }
             }
         }else{
-            Toast.makeText(frm_cambio_ubicacion_ciega.this, "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
             inicializaTarea(true);
         }
     }
+
 
     private void msgAskAplicar(String msg) {
 
