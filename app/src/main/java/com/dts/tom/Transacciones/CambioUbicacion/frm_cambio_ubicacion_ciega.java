@@ -1956,9 +1956,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (stockResList != null){
                 LlenaPresentaciones();
             }else{
+
                 msgbox("El producto no existe en la ubicación origen");
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.selectAll();
+                progress.cancel();
             }
 
         } catch (Exception e) {
