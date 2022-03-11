@@ -269,6 +269,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 Lista_Inventario_Disponible();
 
             }else{
+                toastlong("No se ha encontrado stock disponible para el producto: "+BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto);
                 progress.cancel();
             }
 
@@ -347,8 +348,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 listDispProd.setAdapter(adapter);
 
                 progress.cancel();
-
-            }else{
 
             }
 
