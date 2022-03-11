@@ -151,6 +151,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     private TextToSpeech mTTS;
     private String textToSpeeach = "";
+    private boolean ocultar_mensajes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
             super.InitBase();
+            ocultar_mensajes = gl.Mostrar_Area_En_HH;
 
             ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -2120,10 +2122,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 progress.cancel();
 
-                //#AT 20220309 Ya no se muestra el mensaje en el cambio de ubicación
-                //msgAsk(gl.modo_cambio ==1 ? "Cambio de ubicación aplicado": "Cambio de estado aplicado");
-                completaProceso();
-
+                //#AT 202203011 Si ocultar mensajes es falso se muestran los mensajes de lo contrario se ocultan
+                if (!ocultar_mensajes) {
+                    msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                } else {
+                    completaProceso();
+                }
             }
 
         }catch (Exception ex){
