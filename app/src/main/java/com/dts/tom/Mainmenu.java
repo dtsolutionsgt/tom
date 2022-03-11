@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -788,7 +789,7 @@ public class Mainmenu extends PBase {
 
         try{
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+      /*      AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
             dialog.setCancelable(false);
@@ -809,7 +810,50 @@ public class Mainmenu extends PBase {
                 }
             });
 
-            dialog.show();
+            dialog.show();*/
+
+
+            //#GT10032022: set en el boton Si para facilitar el ENTER del teclado
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    this);
+
+            // set title
+            alertDialogBuilder.setTitle(R.string.app_name);
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage("¿" + msg + "?")
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                            startActivity(intent);
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+            Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            nbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            //pbutton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            pbutton.setPadding(0, 10, 10, 0);
+            //pbutton.setTextColor(Color.WHITE);
+
+            nbutton.setFocusable(true);
+            nbutton.setFocusableInTouchMode(true);
+            nbutton.requestFocus();
+
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
