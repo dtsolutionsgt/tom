@@ -158,6 +158,9 @@ public class appGlobals extends Application {
 
     public boolean validar_disponibilidad_ubicaicon_destino = false;
 
-    public boolean Mostrar_Area_En_HH;
-    public boolean confirmar_codigo_en_picking;
+    public boolean Mostrar_Area_En_HH=false;
+    public boolean confirmar_codigo_en_picking=false;
+
+    //#EJC20220314: CEALSA, si true, entonces en el cambio de ubicación, al escanear únicamente licencia, se coloca automáticamente la ubicación de origen.
+    public boolean inferir_origen_en_cambio_ubic =false;
 }

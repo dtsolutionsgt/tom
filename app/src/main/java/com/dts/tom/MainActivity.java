@@ -92,7 +92,7 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String version="4.6.12";
+    private String version="4.6.18";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -504,6 +504,7 @@ public class MainActivity extends PBase {
                     gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
                     gl.Mostrar_Area_En_HH = bodegas.items.get(position).Mostrar_Area_En_HH;
                     gl.confirmar_codigo_en_picking = bodegas.items.get(position).confirmar_codigo_en_picking;
+                    gl.inferir_origen_en_cambio_ubic = bodegas.items.get(position).inferir_origen_en_cambio_ubic;
 
                     idimpres=0;
                     execws(3);
