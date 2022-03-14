@@ -55,6 +55,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
     @Element(required=false) public boolean Ubicar_Tarimas_Completas_Reabasto = false;
     @Element(required=false) public int IdTipoTransaccionSalida=0;
+    @Element(required=false) public boolean Permitir_Eliminar_Documento_Salida = false;
 
 
     public clsBeBodega() {

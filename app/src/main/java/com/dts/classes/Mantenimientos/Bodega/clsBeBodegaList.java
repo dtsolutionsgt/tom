@@ -12,5 +12,5 @@ import java.util.ListIterator;
 
 public class clsBeBodegaList {
     @ElementList(inline=true,required=false)
-    public List<clsBeBodegaBase> items ;
+    public List<clsBeBodega> items ;
 }

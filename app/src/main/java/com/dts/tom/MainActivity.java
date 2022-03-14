@@ -38,6 +38,7 @@ import com.dts.base.ExDialog;
 import com.dts.base.NetWorkInfoUtility;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
@@ -724,7 +725,7 @@ public class MainActivity extends PBase {
                 if (gl.IdBodega>0) {
                     if (gl.IdOperador>0) {
                         if (!txtpass.getText().toString().isEmpty())  {
-                            List<clsBeBodegaBase> BeBodega =
+                            List<clsBeBodega> BeBodega =
                                     stream(bodegas.items)
                                             .where(c -> c.IdBodega  == gl.IdBodega)
                                             .toList();
