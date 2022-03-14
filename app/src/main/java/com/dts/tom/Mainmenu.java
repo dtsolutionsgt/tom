@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_op;
 import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_opList;
@@ -66,11 +67,18 @@ public class Mainmenu extends PBase {
 
     private static String PathDataDir = "";
 
+    private boolean areaprimera = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
+
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.Mostrar_Area_En_HH;
 
         super.InitBase();
 
@@ -598,7 +606,15 @@ public class Mainmenu extends PBase {
 
                     gl.IdTareaUbicEnc =0;
                     gl.modo_cambio = 1;
-                    msgAskUbicNoDirigida("Ubicación dirigida");
+
+                    //#GT14032022_1348: si tiene parametro mostrarArea, se hace ubicacion no dirigida
+                    if (areaprimera) {
+                        Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                        startActivity(intent);
+
+                    } else {
+                        msgAskUbicNoDirigida("Ubicación dirigida");
+                    }
 
                     break;
 
