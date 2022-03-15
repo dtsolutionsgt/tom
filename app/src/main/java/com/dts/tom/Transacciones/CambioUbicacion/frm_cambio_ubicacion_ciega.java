@@ -156,6 +156,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private String textToSpeeach = "";
     private boolean ocultar_mensajes;
     private boolean areaprimera = true;
+    private boolean inferir_origen_en_cambio_ubic = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +176,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             super.InitBase();
             ocultar_mensajes = gl.Mostrar_Area_En_HH;
+            inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 
             ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -1881,6 +1883,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 if (escaneoPallet && productoList != null){
+                    if (inferir_origen_en_cambio_ubic) {
+                        if (txtUbicOrigen.getText().toString().isEmpty()) {
+                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
+                            String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
+
+                            txtUbicOrigen.setText(String.valueOf(ubic));
+                            lblUbicCompleta.setText(ubicompleta);
+                            cvUbicOrigID = ubic;
+                        } else {
+                            int tmpUbic = Integer.valueOf(txtUbicOrigen.getText().toString());
+                            cvUbicOrigID = tmpUbic;
+                        }
+                    }
 
                     List AuxList = stream(productoList.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
