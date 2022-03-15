@@ -517,9 +517,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             boolean tienePedidosSV = (Boolean) xobj.getSingle("Tiene_Pedidos_Sin_Verificar_By_IdPickingEncResult",Boolean.class);
 
-            if (! tienePedidosSV){
+            if (! tienePedidosSV) {
                 //Llama a método del WS Get_Picking_By_IdPickingEnc
                 execws(7);
+            } else {
+                progress.cancel();
             }
 
         }catch (Exception ex){
