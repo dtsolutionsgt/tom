@@ -152,6 +152,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextToSpeech mTTS;
     private String textToSpeeach = "";
     private boolean ocultar_mensajes;
+    private boolean inferir_origen_en_cambio_ubic = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             super.InitBase();
             ocultar_mensajes = gl.Mostrar_Area_En_HH;
+            inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 
             ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -954,8 +956,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (!txtLicPlate.getText().toString().isEmpty()) {
 
-               escaneoPallet = true;
+                if (inferir_origen_en_cambio_ubic) {
+                    txtUbicOrigen.setText("");
+                    lblUbicCompleta.setText("");
+                }
 
+                escaneoPallet = true;
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
                 //Llama al método del WS Existe_Lp_In_Stock
@@ -1858,7 +1864,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                if (escaneoPallet && productoList != null){
+                if (escaneoPallet && productoList != null) {
+
+                    if (inferir_origen_en_cambio_ubic) {
+                        if (txtUbicOrigen.getText().toString().isEmpty()) {
+                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
+                            String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
+
+                            txtUbicOrigen.setText(String.valueOf(ubic));
+                            lblUbicCompleta.setText(ubicompleta);
+                            cvUbicOrigID = ubic;
+                            tmpUbicId = ubic;
+                        }
+                    }
 
                     List AuxList = stream(productoList.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
