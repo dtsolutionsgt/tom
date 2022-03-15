@@ -42,6 +42,8 @@ public class clsBeCliente {
     @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
     @Element(required=false) public clsBeCliente_tipo ClienteTipo=new clsBeCliente_tipo();
 
+    //#EJC20220314: BYB, Certificado_Calidad:
+    @Element(required=false) public boolean Control_Calidad=false;
 
     public clsBeCliente() {
     }
@@ -276,5 +278,10 @@ public class clsBeCliente {
     public void setClienteTipo(clsBeCliente_tipo value) {
         ClienteTipo=value;
     }
-
+    public boolean getControl_Calidad() {
+        return Control_Calidad;
+    }
+    public void setControl_Calidad(boolean value) {
+        Control_Calidad=value;
+    }
 }
