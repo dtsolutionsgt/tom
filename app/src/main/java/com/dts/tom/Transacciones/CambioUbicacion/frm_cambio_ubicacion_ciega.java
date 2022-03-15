@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
@@ -40,6 +42,7 @@ import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucSta
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -152,7 +155,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextToSpeech mTTS;
     private String textToSpeeach = "";
     private boolean ocultar_mensajes;
-    private boolean inferir_origen_en_cambio_ubic = false;
+    private boolean areaprimera = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,11 +163,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
 
             super.onCreate(savedInstanceState);
+
+
+            appGlobals gll;
+            gll=((appGlobals) this.getApplication());
+            areaprimera = gll.Mostrar_Area_En_HH;
+
+
+
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
             super.InitBase();
             ocultar_mensajes = gl.Mostrar_Area_En_HH;
-            inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 
             ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -956,12 +966,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (!txtLicPlate.getText().toString().isEmpty()) {
 
-                if (inferir_origen_en_cambio_ubic) {
-                    txtUbicOrigen.setText("");
-                    lblUbicCompleta.setText("");
-                }
+               escaneoPallet = true;
 
-                escaneoPallet = true;
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
                 //Llama al método del WS Existe_Lp_In_Stock
@@ -1597,7 +1603,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 progress.cancel();
 
-                msgAskAplicar((gl.modo_cambio ==1? "Mover producto a ubicación: " + bodega_ubicacion_destino.Descripcion: "Aplicar cambio de estado?"));
+                //#GT14032022_1348: si tiene parametro mostrarArea, se hace ubicacion no dirigida sin preguntar
+                if (areaprimera) {
+
+                    //Llamar método para aplicar el cambio de estado
+                    aplicarCambio();
+
+                } else {
+                    msgAskAplicar((gl.modo_cambio ==1? "Mover producto a ubicación: " + bodega_ubicacion_destino.Descripcion: "Aplicar cambio de estado?"));
+                }
+
+
 
             }else{
                 progress.cancel();
@@ -1864,19 +1880,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                if (escaneoPallet && productoList != null) {
-
-                    if (inferir_origen_en_cambio_ubic) {
-                        if (txtUbicOrigen.getText().toString().isEmpty()) {
-                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                            String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
-
-                            txtUbicOrigen.setText(String.valueOf(ubic));
-                            lblUbicCompleta.setText(ubicompleta);
-                            cvUbicOrigID = ubic;
-                            tmpUbicId = ubic;
-                        }
-                    }
+                if (escaneoPallet && productoList != null){
 
                     List AuxList = stream(productoList.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
@@ -2951,31 +2955,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void msgAskAplicar(String msg) {
 
         try{
-
-      /*      AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setCancelable(false);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
-            dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which)
-                {btnGuardarCiega.setVisibility(View.VISIBLE); }
-
-            });
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    //Llamar método para aplicar el cambio de estado
-                    aplicarCambio();
-                }
-
-            });
-
-            dialog.show();*/
-
 
             //#GT10032022: set en el boton Si para facilitar el ENTER del teclado
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
