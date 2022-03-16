@@ -3586,7 +3586,11 @@ public class frm_recepcion_datos extends PBase {
                         tblUbicacion.setVisibility(View.GONE);
                     }
                 }else{
-                    toast("La licencia ingresada no es válida");
+                    //#CKFK20220307 Coloqué este toast para cuando es una OP y se ingresa una licencia no válida
+                    if (!txtNoLP.getText().toString().isEmpty()){
+                        toast("La licencia ingresada no es válida");
+                        txtNoLP.setText("");
+                    }
                     tblUbicacion.setVisibility(View.GONE);
                 }
 
@@ -5918,8 +5922,8 @@ public class frm_recepcion_datos extends PBase {
                         break;
                     case 24:
                         callMethod("Existe_Lp","pLic_Plate",pLp,
-                                                "pIdBodega",gl.IdBodega,
-                                                "pIdStock",(pListBeStockRec.items==null?0:pListBeStockRec.items.get(0).IdStockRec));
+                                               "pIdBodega",gl.IdBodega,
+                                               "pIdStock",(pListBeStockRec.items==null?0:pListBeStockRec.items.get(0).IdStockRec));
                         break;
                     case 25:
 
