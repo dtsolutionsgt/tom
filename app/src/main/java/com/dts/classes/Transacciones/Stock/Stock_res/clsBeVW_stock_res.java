@@ -98,6 +98,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Documento_Ingreso="";
   @Element(required=false) public boolean ubicacion_picking=false;
   @Element(required=false) public String Host="";
+  @Element(required=false) public int no_linea=0;
 
   //#EJC20220129:
   @Element(required=false) public double CamasPorTarima=0;
@@ -135,7 +136,7 @@ public class clsBeVW_stock_res {
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
-                           String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion) {
+                           String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion, int no_linea) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -226,8 +227,8 @@ public class clsBeVW_stock_res {
     this.numero_orden = numero_orden;
     this.Documento_Ingreso = Documento_Ingreso;
     this.NombreUbicacion = NombreUbicacion;
+    this.no_linea = no_linea;
   }
-
 
   public int getIdBodega() {
     return IdBodega;
@@ -811,6 +812,13 @@ public class clsBeVW_stock_res {
   }
   public void setNombreUbicacion(String value) {
     NombreUbicacion=value;
+  }
+
+  public int getNo_linea() {
+    return no_linea;
+  }
+  public void setNo_linea(int value) {
+    no_linea=value;
   }
 }
 
