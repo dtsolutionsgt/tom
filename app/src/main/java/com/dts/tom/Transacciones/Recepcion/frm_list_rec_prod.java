@@ -1414,8 +1414,10 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
+                    msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
+                    //#CKFK20220317 Agregué pregunta para dejar o no en BackOrder
+//                    Finalizar = true;
+//                    Termina_Finalizacion_Recepcion();
                 }
             });
 
@@ -1456,6 +1458,39 @@ public class frm_list_rec_prod extends PBase {
                     Finalizar = false;
                    relbot.setVisibility(View.VISIBLE);
                     return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgDocIngresoBackOrder(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    backorder = true;
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    backorder = false;
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
                 }
             });
 
