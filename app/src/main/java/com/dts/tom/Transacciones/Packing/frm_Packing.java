@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -105,8 +106,10 @@ public class frm_Packing extends PBase {
     private ArrayList<String> cmbLoteList = new ArrayList<String>();
     private ArrayList<String> cmbVenceList = new ArrayList<String>();
     private ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
+    private ArrayList<String> ListPres = new ArrayList<String>();
     private String cvLote;
-
+    private int IdPresCmb = 0;
+    private boolean inferir_origen_en_cambio_ubic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,7 @@ public class frm_Packing extends PBase {
 
             //#CKFK 20210730 Agregué el Caps al txtLic_Plate
             txtLic_Plate.setAllCaps(true);
+            inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 
             ProgressDialog("Cargando forma");
 
@@ -196,7 +200,14 @@ public class frm_Packing extends PBase {
                             spinlabel.setTextSize(18);
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                            cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            if (position > 0 && stockResList.items.get(0).IdPresentacion == 0) {
+                                spinlabel.setTextColor(Color.RED);
+                                Toast.makeText(frm_Packing.this, "Se le asignará la presentación '"+cmbPresentacion.getSelectedItem()+"' al producto '"+BeProductoUbicacionOrigen.getNombre()+"'", Toast.LENGTH_LONG).show();
+                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            } else {
+                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            }
+
                             LlenaLotes();
                         }
 
@@ -730,6 +741,10 @@ public class frm_Packing extends PBase {
 
         try {
 
+            //#AT 20220316 Se asigna valor a cvPresI -> si tiene presentación toma el Id del combo presentacion
+            //si no se le asigna 0
+            cvPresID = stockResList.items.get(0).IdPresentacion != 0 ? IdPresCmb:0;
+
             cmbLoteList.clear();
 
             gLoteOrigen = "";
@@ -1235,7 +1250,8 @@ public class frm_Packing extends PBase {
 
             vStockRes.CantidadUmBas = vCantidadAUbicar;
             vStockRes.Peso = cvStockItem.Peso;
-            vStockRes.IdPresentacion =cvPresID;
+            vStockRes.IdPresentacion = IdPresCmb;
+            vStockRes.IdPresentacion_Anterior = stockResList.items.get(0).getIdPresentacion();
             vStockRes.IdProductoEstado = cvEstEst;
             vStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
             vStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
@@ -1597,6 +1613,12 @@ public class frm_Packing extends PBase {
                                 "pCodigo",txtPrd.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
+                    //#AT20220316 Se cargan  presentaciones por IdProducto
+                    case 13:
+                        callMethod("Get_All_Presentaciones_By_IdProducto",
+                                "pIdProducto",gIdProductoOrigen,
+                                "pActivo",true);
+                        break;
                 }
 
                 progress.cancel();
@@ -1652,6 +1674,9 @@ public class frm_Packing extends PBase {
                 case 12:
                     processStockLP_AndCodigo();
                     break;
+                case 13:
+                    processPresentacionesProducto();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1667,12 +1692,50 @@ public class frm_Packing extends PBase {
 
             progress.setMessage("Obteniendo presentaciones de producto");
 
-            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProductoBodega");
+            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
 
-            Listar_Producto_Presentaciones();
+            setPresetaciones();
 
         }catch (Exception e){
             mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private void setPresetaciones() {
+        String valor="";
+
+        try {
+            if (gBeProducto.Presentaciones != null) {
+
+                progress.setMessage("Listando presentaciones de producto");
+
+                if (gBeProducto.Presentaciones.items != null) {
+
+                    ListPres.clear();
+                    cmbPresentacion.setEnabled(true);
+
+                    valor = "0 - Sin Presentación";
+                    ListPres.add(valor);
+
+                    for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
+                        valor = gBeProducto.Presentaciones.items.get(i).getIdPresentacion() + " - " +
+                                gBeProducto.Presentaciones.items.get(i).getNombre();
+                        ListPres.add(valor);
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ListPres);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresentacion.setAdapter(dataAdapter);
+
+                    if (ListPres.size() > 0) cmbPresentacion.setSelection(0);
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("Listar_Producto_Presentaciones:" + e.getMessage());
         }
     }
 
@@ -1803,6 +1866,25 @@ public class frm_Packing extends PBase {
 
                 if (Escaneo_Pallet && ListBeStockPallet != null){
 
+                    //#AT20220316 Si inferir_origen_en_cambio_ubic es verdadero
+                    //y la ubicación de origen esta vacia carga los datos del producto unicamente con la licencia
+                    if (inferir_origen_en_cambio_ubic && txtUbicOr.getText().toString().isEmpty()) {
+                        int tmpIdPres = ListBeStockPallet.items.get(0).Stock.IdUbicacion;
+                        String tmpNomPres = ListBeStockPallet.items.get(0).Stock.NombreUbicacion;
+
+                        txtUbicOr.setText(String.valueOf(tmpIdPres));
+                        lblUbicOrigen.setText(tmpNomPres);
+
+                        txtUbicDestino.setText(tmpIdPres+ "");
+                        lblNomDestino.setText(tmpNomPres+ "");
+
+                        cUbicOrig.IdUbicacion= tmpIdPres;
+                        cUbicOrig.Descripcion = tmpNomPres;
+
+                        cvUbicOrigID = tmpIdPres;
+                        cvUbicDestID = cvUbicOrigID;
+                    }
+
                     List AuxList = stream(ListBeStockPallet.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
                             .toList();
@@ -1899,7 +1981,11 @@ public class frm_Packing extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                if (stockResList.items.get(0).IdPresentacion != 0) {
+                    LlenaPresentaciones();
+                } else {
+                    execws(13);
+                }
             }else{
                 msgbox("No hay existencias disponibles de este producto en esta ubicación o las existentes están reservadas");
                 Inicializa_Valores();
@@ -1963,7 +2049,11 @@ public class frm_Packing extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                if (stockResList.items.get(0).IdPresentacion != 0) {
+                    LlenaPresentaciones();
+                } else {
+                    execws(13);
+                }
             }else{
                 msgbox("El producto no existe en la ubicación origen");
                 progress.cancel();
