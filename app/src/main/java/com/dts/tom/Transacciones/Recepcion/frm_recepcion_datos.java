@@ -3564,8 +3564,13 @@ public class frm_recepcion_datos extends PBase {
                                 CantRec= mu.round2(CantRec/ BeProducto.Presentacion.Factor);
                             }
 
-                            if (!UbicLotesList.contains(valor)){
-                                UbicLotesList.add(valor);
+                            DifCantUbic = CantTotal - CantRec;
+
+                            if (DifCantUbic>0){
+                                if (!UbicLotesList.contains(valor)){
+                                    UbicLotesList.add(valor);
+                                    break;
+                                }
                             }
                         }
                     }
