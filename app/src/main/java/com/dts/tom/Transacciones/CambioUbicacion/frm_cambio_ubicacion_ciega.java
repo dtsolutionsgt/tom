@@ -162,15 +162,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
-
             super.onCreate(savedInstanceState);
-
 
             appGlobals gll;
             gll=((appGlobals) this.getApplication());
             areaprimera = gll.Mostrar_Area_En_HH;
-
-
 
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
@@ -242,7 +238,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try {
             if(gl.modo_cambio==1){
-                execws(1);
+                if (!inferir_origen_en_cambio_ubic) {
+                    execws(1);
+                } else {
+                    progress.cancel();
+                    txtUbicOrigen.setEnabled(false);
+                }
             }else{
                 txtUbicOrigen.requestFocus();
                 progress.cancel();
@@ -442,6 +443,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         });
 
         txtLicPlate.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+        txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
 
         txtUbicOrigen.setOnKeyListener(new View.OnKeyListener() {
 
@@ -1199,14 +1201,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 lblCant.setText(mu.frmdecimal(vCantidadDisponible, gl.gCantDecDespliegue));
                 txtCantidad.setText(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue));
                 txtPeso.setText(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
-                txtCantidad.selectAll();
+                if (!inferir_origen_en_cambio_ubic) {
+                    txtCantidad.selectAll();
+                }
             }
 
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
             txtPeso.setEnabled(true);
 
-            txtCantidad.requestFocus();
+            if (inferir_origen_en_cambio_ubic) {
+                txtUbicDestino.requestFocus();
+            } else {
+                txtCantidad.requestFocus();
+            }
 
             fechaVenceU = app.strFechaXMLCombo(cvVence);
             execws(15);
@@ -1813,7 +1821,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }
 
-            txtCantidad.requestFocus();
+            if (!inferir_origen_en_cambio_ubic) {
+                txtCantidad.requestFocus();
+            }
+
             progress.cancel();
 
         } catch (Exception e) {
@@ -1884,17 +1895,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (escaneoPallet && productoList != null){
                     if (inferir_origen_en_cambio_ubic) {
-                        if (txtUbicOrigen.getText().toString().isEmpty()) {
-                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                            String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
+                        //if (txtUbicOrigen.getText().toString().isEmpty()) {
+                        int ubic = productoList.items.get(0).Stock.IdUbicacion;
+                        String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
 
-                            txtUbicOrigen.setText(String.valueOf(ubic));
-                            lblUbicCompleta.setText(ubicompleta);
-                            cvUbicOrigID = ubic;
-                        } else {
+                        txtUbicOrigen.setText(String.valueOf(ubic));
+                        lblUbicCompleta.setText(ubicompleta);
+                        cvUbicOrigID = ubic;
+                        /*} else {
                             int tmpUbic = Integer.valueOf(txtUbicOrigen.getText().toString());
                             cvUbicOrigID = tmpUbic;
-                        }
+                        }*/
                     }
 
                     List AuxList = stream(productoList.items)
@@ -2452,7 +2463,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             btnGuardarCiega.setVisibility(View.VISIBLE);
 
             if(gl.modo_cambio==1 && finalizar){
-                execws(1);
+                if (!inferir_origen_en_cambio_ubic) {
+                    execws(1);
+                }
             }else{
                 txtUbicOrigen.requestFocus();
                 progress.cancel();

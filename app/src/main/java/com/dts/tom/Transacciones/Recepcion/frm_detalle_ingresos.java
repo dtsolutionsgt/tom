@@ -25,15 +25,19 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
+import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -74,7 +78,9 @@ public class frm_detalle_ingresos extends PBase {
     private ArrayList<String> tipooclist= new ArrayList<String>();
     private ArrayList<String> vencelist= new ArrayList<String>();
 
-
+    //Imagenes
+    private clsBeImagen BeImagen;
+    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,13 +147,15 @@ public class frm_detalle_ingresos extends PBase {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
             //aquí la convierto a base 64
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-            msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
+            //#AT 20220321 Se guarda automáticamente la imagen
+            //msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
             //imageView.setImageBitmap(imageBitmap);
+            execws(6);
         }
     }
 
@@ -195,11 +203,11 @@ public class frm_detalle_ingresos extends PBase {
     private File  createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "PNG_" + timeStamp + "_";
+        String imageFileName = "JPG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".png",         /* suffix */
+                ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
 
@@ -241,6 +249,9 @@ public class frm_detalle_ingresos extends PBase {
                         //aquí mando la imagen ya convertida, así como se hizo con la firma.
                         callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
                         break;
+                    case 7:
+                        callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
+                        break;
 
                 }
 
@@ -268,7 +279,10 @@ public class frm_detalle_ingresos extends PBase {
                     processStockRec();
                     break;
                 case 6:
-                    encoded="";
+                    processEnviarFoto();
+                    break;
+                case 7:
+                    processGetImagenes();
                     break;
 
             }
@@ -288,6 +302,59 @@ public class frm_detalle_ingresos extends PBase {
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processEnviarFoto() {
+        boolean exito;
+
+        try {
+            progress.setMessage("Guardando imagen...");
+            progress.show();
+
+            exito = true;
+
+            if (exito) {
+                progress.cancel();
+                toastlong("Foto guardada con éxito");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processEnviarFoto: " + e.getMessage());
+        }
+
+    }
+
+    private void processGetImagenes() {
+        try {
+            BeListTranReImagen = xobj.getresult(clsBeTrans_re_imgList.class,"Get_All_Imagen_Recepcion");
+
+            gl.ListImagen.clear();
+            if (BeListTranReImagen != null) {
+                if (BeListTranReImagen.items != null) {
+                    for (int i=0; i < BeListTranReImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = "Documento de Ingreso";
+                        BeImagen.Imagen = BeListTranReImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                toastlong("No se encontraron imágenes");
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
         }
     }
 
@@ -615,6 +682,12 @@ public class frm_detalle_ingresos extends PBase {
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
+    }
+
+    public void verImagenes(View view) {
+        progress.setMessage("Cargando imágenes...");
+        progress.show();
+        execws(7);
     }
 
     private void BloquearControles(){

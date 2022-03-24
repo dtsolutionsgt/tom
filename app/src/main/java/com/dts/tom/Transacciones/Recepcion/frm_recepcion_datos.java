@@ -8,15 +8,21 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +52,8 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_codigos_barra.clsBeProducto_codigos_barraList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagen;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Mantenimientos.Producto.Producto_pallet.clsBeProducto_pallet;
 import com.dts.classes.Mantenimientos.Producto.Producto_pallet.clsBeProducto_palletList;
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametros;
@@ -70,15 +78,19 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
+import com.dts.classes.clsBeImagen;
 import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
+import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,6 +105,8 @@ import java.util.regex.Pattern;
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
+
+import androidx.core.content.FileProvider;
 
 //import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 
@@ -250,6 +264,12 @@ public class frm_recepcion_datos extends PBase {
     private double CantRec=0;
     private double CantTotal =0;
     private double DifCantUbic =0;
+
+    //Imagen
+    private String encoded="";
+    private clsBeImagen BeImagen;
+    private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
+    private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -6026,6 +6046,12 @@ public class frm_recepcion_datos extends PBase {
                                 "pSerie", pSerie,
                                 "pIdBodega",gl.IdBodega);
                         break;
+                    case 29:
+                        callMethod("Guardar_Producto_Imagen","pBeProductoImagen",BeProductoImagen);
+                        break;
+                    case 30:
+                        callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
+                        break;
                 }
 
             }catch (Exception e){
@@ -6134,6 +6160,12 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 28:
                     processExisteSerie();
+                    break;
+                case 29:
+                    processEnviarFoto();
+                    break;
+                case 30:
+                    processGetFotosProducto();
                     break;
             }
 
@@ -7167,6 +7199,62 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private void processEnviarFoto() {
+        boolean exito;
+
+        try {
+            progress.setMessage("Guardando imagen...");
+            progress.show();
+
+            exito = xobj.getresult(Boolean.class,"Guardar_Producto_Imagen");
+
+            if (exito) {
+                progress.cancel();
+                toastlong("Foto guardada con éxito");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processEnviarFoto: " + e.getMessage());
+        }
+
+    }
+
+    private void processGetFotosProducto() {
+
+        try {
+            progress.setMessage("Cargando imágenes...");
+            BeListProductoImagen = xobj.getresult(clsBeProducto_imagenList.class,"Get_All_Producto_Imagen");
+
+            gl.ListImagen.clear();
+            if (BeListProductoImagen != null) {
+                if (BeListProductoImagen.items != null) {
+
+                    for (int i=0; i < BeListProductoImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = BeProducto.Codigo+" - "+BeProducto.Nombre;
+                        BeImagen.Imagen = BeListProductoImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                toastlong("El producto no tiene imágenes");
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
+
     public void msgboxErrorOnWS2(String msg) {
         try{
             ExDialog dialog = new ExDialog(this);
@@ -7358,6 +7446,81 @@ public class frm_recepcion_datos extends PBase {
         }
 
         return parametro_personalizado_valido;
+    }
+
+    public void Capturar(View view) {
+        abrirCamara();
+    }
+
+    public void verImagenes(View view) {
+        progress.setMessage("Cargando imágenes...");
+        progress.show();
+        execws(30);
+    }
+
+    private void abrirCamara() {
+        try{
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.dts.tom.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }catch (Exception ee){
+            mu.msgbox(ee.getMessage());
+        }
+
+    }
+
+    String currentPhotoPath;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private File  createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            //aquí la convierto a base 64
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            //#AT 20220322 Se guarda la imagen
+            BeProductoImagen = new clsBeProducto_imagen();
+            BeProductoImagen.IdProducto = BeProducto.IdProducto;
+            BeProductoImagen.Imagen = encoded;
+            BeProductoImagen.Etiqueta = BeProducto.Codigo;
+
+            execws(29);
+        }
     }
 
     class DecimalFilter implements InputFilter {

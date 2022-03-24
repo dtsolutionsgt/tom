@@ -1,6 +1,7 @@
 package com.dts.base;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
@@ -23,6 +24,7 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.classes.clsBeImagen;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -163,4 +165,8 @@ public class appGlobals extends Application {
 
     //#EJC20220314: CEALSA, si true, entonces en el cambio de ubicación, al escanear únicamente licencia, se coloca automáticamente la ubicación de origen.
     public boolean inferir_origen_en_cambio_ubic =false;
+
+    //Imagen
+    public Bitmap imagen;
+    public ArrayList<clsBeImagen> ListImagen = new ArrayList<clsBeImagen>();
 }

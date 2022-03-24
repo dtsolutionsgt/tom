@@ -27,6 +27,15 @@
                 android:gravity="right">
 
                 <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:onClick="verImagenes"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:src="@android:drawable/ic_menu_gallery" />
+
+                <ImageView
                     android:id="@+id/imageView12"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

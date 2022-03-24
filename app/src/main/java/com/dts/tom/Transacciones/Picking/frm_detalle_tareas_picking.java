@@ -98,7 +98,6 @@ public class frm_detalle_tareas_picking extends PBase {
         ProgressDialog("Cargando forma...");
 
         setHandlers();
-
         Load();
 
     }
@@ -106,29 +105,33 @@ public class frm_detalle_tareas_picking extends PBase {
     private void setHandlers() {
 
         try {
-
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    selid = 0;
-
-                    //AT 20211222 No importa que la posición sea = a 0
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
-                    selitem = new clsBeTrans_picking_ubic();
-                    selitem = BeListPickingUbic.get(position);
-
-                    selid = sitem.IdPickingUbic;
-                    selidx = position;
-
                     if (areaprimera) {
-                        adapter2.setSelectedIndex(position);
+                        listView.setClickable(false);
+                        toast("Por favor, escaneé la ubicación");
+                        txtUbicacionFiltro.requestFocus();
                     } else {
-                        adapter.setSelectedIndex(position);
-                    }
+                        selid = 0;
+                        //AT 20211222 No importa que la posición sea = a 0
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                        selitem = new clsBeTrans_picking_ubic();
+                        selitem = BeListPickingUbic.get(position);
 
-                    procesar_registro();
+                        selid = sitem.IdPickingUbic;
+                        selidx = position;
+
+                        if (areaprimera) {
+                            adapter2.setSelectedIndex(position);
+                        } else {
+                            adapter.setSelectedIndex(position);
+                        }
+
+                        procesar_registro();
+                    }
                 }
 
             });
@@ -706,6 +709,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             }else{
                 mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ "no es válido para la bodega: "+gl.IdBodega);
+                txtUbicacionFiltro.requestFocus();
+                txtUbicacionFiltro.selectAll();
                 return;
             }
 
