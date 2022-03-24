@@ -242,6 +242,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     execws(1);
                 } else {
                     progress.cancel();
+                    txtLicPlate.requestFocus();
                     txtUbicOrigen.setEnabled(false);
                 }
             }else{
@@ -1605,6 +1606,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)){
                     msgbox("La ubicación de destino coincide con la de origen");
+                    cvUbicDestID = 0;
+                    txtUbicDestino.selectAll();
                     txtUbicDestino.requestFocus();
                     datosCorrectos = false;
                 }
@@ -2465,6 +2468,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if(gl.modo_cambio==1 && finalizar){
                 if (!inferir_origen_en_cambio_ubic) {
                     execws(1);
+                } else {
+                    progress.cancel();
+                    txtUbicOrigen.requestFocus();
                 }
             }else{
                 txtUbicOrigen.requestFocus();
@@ -3197,7 +3203,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 datosCorrectos = false;
             }
 
-            if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)){
+            if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)) {
                 msgbox("La ubicación de destino coincide con la de origen");
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;
