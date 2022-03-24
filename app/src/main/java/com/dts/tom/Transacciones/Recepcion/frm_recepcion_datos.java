@@ -36,6 +36,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -154,6 +155,7 @@ public class frm_recepcion_datos extends PBase {
     private EditText txtSerieFin;
     private Spinner cmbPresParams;
     private Spinner cmbCantidad;
+    private RelativeLayout relOpciones;
     int pIndexStock=-1;
     double Cant_Recibida_Actual=0;
 
@@ -308,6 +310,7 @@ public class frm_recepcion_datos extends PBase {
         lblPres = findViewById(R.id.textView83);
         lblEstiba = findViewById(R.id.lblEstiba);
         lblUbicacion = findViewById(R.id.lblUbicacion);
+        relOpciones = findViewById(R.id.relOpciones);
 
         btnCantRecibida = findViewById(R.id.btnCantRecibida);
         btnCantPendiente = findViewById(R.id.btnCantPendiente);
@@ -358,6 +361,10 @@ public class frm_recepcion_datos extends PBase {
             pIdPropietarioBodega =  BeOcDet.IdPropietarioBodega;
         }else{
             pIdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+        }
+
+        if (gl.gBeRecepcion.Tomar_fotos) {
+            relOpciones.setVisibility(View.VISIBLE);
         }
 
         pBeTipo_etiqueta = new clsBeTipo_etiqueta();

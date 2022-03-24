@@ -66,7 +66,7 @@ public class frm_detalle_ingresos extends PBase {
 
     private Spinner cmbPropietario,cmbProveedor,cmbTipoDoc,cmbFechaRec;
     private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza;
-    private TableRow tblNumOrden, tblNumPoliza;
+    private TableRow tblNumOrden, tblNumPoliza, tblImagen;
     private ProgressBar pbar;
     private ProgressDialog progress;
     private ImageView btnCamara;
@@ -104,6 +104,7 @@ public class frm_detalle_ingresos extends PBase {
 
         tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
         tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
+        tblImagen = (TableRow) findViewById(R.id.tblImagen);
 
         cmbPropietario = (Spinner) findViewById(R.id.cmbPropietario);
         cmbProveedor = (Spinner) findViewById(R.id.cmbProveedor);
@@ -433,6 +434,9 @@ public class frm_detalle_ingresos extends PBase {
             gl.mode =1;
             if (gBeRecepcion!=null)
             {
+                if (gBeRecepcion.Tomar_fotos) {
+                    tblImagen.setVisibility(View.VISIBLE);
+                }
                 Llenar_Campos();
             }
 
