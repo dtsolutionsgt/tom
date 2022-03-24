@@ -422,7 +422,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    llenaDatosProducto();
+                    //#AT 20220324 Si no se ingresa la licencia no deja buscar por codigo de producto  esto aplica si
+                    //inferir_origen_en_cambio_ubic es verdadero
+                    if (inferir_origen_en_cambio_ubic) {
+                        if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                            pLicensePlate = txtLicPlate.getText().toString();
+                            execws(17);
+                        } else {
+                            toast("No se puede ubicar sin licencia");
+                            txtLicPlate.requestFocus();
+                        }
+                    } else {
+                        llenaDatosProducto();
+                    }
                 }
 
                 return false;
@@ -2230,10 +2242,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             productoList = xobj.getresult(clsBeProductoList.class,"Get_Stock_By_Lic_Plate_And_Codigo");
 
+            if (inferir_origen_en_cambio_ubic) {
+                if (productoList == null) {
+                    toast("Licencia o código ingresados no validos");
+                    progress.cancel();
+                    return;
+                }
+            }
+
             if (escaneoPallet && productoList == null) {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
-                lblDescProducto.setText ("Licencia no válida");
+                lblDescProducto.setText ("Licencia no válida.");
                 progress.cancel();
             }else{
 
@@ -2275,6 +2295,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     }
                 }else{
                     //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    //#AT 20220324 Se obtiene el idUbicacion para luego poder buscar por codigo de producto
+                    if (inferir_origen_en_cambio_ubic) {
+                        cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
+                        txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                    }
+
                     execws(3);
                 }
             }
@@ -2470,7 +2497,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     execws(1);
                 } else {
                     progress.cancel();
-                    txtUbicOrigen.requestFocus();
+                    txtLicPlate.requestFocus();
                 }
             }else{
                 txtUbicOrigen.requestFocus();
