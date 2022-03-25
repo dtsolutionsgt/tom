@@ -275,6 +275,7 @@ public class frm_recepcion_datos extends PBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frm_recepcion_datos);
 
@@ -365,6 +366,16 @@ public class frm_recepcion_datos extends PBase {
 
         if (gl.gBeRecepcion.Tomar_fotos) {
             relOpciones.setVisibility(View.VISIBLE);
+        }else{
+            relOpciones.setVisibility(View.INVISIBLE);
+        }
+
+        //#EJC20220325: Ocultar boton de imprimir para CEALSA.
+        //Solicitud de Axel.
+        if (gl.Mostrar_Area_En_HH) {
+            cmdImprimir.setVisibility(View.INVISIBLE);
+        }else{
+            cmdImprimir.setVisibility(View.VISIBLE);
         }
 
         pBeTipo_etiqueta = new clsBeTipo_etiqueta();
