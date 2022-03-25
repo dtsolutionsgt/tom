@@ -4475,12 +4475,14 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Imprimiendo Código");
                 progress.show();
                 Imprimir_Codigo_Barra_Producto(CantCopias);
+                progress.cancel();
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
                 Imprimir_Licencia(CantCopias);
+                progress.cancel();
             });
 
             dialog.setNeutralButton("Salir", (dialog13, which) -> {
