@@ -19,6 +19,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Trasladar_Lotes_Doc_Ingreso=false;
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean Requerir_Cliente_Es_Bodega_WMS=false;
+    @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -150,6 +151,13 @@ public class clsBeTrans_pe_tipo {
     }
     public void setRequerir_Cliente_Es_Bodega_WMS(boolean value) {
         Requerir_Cliente_Es_Bodega_WMS=value;
+    }
+
+    public boolean getMarcar_Registros_Enviados_MI3() {
+        return Marcar_Registros_Enviados_MI3;
+    }
+    public void setMarcar_Registros_Enviados_MI3(boolean value) {
+        Marcar_Registros_Enviados_MI3=value;
     }
 
 }
