@@ -375,8 +375,19 @@ public class Mainmenu extends PBase {
         try {
             updateList();
             starttimer();
+            progress.cancel();
         } catch (Exception e){
             mu.msgbox(e.getMessage());
+        }
+    }
+
+    public void actualizaTareas(View view) {
+        try {
+            progress.show();
+            execws(1);
+        }catch (Exception e) {
+            progress.cancel();
+            msgbox("Acutualiza cantidad de tareas: "+e.getMessage());
         }
     }
 
