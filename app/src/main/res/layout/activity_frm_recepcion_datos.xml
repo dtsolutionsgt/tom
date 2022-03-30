@@ -211,24 +211,51 @@
                     android:visibility="visible" />
             </TableRow>
 
-            <TableRow
+            <RelativeLayout
                 android:id="@+id/tblPres"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/lblsinPresentacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/conPresentacion"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Sin Presentación"
+                    android:textSize="17sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textView83"
                     style="@style/StyleText"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="43dp"
                     android:text="Presentación:" />
 
                 <Spinner
                     android:id="@+id/cmbPresRec"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="45dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@+id/conPresentacion"
+                    android:layout_toEndOf="@+id/textView83" />
 
-            </TableRow>
+                <CheckBox
+                    android:id="@+id/conPresentacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="0dp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <TableRow
                 android:id="@+id/tblEstiba"

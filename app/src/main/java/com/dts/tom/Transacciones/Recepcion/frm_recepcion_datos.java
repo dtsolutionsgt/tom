@@ -117,7 +117,7 @@ public class frm_recepcion_datos extends PBase {
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
     private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
-    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit;
+    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit,lblsinPresentacion,lblPresentacion;
     private TextView lblFecIngreso;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
@@ -129,6 +129,7 @@ public class frm_recepcion_datos extends PBase {
     private TableRow tbLPeso;
     private TableRow tblVence;
     private TableRow tblUbicacion;
+    private CheckBox chkPresentacion;
     private Dialog dialog;
 
     private boolean imprimirDesdeBoton=false;
@@ -312,6 +313,9 @@ public class frm_recepcion_datos extends PBase {
         lblEstiba = findViewById(R.id.lblEstiba);
         lblUbicacion = findViewById(R.id.lblUbicacion);
         relOpciones = findViewById(R.id.relOpciones);
+        chkPresentacion = findViewById(R.id.conPresentacion);
+        lblPresentacion = findViewById(R.id.textView83);
+        lblsinPresentacion = findViewById(R.id.lblsinPresentacion);
 
         btnCantRecibida = findViewById(R.id.btnCantRecibida);
         btnCantPendiente = findViewById(R.id.btnCantPendiente);
@@ -719,6 +723,31 @@ public class frm_recepcion_datos extends PBase {
                 public void onNothingSelected(AdapterView<?> parentView) {
                 }
 
+            });
+
+            chkPresentacion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    if (!isChecked) {
+                        lblPresentacion.setVisibility(View.GONE);
+                        cmbPresRec.setVisibility(View.GONE);
+                        lblEstiba.setVisibility(View.GONE);
+
+                        lblsinPresentacion.setVisibility(View.VISIBLE);
+                        lblsinPresentacion.setText("Recibir  el producto sin presentación");
+                        lblsinPresentacion.setTextColor(Color.RED);
+                        lblsinPresentacion.setTypeface(lblsinPresentacion.getTypeface(), Typeface.BOLD);
+                    } else {
+                        lblPresentacion.setVisibility(View.VISIBLE);
+                        cmbPresRec.setVisibility(View.VISIBLE);
+                        lblEstiba.setVisibility(View.VISIBLE);
+
+                        lblsinPresentacion.setVisibility(View.GONE);
+                    }
+
+                }
             });
 
         }catch (Exception e){
@@ -2905,7 +2934,8 @@ public class frm_recepcion_datos extends PBase {
             vPresentacion = Get_Presentacion_A_Recibir();
 
             if (vPresentacion>0){
-
+                chkPresentacion.setVisibility(View.VISIBLE);
+                chkPresentacion.setChecked(true);
                 Factor =Get_Factor_Presentacion(vPresentacion);
 
                 //#EJC20201008: Da error de NoSuchElementException cuando no encuentra la presentación por el ID,
@@ -5288,16 +5318,21 @@ public class frm_recepcion_datos extends PBase {
                             //Si el parámetro está en true se manda la ubicación de la tarea de recepción
                             //en caso contrario se manda la ubicación del estado o la ubicación de merma
                             // si no existe ninguna de ellas se manda la ubicación de la tarea de recepción
-                            if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
-                                BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                            }else{
-                                //Si el parametro está en false se manda la ubicación del estado
-                                //Si la ubicación del estado no existe
-                                //Se manda la ubicación de la tarea de recepción
-                                if (vIdUbicacion==0){
+                            //#AT 20220330 (CEALSA) Erik me pidio que pusiera esta validacion aca
+                            if (gl.gBeRecepcion.Escanear_rec_ubic) {
+                                BeStockRec.IdUbicacion = gl.recepcionIdUbicacion;
+                            } else {
+                                if (gl.gPriorizar_UbicRec_Sobre_UbicEst) {
                                     BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                                }else{
-                                    BeStockRec.IdUbicacion = vIdUbicacion;
+                                } else {
+                                    //Si el parametro está en false se manda la ubicación del estado
+                                    //Si la ubicación del estado no existe
+                                    //Se manda la ubicación de la tarea de recepción
+                                    if (vIdUbicacion == 0) {
+                                        BeStockRec.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                                    } else {
+                                        BeStockRec.IdUbicacion = vIdUbicacion;
+                                    }
                                 }
                             }
 
@@ -5914,6 +5949,18 @@ public class frm_recepcion_datos extends PBase {
                     case 16:
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
+                        //#AT 20220328 Si chkPresentacion no esta marcado, IdPresentación = 0
+                        if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+                            pListBeStockRec.items.get(0).IdPresentacion = 0;
+                            pListBeStockRec.items.get(0).Presentacion.IdPresentacion = 0;
+                            pListBeStockRec.items.get(0).Cantidad = Double.valueOf(txtCantidadRec.getText().toString());
+
+                            gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
+                            gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
+                            gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+
+                        }
+
                         callMethod("Guardar_Recepcion",
                                 "pRecEnc",gl.gBeRecepcion,
                                 "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
@@ -6754,6 +6801,14 @@ public class frm_recepcion_datos extends PBase {
             if (AuxList.size()>0){
 
                 vIndex = AuxList.indexOf(beTransOCDet.IdOrdenCompraDet);
+
+                //#AT20220329 Si no esta en marcado chkPresentacion
+                //BeTransReDet.cantidad_recibida es =  al valor de txtCantidadRec / Factor
+                if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+                    if (BeProducto.Presentaciones.items != null) {
+                         BeTransReDet.cantidad_recibida = Double.valueOf(txtCantidadRec.getText().toString()) / BeProducto.Presentaciones.items.get(0).Factor;
+                    }
+                }
 
                 if (gl.mode==1){
                     gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;

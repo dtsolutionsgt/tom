@@ -6,24 +6,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
@@ -63,13 +68,16 @@ public class frm_detalle_ingresos extends PBase {
     public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
+    private clsBeBodega_ubicacion bodega_ubicacion_origen;
 
     private Spinner cmbPropietario,cmbProveedor,cmbTipoDoc,cmbFechaRec;
-    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza;
+    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza, txtUbicacion;
+    private TextView lblNombreUbicacion;
     private TableRow tblNumOrden, tblNumPoliza, tblImagen;
     private ProgressBar pbar;
     private ProgressDialog progress;
     private ImageView btnCamara;
+    private RelativeLayout relUbicacion;
 
     String encoded="";
 
@@ -101,6 +109,8 @@ public class frm_detalle_ingresos extends PBase {
         txtMuelleRec = (EditText)findViewById(R.id.txtMuelleRec);
         txtNumOrden = (EditText)findViewById(R.id.txtNumOrden);
         txtNumPoliza = (EditText)findViewById(R.id.txtNumPoliza);
+        txtUbicacion = (EditText) findViewById(R.id.txtUbicacion);
+        lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
 
         tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
         tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
@@ -111,12 +121,33 @@ public class frm_detalle_ingresos extends PBase {
         cmbTipoDoc = (Spinner) findViewById(R.id.cmbTipoDoc);
         cmbFechaRec = (Spinner) findViewById(R.id.cmbFechaRec);
 
+        relUbicacion = findViewById(R.id.relUbicacion);
+
         btnCamara = (ImageView)findViewById(R.id.imageView12);
 
         ProgressDialog("Cargando forma");
 
+        setHandlers();
         Load();
 
+    }
+    private void setHandlers() {
+        txtUbicacion.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction()== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                if (!txtUbicacion.getText().toString().isEmpty()) {
+                    execws(8);
+                } else {
+                    toast("Debe ingresar la ubicación.");
+                }
+            }
+
+            return false;
+        });
+
+        txtUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { }
+        });
     }
 
     private void Load(){
@@ -253,6 +284,11 @@ public class frm_detalle_ingresos extends PBase {
                     case 7:
                         callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
                         break;
+                    case 8:
+                        callMethod("Get_Ubicacion_Recepcion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicacion.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
 
                 }
 
@@ -284,6 +320,9 @@ public class frm_detalle_ingresos extends PBase {
                     break;
                 case 7:
                     processGetImagenes();
+                    break;
+                case 8:
+                    processValidaUbicacion();
                     break;
 
             }
@@ -359,6 +398,37 @@ public class frm_detalle_ingresos extends PBase {
         }
     }
 
+    private void processValidaUbicacion() {
+        try {
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            bodega_ubicacion_origen = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_Recepcion_By_Codigo_Barra_And_IdBodega");
+
+            if (bodega_ubicacion_origen == null) {
+                txtUbicacion.selectAll();
+                txtUbicacion.requestFocus();
+
+                lblNombreUbicacion.setTextColor(Color.RED);
+                lblNombreUbicacion.setText("Ubicación no existe o no configurada como ubicación de recepción");
+                progress.cancel();
+
+                return;
+            } else {
+                gl.recepcionIdUbicacion = bodega_ubicacion_origen.IdUbicacion;
+
+                lblNombreUbicacion.setTextColor(Color.parseColor("#0119A2"));
+                lblNombreUbicacion.setText(bodega_ubicacion_origen.getDescripcion());
+
+                Atender();
+            }
+
+            progress.cancel();
+        }catch (Exception e) {
+            progress.cancel();
+            msgbox("processValidaUbicacion: "+e.getMessage());
+        }
+    }
     private void processConfiguracionPallet(){
 
         try{
@@ -437,6 +507,11 @@ public class frm_detalle_ingresos extends PBase {
                 if (gBeRecepcion.Tomar_fotos) {
                     tblImagen.setVisibility(View.VISIBLE);
                 }
+
+                if (gBeRecepcion.Escanear_rec_ubic) {
+                    relUbicacion.setVisibility(View.VISIBLE);
+                }
+
                 Llenar_Campos();
             }
 
@@ -744,10 +819,24 @@ public class frm_detalle_ingresos extends PBase {
     }
 
     public void Atender_rece(View view){
+        if (gBeRecepcion.Escanear_rec_ubic) {
+            validaDatos();
+        } else {
+            Atender();
+        }
+    }
+
+    private void validaDatos() {
+        if (!txtUbicacion.getText().toString().isEmpty()) {
+            execws(8);
+        } else {
+            toast("Debe ingresar la ubicación.");
+        }
+    }
+
+    private void Atender() {
         browse=1;
-
-        startActivity(new Intent(this, frm_list_rec_prod.class));
-
+        startActivity(new Intent(frm_detalle_ingresos.this, frm_list_rec_prod.class));
     }
 
     public void Regresar(View view){

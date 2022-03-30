@@ -1284,7 +1284,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizada | Anulada){
                 onResume();
-               relbot.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
             }else{
                 pListTransRecDet = new clsBeTrans_re_detList();
                 execws(11);

@@ -26,6 +26,8 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagen;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
@@ -33,8 +35,10 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_resList;
+import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +90,10 @@ public class frm_picking_datos extends PBase {
 
     private TextToSpeech mTTS;
     private boolean confirmar_codigo_en_picking;
+    //Imagen
+    private clsBeImagen BeImagen;
+    private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
+    private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1493,18 +1501,18 @@ public class frm_picking_datos extends PBase {
             if (!txtBarra.getText().toString().isEmpty() || !txtCodigoProducto.getText().toString().isEmpty()) {
 
                 if (txtCantidadPick.getText().toString().equals("0") ||
-                    txtCantidadPick.getText().toString().equals("0.00") ||
-                    txtCantidadPick.getText().toString().isEmpty() ||
-                    txtCantidadPick.getText().toString().equals("")) {
+                        txtCantidadPick.getText().toString().equals("0.00") ||
+                        txtCantidadPick.getText().toString().isEmpty() ||
+                        txtCantidadPick.getText().toString().equals("")) {
 
                     mu.msgbox("Ingrese la cantidad de producto a reemplazar");
                     txtCantidadPick.setSelectAllOnFocus(true);
                     txtCantidadPick.requestFocus();
                     return false;
                 } else {
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",", "")) + gBePickingUbic.Cantidad_Recibida);
 
-                    if (vDif<0){
+                    if (vDif < 0) {
                         mu.msgbox("La cantidad es mayor a la solicitada");
                         txtCantidadPick.selectAll();
                         txtCantidadPick.setSelectAllOnFocus(true);
@@ -1537,6 +1545,48 @@ public class frm_picking_datos extends PBase {
         }
 
         return false;
+    }
+
+    private void processGetFotosProducto() {
+
+        try {
+            progress.setMessage("Cargando imágenes...");
+            BeListProductoImagen = xobj.getresult(clsBeProducto_imagenList.class,"Get_All_Producto_Imagen");
+
+            gl.ListImagen.clear();
+            if (BeListProductoImagen != null) {
+                if (BeListProductoImagen.items != null) {
+
+                    for (int i=0; i < BeListProductoImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = gBeProducto.Codigo+" - "+gBeProducto.Nombre;
+                        BeImagen.Imagen = BeListProductoImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                toastlong("El producto no tiene imágenes");
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
+
+    public void verImagenes(View view) {
+        progress.setMessage("Cargando imágenes...");
+        progress.show();
+        execws(10);
     }
 
     public void BotonReemplazo(View view){
@@ -1696,6 +1746,9 @@ public class frm_picking_datos extends PBase {
                                 "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);*/
                         break;
+                    case 10:
+                        callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -1741,6 +1794,9 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 9:
                     doExit();
+                case 10:
+                    processGetFotosProducto();
+                    break;
             }
 
         } catch (Exception e) {

@@ -169,4 +169,7 @@ public class appGlobals extends Application {
     //Imagen
     public Bitmap imagen;
     public ArrayList<clsBeImagen> ListImagen = new ArrayList<clsBeImagen>();
+
+    //Recepción
+    public int recepcionIdUbicacion = 0;
 }
