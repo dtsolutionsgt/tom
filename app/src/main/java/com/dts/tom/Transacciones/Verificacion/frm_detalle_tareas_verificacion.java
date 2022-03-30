@@ -249,11 +249,18 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                    "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 3:
+
+                        int vIdOperadorBodega =0;
+
+                        //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
+                        if (gl.operador_picking_realiza_verificacion){
+                            vIdOperadorBodega=gl.IdOperador;
+                        }
                         //#EJC20201008: Lllamada a método específico para verificación!
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion",
                                    "pIdPickingEnc",gl.gIdPickingEnc,
                                    "pDetalleOperador", false,
-                                   "pIdOperadorBodega",0);
+                                   "pIdOperadorBodega",vIdOperadorBodega);
                         break;
                     case 4:
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc",
