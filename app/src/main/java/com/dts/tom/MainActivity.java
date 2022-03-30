@@ -506,7 +506,7 @@ public class MainActivity extends PBase {
                     gl.Mostrar_Area_En_HH = bodegas.items.get(position).Mostrar_Area_En_HH;
                     gl.confirmar_codigo_en_picking = bodegas.items.get(position).confirmar_codigo_en_picking;
                     gl.inferir_origen_en_cambio_ubic = bodegas.items.get(position).inferir_origen_en_cambio_ubic;
-                    gl.operador_picking_realiza_verificacion= bodegas.items.get(position).inferir_origen_en_cambio_ubic;
+                    gl.operador_picking_realiza_verificacion= bodegas.items.get(position).operador_picking_realiza_verificacion;
 
                     idimpres=0;
                     execws(3);
