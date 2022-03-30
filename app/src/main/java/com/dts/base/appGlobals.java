@@ -172,4 +172,8 @@ public class appGlobals extends Application {
 
     //Recepción
     public int recepcionIdUbicacion = 0;
+
+    //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
+    public boolean operador_picking_realiza_verificacion =false;
+
 }
