@@ -57,7 +57,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdTipoTransaccionSalida=0;
     @Element(required=false) public boolean Permitir_Eliminar_Documento_Salida = false;
     @Element(required=false) public boolean Eliminar_Documento_Salida = false;
-    @Element(required=false) public boolean operador_picking_realiza_verificacion = false;
+    @Element(required=false) public boolean Operador_Picking_Realiza_Verificacion = false;
 
 
     public clsBeBodega() {
@@ -78,7 +78,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
-                       boolean operador_picking_realiza_verificacion) {
+                       boolean Operador_Picking_Realiza_Verificacion) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -131,7 +131,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.IdTamanoEtiquetaUbicacionDefecto = IdTamanoEtiquetaUbicacionDefecto;
         this.Permitir_Eliminar_Documento_Salida = Permitir_Eliminar_Documento_Salida;
         this.Eliminar_Documento_Salida = Eliminar_Documento_Salida;
-        this.operador_picking_realiza_verificacion = operador_picking_realiza_verificacion;
+        this.Operador_Picking_Realiza_Verificacion = Operador_Picking_Realiza_Verificacion;
         //this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
     }
 
@@ -458,10 +458,10 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
 
     public boolean getoperador_picking_realiza_verificacion() {
-        return operador_picking_realiza_verificacion;
+        return Operador_Picking_Realiza_Verificacion;
     }
     public void setoperador_picking_realiza_verificacion(boolean value) {
-        operador_picking_realiza_verificacion=value;
+        Operador_Picking_Realiza_Verificacion=value;
     }
 
 }

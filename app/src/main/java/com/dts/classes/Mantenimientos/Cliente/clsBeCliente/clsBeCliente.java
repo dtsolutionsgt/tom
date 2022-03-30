@@ -45,6 +45,8 @@ public class clsBeCliente {
     //#EJC20220314: BYB, Certificado_Calidad:
     @Element(required=false) public boolean Control_Calidad=false;
 
+    @Element(required=false) public int IdUbicacionAbastecerCon = 0;
+
     public clsBeCliente() {
     }
 
@@ -55,7 +57,7 @@ public class clsBeCliente {
                         String User_mod,String Fec_mod,boolean Despachar_lotes_completos,boolean Sistema,
                         boolean Es_bodega_recepcion,boolean Es_Bodega_Traslado,int IdUbicacionVirtual,boolean Control_Ultimo_Lote,
                         String Referencia,clsBeCliente_tipo Tipo,clsBeCliente_direccionList Drecciones,clsBeCliente_tiemposList Tiempos,
-                        clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo) {
+                        clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo, int IdUbicacionAbastecerCon) {
 
         this.IdCliente=IdCliente;
         this.IdEmpresa=IdEmpresa;
@@ -88,6 +90,7 @@ public class clsBeCliente {
         this.Empresa=Empresa;
         this.Propietario=Propietario;
         this.ClienteTipo=ClienteTipo;
+        this.IdUbicacionAbastecerCon = IdUbicacionAbastecerCon;
 
     }
 
@@ -283,5 +286,12 @@ public class clsBeCliente {
     }
     public void setControl_Calidad(boolean value) {
         Control_Calidad=value;
+    }
+
+    public int getIdUbicacionAbastecerCon() {
+        return IdUbicacionAbastecerCon;
+    }
+    public void setIdUbicacionAbastecerCon(int value) {
+        IdUbicacionAbastecerCon=value;
     }
 }
