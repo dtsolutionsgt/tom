@@ -531,14 +531,13 @@ public class frm_recepcion_datos extends PBase {
                     BeProducto.Presentacion = BeProducto.Presentaciones.items.get(position);
 
                     if (BeProducto.Presentacion != null){
+
                         if (BeProducto.Presentacion.Genera_lp_auto) {
                             progress.setMessage("Buscando License Plate");
                             progress.show();
 
-
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: cmb_pres resolución LP " + valores);
-
 
                             execws(6);
                             progress.cancel();
@@ -1300,7 +1299,6 @@ public class frm_recepcion_datos extends PBase {
                             if (pIndexStock<0){
                                 if (!Existe_Lp){
 
-
                                     //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                                     //toastlong("GT: muestra_parametros2 resolución LP " + valores);
 
@@ -1734,14 +1732,13 @@ public class frm_recepcion_datos extends PBase {
 
             }else {
 
-                //GT 08092021 1730: Si hay un parametro A del bof y la funcion nos dice si estan correctos o no
+                //GT 08092021 1730: Si hay un parametro A del bof y la función nos dice si estón correctos o no
                 if (mostrar_parametros_producto && !Parametros_Obligatorios_Ingresados() ){
 
-                    MensajeParam= "¿El atributo tiene el valor por defecto o, no asigno ningúno, desea continuar?";
+                    MensajeParam= "¿El atributo tiene el valor por defecto o, no asignó ninguno, desea continuar?";
                     msgGuardarsinParametros(MensajeParam);
 
-
-                    //GT 08092021 1730: Si hay un parametro personalizado, la funcion nos dice si se setearon correctamente.
+                    //GT 08092021 1730: Si hay un parametro personalizado, la función nos dice si se setearon correctamente.
                 }else if(Pperzonalizados && !Validar_Parametros_personalizados() ){
 
                     MensajeParam= "¿El parametro tiene el valor por defecto o, no asigno ningúno, desea continuar?";
@@ -6367,7 +6364,7 @@ public class frm_recepcion_datos extends PBase {
 
             Etapa ++;
 
-            //#GT28022022_1706: control_peso es la validación a tomar para validar peso, pero este es el estadistico
+            //#GT28022022_1706: control_peso es la validación a tomar para validar peso, pero este es el estadístico
              if (BeProducto.Peso_recepcion){
                 PTiene_Ctrl_Peso = true;
             }
@@ -7016,6 +7013,31 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private void msgExisteLp(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("OK", (dialog12, which) -> {
+                txtNoLP.setText("");
+                txtNoLP.setSelectAllOnFocus(true);
+                txtNoLP.requestFocus();
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
     private void doExit(){
         try{
 
@@ -7101,7 +7123,12 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (Existe_Lp){
-                msgAskExisteLp("El Lp: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
+                //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
+                if (gl.bloquear_lp_hh){
+                    msgExisteLp("El Lp: "+pLp+ " ya existe, debe ingresar una nueva licencia");
+                }else{
+                    msgAskExisteLp("El Lp: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
+                }
             }else{
                 if (guardando_recepcion){
 

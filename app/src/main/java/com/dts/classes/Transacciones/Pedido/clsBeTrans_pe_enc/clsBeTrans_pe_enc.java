@@ -78,6 +78,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public clsBeTrans_pe_pol ObjPoliza= new clsBeTrans_pe_pol();
     @Element(required=false) public int IdTipoPedido=0;
     @Element(required=false) public String No_Picking_ERP="";
+    @Element(required=false) public String No_Documento_Externo="";
 
     public clsBeTrans_pe_enc() {
     }
@@ -97,7 +98,8 @@ public class clsBeTrans_pe_enc {
                              boolean PedidoRoad,String HoraEntregaDesde,String HoraEntregaHasta,String Referencia,
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
-                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza, int IdTipoPedido) {
+                             boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
+                             int IdTipoPedido, String No_Documento_Externo) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -165,6 +167,7 @@ public class clsBeTrans_pe_enc {
         this.Correlativo=Correlativo;
         this.ObjPoliza=ObjPoliza;
         this.IdTipoPedido = IdTipoPedido;
+        this.No_Documento_Externo = No_Documento_Externo;
 
     }
 
@@ -573,4 +576,10 @@ public class clsBeTrans_pe_enc {
         No_Picking_ERP=value;
     }
 
+    public String getNo_Documento_Externo() {
+        return No_Documento_Externo;
+    }
+    public void setNo_Documento_Externo(String value) {
+        No_Documento_Externo=value;
+    }
 }

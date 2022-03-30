@@ -16,13 +16,16 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public String Codigo="";
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public int IdUbicacion=0;
+    @Element(required=false) public String License_plate="";
+    @Element(required=false) public String Codigo_variante="";
 
     public clsBeTrans_inv_stock_prod() {
     }
 
     public clsBeTrans_inv_stock_prod(int Idinventario,int Idinvstockprod,int IdProducto,int IdPresentacion,
                                      double Cant,double Peso,int IdUnidadMedida,String Lote,
-                                     String Fecha_vence,String Codigo, int IdBodega, int IdUbicacion) {
+                                     String Fecha_vence,String Codigo, int IdBodega, int IdUbicacion,
+                                     String License_Plate, String Codigo_variante) {
 
         this.Idinventario=Idinventario;
         this.Idinvstockprod=Idinvstockprod;
@@ -36,6 +39,8 @@ public class clsBeTrans_inv_stock_prod {
         this.Codigo=Codigo;
         this.IdBodega=IdBodega;
         this.IdUbicacion=IdUbicacion;
+        this.License_plate=License_Plate;
+        this.Codigo_variante=Codigo_variante;
 
     }
 
@@ -111,6 +116,17 @@ public class clsBeTrans_inv_stock_prod {
     public void setIdubicacion(int value) {
         IdUbicacion=value;
     }
-
+    public String getLicense_plate() {
+        return License_plate;
+    }
+    public void setLicense_plate(String value) {
+        License_plate=value;
+    }
+    public String getCodigo_variante() {
+        return Codigo_variante;
+    }
+    public void setCodigo_variante(String value) {
+        Codigo_variante=value;
+    }
 }
 

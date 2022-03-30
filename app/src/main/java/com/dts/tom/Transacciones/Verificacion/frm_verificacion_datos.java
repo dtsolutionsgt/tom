@@ -294,7 +294,15 @@ public class frm_verificacion_datos extends PBase {
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
                                        BePedidoDetVerif.getNom_Presentacion());
-            cmbPresVeri.setSelection(sel);
+
+            //#CKFK20220326 Agregué esta validación para que si el producto no tiene presentación
+            //no se muestre el combo de la presentación
+            if (sel>-1){
+                llPresentacion.setVisibility(View.VISIBLE);
+                cmbPresVeri.setSelection(sel);
+            }else{
+                llPresentacion.setVisibility(View.GONE);
+            }
 
             if (Lp != ""){
                 lblLicPlate2.setVisibility(View.VISIBLE);
@@ -355,6 +363,8 @@ public class frm_verificacion_datos extends PBase {
 
                     if (PresList.size() > 0) cmbPresVeri.setSelection(0);
 
+                }else{
+                    llPresentacion.setVisibility(View.GONE);
                 }
 
             }
