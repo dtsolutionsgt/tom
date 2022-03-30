@@ -254,7 +254,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
                         if (gl.operador_picking_realiza_verificacion){
-                            vIdOperadorBodega=gl.IdOperador;
+                            vIdOperadorBodega=gl.OperadorBodega.IdOperadorBodega;
                         }
                         //#EJC20201008: Lllamada a método específico para verificación!
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion",
