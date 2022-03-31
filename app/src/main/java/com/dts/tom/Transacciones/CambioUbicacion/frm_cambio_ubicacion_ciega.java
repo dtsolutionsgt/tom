@@ -79,20 +79,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
     private clsBeVW_stock_resList presentacionList = new clsBeVW_stock_resList();
     private clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
-
-    /*private clsBeProducto producto_ubicacion = new clsBeProducto();
-    private ArrayList<clsBeProducto> productoArrayList = new ArrayList<clsBeProducto>();
-    private ArrayList<clsBeVW_stock_res> fechaVenceArrayList = new ArrayList<clsBeVW_stock_res>();
-    private ArrayList<clsBeVW_stock_res> loteArrayList = new ArrayList<clsBeVW_stock_res>();
-    private clsBeProducto_estado producto_estado_origen = new clsBeProducto_estado();
-    private ArrayList<clsBeProducto_estado> productoEstadoOrigenArrayList = new ArrayList<clsBeProducto_estado>();
-    private clsBeProducto_estado producto_estado_destino = new clsBeProducto_estado();
-    private ArrayList<clsBeProducto_estado> productoEstadoDestinoArrayList = new ArrayList<clsBeProducto_estado>();
-    private clsBeProducto_Presentacion presentacion = new clsBeProducto_Presentacion();
-    private ArrayList<clsBeProducto_Presentacion> presentacionArrayList = new ArrayList<clsBeProducto_Presentacion>();*/
-
     private clsBeProducto_estadoList productoEstadoDestinoList = new clsBeProducto_estadoList();
-
     private USUbicStrucStage5List lUbicSug = new USUbicStrucStage5List();
 
     private ArrayList<String> cmbPresentacionList = new ArrayList<String>();
@@ -157,6 +144,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean ocultar_mensajes;
     private boolean areaprimera = true;
     private boolean inferir_origen_en_cambio_ubic = false;
+    private boolean licencia_reservada_completamente = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1184,7 +1172,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (tmpStockResList.items.size() >0){
                 cvStockID = tmpStockResList.items.get(0).getIdStock();
-                vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
+                if (!gl.Permitir_Cambio_Ubic_Producto_Picking){
+                    vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
+                } else {
+                    vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas();
+                    licencia_reservada_completamente =  ((tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas)==0);
+                }
                 vFactorPres = (tmpStockResList.items.get(0).getFactor()==0?1:tmpStockResList.items.get(0).getFactor());
                 vPesoAUbicar = tmpStockResList.items.get(0).getPeso();
             }else{
@@ -1227,6 +1220,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtUbicDestino.requestFocus();
             } else {
                 txtCantidad.requestFocus();
+            }
+
+            //#EJC20220330: De momento mover licencias completas y no permitir explosión.
+            if (gl.Permitir_Cambio_Ubic_Producto_Picking){
+                if(licencia_reservada_completamente){
+                    txtCantidad.setEnabled(false);
+                    chkExplosionar.setEnabled(false);
+                }
             }
 
             fechaVenceU = app.strFechaXMLCombo(cvVence);
@@ -3149,6 +3150,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (Es_Explosion_Manual){
                 gMovimientoDet.IdTipoTarea = 20;
+            }
+
+            //#EJC20220330: De momento mover licencias completas y no permitir explosión.
+            if (gl.Permitir_Cambio_Ubic_Producto_Picking){
+                if(licencia_reservada_completamente){
+                    vStockRes.IdUbicacionVirtual= cvUbicDestID;
+                }
             }
 
             //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);

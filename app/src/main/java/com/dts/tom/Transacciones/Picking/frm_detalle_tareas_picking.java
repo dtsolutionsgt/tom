@@ -347,6 +347,12 @@ public class frm_detalle_tareas_picking extends PBase {
                             if (obj.Fecha_Vence.contains("T")) {
                                 obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
                             }
+
+                            if (obj.IdUbicacionTemporal!=0) {
+                                obj.IdUbicacion = obj.IdUbicacionTemporal;
+                                obj.NombreUbicacion = obj.NombreUbicacionTemporal;
+                            }
+
                             vItem = obj;
 
                             BeListPickingUbic.add(vItem);

@@ -110,7 +110,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Area="";
   @Element(required=false) public String NombreUbicacion="";
   @Element(required = false) public int IdPresentacion_Anterior = 0;
-
+  @Element(required=false) public int IdUbicacionVirtual=0;
 
   public clsBeVW_stock_res() {
   }
@@ -831,6 +831,12 @@ public class clsBeVW_stock_res {
     return IdPresentacion_Anterior;
   }
 
+  public int getIdUbicacionVirtual() {
+    return IdUbicacionVirtual;
+  }
+  public void setIdUbicacionVirtual(int value) {
+    IdUbicacionVirtual=value;
+  }
 
 }
 

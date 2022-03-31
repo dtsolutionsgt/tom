@@ -507,6 +507,7 @@ public class MainActivity extends PBase {
                     gl.confirmar_codigo_en_picking = bodegas.items.get(position).confirmar_codigo_en_picking;
                     gl.inferir_origen_en_cambio_ubic = bodegas.items.get(position).inferir_origen_en_cambio_ubic;
                     gl.operador_picking_realiza_verificacion= bodegas.items.get(position).Operador_Picking_Realiza_Verificacion;
+                    gl.Permitir_Cambio_Ubic_Producto_Picking = bodegas.items.get(position).Permitir_Cambio_Ubic_Producto_Picking;
 
                     idimpres=0;
                     execws(3);

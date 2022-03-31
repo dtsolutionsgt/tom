@@ -70,6 +70,8 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public  boolean No_encontrado = false;
     @Element(required=false) public String NombreArea = "";
     @Element(required=false) public String NombreClasificacion="";
+    @Element(required=false) public int IdUbicacionTemporal=0;
+    @Element(required=false) public String NombreUbicacionTemporal="";
 
     public clsBeTrans_picking_ubic() {
     }
@@ -89,7 +91,7 @@ public class clsBeTrans_picking_ubic {
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
                                    int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
-                                   boolean No_encontrado, String NombreClasificacion) {
+                                   boolean No_encontrado, String NombreClasificacion, int IdUbicacionTemporal, String NombreUbicacionTemporal) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.NombreArea = NombreArea;
@@ -154,6 +156,8 @@ public class clsBeTrans_picking_ubic {
         this.Tarima=Tarima;
         this.No_encontrado = No_encontrado;
         this.NombreClasificacion = NombreClasificacion;
+        this.IdUbicacionTemporal = IdUbicacionTemporal;
+        this.NombreUbicacionTemporal = NombreUbicacionTemporal;
     }
 
 
@@ -535,5 +539,20 @@ public class clsBeTrans_picking_ubic {
     public void setNombreClasificacion(String value) {
         NombreClasificacion=value;
     }
+
+    public int getIdUbicacionTemporal() {
+        return IdUbicacionTemporal;
+    }
+    public void setIdUbicacionTemporal(int value) {
+        IdUbicacionTemporal=value;
+    }
+    public String getNombreUbicacionTemporal() {
+        return NombreUbicacionTemporal;
+    }
+    public void setNombreUbicacionTemporal(String value) {
+        NombreUbicacionTemporal=value;
+    }
+
+
 }
 

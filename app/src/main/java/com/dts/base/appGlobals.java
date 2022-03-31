@@ -176,4 +176,6 @@ public class appGlobals extends Application {
     //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
     public boolean operador_picking_realiza_verificacion =false;
 
+    //#EJC20220330_CEALSA: Si true, se permite realizar el cambio de ubicación de producto que está reservado en picking pero se actualiza el IdUbicacionTemporal.
+    public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
 }
