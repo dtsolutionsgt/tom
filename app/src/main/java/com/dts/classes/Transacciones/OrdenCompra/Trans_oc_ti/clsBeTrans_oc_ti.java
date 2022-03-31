@@ -148,10 +148,10 @@ public class clsBeTrans_oc_ti {
         Requerir_Documento_Ref_WMS=value;
     }
 
-    public boolean getrequerir_ubic_rec_ingreso() {
+    public boolean getRequerir_Ubic_Rec_Ingreso() {
         return Requerir_Ubic_Rec_Ingreso;
     }
-    public void setrequerir_ubic_rec_ingreso(boolean value) {
+    public void setRequerir_Ubic_Rec_Ingreso(boolean value) {
         Requerir_Ubic_Rec_Ingreso=value;
     }
 
