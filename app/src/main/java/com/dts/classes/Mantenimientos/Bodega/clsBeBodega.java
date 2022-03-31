@@ -58,6 +58,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Eliminar_Documento_Salida = false;
     @Element(required=false) public boolean Eliminar_Documento_Salida = false;
     @Element(required=false) public boolean Operador_Picking_Realiza_Verificacion = false;
+    @Element(required=false) public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
 
 
     public clsBeBodega() {
@@ -78,7 +79,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
-                       boolean Operador_Picking_Realiza_Verificacion) {
+                       boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -132,6 +133,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Permitir_Eliminar_Documento_Salida = Permitir_Eliminar_Documento_Salida;
         this.Eliminar_Documento_Salida = Eliminar_Documento_Salida;
         this.Operador_Picking_Realiza_Verificacion = Operador_Picking_Realiza_Verificacion;
+        this.Permitir_Cambio_Ubic_Producto_Picking = Permitir_Cambio_Ubic_Producto_Picking;
         //this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
     }
 
@@ -464,4 +466,10 @@ public class clsBeBodega extends clsBeBodegaBase {
         Operador_Picking_Realiza_Verificacion=value;
     }
 
+    public boolean getPermitir_Cambio_Ubic_Producto_Picking() {
+        return Permitir_Cambio_Ubic_Producto_Picking;
+    }
+    public void setPermitir_Cambio_Ubic_Producto_Picking(boolean value) {
+        Permitir_Cambio_Ubic_Producto_Picking=value;
+    }
 }

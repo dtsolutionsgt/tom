@@ -1377,6 +1377,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     case 6://Obtiene el stock de un producto en una Ubicacion con un License Plate
                         callMethod("Get_Productos_By_IdUbicacion_And_LicPlate",
                                 "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                "pIdBodega", gl.IdBodega,
                                 "pIdProductoBodega",BeProductoUbicacion.IdProductoBodega,
                                 "pLicPlate",BeStockPallet.Lic_plate);
 
