@@ -19,7 +19,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Genera_Tarea_Ingreso=false;
     @Element(required=false) public boolean Requerir_Proveedor_Es_Bodega_WMS=false;
     @Element(required=false) public boolean Requerir_Documento_Ref_WMS=false;
-    @Element(required=false) public boolean requerir_ubic_rec_ingreso=false;
+    @Element(required=false) public boolean Requerir_Ubic_Rec_Ingreso=false;
 
 
     public clsBeTrans_oc_ti() {
@@ -38,7 +38,7 @@ public class clsBeTrans_oc_ti {
                             boolean requerir_documento_ref,
                             boolean Requerir_Proveedor_Es_Bodega_WMS,
                             boolean Requerir_Documento_Ref_WMS,
-                            boolean requerir_ubic_rec_ingreso
+                            boolean Requerir_Ubic_Rec_Ingreso
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -53,7 +53,7 @@ public class clsBeTrans_oc_ti {
         this.Requerir_Documento_Ref = requerir_documento_ref;
         this.Requerir_Proveedor_Es_Bodega_WMS = Requerir_Proveedor_Es_Bodega_WMS;
         this.Requerir_Documento_Ref_WMS = Requerir_Documento_Ref_WMS;
-        this.requerir_ubic_rec_ingreso = requerir_ubic_rec_ingreso;
+        this.Requerir_Ubic_Rec_Ingreso = Requerir_Ubic_Rec_Ingreso;
     }
 
 
@@ -149,10 +149,10 @@ public class clsBeTrans_oc_ti {
     }
 
     public boolean getrequerir_ubic_rec_ingreso() {
-        return requerir_ubic_rec_ingreso;
+        return Requerir_Ubic_Rec_Ingreso;
     }
     public void setrequerir_ubic_rec_ingreso(boolean value) {
-        requerir_ubic_rec_ingreso=value;
+        Requerir_Ubic_Rec_Ingreso=value;
     }
 
 }

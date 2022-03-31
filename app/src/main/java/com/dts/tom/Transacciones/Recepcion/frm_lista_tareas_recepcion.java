@@ -42,7 +42,7 @@ import static br.com.zbra.androidlinq.Linq.stream;
 public class frm_lista_tareas_recepcion extends PBase {
 
     private EditText txtTarea;
-    private TextView lblTitulo;
+    private TextView lblTitulo, lblBodega, lblOperador;
     private Button lblRegs,btnNueva;
 
     private WebServiceHandler ws;
@@ -75,6 +75,8 @@ public class frm_lista_tareas_recepcion extends PBase {
         super.InitBase();
 
         lblTitulo = (TextView) findViewById(R.id.lblTituloForma);
+        lblBodega = (TextView) findViewById(R.id.lblBodega);
+        lblOperador = (TextView) findViewById(R.id.lblOperador);
         txtTarea = (EditText) findViewById(R.id.editText8);
         listView = (ListView) findViewById(R.id.listTareas);
         lblRegs = (Button) findViewById(R.id.btnRegsList);
@@ -84,6 +86,8 @@ public class frm_lista_tareas_recepcion extends PBase {
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
 
         ProgressDialog("Cargando forma");
+        lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
+        lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
         ws = new WebServiceHandler(frm_lista_tareas_recepcion.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -238,7 +242,14 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega", "pIdBodega",gl.IdBodega,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
-                        callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega","pIdBodega",gl.IdBodega);
+                        int vIdOperadorBodega = 0;
+
+                        if (gl.operador_picking_realiza_verificacion){
+                            vIdOperadorBodega=gl.OperadorBodega.IdOperadorBodega;
+                        }
+                        callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega", vIdOperadorBodega);
                         break;
                     case 5:
                         callMethod("Get_Pedido_A_Verificar_By_LP","pLP",gl.gLP);
