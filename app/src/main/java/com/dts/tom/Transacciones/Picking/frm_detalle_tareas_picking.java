@@ -48,7 +48,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro;
-    private TextView lblNoDocumento;
+    private TextView lblNoDocumento, lblBodega, lblOperador;
 
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
@@ -94,6 +94,11 @@ public class frm_detalle_tareas_picking extends PBase {
         btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
         txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
         lblNoDocumento = (TextView)findViewById(R.id.lblNoDocumento);
+        lblBodega = (TextView) findViewById(R.id.lblBodega);
+        lblOperador = (TextView) findViewById(R.id.lblOperador);
+
+        lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
+        lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
         ProgressDialog("Cargando forma...");
 
