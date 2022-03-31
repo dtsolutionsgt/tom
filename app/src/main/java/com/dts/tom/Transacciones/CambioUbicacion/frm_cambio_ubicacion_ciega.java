@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private Button btnGuardarCiega;
     private TableRow trPeso,tblExplosionar,tblPresentacion;
     private CheckBox chkExplosionar;
+    private RelativeLayout relbot, reltop;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -197,6 +199,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             trPeso = (TableRow)findViewById(R.id.trPeso);
             tblExplosionar = (TableRow)findViewById(R.id.tblExplosionar);
             tblPresentacion = (TableRow)findViewById(R.id.tblPresentacion);
+
+            relbot = (RelativeLayout) findViewById(R.id.relbot);
+            reltop = (RelativeLayout) findViewById(R.id.reltop);
 
             tblExplosionar.setVisibility(View.GONE);
 
@@ -1227,6 +1232,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(licencia_reservada_completamente){
                     txtCantidad.setEnabled(false);
                     chkExplosionar.setEnabled(false);
+
+                    //Cambiar colores de pantallita, titulo, procesar y flechita. (medium_a)
+                    //Mostrar una tostada larga, que diga, ubicación temporal para stagin.
+                    reltop.setBackgroundResource(R.drawable.color_medium_a);
+                    relbot.setBackgroundResource(R.drawable.color_medium_a);
+                    btnGuardarCiega.setBackgroundResource(R.drawable.color_medium_a);
+
+                    toastlong("Ubicación temporal para stagin");
+                }else{
+                    //#EJC20220331: Este escneario falta probar..
                 }
             }
 
