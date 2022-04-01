@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     private EditText txtTarea;
     private TextView lblTitulo, lblBodega, lblOperador;
     private Button lblRegs,btnNueva;
-
+    private LinearLayout hdVerificacion, hdRecepcion, hdPicking;
     private WebServiceHandler ws;
     private XMLObject xobj;
 
@@ -82,6 +83,9 @@ public class frm_lista_tareas_recepcion extends PBase {
         lblRegs = (Button) findViewById(R.id.btnRegsList);
         btnNueva = (Button)findViewById(R.id.btnNuevaTarea);
         pbar = (ProgressBar) findViewById(R.id.pgrtareas);
+        hdVerificacion = (LinearLayout) findViewById(R.id.hdVerificacion);
+        hdRecepcion = (LinearLayout) findViewById(R.id.hdRecepcion);
+        hdPicking = (LinearLayout) findViewById(R.id.hdPicking);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
 
@@ -107,7 +111,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.show();
 
             if (gl.tipoTarea==1){
-
+                hdRecepcion.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
@@ -120,10 +124,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                 }
 
             }else if(gl.tipoTarea==5){
+                hdPicking.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Picking");
                 //Llama al método del WS Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega
                 execws(3);
             }else if(gl.tipoTarea==6){
+                hdVerificacion.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Verificación");
                 //Llama al método del WS Get_All_Pedidos_A_Verificar_By_IdBodega
                 execws(4);
@@ -152,31 +158,31 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     if (gl.tipoTarea==1){
 
-                        if (position > 0) {
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                            selitem = sitem;
+                        //if (position > 0) {
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                        selitem = sitem;
 
-                            selid = sitem.IdRecepcionEnc;
-                            selidx = position;
-                            adapter.setSelectedIndex(position);
+                        selid = sitem.IdRecepcionEnc;
+                        selidx = position;
+                        adapter.setSelectedIndex(position);
 
-                            procesar_registro();
-                        }
+                        procesar_registro();
+                        //}
 
                     }else if(gl.tipoTarea==5){
 
-                        if (position > 0){
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
-                            selitempicking = sitem;
+                        //if (position > 0){
+                        Object lvObj = listView.getItemAtPosition(position);
+                        clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                        selitempicking = sitem;
 
-                            selid = sitem.IdPickingEnc;
-                            selidx = position;
-                            adapterPicking.setSelectedIndex(position);
+                        selid = sitem.IdPickingEnc;
+                        selidx = position;
+                        adapterPicking.setSelectedIndex(position);
 
-                            procesar_registro();
-                        }
+                        procesar_registro();
+                       // }
 
                     } else if(gl.tipoTarea==6){
 
@@ -363,7 +369,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     vItem = new clsBeTrans_picking_enc();
 
-                    BeListTareasPicking.add(vItem);
+                    //BeListTareasPicking.add(vItem);
 
                     for (clsBeTrans_picking_enc BePicking:pListBeTareasPickingHH.items ){
 
@@ -422,10 +428,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem = new clsBeTrans_pe_enc();
 
                         vItem.IdPedidoEnc = BePedEnc.IdPedidoEnc;
+                        vItem.Fecha_Pedido = du.convierteFechaMostrarDiagonal(BePedEnc.Fecha_Pedido);
                         vItem.Referencia = BePedEnc.Referencia;
                         vItem.IdMuelle = BePedEnc.IdMuelle;
+                        vItem.NombreRutaDespacho = BePedEnc.NombreRutaDespacho;
                         vItem.IdCliente = BePedEnc.getIdCliente();
-                        vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Nombre_comercial;
+                        vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Codigo+" - "+BePedEnc.Cliente.Nombre_comercial;
                         vItem.Estado = BePedEnc.Estado;
                         vItem.IdPickingEnc = BePedEnc.IdPickingEnc;;
                         vItem.Hora_ini = du.convierteHoraMostar(BePedEnc.Hora_ini);
@@ -473,7 +481,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     vItem = new clsBeTareasIngresoHH();
 
-                    BeListTareas.add(vItem);
+                    //BeListTareas.add(vItem);
 
                     for (int i = pListBeTareasIngresoHH.items.size()-1; i>=0; i--) {
 

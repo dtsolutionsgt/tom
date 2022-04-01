@@ -76,26 +76,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position==0){
-            holder.lblIdPickingEnc.setText("Código");
-            holder.lblBodegaPick.setText("Bodega");
-            holder.lblBodegaPick.setTextColor(R.style.titlestyle);
-            holder.lblPropietarioPick.setText("Propietario");
-            holder.lblPropietarioPick.setTextColor(R.style.titlestyle);
-//            holder.lblUbicacionPick.setText("Ubicación");
-//            holder.lblUbicacionPick.setTextColor(R.style.titlestyle);
-            holder.lblEstadoPick.setText("Estado");
-            holder.lblEstadoPick.setTextColor(R.style.titlestyle);
-            holder.lblFechaPick.setText("Fecha");
-//            holder.lblOperadorPick.setText("DetalleOperador");
-//            holder.lblOperadorPick.setTextColor(R.style.titlestyle);
-//            holder.lblFechaPick.setTextColor(R.style.titlestyle);
-//            holder.lblHoraInicial.setText("HoraInicial");
-//            holder.lblHoraInicial.setTextColor(R.style.titlestyle);
-//            holder.lblHoraFinal.setText("HoraFinal");
-//            holder.lblHoraFinal.setTextColor(R.style.titlestyle);
 
-        }else{
 
             holder.lblIdPickingEnc.setText("0");
             holder.lblBodegaPick.setText("0");
@@ -143,18 +124,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 //                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
 //            }
 
-        }
+
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
-            if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblIdPickingEnc.setTextColor(R.style.titlestyle);
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }
-
+            convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         return convertView;
