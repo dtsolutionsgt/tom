@@ -1787,7 +1787,7 @@ public class frm_Packing extends PBase {
 
             }else{
                 progress.cancel();
-                mu.msgbox("Lp no existe");
+                mu.msgbox("Licencia no existe");
                 txtLic_Plate.selectAll();
                 txtLic_Plate.requestFocus();
             }

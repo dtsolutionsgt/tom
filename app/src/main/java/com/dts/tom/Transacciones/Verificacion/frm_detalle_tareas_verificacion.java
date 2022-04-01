@@ -379,7 +379,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
 
-            lblNoDocumento.setText(String.format("NoDocumento: %s-%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
+            lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
 
             progress.setMessage("Cargando detalle del Picking Ubic");

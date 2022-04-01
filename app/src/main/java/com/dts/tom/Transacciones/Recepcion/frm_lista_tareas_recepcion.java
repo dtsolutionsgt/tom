@@ -592,7 +592,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             try {
                 if (pListBeTransPeEnc.items.size()==0) throw new Exception();
             } catch (Exception e){
-                toast("LP no existe");return;
+                toast("Licencia no existe");return;
             }
 
             gl.gVerifCascade=true;
