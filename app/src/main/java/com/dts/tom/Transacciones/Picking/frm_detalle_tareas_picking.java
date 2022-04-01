@@ -312,11 +312,10 @@ public class frm_detalle_tareas_picking extends PBase {
             if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
 
             pOrden=1;
-
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
-            lblNoDocumento.setText("NoDocumento: "+gl.gIdPickingEnc);
+            lblNoDocumento.setText("Picking#: "+gl.gIdPickingEnc);
 
             if (gl.gIdPickingEnc>0){
                 execws(1);

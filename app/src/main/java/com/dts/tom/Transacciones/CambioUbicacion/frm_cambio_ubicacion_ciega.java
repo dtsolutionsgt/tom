@@ -2343,7 +2343,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 execws(5);
             }else{
                 progress.cancel();
-                mu.msgbox("Lp no existe");
+                mu.msgbox("Licencia no existe");
                 txtLicPlate.selectAll();
                 txtLicPlate.requestFocus();
             }
