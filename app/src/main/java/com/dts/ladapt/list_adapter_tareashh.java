@@ -68,6 +68,9 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblNombrePropietario = (TextView) convertView.findViewById(R.id.lblNombrePropietario);
             holder.lblNumPoliza = (TextView) convertView.findViewById(R.id.lblNumPoliza);
             holder.lblNumOrden = (TextView) convertView.findViewById(R.id.lblNumOrden);
+            holder.lblRutaDespacho = (TextView) convertView.findViewById(R.id.txtRutaDespacho);
+            holder.lblObservacion = (TextView) convertView.findViewById(R.id.txtObservacion);
+            holder.lblRequiereTarima = (TextView) convertView.findViewById(R.id.txtRequiereTarima);
 
             convertView.setTag(holder);
 
@@ -84,6 +87,9 @@ public class list_adapter_tareashh extends BaseAdapter {
         holder.lblProveedor.setText("--");
         holder.lblTipoIngresoOC.setText("--");
         holder.lblTipoRecepcion.setText("--");
+        holder.lblRutaDespacho.setText("--");
+        holder.lblObservacion.setText("--");
+        holder.lblRequiereTarima.setText("--");
 
         if(BeListTareasHH.get(position).IdOrderCompraEnc>0){
             holder.lblIdOrderCompraEnc.setText(""+BeListTareasHH.get(position).IdOrderCompraEnc);
@@ -124,6 +130,15 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblNumPoliza.setText(BeListTareasHH.get(position).NumPoliza);
         }
 
+        if(BeListTareasHH.get(position).RutaDespacho!=null){
+            holder.lblRutaDespacho.setText(BeListTareasHH.get(position).RutaDespacho);
+        }
+        if(BeListTareasHH.get(position).Observacion!=null){
+            holder.lblObservacion.setText(BeListTareasHH.get(position).Observacion);
+        }
+
+        holder.lblRequiereTarima.setText(BeListTareasHH.get(position).RequiereTarima+"");
+
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
@@ -143,7 +158,10 @@ public class list_adapter_tareashh extends BaseAdapter {
                 lblTipoIngresoOC,
                 lblTipoRecepcion,
                 lblNumOrden,
-                lblNumPoliza;
+                lblNumPoliza,
+                lblRutaDespacho,
+                lblObservacion,
+                lblRequiereTarima;
     }
 
 }
