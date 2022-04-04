@@ -211,11 +211,12 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             for (clsBeTrans_picking_ubic ubicacion: pSubListPickingU.items){
 
-                                ubi = new clsBeTrans_picking_ubic();
+                                //ubi = new clsBeTrans_picking_ubic();
+                                //ubi = ubicacion;
+                                //clsBeTrans_picking_ubic finalUbi = ubi;
 
-                                ubi = ubicacion;
+                                clsBeTrans_picking_ubic finalUbi = ubicacion;
 
-                                clsBeTrans_picking_ubic finalUbi = ubi;
                                 gbePickingDet = stream(gBePicking.ListaPickingDet.items).where(c -> c.IdPickingDet == finalUbi.IdPickingDet).first();
 
                                 if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
