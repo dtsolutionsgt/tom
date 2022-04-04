@@ -24,6 +24,8 @@
     <string name="fecha_version">23-Nov-2021</string>
     <string name="no_version">Versión</string>
     <string name="por_favor_espere">Por favor espere...</string>
+    <string name="vence">Vence:</string>
+    <string name="u_m_bas">U.M. Bas.:</string>
 
     <string-array name="filtros">
         <item>Código</item>
