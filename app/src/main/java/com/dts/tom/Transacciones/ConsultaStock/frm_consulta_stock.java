@@ -52,12 +52,12 @@ public class frm_consulta_stock extends PBase {
     private ListView listView;
     private Button btnBack, registros,btnBuscar;
     private int pIdTarea=0;
-    private EditText txtCodigo, txtUbic;
+    private EditText txtCodigo, txtUbic, txtNombre;
     private CheckBox chkDetalle;
     private int idubic, idprod, conteo;
     private clsBeBodega_ubicacion cUbic;
     private clsBeProductoList ListBeStockPallet;
-    private String pLicensePlate, codProducto;
+    private String pLicensePlate, codProducto, nomProducto;
     private clsBeProducto BeProducto;
     private boolean Escaneo_Pallet;
     private TextView lblNombreUbicacion;
@@ -102,6 +102,7 @@ public class frm_consulta_stock extends PBase {
         registros = findViewById(R.id.btnRegs2);
         txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
+        txtNombre = (EditText) findViewById(R.id.txtNombre);
         lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
@@ -154,6 +155,27 @@ public class frm_consulta_stock extends PBase {
 
                                     lblNombreProducto.setText("");
 
+                                    busca_stock();
+
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+
+            txtNombre.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int keyCode, KeyEvent event) {
+                    try {
+
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+
+                            switch (keyCode) {
+
+                                case KeyEvent.KEYCODE_ENTER:
                                     busca_stock();
 
                             }
@@ -703,7 +725,8 @@ public class frm_consulta_stock extends PBase {
             lblNombreProducto.setText("");
 
             if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
-                    (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty())
+                    (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty()) &&
+                    (txtNombre.getText().toString().isEmpty() && txtNombre.getText().toString().isEmpty())
             ) {
                 items_stock.clear();
 
@@ -733,6 +756,12 @@ public class frm_consulta_stock extends PBase {
                     idubic = 0;
                 }else{
                     idubic = Integer.valueOf(txtUbic.getText().toString());
+                }
+
+                if (txtNombre.getText().toString().isEmpty()) {
+                    nomProducto = "";
+                } else {
+                    nomProducto = txtNombre.getText().toString();
                 }
 
                 String vStarWithParameter = "$";
@@ -784,6 +813,7 @@ public class frm_consulta_stock extends PBase {
                                 "pLicPlate",(pLicensePlate==null?0:pLicensePlate),
                                 "pIdBodega",gl.IdBodega,
                                 "pIdUbicacion",idubic,
+                                "pNombre", nomProducto,
                                 "pDetallado", chkDetalle.isChecked());
                         break;
                     case 3:
@@ -798,6 +828,7 @@ public class frm_consulta_stock extends PBase {
                                                "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
                                                "pIdBodega",gl.IdBodega,
+                                               "pNombre", nomProducto,
                                                "pDetallado", chkDetalle.isChecked());
                         break;
 

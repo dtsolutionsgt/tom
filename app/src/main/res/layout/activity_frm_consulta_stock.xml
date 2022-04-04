@@ -509,6 +509,37 @@
         android:inputType="textPersonName"
         android:textSize="14sp" />
 
+    <EditText
+        android:id="@+id/txtNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/lblNombreProducto"
+        android:layout_alignStart="@+id/txtUbic1"
+        android:layout_alignEnd="@+id/txtUbic1"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtNombre"
+        android:layout_alignEnd="@+id/lblCodigoProductoT"
+        android:layout_alignBottom="@+id/txtNombre"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="Nombre: "
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/lblCodigoProductoT"
         style="@style/StyleText"
@@ -526,7 +557,7 @@
         android:id="@+id/cmbEstadoExist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lblNombreProducto"
+        android:layout_below="@+id/txtNombre"
         android:layout_alignStart="@+id/txtCodigo1"
         android:layout_alignEnd="@+id/txtCodigo1"
         android:layout_alignParentBottom="false"
@@ -538,7 +569,6 @@
         style="@style/StyleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lblNombreProducto"
         android:layout_alignEnd="@+id/lblCodigoProductoT"
         android:layout_alignBottom="@+id/cmbEstadoExist"
         android:layout_alignParentStart="true"
