@@ -398,7 +398,10 @@ public class frm_recepcion_datos extends PBase {
             Load();
         }
 
+        txtCantidadRec.requestFocus();
+
     }
+
 
     //region Events
 
@@ -576,6 +579,14 @@ public class frm_recepcion_datos extends PBase {
                 return false;
             });
 
+            txtCantidadRec.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
@@ -661,6 +672,7 @@ public class frm_recepcion_datos extends PBase {
                 imprimirDesdeBoton=true;
                 Imprimir(v);
             });
+
 
             chkEstiba.setOnClickListener(view -> {
                 if(((CompoundButton) view).isChecked()){
@@ -2725,6 +2737,10 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }
+
+            //#GT04042022: focus en cantidad.
+            txtCantidadRec.requestFocus();
+            txtCantidadRec.selectAll();
 
         }catch (Exception e){
             mu.msgbox("Load:"+ e.getMessage());
@@ -6311,6 +6327,10 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 LlenaDatosFaltantes_Existente();
             }
+
+            //GT04042022: focus a cantidad
+            txtCantidadRec.requestFocus();
+
 
         }catch (Exception e){
             progress.cancel();

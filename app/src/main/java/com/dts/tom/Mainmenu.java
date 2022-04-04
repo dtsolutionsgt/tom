@@ -478,6 +478,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de recepciones");
+            cantRecep = 0;
 
             cantRecep = (Integer) xobj.getSingle("Get_Count_Recepciones_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -495,6 +496,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de picking");
+            cantPicking = 0;
 
             cantPicking = (Integer) xobj.getSingle("Get_Count_Picking_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -512,6 +514,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de verificaciones");
+            cantVerif = 0;
 
             cantVerif = (Integer) xobj.getSingle("Get_Count_Verificaciones_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -546,6 +549,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de Cambio Estados");
+            cantCambioEst = 0;
 
             cantCambioEst = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
 
