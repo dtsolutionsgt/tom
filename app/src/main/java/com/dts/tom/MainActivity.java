@@ -277,7 +277,11 @@ public class MainActivity extends PBase {
             input.setText(url);
             input.setInputType(InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+            if (!lblurl.getText().toString().isEmpty()){
+                input.setText(lblurl.getText());
+            }else{
+                input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+            }
             alert.setView(input);
             input.requestFocus();
 

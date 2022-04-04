@@ -32,13 +32,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Licencia:" />
+                    android:text="@string/licencia" />
 
                 <EditText
                     android:id="@+id/txtLP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -52,13 +53,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Código:" />
+                    android:text="@string/c_digo" />
 
                 <EditText
                     android:id="@+id/txtCodigoProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -78,7 +80,8 @@
                     android:id="@+id/txtFechaCad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -92,13 +95,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Lote:" />
+                    android:text="@string/lote" />
 
                 <EditText
                     android:id="@+id/txtLote"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -112,12 +116,13 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Presentación:" />
+                    android:text="@string/presentaci_n" />
 
                 <Spinner
                     android:id="@+id/cmbPresentacion"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="45dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -131,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:text="Camas X Tarima - Cajas X Cama"
+                    android:text="@string/camas_x_tarima_cajas_x_cama"
                     android:textSize="18sp"
                     android:visibility="visible" />
             </TableRow>
@@ -152,7 +157,8 @@
                     android:id="@+id/txtUniBas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
             </TableRow>
 
@@ -166,13 +172,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Cantidad:" />
+                    android:text="@string/cantidad" />
 
                 <EditText
                     android:id="@+id/txtCantidadPick"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -186,7 +193,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Peso:" />
+                    android:text="@string/peso" />
 
                 <EditText
                     android:id="@+id/txtPesoPick"
@@ -208,12 +215,13 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Estado:" />
+                    android:text="@string/estado" />
 
                 <Spinner
                     android:id="@+id/cmbEstado"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="45dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
         </LinearLayout>
     </ScrollView>
@@ -236,7 +244,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
-            android:onClick="ExitFormPick" />
+            android:onClick="ExitFormPick"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/btnConfirmarPk"
@@ -247,7 +256,7 @@
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
             android:onClick="BotonGuardar"
-            android:text="Confirmar"
+            android:text="@string/confirmar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -268,7 +277,7 @@
             android:gravity="center"
             android:maxLines="5"
             android:minLines="1"
-            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:text="@string/_1008049944_aceite_ideal_maiz_60_ml"
             android:textColor="@color/medium"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -284,7 +293,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/color_medium"
         android:gravity="center"
-        android:text="0EN0405140000717"
+        android:text="@string/_0en0405140000717"
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -348,7 +357,7 @@
                 android:layout_marginTop="0dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:paddingTop="2dp"
-                android:text="Reemplazo"
+                android:text="@string/reemplazo"
                 android:textColor="#000000"
                 android:textSize="10sp" />
 
@@ -366,7 +375,8 @@
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:src="@drawable/no_encontrado" />
+                android:src="@drawable/no_encontrado"
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -376,7 +386,7 @@
                 android:layout_marginTop="0dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:paddingTop="2dp"
-                android:text="No Encontrado"
+                android:text="@string/no_encontrado"
                 android:textColor="#000000"
                 android:textSize="10sp" />
         </RelativeLayout>
@@ -393,7 +403,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/color_medium"
-        android:text="Vence en: 0 días"
+        android:text="@string/vence_en_0_d_as"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 
