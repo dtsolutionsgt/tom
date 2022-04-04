@@ -214,9 +214,11 @@ public class list_adapt_detalle_recepcion2 extends BaseAdapter {
                 }else if (BeDetalleOC.get(position).Cantidad_recibida < BeDetalleOC.get(position).Cantidad  &&
                           BeDetalleOC.get(position).Cantidad_recibida >0) {
                     convertView.setBackgroundColor(Color.parseColor("#f5ffae"));
-                }
-                else{
-                    convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }else if (BeDetalleOC.get(position).Cantidad_recibida < BeDetalleOC.get(position).Cantidad  &&
+                        BeDetalleOC.get(position).Cantidad_recibida == 0) {
+                    convertView.setBackgroundColor(Color.parseColor("#ff8080"));
+                }else if (BeDetalleOC.get(position).Cantidad_recibida > BeDetalleOC.get(position).Cantidad) {
+                    convertView.setBackgroundColor(Color.parseColor("#80c3ff"));
                 }
             }
         }
