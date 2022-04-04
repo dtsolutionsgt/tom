@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -23,6 +25,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
+import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
@@ -67,6 +70,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     private ProgressBar pbar;
     private ObjectAnimator anim;
     private ProgressDialog progress;
+    private int IdOrdenCompra = 0, vIdTarea=0;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +209,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        GetFila();
+                        if (!txtTarea.getText().toString().isEmpty()) {
+                            execws(6);
+                        }
                     }
 
                     return false;
@@ -260,6 +266,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     case 5:
                         callMethod("Get_Pedido_A_Verificar_By_LP","pLP",gl.gLP);
                         break;
+                    case 6:
+                        callMethod("Get_IdOrdenCompraEnc_By_Licencia","pLicenciaIngreso",txtTarea.getText().toString());
+                        break;
+                    case 7:
+                        callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        break;
                 }
 
                 anim.cancel();
@@ -288,6 +300,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processListTareasVerificacion();break;
                 case 5:
                     recibeLP();break;
+                case 6:
+                    processIdOrdenCompra();
+                    break;
+                case 7:
+                    processIdRecepcion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -432,6 +450,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Referencia = BePedEnc.Referencia;
                         vItem.IdMuelle = BePedEnc.IdMuelle;
                         vItem.NombreRutaDespacho = BePedEnc.NombreRutaDespacho;
+                        vItem.Observacion = BePedEnc.Observacion;
+                        vItem.Requiere_Tarimas = BePedEnc.Requiere_Tarimas;
                         vItem.IdCliente = BePedEnc.getIdCliente();
                         vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Codigo+" - "+BePedEnc.Cliente.Nombre_comercial;
                         vItem.Estado = BePedEnc.Estado;
@@ -616,6 +636,40 @@ public class frm_lista_tareas_recepcion extends PBase {
         }
     }
 
+    private  void processIdOrdenCompra() {
+        try {
+            progress.setMessage("Obteniendo orden de compra...");
+            progress.show();
+
+            IdOrdenCompra = xobj.getresult(Integer.class,"Get_IdOrdenCompraEnc_By_Licencia");
+
+            if (IdOrdenCompra > 0) {
+                gl.gIdRecepcionEnc = stream(pListBeTareasIngresoHH.items).where(c -> c.IdOrderCompraEnc == IdOrdenCompra).select(c -> c.IdRecepcionEnc).first();
+
+                execws(7);
+            } else {
+                progress.cancel();
+                Toast.makeText(this, "No se ha encontrado una orden de compra válida relacionada a la licencia "+txtTarea.getText().toString()+".", Toast.LENGTH_LONG).show();
+                msgLicPlate("Buscar por número de tarea");
+
+            }
+            progress.cancel();
+        } catch (Exception e) {
+            mu.msgbox("processIdOrdenCompra: "+e.getMessage());
+        }
+    }
+
+    private void processIdRecepcion() {
+        try {
+            gl.gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class, "GetSingleRec");
+
+            startActivity(new Intent(this, frm_list_rec_prod.class));
+
+        } catch ( Exception e) {
+            mu.msgbox("processIdRecepcion: "+e.getMessage());
+        }
+    }
+
     public void BotonNueva(View view){
 
         try{
@@ -640,8 +694,6 @@ public class frm_lista_tareas_recepcion extends PBase {
     private void GetFila(){
 
         try{
-
-            int vIdTarea=0;
 
             if (!txtTarea.getText().toString().isEmpty()){
 
@@ -871,6 +923,36 @@ public class frm_lista_tareas_recepcion extends PBase {
             pbutton.setFocusableInTouchMode(true);
             pbutton.requestFocus();
 
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgLicPlate(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    GetFila();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

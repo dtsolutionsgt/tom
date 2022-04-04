@@ -74,6 +74,9 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
                 holder.lblIdPickingEnc = (TextView) convertView.findViewById(R.id.lblIdPickingEnc);
                 holder.lblFechaPedido = (TextView) convertView.findViewById(R.id.lblFechaPedido);
                 holder.lblRutaDespacho = (TextView) convertView.findViewById(R.id.lblRutaDespacho);
+                holder.lblObservaciones = (TextView) convertView.findViewById(R.id.lblObservaciones);
+                holder.lblRequiereTarima = (TextView) convertView.findViewById(R.id.lblRequiereTarima);
+
 
                 convertView.setTag(holder);
 
@@ -90,6 +93,18 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
                 holder.lblRutaDespacho.setText("" + BeListTareasHH.get(position).NombreRutaDespacho);
             } else {
                 holder.lblRutaDespacho.setText("--");
+            }
+
+            if (!BeListTareasHH.get(position).Observacion.isEmpty()) {
+                holder.lblObservaciones.setText("" + BeListTareasHH.get(position).Observacion);
+            } else {
+                holder.lblObservaciones.setText("--");
+            }
+
+            if (BeListTareasHH.get(position).Requiere_Tarimas) {
+                holder.lblRequiereTarima.setText("Si");
+            } else {
+                holder.lblRequiereTarima.setText("No");
             }
 
             holder.lblIdCliente.setText(""+BeListTareasHH.get(position).IdCliente);
@@ -114,6 +129,7 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblPedEnc,lblFechaPedido,lblReferencia,lblMuelle, lblRutaDespacho,lblIdCliente,lblCliente,lblEstado,lblIdPickingEnc;
+        TextView lblPedEnc,lblFechaPedido,lblReferencia,lblMuelle, lblRutaDespacho,lblIdCliente,
+                lblCliente,lblEstado,lblIdPickingEnc, lblObservaciones, lblRequiereTarima;
     }
 }
