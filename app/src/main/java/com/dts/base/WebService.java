@@ -75,6 +75,13 @@ public class WebService {
 
         try{
 
+            //#EJC20220403:Short time out if is the first loading
+            //usefull if its wrong url of the WS.
+//            if(mMethodName =="Android_Get_All_Empresas"){
+//                READTIMEOUT=6000;
+//                TIMEOUT=6000;
+//            }
+
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
            conn.setReadTimeout(READTIMEOUT);

@@ -113,8 +113,8 @@ public class frm_detalle_tareas_picking extends PBase {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    if (areaprimera) {
+                    //#EJC20220403: Force scan location...
+                    if (areaprimera || !areaprimera) {
                         listView.setClickable(false);
                         toast("Por favor, escaneé la ubicación");
                         txtUbicacionFiltro.requestFocus();
@@ -352,6 +352,7 @@ public class frm_detalle_tareas_picking extends PBase {
                                 obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
                             }
 
+                            //#EJC20220403:Cambio de ubicación temporal en picking.
                             if (obj.IdUbicacionTemporal!=0) {
                                 obj.IdUbicacion = obj.IdUbicacionTemporal;
                                 obj.NombreUbicacion = obj.NombreUbicacionTemporal;

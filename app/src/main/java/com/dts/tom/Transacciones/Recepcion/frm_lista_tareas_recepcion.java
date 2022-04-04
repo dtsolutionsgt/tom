@@ -701,6 +701,50 @@ public class frm_lista_tareas_recepcion extends PBase {
         }
     }
 
+    //#EJC20220404:BYB Filtrar por licencia de ingreso de producción.
+    private void Get_Fila_By_IdOrdenCompraEnc(){
+
+        try{
+
+            int vIdTarea=0;
+
+            if (!txtTarea.getText().toString().isEmpty()){
+
+                selid = Integer.parseInt(txtTarea.getText().toString());
+
+                if (gl.tipoTarea==1){
+
+                    vIdTarea = stream(pListBeTareasIngresoHH.items).where(c->c.IdOrderCompraEnc == selid).select(c->c.IdOrderCompraEnc).first();
+
+                    if (vIdTarea>0){
+                        procesar_registro();
+                    }else{
+
+                        if (existe_en_recepciones(txtTarea.getText().toString())) {
+
+                        }else{
+                            mu.msgbox("No existe la tarea "+selid);
+                        }
+                    }
+
+                }
+            }
+
+        }catch (Exception e){
+            if (e.getMessage() !=null){
+                mu.msgbox("Error obteniendo la tarea: "+e.getMessage());
+            }else{
+                if(gl.tipoTarea==6) {
+                    buscaLP(txtTarea.getText().toString());
+                } else {
+                    mu.msgbox("El número de tarea ingresado no es válido");
+                    txtTarea.setText("");
+                    txtTarea.requestFocus();
+                }
+            }
+        }
+    }
+
     private boolean existe_en_recepciones(String v_producto){
 
         boolean result = false;
