@@ -107,7 +107,7 @@
     <Spinner
         android:id="@+id/cmbOrdenadorPor"
         android:layout_width="239dp"
-        android:layout_height="47dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/lblNoDocumento"
         android:layout_alignParentStart="true"
         android:layout_marginStart="172dp"
@@ -136,6 +136,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
         android:background="@color/colorPrimary"
+        android:minHeight="48dp"
         android:onClick="BotonR"
         android:text="C."
         android:textColor="@android:color/background_light"
@@ -151,7 +152,8 @@
         android:layout_alignEnd="@+id/cmbOrdenadorPor"
         android:layout_marginTop="10dp"
         android:importantForAutofill="no"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
 
     <TextView
         android:id="@+id/textView11"
@@ -171,7 +173,7 @@
     <RelativeLayout
         android:id="@+id/relBtn"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:layout_above="@+id/relbot"
         android:layout_alignParentStart="true">
 
@@ -184,7 +186,7 @@
             android:background="@android:color/holo_red_dark"
             android:text="Pendientes: 0"
             android:textColor="@android:color/background_light"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <HorizontalScrollView
@@ -196,7 +198,7 @@
         android:layout_marginBottom="0dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
 

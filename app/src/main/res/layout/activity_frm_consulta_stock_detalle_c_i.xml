@@ -292,7 +292,6 @@
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
-            android:contentDescription="@string/todo"
             android:onClick="printBarras"
             android:src="@drawable/printimg" />
 

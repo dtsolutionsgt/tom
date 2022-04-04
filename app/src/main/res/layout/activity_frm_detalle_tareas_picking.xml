@@ -166,14 +166,14 @@
         android:layout_toEndOf="@+id/btnRes_Det"
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
-        android:text="Ubic"
+        android:text="Ubic.: #"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
     <RelativeLayout
         android:id="@+id/relBtn"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:layout_above="@+id/relbot"
         android:layout_alignParentStart="true">
 
@@ -186,7 +186,8 @@
             android:background="@android:color/holo_red_dark"
             android:text="Pendientes: 0"
             android:textColor="@android:color/background_light"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="TouchTargetSizeCheck" />
     </RelativeLayout>
 
     <HorizontalScrollView
