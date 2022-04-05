@@ -1255,14 +1255,12 @@ public class MainActivity extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinuser.setAdapter(dataAdapter);
 
-            if (userlist.size()>0)
-            {
+            if (userlist.size()>0) {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
 
                 txtpass.requestFocus();
                 //showkeyb();
-
             }
 
         } catch (Exception e)

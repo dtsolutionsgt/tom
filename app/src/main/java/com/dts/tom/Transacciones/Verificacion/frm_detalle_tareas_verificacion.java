@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
@@ -32,6 +33,8 @@ import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -68,7 +71,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false, mostrar_area;
     private boolean finalizar = true;
-    private int selidx = -1;
+    private int selidx = -1,sortord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -380,7 +383,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     }
 
-    private void  processEncabezadoPedido(){
+    private void processEncabezadoPedido(){
         try{
             progress.setMessage("Cargando datos del encabezado del pedido...");
             progress.show();
@@ -824,6 +827,87 @@ public class frm_detalle_tareas_verificacion extends PBase {
     public void Actualizar(View view){
         Load();
     }
+
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {"Codigo A-Z","Codigo Z-A",
+                                   "Producto A-Z","Producto Z-A" ,
+                                   "Presentacion A-Z","Presentacion Z-A"};
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 0:
+                        sortord=1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+                    case 1:
+                        sortord=-1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+                    case 2:
+                        sortord=1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+                    case 3:
+                        sortord=-1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+                    case 4:
+                        sortord=1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+                    case 5:
+                        sortord=-1;
+                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+                }
+                listSortedItems();
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    class Sort_Codigo implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Codigo.compareTo(right.Codigo);
+        }
+    }
+
+    class Sort_Presentacion implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Nom_Presentacion.compareTo(right.Nom_Presentacion);
+        }
+    }
+
+    class Sort_Producto implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Nombre_Producto.compareTo(right.Nombre_Producto);
+        }
+    }
+
+    private void listSortedItems() {
+
+        try {
+          if (mostrar_area) {
+                adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter2);
+            } else {
+                adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter);
+            }
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
