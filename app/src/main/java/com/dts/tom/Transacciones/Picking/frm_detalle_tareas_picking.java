@@ -6,13 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,8 +51,9 @@ public class frm_detalle_tareas_picking extends PBase {
     private ListView listView;
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
-    private EditText txtUbicacionFiltro;
+    private EditText txtUbicacionFiltro, txtFiltro;
     private TextView lblNoDocumento, lblBodega, lblOperador;
+    private ImageView btnLimpiar;
 
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
@@ -56,10 +61,11 @@ public class frm_detalle_tareas_picking extends PBase {
     private clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc();
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+    private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
 
-    public static clsBeTrans_picking_ubic selitem;
+    public static clsBeTrans_picking_ubic selitem, tmpPickingUbic;
 
     private List TipoOrden = new ArrayList();
 
@@ -96,6 +102,8 @@ public class frm_detalle_tareas_picking extends PBase {
         lblNoDocumento = (TextView)findViewById(R.id.lblNoDocumento);
         lblBodega = (TextView) findViewById(R.id.lblBodega);
         lblOperador = (TextView) findViewById(R.id.lblOperador);
+        txtFiltro = (EditText) findViewById(R.id.txtFiltro);
+        btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
 
         lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
         lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
@@ -124,15 +132,16 @@ public class frm_detalle_tareas_picking extends PBase {
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
                         selitem = new clsBeTrans_picking_ubic();
-                        selitem = BeListPickingUbic.get(position);
+                        //selitem = BeListPickingUbic.get(position);
+                        selitem = sitem;
 
                         selid = sitem.IdPickingUbic;
                         selidx = position;
 
                         if (areaprimera) {
-                            adapter2.setSelectedIndex(position);
+                            adapter2.getItem(position);
                         } else {
-                            adapter.setSelectedIndex(position);
+                            adapter.getItem(position);
                         }
 
                         procesar_registro();
@@ -177,6 +186,54 @@ public class frm_detalle_tareas_picking extends PBase {
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }
+
+        btnLimpiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txtFiltro.setText("");
+                txtFiltro.requestFocus();
+            }
+        });
+
+        txtFiltro.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!txtFiltro.getText().toString().isEmpty()) {
+                    btnLimpiar.setVisibility(View.VISIBLE);
+                    String termino  = charSequence.toString();
+                    AuxBePickingUbic.clear();
+                    for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
+
+                        if(obj.CodigoProducto.contains(termino) || obj.NombreProducto.toLowerCase().contains(termino)){
+                            AuxBePickingUbic.add(obj);
+                        }
+                    }
+
+                    if (areaprimera) {
+                        adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                        listView.setAdapter(adapter2);
+                    } else {
+                        adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                        listView.setAdapter(adapter);
+                    }
+
+                    btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
+                } else {
+                    Lista_Detalle_Picking();
+                    btnLimpiar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
     }
 
@@ -256,6 +313,8 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
 
             }
+
+            txtFiltro.setText("");
 
         } catch (Exception e) {
             mu.msgbox("procesar_registro:" + e.getMessage());
@@ -421,12 +480,13 @@ public class frm_detalle_tareas_picking extends PBase {
     public void BotonR(View view){
 
         try{
-
+            txtFiltro.setText("");
             if (btnRes_Det.getText().toString().equals("C.")){
 
                 btnRes_Det.setText("D.");
 
                 TipoLista=2;
+
 
                 execws(3);
 
