@@ -702,7 +702,8 @@ public class MainActivity extends PBase {
 
     private void Valida_Ingreso() {
 
-        /*
+
+/*
         try {
 
             gl.IdEmpresa=1;
@@ -722,8 +723,7 @@ public class MainActivity extends PBase {
             String ss=e.getMessage();
         }
 
-         */
-
+   */
 
         try{
 

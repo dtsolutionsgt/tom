@@ -101,7 +101,7 @@ public class clsBeTrans_pe_enc {
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
-                             int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho) {
+                             int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho, boolean Requiere_Tarimas) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -171,6 +171,7 @@ public class clsBeTrans_pe_enc {
         this.IdTipoPedido = IdTipoPedido;
         this.No_Documento_Externo = No_Documento_Externo;
         this.NombreRutaDespacho = NombreRutaDespacho;
+        this.Requiere_Tarimas = Requiere_Tarimas;
 
     }
 

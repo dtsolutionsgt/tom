@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 28
         defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 24
@@ -44,7 +44,7 @@ dependencies {
        exclude group: 'stax', module: 'stax-api'
        exclude group: 'xpp3', module: 'xpp3'
     }
-    implementation 'androidx.wear:wear:1.2.0'
+    //implementation 'androidx.wear:wear:1.2.0'
     implementation files('libs\\ZSDK_ANDROID_API.jar')
     implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\commons-net-3.1.jar')
