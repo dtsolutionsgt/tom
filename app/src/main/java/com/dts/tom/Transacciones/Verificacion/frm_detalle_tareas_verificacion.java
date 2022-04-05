@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private ListView listDetVeri;
     private EditText txtCodProd;
     private TextView lblNoDocumento;
+    private LinearLayout encabezado1, encabezado2;
     private Button btnFinalizarTareaVerificacion,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
@@ -90,6 +92,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
             btnConsultaDa = (Button) findViewById(R.id.btnConsultaDa);
             btnBack = (Button) findViewById(R.id.btnBack);
             lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
+            encabezado1 = (LinearLayout) findViewById(R.id.encabezado_1);
+            encabezado2 = (LinearLayout) findViewById(R.id.encabezado_2);
+
+            if (mostrar_area) {
+                encabezado2.setVisibility(View.VISIBLE);
+            } else {
+                encabezado1.setVisibility(View.VISIBLE);
+            }
 
             setHandlers();
 

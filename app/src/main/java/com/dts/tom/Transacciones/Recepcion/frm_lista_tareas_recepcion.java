@@ -661,8 +661,10 @@ public class frm_lista_tareas_recepcion extends PBase {
 
     private void processIdRecepcion() {
         try {
+
             gl.gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class, "GetSingleRec");
 
+            txtTarea.setText("");
             startActivity(new Intent(this, frm_list_rec_prod.class));
 
         } catch ( Exception e) {
