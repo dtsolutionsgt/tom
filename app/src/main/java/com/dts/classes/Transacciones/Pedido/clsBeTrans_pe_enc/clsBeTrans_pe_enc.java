@@ -80,6 +80,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String No_Picking_ERP="";
     @Element(required=false) public String No_Documento_Externo="";
     @Element(required=false) public String NombreRutaDespacho="";
+    @Element(required=false) public boolean Requiere_Tarimas=false;
 
     public clsBeTrans_pe_enc() {
     }
@@ -591,4 +592,12 @@ public class clsBeTrans_pe_enc {
     public void setNombreRutaDespacho(String value) {
         NombreRutaDespacho=value;
     }
+
+    public void setRequiere_Tarimas(boolean value) {
+        Requiere_Tarimas=value;
+    }
+    public boolean getRequiere_Tarimas() {
+        return Requiere_Tarimas;
+    }
+
 }
