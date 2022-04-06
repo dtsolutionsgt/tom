@@ -251,6 +251,7 @@ public class frm_picking_datos extends PBase {
 
             }
 
+            //GT06042022: no remover, hacen de pivote para retener el focus
             txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -279,6 +280,15 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
+            txtCantidadPick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+
+            //GT06042022: no remover, hacen de pivote para retener el focus
             txtCantidadPick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1374,9 +1384,10 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText("0");
             }
 
-            txtCantidadPick.selectAll();
-            txtCantidadPick.setSelectAllOnFocus(true);
-            txtCantidadPick.requestFocus();
+            //txtCantidadPick.selectAll();
+            //txtCantidadPick.setSelectAllOnFocus(true);
+            //txtCantidadPick.requestFocus();
+            //txtCantidadPick.requestFocus();
             btnConfirmarPk.setEnabled(true);
 
         }catch (Exception e){
@@ -1386,34 +1397,41 @@ public class frm_picking_datos extends PBase {
 
     public void BotonGuardar(View view){
 
-        if (PressEnterLp){
+        //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
+        if (confirmar_codigo_en_picking){
 
-            if (PressEnterProducto){
+            if (PressEnterLp ){
 
-                if (confirmar_codigo_en_picking) {
-                    if (txtLicencia.getText().toString().isEmpty()) {
-                        msgCodigoProducto("Debe ingresar la licencia del producto");
-                        txtLicencia.requestFocus();
-                        return;
+                if (PressEnterProducto){
+
+                    if (confirmar_codigo_en_picking) {
+                        if (txtLicencia.getText().toString().isEmpty()) {
+                            msgCodigoProducto("Debe ingresar la licencia del producto");
+                            txtLicencia.requestFocus();
+                            return;
+                        }
+
+                        if (txtCodigoProducto.getText().toString().isEmpty()) {
+                            msgCodigoProducto("Debe ingresar el código del producto");
+                            return;
+                        }
                     }
 
-                    if (txtCodigoProducto.getText().toString().isEmpty()) {
-                        msgCodigoProducto("Debe ingresar el código del producto");
-                        return;
-                    }
+                    Procesar_Registro();
+                }else{
+                    msgCodigoProducto("Debe de leer SKU del producto y luego presionar Enter.");
+                    txtLicencia.requestFocus();
+                    return;
                 }
 
-                Procesar_Registro();
             }else{
-                msgCodigoProducto("Debe de leer SKU del producto y luego presionar Enter.");
+                msgCodigoProducto("Debe de leer la licencia y luego presionar Enter.");
                 txtLicencia.requestFocus();
                 return;
             }
 
         }else{
-            msgCodigoProducto("Debe de leer la licencia y luego presionar Enter.");
-            txtLicencia.requestFocus();
-            return;
+            Procesar_Registro();
         }
 
     }

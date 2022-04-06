@@ -790,7 +790,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }else{
 
                 //mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ " no es válido para la bodega: "+gl.IdBodega);
-                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString()+ " no esta en la ola de picking de la bodega: " +gl.IdBodega);
+                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString()+ " no esta en la ola de picking");
                 txtUbicacionFiltro.setSelectAllOnFocus(true);
                 txtUbicacionFiltro.requestFocus();
                 txtUbicacionFiltro.setText("");
