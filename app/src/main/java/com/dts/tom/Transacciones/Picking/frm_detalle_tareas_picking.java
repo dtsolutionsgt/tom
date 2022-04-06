@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -54,6 +55,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private EditText txtUbicacionFiltro, txtFiltro;
     private TextView  lblBodega, lblOperador, lblTituloForma;
     private ImageView btnLimpiar;
+    private RelativeLayout relbot;
 
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
@@ -104,6 +106,8 @@ public class frm_detalle_tareas_picking extends PBase {
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         txtFiltro = (EditText) findViewById(R.id.txtFiltro);
         btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
+        //btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
+        relbot = (RelativeLayout) findViewById(R.id.relbot);
 
         lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
         lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
@@ -242,6 +246,13 @@ public class frm_detalle_tareas_picking extends PBase {
 
             }
         });
+
+        /*btnFiltros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnFiltros.setVisibility(View.VISIBLE);
+            }
+        });*/
 
     }
 
@@ -456,8 +467,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 listView.setAdapter(adapter);
             }
 
-
-
+            progress.cancel();
         }catch (Exception e){
             mu.msgbox("Lista_Detalle_Picking:"+e.getMessage());
         }
@@ -470,7 +480,9 @@ public class frm_detalle_tareas_picking extends PBase {
             if (BeListPickingUbic.size()==0){
 
                 btnPendientes.setText("Completa");
-                btnPendientes.setBackgroundColor(Color.parseColor("#FF99CC00"));
+                btnPendientes.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                btnPendientes.setTextColor(Color.BLACK);
+                relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
 
                 Finalizar_Picking();
 
@@ -693,6 +705,7 @@ public class frm_detalle_tareas_picking extends PBase {
         try{
 
             progress.setMessage("Obteniendo valores de picking");
+            progress.show();
 
             //-----------------------------
             gBePicking =xobj.getresult(clsBeTrans_picking_enc.class,"Get_Picking_By_IdPickingEnc");
@@ -746,6 +759,16 @@ public class frm_detalle_tareas_picking extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
+        }
+    }
+
+    public void ActualizaLista(View view) {
+        try {
+            progress.setMessage("Actualizando Lista de Picking...");
+            progress.show();
+            execws(1);
+        } catch (Exception e) {
+            mu.msgbox("ActualizaLista: "+e.getMessage());
         }
     }
 
