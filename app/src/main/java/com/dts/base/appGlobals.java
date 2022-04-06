@@ -178,4 +178,6 @@ public class appGlobals extends Application {
 
     //#EJC20220330_CEALSA: Si true, se permite realizar el cambio de ubicación de producto que está reservado en picking pero se actualiza el IdUbicacionTemporal.
     public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
+
+    public int sortOrd = 0;
 }

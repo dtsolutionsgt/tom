@@ -436,7 +436,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
             }
-
+            orderar();
         } catch (Exception e) {
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -846,26 +846,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 0:
-                        sortord=1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
-                    case 1:
-                        sortord=-1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
-                    case 2:
-                        sortord=1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
-                    case 3:
-                        sortord=-1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
-                    case 4:
-                        sortord=1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
-                    case 5:
-                        sortord=-1;
-                        Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
-                }
+                gl.sortOrd = item;
+                orderar();
                 listSortedItems();
                 dialog.cancel();
             }
@@ -880,6 +862,29 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         Dialog = menudlg.create();
         Dialog.show();
+    }
+
+    private void orderar() {
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+            case 1:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+            case 2:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+            case 3:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+            case 4:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+            case 5:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+        }
     }
 
     class Sort_Codigo implements Comparator<clsBeDetallePedidoAVerificar> {
