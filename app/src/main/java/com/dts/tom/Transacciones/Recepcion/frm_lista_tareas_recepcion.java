@@ -103,6 +103,7 @@ public class frm_lista_tareas_recepcion extends PBase {
         setHandlers();
 
         gl.gVerifCascade =false;
+
         Load();
 
     }
@@ -154,55 +155,51 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         try {
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
 
-                    if (gl.tipoTarea==1){
+                if (gl.tipoTarea==1){
 
-                        //if (position > 0) {
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                        selitem = sitem;
+                    //if (position > 0) {
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                    selitem = sitem;
 
-                        selid = sitem.IdRecepcionEnc;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
+                    selid = sitem.IdRecepcionEnc;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        procesar_registro();
-                        //}
+                    procesar_registro();
+                    //}
 
-                    }else if(gl.tipoTarea==5){
+                }else if(gl.tipoTarea==5){
 
-                        //if (position > 0){
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
-                        selitempicking = sitem;
+                    //if (position > 0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                    selitempicking = sitem;
 
-                        selid = sitem.IdPickingEnc;
-                        selidx = position;
-                        adapterPicking.setSelectedIndex(position);
+                    selid = sitem.IdPickingEnc;
+                    selidx = position;
+                    adapterPicking.setSelectedIndex(position);
 
-                        procesar_registro();
-                       // }
+                    procesar_registro();
+                   // }
 
-                    } else if(gl.tipoTarea==6){
+                } else if(gl.tipoTarea==6){
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
-                        selitempe = sitem;
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
+                    selitempe = sitem;
 
-                        selid = sitem.IdPedidoEnc;
-                        selidx = position;
-                        adapterVerificacion.setSelectedIndex(position);
+                    selid = sitem.IdPedidoEnc;
+                    selidx = position;
+                    adapterVerificacion.setSelectedIndex(position);
 
-                        procesar_registro();
+                    procesar_registro();
 
-                    }
                 }
-
             });
 
             txtTarea.setOnKeyListener(new View.OnKeyListener() {
@@ -222,12 +219,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 }
             });
 
-            lblRegs.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Load();
-                }
-            });
+            lblRegs.setOnClickListener(v -> Load());
 
         }catch (Exception e){
 
@@ -249,7 +241,6 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_All_Recepciones_For_HH_By_IdBodega_By_Operador",
                                 "pIdBodega",gl.IdBodega,
                                 "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
-                        //callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_All_Rec_Ciegas_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);

@@ -93,7 +93,7 @@ public class MainActivity extends PBase {
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
-    private String version="4.6.29";
+    private String version="4.6.30";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -280,7 +280,8 @@ public class MainActivity extends PBase {
             if (!lblurl.getText().toString().isEmpty()){
                 input.setText(lblurl.getText());
             }else{
-                input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+                //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+                input.setText("http://10.10.20.181/WCFTOM4/TOMHHWS.asmx");
             }
             alert.setView(input);
             input.requestFocus();

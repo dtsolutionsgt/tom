@@ -7363,7 +7363,7 @@ public class frm_recepcion_datos extends PBase {
 
                 }
             } else {
-                toastlong("El producto no tiene imágenes");
+                //toastlong("El producto no tiene imágenes");
                 progress.cancel();
                 return;
 

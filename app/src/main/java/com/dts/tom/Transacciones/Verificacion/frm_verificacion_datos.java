@@ -306,13 +306,17 @@ public class frm_verificacion_datos extends PBase {
                 throw new Exception("El producto no está definido");
             }else{
 
-                AuxList = stream(BePickingUbicList.items)
-                        .where (z -> z.CodigoProducto.equals(Codigo))
-                        .where(z -> z.Lote.equals(Lote))
-                        .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
-                        .toList();
+                if (BePickingUbicList !=null){
 
-                pSubListPickingU.items = AuxList;
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (z -> z.CodigoProducto.equals(Codigo))
+                            .where(z -> z.Lote.equals(Lote))
+                            .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                            .toList();
+
+                    pSubListPickingU.items = AuxList;
+                }
+
             }
 
             txtVenceVeri.setText(Expira);
@@ -462,30 +466,36 @@ public class frm_verificacion_datos extends PBase {
 
             pSubListPickingU = new clsBeTrans_picking_ubicList();
 
-            if (Lp.equals("")){
-                AuxList = stream(BePickingUbicList.items)
-                        .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
-                        .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
-                        .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
-                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                        .toList();
-            }else{
-                AuxList = stream(BePickingUbicList.items)
-                        .where (c -> c.CodigoProducto.equals(Codigo))
-                        .where(c -> c.Lote.equals(Lote))
-                        .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
-                        .where(c -> c.Lic_plate.equals(Lp))
-                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                        .toList();
+            if (BePickingUbicList!=null){
+
+                if (Lp.equals("")){
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                            .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
+                            .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
+                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                            .toList();
+                }else{
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (c -> c.CodigoProducto.equals(Codigo))
+                            .where(c -> c.Lote.equals(Lote))
+                            .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
+                            .where(c -> c.Lic_plate.equals(Lp))
+                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                            .toList();
+
+                }
+
+                pSubListPickingU.items = AuxList;
 
             }
-
-            pSubListPickingU.items = AuxList;
 
             //Llama al método del WS Actualiza_Cant_Peso_Verificacion
             execws(3);
 
         }catch (Exception ex){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
             result = false;
         }
 
