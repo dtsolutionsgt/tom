@@ -202,8 +202,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:paddingBottom="10dp"
-                android:visibility="visible"
-                tools:visibility="visible">
+                android:visibility="gone"
+                tools:visibility="gone">
 
                 <TableRow
                     android:id="@+id/trTitulo"
