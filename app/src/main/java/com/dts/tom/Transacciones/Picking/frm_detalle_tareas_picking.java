@@ -52,7 +52,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
-    private TextView lblNoDocumento, lblBodega, lblOperador;
+    private TextView  lblBodega, lblOperador, lblTituloForma;
     private ImageView btnLimpiar;
 
     public static clsBeTrans_picking_enc gBePicking;
@@ -99,9 +99,9 @@ public class frm_detalle_tareas_picking extends PBase {
         btnPendientes = (Button) findViewById(R.id.btnPendientes);
         btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
         txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
-        lblNoDocumento = (TextView)findViewById(R.id.lblNoDocumento);
         lblBodega = (TextView) findViewById(R.id.lblBodega);
         lblOperador = (TextView) findViewById(R.id.lblOperador);
+        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         txtFiltro = (EditText) findViewById(R.id.txtFiltro);
         btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
 
@@ -383,7 +383,7 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
-            lblNoDocumento.setText("Picking#: "+gl.gIdPickingEnc);
+            lblTituloForma.setText("Detalle de producto para Picking "+gl.gIdPickingEnc);
 
             if (gl.gIdPickingEnc>0){
                 execws(1);
