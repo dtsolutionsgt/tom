@@ -94,6 +94,8 @@ public class frm_picking_datos extends PBase {
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
+    private boolean PressEnterLp, PressEnterProducto;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +151,9 @@ public class frm_picking_datos extends PBase {
 
             gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
         }
+
+        PressEnterLp = false;
+        PressEnterProducto = false;
 
         setHandlers();
 
@@ -233,10 +238,19 @@ public class frm_picking_datos extends PBase {
 
         try {
 
+
+            txtBarra.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
             txtBarra.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
                         Procesa_Barra();
                     }
 
@@ -558,7 +572,7 @@ public class frm_picking_datos extends PBase {
 
             if (!txtBarra.getText().toString().isEmpty()) {
 
-                String vStarWithParameter = "$";
+                //String vStarWithParameter = "$";
 
                /* if (txtBarra.getText().toString().startsWith("$") |
                         txtBarra.getText().toString().startsWith("(01)") |
@@ -569,10 +583,27 @@ public class frm_picking_datos extends PBase {
                     if (vLengthBarra > 0) {
 
                         Escaneo_Pallet = true;
-
                         pLP = txtBarra.getText().toString().replace("$", "");
 
-                        Continua_procesando_barra();
+
+                        if ( confirmar_codigo_en_picking ){
+                            if (gBePickingUbic.Lic_plate.equals(pLP)){
+                                Continua_procesando_barra();
+                            }else{
+                                mu.msgbox("la licencia no es válida, re-intente");
+                                //txtBarra.setSelectAllOnFocus(true);
+                                txtBarra.setText("");
+                                txtBarra.requestFocus();
+
+                            }
+                        }else
+                        {
+                            Continua_procesando_barra();
+                        }
+
+
+
+
 
                     }
 
@@ -848,7 +879,6 @@ public class frm_picking_datos extends PBase {
                     if (!gBePickingUbic.Lic_plate.isEmpty()){
 
                         if (!gBePickingUbic.Lic_plate.equals(pLP)){
-
                             if (ListBeStockPalletEscaneado!=null){
 
                                 if (ListBeStockPalletEscaneado.items!=null){
@@ -1027,12 +1057,19 @@ public class frm_picking_datos extends PBase {
                     //Cuarto llamado
                     //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
                     //que se ingrese el código del producto para cargar los datos del picking
+
                     if (confirmar_codigo_en_picking) {
+                        txtBarra.setFocusable(false);
+                        txtBarra.clearFocus();
                         txtCodigoProducto.requestFocus();
                         txtCodigoProducto.setEnabled(true);
+                        //#GT05042022: aviso para que el operador entienda que debe presionar ENTER  :(
+                        PressEnterLp = true;
+
                     } else {
                         Cargar_Datos_Producto_Picking();
                     }
+
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
                         (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtBarra.getText().toString()))){
@@ -1269,6 +1306,7 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText("0");
             }
 
+            PressEnterProducto = true;
             txtCantidadPick.selectAll();
             txtCantidadPick.setSelectAllOnFocus(true);
             txtCantidadPick.requestFocus();
@@ -1353,19 +1391,35 @@ public class frm_picking_datos extends PBase {
 
     public void BotonGuardar(View view){
 
-        if (confirmar_codigo_en_picking) {
-            if (txtBarra.getText().toString().isEmpty()) {
-                msgCodigoProducto("Debe ingresar la licencia del producto");
+        if (PressEnterLp){
+
+            if (PressEnterProducto){
+
+                if (confirmar_codigo_en_picking) {
+                    if (txtBarra.getText().toString().isEmpty()) {
+                        msgCodigoProducto("Debe ingresar la licencia del producto");
+                        txtBarra.requestFocus();
+                        return;
+                    }
+
+                    if (txtCodigoProducto.getText().toString().isEmpty()) {
+                        msgCodigoProducto("Debe ingresar el código del producto");
+                        return;
+                    }
+                }
+
+                Procesar_Registro();
+            }else{
+                msgCodigoProducto("Debe de leer SKU del producto y luego presionar Enter.");
+                txtBarra.requestFocus();
                 return;
             }
 
-            if (txtCodigoProducto.getText().toString().isEmpty()) {
-                msgCodigoProducto("Debe ingresar el código del producto");
-                return;
-            }
+        }else{
+            msgCodigoProducto("Debe de leer la licencia y luego presionar Enter.");
+            txtBarra.requestFocus();
+            return;
         }
-
-        Procesar_Registro();
 
     }
 

@@ -170,6 +170,14 @@ public class frm_detalle_tareas_picking extends PBase {
 
             });
 
+
+            txtUbicacionFiltro.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
             txtUbicacionFiltro.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -762,8 +770,6 @@ public class frm_detalle_tareas_picking extends PBase {
     private void processGetUbicacion(){
 
         clsBeBodega_ubicacion beUbicacion = new clsBeBodega_ubicacion();
-        //#GT05042022: la iteración confirma si hubo match entre el codigo leido y la lista recorrida
-        Integer iteracion = 0;
 
         try{
 
@@ -774,7 +780,6 @@ public class frm_detalle_tareas_picking extends PBase {
                 for (clsBeTrans_picking_ubic r:BeListPickingUbic){
 
                     if (beUbicacion.IdUbicacion==r.IdUbicacion){
-                        iteracion +=1;
                         selitem = r;
                         selid = r.IdPickingUbic;
                         procesar_registro();
@@ -783,16 +788,12 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
 
             }else{
-                mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ " no es válido para la bodega: "+gl.IdBodega);
-                txtUbicacionFiltro.requestFocus();
-                txtUbicacionFiltro.selectAll();
-                return;
-            }
 
-            if (iteracion == 0) {
-                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString()+ " no esta en la ola de picking");
+                //mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ " no es válido para la bodega: "+gl.IdBodega);
+                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString()+ " no esta en la ola de picking de la bodega: " +gl.IdBodega);
+                txtUbicacionFiltro.setSelectAllOnFocus(true);
                 txtUbicacionFiltro.requestFocus();
-                txtUbicacionFiltro.selectAll();
+                txtUbicacionFiltro.setText("");
                 return;
             }
 
