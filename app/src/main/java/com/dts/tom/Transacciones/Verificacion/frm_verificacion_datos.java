@@ -271,7 +271,7 @@ public class frm_verificacion_datos extends PBase {
             double unidades = decimal * factor;
 
             txtCajas.setText(String.valueOf(cajas));
-            txtUnidades.setText(String.valueOf(unidades));
+            txtUnidades.setText(String.valueOf(mu.frmdec(unidades)));
 
         } else {
             relDesglose.setVisibility(View.GONE);
@@ -333,6 +333,11 @@ public class frm_verificacion_datos extends PBase {
             if (sel>-1){
                 llPresentacion.setVisibility(View.VISIBLE);
                 cmbPresVeri.setSelection(sel);
+
+                double tmpCantVeri = Double.valueOf(txtCantVeri.getText().toString());
+
+                if (((tmpCantVeri % 1) > 0) || (tmpCantVeri > factor))
+                    procesaCajasUnidades();
             }else{
                 llPresentacion.setVisibility(View.GONE);
 
@@ -379,6 +384,9 @@ public class frm_verificacion_datos extends PBase {
                 progress.setMessage("Listando presentaciones de producto...");
 
                 if (gBeProducto.Presentaciones.items != null) {
+
+                    factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                    lblPresentacion.setText(gBeProducto.Presentaciones.items.get(0).Nombre+": ");
 
                     PresList.clear();
 
