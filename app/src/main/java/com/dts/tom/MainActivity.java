@@ -281,7 +281,7 @@ public class MainActivity extends PBase {
                 input.setText(lblurl.getText());
             }else{
                 //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
-                input.setText("http://10.10.20.181/WCFTOM4/TOMHHWS.asmx");
+                input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
             }
             alert.setView(input);
             input.requestFocus();
