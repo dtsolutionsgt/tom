@@ -12,8 +12,10 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -53,9 +55,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private ListView listDetVeri;
     private EditText txtCodProd;
-    private TextView lblNoDocumento;
+    private TextView lblNoDocumento, lblTituloForma;
     private LinearLayout encabezado1, encabezado2;
-    private Button btnFinalizarTareaVerificacion,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
+    private ImageView imgReemplazo;
+    private RelativeLayout relbot;
+    private Button btnRegs;
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
@@ -89,14 +93,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             listDetVeri = (ListView)findViewById(R.id.ListDetVeri);
             txtCodProd = (EditText) findViewById(R.id.txtCodProd);
-            btnFinalizarTareaVerificacion = (Button) findViewById(R.id.btnFinalizarTareaPicking);
-            btnNoVerificado = (Button) findViewById(R.id.btnNoVerificado);
             btnRegs = (Button) findViewById(R.id.btnRegs);
-            btnConsultaDa = (Button) findViewById(R.id.btnConsultaDa);
-            btnBack = (Button) findViewById(R.id.btnBack);
+            imgReemplazo = (ImageView) findViewById(R.id.imgReemplazo);
             lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
             encabezado1 = (LinearLayout) findViewById(R.id.encabezado_1);
             encabezado2 = (LinearLayout) findViewById(R.id.encabezado_2);
+            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+            relbot = (RelativeLayout) findViewById(R.id.relbot);
 
             if (mostrar_area) {
                 encabezado2.setVisibility(View.VISIBLE);
@@ -191,7 +194,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 }
             });
 
-            btnConsultaDa.setOnClickListener(new View.OnClickListener() {
+            imgReemplazo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mostrar_Reemplazados();
@@ -424,8 +427,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
             if (pListaPedidoDet!=null){
                 if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
             } else {
-                btnNoVerificado.setText("Verificado");
-                btnNoVerificado.setBackgroundColor(Color.GREEN);
+                lblTituloForma.setText("Tarea de Verificación - Verificado");
+                btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                btnRegs.setText("Registros: 0");
+                btnRegs.setTextColor(Color.BLACK);
+
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
             }
@@ -477,13 +484,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     for (clsBeTrans_picking_ubic ubi:plistPickingUbic.items){
 
                         if (ubi.Cantidad_Recibida != ubi.Cantidad_Verificada) {
-
                             preguntoPorDiferencia = true;
-
-                            msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla?");
-
                         }
                     }
+                    if (preguntoPorDiferencia)
+                        msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla");
 
                     progress.cancel();
                     if (finalizar){
@@ -646,7 +651,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             }
                         }
 
-                        btnRegs.setText("Regs: "+pListaPedidoDet.items.size());
+                        btnRegs.setText("Registros: "+pListaPedidoDet.items.size());
 
                         if (mostrar_area) {
                             adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
@@ -664,11 +669,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             }
 
                             index = -1;
-                            btnNoVerificado.setText("No Verificado");
-                            btnNoVerificado.setBackgroundColor(Color.RED);
+                            lblTituloForma.setText("Tarea de Verificación - No Verificado");
+
                         } else {
-                            btnNoVerificado.setText("Verificado");
-                            btnNoVerificado.setBackgroundColor(Color.GREEN);
+                            lblTituloForma.setText("Tarea de Verificación - Verificado");
+                            btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                            relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                            btnRegs.setTextColor(Color.BLACK);
                         }
 
                         if ( gl.gVerifCascade && selidx>-1) {
