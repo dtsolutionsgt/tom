@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -70,7 +67,7 @@ public class frm_picking_datos extends PBase {
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate, lblEstiba;
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
-    private EditText txtBarra, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
+    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
 
@@ -108,7 +105,7 @@ public class frm_picking_datos extends PBase {
         ws = new WebServiceHandler(frm_picking_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtBarra = (EditText) findViewById(R.id.txtLP);
+        txtLicencia = (EditText) findViewById(R.id.txtLP);
         txtFechaCad = (EditText) findViewById(R.id.txtFechaCad);
         txtLote = (EditText) findViewById(R.id.txtLote);
         txtUniBas = (EditText) findViewById(R.id.txtUniBas);
@@ -239,11 +236,11 @@ public class frm_picking_datos extends PBase {
         try {
 
 
-            if (txtBarra!=null){
-                txtBarra.setOnClickListener(view -> {
-
-                });
-                txtBarra.setOnKeyListener((v, keyCode, event) -> {
+            if (txtLicencia !=null){
+//                txtLicencia.setOnClickListener(view -> {
+//
+//                });
+                txtLicencia.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
                         Procesa_Barra();
@@ -269,16 +266,23 @@ public class frm_picking_datos extends PBase {
                         if (trLP.getVisibility() == View.GONE) {
                             Procesa_Codigo();
                         } else {
-                            if (!txtBarra.getText().toString().isEmpty()) {
+                            if (!txtLicencia.getText().toString().isEmpty()) {
                                 confirmarPorCodigo();
                             } else {
                                 msgCodigoProducto("Debe ingresar la licencia del producto");
-                                txtBarra.requestFocus();
+                                txtLicencia.requestFocus();
                             }
                         }
                     }
 
                     return false;
+                }
+            });
+
+            txtCantidadPick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
                 }
             });
 
@@ -368,7 +372,7 @@ public class frm_picking_datos extends PBase {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 trLP.setVisibility(View.VISIBLE);
                 txtCodigoProducto.setEnabled(false);
-                txtBarra.requestFocus();
+                txtLicencia.requestFocus();
             } else {
                 lblLicPlate.setText("");
                 trLP.setVisibility(View.GONE);
@@ -482,8 +486,8 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            txtBarra.setSelectAllOnFocus(true);
-            txtBarra.requestFocus();
+            txtLicencia.setSelectAllOnFocus(true);
+            txtLicencia.requestFocus();
 
             txtLote.setFocusable(false);
             txtLote.setFocusableInTouchMode(false);
@@ -522,7 +526,7 @@ public class frm_picking_datos extends PBase {
     }
 
     private void Limpia_controles() {
-        txtBarra.setText("");
+        txtLicencia.setText("");
         txtLote.setText("");
         cmbPresentacion.setSelection(-1);
         txtUniBas.setText("");
@@ -565,7 +569,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            if (!txtBarra.getText().toString().isEmpty()) {
+            if (!txtLicencia.getText().toString().isEmpty()) {
 
                 //String vStarWithParameter = "$";
 
@@ -573,32 +577,28 @@ public class frm_picking_datos extends PBase {
                         txtBarra.getText().toString().startsWith("(01)") |
                         txtBarra.getText().toString().startsWith(vStarWithParameter)) {*/
 
-                    int vLengthBarra = txtBarra.getText().toString().length();
+                    int vLengthBarra = txtLicencia.getText().toString().length();
 
                     if (vLengthBarra > 0) {
 
                         Escaneo_Pallet = true;
-                        pLP = txtBarra.getText().toString().replace("$", "");
+                        pLP = txtLicencia.getText().toString().replace("$", "");
 
 
                         if ( confirmar_codigo_en_picking ){
                             if (gBePickingUbic.Lic_plate.equals(pLP)){
                                 Continua_procesando_barra();
                             }else{
-                                mu.msgbox("la licencia no es válida, re-intente");
+                                mu.msgbox("la licencia no válida.");
                                 //txtBarra.setSelectAllOnFocus(true);
-                                txtBarra.setText("");
-                                txtBarra.requestFocus();
+                                txtLicencia.setText("");
+                                txtLicencia.requestFocus();
 
                             }
                         }else
                         {
                             Continua_procesando_barra();
                         }
-
-
-
-
 
                     }
 
@@ -686,29 +686,29 @@ public class frm_picking_datos extends PBase {
                                                     }else{
                                                         mu.msgbox("El pallet escaneado no contiene la cantidad solicitada: "+gBePickingUbic.Cantidad_Solicitada
                                                                 +"\nCant. Disp:"+vCantDispLP);
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
 
                                                 }else{
                                                     mu.msgbox("El pallet escaneado no está disponible o ya fue reservado en un pedido.");
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
                                                     return;
                                                 }
 
                                             }else{
                                                 mu.msgbox("El lote escaneado de pallet: "+BeStockPallet.Stock.Lote+" no coincide con el lote solicitado: "+gBePickingUbic.Lote);
-                                                txtBarra.setSelectAllOnFocus(true);
-                                                txtBarra.requestFocus();
+                                                txtLicencia.setSelectAllOnFocus(true);
+                                                txtLicencia.requestFocus();
                                                 return;
                                             }
 
                                         }else{
                                             mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                            txtBarra.setSelectAllOnFocus(true);
-                                            txtBarra.requestFocus();
+                                            txtLicencia.setSelectAllOnFocus(true);
+                                            txtLicencia.requestFocus();
                                             return;
                                         }
 
@@ -740,15 +740,15 @@ public class frm_picking_datos extends PBase {
                                                         return;
                                                     }else{
                                                         mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
 
                                                 }else{
                                                     mu.msgbox("El pallet escaneado : "+pLP+" ya fue procesado para este picking.");
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
                                                     return;
                                                 }
 
@@ -775,30 +775,30 @@ public class frm_picking_datos extends PBase {
 
                                                             }else{
                                                                 mu.msgbox("El lote escaneado: "+BeStockPallet.Stock.Lote+" del pallet no coincide con el lote solicitado: "+gBePickingUbic.Lote);
-                                                                txtBarra.setSelectAllOnFocus(true);
-                                                                txtBarra.requestFocus();
-                                                                txtBarra.setText("");
+                                                                txtLicencia.setSelectAllOnFocus(true);
+                                                                txtLicencia.requestFocus();
+                                                                txtLicencia.setText("");
                                                                 return;
                                                             }
 
                                                         }else{
                                                             mu.msgbox("El pallet escaneado no contiene la cantidad solicitada: "+gBePickingUbic.Cantidad_Solicitada+
                                                                     "\nCant. Disp: "+vCantDispLP);
-                                                            txtBarra.setSelectAllOnFocus(true);
-                                                            txtBarra.requestFocus();
+                                                            txtLicencia.setSelectAllOnFocus(true);
+                                                            txtLicencia.requestFocus();
                                                             return;
                                                         }
                                                     }else{
                                                         mu.msgbox("El pallet escaneado no está disponible o ya fue reservado en un pedido.");
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
                                                 }else{
                                                     mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
-                                                    txtBarra.setText("");
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
+                                                    txtLicencia.setText("");
                                                     return;
                                                 }
 
@@ -807,9 +807,9 @@ public class frm_picking_datos extends PBase {
                                         }else{
 
                                             mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                            txtBarra.setSelectAllOnFocus(true);
-                                            txtBarra.requestFocus();
-                                            txtBarra.setText("");
+                                            txtLicencia.setSelectAllOnFocus(true);
+                                            txtLicencia.requestFocus();
+                                            txtLicencia.setText("");
                                             return;
                                         }
 
@@ -824,9 +824,9 @@ public class frm_picking_datos extends PBase {
 
                     }else{
                         mu.msgbox("El producto en esta ubicación no tiene barra de pallet asociada");
-                        txtBarra.setSelectAllOnFocus(true);
-                        txtBarra.requestFocus();
-                        txtBarra.setText("");
+                        txtLicencia.setSelectAllOnFocus(true);
+                        txtLicencia.requestFocus();
+                        txtLicencia.setText("");
                         return;
                     }
 
@@ -902,29 +902,29 @@ public class frm_picking_datos extends PBase {
                                                     }else{
                                                         mu.msgbox("El pallet escaneado no contiene la cantidad solicitada: "+gBePickingUbic.Cantidad_Solicitada
                                                                 +"\nCant. Disp:"+vCantDispLP);
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
 
                                                 }else{
                                                     mu.msgbox("El pallet escaneado no está disponible o ya fue reservado en un pedido.");
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
                                                     return;
                                                 }
 
                                             }else{
                                                 mu.msgbox("El lote escaneado de pallet: "+BeStockPallet.Stock.Lote+" no coincide con el lote solicitado: "+gBePickingUbic.Lote);
-                                                txtBarra.setSelectAllOnFocus(true);
-                                                txtBarra.requestFocus();
+                                                txtLicencia.setSelectAllOnFocus(true);
+                                                txtLicencia.requestFocus();
                                                 return;
                                             }
 
                                         }else{
                                             mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                            txtBarra.setSelectAllOnFocus(true);
-                                            txtBarra.requestFocus();
+                                            txtLicencia.setSelectAllOnFocus(true);
+                                            txtLicencia.requestFocus();
                                             return;
                                         }
 
@@ -956,15 +956,15 @@ public class frm_picking_datos extends PBase {
                                                         return;
                                                     }else{
                                                         mu.msgbox("El pallet escaneado : "+gBePickingUbic.Lic_plate+" pertenece al picking pero está asociado a la ubicación: "+ gBePickingUbic.IdUbicacion+" y la ubicación actual es: "+gIdUbicacion);
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
 
                                                 }else{
                                                     mu.msgbox("El pallet escaneado : "+pLP+" ya fue procesado para este picking.");
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
                                                     return;
                                                 }
 
@@ -991,30 +991,30 @@ public class frm_picking_datos extends PBase {
 
                                                             }else{
                                                                 mu.msgbox("El lote escaneado: "+BeStockPallet.Stock.Lote+" del pallet no coincide con el lote solicitado: "+gBePickingUbic.Lote);
-                                                                txtBarra.setSelectAllOnFocus(true);
-                                                                txtBarra.requestFocus();
-                                                                txtBarra.setText("");
+                                                                txtLicencia.setSelectAllOnFocus(true);
+                                                                txtLicencia.requestFocus();
+                                                                txtLicencia.setText("");
                                                                 return;
                                                             }
 
                                                         }else{
                                                             mu.msgbox("El pallet escaneado no contiene la cantidad solicitada: "+gBePickingUbic.Cantidad_Solicitada+
                                                                     "\nCant. Disp: "+vCantDispLP);
-                                                            txtBarra.setSelectAllOnFocus(true);
-                                                            txtBarra.requestFocus();
+                                                            txtLicencia.setSelectAllOnFocus(true);
+                                                            txtLicencia.requestFocus();
                                                             return;
                                                         }
                                                     }else{
                                                         mu.msgbox("El pallet escaneado no está disponible o ya fue reservado en un pedido.");
-                                                        txtBarra.setSelectAllOnFocus(true);
-                                                        txtBarra.requestFocus();
+                                                        txtLicencia.setSelectAllOnFocus(true);
+                                                        txtLicencia.requestFocus();
                                                         return;
                                                     }
                                                 }else{
                                                     mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                                    txtBarra.setSelectAllOnFocus(true);
-                                                    txtBarra.requestFocus();
-                                                    txtBarra.setText("");
+                                                    txtLicencia.setSelectAllOnFocus(true);
+                                                    txtLicencia.requestFocus();
+                                                    txtLicencia.setText("");
                                                     return;
                                                 }
 
@@ -1023,9 +1023,9 @@ public class frm_picking_datos extends PBase {
                                         }else{
 
                                             mu.msgbox("El código escaneado de pallet: "+pLP+" no coincide con el pallet de esta ubicación: "+gBePickingUbic.Lic_plate);
-                                            txtBarra.setSelectAllOnFocus(true);
-                                            txtBarra.requestFocus();
-                                            txtBarra.setText("");
+                                            txtLicencia.setSelectAllOnFocus(true);
+                                            txtLicencia.requestFocus();
+                                            txtLicencia.setText("");
                                             return;
                                         }
 
@@ -1040,9 +1040,9 @@ public class frm_picking_datos extends PBase {
 
                     }else{
                         mu.msgbox("El producto en esta ubicación no tiene barra de pallet asociada");
-                        txtBarra.setSelectAllOnFocus(true);
-                        txtBarra.requestFocus();
-                        txtBarra.setText("");
+                        txtLicencia.setSelectAllOnFocus(true);
+                        txtLicencia.requestFocus();
+                        txtLicencia.setText("");
                         return;
                     }
 
@@ -1054,8 +1054,8 @@ public class frm_picking_datos extends PBase {
                     //que se ingrese el código del producto para cargar los datos del picking
 
                     if (confirmar_codigo_en_picking) {
-                        txtBarra.setFocusable(false);
-                        txtBarra.clearFocus();
+                        txtLicencia.setFocusable(false);
+                        txtLicencia.clearFocus();
                         txtCodigoProducto.requestFocus();
                         txtCodigoProducto.setEnabled(true);
                         //#GT05042022: aviso para que el operador entienda que debe presionar ENTER  :(
@@ -1067,7 +1067,7 @@ public class frm_picking_datos extends PBase {
 
 
                 }else if ((!Escaneo_Pallet) && (!gBePickingUbic.Lic_plate.isEmpty()) &&
-                        (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtBarra.getText().toString()))){
+                        (!gBePickingUbic.Lic_plate.equals("0")) && (gBePickingUbic.CodigoProducto.equals(txtLicencia.getText().toString()))){
 
                     msgContinuarPorCodigo("Se requiere licencia de pallet para este producto y se ha ingresado el código, ¿está seguro de verificar por código de producto?");
                     return;
@@ -1304,9 +1304,9 @@ public class frm_picking_datos extends PBase {
             PressEnterProducto = true;
             txtCantidadPick.selectAll();
             txtCantidadPick.setSelectAllOnFocus(true);
-            txtCantidadPick.requestFocus();
             btnConfirmarPk.setEnabled(true);
-
+            txtCantidadPick.setFocusableInTouchMode(true);
+            txtCantidadPick.requestFocus();
 
         }catch (Exception e){
             mu.msgbox("Cargar_Datos_Producto_Picking:"+e.getMessage());
@@ -1391,9 +1391,9 @@ public class frm_picking_datos extends PBase {
             if (PressEnterProducto){
 
                 if (confirmar_codigo_en_picking) {
-                    if (txtBarra.getText().toString().isEmpty()) {
+                    if (txtLicencia.getText().toString().isEmpty()) {
                         msgCodigoProducto("Debe ingresar la licencia del producto");
-                        txtBarra.requestFocus();
+                        txtLicencia.requestFocus();
                         return;
                     }
 
@@ -1406,13 +1406,13 @@ public class frm_picking_datos extends PBase {
                 Procesar_Registro();
             }else{
                 msgCodigoProducto("Debe de leer SKU del producto y luego presionar Enter.");
-                txtBarra.requestFocus();
+                txtLicencia.requestFocus();
                 return;
             }
 
         }else{
             msgCodigoProducto("Debe de leer la licencia y luego presionar Enter.");
-            txtBarra.requestFocus();
+            txtLicencia.requestFocus();
             return;
         }
 
@@ -1547,7 +1547,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            if (!txtBarra.getText().toString().isEmpty() || !txtCodigoProducto.getText().toString().isEmpty()) {
+            if (!txtLicencia.getText().toString().isEmpty() || !txtCodigoProducto.getText().toString().isEmpty()) {
 
                 if (txtCantidadPick.getText().toString().equals("0") ||
                         txtCantidadPick.getText().toString().equals("0.00") ||
@@ -1574,10 +1574,10 @@ public class frm_picking_datos extends PBase {
                 }
             } else {
 
-                if (trLP.getVisibility() == View.VISIBLE && txtBarra.getText().toString().isEmpty()) {
+                if (trLP.getVisibility() == View.VISIBLE && txtLicencia.getText().toString().isEmpty()) {
                     mu.msgbox("Ingrese LP del producto");
-                    txtBarra.setSelectAllOnFocus(true);
-                    txtBarra.requestFocus();
+                    txtLicencia.setSelectAllOnFocus(true);
+                    txtLicencia.requestFocus();
                     return false;
                 }
 
@@ -1912,7 +1912,7 @@ public class frm_picking_datos extends PBase {
                     Set_dias_Vence();
 
                     if (!gBePickingUbic.Lic_plate.isEmpty()) {
-                        txtBarra.requestFocus();
+                        txtLicencia.requestFocus();
                     } else {
                         txtCodigoProducto.requestFocus();
                     }
@@ -1943,7 +1943,7 @@ public class frm_picking_datos extends PBase {
             Set_dias_Vence();
 
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
-               txtBarra.requestFocus();
+               txtLicencia.requestFocus();
             } else {
                 txtCodigoProducto.requestFocus();
             }
@@ -1970,16 +1970,16 @@ public class frm_picking_datos extends PBase {
                 }else{
                     mu.msgbox("El código ingresado no es el válido para la línea de picking");
                     btnConfirmarPk.setEnabled(false);
-                    txtBarra.setSelectAllOnFocus(true);
-                    txtBarra.requestFocus();
+                    txtLicencia.setSelectAllOnFocus(true);
+                    txtLicencia.requestFocus();
                 }
 
             }else{
 
                 mu.msgbox("El código ingresado no es el válido para la línea de picking");
                 btnConfirmarPk.setEnabled(false);
-                txtBarra.setSelectAllOnFocus(true);
-                txtBarra.requestFocus();
+                txtLicencia.setSelectAllOnFocus(true);
+                txtLicencia.requestFocus();
             }
 
         }catch (Exception e){
