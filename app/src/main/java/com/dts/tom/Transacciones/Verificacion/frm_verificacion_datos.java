@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,15 +45,17 @@ public class frm_verificacion_datos extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri;
-    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri;
+    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri, txtCajas, txtUnidades;
+    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
+    private RelativeLayout relDesglose, relConDesglose;
 
     private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
 
     public static clsBeProducto gBeProducto = new clsBeProducto();
+    public static clsBeProducto_PresentacionList tmpBePresentacion = new clsBeProducto_PresentacionList();
     public static clsBeDetallePedidoAVerificar BePedidoDetVerif = new clsBeDetallePedidoAVerificar();
     public static clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
@@ -71,6 +74,7 @@ public class frm_verificacion_datos extends PBase {
     private double Sol = 0;
     private double Rec = 0;
     private double Ver = 0;
+    private double factor = 0;
     private String UM = "";
     private double pPeso;
     private double pCantidad;
@@ -105,7 +109,6 @@ public class frm_verificacion_datos extends PBase {
         lblLoteVeri = (TextView) findViewById(R.id.lblLoteVeri);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate2 = (TextView) findViewById(R.id.lblLicPlate2);
-        btMarcarReemplazoVeri = (Button) findViewById(R.id.btMarcarReemplazoVeri);
         btnConfirmarV = (Button) findViewById(R.id.btnConfirmarV);
         btnBack = (Button) findViewById(R.id.btnBack);
         cmbPresVeri = (Spinner) findViewById(R.id.cmbPresVeri);
@@ -115,9 +118,12 @@ public class frm_verificacion_datos extends PBase {
         llCantidad = (LinearLayout) findViewById(R.id.llCantidad);
         llPeso = (LinearLayout) findViewById(R.id.llPeso);
         llUMBas = (LinearLayout) findViewById(R.id.llUMBas);
-        llReemplazo = (LinearLayout) findViewById(R.id.llReemplazo);
         dpResult = (DatePicker) findViewById(R.id.datePicker2);
         imgDate = (ImageView)findViewById(R.id.imgDate3);
+        txtCajas = (EditText) findViewById(R.id.txtCajas);
+        txtUnidades = (EditText) findViewById(R.id.txtUnidades);
+        lblPresentacion = (TextView) findViewById(R.id.lblPresentacion);
+        relDesglose = findViewById(R.id.relDesglose);
 
         BePickingUbicList = gl.gBePickingUbicList;
 
@@ -249,6 +255,29 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    private void procesaCajasUnidades() {
+        double cantidadPresentacion = 0;
+        double CantVeri = 0;
+
+        CantVeri = Double.valueOf(txtCantVeri.getText().toString());
+        if (CantVeri > factor) {
+            relDesglose.setVisibility(View.VISIBLE);
+            app.readOnly(txtCajas,true);
+            app.readOnly(txtUnidades,true);
+
+            cantidadPresentacion = CantVeri / factor;
+            double decimal = cantidadPresentacion % 1;
+            double cajas = cantidadPresentacion - decimal;
+            double unidades = decimal * factor;
+
+            txtCajas.setText(String.valueOf(cajas));
+            txtUnidades.setText(String.valueOf(unidades));
+
+        } else {
+            relDesglose.setVisibility(View.GONE);
+        }
+    }
+
     public void Inicia_Tarea_Detalle(){
 
         double suma=0;
@@ -302,6 +331,8 @@ public class frm_verificacion_datos extends PBase {
                 cmbPresVeri.setSelection(sel);
             }else{
                 llPresentacion.setVisibility(View.GONE);
+
+                execws(4);
             }
 
             if (Lp != ""){
@@ -484,6 +515,9 @@ public class frm_verificacion_datos extends PBase {
                                    "pCantidad",pCantidad,
                                    "pPeso",pPeso);
                         break;
+                    case 4:
+                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);
+                        break;
                 }
 
             }catch (Exception e){
@@ -509,6 +543,9 @@ public class frm_verificacion_datos extends PBase {
                     break;
                 case 3:
                     processActualizaCantPesoVerif();
+                    break;
+                case 4:
+                    processGetPresentacion();
                     break;
             }
 
@@ -604,6 +641,29 @@ public class frm_verificacion_datos extends PBase {
             progress.cancel();
 
             frm_verificacion_datos.super.finish();
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private void processGetPresentacion() {
+        try {
+
+            progress.setMessage("Actualizando cantidad y peso de la verificación...");
+
+            tmpBePresentacion = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
+
+            if (tmpBePresentacion != null) {
+                if (tmpBePresentacion.items != null) {
+                    factor = tmpBePresentacion.items.get(0).Factor;
+                    lblPresentacion.setText(tmpBePresentacion.items.get(0).Nombre+": ");
+
+                    procesaCajasUnidades();
+                }
+            }
+            progress.cancel();
 
         }catch (Exception e){
             progress.cancel();
