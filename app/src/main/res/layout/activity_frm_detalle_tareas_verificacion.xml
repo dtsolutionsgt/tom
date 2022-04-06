@@ -25,7 +25,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
-            android:onClick="Regresar" />
+            android:onClick="Regresar"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/btnFinalizarTareaVerificacion"
@@ -113,7 +114,9 @@
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/imgReemplazo"
             android:layout_toEndOf="@id/textView2"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/textView2"
@@ -655,8 +658,8 @@
 
         <ImageView
             android:id="@+id/imageView18"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignTop="@+id/txtCodProd"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="2dp"
@@ -665,7 +668,8 @@
             android:clickable="true"
             android:onClick="showItemMenu"
             android:padding="3dp"
-            android:src="@drawable/cambioesta" />
+            android:src="@drawable/cambioesta"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageView
             android:id="@+id/imgReemplazo"

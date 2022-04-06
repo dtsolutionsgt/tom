@@ -108,7 +108,7 @@ public class frm_picking_datos extends PBase {
         ws = new WebServiceHandler(frm_picking_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtBarra = (EditText) findViewById(R.id.chip1);
+        txtBarra = (EditText) findViewById(R.id.txtLP);
         txtFechaCad = (EditText) findViewById(R.id.txtFechaCad);
         txtLote = (EditText) findViewById(R.id.txtLote);
         txtUniBas = (EditText) findViewById(R.id.txtUniBas);
@@ -239,25 +239,20 @@ public class frm_picking_datos extends PBase {
         try {
 
 
-            txtBarra.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            if (txtBarra!=null){
+                txtBarra.setOnClickListener(view -> {
 
-                }
-            });
-
-            txtBarra.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                });
+                txtBarra.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
                         Procesa_Barra();
                     }
 
                     return false;
-                }
-            });
+                });
 
+            }
 
             txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1623,7 +1618,7 @@ public class frm_picking_datos extends PBase {
 
                 }
             } else {
-                toastlong("El producto no tiene imágenes");
+                //toastlong("El producto no tiene imágenes");
                 progress.cancel();
                 return;
 

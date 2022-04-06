@@ -122,7 +122,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //#EJC20220403: Force scan location...
-                    if (areaprimera || !areaprimera) {
+                    if (areaprimera) {
                         listView.setClickable(false);
                         toast("Por favor, escaneé la ubicación");
                         txtUbicacionFiltro.requestFocus();
