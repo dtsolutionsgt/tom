@@ -4474,8 +4474,8 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Actualiza_Valores_Despues_Imprimir(boolean salir){
-        try{
 
+        try{
             //EJC20210125: Actualiza valores de la OC después imprimir
             switch (gl.TipoOpcion){
 
@@ -4491,7 +4491,6 @@ public class frm_recepcion_datos extends PBase {
                 case 2:
                     progress.cancel();
                     break;
-
             }
 
         }catch (Exception e){
