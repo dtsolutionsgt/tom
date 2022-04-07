@@ -223,6 +223,80 @@
                     android:layout_height="45dp"
                     tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
+
+            <RelativeLayout
+                android:id="@+id/tblCajasUnidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:paddingLeft="9dp"
+                android:paddingRight="5dp"
+                android:visibility="gone">
+
+                <TableRow
+                    android:id="@+id/tbCajasUnidades"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="Desglose"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <LinearLayout
+                    android:id="@+id/llCajas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tbCajasUnidades"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/color_light"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp">
+
+                    <TextView
+                        android:id="@+id/lblPresentacion"
+                        style="@style/StyleText"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:text="Cajas:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/txtCajas"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="0"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/lblUnidades"
+                        style="@style/StyleText"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:text="UNI:"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/txtUnidades"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="0"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

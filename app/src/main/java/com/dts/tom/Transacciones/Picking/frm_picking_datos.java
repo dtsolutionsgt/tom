@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -65,11 +66,12 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
-    private TextView lblTituloForma, lblLicPlate, lblEstiba;
+    private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion;
     private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
-    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto;
+    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto, txtCajas, txtUnidades;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
+    private RelativeLayout tblCajasUnidades;
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
@@ -113,6 +115,8 @@ public class frm_picking_datos extends PBase {
         txtCantidadPick = (EditText) findViewById(R.id.txtCantidadPick);
         txtPesoPick = (EditText) findViewById(R.id.txtPesoPick);
         txtCodigoProducto = (EditText) findViewById(R.id.txtCodigoProducto);
+        txtCajas = (EditText) findViewById(R.id.txtCajas);
+        txtUnidades = (EditText) findViewById(R.id.txtUnidades);
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
@@ -131,6 +135,8 @@ public class frm_picking_datos extends PBase {
         trLote = (TableRow) findViewById(R.id.trLote);
         trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
         tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
+        tblCajasUnidades = findViewById(R.id.tblCajasUnidades);
+        lblPresentacion = findViewById(R.id.lblPresentacion);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -1211,6 +1217,8 @@ public class frm_picking_datos extends PBase {
         double cantidadPresentacion = 0;
         double CantPick = 0;
 
+        tblCajasUnidades.setVisibility(View.VISIBLE);
+
         CantPick = Double.valueOf(txtCantidadPick.getText().toString());
         if (CantPick > factor) {
 
@@ -1219,7 +1227,9 @@ public class frm_picking_datos extends PBase {
             double cajas = cantidadPresentacion - decimal;
             double unidades = decimal * factor;
 
-            toast("CAJAS: "+cajas+" UNIDADES: "+unidades);
+            lblPresentacion.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtCajas.setText(String.valueOf(cajas));
+            txtUnidades.setText(String.valueOf(mu.frmdec(unidades)));
         }
     }
 
@@ -1276,10 +1286,6 @@ public class frm_picking_datos extends PBase {
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                         cmbPresentacion.setSelection(inx);
 
-                        //#AT20220406 Ser nombre presentación en label
-                        factor = gBeProducto.Presentaciones.items.get(0).Factor;
-
-
 
                         //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                         gBePresentacion= stream(gBeProducto.Presentaciones.items).
@@ -1331,6 +1337,16 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText(""+mu.frmdecimal(gBePickingUbic.Peso_solicitado,gl.gCantDecDespliegue));
             }else{
                 txtPesoPick.setText("0");
+            }
+
+            if (gBeProducto.Presentaciones.items!=null) {
+
+                // gBeProducto.Presentaciones.items.get(0).Factor;
+                double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+
+                if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+                    calculaCajaUnidades();
+                }
             }
 
             PressEnterProducto = true;
@@ -1404,6 +1420,16 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText(""+mu.frmdecimal(gBePickingUbic.Peso_solicitado,gl.gCantDecDespliegue));
             }else{
                 txtPesoPick.setText("0");
+            }
+
+            if (gBeProducto.Presentaciones.items!=null) {
+
+                // gBeProducto.Presentaciones.items.get(0).Factor;
+                double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+
+                if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+                    calculaCajaUnidades();
+                }
             }
 
             //txtCantidadPick.selectAll();
