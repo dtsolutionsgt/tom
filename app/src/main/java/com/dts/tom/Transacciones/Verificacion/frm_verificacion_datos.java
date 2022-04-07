@@ -300,7 +300,7 @@ public class frm_verificacion_datos extends PBase {
             Lp = BePedidoDetVerif.getLicPlate();
 
             lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s Sol: %s Pick: %s Veri: %s",
-                    Codigo, Nombre, Expira, Lote,String.valueOf(Sol), String.valueOf(Rec), String.valueOf(Ver)));
+                    Codigo, Nombre, Expira, Lote, Sol, Rec, Ver));
 
             if (gBeProducto == null){
                 throw new Exception("El producto no está definido");
@@ -491,7 +491,11 @@ public class frm_verificacion_datos extends PBase {
             }
 
             //Llama al método del WS Actualiza_Cant_Peso_Verificacion
-            execws(3);
+            if (pSubListPickingU.items.size()!=0){
+                execws(3);
+            }else{
+                throw new Exception("#ERR_20220406: No se obtuvo la lista de verificación.");
+            }
 
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");

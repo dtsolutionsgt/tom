@@ -226,6 +226,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                                         .first();
 
                 if (vPedidoVerif != null) {
+                    vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
                     Procesa_Registro(vPedidoVerif);
                 } else {
                     mu.msgbox(String.format("No existe el producto %s en esta Verificación",selProd));

@@ -1321,6 +1321,8 @@ public class frm_picking_datos extends PBase {
                     txtCantidadPick.setText(""+mu.frmdecimal(vCantUniXTarima,gl.gCantDecDespliegue));
                 }else{
                     txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                    //#EJC20220406:No formatear para aquellos casos que tienen muchos decimales.
+                    txtCantidadPick.setText(""+CantARec);
                 }
 
             }

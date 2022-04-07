@@ -608,6 +608,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
         });
 
+        txtUbicDestino.setOnClickListener(view -> {
+
+        });
 
     }
 
@@ -1220,12 +1223,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
             txtPeso.setEnabled(true);
-
-            if (inferir_origen_en_cambio_ubic) {
-                txtUbicDestino.requestFocus();
-            } else {
-                txtCantidad.requestFocus();
-            }
 
             //#EJC20220330: De momento mover licencias completas y no permitir explosión.
             if (gl.Permitir_Cambio_Ubic_Producto_Picking){
@@ -1853,8 +1850,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }
 
-            if (!inferir_origen_en_cambio_ubic) {
-                txtCantidad.requestFocus();
+            if (inferir_origen_en_cambio_ubic) {
+                txtUbicDestino.requestFocus();
+            } else {
+                if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                    txtUbicDestino.requestFocus();
+                }else{
+                    txtCantidad.requestFocus();
+                }
             }
 
             progress.cancel();
@@ -2232,15 +2235,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(lUbicSug.items.size()>0){
 
                     txtUbicSug.setText(String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
-                    txtUbicDestino.setHint("Escanee " + String.valueOf(lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion));
+                    txtUbicDestino.setHint("Escanee " + lUbicSug.items.get(0).lUbicacionesVacias.items.get(0).IdUbicacion);
                     validaDestinoSug();
 
                 }
 
             }else{
+
                 cvUbicDestID = 0;
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
+
+                if (inferir_origen_en_cambio_ubic) {
+                    txtUbicDestino.requestFocus();
+                } else {
+                    if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                        txtUbicDestino.requestFocus();
+                    }else{
+                        txtCantidad.requestFocus();
+                    }
+                }
+
             }
 
         }catch (Exception ex){

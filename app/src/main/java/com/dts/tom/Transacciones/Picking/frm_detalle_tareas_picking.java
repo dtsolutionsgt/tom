@@ -410,7 +410,7 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
-            lblTituloForma.setText("Detalle de producto para Picking "+gl.gIdPickingEnc);
+            lblTituloForma.setText("Picking #"+gl.gIdPickingEnc);
 
             if (gl.gIdPickingEnc>0){
                 execws(1);
