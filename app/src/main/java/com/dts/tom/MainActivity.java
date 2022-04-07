@@ -89,7 +89,7 @@ public class MainActivity extends PBase {
     private ArrayList<String> prnlist= new ArrayList<String>();
     private ArrayList<String> userlist= new ArrayList<String>();
 
-    private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
+    private int idemp=0,idbodega=0,idimpres=0,iduser=-1,ii;
     private String NomOperador, NomBodega;
     private boolean idle=false;
 
