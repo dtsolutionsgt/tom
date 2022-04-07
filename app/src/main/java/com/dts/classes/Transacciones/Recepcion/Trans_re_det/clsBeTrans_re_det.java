@@ -52,7 +52,6 @@ public class clsBeTrans_re_det {
     @Element(required=false) public int IdPropietarioBodega=0;
     @Element(required=false) public int IdUbicacion=0;
     @Element(required=false) public int IdUbicacionAnterior=0;
-    @Element(required=false) public int IdOrdenCompraEnc=0;
     @Element(required=false) public String Fecha_Rec="1900-01-01T00:00:01";
     @Element(required=false) public String Fecha_tarea="1900-01-01T00:00:01";
     @Element(required=false) public String Hora_ini="1900-01-01T00:00:01";
@@ -62,6 +61,9 @@ public class clsBeTrans_re_det {
     @Element(required=false) public String Lic_plate="";
     @Element(required=false) public double Uds_lic_plate=0;
     @Element(required=false) public boolean Pallet_No_Estandar= false;
+    @Element(required=false) public int IdOrdenCompraEnc=0;
+    @Element(required=false) public int IdOrdenCompraDet=0;
+
 
     public clsBeTrans_re_det() {
     }
@@ -78,7 +80,7 @@ public class clsBeTrans_re_det {
                              boolean IsNew,boolean Control_Peso,int IdPropietarioBodega,int IdUbicacion,
                              int IdUbicacionAnterior,int IdOrdenCompraEnc,String Fecha_Rec,String Fecha_tarea,
                              String Hora_ini,String Hora_Fin,String Estado_Rec,String UbicacionCompleta,
-                             String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar) {
+                             String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar, int IdOrdenCompraDet) {
 
         this.IdPresentacion=IdPresentacion;
         this.IdUnidadMedida=IdUnidadMedida;
@@ -131,6 +133,7 @@ public class clsBeTrans_re_det {
         this.Lic_plate=Lic_plate;
         this.Uds_lic_plate=Uds_lic_plate;
         this.Pallet_No_Estandar=Pallet_No_Estandar;
+        this.IdOrdenCompraDet = IdOrdenCompraDet;
 
     }
 
@@ -440,5 +443,12 @@ public class clsBeTrans_re_det {
     public void setPallet_No_Estandar(boolean value) {
         Pallet_No_Estandar=value;
     }
+    public int getIdOrdenCompraDet() {
+        return IdOrdenCompraDet;
+    }
+    public void setIdOrdenCompraDet(int value) {
+        IdOrdenCompraDet=value;
+    }
+
 }
 

@@ -4387,6 +4387,12 @@ public class frm_recepcion_datos extends PBase {
 
                 try{
 
+                    //#AT20220407 Se agregá IdOrdenCompraEnc y Det a clsBeTrans_re_detList
+                    for (int i=0; i < auxListTransRecDet.items.size(); i++) {
+                        auxListTransRecDet.items.get(i).IdOrdenCompraDet = pIdOrdenCompraDet;
+                        auxListTransRecDet.items.get(i).IdOrdenCompraEnc = pIdOrdenCompraEnc;
+                    }
+
                     gl.gBeRecepcion.Detalle.items = new ArrayList<>();
                     gl.gBeRecepcion.Detalle.items.addAll(auxListTransRecDet.items);
 
