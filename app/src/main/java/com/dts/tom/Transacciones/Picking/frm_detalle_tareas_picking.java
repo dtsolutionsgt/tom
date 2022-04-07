@@ -54,8 +54,8 @@ public class frm_detalle_tareas_picking extends PBase {
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
     private TextView  lblBodega, lblOperador, lblTituloForma;
-    private ImageView btnLimpiar;
-    private RelativeLayout relbot;
+    private ImageView btnLimpiar, btnFiltros;
+    private RelativeLayout relbot, relFiltros;
 
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
@@ -75,7 +75,7 @@ public class frm_detalle_tareas_picking extends PBase {
     public static int pOrden=1;
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
-    private boolean areaprimera = true;
+    private boolean areaprimera = true, filtros = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +106,15 @@ public class frm_detalle_tareas_picking extends PBase {
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         txtFiltro = (EditText) findViewById(R.id.txtFiltro);
         btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
-        //btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
+        btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
         relbot = (RelativeLayout) findViewById(R.id.relbot);
+        relFiltros = findViewById(R.id.relFiltros);
 
         lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
         lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
+
+        gl.mostar_filtros = false;
+        gl.termino = "";
 
         ProgressDialog("Cargando forma...");
 
@@ -202,6 +206,7 @@ public class frm_detalle_tareas_picking extends PBase {
         btnLimpiar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                gl.termino = "";
                 txtFiltro.setText("");
                 txtFiltro.requestFocus();
             }
@@ -214,27 +219,10 @@ public class frm_detalle_tareas_picking extends PBase {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                 if (!txtFiltro.getText().toString().isEmpty()) {
-                    btnLimpiar.setVisibility(View.VISIBLE);
-                    String termino  = charSequence.toString();
-                    AuxBePickingUbic.clear();
-                    for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
-
-                        if(obj.CodigoProducto.contains(termino) || obj.NombreProducto.toLowerCase().contains(termino)){
-                            AuxBePickingUbic.add(obj);
-                        }
-                    }
-
-                    if (areaprimera) {
-                        adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                        listView.setAdapter(adapter2);
-                    } else {
-                        adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                        listView.setAdapter(adapter);
-                    }
-
-                    btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
+                    gl.termino = termino.toString();
+                    Filtro();
                 } else {
                     Lista_Detalle_Picking();
                     btnLimpiar.setVisibility(View.GONE);
@@ -247,14 +235,42 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         });
 
-        /*btnFiltros.setOnClickListener(new View.OnClickListener() {
+        btnFiltros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnFiltros.setVisibility(View.VISIBLE);
+                gl.mostar_filtros = !gl.mostar_filtros;
+                relFiltros.setVisibility(gl.mostar_filtros ? View.VISIBLE : View.GONE);
             }
-        });*/
+        });
 
     }
+
+    private void Filtro() {
+        String termino  = gl.termino;
+
+        if (!termino.isEmpty()) {
+            btnLimpiar.setVisibility(View.VISIBLE);
+        }
+
+        AuxBePickingUbic.clear();
+        for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
+
+            if(obj.CodigoProducto.contains(termino) || obj.NombreProducto.toLowerCase().contains(termino)){
+                AuxBePickingUbic.add(obj);
+            }
+        }
+
+        if (areaprimera) {
+            adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+            listView.setAdapter(adapter2);
+        } else {
+            adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+            listView.setAdapter(adapter);
+        }
+
+        btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
+    }
+
 
     public void ProgressDialog(String mensaje) {
         progress = new ProgressDialog(this);
@@ -500,7 +516,6 @@ public class frm_detalle_tareas_picking extends PBase {
     public void BotonR(View view){
 
         try{
-            txtFiltro.setText("");
             if (btnRes_Det.getText().toString().equals("C.")){
 
                 btnRes_Det.setText("D.");
@@ -757,6 +772,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
             Lista_Detalle();
 
+            if (!gl.termino.isEmpty())
+                Filtro();
+
         }catch (Exception e){
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
         }
@@ -831,6 +849,10 @@ public class frm_detalle_tareas_picking extends PBase {
         try{
 
             super.onResume();
+
+            if (!gl.termino.isEmpty()) {
+                txtFiltro.setText(gl.termino);
+            }
 
             if (browse==1){
                 browse=0;

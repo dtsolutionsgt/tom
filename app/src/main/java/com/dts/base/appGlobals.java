@@ -180,4 +180,7 @@ public class appGlobals extends Application {
     public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
 
     public int sortOrd = 0;
+
+    public boolean mostar_filtros = false;
+    public String termino = "";
 }

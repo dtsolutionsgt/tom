@@ -82,6 +82,7 @@ public class frm_picking_datos extends PBase {
     public clsBeProducto_Presentacion gBePresentacion = new clsBeProducto_Presentacion();
     public double vCajasPorCama =0;
     public double vCamasPorTarima = 0;
+    public double factor=0;
 
     private int DifDias = 0;
 
@@ -1206,6 +1207,22 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void calculaCajaUnidades() {
+        double cantidadPresentacion = 0;
+        double CantPick = 0;
+
+        CantPick = Double.valueOf(txtCantidadPick.getText().toString());
+        if (CantPick > factor) {
+
+            cantidadPresentacion = CantPick / factor;
+            double decimal = cantidadPresentacion % 1;
+            double cajas = cantidadPresentacion - decimal;
+            double unidades = decimal * factor;
+
+            toast("CAJAS: "+cajas+" UNIDADES: "+unidades);
+        }
+    }
+
     private void Cargar_Datos_Producto_Picking(){
 
         double CantARec = 0;
@@ -1258,6 +1275,11 @@ public class frm_picking_datos extends PBase {
                         List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                         cmbPresentacion.setSelection(inx);
+
+                        //#AT20220406 Ser nombre presentación en label
+                        factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
+
 
                         //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                         gBePresentacion= stream(gBeProducto.Presentaciones.items).
@@ -1418,6 +1440,7 @@ public class frm_picking_datos extends PBase {
                     }
 
                     Procesar_Registro();
+                    //gl.termino = "";
                 }else{
                     msgCodigoProducto("Debe de leer SKU del producto y luego presionar Enter.");
                     txtLicencia.requestFocus();
@@ -1432,6 +1455,7 @@ public class frm_picking_datos extends PBase {
 
         }else{
             Procesar_Registro();
+            //gl.termino = "";
         }
 
     }
@@ -1925,6 +1949,9 @@ public class frm_picking_datos extends PBase {
 
             if (gBeProducto.Presentaciones!=null){
                 if (gBeProducto.Presentaciones.items!=null){
+
+                    factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
                     Listar_Producto_Estado();
                     Listar_Producto_Presentaciones();
                     Set_dias_Vence();
