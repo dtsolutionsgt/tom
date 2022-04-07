@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -15,7 +16,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -50,7 +53,9 @@ public class frm_consulta_stock extends PBase {
     private ProgressDialog progress;
 
     private ListView listView;
+    private ImageView btnFiltros;
     private Button btnBack, registros,btnBuscar;
+    private RelativeLayout relFiltros;
     private int pIdTarea=0;
     private EditText txtCodigo, txtUbic, txtNombre;
     private CheckBox chkDetalle;
@@ -98,7 +103,7 @@ public class frm_consulta_stock extends PBase {
 
         listView = (ListView) findViewById(R.id.listExist);
         btnBack = (Button) findViewById(R.id.btnBack);
-        btnBuscar = (Button) findViewById(R.id.btnBuscar);
+        //btnBuscar = (Button) findViewById(R.id.btnBuscar);
         registros = findViewById(R.id.btnRegs2);
         txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
         txtUbic = (EditText) findViewById(R.id.txtUbic1);
@@ -108,7 +113,10 @@ public class frm_consulta_stock extends PBase {
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
         spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
         chkDetalle=(CheckBox)findViewById(R.id.chkDetalle);
+        btnFiltros = findViewById(R.id.btnFiltros);
+        relFiltros = findViewById(R.id.relFiltros);
 
+        gl.mostar_filtros = false;
         setHandlers();
 
         txtUbic.requestFocus();
@@ -154,6 +162,7 @@ public class frm_consulta_stock extends PBase {
                                 case KeyEvent.KEYCODE_ENTER:
 
                                     lblNombreProducto.setText("");
+                                    lblNombreProducto.setVisibility(View.GONE);
 
                                     busca_stock();
 
@@ -193,6 +202,9 @@ public class frm_consulta_stock extends PBase {
 
 
                     try{
+                        TextView spinlabel = (TextView) parentView.getChildAt(0);
+                        spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
+
                         String estado = cmbEstadoExist.getSelectedItem().toString();
 
                         if(estado.isEmpty() && selest ==0){
@@ -220,6 +232,9 @@ public class frm_consulta_stock extends PBase {
             spOrdenar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                    TextView spinlabel = (TextView) parentView.getChildAt(0);
+                    spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     if (pListStock2 != null){
 
@@ -296,6 +311,14 @@ public class frm_consulta_stock extends PBase {
                 }
             });
 
+            btnFiltros.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    gl.mostar_filtros = !gl.mostar_filtros;
+                    relFiltros.setVisibility(gl.mostar_filtros ? View.VISIBLE : View.GONE);
+                }
+            });
+
         }
         catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -349,6 +372,7 @@ public class frm_consulta_stock extends PBase {
 
             cUbic =xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
+            lblNombreUbicacion.setVisibility(View.VISIBLE);
             if (cUbic != null){
                 idubic = cUbic.IdUbicacion;
 
@@ -382,6 +406,7 @@ public class frm_consulta_stock extends PBase {
 
             if (BeProducto != null){
                 idprod = BeProducto.IdProducto;
+                lblNombreProducto.setVisibility(View.VISIBLE);
                 lblNombreProducto.setText(BeProducto.getNombre());
                 codProducto=BeProducto.Codigo;
                 //toast("ubicación encontrada por HH");
@@ -420,7 +445,7 @@ public class frm_consulta_stock extends PBase {
                 conteo = pListStock2.items.size();
 
                 if(conteo == 0 || pListStock2.items.isEmpty()){
-
+                    lblNombreUbicacion.setVisibility(View.VISIBLE);
                     lblNombreUbicacion.setText("U.S.P");
                     idle = true;
                 }
@@ -442,7 +467,7 @@ public class frm_consulta_stock extends PBase {
                         item.UM = pListStock2.items.get(i).UM;
                         item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
                         item.Pres = pListStock2.items.get(i).Pres;
-                        item.ExistPres = pListStock2.items.get(i).ExistPres;
+                        item.ExistPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistPres));
                         item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                         item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                         item.Lote = pListStock2.items.get(i).Lote;
@@ -457,8 +482,8 @@ public class frm_consulta_stock extends PBase {
                         item.factor = pListStock2.items.get(i).factor;
                         item.ingreso= pListStock2.items.get(i).ingreso;
                         item.IdTipoEtiqueta=pListStock2.items.get(i).IdTipoEtiqueta;
-                        item.ResPres = pListStock2.items.get(i).ResPres;
-                        item.DispPres = pListStock2.items.get(i).DispPres;
+                        item.ResPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ResPres));
+                        item.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                         item.NombreArea = pListStock2.items.get(i).NombreArea;
                         item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                         items_stock.add(item);
@@ -466,6 +491,7 @@ public class frm_consulta_stock extends PBase {
                         if (i==0){
                             if (!txtCodigo.getText().toString().isEmpty()){
                                 if (!txtCodigo.getText().toString().equals("0")){
+                                    lblNombreProducto.setVisibility(View.VISIBLE);
                                     lblNombreProducto.setText(item.Codigo + " " + item.Nombre);
                                 }
                             }
@@ -547,7 +573,7 @@ public class frm_consulta_stock extends PBase {
                 item.UM = pListStock2.items.get(i).UM;
                 item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
                 item.Pres = pListStock2.items.get(i).Pres;
-                item.ExistPres = pListStock2.items.get(i).ExistPres;
+                item.ExistPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistPres));
                 item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                 item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                 item.Lote = pListStock2.items.get(i).Lote;
@@ -562,8 +588,8 @@ public class frm_consulta_stock extends PBase {
                 item.factor = pListStock2.items.get(i).factor;
                 item.ingreso= pListStock2.items.get(i).ingreso;
                 item.IdTipoEtiqueta= pListStock2.items.get(i).IdTipoEtiqueta;//#CKFK 20210716 1846 Agregué el campo IdTipoEtiqueta
-                item.ResPres = pListStock2.items.get(i).ResPres;
-                item.DispPres = pListStock2.items.get(i).DispPres;
+                item.ResPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ResPres));
+                item.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                 item.NombreArea = pListStock2.items.get(i).NombreArea;
                 item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 items_stock.add(item);
@@ -608,7 +634,7 @@ public class frm_consulta_stock extends PBase {
                 items.UM = pListStock2.items.get(i).UM;
                 items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
                 items.Pres = pListStock2.items.get(i).Pres;
-                items.ExistPres = pListStock2.items.get(i).ExistPres;
+                items.ExistPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistPres));
                 items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                 items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                 items.Lote = pListStock2.items.get(i).Lote;
@@ -623,8 +649,8 @@ public class frm_consulta_stock extends PBase {
                 items.factor = pListStock2.items.get(i).factor;
                 items.ingreso = pListStock2.items.get(i).ingreso;
                 items.IdTipoEtiqueta = pListStock2.items.get(i).IdTipoEtiqueta;
-                items.ResPres = pListStock2.items.get(i).ResPres;
-                items.DispPres = pListStock2.items.get(i).DispPres;
+                items.ResPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ResPres));
+                items.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                 items.NombreArea = pListStock2.items.get(i).NombreArea;
                 items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 items_stock2.add(items);
@@ -658,7 +684,7 @@ public class frm_consulta_stock extends PBase {
                     items.UM = pListStock2.items.get(i).UM;
                     items.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
                     items.Pres = pListStock2.items.get(i).Pres;
-                    items.ExistPres = pListStock2.items.get(i).ExistPres;
+                    items.ExistPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistPres));
                     items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                     items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                     items.Lote = pListStock2.items.get(i).Lote;
@@ -671,8 +697,8 @@ public class frm_consulta_stock extends PBase {
                     items.LicPlate = pListStock2.items.get(i).LicPlate;
                     items.IdProductoBodega = pListStock2.items.get(i).IdProductoBodega;
                     items.ingreso = pListStock2.items.get(i).ingreso;
-                    items.ResPres = pListStock2.items.get(i).ResPres;
-                    items.DispPres = pListStock2.items.get(i).DispPres;
+                    items.ResPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ResPres));
+                    items.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                     items.NombreArea = pListStock2.items.get(i).NombreArea;
                     items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                     items_stock2.add(items);
@@ -723,6 +749,7 @@ public class frm_consulta_stock extends PBase {
         try{
 
             lblNombreProducto.setText("");
+            lblNombreProducto.setVisibility(View.GONE);
 
             if ((txtCodigo.getText().toString().isEmpty() && txtCodigo.getText().toString().isEmpty()) &&
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty()) &&
