@@ -6728,6 +6728,7 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    //Probando
     private void processGuardarRecNueva(){
 
         try{
