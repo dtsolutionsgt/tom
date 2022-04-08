@@ -5986,6 +5986,7 @@ public class frm_recepcion_datos extends PBase {
                                 "pIdUsuario",gl.IdOperador,
                                 "pIdResolucionLp",gl.IdResolucionLpOperador);
                         break;
+
                     case 17 :
                         //Guardar_Recepcion_Edita
                         callMethod("GuardarRecepcionModif","pRecEnc",gl.gBeRecepcion,
