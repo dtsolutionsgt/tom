@@ -2934,7 +2934,10 @@ public class frm_recepcion_datos extends PBase {
                 tblVence.setVisibility(View.VISIBLE);
 
                 if (!gl.gFechaVenceAnterior.equals("")){
-                    cmbVenceRec.setText(gl.gFechaVenceAnterior);
+                    //#EJC20220407:Conservar último lote, solo si no hay lotes predefinidos.
+                    if (gl.gBeOrdenCompra.DetalleLotes.items.size()==0){
+                        cmbVenceRec.setText(gl.gFechaVenceAnterior);
+                    }
                 }
 
             }else{
