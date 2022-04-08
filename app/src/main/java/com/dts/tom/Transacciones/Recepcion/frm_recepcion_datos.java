@@ -556,6 +556,12 @@ public class frm_recepcion_datos extends PBase {
 
 
             });
+            txtNoLP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
             txtNoLP.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
@@ -2738,9 +2744,19 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            //#GT04042022: focus en cantidad.
-            txtCantidadRec.requestFocus();
-            txtCantidadRec.selectAll();
+            /*if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
+                if (nBeResolucion == null) {
+                    if (!txtNoLP.getText().toString().isEmpty()) {
+                        txtNoLP.requestFocus();
+                    }
+                } else {
+                    txtCantidadRec.requestFocus();
+                }
+            }else {*/
+                //#GT04042022: focus en cantidad.
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            //}
 
         }catch (Exception e){
             mu.msgbox("Load:"+ e.getMessage());
@@ -3336,6 +3352,21 @@ public class frm_recepcion_datos extends PBase {
                 }
             }else{
                 Llena_beStock_Anterior();
+            }
+
+            if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
+                execws(6);
+                if (nBeResolucion == null) {
+                    if (!txtNoLP.getText().toString().isEmpty()) {
+                        txtNoLP.requestFocus();
+                    }
+                } else {
+                    txtCantidadRec.requestFocus();
+                }
+            }else {
+                //GT04042022: focus a cantidad
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
             }
 
             progress.cancel();
@@ -6333,8 +6364,20 @@ public class frm_recepcion_datos extends PBase {
                 LlenaDatosFaltantes_Existente();
             }
 
-            //GT04042022: focus a cantidad
-            txtCantidadRec.requestFocus();
+
+            /*if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
+                if (nBeResolucion == null) {
+                    if (!txtNoLP.getText().toString().isEmpty()) {
+                        txtNoLP.requestFocus();
+                    }
+                } else {
+                    txtCantidadRec.requestFocus();
+                }
+            }else {*/
+                //GT04042022: focus a cantidad
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            //}
 
 
         }catch (Exception e){
