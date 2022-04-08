@@ -28,7 +28,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="0dp"
         android:background="@drawable/color_medium">
 
         <Button
@@ -42,18 +42,19 @@
             android:onClick="Salir" />
 
         <Button
-            android:id="@+id/btnFinalizarRece"
+            android:id="@+id/btnRegs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="2dp"
             android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="BotonFinalizarRec"
-            android:text="Finalizar"
+            android:background="@color/medium"
+            android:text="Registros: 0"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -86,7 +87,8 @@
         android:layout_below="@+id/reltop"
         android:background="@drawable/color_light"
         android:gravity="center"
-        android:text="NoDocumento:" />
+        android:text="NoDocumento:"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btnCompletaRec"
@@ -96,7 +98,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="172dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:background="@color/rosado"
         android:text="Incompleta"
@@ -133,25 +135,11 @@
         android:layout_marginStart="50dp"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@+id/btnRegs"
         android:background="@drawable/color_medium"
         android:text="Detalle"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/btnRegs"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/relbot"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/holo_blue_dark"
-        android:text="Registros: 0"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/chkRecepcionados"
@@ -164,4 +152,20 @@
         android:text="Recepcionados"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnTareas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/medium"
+        android:clickable="true"
+        android:onClick="BotonFinalizarRec"
+        android:src="@drawable/ok_btn"
+        app:fabCustomSize="60dp"
+        app:maxImageSize="35dp" />
 </RelativeLayout>
