@@ -66,7 +66,7 @@ public class WebService {
 
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
-        int TIMEOUT = 15000;
+        int TIMEOUT = 45000;
         int READTIMEOUT = 0;
 
         mMethodName = methodName; mResult = "";xmlresult="";

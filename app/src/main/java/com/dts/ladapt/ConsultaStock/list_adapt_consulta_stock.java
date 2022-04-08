@@ -139,10 +139,15 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
             holder.lblNombreArea.setTextColor(Color.BLACK);
 
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                holder.lblIdProductoBodega.setText(" ");
+                holder.lblIdTipoEtiqueta.setText(" ");
+                convertView.setBackgroundColor(Color.rgb(192, 192, 192));
+            }
+
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
             } else {
-
                 //AT 20211221 se quitó la valicación para darle color al encabezado
                /* if (position==0){
                     convertView.setBackgroundResource(R.drawable.color_medium);
@@ -152,7 +157,11 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 
-        }catch (Exception ex){
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                 convertView.setBackgroundColor(Color.rgb(192, 192, 192));
+            }
+
+        } catch (Exception ex){
             toast(ex.getMessage());
         }
         return convertView;
