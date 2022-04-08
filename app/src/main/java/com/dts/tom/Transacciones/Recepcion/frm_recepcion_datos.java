@@ -2744,19 +2744,9 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            /*if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
-                if (nBeResolucion == null) {
-                    if (!txtNoLP.getText().toString().isEmpty()) {
-                        txtNoLP.requestFocus();
-                    }
-                } else {
-                    txtCantidadRec.requestFocus();
-                }
-            }else {*/
-                //#GT04042022: focus en cantidad.
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
-            //}
+            //#GT04042022: focus en cantidad.
+            txtCantidadRec.requestFocus();
+            txtCantidadRec.selectAll();
 
         }catch (Exception e){
             mu.msgbox("Load:"+ e.getMessage());
@@ -6365,20 +6355,9 @@ public class frm_recepcion_datos extends PBase {
             }
 
 
-            /*if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
-                if (nBeResolucion == null) {
-                    if (!txtNoLP.getText().toString().isEmpty()) {
-                        txtNoLP.requestFocus();
-                    }
-                } else {
-                    txtCantidadRec.requestFocus();
-                }
-            }else {*/
-                //GT04042022: focus a cantidad
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
-            //}
-
+            //GT04042022: focus a cantidad
+            txtCantidadRec.requestFocus();
+            txtCantidadRec.selectAll();
 
         }catch (Exception e){
             progress.cancel();
