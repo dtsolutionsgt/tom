@@ -850,7 +850,8 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     public void SalirTareas(View view){
-        msgAskExit("Está seguro de salir");
+        gl.gVerifCascade=false;
+        doExit();
     }
 
     private void msgAskExit(String msg) {

@@ -235,6 +235,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         });
 
+        //#GT07042022: faltó agregar el view de filtros en las 2 layout de detalle_tareas_picking
         btnFiltros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

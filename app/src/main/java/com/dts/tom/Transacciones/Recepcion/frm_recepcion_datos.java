@@ -556,6 +556,12 @@ public class frm_recepcion_datos extends PBase {
 
 
             });
+            txtNoLP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
             txtNoLP.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
@@ -3338,6 +3344,21 @@ public class frm_recepcion_datos extends PBase {
                 Llena_beStock_Anterior();
             }
 
+            if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
+                execws(6);
+                if (nBeResolucion == null) {
+                    if (!txtNoLP.getText().toString().isEmpty()) {
+                        txtNoLP.requestFocus();
+                    }
+                } else {
+                    txtCantidadRec.requestFocus();
+                }
+            }else {
+                //GT04042022: focus a cantidad
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            }
+
             progress.cancel();
 
         }catch (Exception e){
@@ -4387,6 +4408,12 @@ public class frm_recepcion_datos extends PBase {
 
                 try{
 
+                    //#AT20220407 Se agregá IdOrdenCompraEnc y Det a clsBeTrans_re_detList
+                    for (int i=0; i < auxListTransRecDet.items.size(); i++) {
+                        auxListTransRecDet.items.get(i).IdOrdenCompraDet = pIdOrdenCompraDet;
+                        auxListTransRecDet.items.get(i).IdOrdenCompraEnc = pIdOrdenCompraEnc;
+                    }
+
                     gl.gBeRecepcion.Detalle.items = new ArrayList<>();
                     gl.gBeRecepcion.Detalle.items.addAll(auxListTransRecDet.items);
 
@@ -4468,8 +4495,8 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Actualiza_Valores_Despues_Imprimir(boolean salir){
-        try{
 
+        try{
             //EJC20210125: Actualiza valores de la OC después imprimir
             switch (gl.TipoOpcion){
 
@@ -4485,7 +4512,6 @@ public class frm_recepcion_datos extends PBase {
                 case 2:
                     progress.cancel();
                     break;
-
             }
 
         }catch (Exception e){
@@ -6328,9 +6354,10 @@ public class frm_recepcion_datos extends PBase {
                 LlenaDatosFaltantes_Existente();
             }
 
+
             //GT04042022: focus a cantidad
             txtCantidadRec.requestFocus();
-
+            txtCantidadRec.selectAll();
 
         }catch (Exception e){
             progress.cancel();

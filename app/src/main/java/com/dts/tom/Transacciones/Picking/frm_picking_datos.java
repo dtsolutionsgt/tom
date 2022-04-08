@@ -1218,6 +1218,8 @@ public class frm_picking_datos extends PBase {
         double CantPick = 0;
 
         tblCajasUnidades.setVisibility(View.VISIBLE);
+        app.readOnly(txtCajas,true);
+        app.readOnly(txtUnidades,true);
 
         CantPick = Double.valueOf(txtCantidadPick.getText().toString());
         if (CantPick > factor) {
@@ -1341,13 +1343,18 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText("0");
             }
 
-            if (gBeProducto.Presentaciones.items!=null) {
+            //#GT07042022: el obj Presentaciones puede venir null
+            //if (  gBeProducto.Presentaciones.items!=null) {
 
-                // gBeProducto.Presentaciones.items.get(0).Factor;
-                double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+            if (  gBeProducto.Presentaciones!=null) {
 
-                if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
-                    calculaCajaUnidades();
+                if (gBeProducto.Presentaciones.items != null){
+                    // gBeProducto.Presentaciones.items.get(0).Factor;
+                    double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+
+                    if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+                        calculaCajaUnidades();
+                    }
                 }
             }
 
@@ -1424,13 +1431,14 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText("0");
             }
 
-            if (gBeProducto.Presentaciones.items!=null) {
+            if (  gBeProducto.Presentaciones!=null) {
+                if (gBeProducto.Presentaciones.items != null) {
 
-                // gBeProducto.Presentaciones.items.get(0).Factor;
-                double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+                    double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
 
-                if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
-                    calculaCajaUnidades();
+                    if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+                        calculaCajaUnidades();
+                    }
                 }
             }
 
