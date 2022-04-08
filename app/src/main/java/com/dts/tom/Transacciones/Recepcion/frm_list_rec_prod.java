@@ -60,7 +60,7 @@ public class frm_list_rec_prod extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private TextView lblNoDocumento;
+    private TextView lblTituloForma;
     private Button btnRegs,btnCompletaRec,btnGuardarFirma,btnSalirFirma,btnLimpiar;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
@@ -132,7 +132,7 @@ public class frm_list_rec_prod extends PBase {
         ws = new WebServiceHandler(frm_list_rec_prod.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblNoDocumento = (TextView) findViewById(R.id.lblNoDocumento);
+        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
 
         btnRegs = (Button) findViewById(R.id.btnRegs);
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
@@ -448,7 +448,7 @@ public class frm_list_rec_prod extends PBase {
 
             progress.setMessage("Inicializando valores");
 
-            lblNoDocumento.setText("");
+            lblTituloForma.setText("");
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -489,7 +489,7 @@ public class frm_list_rec_prod extends PBase {
                     }
 
                     if(gBeOrdenCompra.No_Documento!=null & gBeOrdenCompra.Referencia!=null){
-                        lblNoDocumento.setText("No. Documento:"+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
+                        lblTituloForma.setText("No. Documento: "+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
                     }
 
                     if(gBeOrdenCompra.IdEstadoOC != 3){
@@ -1647,7 +1647,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     public void Salir(View view){
-        msgAskExit("Está seguro de salir");
+        doExit();
     }
 
     private void msgAskExit(String msg) {
