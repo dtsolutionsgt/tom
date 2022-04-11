@@ -490,6 +490,8 @@ public class frm_list_rec_prod extends PBase {
 
                     if(gBeOrdenCompra.No_Documento!=null & gBeOrdenCompra.Referencia!=null){
                         lblTituloForma.setText("No. Documento: "+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
+                    } else {
+                        lblTituloForma.setText("No. Documento: "+ gBeOrdenCompra.No_Documento);
                     }
 
                     if(gBeOrdenCompra.IdEstadoOC != 3){
