@@ -2933,7 +2933,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
-            lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
+            lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
 
