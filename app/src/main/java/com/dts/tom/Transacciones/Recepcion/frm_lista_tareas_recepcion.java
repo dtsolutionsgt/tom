@@ -358,6 +358,9 @@ public class frm_lista_tareas_recepcion extends PBase {
 
     private void processListTareasVerificacion(){
         try {
+
+            pListBeTransPeEnc = new clsBeTrans_pe_encList();
+
             pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_All_Pedidos_A_Verificar_By_IdBodega");
             Llena_Tareas_Verificacion();
         } catch (Exception e){

@@ -137,18 +137,6 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/txtRutaDespacho"
-            android:layout_width="105dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:minHeight="50dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="RutaDespacho"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/txtRequiereTarima"
             android:layout_width="105dp"
             android:layout_height="wrap_content"
@@ -157,6 +145,18 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="RequiereTarima"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtRutaDespacho"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="RutaDespacho"
             android:textSize="18sp"
             android:textStyle="bold" />
 

@@ -23,6 +23,7 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.ExDialog;
@@ -542,6 +544,7 @@ public class frm_recepcion_datos extends PBase {
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: cmb_pres resolución LP " + valores);
 
+                            toastlong("nueva LP P1 ");
                             execws(6);
                             progress.cancel();
                         }else{
@@ -1297,6 +1300,7 @@ public class frm_recepcion_datos extends PBase {
                                 //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                                 //toastlong("GT: muestra_parametros resolución LP " + valores);
 
+                                toastlong("nueva LP P2 ");
                                 execws(6);
                             }else{
                                 pNumeroLP = pLp;
@@ -1319,6 +1323,7 @@ public class frm_recepcion_datos extends PBase {
 
                                     //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                                     //toastlong("GT: muestra_parametros2 resolución LP " + valores);
+                                    toastlong("nueva LP P3 ");
 
                                     execws(6);
                                 }else{
@@ -2786,7 +2791,7 @@ public class frm_recepcion_datos extends PBase {
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: carga_prod_x_pallet resolución LP3 " + valores);
 
-
+                            toastlong("nueva LP P4 ");
                             execws(6);
                         }
                     }
@@ -6507,10 +6512,12 @@ public class frm_recepcion_datos extends PBase {
                    if (!txtNoLP.getText().toString().isEmpty()){
                        if (txtLicPlate != null){
                            txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+
                        }
                    }else{
                        if (txtLicPlate != null){
                            txtLicPlate.setText(pNumeroLP);
+
                        }else{
                            clsBeTrans_oc_det_loteList ubic;
                            ubic=gl.gBeOrdenCompra.DetalleLotes;
@@ -6553,15 +6560,16 @@ public class frm_recepcion_datos extends PBase {
                                }
                            }else{
                                txtNoLP.setText(pNumeroLP);
+
                            }
 
                        }
                    }
                }
 
-               pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+            pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
-               execws(27);
+            execws(27);
 
 
         }catch (Exception e){
@@ -7342,9 +7350,18 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
+            clsBeTipo_etiqueta etiqueta;
             progress.setMessage("Obteniendo tipo de etiqueta del producto");
 
-            pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
+            //GT11042022: obtengo etiqueta y valido que no venga vacia, porque al parecer... se llama 2 veces al proceso
+            //y en la 2da llamada viene vacia la respuesta, similar a NuevoProcesLP
+            etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
+
+            if (etiqueta != null){
+                pBeTipo_etiqueta = etiqueta;
+                //toastlong("etiqueta "+ pBeTipo_etiqueta.Nombre);
+            }
+
 
         } catch (Exception e) {
             msgbox(new Object() {
