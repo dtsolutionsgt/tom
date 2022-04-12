@@ -63,7 +63,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino,lblCantidad;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
     private TableRow trPeso,tblExplosionar,tblPresentacion;
@@ -184,6 +184,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblPeso = (TextView) findViewById(R.id.lblPeso);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
+            lblCantidad = findViewById(R.id.lblCantidad);
             txtUbicSug = (TextView) findViewById(R.id.txtUbicSug);
 
             cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
@@ -677,6 +678,36 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }.getClass().getEnclosingMethod().getName(), ex.getMessage(), "");
             msgbox(new Object() {
             }.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    //#AT20220412 Cree esta función para asignar a cvPresId el idPresentación
+    //sin utilizar el cmb
+    private void setPresentacion() {
+        try {
+
+            List AuxList = stream(stockResList.items)
+                    .where(c -> c.IdProducto == cvProdID)
+                    .toList();
+
+            presentacionList.items = AuxList;
+
+            if (presentacionList.items.size() > 0) {
+                cvPresID = presentacionList.items.get(0).IdPresentacion;
+
+                if (cvPresID == 0){
+                    tblExplosionar.setVisibility(View.GONE);
+                    lblCantidad.setText("Cantidad (UNI): ");
+                } else {
+                    tblExplosionar.setVisibility(View.VISIBLE);
+                    lblCantidad.setText("Cantidad ("+presentacionList.items.get(0).Nombre_Presentacion+"): ");
+                }
+            }
+
+            LlenaLotes();
+
+        } catch (Exception e) {
+            mu.msgbox("setPresentación: "+ e.getMessage());
         }
     }
 
@@ -2016,7 +2047,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                //LlenaPresentaciones();
+                setPresentacion();
             }else{
                 msgbox("No hay existencias disponibles de este producto en esta ubicación o las existentes están reservadas");
                 inicializaTarea(false);
@@ -2039,7 +2071,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                //LlenaPresentaciones();
+                setPresentacion();
             }else{
 
                 msgbox("El producto no existe en la ubicación origen");
@@ -2214,7 +2247,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     completaProceso();
                 }
             }
-
+            lblCantidad.setText("Cantidad:");
         }catch (Exception ex){
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -2978,7 +3011,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
 
                     if( escaneoPallet && productoList != null){
-                        //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material
+                        //#CKFK20210610 agregué esta validación para que si no tiene presentación no chkExplosionarlosione el material
                         if (BeStockPallet.getIdPresentacion()!=0) {
 
                             if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
@@ -3368,11 +3401,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
 
-            if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
+            /*if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
                 gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()));
             }else{
                 gMovimientoDet.IdPresentacion = 0;
+            }*/
+
+            if (cvPresID > 0) {
+                gMovimientoDet.IdPresentacion = cvPresID;
+            } else {
+                gMovimientoDet.IdPresentacion = 0;
             }
+
             if(cmbEstadoOrigen.getAdapter()!=null && cmbEstadoOrigen.getAdapter().getCount()>0){
                 gMovimientoDet.IdEstadoOrigen = Integer.valueOf( cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0].toString());
             }else{
