@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/lblNoLinea"
-            android:layout_width="75dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/lblPres"
-            android:layout_width="105dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -76,7 +76,7 @@
 
         <TextView
             android:id="@+id/lblCantidad"
-            android:layout_width="75dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -88,7 +88,7 @@
 
         <TextView
             android:id="@+id/lblCantRec"
-            android:layout_width="75dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -100,7 +100,7 @@
 
         <TextView
             android:id="@+id/lblDiferencia"
-            android:layout_width="85dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"

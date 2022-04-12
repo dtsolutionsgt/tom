@@ -61,7 +61,7 @@ public class frm_list_rec_prod extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private TextView lblTituloForma;
+    private TextView lblTituloForma, lblIdPropietarioBodega, lblNombrePropietario;
     private Button btnRegs,btnCompletaRec,btnGuardarFirma,btnSalirFirma,btnLimpiar;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
@@ -127,8 +127,6 @@ public class frm_list_rec_prod extends PBase {
             setContentView(R.layout.activity_frm_list_rec_prod);
         }
 
-        //setContentView(R.layout.activity_frm_list_rec_prod);
-
         super.InitBase();
 
         ws = new WebServiceHandler(frm_list_rec_prod.this, gl.wsurl);
@@ -141,6 +139,8 @@ public class frm_list_rec_prod extends PBase {
         listView = (ListView)findViewById(R.id.listRec);
         chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
         btnTareas = (FloatingActionButton) findViewById(R.id.btnTareas);
+        lblNombrePropietario = findViewById(R.id.lblNombrePropietario);
+        lblIdPropietarioBodega = findViewById(R.id.lblIdPropietarioBodega);
 
         relbot = (RelativeLayout)findViewById(R.id.relbot);
 
@@ -537,30 +537,22 @@ public class frm_list_rec_prod extends PBase {
 
                     selid = 0;
 
-                    if (position>0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                    selitem = pListDetalleOC.items.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                        selitem = pListDetalleOC.items.get(position-1);
+                    selid = sitem.No_Linea;
+                    selidx = position;
 
-                        selid = sitem.No_Linea;
-                        selidx = position;
-
-                        //#GT09032022: si tiene mostrar_area cealsa
-                        if (areaprimera) {
-                            listdetadapter2.setSelectedIndex(position);
-                        } else {
-                            listdetadapter.setSelectedIndex(position);
-                        }
-
-                        //listdetadapter.setSelectedIndex(position);
-
-                        procesar_registro();
-
+                    //#GT09032022: si tiene mostrar_area cealsa
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
+                    } else {
+                        listdetadapter.setSelectedIndex(position);
                     }
 
+                    procesar_registro();
                 }
-
             });
 
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -570,27 +562,21 @@ public class frm_list_rec_prod extends PBase {
 
                     selid = 0;
 
-                    if (position>0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                    selitem = pListDetalleOC.items.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                        selitem = pListDetalleOC.items.get(position-1);
+                    selid = sitem.No_Linea;
+                    selidx = position;
 
-                        selid = sitem.No_Linea;
-                        selidx = position;
-
-                        //#GT09032022: si tiene mostrar_area cealsa
-                        if (areaprimera) {
-                            listdetadapter2.setSelectedIndex(position);
-                        } else {
-                            listdetadapter.setSelectedIndex(position);
-                        }
-
-                        //listdetadapter.setSelectedIndex(position);
-
-                        msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
-
+                    //#GT09032022: si tiene mostrar_area cealsa
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
+                    } else {
+                        listdetadapter.setSelectedIndex(position);
                     }
+
+                    msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
                     return true;
                 }
@@ -841,10 +827,6 @@ public class frm_list_rec_prod extends PBase {
 
             if(pListDetalleOC.items!=null){
 
-                vItem = new clsBeTrans_oc_det();
-
-                BeListDetalleOC.add(vItem);
-
                 for (int i = pListDetalleOC.items.size()-1; i>=0; i--) {
 
                     vItem = new clsBeTrans_oc_det();
@@ -908,6 +890,10 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
+            if (!es_poliza_consolidada) {
+                lblIdPropietarioBodega.setVisibility(View.GONE);
+                lblNombrePropietario.setVisibility(View.GONE);
+            }
 
             if (areaprimera) {
                 listdetadapter2 = new list_adapt_detalle_recepcion2(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
@@ -916,9 +902,6 @@ public class frm_list_rec_prod extends PBase {
                 listdetadapter = new list_adapt_detalle_recepcion(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
                 listView.setAdapter(listdetadapter);
             }
-
-            //listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
-            //listView.setAdapter(listdetadapter);
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
