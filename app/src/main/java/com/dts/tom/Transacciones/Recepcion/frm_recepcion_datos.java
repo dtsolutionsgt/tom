@@ -546,13 +546,13 @@ public class frm_recepcion_datos extends PBase {
                     if (BeProducto.Presentacion != null){
 
                         if (BeProducto.Presentacion.Genera_lp_auto) {
-                            progress.setMessage("Buscando License Plate");
+                            progress.setMessage("Buscando Licencia");
                             progress.show();
 
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: cmb_pres resolución LP " + valores);
-
-                            execws(6);
+                            //#EJC20220412: Evaluar si es necesario que se llame aqui.
+                            //execws(6);
                             progress.cancel();
                         }else{
                             toastlong("La presentación no genera lp Auto..");
@@ -2847,7 +2847,7 @@ public class frm_recepcion_datos extends PBase {
 
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: carga_datos_producto resolución LP " + valores);
-
+                            Log.e("Licencia","Call_From_A.");
                             execws(6);
                         }
                     }
@@ -3081,8 +3081,13 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private boolean Call_From_B = false;
+    private boolean Call_From_C = false;
+    private boolean Call_From_D = false;
+
     private void mostarEstiba()
     {
+
         CajasPorCama = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CajasPorCama).first();
         CamasPorTarima = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CamasPorTarima).first();
 
@@ -3109,14 +3114,16 @@ public class frm_recepcion_datos extends PBase {
         if (BeProducto.Presentacion != null){
 
             if (BeProducto.Presentacion.Genera_lp_auto) {
-                progress.setMessage("Buscando License Plate");
+                progress.setMessage("Buscando Licencia");
                 progress.show();
 
                 //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                 //toastlong("GT: cmb_pres resolución LP " + valores);
 
-                toastlong("nueva LP P1 ");
+                //toastlong("nueva LP P1 ");
+                Log.e("Licencia","Call_From_B.");
                 execws(6);
+                Call_From_B = true;
                 progress.cancel();
             }else{
                 toastlong("La presentación no genera lp Auto..");
@@ -3401,6 +3408,7 @@ public class frm_recepcion_datos extends PBase {
 
                         //GT15022022: si presentacion esta null carga nuevamente NuevoLP
                         if (BeProducto.Presentaciones.items==null || BeOcDet.IdPresentacion==0){
+                            Log.e("Licencia","Call_From_C.");
                             execws(6);
                             progress.cancel();
                             //#CKFK20220411 Agregué este return para que no vuelva a ejecutar el execws(6)
@@ -3413,14 +3421,26 @@ public class frm_recepcion_datos extends PBase {
             }
 
             if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
-                execws(6);
-                if (nBeResolucion == null) {
-                    if (!txtNoLP.getText().toString().isEmpty()) {
-                        txtNoLP.requestFocus();
+
+                //#EJC20220412:Check where Call_B its called
+                if (!Call_From_B){
+
+                    Log.e("Licencia","Call_From_D.");
+                    execws(6);
+                    if (nBeResolucion == null) {
+                        if (!txtNoLP.getText().toString().isEmpty()) {
+                            txtNoLP.requestFocus();
+                        }
+                    } else {
+                        txtCantidadRec.requestFocus();
                     }
-                } else {
-                    txtCantidadRec.requestFocus();
+
+                    Call_From_D=true;
+
+                }else{
+                    Call_From_B =false;
                 }
+
             }else {
                 //GT04042022: focus a cantidad
                 txtCantidadRec.requestFocus();
@@ -6534,25 +6554,27 @@ public class frm_recepcion_datos extends PBase {
 
 
         try {
+
             CantVeces+=1;
 
-            toast("Cuantas veces entró " + CantVeces);
+            //toast("Cuantas veces entró " + CantVeces);
 
             if (nBeResolucion == null){
-                toast("Buscando la resolución");
+                //toast("Buscando la resolución");
                 nBeResolucion = new clsBeResolucion_lp_operador();
-                toast("Inicializando la instancia");
+                //toast("Inicializando la instancia");
                 if (xobj!=null){
-                    toast("El objeto no es nulo");
+                    //toast("El objeto no es nulo");
                     nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
-                    toast("Se obtuvo la resolución");
                 }else{
-                    toast("El objeto  es nulo");
+                    toast("El objeto SI es nulo");
                 }
             }
 
             //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
             if (nBeResolucion !=null){
+
+                //toast("Se obtuvo la resolución");
 
                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
@@ -6578,8 +6600,11 @@ public class frm_recepcion_datos extends PBase {
                    pNumeroLP= nBeResolucion.Serie + result;
 
                }else{
-                   toastlong("No se pudo obtener la resolución del operador, no fue posible generar el LP");
+                Log.e("Licencia","recursivecall_by_ejc: " + CantVeces);
+                   execws(6);
+                   //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
                    gl.IdResolucionLpOperador =0;
+                   return;
                }
 
                if (gl.mode==1){
@@ -6600,9 +6625,11 @@ public class frm_recepcion_datos extends PBase {
                            //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
                            if(gl.gBeOrdenCompra!=null){
                                if(gl.gBeOrdenCompra.DetalleLotes!=null){
-                                   for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
-                                       if(l.Lic_Plate==null){
-                                           l.Lic_Plate="";
+                                   if(gl.gBeOrdenCompra.DetalleLotes.items!=null){
+                                       for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
+                                           if(l.Lic_Plate==null){
+                                               l.Lic_Plate="";
+                                           }
                                        }
                                    }
                                }
