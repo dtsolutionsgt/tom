@@ -47,6 +47,7 @@ import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +69,7 @@ public class frm_list_rec_prod extends PBase {
     private ProgressDialog progress;
     private CheckBox chkRecepcionados;
     private RelativeLayout relbot;
+    private FloatingActionButton btnTareas;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
@@ -138,6 +140,7 @@ public class frm_list_rec_prod extends PBase {
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
         listView = (ListView)findViewById(R.id.listRec);
         chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
+        btnTareas = (FloatingActionButton) findViewById(R.id.btnTareas);
 
         relbot = (RelativeLayout)findViewById(R.id.relbot);
 
@@ -637,7 +640,8 @@ public class frm_list_rec_prod extends PBase {
             gl.gFechaVenceAnterior = "";
             gl.gLoteAnterior ="";
             gl.Escaneo_Pallet=false;
-           relbot.setVisibility(View.VISIBLE);
+            btnTareas.setVisibility(View.VISIBLE);
+            relbot.setVisibility(View.VISIBLE);
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -926,11 +930,13 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+           btnTareas.setVisibility(View.INVISIBLE);
            relbot.setVisibility(View.INVISIBLE);
-            execws(10);
+           execws(10);
 
         }catch (Exception e){
             mu.msgbox("BotonFinalizarRec"+e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
         }
     }
@@ -984,6 +990,7 @@ public class frm_list_rec_prod extends PBase {
             execws(12);
 
         }catch (Exception e){
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
         }
@@ -1085,6 +1092,7 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }catch (Exception e){
+                btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
                 mu.msgbox(e.getClass()+e.getMessage());
             }
@@ -1286,6 +1294,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizada | Anulada){
                 onResume();
+                btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
             }else{
                 pListTransRecDet = new clsBeTrans_re_detList();
@@ -1294,6 +1303,7 @@ public class frm_list_rec_prod extends PBase {
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
         }
 
@@ -1324,6 +1334,7 @@ public class frm_list_rec_prod extends PBase {
 
             }else{
                 progress.cancel();
+                btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
                 Resultado =xobj.ws.xmlresult.replace("<DocumentElement>  <CustomError>    <Error>","").replace("</Error>  </CustomError></DocumentElement>","");
                 msgboxErrorOnWS2("No se pudo finalizar la recepción: " + Resultado);
@@ -1331,16 +1342,17 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             progress.hide();
-            relbot.setVisibility(View.VISIBLE);
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
         }finally {
-            relbot.setVisibility(View.VISIBLE);
+            btnTareas.setVisibility(View.VISIBLE);
         }
     }
 
     public void msgboxErrorOnWS2(String msg) {
         try{
+
             ExDialog dialog = new ExDialog(this);
+            dialog.setCancelable(false);
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -1390,16 +1402,13 @@ public class frm_list_rec_prod extends PBase {
                             Termina_Finalizacion_Recepcion();
                         }
                     }
-
-                }else{
-                    relbot.setVisibility(View.VISIBLE);
                 }
-            }else{
-                relbot.setVisibility(View.VISIBLE);
             }
 
         }catch (Exception e){
             mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
+        }finally {
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
         }
     }
@@ -1426,7 +1435,8 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
-                   relbot.setVisibility(View.VISIBLE);
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
                     return;
                 }
             });
@@ -1458,7 +1468,8 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
-                   relbot.setVisibility(View.VISIBLE);
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
                     return;
                 }
             });
@@ -1515,8 +1526,9 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    btnTareas.setVisibility(View.INVISIBLE);
                     relbot.setVisibility(View.INVISIBLE);
-                   execws(11);
+                    execws(11);
                 }
             });
 
@@ -1547,13 +1559,11 @@ public class frm_list_rec_prod extends PBase {
                     Finalizar_Recepcion();
                 }
 
-            }else{
-                relbot.setVisibility(View.VISIBLE);
-                return;
             }
 
         }catch (Exception e){
             mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
         }
     }
@@ -1598,6 +1608,7 @@ public class frm_list_rec_prod extends PBase {
             btnSalirFirma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnTareas.setVisibility(View.VISIBLE);
                     relbot.setVisibility(View.VISIBLE);
                     dialog.cancel();
                 }
@@ -1686,7 +1697,7 @@ public class frm_list_rec_prod extends PBase {
     @Override
     public void onBackPressed() {
         try{
-            if (relbot.getVisibility()==View.VISIBLE){
+            if (btnTareas.getVisibility()==View.VISIBLE){
                 msgAskExit("Está seguro de salir");
             }
         }catch (Exception e){

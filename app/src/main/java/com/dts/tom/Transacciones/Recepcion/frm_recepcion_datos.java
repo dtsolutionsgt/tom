@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -175,6 +176,7 @@ public class frm_recepcion_datos extends PBase {
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
     private Integer CantCopias =1;
+    private Integer CantVeces=0;
 
     private boolean PallCorrecto= false;
     private int pIndexProdPallet=-1;
@@ -357,6 +359,10 @@ public class frm_recepcion_datos extends PBase {
         setCurrentDateOnView();
 
         setHandlers();
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, PresList);
+        cmbPresRec.setAdapter(dataAdapter);
+        cmbPresRec.setSelection(-1);
 
         ProgressDialog();
 
@@ -546,7 +552,6 @@ public class frm_recepcion_datos extends PBase {
                             //String valores = gl.IdOperador +"-"+ gl.IdBodega;
                             //toastlong("GT: cmb_pres resolución LP " + valores);
 
-                            toastlong("nueva LP P1 ");
                             execws(6);
                             progress.cancel();
                         }else{
@@ -561,6 +566,7 @@ public class frm_recepcion_datos extends PBase {
 
 
             });
+
             txtNoLP.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -3397,6 +3403,8 @@ public class frm_recepcion_datos extends PBase {
                         if (BeProducto.Presentaciones.items==null || BeOcDet.IdPresentacion==0){
                             execws(6);
                             progress.cancel();
+                            //#CKFK20220411 Agregué este return para que no vuelva a ejecutar el execws(6)
+                            return;
                         }
                     }
                 }
@@ -6118,6 +6126,7 @@ public class frm_recepcion_datos extends PBase {
                                                "pIdBodega",gl.IdBodega,
                                                "pIdStock",(pListBeStockRec.items==null?0:pListBeStockRec.items.get(0).IdStockRec));
                         break;
+
                     case 25:
 
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
@@ -6525,24 +6534,35 @@ public class frm_recepcion_datos extends PBase {
 
 
         try {
+            CantVeces+=1;
+
+            toast("Cuantas veces entró " + CantVeces);
 
             if (nBeResolucion == null){
+                toast("Buscando la resolución");
                 nBeResolucion = new clsBeResolucion_lp_operador();
-                nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+                toast("Inicializando la instancia");
+                if (xobj!=null){
+                    toast("El objeto no es nulo");
+                    nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+                    toast("Se obtuvo la resolución");
+                }else{
+                    toast("El objeto  es nulo");
+                }
             }
 
             //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
-               if (nBeResolucion !=null){
+            if (nBeResolucion !=null){
 
-                   gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+               gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                   float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                   float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+               float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+               float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                   int intLPSig = (int) pLpSiguiente;
-                   int MaxL = (int) largoMaximo;
+               int intLPSig = (int) pLpSiguiente;
+               int MaxL = (int) largoMaximo;
 
-                   String str = String.valueOf(intLPSig);
+/*                   String str = String.valueOf(intLPSig);
                    StringBuilder sb = new StringBuilder();
 
                    for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
@@ -6550,13 +6570,15 @@ public class frm_recepcion_datos extends PBase {
                    }
 
                    sb.append(str);
-                   String result = sb.toString();
+                   String result = sb.toString();*/
+
+                   //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                   String result = String.format("%0"+ MaxL + "d",intLPSig);
 
                    pNumeroLP= nBeResolucion.Serie + result;
 
                }else{
-
-                   toastlong("no hay LP");
+                   toastlong("No se pudo obtener la resolución del operador, no fue posible generar el LP");
                    gl.IdResolucionLpOperador =0;
                }
 
@@ -6623,7 +6645,6 @@ public class frm_recepcion_datos extends PBase {
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
             execws(27);
-
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP_RE: "+e.getMessage());
