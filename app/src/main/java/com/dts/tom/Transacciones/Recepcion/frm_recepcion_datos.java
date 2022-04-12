@@ -6594,8 +6594,20 @@ public class frm_recepcion_datos extends PBase {
                            txtLicPlate.setText(pNumeroLP);
 
                        }else{
-                           clsBeTrans_oc_det_loteList ubic;
-                           ubic=gl.gBeOrdenCompra.DetalleLotes;
+                           clsBeTrans_oc_det_loteList BeOCDetLoteList;
+                           BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
+
+                           //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
+                           if(gl.gBeOrdenCompra!=null){
+                               if(gl.gBeOrdenCompra.DetalleLotes!=null){
+                                   for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
+                                       if(l.Lic_Plate==null){
+                                           l.Lic_Plate="";
+                                       }
+                                   }
+                               }
+                           }
+
                            List<clsBeTrans_oc_det_lote> BeUbicaciones;
 
                            //#CKFK20220306 Agregué esta validación para el License Plate
@@ -6603,9 +6615,9 @@ public class frm_recepcion_datos extends PBase {
 
                            if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
-                               //#CKFK 20211030 Validé que ubic.items no fuera nulo
-                               if (ubic.items!=null){
-                                   BeUbicaciones = stream(ubic.items)
+                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                               if (BeOCDetLoteList.items!=null){
+                                   BeUbicaciones = stream(BeOCDetLoteList.items)
                                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                                    c.No_linea == BeOcDet.No_Linea &&
                                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
@@ -6615,9 +6627,9 @@ public class frm_recepcion_datos extends PBase {
                                }
 
                            }else{
-                               //#CKFK 20211030 Validé que ubic.items no fuera nulo
-                               if (ubic.items!=null){
-                                   BeUbicaciones = stream(ubic.items)
+                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                               if (BeOCDetLoteList.items!=null){
+                                   BeUbicaciones = stream(BeOCDetLoteList.items)
                                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
                                                    c.No_linea == BeOcDet.No_Linea &&
                                                    !c.Lic_Plate.isEmpty()  &&
