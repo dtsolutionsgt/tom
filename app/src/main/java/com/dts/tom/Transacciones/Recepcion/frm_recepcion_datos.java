@@ -6600,8 +6600,8 @@ public class frm_recepcion_datos extends PBase {
                    pNumeroLP= nBeResolucion.Serie + result;
 
                }else{
-                Log.e("Licencia","recursivecall_by_ejc: " + CantVeces);
-                   execws(6);
+                Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
+                   //execws(6);
                    //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
                    gl.IdResolucionLpOperador =0;
                    return;
