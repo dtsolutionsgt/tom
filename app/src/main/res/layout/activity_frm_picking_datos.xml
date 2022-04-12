@@ -11,8 +11,9 @@
         android:id="@+id/scrollDatos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btnFechaVence"
-        android:layout_below="@id/relEnc">
+        android:layout_above="@+id/relbot"
+        android:layout_below="@id/relEnc"
+        android:layout_marginBottom="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -222,6 +223,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     tools:ignore="SpeakableTextPresentCheck" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblVenceEn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lblVenceEn"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:text="Días Vencimiento:" />
+
+                <EditText
+                    android:id="@+id/txtVenceEn"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:enabled="false"
+                    android:inputType="number"
+                    android:text="" />
             </TableRow>
 
             <RelativeLayout
@@ -467,18 +492,5 @@
 
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/btnFechaVence"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/relbot"
-        android:layout_marginStart="150dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/color_medium"
-        android:text="@string/vence_en_0_d_as"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
 
 </RelativeLayout>

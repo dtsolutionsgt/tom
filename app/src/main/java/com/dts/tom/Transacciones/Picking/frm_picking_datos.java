@@ -67,10 +67,10 @@ public class frm_picking_datos extends PBase {
 
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion;
-    private Button btnFechaVence, btnDanado, btNE,btnConfirmarPk;
-    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto, txtCajas, txtUnidades;
+    private Button btnDanado, btNE,btnConfirmarPk;
+    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto, txtCajas, txtUnidades, txtVenceEn;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba, tblVenceEn;
     private RelativeLayout tblCajasUnidades;
 
     private boolean Escaneo_Pallet = false;
@@ -117,12 +117,12 @@ public class frm_picking_datos extends PBase {
         txtCodigoProducto = (EditText) findViewById(R.id.txtCodigoProducto);
         txtCajas = (EditText) findViewById(R.id.txtCajas);
         txtUnidades = (EditText) findViewById(R.id.txtUnidades);
+        txtVenceEn = findViewById(R.id.txtVenceEn);
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
         lblEstiba = (TextView) findViewById(R.id.lblEstiba);
 
-        btnFechaVence = (Button) findViewById(R.id.btnFechaVence);
         btnConfirmarPk = (Button) findViewById(R.id.btnConfirmarPk);
 
         cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
@@ -135,6 +135,8 @@ public class frm_picking_datos extends PBase {
         trLote = (TableRow) findViewById(R.id.trLote);
         trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
         tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
+        tblVenceEn = findViewById(R.id.tblVenceEn);
+
         tblCajasUnidades = findViewById(R.id.tblCajasUnidades);
         lblPresentacion = findViewById(R.id.lblPresentacion);
 
@@ -563,13 +565,13 @@ public class frm_picking_datos extends PBase {
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
 
-                btnFechaVence.setVisibility(View.VISIBLE);
-                btnFechaVence.setText("Vence en: " + DifDias + " días");
+                tblVenceEn.setVisibility(View.VISIBLE);
+                txtVenceEn.setText(String.valueOf(DifDias));
 
             }else{
 
                 trCaducidad.setVisibility(View.GONE);
-                btnFechaVence.setVisibility(View.GONE);
+                tblVenceEn.setVisibility(View.GONE);
                 txtFechaCad.setText("");
 
             }
@@ -1257,10 +1259,10 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
-                btnFechaVence.setVisibility(View.VISIBLE);
+                tblVenceEn.setVisibility(View.VISIBLE);
             }else{
                 trCaducidad.setVisibility(View.GONE);
-                btnFechaVence.setVisibility(View.GONE);
+                tblVenceEn.setVisibility(View.GONE);
             }
 
             txtLote.setText(gBePickingUbic.Lote);
@@ -1393,13 +1395,12 @@ public class frm_picking_datos extends PBase {
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
 
-                btnFechaVence.setVisibility(View.VISIBLE);
-                btnFechaVence.setText("Vence en: " + DifDias + " días");
-
+                tblVenceEn.setVisibility(View.VISIBLE);
+                txtVenceEn.setText(String.valueOf(DifDias));
             }else{
 
                 trCaducidad.setVisibility(View.GONE);
-                btnFechaVence.setVisibility(View.GONE);
+                tblVenceEn.setVisibility(View.GONE);
                 txtFechaCad.setText("");
 
             }
