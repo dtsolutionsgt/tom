@@ -110,6 +110,7 @@ public class frm_Packing extends PBase {
     private String cvLote;
     private int IdPresCmb = 0;
     private boolean inferir_origen_en_cambio_ubic;
+    private String tmpLicencia = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,6 +367,9 @@ public class frm_Packing extends PBase {
 
             cmdImprimir.setOnClickListener(v -> {
                 imprimirDesdeBoton = true;
+                //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
+                //para luego poder imprimirla
+                tmpLicencia  = txtNuevoLp.getText().toString();
                 Imprimir(v);
             });
 
@@ -390,6 +394,7 @@ public class frm_Packing extends PBase {
             cvEstOrigen = 0;
             cvProdID = 0;
             cvVence = "01/01/1900";
+            tmpLicencia = "";
 
             //Es una barra de pallet válida por tamaño
             int vLengthBarra = txtLic_Plate.getText().toString().length();
@@ -415,6 +420,7 @@ public class frm_Packing extends PBase {
         try{
 
             gIdProductoOrigen= 0;
+            tmpLicencia = "";
 
             String vStarWithParameter = "$";
 
@@ -1271,6 +1277,9 @@ public class frm_Packing extends PBase {
             }
 
             //Set_LP_Stock(gMovimientoDet, vStockRes);
+            //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
+            //para luego poder imprimirla
+            tmpLicencia  = txtNuevoLp.getText().toString();
             execws(8);
 
         }catch (Exception e){
@@ -2374,7 +2383,8 @@ public class frm_Packing extends PBase {
 
                 if (BeProductoUbicacionOrigen!=null){
 
-                    NuevoLp = txtNuevoLp.getText().toString();
+                    //NuevoLp = txtNuevoLp.getText().toString();
+                    NuevoLp = tmpLicencia;
 
                     if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
