@@ -33,6 +33,8 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public clsBeProducto_Presentacion Presentacion = new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida = new clsBeUnidad_medida();
     @Element(required=false) public Boolean Reclasificar=false;
+    @Element(required=false) public Boolean Activo=false;
+    @Element(required=false) public String No_Documento="";
 
     public clsBeTrans_oc_det_lote() {
     }
@@ -208,6 +210,15 @@ public class clsBeTrans_oc_det_lote {
         return Reclasificar;
     }
     public void setReclasificar(boolean value){Reclasificar=value;}
+
+    public Boolean getActivo(){
+        return Activo;
+    }
+    public void setActivo(boolean value){Activo=value;}
+
+    public String getNo_Documento(){
+        return No_Documento;
+    }
+    public void setNo_Documento(String value){No_Documento=value;}
+
 }
-
-
