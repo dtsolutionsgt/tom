@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,17 +37,21 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion2;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
+import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -70,6 +75,7 @@ public class frm_list_rec_prod extends PBase {
     private CheckBox chkRecepcionados;
     private RelativeLayout relbot;
     private FloatingActionButton btnTareas;
+    private ImageView btnOrdenar;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
@@ -87,7 +93,7 @@ public class frm_list_rec_prod extends PBase {
     private boolean Escaneo_Pallet;
     private boolean Finalizada = false, Anulada = false;
     private double Cant_Recibida_Anterior;
-    private int browse;
+    private int browse, sortord;
     public String pLP="";
     private String vLP="";
     public String vCodigoBodegaBarraPallet = "";
@@ -141,6 +147,9 @@ public class frm_list_rec_prod extends PBase {
         btnTareas = (FloatingActionButton) findViewById(R.id.btnTareas);
         lblNombrePropietario = findViewById(R.id.lblNombrePropietario);
         lblIdPropietarioBodega = findViewById(R.id.lblIdPropietarioBodega);
+        btnOrdenar = findViewById(R.id.btnOrdenar);
+
+        gl.sortOrd = -1;
 
         relbot = (RelativeLayout)findViewById(R.id.relbot);
 
@@ -539,7 +548,11 @@ public class frm_list_rec_prod extends PBase {
 
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    selitem = pListDetalleOC.items.get(position);
+                    //selitem = pListDetalleOC.items.get(position);
+
+                    selitem  = stream(pListDetalleOC.items)
+                            .where(c -> c.No_Linea == sitem.No_Linea)
+                            .first();
 
                     selid = sitem.No_Linea;
                     selidx = position;
@@ -564,7 +577,11 @@ public class frm_list_rec_prod extends PBase {
 
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    selitem = pListDetalleOC.items.get(position);
+                    //selitem = pListDetalleOC.items.get(position);
+
+                    selitem  = stream(pListDetalleOC.items)
+                            .where(c -> c.No_Linea == sitem.No_Linea)
+                            .first();
 
                     selid = sitem.No_Linea;
                     selidx = position;
@@ -882,7 +899,7 @@ public class frm_list_rec_prod extends PBase {
                 btnRegs.setText("Regs: "+pListDetalleOC.items.size());
             }
 
-            Collections.sort(BeListDetalleOC,new OrdenarItems());
+            Collections.sort(BeListDetalleOC, new OrdenarItems());
 
             //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
             boolean es_poliza_consolidada = false;
@@ -1551,6 +1568,100 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {"Codigo A-Z","Codigo Z-A",
+                "Producto A-Z","Producto Z-A" ,
+                "Cantidad Recibida A-Z","Cantidad Recibida Z-A"};
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                gl.sortOrd = item;
+                orderar();
+                listSortedItems();
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void listSortedItems() {
+        try {
+            boolean es_poliza_consolidada = false;
+            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            TipoIngreso = gBeOrdenCompra.getTipoIngreso();
+            if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
+
+            if (!es_poliza_consolidada) {
+                lblIdPropietarioBodega.setVisibility(View.GONE);
+                lblNombrePropietario.setVisibility(View.GONE);
+            }
+
+            if (areaprimera) {
+                listdetadapter2 = new list_adapt_detalle_recepcion2(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter2);
+            } else {
+                listdetadapter = new list_adapt_detalle_recepcion(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter);
+            }
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void orderar() {
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+            case 1:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+            case 2:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+            case 3:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+            case 4:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+            case 5:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+        }
+    }
+
+    class Sort_Codigo implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left, clsBeTrans_oc_det right)                    {
+            return sortord*left.Producto.Codigo.compareTo(right.Producto.Codigo);
+        }
+    }
+
+    class Sort_Cantidad implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left,clsBeTrans_oc_det rigth){
+            return Double.compare(sortord * left.Cantidad_recibida, sortord * rigth.Cantidad_recibida);
+        }
+    }
+
+    class Sort_Producto implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left, clsBeTrans_oc_det right)                    {
+            return sortord*left.Producto.Nombre.compareTo(right.Producto.Nombre);
+        }
+    }
+
     private void MuestraPantallaFirma(Activity activity){
 
         try{
@@ -1623,6 +1734,7 @@ public class frm_list_rec_prod extends PBase {
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_Documento_Ingreso();
+                orderar();
                if(Recepcion_Completa()){
                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                }
