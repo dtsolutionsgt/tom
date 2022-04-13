@@ -99,7 +99,7 @@
                     android:id="@+id/lblLoteVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="0dp"
                     android:text="Lote:" />
 
@@ -115,7 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblPresVeri"
@@ -135,7 +136,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblUmbasVeri"
@@ -162,13 +164,13 @@
                     android:id="@+id/lblCantVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Cantidad:" />
 
                 <EditText
                     android:id="@+id/txtCantVeri"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:inputType="number"
                     android:text="0" />
             </LinearLayout>
@@ -184,7 +186,7 @@
                     android:id="@+id/lblPesoVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Peso:" />
 
                 <EditText

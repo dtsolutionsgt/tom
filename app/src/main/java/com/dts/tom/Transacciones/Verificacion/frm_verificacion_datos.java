@@ -322,7 +322,7 @@ public class frm_verificacion_datos extends PBase {
             txtVenceVeri.setText(Expira);
             txtCantVeri.setText(String.valueOf(Rec-Ver));
 
-            txtUmbasVeri.setText(UM);
+            //txtUmbasVeri.setText(UM);
             txtLoteVeri.setText(BePedidoDetVerif.getLote());
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
@@ -331,15 +331,18 @@ public class frm_verificacion_datos extends PBase {
             //#CKFK20220326 Agregué esta validación para que si el producto no tiene presentación
             //no se muestre el combo de la presentación
             if (sel>-1){
-                llPresentacion.setVisibility(View.VISIBLE);
-                cmbPresVeri.setSelection(sel);
+                lblCantVeri.setText("Cantidad ("+BePedidoDetVerif.getNom_Presentacion()+"): ");
+                //llPresentacion.setVisibility(View.VISIBLE);
+                //cmbPresVeri.setSelection(sel);
 
                 double tmpCantVeri = Double.valueOf(txtCantVeri.getText().toString());
 
-                if (((tmpCantVeri % 1) > 0) || (tmpCantVeri > factor))
+                if (((tmpCantVeri % 1) > 0) || (tmpCantVeri > factor)) {
                     procesaCajasUnidades();
+                }
             }else{
-                llPresentacion.setVisibility(View.GONE);
+                lblCantVeri.setText("Cantidad ("+UM+"): ");
+                //llPresentacion.setVisibility(View.GONE);
 
                 execws(4);
             }
