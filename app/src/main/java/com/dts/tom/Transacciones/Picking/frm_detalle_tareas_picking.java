@@ -221,7 +221,7 @@ public class frm_detalle_tareas_picking extends PBase {
             @Override
             public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                 if (!txtFiltro.getText().toString().isEmpty()) {
-                    gl.termino = termino.toString();
+                    gl.termino = txtFiltro.getText().toString();
                     Filtro();
                 } else {
                     Lista_Detalle_Picking();
@@ -256,7 +256,7 @@ public class frm_detalle_tareas_picking extends PBase {
         AuxBePickingUbic.clear();
         for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
 
-            if(obj.CodigoProducto.contains(termino) || obj.NombreProducto.toLowerCase().contains(termino)){
+            if(obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())){
                 AuxBePickingUbic.add(obj);
             }
         }

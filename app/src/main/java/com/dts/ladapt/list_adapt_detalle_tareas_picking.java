@@ -204,14 +204,13 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         if (!BeListTareasHH.get(position).NombreArea.isEmpty()){
             holder.lblNombreArea.setText(""+BeListTareasHH.get(position).NombreArea);
         }else{
-            holder.lblNombreArea.setText("ND");
+            holder.lblNombreArea.setText("--");
         }
 
         if (!BeListTareasHH.get(position).NombreClasificacion.isEmpty() && !BeListTareasHH.get(position).NombreClasificacion.contains("Clasificación") ){
             holder.lblNombreClasificacion.setText(""+BeListTareasHH.get(position).NombreClasificacion);
-        }else
-        {
-            holder.lblNombreClasificacion.setText("ND");
+        }else {
+            holder.lblNombreClasificacion.setText("--");
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {

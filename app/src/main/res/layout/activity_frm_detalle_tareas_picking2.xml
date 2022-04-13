@@ -24,23 +24,21 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
-            android:onClick="Salir"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:onClick="Salir" />
 
         <Button
-            android:id="@+id/btnFinalizarTareaPicking"
+            android:id="@+id/btnPendientes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="BotonFinalizar"
-            android:text="Finalizar Tarea"
+            android:background="@color/medium"
+            android:onClick="ActualizaLista"
+            android:text="Pendientes: 0"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:visibility="gone"/>
+            android:textSize="18sp"
+            tools:ignore="TouchTargetSizeCheck" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,13 +62,11 @@
             android:padding="5dp"
             android:src="@drawable/filter" />
 
-
         <TextView
             android:id="@+id/lblTituloForma"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="Detalle de producto para Picking"
             android:textColor="#FFFFFF"
@@ -82,7 +78,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lblTituloForma"
+            android:layout_alignEnd="@+id/lblTituloForma"
             android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="Bodega"
             android:textColor="#FFFFFF"
@@ -95,7 +93,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lblBodega"
+            android:layout_alignEnd="@+id/lblTituloForma"
             android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="Operador"
             android:textColor="#FFFFFF"
@@ -105,42 +105,86 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/lblNoDocumento"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
+    <RelativeLayout
+        android:id="@+id/relFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="NoDocumento: "
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
-
-    <Spinner
-        android:id="@+id/cmbOrdenadorPor"
-        android:layout_width="239dp"
-        android:layout_height="35dp"
-        android:layout_below="@+id/lblNoDocumento"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="142dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp" />
+        android:visibility="gone"
+        tools:visibility="gone">
 
-    <TextView
-        android:id="@+id/lblOrdenPr"
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/cmbOrdenadorPor"
-        android:layout_alignBottom="@+id/cmbOrdenadorPor"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:gravity="center_vertical"
-        android:text="Ordernar por:"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        <Spinner
+            android:id="@+id/cmbOrdenadorPor"
+            android:layout_width="239dp"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="142dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:id="@+id/lblOrdenPr"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/cmbOrdenadorPor"
+            android:layout_alignBottom="@+id/cmbOrdenadorPor"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-10dp"
+            android:gravity="center_vertical"
+            android:text="Ordernar por:"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblFiltro"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lblOrdenPr"
+            android:layout_alignStart="@+id/lblOrdenPr"
+            android:layout_alignBottom="@+id/txtFiltro"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center_vertical"
+            android:text="Filtro:"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/txtFiltro"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/cmbOrdenadorPor"
+            android:layout_alignStart="@+id/cmbOrdenadorPor"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/btnLimpiar"
+            android:ems="10"
+            android:hint="Código o nombre"
+            android:inputType="textPersonName" />
+
+        <ImageView
+            android:id="@+id/btnLimpiar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignTop="@+id/lblFiltro"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="0dp"
+            android:padding="4dp"
+            android:src="@drawable/close"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
+    </RelativeLayout>
+
+
 
     <Button
         android:id="@+id/btnRes_Det"
@@ -163,107 +207,48 @@
         android:id="@+id/txtUbicacionFiltro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtFiltro"
-        android:layout_alignStart="@+id/cmbOrdenadorPor"
-        android:layout_alignEnd="@+id/cmbOrdenadorPor"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/relFiltros"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/textView11"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
 
     <TextView
         android:id="@+id/textView11"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtUbicacionFiltro"
-        android:layout_alignEnd="@+id/lblOrdenPr"
-        android:layout_alignBottom="@+id/txtUbicacionFiltro"
-        android:layout_marginEnd="6dp"
+        android:layout_alignTop="@+id/btnRes_Det"
+        android:layout_alignBottom="@+id/btnRes_Det"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/btnRes_Det"
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
-        android:text="Ubic"
+        android:text="Ubic.: #"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/lblFiltro"
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lblOrdenPr"
-        android:layout_alignStart="@+id/lblOrdenPr"
-        android:layout_alignBottom="@+id/txtFiltro"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="0dp"
-        android:gravity="center_vertical"
-        android:text="Filtro:"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/txtFiltro"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/cmbOrdenadorPor"
-        android:layout_alignStart="@+id/cmbOrdenadorPor"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toStartOf="@+id/btnLimpiar"
-        android:ems="10"
-        android:hint="Código o nombre"
-        android:inputType="textPersonName" />
-
-    <ImageView
-        android:id="@+id/btnLimpiar"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
-        android:layout_alignTop="@+id/lblFiltro"
-        android:layout_alignBottom="@+id/lblFiltro"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="0dp"
-        android:padding="4dp"
-        android:src="@drawable/close"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/relBtn"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_above="@+id/relbot"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:id="@+id/btnPendientes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/holo_red_dark"
-            android:text="Pendientes: 0"
-            android:textColor="@android:color/background_light"
-            android:textSize="16sp" />
-    </RelativeLayout>
 
     <HorizontalScrollView
         android:id="@+id/hrPicking"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/relBtn"
+        android:layout_above="@+id/relbot"
         android:layout_below="@id/txtUbicacionFiltro"
         android:layout_marginBottom="0dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="35dp"
                 android:background="@drawable/color_medium"
                 android:orientation="horizontal">
 
@@ -591,7 +576,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="15dp"
         android:backgroundTint="@color/medium"
         app:fabCustomSize="60dp"
         android:clickable="true"
