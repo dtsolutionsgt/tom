@@ -1343,8 +1343,6 @@ public class frm_list_rec_prod extends PBase {
         }catch (Exception e){
             progress.hide();
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
-        }finally {
-            btnTareas.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1407,9 +1405,6 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
-        }finally {
-            btnTareas.setVisibility(View.VISIBLE);
-            relbot.setVisibility(View.VISIBLE);
         }
     }
 

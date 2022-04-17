@@ -6253,6 +6253,14 @@ public class frm_recepcion_datos extends PBase {
 
             }catch (Exception e){
                 progress.hide();
+                switch (ws.callback) {
+                    case 16:
+                        msgboxErrorCallBack(e.getMessage(),false);
+                        break;
+                    default:
+                        msgboxErrorCallBack(e.getMessage(),true);
+                        break;
+                }
                 mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }finally{
                 progress.cancel();
@@ -7568,6 +7576,30 @@ public class frm_recepcion_datos extends PBase {
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Imprime_Barra_Despues_Guardar();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            //Log.println(1,"msg",e.getMessage());
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void msgboxErrorCallBack(String msg,boolean guardo) {
+        try{
+            ExDialog dialog = new ExDialog(this);
+            dialog.setCancelable(false);
+            dialog.setMessage(msg);
+
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (guardo){
+                        Imprime_Barra_Despues_Guardar();
+                    }else{
+                        Actualiza_Valores_Despues_Imprimir(true);
+                    }
                 }
             });
 
