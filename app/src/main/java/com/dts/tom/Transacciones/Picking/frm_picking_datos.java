@@ -66,7 +66,7 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
-    private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion;
+    private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad;
     private Button btnDanado, btNE,btnConfirmarPk;
     private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto, txtCajas, txtUnidades, txtVenceEn;
     private Spinner cmbPresentacion, cmbEstado;
@@ -75,7 +75,7 @@ public class frm_picking_datos extends PBase {
 
     private boolean Escaneo_Pallet = false;
     private String pLP = "";
-    private String pCodigo = "";
+    private String pCodigo = "", vUnidadMedida="";
     private int gIdUbicacion=0;
     public static double CantReemplazar=0;
     public static boolean ReemplazoLP=false;
@@ -122,10 +122,10 @@ public class frm_picking_datos extends PBase {
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
         lblEstiba = (TextView) findViewById(R.id.lblEstiba);
+        lblCantidad = (TextView) findViewById(R.id.lblCantidad);
 
         btnConfirmarPk = (Button) findViewById(R.id.btnConfirmarPk);
 
-        cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
         trCaducidad = (TableRow) findViewById(R.id.trCaducidad);
@@ -380,8 +380,6 @@ public class frm_picking_datos extends PBase {
 
     private void Load() {
 
-        String vUnidadMedida ="";
-
         try {
             txtCantidadPick.setEnabled(false);
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
@@ -396,9 +394,7 @@ public class frm_picking_datos extends PBase {
                 txtCodigoProducto.requestFocus();
             }
 
-            if(gBePickingUbic.getIdPresentacion()!=0){
-                trPresentacion.setVisibility(View.VISIBLE);
-            }else{
+            if(gBePickingUbic.getIdPresentacion() == 0){
                 trPresentacion.setVisibility(View.GONE);
                 tblEstiba.setVisibility(View.GONE);
             }
@@ -509,10 +505,10 @@ public class frm_picking_datos extends PBase {
             txtLote.setFocusableInTouchMode(false);
             txtLote.setClickable(false);
 
-            cmbPresentacion.setFocusable(false);
+            /*cmbPresentacion.setFocusable(false);
             cmbPresentacion.setFocusableInTouchMode(false);
             cmbPresentacion.setClickable(false);
-            cmbPresentacion.setEnabled(false);
+            cmbPresentacion.setEnabled(false);*/
 
             txtUniBas.setFocusable(false);
             txtUniBas.setFocusableInTouchMode(false);
@@ -544,7 +540,7 @@ public class frm_picking_datos extends PBase {
     private void Limpia_controles() {
         txtLicencia.setText("");
         txtLote.setText("");
-        cmbPresentacion.setSelection(-1);
+        //cmbPresentacion.setSelection(-1);
         txtUniBas.setText("");
         txtCantidadPick.setText("0.00");
         cmbEstado.setSelection(-1);
@@ -1283,10 +1279,11 @@ public class frm_picking_datos extends PBase {
             if (gBePickingUbic.IdPresentacion>0){
                 if (gBeProducto.Presentaciones!=null){
                     if (gBeProducto.Presentaciones.items!=null){
-                        List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        //#AT 20220418 Se carga la presentación en el lblCantidad ya no se utiliza cmbPresentación
+                       /* List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
-                        cmbPresentacion.setSelection(inx);
-
+                        cmbPresentacion.setSelection(inx);*/
+                        lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
 
                         //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                         gBePresentacion= stream(gBeProducto.Presentaciones.items).
@@ -1304,6 +1301,7 @@ public class frm_picking_datos extends PBase {
                     }
                 }
             }else{
+                lblCantidad.setText("Cantidad ("+vUnidadMedida+"): ");
                 tblEstiba.setVisibility(View.GONE);
                 lblEstiba.setText("");
             }
@@ -1405,9 +1403,13 @@ public class frm_picking_datos extends PBase {
             txtLote.setText(gBePickingUbic.Lote);
 
             if (gBePickingUbic.IdPresentacion>0){
-                List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                //#AT 20220418 Se carga la presentación en el lblCantidad ya no se utiliza cmbPresentación
+                /*List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                 int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
-                cmbPresentacion.setSelection(inx);
+                cmbPresentacion.setSelection(inx);*/
+                lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
+            } else {
+                lblCantidad.setText("Cantidad ("+vUnidadMedida+"): ");
             }
 
             txtUniBas.setText(gBePickingUbic.ProductoUnidadMedida);
@@ -1987,7 +1989,7 @@ public class frm_picking_datos extends PBase {
                     factor = gBeProducto.Presentaciones.items.get(0).Factor;
 
                     Listar_Producto_Estado();
-                    Listar_Producto_Presentaciones();
+                    //Listar_Producto_Presentaciones();
                     Set_dias_Vence();
 
                     if (!gBePickingUbic.Lic_plate.isEmpty()) {
@@ -2018,7 +2020,7 @@ public class frm_picking_datos extends PBase {
             gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
 
             Listar_Producto_Estado();
-            Listar_Producto_Presentaciones();
+            //Listar_Producto_Presentaciones();
             Set_dias_Vence();
 
             if (!gBePickingUbic.Lic_plate.isEmpty()) {

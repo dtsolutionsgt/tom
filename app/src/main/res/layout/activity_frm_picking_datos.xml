@@ -110,7 +110,8 @@
                 android:id="@+id/trPresentacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView14"
@@ -127,25 +128,10 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/tblEstiba"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/lblEstiba"
-                    style="@style/StyleText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:text="@string/camas_x_tarima_cajas_x_cama"
-                    android:textSize="18sp"
-                    android:visibility="visible" />
-            </TableRow>
-
-            <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView15"
@@ -169,7 +155,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/lblCantidad"
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
@@ -181,6 +167,22 @@
                     android:layout_height="match_parent"
                     android:inputType="number"
                     tools:ignore="SpeakableTextPresentCheck" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblEstiba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblEstiba"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="@string/camas_x_tarima_cajas_x_cama"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
             </TableRow>
 
             <TableRow
