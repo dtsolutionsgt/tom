@@ -461,9 +461,9 @@ public class frm_consulta_stock extends PBase {
                                 item.Codigo = "Total:";
                                 item.Nombre = lname;
                                 item.UM = "";
-                                item.ExistUMBAs = mu.frmdecno(tuni);
+                                item.ExistUMBAs = "";
                                 item.Pres = "";
-                                item.ExistPres ="";
+                                item.ExistPres =mu.frmdec(tuni);
                                 item.ReservadoUMBAs = "";
                                 item.DisponibleUMBas = "";
                                 item.Lote = "";
@@ -529,7 +529,7 @@ public class frm_consulta_stock extends PBase {
                         }
 
                         try {
-                            uni=Double.parseDouble(pListStock2.items.get(i).ExistUMBAs);
+                            uni=Double.parseDouble(pListStock2.items.get(i).ExistPres);
                         } catch (NumberFormatException e) {
                             uni=0;
                         }
@@ -544,9 +544,9 @@ public class frm_consulta_stock extends PBase {
                         item.Codigo = "Total:";
                         item.Nombre = lname;
                         item.UM = "";
-                        item.ExistUMBAs = mu.frmdecno(tuni);
+                        item.ExistUMBAs = "";
                         item.Pres = "";
-                        item.ExistPres ="";
+                        item.ExistPres =mu.frmdec(tuni);
                         item.ReservadoUMBAs = "";
                         item.DisponibleUMBas = "";
                         item.Lote = "";
