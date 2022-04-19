@@ -1402,7 +1402,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             try {
                 switch (ws.callback) {
                     case 1://Obtiene la ubicacion por defecto de la recepción para el cambio de ubicacion o estado ciego
-                        callMethod("Get_IdUbic_Ciega_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
+                        callMethod("Get_IdUbicacion_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2://Obtiene los motivos de ubicación
                         callMethod("Get_Motivos_Ubicacion_For_HH");
@@ -1540,7 +1540,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.setMessage("Obteniendo la ubicación por defecto de la recepción");
             progress.show();
 
-            cvUbicOrigID = (Integer) xobj.getSingle("Get_IdUbic_Ciega_Recepcion_By_IdBodegaResult",int.class);
+            cvUbicOrigID = (Integer) xobj.getSingle("Get_IdUbicacion_Recepcion_By_IdBodegaResult",int.class);
 
             if (cvUbicOrigID > 0){
                 txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
