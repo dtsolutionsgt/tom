@@ -677,7 +677,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             progress.setMessage("Creando el movimiento");
 
             gMovimientoDet = new clsBeTrans_movimientos();
-            String fecha_registro = du.getFechaActual();
 
             gMovimientoDet.IdMovimiento = 0;
             gMovimientoDet.IdEmpresa = gl.IdEmpresa;
@@ -709,10 +708,11 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             //gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
             //gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
             //#GT19042022: se obtiene la fecha actual, porque en gl esas horas vienen en null
-            gMovimientoDet.Fecha = du.getFechaActual();
+            //gMovimientoDet.Fecha = du.getFechaActual();
+            gMovimientoDet.Fecha = du.getFullDate();
             gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
-            gMovimientoDet.Hora_fin = fecha_registro;
-            gMovimientoDet.Fecha_agr = fecha_registro;
+            gMovimientoDet.Hora_fin = du.getFechaActual();
+            gMovimientoDet.Fecha_agr = du.getFechaActual();
 
             if (gl.Escaneo_Pallet){
                 if (gl.BeStockPallet!=null) {
