@@ -707,8 +707,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             //gMovimientoDet.Fecha = gl.tareadet.HoraFin;
             //gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
             //gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
-            //#GT19042022: se obtiene la fecha actual, porque en gl esas horas vienen en null
-            //gMovimientoDet.Fecha = du.getFechaActual();
+            //#GT19042022: se obtiene la fecha actual, porque en gl.tareadet las horas vienen null
             gMovimientoDet.Fecha = du.getFullDate();
             gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
             gMovimientoDet.Hora_fin = du.getFechaActual();

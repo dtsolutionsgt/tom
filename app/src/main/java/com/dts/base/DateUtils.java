@@ -743,7 +743,7 @@ public class DateUtils {
 
 		try {
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'T' HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("HH:mm");
 
@@ -957,7 +957,7 @@ public class DateUtils {
 		final Calendar c = Calendar.getInstance();
 		//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		//Date date = dateFormat.parse(fechaS);
-		@SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'T' HH:mm:ss");
+		@SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		vFecha = dateFormat.format(c.getTime());
 
 		return vFecha;
