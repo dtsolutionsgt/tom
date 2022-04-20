@@ -45,8 +45,8 @@ public class frm_verificacion_datos extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri, txtCajas, txtUnidades;
-    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion;
+    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri, txtCajas, txtUnidades, txtPreSol, txtPresRec, txtUnidadSol, txtUnidadRec;
+    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
@@ -124,6 +124,14 @@ public class frm_verificacion_datos extends PBase {
         txtUnidades = (EditText) findViewById(R.id.txtUnidades);
         lblPresentacion = (TextView) findViewById(R.id.lblPresentacion);
         relDesglose = findViewById(R.id.relDesglose);
+        txtPreSol = findViewById(R.id.txtPresSol);
+        txtUnidadSol = findViewById(R.id.txtUnidadSol);
+        txtUnidadRec = findViewById(R.id.txtUnidadRec);
+        txtPresRec = findViewById(R.id.txtPresRec);
+        lblPresRec = findViewById(R.id.lblPresRec);
+        lblPresSol = findViewById(R.id.lblPresSol);
+        lblUnidadSol = findViewById(R.id.lblUnidadSol);
+        lblUnidadRec = findViewById(R.id.lblUnidadRec);
 
         BePickingUbicList = gl.gBePickingUbicList;
 
@@ -299,8 +307,8 @@ public class frm_verificacion_datos extends PBase {
 
             Lp = BePedidoDetVerif.getLicPlate();
 
-            lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s Sol: %s Pick: %s Veri: %s",
-                    Codigo, Nombre, Expira, Lote, Sol, Rec, Ver));
+            lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
+                    Codigo, Nombre, Expira, Lote));
 
             if (gBeProducto == null){
                 throw new Exception("El producto no está definido");
@@ -335,10 +343,90 @@ public class frm_verificacion_datos extends PBase {
                 //llPresentacion.setVisibility(View.VISIBLE);
                 //cmbPresVeri.setSelection(sel);
 
-                double tmpCantVeri = Double.valueOf(txtCantVeri.getText().toString());
+                //#AT20220419 Se muestra Cajas y Unidades en cantidad solicitada y recibida
+                if (BePedidoDetVerif.getIdPresentacion()>0){
+                    if (gBeProducto.Presentaciones!=null){
+                        if (gBeProducto.Presentaciones.items!=null){
 
-                if (((tmpCantVeri % 1) > 0) || (tmpCantVeri > factor)) {
-                    procesaCajasUnidades();
+
+                            factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
+                            double cantidad_solicitada = Rec;
+
+                            double CantidadDecimal = cantidad_solicitada % 1;
+                            double CantidadPresentacion = 0;
+                            CantidadPresentacion = cantidad_solicitada - CantidadDecimal;
+                            double CantidadUMBas = CantidadDecimal * factor;
+
+                            if (CantidadPresentacion > 0) {
+
+                                if ((cantidad_solicitada % 1) > 0 || (cantidad_solicitada > factor)) {
+
+                                    if (CantidadUMBas == 0) {
+                                        txtUnidadSol.setVisibility(View.GONE);
+                                        lblUnidadSol.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
+
+                            }else if ((cantidad_solicitada % 1) > 0 || (factor > 0)) {
+                                txtPreSol.setVisibility(View.GONE);
+                                lblPresSol.setVisibility(View.GONE);
+
+                                calculaUnidades(CantidadUMBas);
+                            }
+
+                            if (Ver > 0) {
+                                double CantidadRec = Ver;
+
+                                double CantidadDecimalRec = CantidadRec % 1;
+                                double CantidadPresentacionRec = 0;
+                                CantidadPresentacionRec = CantidadRec - CantidadDecimalRec;
+                                double CantidadUMBasRec = CantidadDecimalRec * factor;
+
+                                if (CantidadPresentacionRec > 0) {
+
+                                    if ((CantidadRec % 1) > 0 || (CantidadRec >= factor)) {
+
+                                        if (CantidadUMBasRec == 0) {
+                                            txtUnidadRec.setVisibility(View.GONE);
+                                            lblUnidadRec.setVisibility(View.GONE);
+                                        }
+
+                                        lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                        txtPresRec.setText(String.valueOf(CantidadPresentacionRec));
+                                        txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                    } else {
+
+                                        lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                        txtPresRec.setText(String.valueOf(CantidadPresentacionRec));
+                                        txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                    }
+
+                                }else if ((CantidadRec % 1) > 0 || (factor > 0)) {
+                                    lblPresRec.setVisibility(View.GONE);
+                                    txtPresRec.setVisibility(View.GONE);
+
+                                    txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                }
+
+                            } else {
+                                lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                txtPresRec.setText("0");
+                                txtUnidadRec.setText("0");
+                            }
+                        }
+                    }
+                } else {
+                    lblPresSol.setVisibility(View.GONE);
+                    txtPreSol.setVisibility(View.GONE);
+                    lblPresRec.setVisibility(View.GONE);
+                    txtPresRec.setVisibility(View.GONE);
+
+                    txtUnidadSol.setText(""+Rec);
+                    txtUnidadRec.setText(""+Ver);
+
                 }
             }else{
                 lblCantVeri.setText("Cantidad ("+UM+"): ");
@@ -372,6 +460,36 @@ public class frm_verificacion_datos extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
+        }
+
+    }
+
+    private void calculaCajaUnidades(double CantPresentacion, double CantidadUMBas) {
+
+        try {
+
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText(String.valueOf(CantPresentacion));
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean HicimosUnaFumada=false;
+
+    private void calculaUnidades(double CantidadUMBas) {
+
+        try {
+
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText("0");
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
     }

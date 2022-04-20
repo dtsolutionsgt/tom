@@ -66,11 +66,12 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
     private ProgressDialog progress;
-    private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad;
+    private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad, lblPresSol, lblPresRec, lblUnidadSol, lblUnidadRec;
     private Button btnDanado, btNE,btnConfirmarPk;
-    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick, txtCodigoProducto, txtCajas, txtUnidades, txtVenceEn;
+    private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick,
+                     txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba, tblVenceEn;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
     private RelativeLayout tblCajasUnidades;
 
     private boolean Escaneo_Pallet = false;
@@ -90,6 +91,7 @@ public class frm_picking_datos extends PBase {
 
     private TextToSpeech mTTS;
     private boolean confirmar_codigo_en_picking;
+    private boolean SonUnidades = false;
     //Imagen
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
@@ -117,7 +119,14 @@ public class frm_picking_datos extends PBase {
         txtCodigoProducto = (EditText) findViewById(R.id.txtCodigoProducto);
         txtCajas = (EditText) findViewById(R.id.txtCajas);
         txtUnidades = (EditText) findViewById(R.id.txtUnidades);
-        txtVenceEn = findViewById(R.id.txtVenceEn);
+        txtPreSol = findViewById(R.id.txtPresSol);
+        txtUnidadSol = findViewById(R.id.txtUnidadSol);
+        txtUnidadRec = findViewById(R.id.txtUnidadRec);
+        txtPresRec = findViewById(R.id.txtPresRec);
+        lblPresRec = findViewById(R.id.lblPresRec);
+        lblPresSol = findViewById(R.id.lblPresSol);
+        lblUnidadSol = findViewById(R.id.lblUnidadSol);
+        lblUnidadRec = findViewById(R.id.lblUnidadRec);
 
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
@@ -135,7 +144,6 @@ public class frm_picking_datos extends PBase {
         trLote = (TableRow) findViewById(R.id.trLote);
         trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
         tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
-        tblVenceEn = findViewById(R.id.tblVenceEn);
 
         tblCajasUnidades = findViewById(R.id.tblCajasUnidades);
         lblPresentacion = findViewById(R.id.lblPresentacion);
@@ -419,10 +427,9 @@ public class frm_picking_datos extends PBase {
 
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
-                    " Expira: " + gBePickingUbic.Fecha_Vence :"" )
-                    + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:"") + "\r\n"
-                    + "Sol: " + gBePickingUbic.Cantidad_Solicitada + "\r\n"
-                    + "Rec: " + gBePickingUbic.Cantidad_Recibida + " "+ vUnidadMedida);
+                    " Expira: " + gBePickingUbic.Fecha_Vence :"" ) +((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
+                    " (" + DifDias +"d)" :"" )
+                    + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:""));
 
             //txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             //txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
@@ -558,13 +565,9 @@ public class frm_picking_datos extends PBase {
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
 
-                tblVenceEn.setVisibility(View.VISIBLE);
-                txtVenceEn.setText(String.valueOf(DifDias));
-
             }else{
 
                 trCaducidad.setVisibility(View.GONE);
-                tblVenceEn.setVisibility(View.GONE);
                 txtFechaCad.setText("");
 
             }
@@ -1208,26 +1211,44 @@ public class frm_picking_datos extends PBase {
         }
     }
 
-    private void calculaCajaUnidades() {
-        double cantidadPresentacion = 0;
-        double CantPick = 0;
+    private void calculaCajaUnidades(double CantPresentacion, double CantidadUMBas) {
 
-        tblCajasUnidades.setVisibility(View.VISIBLE);
-        app.readOnly(txtCajas,true);
-        app.readOnly(txtUnidades,true);
+        try {
 
-        CantPick = Double.valueOf(txtCantidadPick.getText().toString());
-        if (CantPick > factor) {
+            if (SonUnidades) {
+                lblPresSol.setVisibility(View.GONE);
+                txtPreSol.setVisibility(View.GONE);
+            }
 
-            cantidadPresentacion = CantPick / factor;
-            double decimal = cantidadPresentacion % 1;
-            double cajas = cantidadPresentacion - decimal;
-            double unidades = decimal * factor;
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText(String.valueOf(CantPresentacion));
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
 
-            lblPresentacion.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
-            txtCajas.setText(String.valueOf(cajas));
-            txtUnidades.setText(String.valueOf(mu.frmdec(unidades)));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
+
+    }
+
+    private boolean HicimosUnaFumada=false;
+
+    private void calculaUnidades(double CantidadUMBas) {
+
+        try {
+
+            if (SonUnidades) {
+                lblPresSol.setVisibility(View.GONE);
+                txtPreSol.setVisibility(View.GONE);
+            }
+
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText("0");
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void Cargar_Datos_Producto_Picking(){
@@ -1252,10 +1273,8 @@ public class frm_picking_datos extends PBase {
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
-                tblVenceEn.setVisibility(View.VISIBLE);
             }else{
                 trCaducidad.setVisibility(View.GONE);
-                tblVenceEn.setVisibility(View.GONE);
             }
 
             txtLote.setText(gBePickingUbic.Lote);
@@ -1349,9 +1368,22 @@ public class frm_picking_datos extends PBase {
                     // gBeProducto.Presentaciones.items.get(0).Factor;
                     double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
 
-                    if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
-                        calculaCajaUnidades();
+                    double CantidadDecimal = tmpCantPick % 1;
+                    double CantidadPresentacion = 0;
+                    CantidadPresentacion = tmpCantPick - CantidadDecimal;
+                    double CantidadUMBas = CantidadDecimal * factor;
+
+                    if (CantidadPresentacion > 0) {
+
+                        if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+
+                            calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
+                        }
+
+                    }else if ((tmpCantPick % 1) > 0 || (factor > 0)) {
+                        calculaUnidades(CantidadUMBas);
                     }
+
                 }
             }
 
@@ -1390,12 +1422,9 @@ public class frm_picking_datos extends PBase {
                 trCaducidad.setVisibility(View.VISIBLE);
                 txtFechaCad.setText(gBePickingUbic.Fecha_Vence);
 
-                tblVenceEn.setVisibility(View.VISIBLE);
-                txtVenceEn.setText(String.valueOf(DifDias));
             }else{
 
                 trCaducidad.setVisibility(View.GONE);
-                tblVenceEn.setVisibility(View.GONE);
                 txtFechaCad.setText("");
 
             }
@@ -1431,14 +1460,26 @@ public class frm_picking_datos extends PBase {
                 txtPesoPick.setText("0");
             }
 
-            if (  gBeProducto.Presentaciones!=null) {
+            if (gBeProducto.Presentaciones!=null) {
+
                 if (gBeProducto.Presentaciones.items != null) {
 
                     double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
+                    double CantidadDecimal = tmpCantPick % 1;
+                    double CantidadPresentacion = 0;
+                    CantidadPresentacion = tmpCantPick - CantidadDecimal;
+                    double CantidadUMBas = CantidadDecimal * factor;
 
-                    if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
-                        calculaCajaUnidades();
+                    if (CantidadPresentacion > 0) {
+
+                        if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
+                            calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
+                        }
+
+                    }else if ((tmpCantPick % 1) > 0 || (factor > 0)) {
+                        calculaUnidades(CantidadUMBas);
                     }
+
                 }
             }
 
@@ -1961,7 +2002,94 @@ public class frm_picking_datos extends PBase {
                     trCaducidad.setVisibility(View.GONE);
                 }
 
+                //#AT20220419 Se muestra Cajas y Unidades en cantidad solicitada y recibida
+                if (gBePickingUbic.IdPresentacion>0){
+                    if (gBeProducto.Presentaciones!=null){
+                        if (gBeProducto.Presentaciones.items!=null){
+
+
+                            factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
+                            double cantidad_solicitada = gBePickingUbic.Cantidad_Solicitada;
+
+                            double CantidadDecimal = cantidad_solicitada % 1;
+                            double CantidadPresentacion = 0;
+                            CantidadPresentacion = cantidad_solicitada - CantidadDecimal;
+                            double CantidadUMBas = CantidadDecimal * factor;
+
+                            if (CantidadPresentacion > 0) {
+
+                                if ((cantidad_solicitada % 1) > 0 || (cantidad_solicitada > factor)) {
+
+                                    if (CantidadUMBas == 0) {
+                                        txtUnidadSol.setVisibility(View.GONE);
+                                        lblUnidadSol.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
+
+                            }else if ((cantidad_solicitada % 1) > 0 || (factor > 0)) {
+                                txtPreSol.setVisibility(View.GONE);
+                                lblPresSol.setVisibility(View.GONE);
+
+                                calculaUnidades(CantidadUMBas);
+                            }
+
+                            if (gBePickingUbic.Cantidad_Recibida > 0) {
+                                double CantidadRec = gBePickingUbic.Cantidad_Recibida;
+
+                                double CantidadDecimalRec = CantidadRec % 1;
+                                double CantidadPresentacionRec = 0;
+                                CantidadPresentacionRec = CantidadRec - CantidadDecimalRec;
+                                double CantidadUMBasRec = CantidadDecimalRec * factor;
+
+                                if (CantidadPresentacionRec > 0) {
+
+                                    if ((CantidadRec % 1) > 0 || (CantidadRec >= factor)) {
+
+                                        if (CantidadUMBasRec == 0) {
+                                            txtUnidadRec.setVisibility(View.GONE);
+                                            lblUnidadRec.setVisibility(View.GONE);
+                                        }
+
+                                        lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                        txtPresRec.setText(String.valueOf(CantidadPresentacionRec));
+                                        txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                    } else {
+
+                                        lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                        txtPresRec.setText(String.valueOf(CantidadPresentacionRec));
+                                        txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                    }
+
+                                }else if ((CantidadRec % 1) > 0 || (factor > 0)) {
+                                    lblPresRec.setVisibility(View.GONE);
+                                    txtPresRec.setVisibility(View.GONE);
+
+                                    txtUnidadRec.setText(String.valueOf(Math.round(CantidadUMBasRec)));
+                                }
+
+                            } else {
+                                lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                txtPresRec.setText("0");
+                                txtUnidadRec.setText("0");
+                            }
+                        }
+                    }
+                } else {
+                    lblPresSol.setVisibility(View.GONE);
+                    txtPreSol.setVisibility(View.GONE);
+                    lblPresRec.setVisibility(View.GONE);
+                    txtPresRec.setVisibility(View.GONE);
+
+                    txtUnidadSol.setText(""+gBePickingUbic.Cantidad_Solicitada);
+                    txtUnidadRec.setText(""+gBePickingUbic.Cantidad_Recibida);
+
+                }
+
                 execws(2);
+
 
             }else{
                 progress.cancel();
