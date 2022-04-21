@@ -1499,7 +1499,9 @@ public class frm_Packing extends PBase {
     }
 
     private void msgAskExit(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -1530,6 +1532,7 @@ public class frm_Packing extends PBase {
     }
 
     private void doExit(){
+
         try{
 
             //LimpiaValores();
@@ -1562,7 +1565,7 @@ public class frm_Packing extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_IdUbic_Ciega_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
+                        callMethod("Get_IdUbicacion_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
@@ -1812,7 +1815,7 @@ public class frm_Packing extends PBase {
 
         try{
 
-            idUbicRecep = xobj.getresult(Integer.class,"Get_IdUbic_Ciega_Recepcion_By_IdBodega");
+            idUbicRecep = xobj.getresult(Integer.class,"Get_IdUbicacion_Recepcion_By_IdBodega");
 
             if (idUbicRecep>0){
                 txtUbicOr.setText(idUbicRecep+"");

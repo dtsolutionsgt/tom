@@ -7548,7 +7548,9 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void msgboxErrorOnWS2(String msg) {
+
         try{
+
             ExDialog dialog = new ExDialog(this);
             dialog.setCancelable(false);
             dialog.setMessage(msg);
