@@ -896,7 +896,7 @@ public class frm_list_rec_prod extends PBase {
 
                 }
 
-                btnRegs.setText("Regs: "+pListDetalleOC.items.size());
+                btnRegs.setText("Registros: "+pListDetalleOC.items.size());
             }
 
             Collections.sort(BeListDetalleOC, new OrdenarItems());
@@ -985,6 +985,9 @@ public class frm_list_rec_prod extends PBase {
     private void Finalizar_Recepcion(){
 
         try{
+
+            progress.show();
+            progress.setMessage("Finalizando recepción");
 
             gl.gBeRecepcion.Firma_piloto = encodedImage;//Byte.parseByte(FirmaPiloto.toString());
             execws(12);
@@ -1161,11 +1164,13 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             } catch (Exception e) {
-                msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+                progress.cancel();
+                //msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+                msgboxErrorOnWS2(" wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+
             }
 
     }
-
 
     private void processBanderasRecep(){
 
@@ -1354,7 +1359,11 @@ public class frm_list_rec_prod extends PBase {
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = false;
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
+                }
             });
 
             dialog.show();

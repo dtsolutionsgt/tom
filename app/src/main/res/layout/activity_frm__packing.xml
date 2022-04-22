@@ -200,13 +200,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="LP Destino:" />
+                    android:text="Licencia Destino:" />
 
                 <EditText
                     android:id="@+id/txtNuevoLp"
                     android:layout_width="186dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp" />
 
                 <ImageView
                     android:id="@+id/cmdImprimir2"
@@ -227,7 +228,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="LP Origen:" />
+                    android:text="Licencia Origen:" />
 
                 <EditText
                     android:id="@+id/txtLpAnt"
