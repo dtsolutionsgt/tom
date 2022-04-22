@@ -2018,10 +2018,37 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             //Llama al método del WS Get_Estados_By_IdPropietario
                             execws(10);
 
-                        }else{
-                            progress.cancel();
+                        } else {
+                            //#AT 20220421 Cuando la lista de productos es mayor a 1
+                            // es decir varios productos relacionados con la misma licencia
+                            productoList = new clsBeProductoList();
+                            productoList.items = stream(AuxList).distinct().toList();
+
+                            BeProductoUbicacion = productoList.items.get(0);
+                            BeStockPallet = productoList.items.get(0).Stock;
+
+                            IdProductoUbicacion=BeProductoUbicacion.getIdProducto();
+                            txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
+
+                            lblDescProducto.setTextColor(Color.BLUE);
+                            cvProd = BeProductoUbicacion;
+                            cvProdID = BeProductoUbicacion.IdProducto;
+                            lblDescProducto.setText (BeProductoUbicacion.Nombre);
+                            cvPropID = BeProductoUbicacion.IdPropietario;
+                            cvUMBID = BeProductoUbicacion.IdUnidadMedidaBasica;
+
+                            if (BeProductoUbicacion.getControl_peso()){
+                                trPeso.setVisibility(View.VISIBLE);
+                            }else{
+                                trPeso.setVisibility(View.GONE);
+                            }
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(10);
+
+                            /*progress.cancel();
                             msgbox("Escanee el producto que a ubicar");
-                            txtCodigoPrd.requestFocus();
+                            txtCodigoPrd.requestFocus();*/
                         }
                     }
                 }else{
