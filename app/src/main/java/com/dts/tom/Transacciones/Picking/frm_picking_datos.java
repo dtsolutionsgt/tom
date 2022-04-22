@@ -606,7 +606,8 @@ public class frm_picking_datos extends PBase {
                             }else{
                                 mu.msgbox("la licencia no válida.");
                                 //txtBarra.setSelectAllOnFocus(true);
-                                txtLicencia.setText("");
+                                //txtLicencia.setText("");
+                                //#GT22042022 se deja la licencia digitada, para ser editada caso cealsa, no se debe limpiar
                                 txtLicencia.requestFocus();
 
                             }
