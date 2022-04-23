@@ -990,6 +990,7 @@ public class frm_list_rec_prod extends PBase {
             progress.setMessage("Finalizando recepción");
 
             gl.gBeRecepcion.Firma_piloto = encodedImage;//Byte.parseByte(FirmaPiloto.toString());
+
             execws(12);
 
         }catch (Exception e){
@@ -1329,13 +1330,11 @@ public class frm_list_rec_prod extends PBase {
                 Resultado = xobj.getresult(String.class,"Finalizar_Recepcion");
 
                 if (Resultado!=null){
-
+                    doExit();
                 }else{
                     progress.cancel();
                     mu.msgbox("No se pudo finalizar la recepción");
                 }
-
-                doExit();
 
             }else{
                 progress.cancel();

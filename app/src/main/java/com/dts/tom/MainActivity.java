@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.base.ExDialog;
@@ -48,7 +50,10 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -61,9 +66,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivity extends PBase {
+public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNeededListener {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
@@ -92,8 +99,6 @@ public class MainActivity extends PBase {
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1,ii;
     private String NomOperador, NomBodega;
     private boolean idle=false;
-
-    private String version="4.6.0.18";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -160,8 +165,8 @@ public class MainActivity extends PBase {
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
 
-            lblver.setText("Versión: " + version);
-            lblVersion.setText("V. "+version);
+            lblver.setText("Versión: " +  gl.version);
+            lblVersion.setText("V. "+ gl.version);
 
             getURL();
 
@@ -673,7 +678,7 @@ public class MainActivity extends PBase {
                     break;
                 case 7:
                     Intent i = new Intent(this, Mainmenu.class);
-                    i.putExtra("version", version);
+                    i.putExtra("version", gl.version);
                     startActivity(i);
                     progress.cancel();
                     //startActivity(new Intent(this,Mainmenu.class));
@@ -1357,17 +1362,6 @@ public class MainActivity extends PBase {
 
         progress.show();
 
-//        progress=new ProgressDialog(this);
-//        progress.setMessage(mensaje);
-//        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progress.setIndeterminate(true);
-//        progress.setProgress(0);
-//        progress.show();
-
-//        ProgressBar progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-//        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        //layout.addView(progressBar, params);
     }
 
     private void execws(int callbackvalue) {
@@ -1385,6 +1379,21 @@ public class MainActivity extends PBase {
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    @Override
+    public void onUpdateNeeded(String updateUrl) {
+
+        final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+        updateUrl = remoteConfig.getString("KEY_UPDATE_URL");
+        redirectStore(updateUrl);
+
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public class WebServiceHandler extends WebService  {
@@ -1453,89 +1462,60 @@ public class MainActivity extends PBase {
 
     private void validaVersion() {
 
-        int pp,idemp=0;
-
         if (empresas.items.size()==0) return;
 
         try {
 
-            pp=spinemp.getSelectedItemPosition();
-            idemp=empresas.items.get(pp).IdEmpresa;
+            final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+            String VersionRemoteConfigFireBase = remoteConfig.getString("KEY_CURRENT_VERSION");
+            String Nueva_Version_FireBaseConPuntos = VersionRemoteConfigFireBase;
+            String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
+            String versionActual = gl.version.replace(".","");
 
-            if (versiones!=null){
+            long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
+            long vVersionActualHH = Long.parseLong(versionActual);
 
-                for (int i = 0; i <versiones.items.size(); i++) {
-
-                    if (versiones.items.get(i).IdEmpresa==idemp) {
-
-                        //#EJC20220118: Saber si la versión en FB es mayor.
-                        String Nueva_Version_FireBaseConPuntos = versiones.items.get(i).Version;
-                        String Nueva_Version_FireBase = versiones.items.get(i).Version.replace(".","");
-                        String versionActual = version.replace(".","");
-
-                        long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
-                        long vVersionActualHH = Long.parseLong(versionActual);
-
-                        if(vNuevaVersionFireBase > vVersionActualHH)
-                        {
-                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version_FireBaseConPuntos + "?");
-                            return;
-                        }
-                    }
-                }
+            if(vNuevaVersionFireBase > vVersionActualHH)
+            {
+                msgAskActualizarVersion("La versión actual es: "  + gl.version + " ¿Actualizar a versión: " + Nueva_Version_FireBaseConPuntos + "?");
+                return;
             }
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
-
     }
 
     private void msgAskActualizarVersion(String msg) {
+
         ExDialog dialog = new ExDialog(this);
         dialog.setMessage(msg);
 
-        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    actualizaVersion();
-                } catch (Exception e) {
-                    msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-                }
+        dialog.setPositiveButton("Si", (dialog1, which) -> {
+            try {
+                actualizaVersion();
+            } catch (Exception e) {
+                msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
             }
         });
 
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {}
-        });
+        dialog.setNegativeButton("No", (dialog12, which) -> {});
 
         dialog.show();
 
     }
 
-//    private void validaResolucionLP() {
-//
-//        try {
-//
-//            if (ResolucionLpByBodega !=null){
-//                if (ResolucionLpByBodega.items.size() == 0){
-//                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
-//                }else{
-//                    execws(7);
-//                }
-//            }
-//
-//        } catch (Exception e) {
-//            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-//        }
-//
-//    }
-
     private void actualizaVersion() {
         try {
-            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
-            intent.putExtra("filename","tom.apk");
-            this.startActivity(intent);
+
+            //force_update
+            ForceUpdateChecker.with(this).onUpdateNeeded(this).do_update();
+
+//#EJC20220422
+//            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
+//            intent.putExtra("filename","tom.apk");
+//            this.startActivity(intent);
+
         } catch (Exception e) {
             msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
         }

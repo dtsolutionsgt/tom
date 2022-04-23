@@ -2,6 +2,9 @@ package com.dts.base;
 
 import android.app.Application;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
@@ -25,10 +28,17 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.classes.clsBeImagen;
+import com.dts.tom.ForceUpdateChecker;
+import com.dts.tom.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class appGlobals extends Application {
 
@@ -183,4 +193,30 @@ public class appGlobals extends Application {
 
     public boolean mostar_filtros = false;
     public String termino = "";
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    public final String version="4.6.0.17";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        // set in-app defaults
+        Map<String, Object> remoteConfigDefaults = new HashMap();
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, version);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,"");
+
+        firebaseRemoteConfig.setDefaultsAsync(remoteConfigDefaults);
+        firebaseRemoteConfig.fetch(1) // fetch every minutes
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "remote config is fetched.");
+                        firebaseRemoteConfig.activate();
+                    }
+                });
+        }
 }
