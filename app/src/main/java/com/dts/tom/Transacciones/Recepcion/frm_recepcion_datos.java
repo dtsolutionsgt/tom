@@ -3260,6 +3260,7 @@ public class frm_recepcion_datos extends PBase {
 
     @SuppressLint("SetTextI18n")
     private void FinalizaCargaProductos(){
+        boolean generaLPPres=false;
 
         try{
 
@@ -3420,7 +3421,13 @@ public class frm_recepcion_datos extends PBase {
                 Llena_beStock_Anterior();
             }
 
-            if (BeProducto.Genera_lp || BeProducto.Presentaciones.items.get(0).Genera_lp_auto) {
+            if (BeProducto.Presentaciones.items!=null){
+                if (BeProducto.Presentaciones.items.get(0).Genera_lp_auto){
+                    generaLPPres = true;
+                }
+            }
+
+            if (BeProducto.Genera_lp || generaLPPres ) {
 
                 //#EJC20220412:Check where Call_B its called
                 if (!Call_From_B){
@@ -3450,7 +3457,7 @@ public class frm_recepcion_datos extends PBase {
             progress.cancel();
 
         }catch (Exception e){
-            mu.msgbox("FinalizCargaProductos:"+e.getMessage());
+            mu.msgbox("FinalizaCargaProductos:"+e.getMessage());
         }
     }
 
@@ -4699,6 +4706,8 @@ public class frm_recepcion_datos extends PBase {
                         "^PW700 \n" +
                         "^LL0406 \n" +
                         "^LS0 \n" +
+                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                        "^FO2,40^GB670,0,5^FS \n" +
                         "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
@@ -4711,13 +4720,16 @@ public class frm_recepcion_datos extends PBase {
                         "^PQ1,0,1,Y " +
                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                         BeProducto.Codigo+" - "+BeProducto.Nombre,
-                        BeProducto.Codigo_barra);
+                        BeProducto.Codigo_barra,
+                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.getFechaActual());
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
                                         "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
                                         "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
                                         "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
@@ -4731,7 +4743,8 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         BeProducto.Codigo_barra,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre);
+                                        BeProducto.Codigo+" - "+BeProducto.Nombre,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.getFechaActual());
 
                 }else if (BeProducto.IdTipoEtiqueta==4) {
                                     zpl = String.format("^XA\n" +
@@ -4739,6 +4752,8 @@ public class frm_recepcion_datos extends PBase {
                                     "^PW812\n" +
                                     "^LL609\n" +
                                     "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
                                     "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
                                     "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
                                     "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
@@ -4752,7 +4767,8 @@ public class frm_recepcion_datos extends PBase {
                                     "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
                                     gl.gNomEmpresa,
                                     BeProducto.Codigo_barra,
-                                    BeProducto.Codigo + " - " + BeProducto.Nombre);
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
                  }
 
                 if (!zpl.isEmpty()){
@@ -4836,6 +4852,8 @@ public class frm_recepcion_datos extends PBase {
                                         "^PW700 \n" +
                                         "^LL0406 \n" +
                                         "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
                                         "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
@@ -4848,11 +4866,36 @@ public class frm_recepcion_datos extends PBase {
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                        "$"+pNumeroLP);
+                                        "$"+pNumeroLP,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.getFechaActual());
 
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                     //Dado que la descripción salía muy pequeña
+                    zpl = String.format("^XA\n" +
+                            "^MMT\n" +
+                            "^PW600\n" +
+                            "^LL0406\n" +
+                            "^LS0\n" +
+                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                            "^FO2,40^GB670,0,5^FS \n" +
+                            "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
+                            "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
+                            "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
+                            "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                            "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                            "^BY3,3,160^FT550,280^BCI,,N,N\n" +
+                            "^FD%3$s^FS\n" +
+                            "^PQ1,0,1,Y \n" +
+                            "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                            "^FO2,520^GB670,14,14^FS\n" +
+                            "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            "$"+pNumeroLP,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+/*
                     zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
@@ -4872,7 +4915,9 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         "$"+pNumeroLP,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre);
+                                        BeProducto.Codigo+" - "+BeProducto.Nombre,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+*/
 
                 }else if (BeProducto.IdTipoEtiqueta==4){
                     zpl = String.format("^XA \n" +
@@ -4880,6 +4925,8 @@ public class frm_recepcion_datos extends PBase {
                                         "^PW812 \n" +
                                         "^LL0630 \n" +
                                         "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
                                         "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
@@ -4892,7 +4939,8 @@ public class frm_recepcion_datos extends PBase {
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                        "$"+pNumeroLP);
+                                        "$"+pNumeroLP,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
                 }
 
                 if (!zpl.isEmpty()){
@@ -5999,11 +6047,16 @@ public class frm_recepcion_datos extends PBase {
 
         @Override
         public void wsExecute(){
+            //#CKFK20220421: Obtener el mensaje de erro
+            String vMensajeError="";
 
             try{
 
                 //#EJC20210611: Calculo de cantidad en UMBAS para BYB.
                 double vCantidad=0;
+                //#CKFK20220421: Obtener el tipo de Push
+                String vTipoPush="";
+
 
                 if (!txtCantidadRec.getText().toString().isEmpty()){
                     if (IdPreseSelect!=-1){
@@ -6149,6 +6202,7 @@ public class frm_recepcion_datos extends PBase {
 
                     case 25:
 
+                        vTipoPush = "Push_Recepcion_Produccion_To_NAV_For_BYB";
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
@@ -6160,6 +6214,8 @@ public class frm_recepcion_datos extends PBase {
                         break;
 
                     case 26:
+
+                        ubiDetLote = "";
 
                         try {
 
@@ -6179,6 +6235,7 @@ public class frm_recepcion_datos extends PBase {
                                    vNombreUM=BeTransReDet.Nombre_presentacion;
                                }
 
+                               vTipoPush = "Push_Recepcion_Pedido_Compra_To_NAV_For_BYB";
                                callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -6195,6 +6252,7 @@ public class frm_recepcion_datos extends PBase {
 
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
 
+                               vTipoPush = "Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB";
                                callMethod("Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -6211,6 +6269,7 @@ public class frm_recepcion_datos extends PBase {
                                ;
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
 
+                               vTipoPush = "Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB";
                                callMethod("Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -6230,8 +6289,8 @@ public class frm_recepcion_datos extends PBase {
 
                         } catch (IOException e) {
                             e.printStackTrace();
+                            throw new Exception(e.getMessage());
                         }
-
 
                         break;
                     case 27://Obtiene el Tipo de Etiqueta del producto
@@ -6249,12 +6308,29 @@ public class frm_recepcion_datos extends PBase {
                     case 30:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
                         break;
+                    case 31:
+                        callMethod("Guardar_Transaccion_Error", "pDocumentoUbicacion",ubiDetLote,
+                                                                "pTipoPush",vTipoPush,
+                                                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                                                "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                                                "pMensaje",vMensajeError);
+                        break;
                 }
 
             }catch (Exception e){
+                //#CKFK20220421 Agregué la funcionalidad de poder guardar los errores del push,
+                // cuando ocurran errores en el WS.
                 progress.hide();
                 switch (ws.callback) {
                     case 16:
+                        msgboxErrorCallBack(e.getMessage(),false);
+                        break;
+                    case 25:
+                    case 26:
+                        vMensajeError=e.getMessage();
+                        execws(31);
                         msgboxErrorCallBack(e.getMessage(),false);
                         break;
                     default:

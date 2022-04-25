@@ -190,8 +190,16 @@ public class frm_detalle_tareas_picking extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (!txtUbicacionFiltro.getText().toString().isEmpty()){
-                            execws(5);
+
+                        //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
+                        String ubicacion=txtUbicacionFiltro.getText().toString();
+
+                        if (!ubicacion.isEmpty()){
+                            if (isNumeric(ubicacion)){
+                                execws(5);
+                            }else{
+                                msgbox("La ubicación debe ser numérica " + ubicacion );
+                            }
                         }
                     }
 
@@ -244,6 +252,17 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         });
 
+    }
+
+    public  boolean isNumeric(String cadena) {
+        boolean resultado;
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
     }
 
     private void Filtro() {

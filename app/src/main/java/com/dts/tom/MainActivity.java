@@ -826,8 +826,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                  execws(7);
-                  //ejecuta();
+                    //#CKFK20220422 Cambié el execws(7); por el execws(9);
+                    execws(9);
+                    //ejecuta();
                 }
             });
 
@@ -1432,6 +1433,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         //ejecuta();
+                        break;
                     case 8:
                         callMethod("Android_Get_All_Versiones");
                         break;
