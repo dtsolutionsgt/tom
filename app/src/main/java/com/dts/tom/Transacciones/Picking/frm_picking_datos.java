@@ -283,6 +283,7 @@ public class frm_picking_datos extends PBase {
                         } else {
                             if (!txtLicencia.getText().toString().isEmpty()) {
                                 confirmarPorCodigo();
+
                             } else {
                                 msgCodigoProducto("Debe ingresar la licencia del producto");
                                 txtLicencia.requestFocus();
@@ -294,12 +295,6 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
-            txtCantidadPick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
 
 
             //GT06042022: no remover, hacen de pivote para retener el focus
@@ -339,6 +334,7 @@ public class frm_picking_datos extends PBase {
                         Cargar_Datos_Producto_Picking_Consolidado();
                     } else {
                         Cargar_Datos_Producto_Picking();
+
                     }
                 } else {
                     msgCodigoProducto("El código del producto no es válido para esta licencia");
@@ -1249,6 +1245,8 @@ public class frm_picking_datos extends PBase {
 
         try{
             txtCantidadPick.setEnabled(true);
+
+
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
 
             //#GT 18082021: si la lp digitada coincide con la del producto, se debe setear el producto a pCodigo
@@ -1378,12 +1376,17 @@ public class frm_picking_datos extends PBase {
                 }
             }*/
 
-            PressEnterProducto = true;
-            txtCantidadPick.selectAll();
-            txtCantidadPick.setSelectAllOnFocus(true);
-            btnConfirmarPk.setEnabled(true);
-            txtCantidadPick.setFocusableInTouchMode(true);
+
+            //#GT25042022: le quito el focus al campo código, porque retorna despues del set en cantidad.
+            txtCodigoProducto.setFocusable(false);
+            txtCodigoProducto.clearFocus();
+            //#GT25042022: con el campo codigo sin focus, dejo el de cantidad pick
+            txtCantidadPick.setEnabled(true);
             txtCantidadPick.requestFocus();
+            txtCantidadPick.setFocusable(true);
+
+            btnConfirmarPk.setEnabled(true);
+            PressEnterProducto = true;
 
         }catch (Exception e){
             mu.msgbox("Cargar_Datos_Producto_Picking:"+e.getMessage());
@@ -1474,10 +1477,9 @@ public class frm_picking_datos extends PBase {
                 }
             }*/
 
-            //txtCantidadPick.selectAll();
-            //txtCantidadPick.setSelectAllOnFocus(true);
-            //txtCantidadPick.requestFocus();
-            //txtCantidadPick.requestFocus();
+            txtCantidadPick.selectAll();
+            txtCantidadPick.setSelectAllOnFocus(true);
+            txtCantidadPick.requestFocus();
             btnConfirmarPk.setEnabled(true);
 
         }catch (Exception e){

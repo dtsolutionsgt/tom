@@ -1474,14 +1474,20 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
             String versionActual = gl.version.replace(".","");
 
-            long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
-            long vVersionActualHH = Long.parseLong(versionActual);
 
-            if(vNuevaVersionFireBase > vVersionActualHH)
-            {
-                msgAskActualizarVersion("La versión actual es: "  + gl.version + " ¿Actualizar a versión: " + Nueva_Version_FireBaseConPuntos + "?");
-                return;
+            if (!Nueva_Version_FireBase.equals("")) {
+
+                long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
+                long vVersionActualHH = Long.parseLong(versionActual);
+
+
+                if(vNuevaVersionFireBase > vVersionActualHH)
+                {
+                    msgAskActualizarVersion("La versión actual es: "  + gl.version + " ¿Actualizar a versión: " + Nueva_Version_FireBaseConPuntos + "?");
+                    return;
+                }
             }
+
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
