@@ -7025,7 +7025,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void ExitForm(View view){
-        msgAskExit();
+        doExit();
     }
 
     public void BotonMostrar(View view){
