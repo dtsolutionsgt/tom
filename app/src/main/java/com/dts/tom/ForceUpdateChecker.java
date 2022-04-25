@@ -15,7 +15,7 @@ public class ForceUpdateChecker {
 
     public static final String KEY_UPDATE_REQUIRED = "force_update_required";
     public static final String KEY_CURRENT_VERSION = "force_update_current_version";
-    public static final String KEY_UPDATE_URL = "https://firebasestorage.googleapis.com/v0/b/mposupd.appspot.com/o/tom.apk?alt=media&token=955df99a-a16b-4324-a99a-714a467dd538";
+    public static final String KEY_UPDATE_URL = "KEY_UPDATE_URL";
 
     private OnUpdateNeededListener onUpdateNeededListener;
     private Context context;

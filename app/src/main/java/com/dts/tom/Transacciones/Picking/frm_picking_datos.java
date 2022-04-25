@@ -2073,41 +2073,55 @@ public class frm_picking_datos extends PBase {
                         }
                     }
                 } else {
-                    factor = gBeProducto.Presentaciones.items.get(0).Factor;
-                    double CantSol = gBePickingUbic.Cantidad_Solicitada;
-                    double CantRec = gBePickingUbic.Cantidad_Recibida;
 
-                    if (CantSol > factor) {
-                        //#AT Cantidad Solicitada
-                        double cantidadPresentacion = CantSol / factor;
-                        double decimal = cantidadPresentacion % 1;
-                        double cajas = cantidadPresentacion - decimal;
-                        double unidades = decimal * factor;
+                    if (gBeProducto.Presentaciones.items!=null){
 
-                        lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                        factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                        double CantSol = gBePickingUbic.Cantidad_Solicitada;
+                        double CantRec = gBePickingUbic.Cantidad_Recibida;
 
-                        txtUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
-                        lblUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
+                        if (CantSol > factor) {
+                            //#AT Cantidad Solicitada
+                            double cantidadPresentacion = CantSol / factor;
+                            double decimal = cantidadPresentacion % 1;
+                            double cajas = cantidadPresentacion - decimal;
+                            double unidades = decimal * factor;
 
-                        txtPreSol.setText(String.valueOf(mu.frmdec(cajas)));
-                        txtUnidadSol.setText(String.valueOf(mu.frmdec(unidades)));
+                            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
 
-                        //#AT Cantidad Recibida
-                        double cantidadPresentacionRec = CantRec / factor;
-                        double decimalRec = cantidadPresentacionRec % 1;
-                        double cajasRec = cantidadPresentacionRec - decimalRec;
-                        double unidadesRec = decimalRec * factor;
+                            txtUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
+                            lblUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
 
-                        lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                            txtPreSol.setText(String.valueOf(mu.frmdec(cajas)));
+                            txtUnidadSol.setText(String.valueOf(mu.frmdec(unidades)));
 
-                        txtUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
-                        lblUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
+                            //#AT Cantidad Recibida
+                            double cantidadPresentacionRec = CantRec / factor;
+                            double decimalRec = cantidadPresentacionRec % 1;
+                            double cajasRec = cantidadPresentacionRec - decimalRec;
+                            double unidadesRec = decimalRec * factor;
 
-                        txtPresRec.setText(String.valueOf(mu.frmdec(cajasRec)));
-                        txtUnidadRec.setText(String.valueOf(mu.frmdec(unidadesRec)));
+                            lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+
+                            txtUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
+                            lblUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
+
+                            txtPresRec.setText(String.valueOf(mu.frmdec(cajasRec)));
+                            txtUnidadRec.setText(String.valueOf(mu.frmdec(unidadesRec)));
 
 
-                    } else {
+                        } else {
+
+                            lblPresSol.setVisibility(View.GONE);
+                            txtPreSol.setVisibility(View.GONE);
+                            lblPresRec.setVisibility(View.GONE);
+                            txtPresRec.setVisibility(View.GONE);
+
+                            txtUnidadSol.setText(""+mu.frmdec(gBePickingUbic.Cantidad_Solicitada));
+                            txtUnidadRec.setText(""+mu.frmdec(gBePickingUbic.Cantidad_Recibida));
+                        }
+
+                    }else{
                         lblPresSol.setVisibility(View.GONE);
                         txtPreSol.setVisibility(View.GONE);
                         lblPresRec.setVisibility(View.GONE);
