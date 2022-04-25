@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.Picking;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,7 +93,7 @@ public class frm_picking_datos extends PBase {
 
     private TextToSpeech mTTS;
     private boolean confirmar_codigo_en_picking;
-    private boolean SonUnidades = false;
+    private boolean btnGuardar = false;
     //Imagen
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
@@ -309,7 +311,7 @@ public class frm_picking_datos extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
+                        btnGuardar = true;
                         Recalcula_Peso();
                         Procesar_Registro();
                     }
@@ -369,6 +371,7 @@ public class frm_picking_datos extends PBase {
                 }
             }
         }catch (Exception ex){
+            btnGuardar = false;
             mu.msgbox("Recalcula_Peso:" + ex.getMessage());
         }
     }
@@ -1489,6 +1492,7 @@ public class frm_picking_datos extends PBase {
 
     public void BotonGuardar(View view){
 
+        btnGuardar = true;
         //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
         if (confirmar_codigo_en_picking){
 
@@ -1590,7 +1594,17 @@ public class frm_picking_datos extends PBase {
         double CantPendiente = 0;
         double Cantidad = 0;
 
-        try{
+        progress.setMessage("Procesando registro...");
+        progress.show();
+
+        try {
+            if (btnGuardar) {
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
 
             if (TipoLista==2){
 
@@ -1650,6 +1664,8 @@ public class frm_picking_datos extends PBase {
             }
 
         }catch (Exception e){
+            btnGuardar = false;
+            progress.cancel();
             mu.msgbox("Guardar_Picking:"+e.getMessage());
         }
     }
