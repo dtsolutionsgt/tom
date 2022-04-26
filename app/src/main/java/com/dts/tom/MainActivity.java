@@ -1059,13 +1059,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     }
 
     private void processVersiones() {
+
         try {
-            versiones=xobj.getresult(clsBeVersion_wms_hh_andList.class,"Android_Get_All_Versiones");
-            if (versiones!=null){
-                validaVersion();
-            }
+
+            validaVersion();
+
             idle=true;
+
             execws(6);
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -1474,12 +1476,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
             String versionActual = gl.version.replace(".","");
 
-
-            if (!Nueva_Version_FireBase.equals("")) {
+            if (!Nueva_Version_FireBase.isEmpty()){
 
                 long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
                 long vVersionActualHH = Long.parseLong(versionActual);
-
 
                 if(vNuevaVersionFireBase > vVersionActualHH)
                 {
