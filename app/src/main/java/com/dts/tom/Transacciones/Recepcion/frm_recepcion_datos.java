@@ -215,6 +215,7 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_rec ObjS = new clsBeStock_rec();
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
+    private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
     private clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
@@ -764,7 +765,8 @@ public class frm_recepcion_datos extends PBase {
 
                         tblSinPresentacion.setVisibility(View.VISIBLE);
                     } else {
-                        lblCantidad.setText("Cantidad ("+BeProducto.Presentaciones.items.get(0).Nombre+") :");
+                        //#AT20220426 Se obtiene la presetación según el distado de productos del documento de ingreso
+                        lblCantidad.setText("Cantidad ("+auxPres.Nombre+") :");
                         tblSinPresentacion.setVisibility(View.GONE);
                     }
 
@@ -2992,8 +2994,6 @@ public class frm_recepcion_datos extends PBase {
                     if (BeProducto.Presentaciones.items != null) {
                         //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
                         //#AT20220426 Se obtiene la presetación según el distado de productos del documento de ingreso
-                        clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
-
                          auxPres = stream(BeProducto.Presentaciones.items)
                                 .where(c-> c.IdPresentacion == vPresentacion)
                                 .first();
