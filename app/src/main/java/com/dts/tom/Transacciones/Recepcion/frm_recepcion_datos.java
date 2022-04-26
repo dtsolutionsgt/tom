@@ -2987,15 +2987,24 @@ public class frm_recepcion_datos extends PBase {
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
                 }
 
-                if (BeProducto.Presentaciones!=null) {
+
+                if (BeProducto.Presentaciones != null) {
                     if (BeProducto.Presentaciones.items != null) {
                         //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
-                        IdPreseSelect = BeProducto.Presentaciones.items.get(0).getIdPresentacion();
+                        //#AT20220426 Se obtiene la presetación según el distado de productos del documento de ingreso
+                        clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
+
+                         auxPres = stream(BeProducto.Presentaciones.items)
+                                .where(c-> c.IdPresentacion == vPresentacion)
+                                .first();
+
+                        IdPreseSelect = auxPres.IdPresentacion;
+
                         /*List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         Indx =AxuListPres.indexOf(vPresentacion);
 
                         cmbPresRec.setSelection(Indx);*/
-                        lblCantidad.setText("Cantidad (" + BeProducto.Presentaciones.items.get(0).Nombre + ") :");
+                        lblCantidad.setText("Cantidad (" + auxPres.Nombre +") :");
                         //#AT20220411 Este proceso se realizaba seleccionar un item de  cmbPresRec
                         mostarEstiba();
                     }
