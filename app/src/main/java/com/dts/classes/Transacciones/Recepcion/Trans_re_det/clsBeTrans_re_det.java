@@ -63,7 +63,7 @@ public class clsBeTrans_re_det {
     @Element(required=false) public boolean Pallet_No_Estandar= false;
     @Element(required=false) public int IdOrdenCompraEnc=0;
     @Element(required=false) public int IdOrdenCompraDet=0;
-
+    @Element(required=false) public int Posiciones=0;
 
     public clsBeTrans_re_det() {
     }
@@ -448,6 +448,13 @@ public class clsBeTrans_re_det {
     }
     public void setIdOrdenCompraDet(int value) {
         IdOrdenCompraDet=value;
+    }
+
+    public int getPosiciones() {
+        return Posiciones;
+    }
+    public void setPosiciones(int value) {
+        Posiciones=value;
     }
 
 }

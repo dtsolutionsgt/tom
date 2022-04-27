@@ -3339,7 +3339,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //********************
 
-            progress.setMessage("Aplicando cambio de ubicacion");
+            progress.setMessage("Aplicando cambio de ubicación");
             progress.show();
 
             btnGuardarCiega.setVisibility(View.INVISIBLE);

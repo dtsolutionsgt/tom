@@ -15,8 +15,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -42,7 +40,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.ExDialog;
@@ -83,11 +80,8 @@ import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.classes.clsBeImagen;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
@@ -108,7 +102,6 @@ import java.util.regex.Pattern;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
-import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.gBeStockRec;
 
 import androidx.core.content.FileProvider;
 
@@ -158,6 +151,7 @@ public class frm_recepcion_datos extends PBase {
     private EditText txtPesoReal;
     private EditText txtSerieIni;
     private EditText txtSerieFin;
+    private EditText txtPosiciones;
     private Spinner cmbPresParams;
     private Spinner cmbCantidad;
     private RelativeLayout relOpciones;
@@ -212,7 +206,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_pallet BeProdPallet  = new clsBeProducto_pallet();
     private clsBeStock gBeStockAnt;
     private clsBeTrans_oc_det beTransOCDet =new clsBeTrans_oc_det();
-    private  clsBeStock_rec ObjS = new clsBeStock_rec();
+    private  clsBeStock_rec gBeStockRec = new clsBeStock_rec();
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
@@ -279,6 +273,8 @@ public class frm_recepcion_datos extends PBase {
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
+
+    private clsBeStock pStock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,6 +352,9 @@ public class frm_recepcion_datos extends PBase {
         }
 
         lblUbicacion.setText("");
+
+        txtPosiciones = new EditText(this,null);
+        txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         setCurrentDateOnView();
 
@@ -773,9 +772,120 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
+            chkPalletNoEstandar.setOnClickListener(view -> {
+                if(((CompoundButton) view).isChecked()){
+                    pStock = new clsBeStock();
+                    pStock.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
+                    pStock.IdProductoBodega = BeProducto.IdProductoBodega;
+                    pStock.IdProductoEstado = IdEstadoSelect;
+                    pStock.IdPresentacion = IdPreseSelect;
+                    pStock.IdUnidadMedida = BeProducto.IdUnidadMedidaBasica;
+                    pStock.Fecha_vence = du.convierteFechaDiagonal(cmbVenceRec.getText().toString());
+
+                    if(txtLoteRec!=null){
+                        if(!txtLoteRec.getText().toString().isEmpty()){
+                            pStock.Lote = txtLoteRec.getText().toString().trim();
+                        }else{
+                            pStock.Lote = "";
+                        }
+                    }else{
+                        pStock.Lote = "";
+                    }
+
+                    if(txtNoLP!=null){
+                        if(!txtNoLP.getText().toString().isEmpty()){
+                            pStock.Lic_plate = txtNoLP.getText().toString().trim();
+                        }else{
+                            pStock.Lic_plate = "";
+                        }
+                    }else{
+                        pStock.Lic_plate = "";
+                    }
+
+                    execws(32);
+
+                } else {
+                   vPosiciones =0;
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
             progress.cancel();
+        }
+
+    }
+
+    private boolean TienePosiciones=false;
+    
+    private void processTienePosiciones(){
+
+        try{
+
+            TienePosiciones = xobj.getresult(Boolean.class,"Tiene_Posiciones");
+
+            if (!TienePosiciones){
+                msgAskIngresePosiciones();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processPalletNoEstandar:"+e.getMessage());
+        }
+    }
+
+    private int vPosiciones=0;
+
+    private void msgAskIngresePosiciones() {
+
+        try{
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Número de posiciones");
+
+            vPosiciones = 0;
+
+            final LinearLayout layout   = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
+            if(txtPosiciones.getParent()!= null){
+                ((ViewGroup) txtPosiciones.getParent()).removeView(txtPosiciones);
+            }
+
+            txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
+            txtPosiciones.setText("2");
+            txtPosiciones.requestFocus();
+
+            layout.addView(txtPosiciones);
+
+            alert.setView(layout);
+
+            showkeyb();
+            alert.setCancelable(false);
+            alert.create();
+
+            alert.setPositiveButton("Aceptar", (dialog, whichButton) -> {
+                layout.removeAllViews();
+
+                vPosiciones=Integer.valueOf(txtPosiciones.getText().toString());
+
+                if (vPosiciones==0){
+                    layout.removeAllViews();
+                    msgAskIngresePosiciones();
+                }
+
+            });
+
+            alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    layout.removeAllViews();
+                }
+            });
+
+            alert.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }
@@ -2008,6 +2118,7 @@ public class frm_recepcion_datos extends PBase {
                    pIndexStock = pListBeStockRec.items.size()-1;
 
                    if (IdPreseSelect!=-1){
+
                        if  ((BeProducto.Presentaciones!=null)){
 
                            if (BeProducto.Presentaciones.items!=null) {
@@ -2272,7 +2383,7 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
 
-                    ObjS = new clsBeStock_rec();
+                    gBeStockRec = new clsBeStock_rec();
 
                     if (BeProducto.IdPerfilSerializado == 1){
                         MensajeParam+=" Ingrese al menos una serie \n";
@@ -2299,7 +2410,7 @@ public class frm_recepcion_datos extends PBase {
 
                         if (!txtSerial.getText().toString().isEmpty()){
 
-                            ObjS.Serial = txtSerial.getText().toString();
+                            gBeStockRec.Serial = txtSerial.getText().toString();
 
                             if (pListBeStockRec.items!=null){
 
@@ -2307,7 +2418,7 @@ public class frm_recepcion_datos extends PBase {
 
                                 int lIndex;
 
-                                lIndex = AuxListSerial.indexOf( ObjS.Serial );
+                                lIndex = AuxListSerial.indexOf( gBeStockRec.Serial );
 
                                 if (lIndex>-1){
                                     MensajeParam+="El Serial "+ txtSerial.getText().toString()+" se encuentra ya ingresado\n";
@@ -2335,7 +2446,7 @@ public class frm_recepcion_datos extends PBase {
         try{
             if (pListBeStockRec!=null){
                 if (pListBeStockRec.items!=null){
-                    ObjS.IdStockRec = stream(pListBeStockRec.items).max(c->c.IdStockRec>0).IdStockRec+1; // pListBeStockRec.Max(Function(b) b.IdStockRec) + 1
+                    gBeStockRec.IdStockRec = stream(pListBeStockRec.items).max(c->c.IdStockRec>0).IdStockRec+1; // pListBeStockRec.Max(Function(b) b.IdStockRec) + 1
                     SigueValidandoParametros();
                 }else{
                     execws(11);
@@ -2382,60 +2493,60 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
-            ObjS.IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
-            ObjS.IdProductoBodega = BeProducto.IdProductoBodega;
+            gBeStockRec.IdPropietarioBodega = pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+            gBeStockRec.IdProductoBodega = BeProducto.IdProductoBodega;
 
-            ObjS.Lic_plate = txtLicPlate.getText().toString();
+            gBeStockRec.Lic_plate = txtLicPlate.getText().toString();
 
-            ObjS.Fecha_Ingreso = String.valueOf(du.getFechaActual());
+            gBeStockRec.Fecha_Ingreso = String.valueOf(du.getFechaActual());
 
             if (BeProducto.Fechamanufactura){
-                ObjS.Fecha_Manufactura = txtFechaManu.getText().toString();
+                gBeStockRec.Fecha_Manufactura = txtFechaManu.getText().toString();
             }else{
-                ObjS.Fecha_Manufactura = du.convierteFecha("01-01-1900");
+                gBeStockRec.Fecha_Manufactura = du.convierteFecha("01-01-1900");
             }
 
-            ObjS.Serial = txtSerial.getText().toString();
-            ObjS.Anada = Integer.parseInt(txtAnada.getText().toString());
-            ObjS.Fec_agr = String.valueOf(du.getFechaActual());
-            ObjS.User_agr = gl.IdOperador+"";
-            ObjS.Fec_mod = String.valueOf(du.getFechaActual());
-            ObjS.User_mod = gl.IdOperador+"";
-            ObjS.IsNew = true;
+            gBeStockRec.Serial = txtSerial.getText().toString();
+            gBeStockRec.Anada = Integer.parseInt(txtAnada.getText().toString());
+            gBeStockRec.Fec_agr = String.valueOf(du.getFechaActual());
+            gBeStockRec.User_agr = gl.IdOperador+"";
+            gBeStockRec.Fec_mod = String.valueOf(du.getFechaActual());
+            gBeStockRec.User_mod = gl.IdOperador+"";
+            gBeStockRec.IsNew = true;
 
-            ObjS.Activo = true;
-            ObjS.IdRecepcionDet = pIdRecepcionDet;
+            gBeStockRec.Activo = true;
+            gBeStockRec.IdRecepcionDet = pIdRecepcionDet;
 
             if (IdPreseSelectParam>0){
-                ObjS.IdPresentacion = IdPreseSelectParam;
-                ObjS.Presentacion = new clsBeProducto_Presentacion();
-                ObjS.Presentacion.IdPresentacion = IdPreseSelectParam;
+                gBeStockRec.IdPresentacion = IdPreseSelectParam;
+                gBeStockRec.Presentacion = new clsBeProducto_Presentacion();
+                gBeStockRec.Presentacion.IdPresentacion = IdPreseSelectParam;
             }else{
-                ObjS.IdPresentacion = IdPreseSelect;
-                ObjS.Presentacion = new clsBeProducto_Presentacion();
-                ObjS.Presentacion.IdPresentacion = IdPreseSelect;
+                gBeStockRec.IdPresentacion = IdPreseSelect;
+                gBeStockRec.Presentacion = new clsBeProducto_Presentacion();
+                gBeStockRec.Presentacion.IdPresentacion = IdPreseSelect;
             }
 
             if (BeProducto.Peso_recepcion){
-                ObjS.Peso = Double.parseDouble(txtPesoReal.getText().toString());
+                gBeStockRec.Peso = Double.parseDouble(txtPesoReal.getText().toString());
             }else{
-                ObjS.Peso = 0.0;
+                gBeStockRec.Peso = 0.0;
             }
 
             if (BeProducto.Temperatura_recepcion){
-                ObjS.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
+                gBeStockRec.Temperatura = Double.parseDouble(txtTempReal.getText().toString());
             }else{
-                ObjS.Temperatura = 0.0;
+                gBeStockRec.Temperatura = 0.0;
             }
 
-            ObjS.Regularizado = false;
-            ObjS.Fecha_regularizacion = "";
+            gBeStockRec.Regularizado = false;
+            gBeStockRec.Fecha_regularizacion = "";
 
-            pListBeStockRec.items.add(ObjS);
+            pListBeStockRec.items.add(gBeStockRec);
 
             if (pListBeStockSeRec.items!=null){
                 for (clsBeStock_se_rec bo:pListBeStockSeRec.items){
-                    bo.IdStockRec = ObjS.IdStockRec;
+                    bo.IdStockRec = gBeStockRec.IdStockRec;
                 }
             }
 
@@ -3019,7 +3130,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if  (BeProducto.Presentaciones.items.get(Indx).EsPallet){
 
-                    Cant_Recibida = gBeStockRec.Uds_lic_plate;
+                    Cant_Recibida = frm_list_rec_prod.gBeStockRec.Uds_lic_plate;
                     Cant_A_Recibir = Factor;
 
                     FinalizaCargaProductos();
@@ -3216,7 +3327,7 @@ public class frm_recepcion_datos extends PBase {
 
                 if  (BeProducto.Presentaciones.items.get(Indx).EsPallet){
 
-                    Cant_Recibida = gBeStockRec.Uds_lic_plate;
+                    Cant_Recibida = frm_list_rec_prod.gBeStockRec.Uds_lic_plate;
                     Cant_A_Recibir = Factor;
 
                     FinalizaCargaProductos();
@@ -3391,13 +3502,13 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.Carga_Producto_x_Pallet){
 
-                txtLoteRec.setText(gBeStockRec.Lote);
+                txtLoteRec.setText(frm_list_rec_prod.gBeStockRec.Lote);
 
                 txtLoteRec.setFocusable(false);
                 txtLoteRec.setFocusableInTouchMode(false);
                 txtLoteRec.setClickable(false);
 
-                cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(gBeStockRec.Fecha_vence));
+                cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(frm_list_rec_prod.gBeStockRec.Fecha_vence));
 
                 cmbVenceRec.setFocusable(false);
                 cmbVenceRec.setFocusableInTouchMode(false);
@@ -4015,7 +4126,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             if(gl.Carga_Producto_x_Pallet){
-                rPresentacion = gBeStockRec.IdPresentacion;
+                rPresentacion = frm_list_rec_prod.gBeStockRec.IdPresentacion;
             }else {
                 rPresentacion = stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).firstOrDefault(0);
             }
@@ -5553,6 +5664,9 @@ public class frm_recepcion_datos extends PBase {
 
             BeTransReDet.Atributo_Variante_1 = "";
 
+            //#EJC20220427:Asignar en detalle de REC en campo virtual (no de BD) la cantidad de posiciones.
+            BeTransReDet.Posiciones = vPosiciones;
+
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("Continua:"+e.getMessage());
@@ -6319,13 +6433,19 @@ public class frm_recepcion_datos extends PBase {
                         break;
                     case 31:
                         callMethod("Guardar_Transaccion_Error", "pDocumentoUbicacion",ubiDetLote,
-                                                                "pTipoPush",vTipoPush,
-                                                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
-                                                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
-                                                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
-                                                                "pIdUsuario",gl.OperadorBodega.IdOperador,
-                                                                "pMensaje",vMensajeError);
+                                                "pTipoPush",vTipoPush,
+                                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                                "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                                "pMensaje",vMensajeError);
                         break;
+
+                    case 32:
+                        callMethod("Tiene_Posiciones",
+                                "pStock",pStock);
+                        break;
+
                 }
 
             }catch (Exception e){
@@ -6456,6 +6576,9 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 30:
                     processGetFotosProducto();
+                    break;
+                case 32:
+                    processTienePosiciones();
                     break;
             }
 
@@ -6877,7 +7000,7 @@ public class frm_recepcion_datos extends PBase {
 
             IdMax = xobj.getresult(Integer.class,"MaxIDStockRec");
 
-            ObjS.IdStockRec = IdMax + 1;
+            gBeStockRec.IdStockRec = IdMax + 1;
 
             SigueValidandoParametros();
 
