@@ -2456,12 +2456,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             TienePosiciones = xobj.getresult(Integer.class,"Tiene_Posiciones");
 
-            if (TienePosiciones==0){
-               msgAskIngresePosiciones();
-            }else{
-                vPosiciones = TienePosiciones;
-                validaDestino();
-            }
+            vPosiciones = TienePosiciones;
+
+            validaDestino();
+
+            //#EJC20220427: No pedir posiciones en cambio de ubicación cuando Pallet No estandar.
+            //Solicitado por jefe de bodega CEALSA. en bodega 5.
+//            if (TienePosiciones==0){
+//               msgAskIngresePosiciones();
+//            }else{
+//                vPosiciones = TienePosiciones;
+//                validaDestino();
+//            }
 
         }catch (Exception e){
             mu.msgbox("processPalletNoEstandar:"+e.getMessage());

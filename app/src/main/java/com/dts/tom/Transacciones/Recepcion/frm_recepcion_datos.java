@@ -408,6 +408,10 @@ public class frm_recepcion_datos extends PBase {
             Load();
         }
 
+        //#EJC20220427: Inicializar en 0 : Setear en No estandard
+        vPosiciones=0;
+        chkPalletNoEstandar.setChecked(false);
+
         txtCantidadRec.requestFocus();
 
     }
@@ -5261,6 +5265,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Llena_Detalle_Recepcion_Existente(){
+
         Factor=0;
         TotalLinea=0;
         vCant =0;
