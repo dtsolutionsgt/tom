@@ -102,9 +102,9 @@ public class ForceUpdateChecker {
         try {
 
             final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
-            String currentVersion = remoteConfig.getString(KEY_CURRENT_VERSION);
+            String currentVersion = remoteConfig.getString("KEY_CURRENT_VERSION");
             String appVersion = getAppVersion(context);
-            String updateUrl = remoteConfig.getString(KEY_UPDATE_URL);
+            String updateUrl = remoteConfig.getString("KEY_UPDATE_URL");
 
             if (!TextUtils.equals(currentVersion, appVersion)
                     && onUpdateNeededListener != null) {
