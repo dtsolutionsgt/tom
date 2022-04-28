@@ -13,8 +13,8 @@ public class ForceUpdateChecker {
 
     private static final String TAG = ForceUpdateChecker.class.getSimpleName();
 
-    public static final String KEY_UPDATE_REQUIRED = "force_update_required";
-    public static final String KEY_CURRENT_VERSION = "force_update_current_version";
+    public static final String KEY_UPDATE_REQUIRED = "KEY_UPDATE_REQUIRED";
+    public static final String KEY_CURRENT_VERSION = "KEY_CURRENT_VERSION";
     public static final String KEY_UPDATE_URL = "KEY_UPDATE_URL";
 
     private OnUpdateNeededListener onUpdateNeededListener;

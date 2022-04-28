@@ -1476,6 +1476,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
             String versionActual = gl.version.replace(".","");
 
+            Log.d("version_firebase",VersionRemoteConfigFireBase);
+
             if (!Nueva_Version_FireBase.isEmpty()){
 
                 long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
