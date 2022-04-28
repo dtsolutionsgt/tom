@@ -198,25 +198,25 @@ public class appGlobals extends Application {
 
     public final String version="4.6.0.26";
 
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//
-//        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-//
-//        // set in-app defaults
-//        Map<String, Object> remoteConfigDefaults = new HashMap();
-//        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
-//        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, version);
-//        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,"");
-//
-//        firebaseRemoteConfig.setDefaultsAsync(remoteConfigDefaults);
-//        firebaseRemoteConfig.fetch(1) // fetch every minutes
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        Log.d(TAG, "remote config is fetched.");
-//                        firebaseRemoteConfig.activate();
-//                    }
-//                });
-//        }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        // set in-app defaults
+        Map<String, Object> remoteConfigDefaults = new HashMap();
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, version);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,"");
+
+        firebaseRemoteConfig.setDefaultsAsync(remoteConfigDefaults);
+        firebaseRemoteConfig.fetch(1) // fetch every minutes
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "remote config is fetched.");
+                        firebaseRemoteConfig.activate();
+                    }
+                });
+        }
 }
