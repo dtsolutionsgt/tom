@@ -56,6 +56,7 @@ public class frm_picking_datos extends PBase {
     private XMLObject xobj;
 
     public static clsBeTrans_picking_ubic gBePickingUbic;
+    private clsBeTrans_picking_ubicList tmpListPickingUbi = new clsBeTrans_picking_ubicList();
     public static clsBeProducto tmpgBeProducto = new clsBeProducto();
     public static clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstadoIngreso = new clsBeProducto_estadoList();
@@ -98,7 +99,7 @@ public class frm_picking_datos extends PBase {
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
-    private boolean PressEnterLp, PressEnterProducto;
+    private boolean PressEnterLp, PressEnterProducto, ValidaLicUbic = false;
 
 
     @Override
@@ -504,8 +505,10 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            txtLicencia.setSelectAllOnFocus(true);
-            txtLicencia.requestFocus();
+            if (!ValidaLicUbic) {
+                txtLicencia.setSelectAllOnFocus(true);
+                txtLicencia.requestFocus();
+            }
 
             txtLote.setFocusable(false);
             txtLote.setFocusableInTouchMode(false);
@@ -533,7 +536,9 @@ public class frm_picking_datos extends PBase {
             txtFechaCad.setFocusableInTouchMode(false);
             txtFechaCad.setClickable(false);
 
-            Limpia_controles();
+            if (!ValidaLicUbic) {
+                Limpia_controles();
+            }
 
             progress.cancel();
 
@@ -631,6 +636,25 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    //#AT20220428 Valida si la licencia ingresada tiene la misma ubicación que
+    // esta en gBePickingUbic.IdUbicacion, si es la misma actualiza los datos del producto y picking
+    private void ProcesaLicUbic() {
+        List AuxList = stream(plistPickingUbi.items).where(c ->c.Lic_plate.equalsIgnoreCase(pLP) && c.IdUbicacion == selitem.IdUbicacion && (c.Cantidad_Recibida < c.Cantidad_Solicitada)).toList();
+
+        if (AuxList.size() > 0) {
+            //#AT20220428 Bandera que indica que si encontró datos de la licencia ingresada
+            ValidaLicUbic = true;
+            tmpListPickingUbi.items = AuxList;
+            gBePickingUbic = tmpListPickingUbi.items.get(0);
+            //#AT20220428 Actualiza los datos de gBeProducto
+            Load();
+        } else {
+            mu.msgbox("El código ingresado no es el válido para la línea de picking");
+            txtLicencia.setFocusable(true);
+            return;
+        }
+    }
+
     private void Procesa_Codigo() {
 
         try {
@@ -662,6 +686,11 @@ public class frm_picking_datos extends PBase {
         boolean vMarcarComoNoEncontrado =false;
 
         try{
+
+            //#AT20220428 Se llama a la funcion ProcesaLicUbic si la licencia ingresada es diferente
+            if (!gBePickingUbic.Lic_plate.equals(pLP)) {
+                ProcesaLicUbic();
+            }
 
             if (TipoLista==1){//Resumido
 
@@ -1287,35 +1316,8 @@ public class frm_picking_datos extends PBase {
                 return;
             }
 
-            if (gBePickingUbic.IdPresentacion>0){
-                if (gBeProducto.Presentaciones!=null){
-                    if (gBeProducto.Presentaciones.items!=null){
-                        //#AT 20220418 Se carga la presentación en el lblCantidad ya no se utiliza cmbPresentación
-                       /* List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
-                        int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
-                        cmbPresentacion.setSelection(inx);*/
-                        lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
-
-                        //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
-                        gBePresentacion= stream(gBeProducto.Presentaciones.items).
-                                where(z -> z.IdPresentacion == gBePickingUbic.IdPresentacion).first();
-                        vCajasPorCama = gBePresentacion.CajasPorCama;
-                        vCamasPorTarima = gBePresentacion.CamasPorTarima;
-
-                        if (vCajasPorCama > 0 && vCamasPorTarima > 0){
-                            tblEstiba.setVisibility(View.VISIBLE);
-                            lblEstiba.setText("Camas por Tarima: " + vCamasPorTarima + " Cajas por cama: " +  vCajasPorCama);
-                        }else{
-                            tblEstiba.setVisibility(View.GONE);
-                            lblEstiba.setText("");
-                        }
-                    }
-                }
-            }else{
-                lblCantidad.setText("Cantidad ("+vUnidadMedida+"): ");
-                tblEstiba.setVisibility(View.GONE);
-                lblEstiba.setText("");
-            }
+            //#AT2022048 Cree esta nueva función para poder llenar lblCantidad con la presentación
+            LlenaPresentacion();
 
             txtUniBas.setText(gBePickingUbic.ProductoUnidadMedida);
             if (CantARec<=0){
@@ -2153,6 +2155,11 @@ public class frm_picking_datos extends PBase {
 
                 execws(2);
 
+                if (ValidaLicUbic) {
+                    LlenaPresentacion();
+                    txtCantidadPick.requestFocus();
+                    txtCantidadPick.setSelectAllOnFocus(true);
+                }
 
             }else{
                 progress.cancel();
@@ -2184,7 +2191,9 @@ public class frm_picking_datos extends PBase {
                     Set_dias_Vence();
 
                     if (!gBePickingUbic.Lic_plate.isEmpty()) {
-                        txtLicencia.requestFocus();
+                        if (!ValidaLicUbic) {
+                            txtLicencia.requestFocus();
+                        }
                     } else {
                         txtCodigoProducto.requestFocus();
                     }
@@ -2298,6 +2307,41 @@ public class frm_picking_datos extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    //#AT20220428 Anteriormente este código estaba en Cargar_Datos_Producto_Picking
+    //unicamete pase el codigo a esta función
+    private void LlenaPresentacion()
+    {
+        if (gBePickingUbic.IdPresentacion>0){
+            if (gBeProducto.Presentaciones!=null){
+                if (gBeProducto.Presentaciones.items!=null){
+                    //#AT 20220418 Se carga la presentación en el lblCantidad ya no se utiliza cmbPresentación
+                       /* List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                        int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
+                        cmbPresentacion.setSelection(inx);*/
+                    lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
+
+                    //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
+                    gBePresentacion= stream(gBeProducto.Presentaciones.items).
+                            where(z -> z.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+                    vCajasPorCama = gBePresentacion.CajasPorCama;
+                    vCamasPorTarima = gBePresentacion.CamasPorTarima;
+
+                    if (vCajasPorCama > 0 && vCamasPorTarima > 0){
+                        tblEstiba.setVisibility(View.VISIBLE);
+                        lblEstiba.setText("Camas por Tarima: " + vCamasPorTarima + " Cajas por cama: " +  vCajasPorCama);
+                    }else{
+                        tblEstiba.setVisibility(View.GONE);
+                        lblEstiba.setText("");
+                    }
+                }
+            }
+        }else{
+            lblCantidad.setText("Cantidad ("+vUnidadMedida+"): ");
+            tblEstiba.setVisibility(View.GONE);
+            lblEstiba.setText("");
+        }
     }
 
 
