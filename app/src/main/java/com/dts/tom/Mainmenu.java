@@ -895,7 +895,7 @@ public class Mainmenu extends PBase {
     private void msgAskUpdate(String msg) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Tom WMS");
+        dialog.setTitle("TOMWMS");
         dialog.setMessage("¿" + msg + "?");
 
         dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
