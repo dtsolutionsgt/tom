@@ -13,6 +13,7 @@ public class clsBeTrans_inv_detalle {
     @Element(required=false) public int Idproducto=0;
     @Element(required=false) public int IdPresentacion=0;
     @Element(required=false) public int Idunidadmedida=0;
+    @Element(required=false) public int IdPropietarioBodega=0;
     @Element(required=false) public String Lote="";
     @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
     @Element(required=false) public String Serie="";
@@ -22,6 +23,9 @@ public class clsBeTrans_inv_detalle {
     @Element(required=false) public String Host="";
     @Element(required=false) public String Nom_producto="";
     @Element(required=false) public String Nom_operador="";
+    @Element(required=false) public String nombre_propietario="";
+    @Element(required=false) public String License_plate="";
+    @Element(required=false) public String Codigo_variante="";
     @Element(required=false) public int Carga=0;
     @Element(required=false) public double Peso=0;
 
@@ -33,7 +37,8 @@ public class clsBeTrans_inv_detalle {
                                   int Idoperador,int Idproducto,int IdPresentacion,int Idunidadmedida,
                                   String Lote,String Fecha_vence,String Serie,String Idproductoestado,
                                   double Cantidad,String Fecha_captura,String Host,String Nom_producto,
-                                  String Nom_operador,int Carga,double Peso) {
+                                  String Nom_operador,int Carga,double Peso, int IdPropietarioBodega,
+                                  String nombre_propietario, String License_plate, String Codigo_variante) {
 
         this.Idinventariodet=Idinventariodet;
         this.Idinventarioenc=Idinventarioenc;
@@ -54,6 +59,10 @@ public class clsBeTrans_inv_detalle {
         this.Nom_operador=Nom_operador;
         this.Carga=Carga;
         this.Peso=Peso;
+        this.IdPropietarioBodega = IdPropietarioBodega;
+        this.nombre_propietario = nombre_propietario;
+        this.License_plate = License_plate;
+        this.Codigo_variante = Codigo_variante;
 
     }
 
@@ -172,6 +181,29 @@ public class clsBeTrans_inv_detalle {
     public void setPeso(double value) {
         Peso=value;
     }
-
+    public int getIdPropietarioBodega() {
+        return IdPropietarioBodega;
+    }
+    public void setIdPropietarioBodega(int value) {
+        IdPropietarioBodega=value;
+    }
+    public String getNombre_propietario() {
+        return nombre_propietario;
+    }
+    public void setNombre_propietario(String value) {
+        nombre_propietario=value;
+    }
+    public String getLicense_plate() {
+        return License_plate;
+    }
+    public void setLicense_plate(String value) {
+        License_plate=value;
+    }
+    public String getCodigo_variante() {
+        return Codigo_variante;
+    }
+    public void setCodigo_variante(String value) {
+        Codigo_variante=value;
+    }
 }
 
