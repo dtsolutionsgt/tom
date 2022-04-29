@@ -22,9 +22,20 @@
             android:orientation="vertical">
 
             <TableRow
+                android:id="@+id/tblImagen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="right">
+                android:gravity="right"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:onClick="verImagenes"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:src="@android:drawable/ic_menu_gallery" />
 
                 <ImageView
                     android:id="@+id/imageView12"
@@ -32,7 +43,8 @@
                     android:layout_height="50dp"
                     android:clickable="true"
                     android:onClick="cCamara"
-                    android:src="@android:drawable/ic_menu_camera" />
+                    android:src="@android:drawable/ic_menu_camera"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
 
             <TableRow
@@ -201,7 +213,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Guía #:" />
+                    android:text="No. Contenedor:" />
 
                 <EditText
                     android:id="@+id/txtGuia"
@@ -266,6 +278,54 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
             </TableRow>
+
+            <RelativeLayout
+                android:id="@+id/relUbicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lblUbicacion"
+                    style="@style/StyleText"
+                    android:layout_width="150dp"
+                    android:layout_height="43dp"
+                    android:text="Ubicación Rec.:" />
+
+                <EditText
+                    android:id="@+id/txtUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@+id/imageView17"
+                    android:layout_toEndOf="@+id/lblUbicacion"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="43dp"
+                    android:layout_height="43dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="0dp"
+                    android:src="@drawable/scanner" />
+
+                <TextView
+                    android:id="@+id/lblNombreUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtUbicacion"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_toEndOf="@+id/lblUbicacion"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textColor="#0119A2"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

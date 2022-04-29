@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/lblCodigo"
-            android:layout_width="50dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/lblExistUMBAs"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/lblUM"
             android:gravity="center"
@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/lblExistPres"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/lblPres"
             android:gravity="center"
@@ -87,7 +87,7 @@
 
         <TextView
             android:id="@+id/lblReservadoUMBAs"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -98,7 +98,7 @@
 
         <TextView
             android:id="@+id/lblDisponibleUMBas"
-            android:layout_width="70dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -108,8 +108,32 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/lblResPres"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblDispPres"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/lblLote"
-            android:layout_width="70dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -210,6 +234,7 @@
             android:id="@+id/lblIngreso"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:minHeight="50dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -218,7 +243,7 @@
 
         <TextView
             android:id="@+id/lblIdTipoEtiqueta"
-            android:layout_width="70dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/lblIngreso"
             android:gravity="center"
@@ -226,6 +251,31 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNombreArea"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblIdTipoEtiqueta"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text=""
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblClasificacion"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblNombreArea"
+            android:foregroundTint="#FFEB3B"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Clasificación"
             android:textSize="18sp" />
 
 

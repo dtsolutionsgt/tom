@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -22,11 +25,15 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
+import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
+import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
@@ -39,9 +46,9 @@ import static br.com.zbra.androidlinq.Linq.stream;
 public class frm_lista_tareas_recepcion extends PBase {
 
     private EditText txtTarea;
-    private TextView lblTitulo;
+    private TextView lblTitulo, lblBodega, lblOperador;
     private Button lblRegs,btnNueva;
-
+    private LinearLayout hdVerificacion, hdRecepcion, hdPicking;
     private WebServiceHandler ws;
     private XMLObject xobj;
 
@@ -63,6 +70,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     private ProgressBar pbar;
     private ObjectAnimator anim;
     private ProgressDialog progress;
+    private int IdOrdenCompra = 0, vIdTarea=0;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +80,22 @@ public class frm_lista_tareas_recepcion extends PBase {
         super.InitBase();
 
         lblTitulo = (TextView) findViewById(R.id.lblTituloForma);
+        lblBodega = (TextView) findViewById(R.id.lblBodega);
+        lblOperador = (TextView) findViewById(R.id.lblOperador);
         txtTarea = (EditText) findViewById(R.id.editText8);
         listView = (ListView) findViewById(R.id.listTareas);
         lblRegs = (Button) findViewById(R.id.btnRegsList);
         btnNueva = (Button)findViewById(R.id.btnNuevaTarea);
         pbar = (ProgressBar) findViewById(R.id.pgrtareas);
+        hdVerificacion = (LinearLayout) findViewById(R.id.hdVerificacion);
+        hdRecepcion = (LinearLayout) findViewById(R.id.hdRecepcion);
+        hdPicking = (LinearLayout) findViewById(R.id.hdPicking);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
 
         ProgressDialog("Cargando forma");
+        lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
+        lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
         ws = new WebServiceHandler(frm_lista_tareas_recepcion.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -88,6 +103,7 @@ public class frm_lista_tareas_recepcion extends PBase {
         setHandlers();
 
         gl.gVerifCascade =false;
+
         Load();
 
     }
@@ -100,7 +116,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.show();
 
             if (gl.tipoTarea==1){
-
+                hdRecepcion.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Recepción");
                 if (gl.tipoIngreso.equals("HCOC00")){
                     gl.TipoOpcion =1;
@@ -113,10 +129,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                 }
 
             }else if(gl.tipoTarea==5){
+                hdPicking.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Picking");
                 //Llama al método del WS Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega
                 execws(3);
             }else if(gl.tipoTarea==6){
+                hdVerificacion.setVisibility(View.VISIBLE);
                 lblTitulo.setText("Tareas de Verificación");
                 //Llama al método del WS Get_All_Pedidos_A_Verificar_By_IdBodega
                 execws(4);
@@ -137,74 +155,71 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         try {
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
 
-                    if (gl.tipoTarea==1){
+                if (gl.tipoTarea==1){
 
-                        if (position > 0) {
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
-                            selitem = sitem;
+                    //if (position > 0) {
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTareasIngresoHH sitem = (clsBeTareasIngresoHH) lvObj;
+                    selitem = sitem;
 
-                            selid = sitem.IdRecepcionEnc;
-                            selidx = position;
-                            adapter.setSelectedIndex(position);
+                    selid = sitem.IdRecepcionEnc;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                            procesar_registro();
-                        }
+                    procesar_registro();
+                    //}
 
-                    }else if(gl.tipoTarea==5){
+                }else if(gl.tipoTarea==5){
 
-                        if (position > 0){
-                            Object lvObj = listView.getItemAtPosition(position);
-                            clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
-                            selitempicking = sitem;
+                    //if (position > 0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                    selitempicking = sitem;
 
-                            selid = sitem.IdPickingEnc;
-                            selidx = position;
-                            adapterPicking.setSelectedIndex(position);
+                    selid = sitem.IdPickingEnc;
+                    selidx = position;
+                    adapterPicking.setSelectedIndex(position);
 
-                            procesar_registro();
-                        }
+                    procesar_registro();
+                   // }
 
-                    } else if(gl.tipoTarea==6){
+                } else if(gl.tipoTarea==6){
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
-                        selitempe = sitem;
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_pe_enc sitem = (clsBeTrans_pe_enc) lvObj;
+                    selitempe = sitem;
 
-                        selid = sitem.IdPedidoEnc;
-                        selidx = position;
-                        adapterVerificacion.setSelectedIndex(position);
+                    selid = sitem.IdPedidoEnc;
+                    selidx = position;
+                    adapterVerificacion.setSelectedIndex(position);
 
-                        procesar_registro();
+                    procesar_registro();
 
-                    }
                 }
-
             });
 
             txtTarea.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        GetFila();
+                        if (!txtTarea.getText().toString().isEmpty()) {
+                            if (gl.tipoTarea == 1) {
+                                execws(6);
+                            } else {
+                                GetFila();
+                            }
+                        }
                     }
 
                     return false;
                 }
             });
 
-            lblRegs.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Load();
-                }
-            });
+            lblRegs.setOnClickListener(v -> Load());
 
         }catch (Exception e){
 
@@ -226,7 +241,6 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_All_Recepciones_For_HH_By_IdBodega_By_Operador",
                                 "pIdBodega",gl.IdBodega,
                                 "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
-                        //callMethod("Get_All_Recepciones_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_All_Rec_Ciegas_For_HH_By_IdBodega","pIdBodega",gl.IdBodega);
@@ -235,10 +249,23 @@ public class frm_lista_tareas_recepcion extends PBase {
                         callMethod("Get_All_Picking_For_HH_By_IdBodega_And_IdOperadorBodega", "pIdBodega",gl.IdBodega,"pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 4:
-                        callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega","pIdBodega",gl.IdBodega);
+                        int vIdOperadorBodega = 0;
+
+                        if (gl.operador_picking_realiza_verificacion){
+                            vIdOperadorBodega=gl.OperadorBodega.IdOperadorBodega;
+                        }
+                        callMethod("Get_All_Pedidos_A_Verificar_By_IdBodega",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdOperadorBodega", vIdOperadorBodega);
                         break;
                     case 5:
                         callMethod("Get_Pedido_A_Verificar_By_LP","pLP",gl.gLP);
+                        break;
+                    case 6:
+                        callMethod("Get_IdOrdenCompraEnc_By_Licencia","pLicenciaIngreso",txtTarea.getText().toString());
+                        break;
+                    case 7:
+                        callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                 }
 
@@ -268,6 +295,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     processListTareasVerificacion();break;
                 case 5:
                     recibeLP();break;
+                case 6:
+                    processIdOrdenCompra();
+                    break;
+                case 7:
+                    processIdRecepcion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -325,6 +358,9 @@ public class frm_lista_tareas_recepcion extends PBase {
 
     private void processListTareasVerificacion(){
         try {
+
+            pListBeTransPeEnc = new clsBeTrans_pe_encList();
+
             pListBeTransPeEnc=xobj.getresult(clsBeTrans_pe_encList.class,"Get_All_Pedidos_A_Verificar_By_IdBodega");
             Llena_Tareas_Verificacion();
         } catch (Exception e){
@@ -349,7 +385,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     vItem = new clsBeTrans_picking_enc();
 
-                    BeListTareasPicking.add(vItem);
+                    //BeListTareasPicking.add(vItem);
 
                     for (clsBeTrans_picking_enc BePicking:pListBeTareasPickingHH.items ){
 
@@ -408,10 +444,14 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem = new clsBeTrans_pe_enc();
 
                         vItem.IdPedidoEnc = BePedEnc.IdPedidoEnc;
+                        vItem.Fecha_Pedido = du.convierteFechaMostrarDiagonal(BePedEnc.Fecha_Pedido);
                         vItem.Referencia = BePedEnc.Referencia;
                         vItem.IdMuelle = BePedEnc.IdMuelle;
+                        vItem.NombreRutaDespacho = BePedEnc.NombreRutaDespacho;
+                        vItem.Observacion = BePedEnc.Observacion;
+                        vItem.Requiere_Tarimas = BePedEnc.Requiere_Tarimas;
                         vItem.IdCliente = BePedEnc.getIdCliente();
-                        vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Nombre_comercial;
+                        vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Codigo+" - "+BePedEnc.Cliente.Nombre_comercial;
                         vItem.Estado = BePedEnc.Estado;
                         vItem.IdPickingEnc = BePedEnc.IdPickingEnc;;
                         vItem.Hora_ini = du.convierteHoraMostar(BePedEnc.Hora_ini);
@@ -459,7 +499,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     vItem = new clsBeTareasIngresoHH();
 
-                    BeListTareas.add(vItem);
+                    //BeListTareas.add(vItem);
 
                     for (int i = pListBeTareasIngresoHH.items.size()-1; i>=0; i--) {
 
@@ -578,7 +618,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             try {
                 if (pListBeTransPeEnc.items.size()==0) throw new Exception();
             } catch (Exception e){
-                toast("LP no existe");return;
+                toast("Licencia no existe");return;
             }
 
             gl.gVerifCascade=true;
@@ -591,6 +631,43 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         } catch (Exception e){
             mu.msgbox("processListTareasPicking:"+e.getMessage());progress.cancel();
+        }
+    }
+
+    private  void processIdOrdenCompra() {
+        try {
+            progress.setMessage("Obteniendo orden de compra...");
+            progress.show();
+
+            IdOrdenCompra = xobj.getresult(Integer.class,"Get_IdOrdenCompraEnc_By_Licencia");
+
+            if (IdOrdenCompra > 0) {
+                gl.gIdRecepcionEnc = stream(pListBeTareasIngresoHH.items).where(c -> c.IdOrderCompraEnc == IdOrdenCompra).select(c -> c.IdRecepcionEnc).first();
+
+                execws(7);
+            } else {
+                progress.cancel();
+                Toast.makeText(this, "No se ha encontrado una orden de compra válida relacionada a la licencia "+txtTarea.getText().toString()+".", Toast.LENGTH_LONG).show();
+                msgLicPlate("Buscar por número de tarea");
+
+            }
+            progress.cancel();
+        } catch (Exception e) {
+            mu.msgbox("processIdOrdenCompra: "+e.getMessage());
+        }
+    }
+
+    private void processIdRecepcion() {
+
+        try {
+
+            gl.gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class, "GetSingleRec");
+
+            txtTarea.setText("");
+            startActivity(new Intent(this, frm_list_rec_prod.class));
+
+        } catch ( Exception e) {
+            mu.msgbox("processIdRecepcion: "+e.getMessage());
         }
     }
 
@@ -618,8 +695,6 @@ public class frm_lista_tareas_recepcion extends PBase {
     private void GetFila(){
 
         try{
-
-            int vIdTarea=0;
 
             if (!txtTarea.getText().toString().isEmpty()){
 
@@ -662,6 +737,50 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                 }
 
+            }
+
+        }catch (Exception e){
+            if (e.getMessage() !=null){
+                mu.msgbox("Error obteniendo la tarea: "+e.getMessage());
+            }else{
+                if(gl.tipoTarea==6) {
+                    buscaLP(txtTarea.getText().toString());
+                } else {
+                    mu.msgbox("El número de tarea ingresado no es válido");
+                    txtTarea.setText("");
+                    txtTarea.requestFocus();
+                }
+            }
+        }
+    }
+
+    //#EJC20220404:BYB Filtrar por licencia de ingreso de producción.
+    private void Get_Fila_By_IdOrdenCompraEnc(){
+
+        try{
+
+            int vIdTarea=0;
+
+            if (!txtTarea.getText().toString().isEmpty()){
+
+                selid = Integer.parseInt(txtTarea.getText().toString());
+
+                if (gl.tipoTarea==1){
+
+                    vIdTarea = stream(pListBeTareasIngresoHH.items).where(c->c.IdOrderCompraEnc == selid).select(c->c.IdOrderCompraEnc).first();
+
+                    if (vIdTarea>0){
+                        procesar_registro();
+                    }else{
+
+                        if (existe_en_recepciones(txtTarea.getText().toString())) {
+
+                        }else{
+                            mu.msgbox("No existe la tarea "+selid);
+                        }
+                    }
+
+                }
             }
 
         }catch (Exception e){
@@ -735,12 +854,13 @@ public class frm_lista_tareas_recepcion extends PBase {
     }
 
     public void SalirTareas(View view){
-        msgAskExit("Está seguro de salir");
+        gl.gVerifCascade=false;
+        doExit();
     }
 
     private void msgAskExit(String msg) {
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+           /* AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
@@ -753,6 +873,78 @@ public class frm_lista_tareas_recepcion extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     gl.gVerifCascade=false;
                     doExit();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ;
+                }
+            });
+
+            dialog.show();*/
+
+            //#GT10032022: set en el boton Si para facilitar el ENTER del teclado
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    this);
+
+            // set title
+            alertDialogBuilder.setTitle(R.string.app_name);
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage("¿" + msg + "?")
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            gl.gVerifCascade=false;
+                            doExit();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+            Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            nbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            //pbutton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            pbutton.setPadding(0, 10, 10, 0);
+            //pbutton.setTextColor(Color.WHITE);
+
+            pbutton.setFocusable(true);
+            pbutton.setFocusableInTouchMode(true);
+            pbutton.requestFocus();
+
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgLicPlate(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setCancelable(false);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    GetFila();
                 }
             });
 

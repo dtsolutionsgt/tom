@@ -15,6 +15,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_reemplazo_verif;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdEstadoDanado;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdUbicacionDestino;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
@@ -37,19 +39,20 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private TextView lblTituloForma,lblCantRegs;
+    private TextView lblTituloForma,lblCantRegs,lbldDetProducto;
     private ListView listDispProd;
     private Button btnActualizaPickingDet,btnBack;
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_verif adapter;
     private clsBeStockReemplazo selitem;
-
+    private clsBeStock_res StockResReemplazo;
+    private clsBeStock_res tmpBeStock_Res  = new clsBeStock_res();
     private clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
     //private clsBeStock_res lBeStockRes = new clsBeStock_res();
     //private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
-    private double vCant=0;
+    private double vCant=0, CantidadPendiente=0, CantPendSel=0, pCantTotal= 0;
     private boolean Distinto=false;
 
     public static boolean reemplazoCorrecto=false;
@@ -69,15 +72,37 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
         lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
+        lbldDetProducto = (TextView)findViewById(R.id.lbldDetProducto);
 
         listDispProd = (ListView)findViewById(R.id.listDispProd);
 
         btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
         btnBack = (Button)findViewById(R.id.btnBack);
 
+        pCantTotal = CantReemplazar;
         setHandlers();
 
         ProgressDialog("Listando existencias de producto:"+gBeProducto.Codigo);
+
+
+        StockResReemplazo = new clsBeStock_res();
+
+        StockResReemplazo.IdProductoBodega = BePedidoDetVerif.IdProductoBodega;
+        StockResReemplazo.Lote = BePedidoDetVerif.Lote;
+        StockResReemplazo.IdPresentacion = BePedidoDetVerif.IdPresentacion;
+        StockResReemplazo.IdUnidadMedida = BePedidoDetVerif.IdUnidadMedidaBasica;
+        StockResReemplazo.IdProductoEstado = BePedidoDetVerif.IdProductoEstado;
+        try {
+            if (! BePedidoDetVerif.Fecha_Vence.contains("T")){
+                StockResReemplazo.Fecha_vence = du.convierteFecha(BePedidoDetVerif.Fecha_Vence);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        StockResReemplazo.IdBodega=gl.IdBodega;
+
+        lbldDetProducto.setText(BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto+
+                "\n Cant. Reemplazar: "+CantReemplazar+" "+BePedidoDetVerif.Nom_Unid_Med);
 
         //Llama el método del WS Get_All_Stock_Especifico_By_IdPedidoDet
         execws(1);
@@ -144,16 +169,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_All_Stock_Especifico_By_IdPedidoDet",
-                                    "pIdPedidoDet",BePedidoDetVerif.IdPedidoDet,
-                                    "IdPedidoEnc",BePedidoDetVerif.IdPedidoEnc,
-                                    "gIdBodega",gl.IdBodega,
-                                    "CantReemplazar", CantReemplazar,
-                                    "vCant",vCant);
+                                "pBeStockRes", StockResReemplazo,
+                                "IdPedidoEnc", BePedidoDetVerif.IdPedidoEnc,
+                                "gIdBodega", gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Reemplaza_Producto_Dannado_Mayor_Igual",
-                                   "plistPickingUbi", pSubListPickingU.items,
-                                   "pIdStock", selid,
+                        callMethod("Reemplazar_ListPickingUbic_Verificacion",
+                                   "plistPickingUbi", BePickingUbic,
+                                   "pBeStockRes", tmpBeStock_Res,
                                    "pIdPickingEnc", pSubListPickingU.items.get(0).getIdPickingEnc(),
                                    "pIdOperador", gl.OperadorBodega.getIdOperador(),
                                    "pHost", "1",
@@ -162,7 +185,8 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                                    "pIdUbicDestino", IdUbicacionDestino,
                                    "pIdEstadoDestino", IdEstadoDanado,
                                    "pCantLinea", selitem.Cant,
-                                   "pCantReemplazar", CantReemplazar);
+                                   "pCantReemplazar", CantReemplazar,
+                                   "pCantTotal", pCantTotal);
                         break;
                     case 3:
                         callMethod("Reemplaza_Producto_Dannado_Menor",
@@ -186,7 +210,8 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                                    "pIdEmpresa", gl.IdEmpresa,
                                    "pIdUbicDestino", IdUbicacionDestino,
                                    "pIdEstadoDestino", IdEstadoDanado,
-                                   "pIdOperador",gl.OperadorBodega.getIdOperador());
+                                   "pIdOperador",gl.OperadorBodega.getIdOperador(),
+                                   "pHostSolicita",gl.devicename);
                         break;
 
                 }
@@ -209,7 +234,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     processListStockRes();
                     break;
                 case 2:
-                    processReemplazoMayorIgual();
+                    processReemplazo();
                     break;
                 case 3:
                     processReemplazoMenor();
@@ -231,7 +256,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
             DT = xobj.filldt();
 
-            vCant = xobj.getresultSingle(Double.class,"vCant");
+            //vCant = xobj.getresultSingle(Double.class,"vCant");
 
             if (DT.getCount()>0){
 
@@ -244,15 +269,15 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 Lista_Inventario_Disponible();
 
             }else{
+                toastlong("No se ha encontrado stock disponible para el producto: "+BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto);
                 progress.cancel();
             }
 
-            if (vCant == 0) {
+            //#AT Pendiente de validar para aplicar No Encontrado en la Verificación
+            /*if (vCant == 0) {
                 msgAskMarcarDanado("No hay existencia de este producto en otra ubicación"+
                             "\n¿Marcar como producto para reemplazo de todas formas?");
-
-            }
-
+            }*/
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processListStockRes:"+e.getMessage());
@@ -277,20 +302,39 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
                     vItem=new clsBeStockReemplazo();
 
-                    vItem.Codigo = DT.getString(12);
-                    vItem.Producto = DT.getString(14);
-                    vItem.Presentacion = DT.getString(16);
-                    vItem.UMBas = DT.getString(15);
-                    vItem.Cant = DT.getDouble(22);
-                    vItem.IdUbicacion = DT.getInt(30);
-                    vItem.FechaVence = du.convierteFechaMostrar(DT.getString(19));
-                    vItem.LicPlate = DT.getString(31);
-                    vItem.Lote = DT.getString(17);
-                    vItem.CodigoProducto = DT.getString(12);
-                    vItem.Peso = DT.getDouble(23);
-                    vItem.Estado = DT.getString(25);
-                    vItem.IdStock = DT.getInt(5);
-                    vItem.Despachar = DT.getString(56);
+                    vItem.Codigo = DT.getString(0);
+                    vItem.Producto = DT.getString(1);
+                    vItem.Presentacion = DT.getString(2);
+                    vItem.UMBas = DT.getString(3);
+                    vItem.Cant = DT.getDouble(4);
+                    vItem.IdUbicacion = DT.getInt(5);
+                    vItem.NombreUbicacion = DT.getString(40);
+
+                    if (DT.getString(6)!=null){
+                        vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));
+                    }else{
+                        vItem.FechaVence = "";
+                    }
+
+                    if (DT.getString(7)!=null){
+                        vItem.LicPlate = DT.getString(7);
+                    }else{
+                        vItem.LicPlate = "";
+                    }
+                    if (DT.getString(8)!=null){
+                        vItem.Lote = DT.getString(8);
+                    }else{
+                        vItem.Lote = "";
+                    }
+                    vItem.CodigoProducto = DT.getString(0);
+                    vItem.Peso = DT.getDouble(9);
+                    vItem.Estado = DT.getString(10);
+                    vItem.IdStock = 0; //DT.getInt(11);
+                    vItem.Despachar = DT.getString(11);
+                    vItem.IdEstado = DT.getInt(12);
+                    vItem.IdPresentacion = DT.getInt(13) ;
+                    vItem.IdProductoBodega = DT.getInt(14);
+                    vItem.IdUnidadMedida = DT.getInt(20);
 
                     BeListStock.add(vItem);
 
@@ -305,8 +349,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
                 progress.cancel();
 
-            }else{
-
             }
 
         } catch (Exception e){
@@ -316,25 +358,34 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
     }
 
-    private void  processReemplazoMayorIgual(){
+    private void  processReemplazo(){
+        try {
+            
+            boolean StockReservado = false;
+            progress.cancel();
 
-        Boolean vResultado;
+            StockReservado = xobj.getresult(Boolean.class,"Reemplazar_ListPickingUbic_Verificacion");
+            CantidadPendiente = (Double) xobj.getSingle("CantPend",Double.class);
 
-        try{
+            if (CantidadPendiente == 0 && CantPendSel > 0) {
+                CantidadPendiente = CantPendSel;
+            }
 
-                progress.setMessage("Reemplazando producto de una idStock con una cantidad mayor o igual");
+            if (StockReservado) {
+                if (CantidadPendiente == 0) {
+                    msgAskReemplazado("Stock reemplazado correctamente");
+                } else {
+                    CantReemplazar = CantidadPendiente;
+                    pCantTotal = CantidadPendiente;
+                    msgAskCantPendiente("Cantidad de reemplazo pendiente para completar el proceso: "+ "("+CantReemplazar+")");
 
-                DT = xobj.filldt();
+                    lbldDetProducto.setText(BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto+
+                            "\n Cant. Reemplazar: "+CantReemplazar+" "+BePedidoDetVerif.Nom_Unid_Med);
 
-                vResultado = xobj.getresultSingle(Boolean.class,"Reemplaza_Producto_Dannado_Mayor_IgualResult");
-
-                if (vResultado){
-                    reemplazoCorrecto = true;
-                    super.finish();
-                }else{
-                    reemplazoCorrecto = false;
-                    progress.cancel();
+                    progress.setMessage("Obteniendo inventario disponible para reemplazo");
+                    execws(1);
                 }
+            }
 
         }catch (Exception e){
             progress.cancel();
@@ -415,29 +466,34 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private void Continua_procesando_registro(){
 
         try{
+            CantPendSel = 0;
 
             progress.setMessage("Procesando el reemplazo de producto...");
             progress.show();
 
-            List AuxList = stream(pSubListPickingU.items)
-                    .where (z -> z.getIdPedidoDet() == BePedidoDetVerif.getIdPedidoDet())
-                    .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() !=  0)
-                    .toList();
+            BePickingUbic = pSubListPickingU.items.get(0);
 
-            pSubListPickingU.items = AuxList;
+            if (CantReemplazar > 0) {
+                tmpBeStock_Res = new clsBeStock_res();
 
-            if (selitem.Cant>=CantReemplazar){
+                tmpBeStock_Res.IdPresentacion = selitem.IdPresentacion;
+                tmpBeStock_Res.IdProductoEstado = selitem.IdEstado;
+                tmpBeStock_Res.IdUbicacion = selitem.IdUbicacion;
+                tmpBeStock_Res.Lic_plate = selitem.LicPlate;
+                tmpBeStock_Res.Lote = selitem.Lote;
+                tmpBeStock_Res.Fecha_vence = du.convierteFecha(selitem.FechaVence);
+                tmpBeStock_Res.IdProductoBodega = selitem.IdProductoBodega;
+                tmpBeStock_Res.IdUnidadMedida = selitem.IdUnidadMedida;
 
-                //Llama al método del WS Reemplaza_Producto_Dannado_Mayor_Igual
+                if (selitem.Cant >= CantReemplazar) {
+
+                } else {
+                    CantPendSel = CantReemplazar - selitem.Cant;
+                    CantReemplazar = selitem.Cant;
+                }
+
                 execws(2);
-
-            }else{
-
-                //Llama al método del WS Reemplaza_Producto_Dannado_Menor
-                execws(3);
-
             }
-
 
         }catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -577,6 +633,54 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    private void msgAskReemplazado(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ok48);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    salir();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskCantPendiente(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ok48);
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    public void salir () {
+        super.finish();
     }
 
     public void Regresar(View view){

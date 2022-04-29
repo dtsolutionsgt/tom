@@ -247,6 +247,17 @@
             android:text="10"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/lblicplate"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="LicPlate"
+            android:textSize="18sp" />
+
 
     </LinearLayout>
 </RelativeLayout>

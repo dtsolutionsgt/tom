@@ -1,5 +1,8 @@
 package com.dts.classes.Mantenimientos.Resolucion_LP;
 
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
+import com.dts.classes.Mantenimientos.Propietario.Propietario.clsBePropietarios;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeResolucion_lp_operador {
@@ -18,6 +21,31 @@ public class clsBeResolucion_lp_operador {
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean IsNew=false;
 
+
+
+
+    public clsBeResolucion_lp_operador() {
+    }
+
+    public clsBeResolucion_lp_operador(int IdResolucionlp, int IdOperador, int IdBodega, String Serie,
+                          float Correlativo_Inicial, float Correlativo_Final, int Correlativo_Actual,
+                          String User_agr, String Fec_agr,String User_mod,String Fec_mod, boolean Activo,
+                          boolean IsNew) {
+
+        this.IdResolucionlp=IdResolucionlp;
+        this.IdOperador=IdOperador;
+        this.IdBodega=IdBodega;
+        this.Serie=Serie;
+        this.Correlativo_Inicial=Correlativo_Inicial;
+        this.Correlativo_Final=Correlativo_Final;
+        this.Correlativo_Actual=Correlativo_Actual;
+        this.Activo=Activo;
+        this.User_agr=User_agr;
+        this.Fec_agr=Fec_agr;
+        this.User_mod=User_mod;
+        this.Fec_mod=Fec_mod;
+        this.IsNew = IsNew;
+    }
 
     public boolean getActivo() {
         return Activo;
@@ -99,7 +127,7 @@ public class clsBeResolucion_lp_operador {
     public float getCorrelativo_Actual() {
         return Correlativo_Actual;
     }
-    public void setCorrelativo_Actual(float value) {
+    public void setCorrelativo_Actual(int value) {
         Correlativo_Actual=value;
     }
 

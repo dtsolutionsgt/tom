@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -33,8 +35,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static br.com.zbra.androidlinq.Linq.stream;
-
 
 public class frm_list_rec_prod_detalle extends PBase {
 
@@ -59,6 +59,7 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     private ProgressDialog progress;
 
+    //Activity que muestra la lista del detalle de los productos recepcionados para poderlos modificar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,6 +207,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.IdProductoBodega = obj.IdProductoBodega;
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
                        vItem.Fecha_vence = du.convierteFechaMostrar(obj.Fecha_vence);
+                       vItem.Lote = obj.Lote;
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
 
@@ -428,23 +430,23 @@ public class frm_list_rec_prod_detalle extends PBase {
                 //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
                 String zpl = String.format("^XA \n" +
-                                "^MMT \n" +
-                                "^PW700 \n" +
-                                "^LL0406 \n" +
-                                "^LS0 \n" +
-                                "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-                                "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-                                "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                "^FO2,340^GB670,0,14^FS \n" +
-                                "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                "^FD%4$s^FS \n" +
-                                "^PQ1,0,1,Y " +
-                                "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                        (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
 
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);
@@ -617,7 +619,7 @@ public class frm_list_rec_prod_detalle extends PBase {
     private void doExit(){
         try{
 
-            //LimpiaValores();
+            gl.mode=1;
             super.finish();
             gl.Carga_Producto_x_Pallet=false;
         }catch (Exception e){

@@ -64,6 +64,9 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String No_Documento_Recepcion_ERP;
     @Element(required=false) public String No_Documento_Devolucion="";
     @Element(required=false) public int IdPedidoEncDevolucion=0;
+    @Element(required=false) public boolean Push_To_NAV=false;
+    @Element(required=false) public String No_Documento_Ubicacion_ERP="";
+    @Element(required=false) public boolean PutAway_Registrado=false;
 
     public clsBeTrans_oc_enc()
     {
@@ -431,4 +434,25 @@ public class clsBeTrans_oc_enc {
     public void setNo_Documento_Devolucion(String value) {
         No_Documento_Devolucion=value;
     }
+    public boolean getPushToNav() {
+        return Push_To_NAV;
+    }
+    public void setPush_To_NAV(boolean value) {
+        Push_To_NAV=value;
+    }
+
+    public String getNo_Documento_Ubicacion_ERP() {
+        return No_Documento_Ubicacion_ERP;
+    }
+    public void setNo_Documento_Ubicacion_ERP(String value) {
+        No_Documento_Ubicacion_ERP=value;
+    }
+
+    public boolean getPutAway_Registrado() {
+        return PutAway_Registrado;
+    }
+    public void setPutAway_Registrado(boolean value) {
+        PutAway_Registrado=value;
+    }
+
 }

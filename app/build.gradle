@@ -1,15 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 28
         defaultConfig {
         applicationId "com.dts.tom"
-        minSdkVersion 23
+        minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28
+        targetSdkVersion 24
         renderscriptTargetApi 28
         versionCode 1
-        versionName "1.0"
+        versionName "4.6.0.26"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,13 +38,13 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
-    implementation 'com.android.support:design:28.0.0'
-    implementation "com.android.support:support-compat:28.0.0"
+    //implementation 'com.android.support:design:28.0.0'
+    //implementation "com.android.support:support-compat:28.0.0"
     implementation('org.simpleframework:simple-xml:2.7.1') {
        exclude group: 'stax', module: 'stax-api'
        exclude group: 'xpp3', module: 'xpp3'
     }
-    implementation 'androidx.wear:wear:1.2.0'
+    //implementation 'androidx.wear:wear:1.2.0'
     implementation files('libs\\ZSDK_ANDROID_API.jar')
     implementation files('libs\\commons-lang3-3.4.jar')
     implementation files('libs\\commons-net-3.1.jar')
@@ -54,15 +56,20 @@ dependencies {
     implementation files('libs\\opencsv-2.2.jar')
     implementation files('libs\\snmp6_1.jar')
     implementation files('libs\\ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
-    implementation 'com.google.android.material:material:1.3.0'
-    //implementation files('libs\\ksoap2-android-assembly-3.6.3')
-
-    //implementation 'androidx.wear:wear:1.0.0'
-
+    implementation 'com.google.android.material:material:1.5.0-alpha02'
+    implementation 'com.google.firebase:firebase-analytics:20.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
+    implementation 'com.google.firebase:firebase-perf:20.0.6'
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.3.1')
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-config:21.0.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    //implementation files('libs\\ksoap2-android-assembly-3.6.3')
+    //implementation 'androidx.wear:wear:1.0.0'
     //compileOnly 'com.google.android.wearable:wearable:2.6.0'
     //implementation 'br.com.zbra:android-linq:1.1.0'
     //implementation 'com.github.zbra-solutions:android-linq:1.1.0'

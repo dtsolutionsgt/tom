@@ -18,7 +18,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String Lic_plate="";
     @Element(required=false) public boolean Acepto=false;
     @Element(required=false) public double Peso_solicitado=0;
-    @Element(required=false) public double Peso_recibido=0;
+    @Element(required=false) public double Peso_recibido=0.00;
     @Element(required=false) public double Peso_verificado=0;
     @Element(required=false) public double Peso_despachado=0;
     @Element(required=false) public double Cantidad_Solicitada=0;
@@ -67,11 +67,16 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdStock_reemplazo=0;
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public double Tarima =0;
+    @Element(required=false) public  boolean No_encontrado = false;
+    @Element(required=false) public String NombreArea = "";
+    @Element(required=false) public String NombreClasificacion="";
+    @Element(required=false) public int IdUbicacionTemporal=0;
+    @Element(required=false) public String NombreUbicacionTemporal="";
 
     public clsBeTrans_picking_ubic() {
     }
 
-    public clsBeTrans_picking_ubic(int IdPickingEnc, int IdPickingUbic, int IdPickingDet, int IdUbicacion,
+    public clsBeTrans_picking_ubic(int IdPickingEnc, String NombreArea,int IdPickingUbic, int IdPickingDet, int IdUbicacion,
                                    String Lote, String Fecha_Vence, String Fecha_minima, String Serial,
                                    String Lic_plate, boolean Acepto, double Peso_solicitado, double Peso_recibido,
                                    double Peso_verificado, double Peso_despachado, double Cantidad_Solicitada, double Cantidad_Recibida,
@@ -85,9 +90,11 @@ public class clsBeTrans_picking_ubic {
                                    String ProductoEstado, int IdProductoBodega, int IdProductoEstado, int IdPresentacion,
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
-                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima) {
+                                   int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
+                                   boolean No_encontrado, String NombreClasificacion, int IdUbicacionTemporal, String NombreUbicacionTemporal) {
 
         this.IdPickingEnc=IdPickingEnc;
+        this.NombreArea = NombreArea;
         this.IdPickingUbic=IdPickingUbic;
         this.IdPickingDet=IdPickingDet;
         this.IdUbicacion=IdUbicacion;
@@ -147,7 +154,10 @@ public class clsBeTrans_picking_ubic {
         this.IdStock_reemplazo=IdStock_reemplazo;
         this.IdBodega=IdBodega;
         this.Tarima=Tarima;
-
+        this.No_encontrado = No_encontrado;
+        this.NombreClasificacion = NombreClasificacion;
+        this.IdUbicacionTemporal = IdUbicacionTemporal;
+        this.NombreUbicacionTemporal = NombreUbicacionTemporal;
     }
 
 
@@ -511,5 +521,38 @@ public class clsBeTrans_picking_ubic {
     public void setIdBodega(double value) {
         Tarima=value;
     }
+    public boolean getNoEncontrado() {
+        return No_encontrado;
+    }
+    public void setNoEncontrado(boolean value) {
+        No_encontrado=value;
+    }
+    public String getNombreArea() {
+        return NombreArea;
+    }
+    public void setNombreArea(String value) {
+        NombreArea=value;
+    }
+    public String getNombreClasificacion() {
+        return NombreClasificacion;
+    }
+    public void setNombreClasificacion(String value) {
+        NombreClasificacion=value;
+    }
+
+    public int getIdUbicacionTemporal() {
+        return IdUbicacionTemporal;
+    }
+    public void setIdUbicacionTemporal(int value) {
+        IdUbicacionTemporal=value;
+    }
+    public String getNombreUbicacionTemporal() {
+        return NombreUbicacionTemporal;
+    }
+    public void setNombreUbicacionTemporal(String value) {
+        NombreUbicacionTemporal=value;
+    }
+
+
 }
 

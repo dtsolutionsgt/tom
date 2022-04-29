@@ -50,6 +50,7 @@ public class frm_danado_picking extends PBase {
 
     public static int IdEstadoDanadoSelect = 0;
     public static String vNomUbicDestino="";
+    public static boolean existe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,6 @@ public class frm_danado_picking extends PBase {
         setHandles();
 
         execws(1);
-
     }
 
     private void setHandles(){
@@ -88,6 +88,11 @@ public class frm_danado_picking extends PBase {
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
                     txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
+                    /*BeUbicDestino = new clsBeBodega_ubicacion();
+                    BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                    IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                    execws(2);*/
+
                 }
 
                 @Override
@@ -102,10 +107,22 @@ public class frm_danado_picking extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicDest.getText().toString().isEmpty()){
+
+                            validaUbicacion();
+
                             BeUbicDestino = new clsBeBodega_ubicacion();
                             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-                            execws(2);
+
+                            if (existe) {
+                                execws(2);
+                            } else {
+                                 msgMover("Producto: "+gBeProducto.Nombre
+                                    + "\n Destino: "+txtUbicDest.getText().toString()
+                                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                                    + "\n ¿Mover?");
+                            }
+
                         }
                     }
 
@@ -118,17 +135,50 @@ public class frm_danado_picking extends PBase {
         }
     }
 
+    public void validaUbicacion() {
+        existe = false;
+        for(int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
+            if (LProductoEstadoDanado.items.get(i).IdUbicacionBodegaDefecto == Integer.parseInt(txtUbicDest.getText().toString().trim())) {
+                existe = true;
+                break;
+            }
+        }
+    }
+
     public void BotonGuardarDanado(View view){
         if (!txtUbicDest.getText().toString().isEmpty()){
+            /*BeUbicDestino = new clsBeBodega_ubicacion();
+            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+            execws(2);*/
+
+            validaUbicacion();
+
+            String destino = "";
+
+            if (existe) {
+                destino = lblNomUbic.getText().toString();
+                BeUbicDestino = new clsBeBodega_ubicacion();
+                BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                execws(2);
+            } else {
+                destino = txtUbicDest.getText().toString();
+            }
+
             BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-            execws(2);
+
+            msgMover("Producto: "+gBeProducto.Nombre
+                    + "\n Destino: "+ destino
+                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                    + "\n ¿Mover?");
         }
     }
 
     public void botonAtras(View view){
-        super.finish();
+        regresar();
     }
 
     private void Listar_Producto_Estado() {
@@ -198,6 +248,31 @@ public class frm_danado_picking extends PBase {
 
     }
 
+    private void msgProdEstado(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.back);
+
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    regresar();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
     public class WebServiceHandler extends WebService {
 
         public WebServiceHandler(PBase Parent,String Url) {
@@ -252,10 +327,9 @@ public class frm_danado_picking extends PBase {
     private void processEstadoProducto(){
 
         try{
+            boolean existe = false;
 
             LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
-
-            Listar_Producto_Estado();
 
             lblProdDanado.setText(gBePickingUbic.CodigoProducto+" "+gBePickingUbic.NombreProducto+
                     "\n Cad: "+gBePickingUbic.Fecha_Vence+
@@ -265,6 +339,19 @@ public class frm_danado_picking extends PBase {
             txtUbicDest.setSelectAllOnFocus(true);
             txtUbicDest.requestFocus();
             txtUbicDest.selectAll();
+
+            //#AT 20220126 Se valida  que LProductoEstadoDanado no sea nulo de ser asi mostrará un mensaje
+            if (LProductoEstadoDanado != null) {
+                if (LProductoEstadoDanado.items != null) {
+                    Listar_Producto_Estado();
+                    existe = true;
+                }
+            }
+
+            if (!existe) {
+                msgProdEstado("No se ha encontrado estados disponibles para el producto: "+
+                        "\n"+gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto);
+            }
 
         }catch (Exception e){
             mu.msgbox("processEstadoProducto:"+e.getMessage());
@@ -324,6 +411,11 @@ public class frm_danado_picking extends PBase {
         ws.execute();
     }
 
+    private void regresar() {
+        super.finish();
+        startActivity(new Intent(this, frm_picking_datos.class));
+    }
+
     @Override
     protected void onResume() {
 
@@ -342,4 +434,8 @@ public class frm_danado_picking extends PBase {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        regresar();
+    }
 }

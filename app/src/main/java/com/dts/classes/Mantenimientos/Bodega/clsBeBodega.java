@@ -36,15 +36,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdMotivoUbicacionDanadoPicking=0;
     @Element(required=false) public boolean cambio_ubicacion_auto=false;
     @Element(required=false) public String codigo_bodega_erp="";
-    @Element(required=false) public int ubic_producto_ne=0;
-    @Element(required=false) public int IdProductoEstadoNE=0;
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public clsBeBodega_areaList Areas=new clsBeBodega_areaList();
     @Element(required=false) public clsBeBodega_sectorList Sectores=new clsBeBodega_sectorList();
     @Element(required=false) public clsBeBodega_tramoList Tramos=new clsBeBodega_tramoList();
     @Element(required=false) public clsBeBodega_ubicacionList Ubicaciones=new clsBeBodega_ubicacionList();
     @Element(required=false) public clsBeBodega_muellesList Muelles=new clsBeBodega_muellesList();
-
     @Element(required=false) public String Cuenta_Ingreso_Mercancias="0";
     @Element(required=false) public String Cuenta_Egreso_Mercancias="0";
     @Element(required=false) public boolean Notificacion_Voz=false;
@@ -52,12 +49,17 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Es_Bodega_Fiscal=false;
     @Element(required=false) public boolean habilitar_ingreso_consolidado=false;
     @Element(required=false) public int Id_Motivo_Ubic_Reabasto=0;
-  /*  @Element(required=false) public boolean captura_estiba_ingreso = false;
-    @Element(required=false) public boolean captura_pallet_no_estandar = false;*/
     @Element(required=false) public float valor_porcentaje_iva = 0;
     @Element(required=false) public boolean Permitir_Verificacion_Consolidada = false;
     @Element(required=false) public boolean control_banderas_cliente = false;
     @Element(required=false) public int IdTamanoEtiquetaUbicacionDefecto=0;
+    @Element(required=false) public boolean Ubicar_Tarimas_Completas_Reabasto = false;
+    @Element(required=false) public int IdTipoTransaccionSalida=0;
+    @Element(required=false) public boolean Permitir_Eliminar_Documento_Salida = false;
+    @Element(required=false) public boolean Eliminar_Documento_Salida = false;
+    @Element(required=false) public boolean Operador_Picking_Realiza_Verificacion = false;
+    @Element(required=false) public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
+
 
     public clsBeBodega() {
     }
@@ -75,7 +77,9 @@ public class clsBeBodega extends clsBeBodegaBase {
                        clsBeBodega_muellesList Muelles,String Cuenta_Ingreso_Mercancias,String Cuenta_Egreso_Mercancias,
                        boolean Notificacion_Voz, boolean Control_Tarifa_Servicios, int Id_Motivo_Ubic_Reabasto,
                        boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
-                       boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto) {
+                       boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
+                       boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
+                       boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -126,6 +130,11 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.habilitar_ingreso_consolidado=habilitar_ingreso_consolidado;
         this.control_banderas_cliente=control_banderas_cliente;
         this.IdTamanoEtiquetaUbicacionDefecto = IdTamanoEtiquetaUbicacionDefecto;
+        this.Permitir_Eliminar_Documento_Salida = Permitir_Eliminar_Documento_Salida;
+        this.Eliminar_Documento_Salida = Eliminar_Documento_Salida;
+        this.Operador_Picking_Realiza_Verificacion = Operador_Picking_Realiza_Verificacion;
+        this.Permitir_Cambio_Ubic_Producto_Picking = Permitir_Cambio_Ubic_Producto_Picking;
+        //this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
     }
 
     public int getIdPais() {
@@ -404,7 +413,6 @@ public class clsBeBodega extends clsBeBodegaBase {
     public boolean getPermitir_Verificacion_Consolidada() {
         return Permitir_Verificacion_Consolidada;
     }
-
     public void setPermitir_Verificacion_Consolidada(boolean value) {
         Permitir_Verificacion_Consolidada=value;
     }
@@ -423,6 +431,45 @@ public class clsBeBodega extends clsBeBodegaBase {
         IdTamanoEtiquetaUbicacionDefecto=value;
     }
 
+    public boolean getUbicar_Tarimas_Completas_Reabasto() {
+        return Ubicar_Tarimas_Completas_Reabasto;
+    }
+    public void setUbicar_Tarimas_Completas_Reabasto(boolean value) {
+        Ubicar_Tarimas_Completas_Reabasto=value;
+    }
 
+    public int getIdTipoTransaccionSalida() {
+        return IdTipoTransaccionSalida;
+    }
+    public void setIdTipoTransaccionSalida(int value) {
+        IdTipoTransaccionSalida=value;
+    }
+
+    public boolean getPermitir_Eliminar_Documento_Salida() {
+        return Permitir_Eliminar_Documento_Salida;
+    }
+    public void setPermitir_Eliminar_Documento_Salida(boolean value) {
+        Permitir_Eliminar_Documento_Salida=value;
+    }
+
+    public boolean getEliminar_Documento_Salida() {
+        return Eliminar_Documento_Salida;
+    }
+    public void setEliminar_Documento_Salida(boolean value) {
+        Eliminar_Documento_Salida=value;
+    }
+
+    public boolean getoperador_picking_realiza_verificacion() {
+        return Operador_Picking_Realiza_Verificacion;
+    }
+    public void setoperador_picking_realiza_verificacion(boolean value) {
+        Operador_Picking_Realiza_Verificacion=value;
+    }
+
+    public boolean getPermitir_Cambio_Ubic_Producto_Picking() {
+        return Permitir_Cambio_Ubic_Producto_Picking;
+    }
+    public void setPermitir_Cambio_Ubic_Producto_Picking(boolean value) {
+        Permitir_Cambio_Ubic_Producto_Picking=value;
+    }
 }
-

@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,15 +45,17 @@ public class frm_verificacion_datos extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri;
-    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri;
+    private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri, txtCajas, txtUnidades, txtPreSol, txtPresRec, txtUnidadSol, txtUnidadRec;
+    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
+    private RelativeLayout relDesglose, relConDesglose;
 
     private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
 
     public static clsBeProducto gBeProducto = new clsBeProducto();
+    public static clsBeProducto_PresentacionList tmpBePresentacion = new clsBeProducto_PresentacionList();
     public static clsBeDetallePedidoAVerificar BePedidoDetVerif = new clsBeDetallePedidoAVerificar();
     public static clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
@@ -71,6 +74,7 @@ public class frm_verificacion_datos extends PBase {
     private double Sol = 0;
     private double Rec = 0;
     private double Ver = 0;
+    private double factor = 0;
     private String UM = "";
     private double pPeso;
     private double pCantidad;
@@ -105,7 +109,6 @@ public class frm_verificacion_datos extends PBase {
         lblLoteVeri = (TextView) findViewById(R.id.lblLoteVeri);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate2 = (TextView) findViewById(R.id.lblLicPlate2);
-        btMarcarReemplazoVeri = (Button) findViewById(R.id.btMarcarReemplazoVeri);
         btnConfirmarV = (Button) findViewById(R.id.btnConfirmarV);
         btnBack = (Button) findViewById(R.id.btnBack);
         cmbPresVeri = (Spinner) findViewById(R.id.cmbPresVeri);
@@ -115,9 +118,20 @@ public class frm_verificacion_datos extends PBase {
         llCantidad = (LinearLayout) findViewById(R.id.llCantidad);
         llPeso = (LinearLayout) findViewById(R.id.llPeso);
         llUMBas = (LinearLayout) findViewById(R.id.llUMBas);
-        llReemplazo = (LinearLayout) findViewById(R.id.llReemplazo);
         dpResult = (DatePicker) findViewById(R.id.datePicker2);
         imgDate = (ImageView)findViewById(R.id.imgDate3);
+        txtCajas = (EditText) findViewById(R.id.txtCajas);
+        txtUnidades = (EditText) findViewById(R.id.txtUnidades);
+        lblPresentacion = (TextView) findViewById(R.id.lblPresentacion);
+        relDesglose = findViewById(R.id.relDesglose);
+        txtPreSol = findViewById(R.id.txtPresSol);
+        txtUnidadSol = findViewById(R.id.txtUnidadSol);
+        txtUnidadRec = findViewById(R.id.txtUnidadRec);
+        txtPresRec = findViewById(R.id.txtPresRec);
+        lblPresRec = findViewById(R.id.lblPresRec);
+        lblPresSol = findViewById(R.id.lblPresSol);
+        lblUnidadSol = findViewById(R.id.lblUnidadSol);
+        lblUnidadRec = findViewById(R.id.lblUnidadRec);
 
         BePickingUbicList = gl.gBePickingUbicList;
 
@@ -249,6 +263,29 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    private void procesaCajasUnidades() {
+        double cantidadPresentacion = 0;
+        double CantVeri = 0;
+
+        CantVeri = Double.valueOf(txtCantVeri.getText().toString());
+        if (CantVeri > factor) {
+            relDesglose.setVisibility(View.VISIBLE);
+            app.readOnly(txtCajas,true);
+            app.readOnly(txtUnidades,true);
+
+            cantidadPresentacion = CantVeri / factor;
+            double decimal = cantidadPresentacion % 1;
+            double cajas = cantidadPresentacion - decimal;
+            double unidades = decimal * factor;
+
+            txtCajas.setText(String.valueOf(cajas));
+            txtUnidades.setText(String.valueOf(mu.frmdec(unidades)));
+
+        } else {
+            relDesglose.setVisibility(View.GONE);
+        }
+    }
+
     public void Inicia_Tarea_Detalle(){
 
         double suma=0;
@@ -270,31 +307,173 @@ public class frm_verificacion_datos extends PBase {
 
             Lp = BePedidoDetVerif.getLicPlate();
 
-            lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s Sol: %s Pick: %s Veri: %s",
-                    Codigo, Nombre, Expira, Lote,String.valueOf(Sol), String.valueOf(Rec), String.valueOf(Ver)));
+            lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
+                    Codigo, Nombre, Expira, Lote));
 
             if (gBeProducto == null){
                 throw new Exception("El producto no está definido");
             }else{
 
-                AuxList = stream(BePickingUbicList.items)
-                        .where (z -> z.CodigoProducto.equals(Codigo))
-                        .where(z -> z.Lote.equals(Lote))
-                        .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
-                        .toList();
+                if (BePickingUbicList !=null){
 
-                pSubListPickingU.items = AuxList;
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (z -> z.CodigoProducto.equals(Codigo))
+                            .where(z -> z.Lote.equals(Lote))
+                            .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                            .toList();
+
+                    pSubListPickingU.items = AuxList;
+                }
+
             }
 
             txtVenceVeri.setText(Expira);
             txtCantVeri.setText(String.valueOf(Rec-Ver));
 
-            txtUmbasVeri.setText(UM);
+            //txtUmbasVeri.setText(UM);
             txtLoteVeri.setText(BePedidoDetVerif.getLote());
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
                                        BePedidoDetVerif.getNom_Presentacion());
-            cmbPresVeri.setSelection(sel);
+
+            //#CKFK20220326 Agregué esta validación para que si el producto no tiene presentación
+            //no se muestre el combo de la presentación
+            if (sel>-1){
+                lblCantVeri.setText("Cantidad ("+BePedidoDetVerif.getNom_Presentacion()+"): ");
+                //llPresentacion.setVisibility(View.VISIBLE);
+                //cmbPresVeri.setSelection(sel);
+
+                //#AT20220419 Se muestra Cajas y Unidades en cantidad solicitada y recibida
+                if (BePedidoDetVerif.getIdPresentacion() > 0){
+                    if (gBeProducto.Presentaciones!=null){
+                        if (gBeProducto.Presentaciones.items!=null){
+
+
+                            factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
+                            double cantidad_solicitada = Sol;
+
+                            double CantidadDecimal = cantidad_solicitada % 1;
+                            double CantidadPresentacion = 0;
+                            CantidadPresentacion = cantidad_solicitada - CantidadDecimal;
+                            double CantidadUMBas = CantidadDecimal * factor;
+
+                            if (CantidadPresentacion > 0) {
+
+                                if ((cantidad_solicitada % 1) > 0 || (cantidad_solicitada > factor)) { }
+
+                                if (CantidadUMBas == 0) {
+                                    txtUnidadSol.setVisibility(View.GONE);
+                                    lblUnidadSol.setVisibility(View.GONE);
+                                }
+
+                                calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
+
+                            } else if ((cantidad_solicitada % 1) > 0 || (factor > 0)) {
+
+                                txtPreSol.setVisibility(View.GONE);
+                                lblPresSol.setVisibility(View.GONE);
+
+                                calculaUnidades(CantidadUMBas);
+                            }
+
+                            double CantidadRec = Ver;
+                            double CantidadDecimalRec = CantidadRec % 1;
+                            double CantidadPresentacionRec = 0;
+                            CantidadPresentacionRec = CantidadRec - CantidadDecimalRec;
+                            double CantidadUMBasRec = CantidadDecimalRec * factor;
+
+                            if (Ver > 0) {
+
+                                if (CantidadPresentacionRec > 0) {
+
+                                    if ((CantidadRec % 1) > 0 || (CantidadRec >= factor)) { }
+
+                                    if (CantidadUMBasRec == 0) {
+                                        txtUnidadRec.setVisibility(View.GONE);
+                                        lblUnidadRec.setVisibility(View.GONE);
+                                    }
+
+                                    lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                    txtPresRec.setText(String.valueOf(mu.frmdec(CantidadPresentacionRec)));
+                                    txtUnidadRec.setText(String.valueOf(mu.frmdec(CantidadUMBasRec)));
+
+                                }else if ((CantidadRec % 1) > 0 || (factor > 0)) {
+                                    lblPresRec.setVisibility(View.GONE);
+                                    txtPresRec.setVisibility(View.GONE);
+
+                                    txtUnidadRec.setText(String.valueOf(mu.frmdec(CantidadUMBasRec)));
+                                }
+
+                            } else {
+                                if (CantidadUMBas == 0) {
+                                    lblUnidadRec.setVisibility(View.GONE);
+                                    txtUnidadRec.setVisibility(View.GONE);
+                                }
+
+                                if (CantidadPresentacion == 0) {
+                                    lblPresRec.setVisibility(View.GONE);
+                                    txtPresRec.setVisibility(View.GONE);
+                                }
+
+                                lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                txtPresRec.setText("0.00");
+                                txtUnidadRec.setText("0.00");
+                            }
+                        }
+                    }
+                } else {
+
+
+                }
+            }else{
+                lblCantVeri.setText("Cantidad ("+UM+"): ");
+                factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                double CantSol = Sol;
+                double CantRec = Ver;
+
+                if (CantSol > factor) {
+                    //#AT Cantidad Solicitada
+                    double cantidadPresentacion = CantSol / factor;
+                    double decimal = cantidadPresentacion % 1;
+                    double cajas = cantidadPresentacion - decimal;
+                    double unidades = decimal * factor;
+
+                    lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+
+                    txtUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
+                    lblUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
+
+                    txtPreSol.setText(String.valueOf(mu.frmdec(cajas)));
+                    txtUnidadSol.setText(String.valueOf(mu.frmdec(unidades)));
+
+                    //#AT Cantidad Recibida
+                    double cantidadPresentacionRec = CantRec / factor;
+                    double decimalRec = cantidadPresentacionRec % 1;
+                    double cajasRec = cantidadPresentacionRec - decimalRec;
+                    double unidadesRec = decimalRec * factor;
+
+                    lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+
+                    txtUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
+                    lblUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
+
+                    txtPresRec.setText(String.valueOf(mu.frmdec(cajasRec)));
+                    txtUnidadRec.setText(String.valueOf(mu.frmdec(unidadesRec)));
+
+                } else {
+                    lblPresSol.setVisibility(View.GONE);
+                    txtPreSol.setVisibility(View.GONE);
+                    lblPresRec.setVisibility(View.GONE);
+                    txtPresRec.setVisibility(View.GONE);
+
+                    txtUnidadSol.setText(""+mu.frmdec(Sol));
+                    txtUnidadRec.setText(""+mu.frmdec(Ver));
+                }
+                //llPresentacion.setVisibility(View.GONE);
+
+                execws(4);
+            }
 
             if (Lp != ""){
                 lblLicPlate2.setVisibility(View.VISIBLE);
@@ -325,6 +504,36 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    private void calculaCajaUnidades(double CantPresentacion, double CantidadUMBas) {
+
+        try {
+
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText(String.valueOf(CantPresentacion));
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean HicimosUnaFumada=false;
+
+    private void calculaUnidades(double CantidadUMBas) {
+
+        try {
+
+            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            txtPreSol.setText("0");
+            txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void Listar_Producto_Presentaciones() {
 
         String valor;
@@ -336,6 +545,9 @@ public class frm_verificacion_datos extends PBase {
                 progress.setMessage("Listando presentaciones de producto...");
 
                 if (gBeProducto.Presentaciones.items != null) {
+
+                    factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                    lblPresentacion.setText(gBeProducto.Presentaciones.items.get(0).Nombre+": ");
 
                     PresList.clear();
 
@@ -355,6 +567,8 @@ public class frm_verificacion_datos extends PBase {
 
                     if (PresList.size() > 0) cmbPresVeri.setSelection(0);
 
+                }else{
+                    llPresentacion.setVisibility(View.GONE);
                 }
 
             }
@@ -413,30 +627,40 @@ public class frm_verificacion_datos extends PBase {
 
             pSubListPickingU = new clsBeTrans_picking_ubicList();
 
-            if (Lp.equals("")){
-                AuxList = stream(BePickingUbicList.items)
-                        .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
-                        .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
-                        .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
-                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                        .toList();
-            }else{
-                AuxList = stream(BePickingUbicList.items)
-                        .where (c -> c.CodigoProducto.equals(Codigo))
-                        .where(c -> c.Lote.equals(Lote))
-                        .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
-                        .where(c -> c.Lic_plate.equals(Lp))
-                        .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                        .toList();
+            if (BePickingUbicList!=null){
+
+                if (Lp.equals("")){
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                            .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
+                            .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
+                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                            .toList();
+                }else{
+                    AuxList = stream(BePickingUbicList.items)
+                            .where (c -> c.CodigoProducto.equals(Codigo))
+                            .where(c -> c.Lote.equals(Lote))
+                            .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
+                            .where(c -> c.Lic_plate.equals(Lp))
+                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                            .toList();
+
+                }
+
+                pSubListPickingU.items = AuxList;
 
             }
 
-            pSubListPickingU.items = AuxList;
-
             //Llama al método del WS Actualiza_Cant_Peso_Verificacion
-            execws(3);
+            if (pSubListPickingU.items.size()!=0){
+                execws(3);
+            }else{
+                throw new Exception("#ERR_20220406: No se obtuvo la lista de verificación.");
+            }
 
         }catch (Exception ex){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
             result = false;
         }
 
@@ -474,6 +698,9 @@ public class frm_verificacion_datos extends PBase {
                                    "pCantidad",pCantidad,
                                    "pPeso",pPeso);
                         break;
+                    case 4:
+                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);
+                        break;
                 }
 
             }catch (Exception e){
@@ -499,6 +726,9 @@ public class frm_verificacion_datos extends PBase {
                     break;
                 case 3:
                     processActualizaCantPesoVerif();
+                    break;
+                case 4:
+                    processGetPresentacion();
                     break;
             }
 
@@ -557,6 +787,10 @@ public class frm_verificacion_datos extends PBase {
 
                 gBeProducto.IdProductoBodega = IdProductoBodega;
 
+                if (!gBeProducto.getControl_peso()) {
+                    llPeso.setVisibility(View.GONE);
+                }
+
                 //Llama al método del WS Get_All_Presentaciones_By_IdProducto
                 execws(2);
             }
@@ -594,6 +828,29 @@ public class frm_verificacion_datos extends PBase {
             progress.cancel();
 
             frm_verificacion_datos.super.finish();
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private void processGetPresentacion() {
+        try {
+
+            progress.setMessage("Actualizando cantidad y peso de la verificación...");
+
+            tmpBePresentacion = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
+
+            if (tmpBePresentacion != null) {
+                if (tmpBePresentacion.items != null) {
+                    factor = tmpBePresentacion.items.get(0).Factor;
+                    lblPresentacion.setText(tmpBePresentacion.items.get(0).Nombre+": ");
+
+                    //procesaCajasUnidades();
+                }
+            }
+            progress.cancel();
 
         }catch (Exception e){
             progress.cancel();
@@ -783,17 +1040,29 @@ public class frm_verificacion_datos extends PBase {
 
         try {
 
+            Double vDif;
+            boolean permite = true;
+
             Double valor = Double.valueOf(txtCantVeri.getText().toString());
+            vDif = BePedidoDetVerif.Cantidad_Recibida - (BePedidoDetVerif.Cantidad_Verificada + valor);
 
             if (valor == 0){
                 mu.msgbox("Ingrese la cantidad de producto a reemplazar");
+                permite = false;
+            } else {
+                if (vDif < 0) {
+                    mu.msgbox("La cantidad ingresada es mayor a la recibida");
+                    permite = false;
+                }
+            }
+
+            if (!permite) {
                 txtCantVeri.setSelectAllOnFocus(true);
                 txtCantVeri.requestFocus();
                 return;
             }
 
             CantReemplazar = valor;
-
             msgAskReemplazar("¿Marcar producto para reemplazo?");
 
         }catch (Exception e){

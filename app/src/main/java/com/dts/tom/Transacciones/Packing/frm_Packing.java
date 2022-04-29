@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -105,8 +106,11 @@ public class frm_Packing extends PBase {
     private ArrayList<String> cmbLoteList = new ArrayList<String>();
     private ArrayList<String> cmbVenceList = new ArrayList<String>();
     private ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
+    private ArrayList<String> ListPres = new ArrayList<String>();
     private String cvLote;
-
+    private int IdPresCmb = 0;
+    private boolean inferir_origen_en_cambio_ubic;
+    private String tmpLicencia = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +151,7 @@ public class frm_Packing extends PBase {
 
             //#CKFK 20210730 Agregué el Caps al txtLic_Plate
             txtLic_Plate.setAllCaps(true);
+            inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 
             ProgressDialog("Cargando forma");
 
@@ -168,7 +173,15 @@ public class frm_Packing extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        Procesa_Lp();
+
+                        if(!txtLic_Plate.getText().toString().equals("")){
+                            Procesa_Lp();
+                        }else{
+
+                            mu.msgbox("el campo LP esta vacio");
+                            txtLic_Plate.selectAll();
+                            txtLic_Plate.requestFocus();
+                        }
                     }
 
                     return false;
@@ -188,7 +201,14 @@ public class frm_Packing extends PBase {
                             spinlabel.setTextSize(18);
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                            cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            if (position > 0 && stockResList.items.get(0).IdPresentacion == 0) {
+                                spinlabel.setTextColor(Color.RED);
+                                Toast.makeText(frm_Packing.this, "Se le asignará la presentación '"+cmbPresentacion.getSelectedItem()+"' al producto '"+BeProductoUbicacionOrigen.getNombre()+"'", Toast.LENGTH_LONG).show();
+                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            } else {
+                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                            }
+
                             LlenaLotes();
                         }
 
@@ -347,6 +367,9 @@ public class frm_Packing extends PBase {
 
             cmdImprimir.setOnClickListener(v -> {
                 imprimirDesdeBoton = true;
+                //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
+                //para luego poder imprimirla
+                tmpLicencia  = txtNuevoLp.getText().toString();
                 Imprimir(v);
             });
 
@@ -371,6 +394,7 @@ public class frm_Packing extends PBase {
             cvEstOrigen = 0;
             cvProdID = 0;
             cvVence = "01/01/1900";
+            tmpLicencia = "";
 
             //Es una barra de pallet válida por tamaño
             int vLengthBarra = txtLic_Plate.getText().toString().length();
@@ -379,8 +403,8 @@ public class frm_Packing extends PBase {
 
             pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-            //Llama al método del WS Existe_LP
-            execws(9);
+                //Llama al método del WS Existe_LP
+                execws(9);
 
             progress.cancel();
 
@@ -396,6 +420,7 @@ public class frm_Packing extends PBase {
         try{
 
             gIdProductoOrigen= 0;
+            tmpLicencia = "";
 
             String vStarWithParameter = "$";
 
@@ -721,6 +746,10 @@ public class frm_Packing extends PBase {
         String valor;
 
         try {
+
+            //#AT 20220316 Se asigna valor a cvPresI -> si tiene presentación toma el Id del combo presentacion
+            //si no se le asigna 0
+            cvPresID = stockResList.items.get(0).IdPresentacion != 0 ? IdPresCmb:0;
 
             cmbLoteList.clear();
 
@@ -1188,7 +1217,13 @@ public class frm_Packing extends PBase {
 
             if (!ValidaDatos())return;
 
-            vUbicacionProducto = BeStockPallet.IdUbicacion;
+            if(BeStockPallet == null){
+                vUbicacionProducto = cUbicOrig.IdUbicacion;
+            }else{
+                vUbicacionProducto = BeStockPallet.IdUbicacion;
+            }
+
+
 
             if (pUbicacionLP!=0){
                 if (vUbicacionProducto!=pUbicacionLP){
@@ -1221,7 +1256,8 @@ public class frm_Packing extends PBase {
 
             vStockRes.CantidadUmBas = vCantidadAUbicar;
             vStockRes.Peso = cvStockItem.Peso;
-            vStockRes.IdPresentacion =cvPresID;
+            vStockRes.IdPresentacion = IdPresCmb;
+            vStockRes.IdPresentacion_Anterior = stockResList.items.get(0).getIdPresentacion();
             vStockRes.IdProductoEstado = cvEstEst;
             vStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
             vStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
@@ -1241,6 +1277,9 @@ public class frm_Packing extends PBase {
             }
 
             //Set_LP_Stock(gMovimientoDet, vStockRes);
+            //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
+            //para luego poder imprimirla
+            tmpLicencia  = txtNuevoLp.getText().toString();
             execws(8);
 
         }catch (Exception e){
@@ -1389,6 +1428,11 @@ public class frm_Packing extends PBase {
 
         try{
 
+            //#GT13012022: cuando no hay LP se utiliza la destino como origen
+            if (txtLic_Plate.getText().toString().equals("")){
+
+            }
+
             AplicaPacking();
 
         }catch (Exception e){
@@ -1455,7 +1499,9 @@ public class frm_Packing extends PBase {
     }
 
     private void msgAskExit(String msg) {
+
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -1486,6 +1532,7 @@ public class frm_Packing extends PBase {
     }
 
     private void doExit(){
+
         try{
 
             //LimpiaValores();
@@ -1518,7 +1565,7 @@ public class frm_Packing extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_IdUbic_Ciega_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
+                        callMethod("Get_IdUbicacion_Recepcion_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicOr.getText().toString(),"pIdBodega",gl.IdBodega);
@@ -1578,6 +1625,12 @@ public class frm_Packing extends PBase {
                                 "pCodigo",txtPrd.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
+                    //#AT20220316 Se cargan  presentaciones por IdProducto
+                    case 13:
+                        callMethod("Get_All_Presentaciones_By_IdProducto",
+                                "pIdProducto",gIdProductoOrigen,
+                                "pActivo",true);
+                        break;
                 }
 
                 progress.cancel();
@@ -1633,6 +1686,9 @@ public class frm_Packing extends PBase {
                 case 12:
                     processStockLP_AndCodigo();
                     break;
+                case 13:
+                    processPresentacionesProducto();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1648,12 +1704,50 @@ public class frm_Packing extends PBase {
 
             progress.setMessage("Obteniendo presentaciones de producto");
 
-            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProductoBodega");
+            gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
 
-            Listar_Producto_Presentaciones();
+            setPresetaciones();
 
         }catch (Exception e){
             mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private void setPresetaciones() {
+        String valor="";
+
+        try {
+            if (gBeProducto.Presentaciones != null) {
+
+                progress.setMessage("Listando presentaciones de producto");
+
+                if (gBeProducto.Presentaciones.items != null) {
+
+                    ListPres.clear();
+                    cmbPresentacion.setEnabled(true);
+
+                    valor = "0 - Sin Presentación";
+                    ListPres.add(valor);
+
+                    for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
+                        valor = gBeProducto.Presentaciones.items.get(i).getIdPresentacion() + " - " +
+                                gBeProducto.Presentaciones.items.get(i).getNombre();
+                        ListPres.add(valor);
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ListPres);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresentacion.setAdapter(dataAdapter);
+
+                    if (ListPres.size() > 0) cmbPresentacion.setSelection(0);
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("Listar_Producto_Presentaciones:" + e.getMessage());
         }
     }
 
@@ -1705,7 +1799,7 @@ public class frm_Packing extends PBase {
 
             }else{
                 progress.cancel();
-                mu.msgbox("Lp no existe");
+                mu.msgbox("Licencia no existe");
                 txtLic_Plate.selectAll();
                 txtLic_Plate.requestFocus();
             }
@@ -1721,7 +1815,7 @@ public class frm_Packing extends PBase {
 
         try{
 
-            idUbicRecep = xobj.getresult(Integer.class,"Get_IdUbic_Ciega_Recepcion_By_IdBodega");
+            idUbicRecep = xobj.getresult(Integer.class,"Get_IdUbicacion_Recepcion_By_IdBodega");
 
             if (idUbicRecep>0){
                 txtUbicOr.setText(idUbicRecep+"");
@@ -1751,6 +1845,10 @@ public class frm_Packing extends PBase {
                 lblUbicOrigen.setText(cUbicOrig.Descripcion);
                 cvUbicDestID = cvUbicOrigID;
 
+                //#GT13012022: el origen se setea en el destino porque no cambia de ubicación la mercaderia
+                lblNomDestino.setText(cUbicOrig.Descripcion + "");
+                txtUbicDestino.setText(cUbicOrig.IdUbicacion+ "");
+
                 txtLic_Plate.setSelectAllOnFocus(true);
                 txtLic_Plate.requestFocus();
 
@@ -1779,6 +1877,25 @@ public class frm_Packing extends PBase {
             }else{
 
                 if (Escaneo_Pallet && ListBeStockPallet != null){
+
+                    //#AT20220316 Si inferir_origen_en_cambio_ubic es verdadero
+                    //y la ubicación de origen esta vacia carga los datos del producto unicamente con la licencia
+                    if (inferir_origen_en_cambio_ubic && txtUbicOr.getText().toString().isEmpty()) {
+                        int tmpIdPres = ListBeStockPallet.items.get(0).Stock.IdUbicacion;
+                        String tmpNomPres = ListBeStockPallet.items.get(0).Stock.NombreUbicacion;
+
+                        txtUbicOr.setText(String.valueOf(tmpIdPres));
+                        lblUbicOrigen.setText(tmpNomPres);
+
+                        txtUbicDestino.setText(tmpIdPres+ "");
+                        lblNomDestino.setText(tmpNomPres+ "");
+
+                        cUbicOrig.IdUbicacion= tmpIdPres;
+                        cUbicOrig.Descripcion = tmpNomPres;
+
+                        cvUbicOrigID = tmpIdPres;
+                        cvUbicDestID = cvUbicOrigID;
+                    }
 
                     List AuxList = stream(ListBeStockPallet.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
@@ -1876,7 +1993,11 @@ public class frm_Packing extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                if (stockResList.items.get(0).IdPresentacion != 0) {
+                    LlenaPresentaciones();
+                } else {
+                    execws(13);
+                }
             }else{
                 msgbox("No hay existencias disponibles de este producto en esta ubicación o las existentes están reservadas");
                 Inicializa_Valores();
@@ -1940,7 +2061,11 @@ public class frm_Packing extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
 
             if (stockResList != null){
-                LlenaPresentaciones();
+                if (stockResList.items.get(0).IdPresentacion != 0) {
+                    LlenaPresentaciones();
+                } else {
+                    execws(13);
+                }
             }else{
                 msgbox("El producto no existe en la ubicación origen");
                 progress.cancel();
@@ -2048,7 +2173,7 @@ public class frm_Packing extends PBase {
             }
 
         }catch (Exception e){
-            mu.msgbox("processNuevoLP: "+e.getMessage());
+            mu.msgbox("processNuevoLP_packing: "+e.getMessage());
         }
 
     }
@@ -2061,9 +2186,13 @@ public class frm_Packing extends PBase {
             pUbicacionLP = xobj.getresult(Integer.class,"Get_Ubicacion_LP");
             pNombreUbicacionLP = xobj.getresultSingle(String.class,"nombre_ubicacion");
 
-            if (pUbicacionLP>0){
-                txtUbicDestino.setText(pUbicacionLP+"");
+            if (pUbicacionLP>0) {
+                txtUbicDestino.setText(pUbicacionLP + "");
                 lblNomDestino.setText(pNombreUbicacionLP);
+            }else{
+
+                lblNomDestino.setText(cUbicOrig.Descripcion+ "");
+                txtUbicDestino.setText(cUbicOrig.IdUbicacion+ "");
             }
 
             aplicarCambio();
@@ -2217,12 +2346,13 @@ public class frm_Packing extends PBase {
             });
 
             dialog.setNegativeButton("No gracias", (dialog13, which) -> {
-                if (!imprimirDesdeBoton){
+                /*if (!imprimirDesdeBoton){
                     progress.setMessage("Imprimiendo licencia");
                     progress.show();
-                }else{
+                } else {
                     progress.cancel();
-                }
+                }*/
+                progress.cancel();
             });
 
             dialog.show();
@@ -2256,7 +2386,8 @@ public class frm_Packing extends PBase {
 
                 if (BeProductoUbicacionOrigen!=null){
 
-                    NuevoLp = txtNuevoLp.getText().toString();
+                    //NuevoLp = txtNuevoLp.getText().toString();
+                    NuevoLp = tmpLicencia;
 
                     if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
                         zpl = String.format("^XA \n" +
@@ -2269,7 +2400,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -2288,7 +2419,7 @@ public class frm_Packing extends PBase {
                                 "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
                                 "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
                                 "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
                                 "^FO2,450^GB670,14,14^FS\n" +
                                 "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
                                 "^FD%1$s^FS\n" +
@@ -2307,7 +2438,7 @@ public class frm_Packing extends PBase {
                                             "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                             "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                             "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                             "^FO2,340^GB670,0,14^FS \n" +
                                             "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                             "^FD%4$s^FS \n" +
@@ -2390,7 +2521,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
@@ -2409,7 +2540,7 @@ public class frm_Packing extends PBase {
                                         "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
                                         "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
                                         "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS License Number^FS\n" +
+                                        "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
                                         "^FO2,450^GB670,14,14^FS\n" +
                                         "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
                                         "^FD%1$s^FS\n" +
@@ -2428,7 +2559,7 @@ public class frm_Packing extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +

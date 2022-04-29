@@ -6,12 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Verificacion.frm_verificacion_datos">
 
+
+    <RelativeLayout
+        android:id="@+id/relOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblLicPlate2"
+        android:layout_marginTop="5dp">
+
+        <RelativeLayout
+            android:id="@+id/relReemplazo"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:onClick="MarcarReemplazo">
+
+            <ImageView
+                android:id="@+id/imgReemplazo"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:padding="1dp"
+                android:src="@drawable/reemplazo" />
+
+            <TextView
+                android:id="@+id/lblReemplazo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgReemplazo"
+                android:layout_marginTop="0dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingTop="2dp"
+                android:text="@string/reemplazo"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/scrollDatosV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/relbot"
-        android:layout_below="@id/lblLicPlate2">
+        android:layout_below="@id/relOptions"
+        android:layout_marginTop="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +99,7 @@
                     android:id="@+id/lblLoteVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="0dp"
                     android:text="Lote:" />
 
@@ -75,7 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblPresVeri"
@@ -95,7 +136,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblUmbasVeri"
@@ -122,13 +164,13 @@
                     android:id="@+id/lblCantVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Cantidad:" />
 
                 <EditText
                     android:id="@+id/txtCantVeri"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:inputType="number"
                     android:text="0" />
             </LinearLayout>
@@ -144,7 +186,7 @@
                     android:id="@+id/lblPesoVeri"
                     style="@style/StyleText"
                     android:layout_width="125dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Peso:" />
 
                 <EditText
@@ -156,26 +198,236 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/llReemplazo"
+            <RelativeLayout
+                android:id="@+id/relSol"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/color_light">
 
                 <TextView
-                    android:id="@+id/textView20"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:id="@+id/lblSolicitado"
+                    style="@style/StyleText"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center_vertical"
+                    android:text="Solicitado:" />
 
-                <Button
-                    android:id="@+id/btMarcarReemplazoVeri"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/lblSolicitado"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lblPresSol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="FARDO80: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPresSol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+
+                    <TextView
+                        android:id="@+id/lblUnidadSol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="UNI: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtUnidadSol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relRec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/color_light">
+
+                <TextView
+                    android:id="@+id/lblRecibido"
+                    style="@style/StyleText"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center_vertical"
+                    android:text="Verificado:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/lblRecibido"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lblPresRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="FARDO80: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPresRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+
+                    <TextView
+                        android:id="@+id/lblUnidadRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="UNI: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtUnidadRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relDesglose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"
+                tools:visibility="gone">
+
+                <TableRow
+                    android:id="@+id/trTitulo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:onClick="MarcarReemplazo"
-                    android:text="Marcar reemplazo" />
-            </LinearLayout>
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="Desglose"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <RelativeLayout
+                    android:id="@+id/relConDesglose"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trTitulo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/color_light">
+
+                    <LinearLayout
+                        android:id="@+id/llCajas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp">
+
+                        <TextView
+                            android:id="@+id/lblPresentacion"
+                            style="@style/StyleText"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="Cajas:" />
+
+                        <EditText
+                            android:id="@+id/txtCajas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llUnidades"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/llCajas"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp">
+
+                        <TextView
+                            android:id="@+id/lblUnidades"
+                            style="@style/StyleText"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="UNI:" />
+
+                        <EditText
+                            android:id="@+id/txtUnidades"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

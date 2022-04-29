@@ -239,7 +239,8 @@ public class MiscUtils
 		}catch (Exception ex)
 		{
 			pB = new PBase();
-			pB.addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"msgbox(int v)");}
+			//pB.addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"msgbox(int v)");
+		}
 	
 	}   
 	
@@ -259,7 +260,7 @@ public class MiscUtils
 		}catch (Exception ex)
 		{
 			pB = new PBase();
-			pB.addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"msgbox(double v)");
+			//pB.addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"msgbox(double v)");
 		}
 	}   
 	

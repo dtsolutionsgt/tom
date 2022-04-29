@@ -60,7 +60,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:text="LP" />
+                    android:text="Licencia:" />
 
                 <EditText
                     android:id="@+id/txtLic_Plate"
@@ -200,13 +200,14 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Nuevo LP:" />
+                    android:text="Licencia Destino:" />
 
                 <EditText
                     android:id="@+id/txtNuevoLp"
                     android:layout_width="186dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp" />
 
                 <ImageView
                     android:id="@+id/cmdImprimir2"
@@ -227,7 +228,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:text="Lp Anterior:" />
+                    android:text="Licencia Origen:" />
 
                 <EditText
                     android:id="@+id/txtLpAnt"
@@ -360,7 +361,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Packing"
+            android:text="Implosión"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />

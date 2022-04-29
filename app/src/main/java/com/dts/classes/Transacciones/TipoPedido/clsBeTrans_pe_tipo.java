@@ -19,6 +19,10 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Trasladar_Lotes_Doc_Ingreso=false;
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean Requerir_Cliente_Es_Bodega_WMS=false;
+    @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
+    @Element(required=false) public boolean Generar_Recepcion_Auto_Bodega_Destino=false;
+    @Element(required=false) public boolean Recibir_Producto_Auto_Bodega_Destino=false;
+
 
     public clsBeTrans_pe_tipo() {
     }
@@ -150,6 +154,27 @@ public class clsBeTrans_pe_tipo {
     }
     public void setRequerir_Cliente_Es_Bodega_WMS(boolean value) {
         Requerir_Cliente_Es_Bodega_WMS=value;
+    }
+
+    public boolean getMarcar_Registros_Enviados_MI3() {
+        return Marcar_Registros_Enviados_MI3;
+    }
+    public void setMarcar_Registros_Enviados_MI3(boolean value) {
+        Marcar_Registros_Enviados_MI3=value;
+    }
+
+    public boolean getGenerar_Recepcion_Auto_Bodega_Destino() {
+        return Generar_Recepcion_Auto_Bodega_Destino;
+    }
+    public void setGenerar_Recepcion_Auto_Bodega_Destino(boolean value) {
+        Generar_Recepcion_Auto_Bodega_Destino=value;
+    }
+
+    public boolean getRecibir_Producto_Auto_Bodega_Destino() {
+        return Recibir_Producto_Auto_Bodega_Destino;
+    }
+    public void setRecibir_Producto_Auto_Bodega_Destino(boolean value) {
+        Recibir_Producto_Auto_Bodega_Destino=value;
     }
 
 }

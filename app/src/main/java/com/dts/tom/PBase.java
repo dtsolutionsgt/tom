@@ -2,6 +2,7 @@ package com.dts.tom;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -70,7 +71,7 @@ public class PBase extends Activity {
         try{
             mu.msgbox(msg);
         }catch (Exception ex){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
         }
     }
 
@@ -104,12 +105,7 @@ public class PBase extends Activity {
         final String vinfo = info;
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setAddlog(vmethodname,vmsg, vinfo);
-            }
-        }, 500);
+        handler.postDelayed(() -> setAddlog(vmethodname,vmsg, vinfo), 500);
 
     }
 
@@ -117,10 +113,15 @@ public class PBase extends Activity {
 
         BufferedWriter writer = null;
         FileWriter wfile;
+        String fname ="";
 
         try {
 
-            String fname = Environment.getExternalStorageDirectory()+"/roadlog.txt";
+            //#EJC20220118: En android 11 ya no funciona.
+            //fname = Environment.getExternalStorageDirectory()+"/roadlog.txt";
+
+            fname = gl.PathDataDir+"/wmslog.txt";
+
             wfile=new FileWriter(fname,true);
             writer = new BufferedWriter(wfile);
 

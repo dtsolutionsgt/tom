@@ -1,9 +1,7 @@
 <resources>
-    <string name="app_name">Tom WMS</string>
+    <string name="app_name">TOMWMS</string>
     <string name="buscar">Buscar</string>
     <string name="consulta_de_existencia_trx8">Consulta de Existencia - TRX8</string>
-    <string name="estado">Estado:</string>
-    <string name="c_digo">Código:</string>
     <string name="title_activity_frm_inv_cic_conteo">frm_inv_cic_conteo</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -16,13 +14,29 @@
     <string name="nueva">Nueva</string>
     <string name="tareas_de_preparaci_n">Tareas de preparación</string>
     <string name="tarea">Tarea:</string>
-    <string name="tom_wms">TOM WMS</string>
+    <string name="tom_wms">TOMWMS</string>
     <string name="_19_oct_2021a">19-Oct-2021A</string>
     <string name="textview">TextView</string>
-    <string name="todo">TODO</string>
     <string name="inicio_de_sesi_n">Inicio de sesión</string>
-    <string name="fecha_version">23-Nov-2021</string>
+    <string name="fecha_version">28-Abr-2022</string>
     <string name="no_version">Versión</string>
+    <string name="por_favor_espere">Por favor espere...</string>
+    <string name="vence">Vence:</string>
+    <string name="u_m_bas">U.M. Bas.:</string>
+    <string name="licencia">Licencia:</string>
+    <string name="_0en0405140000717">0EN0405140000717</string>
+    <string name="vence_en_0_d_as">Vence en: 0 días</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="c_digo">Código:</string>
+    <string name="lote">Lote:</string>
+    <string name="presentaci_n">Presentación:</string>
+    <string name="reemplazo">Reemplazo</string>
+    <string name="no_encontrado">No Encontrado</string>
+    <string name="camas_x_tarima_cajas_x_cama">Camas X Tarima - Cajas X Cama</string>
+    <string name="cantidad">Cantidad:</string>
+    <string name="peso">Peso:</string>
+    <string name="estado">Estado:</string>
+    <string name="_1008049944_aceite_ideal_maiz_60_ml">1008049944 - Aceite Ideal Maiz 60 ml</string>
 
     <string-array name="filtros">
         <item>Código</item>

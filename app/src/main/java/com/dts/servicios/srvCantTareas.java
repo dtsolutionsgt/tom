@@ -14,19 +14,24 @@ public class srvCantTareas extends srvBaseJob {
 
     private int idbodega, idoperador, nuevas;
     private String params, ntext, listatareas="";
-    private String fname = Environment.getExternalStorageDirectory().getPath()  + "/tom_tareas.txt";
-    private String taskdir= Environment.getExternalStorageDirectory().getPath() + "/tomtask";
 
+    //#EJC20220118: Android 11
+    private String fname = ""; //Environment.getExternalStorageDirectory().getPath()  + "/tom_tareas.txt";
+    private String taskdir= ""; //Environment.getExternalStorageDirectory().getPath() + "/tomtask";
+
+    public void init_dir() {
+
+        fname = this.getApplicationContext().getDataDir().getPath()+ "/tom_tareas.txt";
+        taskdir= this.getApplicationContext().getDataDir().getPath() + "/tomtask";
+    }
 
     @Override
     public void execute() {
 
-        rnListaTareas = new Runnable() {
-            public void run() {
-                listatareas =ws.retval;
-                procesaTareas();
-                startCantTareas.startService(getApplicationContext(),params);
-            }
+        rnListaTareas = () -> {
+            listatareas =ws.retval;
+            procesaTareas();
+            startCantTareas.startService(getApplicationContext(),params);
         };
 
         ws=new wsCantTareas(URL,idbodega,idoperador);
@@ -36,16 +41,21 @@ public class srvCantTareas extends srvBaseJob {
 
     @Override
     public boolean loadParams(String paramstr) {
+
         params=paramstr;
 
         try {
+
             String[] sp = params.split("#");
 
             URL=sp[0];
             idbodega =Integer.parseInt(sp[1]);
             idoperador =Integer.parseInt(sp[2]);
 
+            init_dir();
+
             return true;
+
         } catch (Exception e) {
             URL="";
             idbodega =0;idoperador =0;
@@ -54,12 +64,14 @@ public class srvCantTareas extends srvBaseJob {
     }
 
     private void procesaTareas() {
+
         String[] sp;
         String lista,ss;
 
         nuevas=0;ntext="";
 
         try {
+
             sp=listatareas.split(";");
             lista=sp[0];
 
@@ -68,6 +80,7 @@ public class srvCantTareas extends srvBaseJob {
             for (int i = 1; i <sp.length; i++) {
                 if (esnuevaTarea(sp[i])) nuevas++;
             }
+
         } catch (Exception e) {
 
         }
@@ -76,6 +89,7 @@ public class srvCantTareas extends srvBaseJob {
     }
 
     private boolean esnuevaTarea(String tname) {
+
         FileWriter wfile=null;
         BufferedWriter writer=null;
         File file;

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dts.tom.PBase;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -57,6 +58,7 @@ public class WebService {
         {
             parent.wsCallBack(errorflag,error,0);
         } catch (Exception e) {
+            //error = e.getMessage(); errorflag = true;
         }
     }
 
@@ -64,24 +66,45 @@ public class WebService {
 
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
-        int TIMEOUT = 150000;
+        int TIMEOUT = 45000;
+        int READTIMEOUT = 0;
+
         mMethodName = methodName; mResult = "";xmlresult="";
 
         error="";errorflag=false;
 
         try{
 
+            //#EJC20220403:Short time out if is the first loading
+            //usefull if its wrong url of the WS.
+//            if(mMethodName =="Android_Get_All_Empresas"){
+//                READTIMEOUT=6000;
+//                TIMEOUT=6000;
+//            }
+
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
-           conn.setReadTimeout(TIMEOUT);
+           conn.setReadTimeout(READTIMEOUT);
            conn.setConnectTimeout(TIMEOUT);
            conn.setDoInput(true);
            conn.setDoOutput(true);
            conn.setRequestProperty("mArch", "Andr");
 
-           OutputStream ostream = conn.getOutputStream();
+            OutputStream ostream = null;
 
-           OutputStreamWriter wr = new OutputStreamWriter(ostream);
+            try {
+                ostream = conn.getOutputStream();
+            } catch (IOException e) {
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=e.getMessage();
+                throw new Exception("Error al conectar con el webservice:\n " + error);
+
+            }
+
+            OutputStreamWriter wr = new OutputStreamWriter(ostream);
 
            String body = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:" +
@@ -105,7 +128,7 @@ public class WebService {
            int responsecode = ((HttpURLConnection) conn).getResponseCode();
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
-           //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
+           //#EJC20200331: Es probable que falta incluir algunos otros códigos de respuesta válidos....
            //#EJC20200514: Actualizado
            if (responsecode!=299 && responsecode!=404) {
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -503,7 +526,9 @@ public class WebService {
         protected Void doInBackground(String... params) {
             try {
                 wsExecute();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
+            }
             return null;
         }
 
@@ -512,6 +537,7 @@ public class WebService {
             try {
                 wsFinished();
             } catch (Exception e) {
+                //error = e.getMessage(); errorflag = true;
             }
         }
 

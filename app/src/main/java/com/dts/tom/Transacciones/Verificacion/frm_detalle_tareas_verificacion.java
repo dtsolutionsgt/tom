@@ -12,11 +12,15 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
@@ -24,12 +28,15 @@ import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -44,11 +51,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private int index = 0;
 
     private list_adapt_detalle_tareas_verificacion adapter;
+    private list_adapt_detalle_tareas_verificacion2 adapter2;
 
     private ListView listDetVeri;
     private EditText txtCodProd;
-    private TextView lblNoDocumento;
-    private Button btnFinalizarTareaVerificacion,btnNoVerificado,btnRegs,btnConsultaDa,btnBack;
+    private TextView lblNoDocumento, lblTituloForma;
+    private LinearLayout encabezado1, encabezado2;
+    private ImageView imgReemplazo;
+    private RelativeLayout relbot;
+    private Button btnRegs;
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
@@ -62,31 +73,39 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeDetallePedidoAVerificar selitem;
 
     private double cantReemplazar = 0;
-    private boolean preguntoPorDiferencia = false;
+    private boolean preguntoPorDiferencia = false, mostrar_area;
     private boolean finalizar = true;
-    private int selidx = -1;
+    private int selidx = -1,sortord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try{
-
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
 
             super.InitBase();
+
+            mostrar_area = gl.Mostrar_Area_En_HH;
 
             ws = new frm_detalle_tareas_verificacion.WebServiceHandler(frm_detalle_tareas_verificacion.this, gl.wsurl);
             xobj = new XMLObject(ws);
 
             listDetVeri = (ListView)findViewById(R.id.ListDetVeri);
             txtCodProd = (EditText) findViewById(R.id.txtCodProd);
-            btnFinalizarTareaVerificacion = (Button) findViewById(R.id.btnFinalizarTareaPicking);
-            btnNoVerificado = (Button) findViewById(R.id.btnNoVerificado);
             btnRegs = (Button) findViewById(R.id.btnRegs);
-            btnConsultaDa = (Button) findViewById(R.id.btnConsultaDa);
-            btnBack = (Button) findViewById(R.id.btnBack);
+            imgReemplazo = (ImageView) findViewById(R.id.imgReemplazo);
             lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
+            encabezado1 = (LinearLayout) findViewById(R.id.encabezado_1);
+            encabezado2 = (LinearLayout) findViewById(R.id.encabezado_2);
+            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+            relbot = (RelativeLayout) findViewById(R.id.relbot);
+
+            if (mostrar_area) {
+                encabezado2.setVisibility(View.VISIBLE);
+            } else {
+                encabezado1.setVisibility(View.VISIBLE);
+            }
 
             setHandlers();
 
@@ -144,10 +163,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     Object lvObj = listDetVeri.getItemAtPosition(position);
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
-                    adapter.setSelectedIndex(position);
+                    if (mostrar_area) {
+                        adapter2.setSelectedIndex(position);
+                    } else {
+                        adapter.setSelectedIndex(position);
+                    }
                     int index = position;
                     Procesa_Registro(vItem);
-                    adapter.refreshItems();
+
+                    if (mostrar_area) {
+                        adapter2.refreshItems();
+                    } else {
+                        adapter.refreshItems();
+                    }
+
                 }
             });
 
@@ -165,7 +194,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 }
             });
 
-            btnConsultaDa.setOnClickListener(new View.OnClickListener() {
+            imgReemplazo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mostrar_Reemplazados();
@@ -197,6 +226,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                                         .first();
 
                 if (vPedidoVerif != null) {
+                    vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
                     Procesa_Registro(vPedidoVerif);
                 } else {
                     mu.msgbox(String.format("No existe el producto %s en esta Verificación",selProd));
@@ -236,11 +266,18 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                    "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 3:
+
+                        int vIdOperadorBodega =0;
+
+                        //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
+                        if (gl.operador_picking_realiza_verificacion){
+                            vIdOperadorBodega=gl.OperadorBodega.IdOperadorBodega;
+                        }
                         //#EJC20201008: Lllamada a método específico para verificación!
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion",
                                    "pIdPickingEnc",gl.gIdPickingEnc,
                                    "pDetalleOperador", false,
-                                   "pIdOperadorBodega",0);
+                                   "pIdOperadorBodega",vIdOperadorBodega);
                         break;
                     case 4:
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_And_IdPedidoEnc",
@@ -350,7 +387,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     }
 
-    private void  processEncabezadoPedido(){
+    private void processEncabezadoPedido(){
         try{
             progress.setMessage("Cargando datos del encabezado del pedido...");
             progress.show();
@@ -359,7 +396,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
 
-            lblNoDocumento.setText(String.format("NoDocumento: %s-%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
+            lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
 
             progress.setMessage("Cargando detalle del Picking Ubic");
@@ -391,12 +428,16 @@ public class frm_detalle_tareas_verificacion extends PBase {
             if (pListaPedidoDet!=null){
                 if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
             } else {
-                btnNoVerificado.setText("Verificado");
-                btnNoVerificado.setBackgroundColor(Color.GREEN);
+                lblTituloForma.setText("Tarea de Verificación - Verificado");
+                btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                btnRegs.setText("Registros: 0");
+                btnRegs.setTextColor(Color.BLACK);
+
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
             }
-
+            orderar();
         } catch (Exception e) {
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -444,13 +485,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     for (clsBeTrans_picking_ubic ubi:plistPickingUbic.items){
 
                         if (ubi.Cantidad_Recibida != ubi.Cantidad_Verificada) {
-
                             preguntoPorDiferencia = true;
-
-                            msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla?");
-
                         }
                     }
+                    if (preguntoPorDiferencia)
+                        msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla");
 
                     progress.cancel();
                     if (finalizar){
@@ -504,9 +543,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             boolean tienePedidosSV = (Boolean) xobj.getSingle("Tiene_Pedidos_Sin_Verificar_By_IdPickingEncResult",Boolean.class);
 
-            if (! tienePedidosSV){
+            if (! tienePedidosSV) {
                 //Llama a método del WS Get_Picking_By_IdPickingEnc
                 execws(7);
+            } else {
+                progress.cancel();
             }
 
         }catch (Exception ex){
@@ -600,6 +641,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdUnidadMedidaBasica = pListaPedidoDet.items.get(i).getIdUnidadMedidaBasica();
                             vItem.NDias = pListaPedidoDet.items.get(i).getNDias();
                             vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
+                            vItem.NombreArea = pListaPedidoDet.items.get(i).getNombreArea();
+                            vItem.NombreClasificacion = pListaPedidoDet.items.get(i).getNombreClasificacion();
 
                             pListBeTareasVerificacionHH.add(vItem);
 
@@ -609,20 +652,31 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             }
                         }
 
-                        btnRegs.setText("Regs: "+pListaPedidoDet.items.size());
+                        btnRegs.setText("Registros: "+pListaPedidoDet.items.size());
 
-                        adapter=new list_adapt_detalle_tareas_verificacion(this,pListBeTareasVerificacionHH);
-
-                        listDetVeri.setAdapter(adapter);
+                        if (mostrar_area) {
+                            adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter2);
+                        } else {
+                            adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter);
+                        }
 
                         if (pListaPedidoDet.items.size()>0){
-                            adapter.setSelectedIndex(-1);
+                            if (mostrar_area) {
+                                adapter2.setSelectedIndex(-1);
+                            } else {
+                                adapter.setSelectedIndex(-1);
+                            }
+
                             index = -1;
-                            btnNoVerificado.setText("No Verificado");
-                            btnNoVerificado.setBackgroundColor(Color.RED);
+                            lblTituloForma.setText("Tarea de Verificación - No Verificado");
+
                         } else {
-                            btnNoVerificado.setText("Verificado");
-                            btnNoVerificado.setBackgroundColor(Color.GREEN);
+                            lblTituloForma.setText("Tarea de Verificación - Verificado");
+                            btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                            relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                            btnRegs.setTextColor(Color.BLACK);
                         }
 
                         if ( gl.gVerifCascade && selidx>-1) {
@@ -781,6 +835,92 @@ public class frm_detalle_tareas_verificacion extends PBase {
     public void Actualizar(View view){
         Load();
     }
+
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {"Codigo A-Z","Codigo Z-A",
+                                   "Producto A-Z","Producto Z-A" ,
+                                   "Presentacion A-Z","Presentacion Z-A"};
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                gl.sortOrd = item;
+                orderar();
+                listSortedItems();
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void orderar() {
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+            case 1:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Codigo());break;
+            case 2:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+            case 3:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Producto());break;
+            case 4:
+                sortord=1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+            case 5:
+                sortord=-1;
+                Collections.sort(pListBeTareasVerificacionHH, new Sort_Presentacion());break;
+        }
+    }
+
+    class Sort_Codigo implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Codigo.compareTo(right.Codigo);
+        }
+    }
+
+    class Sort_Presentacion implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Nom_Presentacion.compareTo(right.Nom_Presentacion);
+        }
+    }
+
+    class Sort_Producto implements Comparator<clsBeDetallePedidoAVerificar> {
+        public int compare(clsBeDetallePedidoAVerificar left, clsBeDetallePedidoAVerificar right)                    {
+            return sortord*left.Nombre_Producto.compareTo(right.Nombre_Producto);
+        }
+    }
+
+    private void listSortedItems() {
+
+        try {
+          if (mostrar_area) {
+                adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter2);
+            } else {
+                adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter);
+            }
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
 
     @Override
     public void onBackPressed() {

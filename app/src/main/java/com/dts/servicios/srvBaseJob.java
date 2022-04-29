@@ -32,7 +32,7 @@ public class srvBaseJob extends JobService {
     private boolean idle=false;
 
     private String appname="TomWMS Nueva tarea";
-    private int iconresource=R.drawable.logotomims;
+    private int iconresource=R.drawable.tom_wms;
 
 
     @Override

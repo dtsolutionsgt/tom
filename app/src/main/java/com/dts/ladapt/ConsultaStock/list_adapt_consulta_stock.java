@@ -81,6 +81,10 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                         holder.lblIngreso = convertView.findViewById(R.id.lblIngreso);
                         holder.lblIdTipoEtiqueta = convertView.findViewById(R.id.lblIdTipoEtiqueta);
+                        holder.lblResPres = convertView.findViewById(R.id.lblResPres);
+                        holder.lblDispPres = convertView.findViewById(R.id.lblDispPres);
+                        holder.lblNombreArea = convertView.findViewById(R.id.lblNombreArea);
+                        holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
                 convertView.setTag(holder);
 
             }else {
@@ -89,101 +93,75 @@ public class list_adapt_consulta_stock extends BaseAdapter {
 
             }
 
-            if (position==0) {
+            //AT 20211221 Ya no se crea el encabezado unicamente se agrega la información
+            holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
+            holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
+            holder.lblUM.setText(BeListStock.get(position).UM  +"");
+            holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
+            holder.lblPres.setText(BeListStock.get(position).Pres  +"");
+            holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
+            holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
+            holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
+            holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
+            holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
+            holder.lblLote.setText(BeListStock.get(position).Lote  +"");
+            holder.lblVence.setText(BeListStock.get(position).Vence  +"");
+            holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
+            holder.lblUbic.setText(BeListStock.get(position).Ubic  +"");
+            holder.lblidUbic.setText(BeListStock.get(position).idUbic  +"");
+            holder.lblPedido.setText(BeListStock.get(position).Pedido  +"");
+            holder.lblPick.setText(BeListStock.get(position).Pick  +"");
+            holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
+            holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
+            holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
+            holder.lblIdTipoEtiqueta.setText(BeListStock.get(position).IdTipoEtiqueta  +"");
+            holder.lblNombreArea.setText(BeListStock.get(position).NombreArea  +"");
+            holder.lblClasificacion.setText(BeListStock.get(position).Clasificacion+"");
 
-                holder.lblCodigo.setText("Código");
-                holder.lblNombre.setText("Nombre");
-                holder.lblUM.setText("UM");
-                holder.lblExistUMBAs.setText("Exist UMB");
-                holder.lblPres.setText("Pres");
-                holder.lblExistPres.setText("ExistPres");
-                holder.lblReservadoUMBAs.setText("Res. UMB");
-                holder.lblDisponibleUMBas.setText("Dispo UMB");
-                holder.lblLote.setText("Lote");
-                holder.lblVence.setText("Vence");
-                holder.lblEstado.setText("Estado");
-                holder.lblUbic.setText("Ubic");
-                holder.lblidUbic.setText("idUbic");
-                holder.lblPedido.setText("Pedido");
-                holder.lblPick.setText("Pick");
-                holder.lbLicPlate.setText("LicPlate");
-                holder.lblIdProductoBodega.setText("IdProdBod");
-                holder.lblIngreso.setText("Ingreso");
-                holder.lblIdTipoEtiqueta.setText("IdTipoEtiqueta");
+            holder.lblCodigo.setTextColor(Color.BLACK);
+            holder.lblNombre.setTextColor(Color.BLACK);
+            holder.lblUM.setTextColor(Color.BLACK);
+            holder.lblExistUMBAs.setTextColor(Color.BLACK);
+            holder.lblPres.setTextColor(Color.BLACK);
+            holder.lblExistPres.setTextColor(Color.BLACK);
+            holder.lblReservadoUMBAs.setTextColor(Color.BLACK);
+            holder.lblDisponibleUMBas.setTextColor(Color.BLACK);
+            holder.lblLote.setTextColor(Color.BLACK);
+            holder.lblVence.setTextColor(Color.BLACK);
+            holder.lblEstado.setTextColor(Color.BLACK);
+            holder.lblUbic.setTextColor(Color.BLACK);
+            holder.lblidUbic.setTextColor(Color.BLACK);
+            holder.lblPedido.setTextColor(Color.BLACK);
+            holder.lblPick.setTextColor(Color.BLACK);
+            holder.lbLicPlate.setTextColor(Color.BLACK);
+            holder.lblIdProductoBodega.setTextColor(Color.BLACK);
+            holder.lblIngreso.setTextColor(Color.BLACK);
+            holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
+            holder.lblNombreArea.setTextColor(Color.BLACK);
 
-                holder.lblCodigo.setTextColor(Color.WHITE);
-                holder.lblNombre.setTextColor(Color.WHITE);
-                holder.lblUM.setTextColor(Color.WHITE);
-                holder.lblExistUMBAs.setTextColor(Color.WHITE);
-                holder.lblPres.setTextColor(Color.WHITE);
-                holder.lblExistPres.setTextColor(Color.WHITE);
-                holder.lblReservadoUMBAs.setTextColor(Color.WHITE);
-                holder.lblDisponibleUMBas.setTextColor(Color.WHITE);
-                holder.lblLote.setTextColor(Color.WHITE);
-                holder.lblVence.setTextColor(Color.WHITE);
-                holder.lblEstado.setTextColor(Color.WHITE);
-                holder.lblUbic.setTextColor(Color.WHITE);
-                holder.lblidUbic.setTextColor(Color.WHITE);
-                holder.lblPedido.setTextColor(Color.WHITE);
-                holder.lblPick.setTextColor(Color.WHITE);
-                holder.lbLicPlate.setTextColor(Color.WHITE);
-                holder.lblIdProductoBodega.setTextColor(Color.WHITE);
-                holder.lblIngreso.setTextColor(Color.WHITE);
-                holder.lblIdTipoEtiqueta.setTextColor(Color.WHITE);
-
-            }else{
-                holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
-                holder.lblNombre.setText(BeListStock.get(position).Nombre  +"");
-                holder.lblUM.setText(BeListStock.get(position).UM  +"");
-                holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
-                holder.lblPres.setText(BeListStock.get(position).Pres  +"");
-                holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
-                holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
-                holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
-                holder.lblLote.setText(BeListStock.get(position).Lote  +"");
-                holder.lblVence.setText(BeListStock.get(position).Vence  +"");
-                holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
-                holder.lblUbic.setText(BeListStock.get(position).Ubic  +"");
-                holder.lblidUbic.setText(BeListStock.get(position).idUbic  +"");
-                holder.lblPedido.setText(BeListStock.get(position).Pedido  +"");
-                holder.lblPick.setText(BeListStock.get(position).Pick  +"");
-                holder.lbLicPlate.setText(BeListStock.get(position).LicPlate  +"");
-                holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
-                holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
-                holder.lblIdTipoEtiqueta.setText(BeListStock.get(position).IdTipoEtiqueta  +"");
-
-                holder.lblCodigo.setTextColor(Color.BLACK);
-                holder.lblNombre.setTextColor(Color.BLACK);
-                holder.lblUM.setTextColor(Color.BLACK);
-                holder.lblExistUMBAs.setTextColor(Color.BLACK);
-                holder.lblPres.setTextColor(Color.BLACK);
-                holder.lblExistPres.setTextColor(Color.BLACK);
-                holder.lblReservadoUMBAs.setTextColor(Color.BLACK);
-                holder.lblDisponibleUMBas.setTextColor(Color.BLACK);
-                holder.lblLote.setTextColor(Color.BLACK);
-                holder.lblVence.setTextColor(Color.BLACK);
-                holder.lblEstado.setTextColor(Color.BLACK);
-                holder.lblUbic.setTextColor(Color.BLACK);
-                holder.lblidUbic.setTextColor(Color.BLACK);
-                holder.lblPedido.setTextColor(Color.BLACK);
-                holder.lblPick.setTextColor(Color.BLACK);
-                holder.lbLicPlate.setTextColor(Color.BLACK);
-                holder.lblIdProductoBodega.setTextColor(Color.BLACK);
-                holder.lblIngreso.setTextColor(Color.BLACK);
-                holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                holder.lblIdProductoBodega.setText(" ");
+                holder.lblIdTipoEtiqueta.setText(" ");
+                convertView.setBackgroundColor(Color.rgb(192, 192, 192));
             }
 
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
             } else {
-                if (position==0){
+                //AT 20211221 se quitó la valicación para darle color al encabezado
+               /* if (position==0){
                     convertView.setBackgroundResource(R.drawable.color_medium);
-                }else{
+               // }else{
                     convertView.setBackgroundColor(Color.TRANSPARENT);
-                }
+                }*/
+                convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 
-        }catch (Exception ex){
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                 convertView.setBackgroundColor(Color.rgb(192, 192, 192));
+            }
+
+        } catch (Exception ex){
             toast(ex.getMessage());
         }
         return convertView;
@@ -197,6 +175,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
-                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta;
+                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
+                lblResPres, lblDispPres,lblNombreArea,lblClasificacion;
     }
 }
