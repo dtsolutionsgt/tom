@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -19,11 +23,12 @@ import com.zebra.sdk.printer.ZebraPrinterFactory;
 public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
-
+    private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
     private ProgressDialog progress;
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
+    private Integer CantCopias =1;
 
     @Override
 
@@ -184,7 +189,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         msgAskImprimir("Imprimir");
     }
 
-    private void Imprimir_Codigo_Barra_Producto(){
+    private void Imprimir_Codigo_Barra_Producto(int Copias){
 
         try{
 
@@ -214,7 +219,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                 "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                 "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                 "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOMWMS Product Barcode^FS \n" +
+                                "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
                                 "^FO2,340^GB670,0,14^FS \n" +
                                 "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                 "^FD%4$s^FS \n" +
@@ -232,12 +237,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                 "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
                                 "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
                                 "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
                                 "^FD%3$s^FS\n" +
                                 "^PQ1,0,1,Y \n" +
-                                "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
                                 "^FO2,440^GB670,14,14^FS\n" +
-                                "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
+                                "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
                                 "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                 gl.gNomEmpresa,
                                 gl.existencia.Codigo,
@@ -253,7 +258,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                             "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                             "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                             "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                            "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
                             "^FO2,340^GB670,0,14^FS \n" +
                             "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                             "^FD%4$s^FS \n" +
@@ -265,15 +270,20 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     }
 
                     if (!zpl.isEmpty()){
-                        zPrinterIns.sendCommand(zpl);
+                        if (Copias > 0){
+                            for(int i=0; i < Copias; i++){
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+
                     }else{
                         msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
 
-                    Thread.sleep(500);
-
+                    //#EJC20220309: Don't close, dont wait!
+                    //Thread.sleep(500);
                     // Close the connection to release resources.
-                    printerIns.close();
+                    //printerIns.close();
 
                 }else{
                     mu.msgbox("No se pudo obtener conexión con la impresora");
@@ -293,7 +303,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         }
     }
 
-    private void Imprimir_Licencia(){
+    private void Imprimir_Licencia(int Copias){
 
         try{
 
@@ -312,47 +322,55 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     String zpl="";
 
                     if (gl.existencia.IdTipoEtiqueta==1){
+
+                        //#EJC20220307: Tomado de recepción.
                         zpl = String.format("^XA \n" +
-                                            "^MMT \n" +
-                                            "^PW609 \n" +
-                                            "^LL0406 \n" +
-                                            "^LS0 \n" +
-                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
-                                            "^FO2,340^GB670,0,14^FS \n" +
-                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                            "^FD%4$s^FS \n" +
-                                            "^PQ1,0,1,Y " +
-                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                            "$"+gl.existencia.getLicPlate());
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
+                                "$"+gl.existencia.LicPlate);
+
                     }else if (gl.existencia.IdTipoEtiqueta==2){
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
+
                         zpl = String.format("^XA\n" +
-                                            "^MMT\n" +
-                                            "^PW609 \n" +
-                                            "^LL0406 \n" +
-                                            "^LS0\n" +
-                                            "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                            "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                            "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                            "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                            "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                            "^BY3,3,160^FT550,200^BCI,,N,N\n" +
-                                            "^FD%3$s^FS\n" +
-                                            "^PQ1,0,1,Y \n" +
-                                            "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                            "^FO2,440^GB670,14,14^FS\n" +
-                                            "^FT600,470^A0I,25,24^FH^FDTOMWMS  Product Barcode^FS\n" +
-                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                            gl.existencia.Codigo+" - "+gl.existencia.Nombre,
-                                            "$"+gl.existencia.getLicPlate());
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$"+gl.existencia.getLicPlate(),
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+
                     }else if (gl.existencia.IdTipoEtiqueta==4){
+
+                        //#EJC20220307: Tomado de recepción.
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW812 \n" +
@@ -363,34 +381,39 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS License Number^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                gl.existencia.Codigo +" - "+gl.existencia.Nombre,
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                 "$"+gl.existencia.LicPlate);
                     }
 
                     if (!zpl.isEmpty()){
-                        zPrinterIns.sendCommand(zpl);
+                        if (Copias > 0) {
+                            for (int i=0; i < Copias; i++) {
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+
                     }else{
                         msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
                     }
 
-                    Thread.sleep(500);
-
+                    //#EJC20220309: Don't close, dont wait!
+                    //Thread.sleep(500);
                     // Close the connection to release resources.
-                    printerIns.close();
+                    //printerIns.close();
 
                 }else{
                     mu.msgbox("No se pudo obtener conexión con la impresora");
                 }
-
             }
 
         }catch (Exception e){
+            progress.cancel();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
@@ -405,29 +428,34 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private void msgAskImprimir(String msg) {
 
         try{
-
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            setHandlersImpresion();
+            dialog.setView(vistaDialog);
+
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg + "\n\n Impresora: " + gl.MacPrinter);
+            dialog.setMessage( msg + "\n\nImpresora: " + gl.MacPrinter);
 
             dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Código de Producto", new DialogInterface.OnClickListener() {
+            dialog.setPositiveButton("Código", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Codigo_Barra_Producto();
+                    Imprimir_Codigo_Barra_Producto(CantCopias);
                 }
             });
 
             dialog.setNegativeButton("Licencia", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Imprimir_Licencia();
+                    Imprimir_Licencia(CantCopias);
                 }
             });
 
-            dialog.setNeutralButton("No Gracias", new DialogInterface.OnClickListener() {
+            dialog.setNeutralButton("Salir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {}
             });
 
@@ -437,6 +465,22 @@ public class frm_consulta_stock_detalleCI extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    private void setHandlersImpresion() {
+        Integer[] cantidad = {1,2,4,6,8,10};
+        cmbCantidad.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,cantidad));
+
+        cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                CantCopias = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+
+        });
     }
 
     public void ProgressDialog(String mensaje) {

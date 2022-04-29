@@ -66,16 +66,25 @@ public class WebService {
 
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
-        int TIMEOUT = 15000;
+        int TIMEOUT = 45000;
+        int READTIMEOUT = 0;
+
         mMethodName = methodName; mResult = "";xmlresult="";
 
         error="";errorflag=false;
 
         try{
 
+            //#EJC20220403:Short time out if is the first loading
+            //usefull if its wrong url of the WS.
+//            if(mMethodName =="Android_Get_All_Empresas"){
+//                READTIMEOUT=6000;
+//                TIMEOUT=6000;
+//            }
+
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
-           conn.setReadTimeout(TIMEOUT);
+           conn.setReadTimeout(READTIMEOUT);
            conn.setConnectTimeout(TIMEOUT);
            conn.setDoInput(true);
            conn.setDoOutput(true);
@@ -119,7 +128,7 @@ public class WebService {
            int responsecode = ((HttpURLConnection) conn).getResponseCode();
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
-           //#EJC20200331: Es probable que falte incluir algunos otros códigos de respuesta válidos....
+           //#EJC20200331: Es probable que falta incluir algunos otros códigos de respuesta válidos....
            //#EJC20200514: Actualizado
            if (responsecode!=299 && responsecode!=404) {
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));

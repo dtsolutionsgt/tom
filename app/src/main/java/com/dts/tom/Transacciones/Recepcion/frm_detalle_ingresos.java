@@ -6,33 +6,43 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
+import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,13 +68,16 @@ public class frm_detalle_ingresos extends PBase {
     public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
+    private clsBeBodega_ubicacion bodega_ubicacion_origen;
 
     private Spinner cmbPropietario,cmbProveedor,cmbTipoDoc,cmbFechaRec;
-    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza;
-    private TableRow tblNumOrden, tblNumPoliza;
+    private EditText txtOc,txtRef,txtMarch,txtGuia,txtEstadoRec,txtMuelleRec, txtNumOrden, txtNumPoliza, txtUbicacion;
+    private TextView lblNombreUbicacion;
+    private TableRow tblNumOrden, tblNumPoliza, tblImagen;
     private ProgressBar pbar;
     private ProgressDialog progress;
     private ImageView btnCamara;
+    private RelativeLayout relUbicacion;
 
     String encoded="";
 
@@ -73,9 +86,14 @@ public class frm_detalle_ingresos extends PBase {
     private ArrayList<String> tipooclist= new ArrayList<String>();
     private ArrayList<String> vencelist= new ArrayList<String>();
 
+    //Imagenes
+    private clsBeImagen BeImagen;
+    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_frm_detalle_ingresos);
 
         super.InitBase();
@@ -91,21 +109,45 @@ public class frm_detalle_ingresos extends PBase {
         txtMuelleRec = (EditText)findViewById(R.id.txtMuelleRec);
         txtNumOrden = (EditText)findViewById(R.id.txtNumOrden);
         txtNumPoliza = (EditText)findViewById(R.id.txtNumPoliza);
+        txtUbicacion = (EditText) findViewById(R.id.txtUbicacion);
+        lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
 
         tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
         tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
+        tblImagen = (TableRow) findViewById(R.id.tblImagen);
 
         cmbPropietario = (Spinner) findViewById(R.id.cmbPropietario);
         cmbProveedor = (Spinner) findViewById(R.id.cmbProveedor);
         cmbTipoDoc = (Spinner) findViewById(R.id.cmbTipoDoc);
         cmbFechaRec = (Spinner) findViewById(R.id.cmbFechaRec);
 
+        relUbicacion = findViewById(R.id.relUbicacion);
+
         btnCamara = (ImageView)findViewById(R.id.imageView12);
 
         ProgressDialog("Cargando forma");
 
+        setHandlers();
         Load();
 
+    }
+    private void setHandlers() {
+        txtUbicacion.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction()== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                if (!txtUbicacion.getText().toString().isEmpty()) {
+                    execws(8);
+                } else {
+                    toast("Debe ingresar la ubicación.");
+                }
+            }
+
+            return false;
+        });
+
+        txtUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { }
+        });
     }
 
     private void Load(){
@@ -137,13 +179,15 @@ public class frm_detalle_ingresos extends PBase {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
             //aquí la convierto a base 64
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-            msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
+            //#AT 20220321 Se guarda automáticamente la imagen
+            //msgAsGuardaFotos("Desea asignar esta foto a la recepción "+gl.gIdRecepcionEnc);
             //imageView.setImageBitmap(imageBitmap);
+            execws(6);
         }
     }
 
@@ -191,11 +235,11 @@ public class frm_detalle_ingresos extends PBase {
     private File  createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "PNG_" + timeStamp + "_";
+        String imageFileName = "JPG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".png",         /* suffix */
+                ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
 
@@ -237,6 +281,14 @@ public class frm_detalle_ingresos extends PBase {
                         //aquí mando la imagen ya convertida, así como se hizo con la firma.
                         callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
                         break;
+                    case 7:
+                        callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
+                        break;
+                    case 8:
+                        callMethod("Get_Ubicacion_Recepcion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbicacion.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
 
                 }
 
@@ -264,7 +316,13 @@ public class frm_detalle_ingresos extends PBase {
                     processStockRec();
                     break;
                 case 6:
-                    encoded="";
+                    processEnviarFoto();
+                    break;
+                case 7:
+                    processGetImagenes();
+                    break;
+                case 8:
+                    processValidaUbicacion();
                     break;
 
             }
@@ -287,6 +345,90 @@ public class frm_detalle_ingresos extends PBase {
         }
     }
 
+    private void processEnviarFoto() {
+        boolean exito;
+
+        try {
+            progress.setMessage("Guardando imagen...");
+            progress.show();
+
+            exito = true;
+
+            if (exito) {
+                progress.cancel();
+                toastlong("Foto guardada con éxito");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processEnviarFoto: " + e.getMessage());
+        }
+
+    }
+
+    private void processGetImagenes() {
+        try {
+            BeListTranReImagen = xobj.getresult(clsBeTrans_re_imgList.class,"Get_All_Imagen_Recepcion");
+
+            gl.ListImagen.clear();
+            if (BeListTranReImagen != null) {
+                if (BeListTranReImagen.items != null) {
+                    for (int i=0; i < BeListTranReImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = "Documento de Ingreso";
+                        BeImagen.Imagen = BeListTranReImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                toastlong("No se encontraron imágenes");
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
+
+    private void processValidaUbicacion() {
+        try {
+            progress.setMessage("Validando ubicación");
+            progress.show();
+
+            bodega_ubicacion_origen = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_Recepcion_By_Codigo_Barra_And_IdBodega");
+
+            if (bodega_ubicacion_origen == null) {
+                txtUbicacion.selectAll();
+                txtUbicacion.requestFocus();
+
+                lblNombreUbicacion.setTextColor(Color.RED);
+                lblNombreUbicacion.setText("Ubicación no existe o no configurada como ubicación de recepción");
+                progress.cancel();
+
+                return;
+            } else {
+                gl.recepcionIdUbicacion = bodega_ubicacion_origen.IdUbicacion;
+
+                lblNombreUbicacion.setTextColor(Color.parseColor("#0119A2"));
+                lblNombreUbicacion.setText(bodega_ubicacion_origen.getDescripcion());
+
+                Atender();
+            }
+
+            progress.cancel();
+        }catch (Exception e) {
+            progress.cancel();
+            msgbox("processValidaUbicacion: "+e.getMessage());
+        }
+    }
     private void processConfiguracionPallet(){
 
         try{
@@ -362,6 +504,14 @@ public class frm_detalle_ingresos extends PBase {
             gl.mode =1;
             if (gBeRecepcion!=null)
             {
+                if (gBeRecepcion.Tomar_fotos) {
+                    tblImagen.setVisibility(View.VISIBLE);
+                }
+
+                if (gBeRecepcion.Escanear_rec_ubic) {
+                    relUbicacion.setVisibility(View.VISIBLE);
+                }
+
                 Llenar_Campos();
             }
 
@@ -425,8 +575,9 @@ public class frm_detalle_ingresos extends PBase {
                 progress.setMessage("Obteniendo detalle de ingreso");
 
                 //GT la lista ya viene de frm_lista_tareas_recepcion, porque se obtiene otra vez de aca?
-                //pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
-                pListDetalleOC = gl.gListDetalleOC;
+                pListDetalleOC = gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
+                //#CKFK 20220302 Puse esto en comentario porque la variable gl.gListDetalleOC no siempre tiene los items.
+                //pListDetalleOC = gl.gListDetalleOC;
 
                 if (pListDetalleOC!=null){
                     gl.gListDetalleOC = pListDetalleOC;
@@ -612,6 +763,12 @@ public class frm_detalle_ingresos extends PBase {
         }
     }
 
+    public void verImagenes(View view) {
+        progress.setMessage("Cargando imágenes...");
+        progress.show();
+        execws(7);
+    }
+
     private void BloquearControles(){
 
         try{
@@ -662,8 +819,24 @@ public class frm_detalle_ingresos extends PBase {
     }
 
     public void Atender_rece(View view){
+        if (gBeRecepcion.Escanear_rec_ubic) {
+            validaDatos();
+        } else {
+            Atender();
+        }
+    }
+
+    private void validaDatos() {
+        if (!txtUbicacion.getText().toString().isEmpty()) {
+            execws(8);
+        } else {
+            toast("Debe ingresar la ubicación.");
+        }
+    }
+
+    private void Atender() {
         browse=1;
-        startActivity(new Intent(this, frm_list_rec_prod.class));
+        startActivity(new Intent(frm_detalle_ingresos.this, frm_list_rec_prod.class));
     }
 
     public void Regresar(View view){

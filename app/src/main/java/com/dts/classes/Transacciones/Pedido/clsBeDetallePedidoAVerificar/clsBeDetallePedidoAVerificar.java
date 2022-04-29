@@ -22,6 +22,9 @@ public class clsBeDetallePedidoAVerificar {
     @Element(required=false) public String Codigo="";
     @Element(required=false) public int NDias=0;
     @Element(required=false) public int IdProductoEstado=0;
+    @Element(required=false) public String NombreArea = "";
+    @Element(required=false) public String NombreClasificacion = "";
+
 
 
     public clsBeDetallePedidoAVerificar() {
@@ -44,7 +47,9 @@ public class clsBeDetallePedidoAVerificar {
                                         int IdUnidadMedidaBasica,
                                         String Codigo,
                                         int NDias,
-                                        int IdProductoEstado) {
+                                        int IdProductoEstado,
+                                        String NombreArea,
+                                        String NombreClasificacion) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdPedidoDet=IdPedidoDet;
@@ -64,6 +69,8 @@ public class clsBeDetallePedidoAVerificar {
         this.Codigo=Codigo;
         this.NDias=NDias;
         this.IdProductoEstado = IdProductoEstado;
+        this.NombreArea = NombreArea;
+        this.NombreClasificacion = NombreClasificacion;
 
     }
 
@@ -176,6 +183,16 @@ public class clsBeDetallePedidoAVerificar {
     }
     public void setIdProductoEstado(int value) {
         IdProductoEstado=value;
+    }
+
+    public String getNombreArea() { return NombreArea; }
+    public void setNombreArea(String value) {
+        NombreArea=value;
+    }
+
+    public String getNombreClasificacion() { return NombreClasificacion; }
+    public void setNombreClasificacion(String value) {
+        NombreClasificacion=value;
     }
 
 

@@ -75,6 +75,8 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
                 holder.lblIdPresentacion = (TextView) convertView.findViewById(R.id.lblIdPresentacion);
                 holder.lblIdProductoBodega = (TextView) convertView.findViewById(R.id.lblIdProductoBodega);
                 holder.lblNDias = (TextView) convertView.findViewById(R.id.lblNDias);
+                holder.lblArea = (TextView) convertView.findViewById(R.id.lblArea);
+                holder.lblClasificacion = (TextView) convertView.findViewById(R.id.lblClasificacion);
 
                 holder.lblEPedidoEnc = (TextView) convertView.findViewById(R.id.lblEPedEnc);
                 holder.lblEPedidoDet = (TextView) convertView.findViewById(R.id.lblEPedDet);
@@ -104,25 +106,14 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
             holder.lblIdPresentacion.setText(""+pListBeTareasVerificacionHH.get(position).IdPresentacion);
             holder.lblIdProductoBodega.setText(""+pListBeTareasVerificacionHH.get(position).IdProductoBodega);
             holder.lblNDias.setText(""+pListBeTareasVerificacionHH.get(position).NDias);
-
-            LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
-
-            if (position>0){
-                encabezado.setVisibility(View.GONE);
-            }else{
-                encabezado.setVisibility(View.VISIBLE);
-            }
+            holder.lblArea.setText(""+pListBeTareasVerificacionHH.get(position).NombreArea);
+            holder.lblClasificacion.setText(""+pListBeTareasVerificacionHH.get(position).NombreClasificacion);
 
             holder.lblPedidoEnc.setVisibility(View.GONE);
             holder.lblPedidoDet.setVisibility(View.GONE);
             holder.lblIdProductoBodega.setVisibility(View.GONE);
             holder.lblIdPresentacion.setVisibility(View.GONE);
             holder.lblNDias.setVisibility(View.GONE);
-            holder.lblEPedidoEnc.setVisibility(View.GONE);
-            holder.lblEPedidoDet.setVisibility(View.GONE);
-            holder.lblEIdProductoBodega.setVisibility(View.GONE);
-            holder.lblEIdPresentacion.setVisibility(View.GONE);
-            holder.lblENDias.setVisibility(View.GONE);
 
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -139,7 +130,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
     static class ViewHolder {
         TextView lblPedidoEnc,lblPedidoDet,lblCodigo,lblProducto,lblLote,lblVence,lblLicPlate,lblUmBas,lblPresentacion,
                 lblSolicitado,lblPickeado, lblVerificado, lblEstado, lblIdPresentacion, lblIdProductoBodega, lblNDias,
-                lblEPedidoEnc,lblEPedidoDet, lblEIdPresentacion, lblEIdProductoBodega, lblENDias;
+                lblEPedidoEnc,lblEPedidoDet, lblEIdPresentacion, lblEIdProductoBodega, lblENDias, lblArea, lblClasificacion;
     }
 
 }

@@ -10,11 +10,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.base.clsClasses;
 import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_op;
 import com.dts.classes.Mantenimientos.Menu_rol.clsBeMenu_rol_opList;
@@ -65,11 +67,18 @@ public class Mainmenu extends PBase {
 
     private static String PathDataDir = "";
 
+    private boolean areaprimera = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
+
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.Mostrar_Area_En_HH;
 
         super.InitBase();
 
@@ -100,11 +109,12 @@ public class Mainmenu extends PBase {
             }
 
             lblVersion.setText("Version: " + versionparam);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        int ori=this.getResources().getConfiguration().orientation; // 1 - portrait , 2 - landscape
+        int ori=this.getResources().getConfiguration().orientation; //1 - portrait , 2 - landscape
         horizpos=ori==2;
 
         if (horizpos) {
@@ -126,7 +136,9 @@ public class Mainmenu extends PBase {
     //region Events
 
     public void setHandlers(){
+
         try{
+
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -140,6 +152,7 @@ public class Mainmenu extends PBase {
 
                 }
             });
+
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -150,7 +163,9 @@ public class Mainmenu extends PBase {
     //region Main
 
     public void listItems() {
+
         try {
+
             clsClasses.clsMenu item;
 
             items.clear();
@@ -298,6 +313,7 @@ public class Mainmenu extends PBase {
     }
 
     private void updateList() {
+
         try {
 
             //GT10122021: Actualizo la cantidad de tareas segun la opción dinamica del menú
@@ -338,7 +354,9 @@ public class Mainmenu extends PBase {
     }
 
     private void Load(){
+
         try {
+
             lblBodega.setText("Bodega: "+ gl.CodigoBodega);
 
             try {
@@ -357,8 +375,19 @@ public class Mainmenu extends PBase {
         try {
             updateList();
             starttimer();
+            progress.cancel();
         } catch (Exception e){
             mu.msgbox(e.getMessage());
+        }
+    }
+
+    public void actualizaTareas(View view) {
+        try {
+            progress.show();
+            execws(1);
+        }catch (Exception e) {
+            progress.cancel();
+            msgbox("Acutualiza cantidad de tareas: "+e.getMessage());
         }
     }
 
@@ -449,6 +478,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de recepciones");
+            cantRecep = 0;
 
             cantRecep = (Integer) xobj.getSingle("Get_Count_Recepciones_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -466,6 +496,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de picking");
+            cantPicking = 0;
 
             cantPicking = (Integer) xobj.getSingle("Get_Count_Picking_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -483,6 +514,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de verificaciones");
+            cantVerif = 0;
 
             cantVerif = (Integer) xobj.getSingle("Get_Count_Verificaciones_For_HH_By_IdBodegaResult",Integer.class);
 
@@ -517,6 +549,7 @@ public class Mainmenu extends PBase {
         try {
 
             progress.setMessage("Obteniendo cantidad  de Cambio Estados");
+            cantCambioEst = 0;
 
             cantCambioEst = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
 
@@ -588,7 +621,15 @@ public class Mainmenu extends PBase {
 
                     gl.IdTareaUbicEnc =0;
                     gl.modo_cambio = 1;
-                    msgAskUbicNoDirigida("Ubicación dirigida");
+
+                    //#GT14032022_1348: si tiene parametro mostrarArea, se hace ubicacion no dirigida
+                    if (areaprimera) {
+                        Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                        startActivity(intent);
+
+                    } else {
+                        msgAskUbicNoDirigida("Ubicación dirigida");
+                    }
 
                     break;
 
@@ -658,6 +699,7 @@ public class Mainmenu extends PBase {
     }
 
     private void menuUtilerias() {
+
         final AlertDialog Dialog;
         final String[] selitems = {"Actualizar versión"};
 
@@ -669,9 +711,7 @@ public class Mainmenu extends PBase {
                 switch (item) {
                     case 0:
                         msgAskUpdate("Actualizar versión");break;
-
                 }
-
                 dialog.cancel();
             }
         });
@@ -698,6 +738,7 @@ public class Mainmenu extends PBase {
     }
 
     private void cargaDatosServicio() {
+
         String vs,ss;
         String[] sp;
 
@@ -779,7 +820,7 @@ public class Mainmenu extends PBase {
 
         try{
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+      /*      AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
             dialog.setCancelable(false);
@@ -800,7 +841,50 @@ public class Mainmenu extends PBase {
                 }
             });
 
-            dialog.show();
+            dialog.show();*/
+
+
+            //#GT10032022: set en el boton Si para facilitar el ENTER del teclado
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    this);
+
+            // set title
+            alertDialogBuilder.setTitle(R.string.app_name);
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage("¿" + msg + "?")
+                    .setCancelable(false)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(Mainmenu.this, frm_tareas_cambio_ubicacion.class));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                            startActivity(intent);
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+            Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            nbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            //pbutton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            pbutton.setPadding(0, 10, 10, 0);
+            //pbutton.setTextColor(Color.WHITE);
+
+            nbutton.setFocusable(true);
+            nbutton.setFocusableInTouchMode(true);
+            nbutton.requestFocus();
+
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -811,7 +895,7 @@ public class Mainmenu extends PBase {
     private void msgAskUpdate(String msg) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Tom WMS");
+        dialog.setTitle("TOMWMS");
         dialog.setMessage("¿" + msg + "?");
 
         dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {

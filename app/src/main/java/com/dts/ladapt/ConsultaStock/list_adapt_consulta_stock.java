@@ -81,6 +81,10 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                         holder.lblIngreso = convertView.findViewById(R.id.lblIngreso);
                         holder.lblIdTipoEtiqueta = convertView.findViewById(R.id.lblIdTipoEtiqueta);
+                        holder.lblResPres = convertView.findViewById(R.id.lblResPres);
+                        holder.lblDispPres = convertView.findViewById(R.id.lblDispPres);
+                        holder.lblNombreArea = convertView.findViewById(R.id.lblNombreArea);
+                        holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
                 convertView.setTag(holder);
 
             }else {
@@ -90,14 +94,16 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             }
 
             //AT 20211221 Ya no se crea el encabezado unicamente se agrega la información
-            holder.lblCodigo.setText(BeListStock.get(position).Codigo  +"");
-            holder.lblNombre.setText(BeListStock.get(position).Nombre  +"");
+            holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
+            holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
             holder.lblUM.setText(BeListStock.get(position).UM  +"");
             holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
             holder.lblPres.setText(BeListStock.get(position).Pres  +"");
             holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
             holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
             holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
+            holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
+            holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
             holder.lblLote.setText(BeListStock.get(position).Lote  +"");
             holder.lblVence.setText(BeListStock.get(position).Vence  +"");
             holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
@@ -109,6 +115,8 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblIdProductoBodega.setText(BeListStock.get(position).IdProductoBodega  +"");
             holder.lblIngreso.setText(BeListStock.get(position).ingreso  +"");
             holder.lblIdTipoEtiqueta.setText(BeListStock.get(position).IdTipoEtiqueta  +"");
+            holder.lblNombreArea.setText(BeListStock.get(position).NombreArea  +"");
+            holder.lblClasificacion.setText(BeListStock.get(position).Clasificacion+"");
 
             holder.lblCodigo.setTextColor(Color.BLACK);
             holder.lblNombre.setTextColor(Color.BLACK);
@@ -129,11 +137,17 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblIdProductoBodega.setTextColor(Color.BLACK);
             holder.lblIngreso.setTextColor(Color.BLACK);
             holder.lblIdTipoEtiqueta.setTextColor(Color.BLACK);
+            holder.lblNombreArea.setTextColor(Color.BLACK);
+
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                holder.lblIdProductoBodega.setText(" ");
+                holder.lblIdTipoEtiqueta.setText(" ");
+                convertView.setBackgroundColor(Color.rgb(192, 192, 192));
+            }
 
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
             } else {
-
                 //AT 20211221 se quitó la valicación para darle color al encabezado
                /* if (position==0){
                     convertView.setBackgroundResource(R.drawable.color_medium);
@@ -143,7 +157,11 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 
-        }catch (Exception ex){
+            if (BeListStock.get(position).IdProductoBodega==-1) {
+                 convertView.setBackgroundColor(Color.rgb(192, 192, 192));
+            }
+
+        } catch (Exception ex){
             toast(ex.getMessage());
         }
         return convertView;
@@ -157,6 +175,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
         TextView lblCodigo,lblNombre,lblUM,lblExistUMBAs,
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
-                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta;
+                lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
+                lblResPres, lblDispPres,lblNombreArea,lblClasificacion;
     }
 }

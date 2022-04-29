@@ -420,5 +420,3 @@ public class clsBeStock {
         Pallet_No_Estandar=value;
     }
 }
-
-

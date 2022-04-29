@@ -20,6 +20,11 @@ public class clsBeTareasIngresoHH {
     @Element(required=false) public String NumOrden="";
     @Element(required=false) public String NumPoliza="";
 
+    @Element(required=false) public String RutaDespacho="";
+    @Element(required=false) public String Observacion="";
+    @Element(required=false) public boolean RequiereTarima=false;
+
+
     public clsBeTareasIngresoHH() {
     }
 
@@ -43,7 +48,6 @@ public class clsBeTareasIngresoHH {
         this.NombreTipoRecepcion=NombreTipoRecepcion;
         this.NumOrden= NumOrden;
         this.NumPoliza=NumPoliza;
-
     }
 
 
@@ -132,5 +136,25 @@ public class clsBeTareasIngresoHH {
         NumPoliza=value;
     }
 
-}
+    public String getRutaDespacho() {
+        return RutaDespacho;
+    }
+    public void setRutaDespacho(String value) {
+        RutaDespacho=value;
+    }
 
+    public String getObservacion() {
+        return Observacion;
+    }
+    public void setObservacion(String value) {
+        Observacion=value;
+    }
+
+    public boolean getRequiereTarima() {
+        return RequiereTarima;
+    }
+    public void setRequiereTarima(boolean value) {
+        RequiereTarima=value;
+    }
+
+}

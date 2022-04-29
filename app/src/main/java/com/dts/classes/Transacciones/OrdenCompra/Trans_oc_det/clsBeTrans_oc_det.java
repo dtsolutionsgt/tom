@@ -60,6 +60,9 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public String Nombre_Propietario ="";
     @Element(required=false) public int IdPedidoCompraDet;
     @Element(required=false) public int IdOrdenCompraDetPadre=0;
+    @Element(required=false) public int IdEmbarcador=0;
+    @Element(required=false) public String Nombre_Embarcador="";
+    @Element(required=false) public String Nombre_Clasificacion ="";
 
     public clsBeTrans_oc_det()
     {
@@ -75,7 +78,8 @@ public class clsBeTrans_oc_det {
                              double FactorPresentacion,clsBeArancel Arancel,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
                              double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
-                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet) {
+                             double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet,String Nombre_Embarcador,
+                             String Nombre_Clasificacion) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -120,6 +124,8 @@ public class clsBeTrans_oc_det {
         this.Peso_Neto=Peso_Neto;
         this.Peso_Bruto=Peso_Bruto;
         this.IdPedidoCompraDet=IdPedidoCompraDet;
+        this.Nombre_Embarcador = Nombre_Embarcador;
+        this.Nombre_Clasificacion = Nombre_Clasificacion;
     }
 
 
@@ -423,6 +429,26 @@ public class clsBeTrans_oc_det {
         IdOrdenCompraDetPadre  =value;
     }
 
+    public int getIdEmbarcador () {
+        return IdEmbarcador;
+    }
+    public void setIdEmbarcador (int value) {
+        IdEmbarcador=value;
+    }
+
+    public String getNombre_Embarcador() {
+        return Nombre_Embarcador;
+    }
+    public void setNombre_Embarcador(String value) {
+        Nombre_Embarcador =value;
+    }
+
+    public String getClasificacion() {
+        return Nombre_Clasificacion;
+    }
+    public void setClasificacion(String value) {
+        Nombre_Clasificacion =value;
+    }
 
 }
 

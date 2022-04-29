@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
@@ -35,14 +37,22 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
+import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion2;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
+import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +66,7 @@ public class frm_list_rec_prod extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private TextView lblNoDocumento;
+    private TextView lblTituloForma, lblIdPropietarioBodega, lblNombrePropietario;
     private Button btnRegs,btnCompletaRec,btnGuardarFirma,btnSalirFirma,btnLimpiar;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
@@ -64,6 +74,8 @@ public class frm_list_rec_prod extends PBase {
     private ProgressDialog progress;
     private CheckBox chkRecepcionados;
     private RelativeLayout relbot;
+    private FloatingActionButton btnTareas;
+    private ImageView btnOrdenar;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
@@ -81,7 +93,7 @@ public class frm_list_rec_prod extends PBase {
     private boolean Escaneo_Pallet;
     private boolean Finalizada = false, Anulada = false;
     private double Cant_Recibida_Anterior;
-    private int browse;
+    private int browse, sortord;
     public String pLP="";
     private String vLP="";
     public String vCodigoBodegaBarraPallet = "";
@@ -102,24 +114,42 @@ public class frm_list_rec_prod extends PBase {
     private clsBeTrans_oc_det selitem;
 
     private list_adapt_detalle_recepcion listdetadapter;
+    private list_adapt_detalle_recepcion2 listdetadapter2;
+
+    private boolean areaprimera = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_frm_list_rec_prod);
+
+        appGlobals gll;
+        gll=((appGlobals) this.getApplication());
+        areaprimera = gll.Mostrar_Area_En_HH;
+
+        if (areaprimera) {
+            setContentView(R.layout.activity_frm_list_rec_prod2);
+        } else {
+            setContentView(R.layout.activity_frm_list_rec_prod);
+        }
 
         super.InitBase();
 
         ws = new WebServiceHandler(frm_list_rec_prod.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblNoDocumento = (TextView) findViewById(R.id.lblNoDocumento);
+        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
 
         btnRegs = (Button) findViewById(R.id.btnRegs);
         btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
         listView = (ListView)findViewById(R.id.listRec);
         chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
+        btnTareas = (FloatingActionButton) findViewById(R.id.btnTareas);
+        lblNombrePropietario = findViewById(R.id.lblNombrePropietario);
+        lblIdPropietarioBodega = findViewById(R.id.lblIdPropietarioBodega);
+        btnOrdenar = findViewById(R.id.btnOrdenar);
+
+        gl.sortOrd = -1;
 
         relbot = (RelativeLayout)findViewById(R.id.relbot);
 
@@ -430,7 +460,7 @@ public class frm_list_rec_prod extends PBase {
 
             progress.setMessage("Inicializando valores");
 
-            lblNoDocumento.setText("");
+            lblTituloForma.setText("");
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -458,7 +488,6 @@ public class frm_list_rec_prod extends PBase {
                     gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
-
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
                     //GT17062021 Se reordena la lista por num_linea
                     Collections.sort(pListDetalleOC.items,new OrdenarItems());
@@ -472,7 +501,9 @@ public class frm_list_rec_prod extends PBase {
                     }
 
                     if(gBeOrdenCompra.No_Documento!=null & gBeOrdenCompra.Referencia!=null){
-                        lblNoDocumento.setText("No. Documento:"+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
+                        lblTituloForma.setText("No. Documento: "+ gBeOrdenCompra.No_Documento+ " - "+gBeOrdenCompra.Referencia);
+                    } else {
+                        lblTituloForma.setText("No. Documento: "+ gBeOrdenCompra.No_Documento);
                     }
 
                     if(gBeOrdenCompra.IdEstadoOC != 3){
@@ -492,7 +523,10 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }else{
-                mu.msgbox("Falta programar");
+                //#EJC20220303:En algunas ocasiones, se pierde el IdtipoTarea...
+                //mu.msgbox("Falta programar");
+                progress.setMessage("Inicializando Oc");
+                execws(1);
             }
 
         }catch (Exception e){
@@ -512,22 +546,26 @@ public class frm_list_rec_prod extends PBase {
 
                     selid = 0;
 
-                    if (position>0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                    //selitem = pListDetalleOC.items.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                        selitem = pListDetalleOC.items.get(position-1);
+                    selitem  = stream(pListDetalleOC.items)
+                            .where(c -> c.No_Linea == sitem.No_Linea)
+                            .first();
 
-                        selid = sitem.No_Linea;
-                        selidx = position;
+                    selid = sitem.No_Linea;
+                    selidx = position;
+
+                    //#GT09032022: si tiene mostrar_area cealsa
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
+                    } else {
                         listdetadapter.setSelectedIndex(position);
-
-                        procesar_registro();
-
                     }
 
+                    procesar_registro();
                 }
-
             });
 
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -537,19 +575,25 @@ public class frm_list_rec_prod extends PBase {
 
                     selid = 0;
 
-                    if (position>0){
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                    //selitem = pListDetalleOC.items.get(position);
 
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                        selitem = pListDetalleOC.items.get(position-1);
+                    selitem  = stream(pListDetalleOC.items)
+                            .where(c -> c.No_Linea == sitem.No_Linea)
+                            .first();
 
-                        selid = sitem.No_Linea;
-                        selidx = position;
+                    selid = sitem.No_Linea;
+                    selidx = position;
+
+                    //#GT09032022: si tiene mostrar_area cealsa
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
+                    } else {
                         listdetadapter.setSelectedIndex(position);
-
-                        msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
-
                     }
+
+                    msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
 
                     return true;
                 }
@@ -599,7 +643,8 @@ public class frm_list_rec_prod extends PBase {
             gl.gFechaVenceAnterior = "";
             gl.gLoteAnterior ="";
             gl.Escaneo_Pallet=false;
-           relbot.setVisibility(View.VISIBLE);
+            btnTareas.setVisibility(View.VISIBLE);
+            relbot.setVisibility(View.VISIBLE);
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -737,7 +782,7 @@ public class frm_list_rec_prod extends PBase {
                     Cantidad_recibida = Obj.Cantidad_recibida;
                     Cantidad = Obj.Cantidad;
 
-                    if (Cantidad_recibida>0){
+                    if (Cantidad_recibida>=0){
 
                         vTipoDiferencia = mu.round(Cantidad_recibida-Cantidad,7);
 
@@ -799,10 +844,6 @@ public class frm_list_rec_prod extends PBase {
 
             if(pListDetalleOC.items!=null){
 
-                vItem = new clsBeTrans_oc_det();
-
-                BeListDetalleOC.add(vItem);
-
                 for (int i = pListDetalleOC.items.size()-1; i>=0; i--) {
 
                     vItem = new clsBeTrans_oc_det();
@@ -824,6 +865,8 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
+                            vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
+                            vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
 
                             BeListDetalleOC.add(vItem);
 
@@ -844,6 +887,8 @@ public class frm_list_rec_prod extends PBase {
                             vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
                             vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
+                            vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
+                            vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
 
                             BeListDetalleOC.add(vItem);
 
@@ -851,10 +896,10 @@ public class frm_list_rec_prod extends PBase {
 
                 }
 
-                btnRegs.setText("Regs: "+pListDetalleOC.items.size());
+                btnRegs.setText("Registros: "+pListDetalleOC.items.size());
             }
 
-            Collections.sort(BeListDetalleOC,new OrdenarItems());
+            Collections.sort(BeListDetalleOC, new OrdenarItems());
 
             //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
             boolean es_poliza_consolidada = false;
@@ -862,8 +907,18 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            listdetadapter =new list_adapt_detalle_recepcion(this,BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
-            listView.setAdapter(listdetadapter);
+            if (!es_poliza_consolidada) {
+                lblIdPropietarioBodega.setVisibility(View.GONE);
+                lblNombrePropietario.setVisibility(View.GONE);
+            }
+
+            if (areaprimera) {
+                listdetadapter2 = new list_adapt_detalle_recepcion2(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter2);
+            } else {
+                listdetadapter = new list_adapt_detalle_recepcion(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter);
+            }
 
         }catch (Exception e){
             mu.msgbox(e.getClass()+e.getMessage());
@@ -875,11 +930,13 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+           btnTareas.setVisibility(View.INVISIBLE);
            relbot.setVisibility(View.INVISIBLE);
-            execws(10);
+           execws(10);
 
         }catch (Exception e){
             mu.msgbox("BotonFinalizarRec"+e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
         }
     }
@@ -929,10 +986,15 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
+            progress.show();
+            progress.setMessage("Finalizando recepción");
+
             gl.gBeRecepcion.Firma_piloto = encodedImage;//Byte.parseByte(FirmaPiloto.toString());
+
             execws(12);
 
         }catch (Exception e){
+            btnTareas.setVisibility(View.VISIBLE);
             relbot.setVisibility(View.VISIBLE);
             mu.msgbox("Finalizar_Recepcion:"+e.getMessage());
         }
@@ -1034,6 +1096,8 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             }catch (Exception e){
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
                 mu.msgbox(e.getClass()+e.getMessage());
             }
 
@@ -1101,11 +1165,13 @@ public class frm_list_rec_prod extends PBase {
                 }
 
             } catch (Exception e) {
-                msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+                progress.cancel();
+                //msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+                msgboxErrorOnWS2(" wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+
             }
 
     }
-
 
     private void processBanderasRecep(){
 
@@ -1234,16 +1300,17 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizada | Anulada){
                 onResume();
-               relbot.setVisibility(View.VISIBLE);
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
             }else{
                 pListTransRecDet = new clsBeTrans_re_detList();
                 execws(11);
             }
 
-
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
+            relbot.setVisibility(View.VISIBLE);
         }
 
     }
@@ -1263,16 +1330,15 @@ public class frm_list_rec_prod extends PBase {
                 Resultado = xobj.getresult(String.class,"Finalizar_Recepcion");
 
                 if (Resultado!=null){
-
+                    doExit();
                 }else{
                     progress.cancel();
                     mu.msgbox("No se pudo finalizar la recepción");
                 }
 
-                doExit();
-
             }else{
                 progress.cancel();
+                btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
                 Resultado =xobj.ws.xmlresult.replace("<DocumentElement>  <CustomError>    <Error>","").replace("</Error>  </CustomError></DocumentElement>","");
                 msgboxErrorOnWS2("No se pudo finalizar la recepción: " + Resultado);
@@ -1280,20 +1346,23 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             progress.hide();
-            relbot.setVisibility(View.VISIBLE);
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
-        }finally {
-            //progress.hide();
         }
     }
 
     public void msgboxErrorOnWS2(String msg) {
         try{
+
             ExDialog dialog = new ExDialog(this);
+            dialog.setCancelable(false);
             dialog.setMessage(msg);
 
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar = false;
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
+                }
             });
 
             dialog.show();
@@ -1339,17 +1408,11 @@ public class frm_list_rec_prod extends PBase {
                             Termina_Finalizacion_Recepcion();
                         }
                     }
-
-                }else{
-                    relbot.setVisibility(View.VISIBLE);
                 }
-            }else{
-                relbot.setVisibility(View.VISIBLE);
             }
 
         }catch (Exception e){
             mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
-            relbot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1365,15 +1428,18 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
+                    msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
+                    //#CKFK20220317 Agregué pregunta para dejar o no en BackOrder
+//                    Finalizar = true;
+//                    Termina_Finalizacion_Recepcion();
                 }
             });
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
-                   relbot.setVisibility(View.VISIBLE);
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
                     return;
                 }
             });
@@ -1405,8 +1471,42 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Finalizar = false;
-                   relbot.setVisibility(View.VISIBLE);
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
                     return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgDocIngresoBackOrder(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    backorder = true;
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    backorder = false;
+                    Finalizar = true;
+                    Termina_Finalizacion_Recepcion();
                 }
             });
 
@@ -1429,8 +1529,9 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    btnTareas.setVisibility(View.INVISIBLE);
                     relbot.setVisibility(View.INVISIBLE);
-                   execws(11);
+                    execws(11);
                 }
             });
 
@@ -1461,13 +1562,106 @@ public class frm_list_rec_prod extends PBase {
                     Finalizar_Recepcion();
                 }
 
-            }else{
-                relbot.setVisibility(View.VISIBLE);
-                return;
             }
 
         }catch (Exception e){
             mu.msgbox("Termina_Finalizacion_Recepcion"+e.getMessage());
+            btnTareas.setVisibility(View.VISIBLE);
+            relbot.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {"Codigo A-Z","Codigo Z-A",
+                "Producto A-Z","Producto Z-A" ,
+                "Cantidad Recibida A-Z","Cantidad Recibida Z-A"};
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                gl.sortOrd = item;
+                orderar();
+                listSortedItems();
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void listSortedItems() {
+        try {
+            boolean es_poliza_consolidada = false;
+            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            TipoIngreso = gBeOrdenCompra.getTipoIngreso();
+            if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
+
+            if (!es_poliza_consolidada) {
+                lblIdPropietarioBodega.setVisibility(View.GONE);
+                lblNombrePropietario.setVisibility(View.GONE);
+            }
+
+            if (areaprimera) {
+                listdetadapter2 = new list_adapt_detalle_recepcion2(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter2);
+            } else {
+                listdetadapter = new list_adapt_detalle_recepcion(this, BeListDetalleOC,es_poliza_consolidada,gl.gCantDecCalculo);
+                listView.setAdapter(listdetadapter);
+            }
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void orderar() {
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+            case 1:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+            case 2:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+            case 3:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+            case 4:
+                sortord=1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+            case 5:
+                sortord=-1;
+                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+        }
+    }
+
+    class Sort_Codigo implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left, clsBeTrans_oc_det right)                    {
+            return sortord*left.Producto.Codigo.compareTo(right.Producto.Codigo);
+        }
+    }
+
+    class Sort_Cantidad implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left,clsBeTrans_oc_det rigth){
+            return Double.compare(sortord * left.Cantidad_recibida, sortord * rigth.Cantidad_recibida);
+        }
+    }
+
+    class Sort_Producto implements Comparator<clsBeTrans_oc_det> {
+        public int compare(clsBeTrans_oc_det left, clsBeTrans_oc_det right)                    {
+            return sortord*left.Producto.Nombre.compareTo(right.Producto.Nombre);
         }
     }
 
@@ -1511,6 +1705,7 @@ public class frm_list_rec_prod extends PBase {
             btnSalirFirma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnTareas.setVisibility(View.VISIBLE);
                     relbot.setVisibility(View.VISIBLE);
                     dialog.cancel();
                 }
@@ -1542,6 +1737,7 @@ public class frm_list_rec_prod extends PBase {
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_Documento_Ingreso();
+                orderar();
                if(Recepcion_Completa()){
                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                }
@@ -1562,7 +1758,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     public void Salir(View view){
-        msgAskExit("Está seguro de salir");
+        doExit();
     }
 
     private void msgAskExit(String msg) {
@@ -1599,7 +1795,7 @@ public class frm_list_rec_prod extends PBase {
     @Override
     public void onBackPressed() {
         try{
-            if (relbot.getVisibility()==View.VISIBLE){
+            if (btnTareas.getVisibility()==View.VISIBLE){
                 msgAskExit("Está seguro de salir");
             }
         }catch (Exception e){

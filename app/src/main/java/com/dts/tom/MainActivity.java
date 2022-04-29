@@ -14,9 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -33,12 +33,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.base.ExDialog;
 import com.dts.base.NetWorkInfoUtility;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaList;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
@@ -48,7 +50,10 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -61,9 +66,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivity extends PBase {
+public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNeededListener {
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
@@ -89,11 +96,9 @@ public class MainActivity extends PBase {
     private ArrayList<String> prnlist= new ArrayList<String>();
     private ArrayList<String> userlist= new ArrayList<String>();
 
-    private int idemp=0,idbodega=0,idimpres=0,iduser=-1;
+    private int idemp=0,idbodega=0,idimpres=0,iduser=-1,ii;
     private String NomOperador, NomBodega;
     private boolean idle=false;
-
-    private String version="4.6.7";
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -111,9 +116,10 @@ public class MainActivity extends PBase {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            //super.InitBase();
-
             ProgressDialog("Inicializando...");
+
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces, la inicializo al entrar
+            browse = 1;
 
             grantPermissions();
 
@@ -121,25 +127,9 @@ public class MainActivity extends PBase {
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
             );
 
-//            if (gl.wsurl!=null){
-//
-//                IsNetWorkAvailable= netWorkInfoUtility.isNetWorkAvailableNow(this.getApplicationContext(), gl.wsurl);
-//
-//                if (IsNetWorkAvailable){
-//                    lblurl.setText(netWorkInfoUtility.gIpAdress);
-//                }
-//            }
-
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-            //#EJC20220118:Path para Android 11.
-            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
-           // if (Build.VERSION.SDK_INT >= 30) {
-                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-
-            //} else {
-             //   gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-           // }
+            gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,8 +165,8 @@ public class MainActivity extends PBase {
             imgIngresar = (ImageView) findViewById(R.id.imageView11);
             imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
 
-            lblver.setText("Versión: " + version);
-            lblVersion.setText("V. "+version);
+            lblver.setText("Versión: " +  gl.version);
+            lblVersion.setText("V. "+ gl.version);
 
             getURL();
 
@@ -201,7 +191,7 @@ public class MainActivity extends PBase {
             } catch (Exception e) {
 
             }
-            //Load();
+            Load();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
@@ -243,6 +233,9 @@ public class MainActivity extends PBase {
 
             progress_setMessage("Cargando empresas...");
             progress.show();
+
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces, aquí le cambio el valor
+            browse = 2;
 
             LimpiarControles();
 
@@ -289,7 +282,12 @@ public class MainActivity extends PBase {
             input.setText(url);
             input.setInputType(InputType.TYPE_CLASS_TEXT |
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+            if (!lblurl.getText().toString().isEmpty()){
+                input.setText(lblurl.getText());
+            }else{
+                //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+                input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+            }
             alert.setView(input);
             input.requestFocus();
 
@@ -407,7 +405,9 @@ public class MainActivity extends PBase {
         {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             {
-                startApplication();
+                //#CKFK20220215 Quité el que se vuelva a iniciar la aplicación por esta opción probé varias veces desinstalando
+                //y no me dio problemas
+               // startApplication();
             } else
             {
                 super.finish();
@@ -513,6 +513,12 @@ public class MainActivity extends PBase {
                     gl.gUbicMerma = bodegas.items.get(position).ubic_merma;
                     gl.gUbicProdNe = bodegas.items.get(position).ubic_producto_ne;
                     gl.IdProductoEstadoNE = bodegas.items.get(position).IdProductoEstadoNE;
+                    gl.Mostrar_Area_En_HH = bodegas.items.get(position).Mostrar_Area_En_HH;
+                    gl.confirmar_codigo_en_picking = bodegas.items.get(position).confirmar_codigo_en_picking;
+                    gl.inferir_origen_en_cambio_ubic = bodegas.items.get(position).inferir_origen_en_cambio_ubic;
+                    gl.operador_picking_realiza_verificacion= bodegas.items.get(position).Operador_Picking_Realiza_Verificacion;
+                    gl.Permitir_Cambio_Ubic_Producto_Picking = bodegas.items.get(position).Permitir_Cambio_Ubic_Producto_Picking;
+
                     idimpres=0;
                     execws(3);
 
@@ -672,8 +678,9 @@ public class MainActivity extends PBase {
                     break;
                 case 7:
                     Intent i = new Intent(this, Mainmenu.class);
-                    i.putExtra("version", version);
+                    i.putExtra("version", gl.version);
                     startActivity(i);
+                    progress.cancel();
                     //startActivity(new Intent(this,Mainmenu.class));
                     break;
                 case 8:
@@ -699,13 +706,10 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void ejecuta(){
-        startActivity(new Intent(this,Mainmenu.class));
-    }
-
     private void Valida_Ingreso() {
 
-        /*
+
+/*
         try {
 
             gl.IdEmpresa=1;
@@ -725,8 +729,7 @@ public class MainActivity extends PBase {
             String ss=e.getMessage();
         }
 
-         */
-
+   */
 
         try{
 
@@ -734,7 +737,7 @@ public class MainActivity extends PBase {
                 if (gl.IdBodega>0) {
                     if (gl.IdOperador>0) {
                         if (!txtpass.getText().toString().isEmpty())  {
-                            List<clsBeBodegaBase> BeBodega =
+                            List<clsBeBodega> BeBodega =
                                     stream(bodegas.items)
                                             .where(c -> c.IdBodega  == gl.IdBodega)
                                             .toList();
@@ -776,7 +779,7 @@ public class MainActivity extends PBase {
                             } else  {
                                 //progress.cancel();
                                 //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida,¿Continuar sin impresora?");
+                                msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
                             }
                             } else {
                                 progress.cancel();
@@ -817,14 +820,15 @@ public class MainActivity extends PBase {
             dialog.setCancelable(false);
 
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage(msg);
 
             dialog.setIcon(R.drawable.printicon);
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                  execws(7);
-                  //ejecuta();
+                    //#CKFK20220422 Cambié el execws(7); por el execws(9);
+                    execws(9);
+                    //ejecuta();
                 }
             });
 
@@ -895,7 +899,9 @@ public class MainActivity extends PBase {
     //region Data Processing
 
     private void processEmpresas() {
+
         try {
+
             empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             if(empresas != null){
@@ -920,7 +926,8 @@ public class MainActivity extends PBase {
         }
     }
 
-    private void processBodegas()     {
+    private void processBodegas(){
+
         try  {
 
             bodegas=xobj.getresult(clsBeBodegaList.class,"Android_Get_Bodegas_By_IdEmpresa");
@@ -1043,12 +1050,7 @@ public class MainActivity extends PBase {
 
         try
         {
-
             gl.gCantDecCalculo = (Integer) xobj.getSingle("Get_cantidad_decimales_calculoResult",Integer.class);
-
-            //Llama al metodo del WS Get_cantidad_decimales_calculo
-            //GT 16082021: no lo ejecuta!! se traslado a processVersiones
-            //execws(6);
 
         } catch (Exception e)
         {
@@ -1057,13 +1059,15 @@ public class MainActivity extends PBase {
     }
 
     private void processVersiones() {
+
         try {
-            versiones=xobj.getresult(clsBeVersion_wms_hh_andList.class,"Android_Get_All_Versiones");
-            if (versiones!=null){
-                validaVersion();
-            }
+
+            validaVersion();
+
             idle=true;
+
             execws(6);
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -1084,7 +1088,9 @@ public class MainActivity extends PBase {
     }
 
     private boolean processLicencia() {
+
         boolean rslt=false;
+
         try {
 
             Integer msgLic = 0;
@@ -1111,7 +1117,9 @@ public class MainActivity extends PBase {
     }
 
     private void processServidor() {
+
         String servidor="";
+
         try {
 
             progress.cancel();
@@ -1197,6 +1205,7 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinBod() {
+
         String ss;
 
         try {
@@ -1241,8 +1250,9 @@ public class MainActivity extends PBase {
     }
 
     private void fillSpinUser() {
-        try
-        {
+
+        try{
+
             userlist.clear();
 
             for (int i = 0; i <users.items.size(); i++)
@@ -1254,14 +1264,12 @@ public class MainActivity extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinuser.setAdapter(dataAdapter);
 
-            if (userlist.size()>0)
-            {
+            if (userlist.size()>0) {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
 
                 txtpass.requestFocus();
                 //showkeyb();
-
             }
 
         } catch (Exception e)
@@ -1278,16 +1286,9 @@ public class MainActivity extends PBase {
         try {
 
             //#EJC20220118: reemplazo, por Android 11, context datadir.
-            //Environment.getExternalStorageDirectory()
-            //#AT 20220211 Validacion de Android para asignar la direccion data o sdcard
             if (gl.PathDataDir.isEmpty()){
-//                if (Build.VERSION.SDK_INT >= 30) {
                   gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
-//                } else {
-//                    gl.PathDataDir = Environment.getExternalStorageDirectory().getPath();
-//                }
             }
-
 
             String pathText = gl.PathDataDir + "/tomws.txt";
             File file1 = new File(pathText);
@@ -1364,17 +1365,6 @@ public class MainActivity extends PBase {
 
         progress.show();
 
-//        progress=new ProgressDialog(this);
-//        progress.setMessage(mensaje);
-//        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progress.setIndeterminate(true);
-//        progress.setProgress(0);
-//        progress.show();
-
-//        ProgressBar progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-//        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        //layout.addView(progressBar, params);
     }
 
     private void execws(int callbackvalue) {
@@ -1384,11 +1374,29 @@ public class MainActivity extends PBase {
 
     protected void onResume() {
         try  {
-            Load();
+            //#CKFK20220215 Agregué esta variable de control para evitar que entre al Load dos veces
+            if (browse==1){
+                Load();
+            }
             super.onResume();
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
+    }
+
+    @Override
+    public void onUpdateNeeded(String updateUrl) {
+
+        final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+        updateUrl = remoteConfig.getString("KEY_UPDATE_URL");
+        redirectStore(updateUrl);
+
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public class WebServiceHandler extends WebService  {
@@ -1427,6 +1435,7 @@ public class MainActivity extends PBase {
                         callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
                                 "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",false);
                         //ejecuta();
+                        break;
                     case 8:
                         callMethod("Android_Get_All_Versiones");
                         break;
@@ -1457,95 +1466,66 @@ public class MainActivity extends PBase {
 
     private void validaVersion() {
 
-        int pp,idemp=0;
-
         if (empresas.items.size()==0) return;
 
         try {
 
-            pp=spinemp.getSelectedItemPosition();
-            idemp=empresas.items.get(pp).IdEmpresa;
+            final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+            String VersionRemoteConfigFireBase = remoteConfig.getString("KEY_CURRENT_VERSION");
+            String Nueva_Version_FireBaseConPuntos = VersionRemoteConfigFireBase;
+            String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
+            String versionActual = gl.version.replace(".","");
 
-            if (versiones!=null){
+            Log.d("version_firebase",VersionRemoteConfigFireBase);
 
-                for (int i = 0; i <versiones.items.size(); i++) {
+            if (!Nueva_Version_FireBase.isEmpty()){
 
-                    if (versiones.items.get(i).IdEmpresa==idemp) {
+                long vNuevaVersionFireBase = Long.parseLong(Nueva_Version_FireBase);
+                long vVersionActualHH = Long.parseLong(versionActual);
 
-                        //#EJC20220118: Saber si la versión en FB es mayor.
-                        String Nueva_Version = versiones.items.get(i).Version;
-                        String[] versionOnFirebase = Nueva_Version.split("\\.");
-                        String[] versionActual = version.split("\\.");
-
-                        int vActualMajor =Integer.parseInt(versionActual[0]);
-                        int vActualMedium =Integer.parseInt(versionActual[1]);
-                        int vActualMinor =Integer.parseInt(versionActual[2]);
-
-                        int vFBaseMajor =Integer.parseInt(versionOnFirebase[0]);
-                        int vFBaseMedium =Integer.parseInt(versionOnFirebase[1]);
-                        int vFBaseMinor =Integer.parseInt(versionOnFirebase[2]);
-
-
-                        if(vFBaseMinor > vActualMinor && vFBaseMedium > vActualMedium && vFBaseMajor > vActualMajor)
-                        {
-                            msgAskActualizarVersion("La versión actual es: "  + version + " ¿Actualizar a la nueva versión: " + Nueva_Version + "?");
-                            return;
-                        }
-                    }
+                if(vNuevaVersionFireBase > vVersionActualHH)
+                {
+                    msgAskActualizarVersion("La versión actual es: "  + gl.version + " ¿Actualizar a versión: " + Nueva_Version_FireBaseConPuntos + "?");
+                    return;
                 }
             }
+
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
-
     }
 
     private void msgAskActualizarVersion(String msg) {
+
         ExDialog dialog = new ExDialog(this);
         dialog.setMessage(msg);
 
-        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    actualizaVersion();
-                } catch (Exception e) {
-                    msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-                }
+        dialog.setPositiveButton("Si", (dialog1, which) -> {
+            try {
+                actualizaVersion();
+            } catch (Exception e) {
+                msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
             }
         });
 
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {}
-        });
+        dialog.setNegativeButton("No", (dialog12, which) -> {});
 
         dialog.show();
 
     }
 
-//    private void validaResolucionLP() {
-//
-//        try {
-//
-//            if (ResolucionLpByBodega !=null){
-//                if (ResolucionLpByBodega.items.size() == 0){
-//                    msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolucion de etiquetas para LP");
-//                }else{
-//                    execws(7);
-//                }
-//            }
-//
-//        } catch (Exception e) {
-//            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-//        }
-//
-//    }
-
     private void actualizaVersion() {
         try {
-            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
-            intent.putExtra("filename","tom.apk");
-            this.startActivity(intent);
+
+            //force_update
+            ForceUpdateChecker.with(this).onUpdateNeeded(this).do_update();
+
+//#EJC20220422
+//            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.dts.mposupd");
+//            intent.putExtra("filename","tom.apk");
+//            this.startActivity(intent);
+
         } catch (Exception e) {
             msgbox("No está instalada aplicación para actualización de versiónes, por favor informe soporte.");
         }

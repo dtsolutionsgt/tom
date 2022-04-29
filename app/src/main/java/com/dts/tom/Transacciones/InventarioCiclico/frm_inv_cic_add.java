@@ -526,6 +526,9 @@ public class frm_inv_cic_add extends PBase {
 
         boolean respuesta = false;
 
+        //#CKFK20220218 Agregué este replace para cuando la barra tiene el símbolo de dólar
+        codigo_producto = codigo_producto.toString().replace("$","");
+
         try{
                 if(gl.inv_ciclico.Licence_plate.equals(codigo_producto)){
 

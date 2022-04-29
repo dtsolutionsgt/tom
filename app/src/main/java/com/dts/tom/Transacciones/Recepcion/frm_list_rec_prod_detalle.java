@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.Recepcion;
 
+import static br.com.zbra.androidlinq.Linq.stream;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,17 +16,10 @@ import android.widget.ListView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
-import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
-import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
-import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
-import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
-import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
-import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -39,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static br.com.zbra.androidlinq.Linq.stream;
 
 
 public class frm_list_rec_prod_detalle extends PBase {
@@ -214,6 +207,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.IdProductoBodega = obj.IdProductoBodega;
                        vItem.Nombre_producto_estado = obj.Nombre_producto_estado;
                        vItem.Fecha_vence = du.convierteFechaMostrar(obj.Fecha_vence);
+                       vItem.Lote = obj.Lote;
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
 
@@ -436,23 +430,23 @@ public class frm_list_rec_prod_detalle extends PBase {
                 //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
                 String zpl = String.format("^XA \n" +
-                                "^MMT \n" +
-                                "^PW700 \n" +
-                                "^LL0406 \n" +
-                                "^LS0 \n" +
-                                "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-                                "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-                                "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                "^FO2,340^GB670,0,14^FS \n" +
-                                "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                "^FD%4$s^FS \n" +
-                                "^PQ1,0,1,Y " +
-                                "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                        (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
 
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);

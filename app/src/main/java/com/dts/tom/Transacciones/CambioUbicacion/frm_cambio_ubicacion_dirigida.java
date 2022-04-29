@@ -704,7 +704,14 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
             gMovimientoDet.Fecha_vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
-            gMovimientoDet.Fecha = gl.tareadet.HoraFin;
+            //gMovimientoDet.Fecha = gl.tareadet.HoraFin;
+            //gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
+            //gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
+            //#GT19042022: se obtiene la fecha actual, porque en gl.tareadet las horas vienen null
+            gMovimientoDet.Fecha = du.getFullDate();
+            gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
+            gMovimientoDet.Hora_fin = du.getFechaActual();
+            gMovimientoDet.Fecha_agr = du.getFechaActual();
 
             if (gl.Escaneo_Pallet){
                 if (gl.BeStockPallet!=null) {
@@ -717,9 +724,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 gMovimientoDet.Barra_pallet = "";
             }
 
-            gMovimientoDet.Hora_ini = gl.tareadet.HoraInicio;
-            gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
-            gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;
             gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperadorBodega);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;

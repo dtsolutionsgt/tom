@@ -1,6 +1,10 @@
 package com.dts.base;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
@@ -23,10 +27,18 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.classes.clsBeImagen;
+import com.dts.tom.ForceUpdateChecker;
+import com.dts.tom.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class appGlobals extends Application {
 
@@ -157,4 +169,54 @@ public class appGlobals extends Application {
     //#EJC20220129: Validar si la ubicación destino tiene producto o está "libre" antes de colocar producto allí
 
     public boolean validar_disponibilidad_ubicaicon_destino = false;
+
+    public boolean Mostrar_Area_En_HH=false;
+    public boolean confirmar_codigo_en_picking=false;
+
+    //#EJC20220314: CEALSA, si true, entonces en el cambio de ubicación, al escanear únicamente licencia, se coloca automáticamente la ubicación de origen.
+    public boolean inferir_origen_en_cambio_ubic =false;
+
+    //Imagen
+    public Bitmap imagen;
+    public ArrayList<clsBeImagen> ListImagen = new ArrayList<clsBeImagen>();
+
+    //Recepción
+    public int recepcionIdUbicacion = 0;
+
+    //#EJC20220330_CEALSA: Si true, se envía en la HH el IdOperadorBodega para filtrar las tareas de verificación
+    public boolean operador_picking_realiza_verificacion =false;
+
+    //#EJC20220330_CEALSA: Si true, se permite realizar el cambio de ubicación de producto que está reservado en picking pero se actualiza el IdUbicacionTemporal.
+    public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
+
+    public int sortOrd = 0;
+
+    public boolean mostar_filtros = false;
+    public String termino = "";
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    public final String version="4.6.0.26";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        // set in-app defaults
+        Map<String, Object> remoteConfigDefaults = new HashMap();
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, version);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,"");
+
+        firebaseRemoteConfig.setDefaultsAsync(remoteConfigDefaults);
+        firebaseRemoteConfig.fetch(1) // fetch every minutes
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "remote config is fetched.");
+                        firebaseRemoteConfig.activate();
+                    }
+                });
+        }
 }

@@ -26,7 +26,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="1008049944 - Aceite Ideal Maiz 60 ml"
+            android:text="-"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -82,8 +82,9 @@
         android:id="@+id/scroldATOS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/relbot"
-        android:layout_below="@id/reltop">
+        android:layout_above="@+id/relOpciones"
+        android:layout_below="@id/reltop"
+        android:layout_marginBottom="0dp">
 
         <LinearLayout
             android:id="@+id/lnDatos"
@@ -97,7 +98,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/color_light"
                 android:gravity="center"
-                android:text="Propietario: Idealsa" />
+                android:text="Propietario: -" />
 
             <RelativeLayout
                 android:id="@+id/tblBarra"
@@ -130,7 +131,7 @@
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:paddingStart="10dp"
-                    android:text="LP :"
+                    android:text="Licencia:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -210,45 +211,49 @@
                     android:visibility="visible" />
             </TableRow>
 
-            <TableRow
+            <RelativeLayout
                 android:id="@+id/tblPres"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lblsinPresentacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/conPresentacion"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Sin Presentación"
+                    android:textSize="17sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textView83"
                     style="@style/StyleText"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="43dp"
                     android:text="Presentación:" />
 
                 <Spinner
                     android:id="@+id/cmbPresRec"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="45dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@+id/conPresentacion"
+                    android:layout_toEndOf="@+id/textView83" />
 
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tblEstiba"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/lblEstiba"
-                    style="@style/StyleText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:text="Camas X Tarima - Cajas X Cama"
-                    android:textSize="18sp"
-                    android:visibility="visible" />
-            </TableRow>
+            </RelativeLayout>
 
             <TableRow
                 android:id="@+id/tblUmbas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView84"
@@ -269,21 +274,80 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView85"
+                        style="@style/StyleText"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Cantidad:" />
+
+                    <EditText
+                        android:id="@+id/txtCantidadRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_toStartOf="@+id/conPresentacion"
+                        android:layout_toEndOf="@+id/textView85"
+                        android:ems="10"
+                        android:inputType="number|numberDecimal"
+                        android:selectAllOnFocus="true" />
+
+                    <CheckBox
+                        android:id="@+id/conPresentacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="5dp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblSinPresentacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
                 <TextView
-                    android:id="@+id/textView85"
-                    style="@style/StyleText"
+                    android:id="@+id/textView9"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Cantidad:" />
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/txtCantidadRec"
-                    android:layout_width="259dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:inputType="number|numberDecimal"
-                    android:selectAllOnFocus="true" />
+                <TextView
+                    android:id="@+id/lblsinPresentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Recibir  el producto sin presentación"
+                    android:textColor="#FF0000"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </TableRow>
 
+            <TableRow
+                android:id="@+id/tblEstiba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lblEstiba"
+                    style="@style/StyleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:text="Camas X Tarima - Cajas X Cama"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
             </TableRow>
 
             <TableRow
@@ -388,43 +452,72 @@
                     android:layout_marginTop="10dp" />
             </TableRow>
 
-            <TableRow
+            <RelativeLayout
+                android:id="@+id/relCheckBox"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <Button
-                    android:id="@+id/btnCantPendiente"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:background="@android:color/holo_blue_dark"
-                    android:text="Pendientes: 1"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
                 <CheckBox
-                    android:id="@+id/chkPaletizar"
+                    android:id="@+id/chkPalletNoEstandar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="Paletizar"
-                    tools:visibility="gone" />
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:checked="false"
+                    android:gravity="center_vertical"
+                    android:text="Pallet No Estándar"
+                    android:textSize="14sp" />
 
                 <CheckBox
                     android:id="@+id/chkEstiba"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="Definir estiba" />
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_toStartOf="@+id/chkPaletizar"
+                    android:layout_toEndOf="@+id/chkPalletNoEstandar"
+                    android:text="Definir estiba"
+                    android:textSize="14sp" />
 
-            </TableRow>
+                <CheckBox
+                    android:id="@+id/chkPaletizar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:text="Paletizar"
+                    android:textSize="14sp"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relTotales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnCantPendiente"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@android:color/holo_blue_dark"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="Pendientes: 1"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/btnCantRecibida"
@@ -439,16 +532,88 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/chkPalletNoEstandar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="Pallet No Estándar" />
+
             </TableRow>
 
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/relOpciones"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_above="@+id/relbot"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/relVerFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:gravity="center_horizontal"
+            android:onClick="verImagenes">
+
+            <ImageView
+                android:id="@+id/imgGaleria"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/lblGaleria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgGaleria"
+                android:layout_alignEnd="@+id/imgGaleria"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="Galería"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relTomarFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center_horizontal"
+            android:onClick="Capturar">
+
+            <ImageView
+                android:id="@+id/imgCamara"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <TextView
+                android:id="@+id/lblCamara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgCamara"
+                android:layout_alignEnd="@+id/imgCamara"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="Capturar"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

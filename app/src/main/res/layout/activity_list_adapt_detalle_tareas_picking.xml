@@ -257,5 +257,28 @@
             android:text="TextView"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/lblNombreArea"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblNombreClasificacion"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Clasificación"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
     </LinearLayout>
 </RelativeLayout>

@@ -50,6 +50,7 @@ public class frm_danado_picking extends PBase {
 
     public static int IdEstadoDanadoSelect = 0;
     public static String vNomUbicDestino="";
+    public static boolean existe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +88,10 @@ public class frm_danado_picking extends PBase {
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
                     txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
-                    BeUbicDestino = new clsBeBodega_ubicacion();
+                    /*BeUbicDestino = new clsBeBodega_ubicacion();
                     BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                     IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-                    execws(2);
+                    execws(2);*/
 
                 }
 
@@ -106,14 +107,22 @@ public class frm_danado_picking extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicDest.getText().toString().isEmpty()){
-                            /*BeUbicDestino = new clsBeBodega_ubicacion();
+
+                            validaUbicacion();
+
+                            BeUbicDestino = new clsBeBodega_ubicacion();
                             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-                            execws(2);*/
-                            msgMover("Producto: "+gBeProducto.Nombre
-                                    + "\n Destino: "+lblNomUbic.getText().toString()
+
+                            if (existe) {
+                                execws(2);
+                            } else {
+                                 msgMover("Producto: "+gBeProducto.Nombre
+                                    + "\n Destino: "+txtUbicDest.getText().toString()
                                     + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
                                     + "\n ¿Mover?");
+                            }
+
                         }
                     }
 
@@ -126,14 +135,43 @@ public class frm_danado_picking extends PBase {
         }
     }
 
+    public void validaUbicacion() {
+        existe = false;
+        for(int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
+            if (LProductoEstadoDanado.items.get(i).IdUbicacionBodegaDefecto == Integer.parseInt(txtUbicDest.getText().toString().trim())) {
+                existe = true;
+                break;
+            }
+        }
+    }
+
     public void BotonGuardarDanado(View view){
         if (!txtUbicDest.getText().toString().isEmpty()){
             /*BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
             execws(2);*/
+
+            validaUbicacion();
+
+            String destino = "";
+
+            if (existe) {
+                destino = lblNomUbic.getText().toString();
+                BeUbicDestino = new clsBeBodega_ubicacion();
+                BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+                IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                execws(2);
+            } else {
+                destino = txtUbicDest.getText().toString();
+            }
+
+            BeUbicDestino = new clsBeBodega_ubicacion();
+            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+
             msgMover("Producto: "+gBeProducto.Nombre
-                    + "\n Destino: "+lblNomUbic.getText().toString()
+                    + "\n Destino: "+ destino
                     + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
                     + "\n ¿Mover?");
         }
@@ -357,10 +395,10 @@ public class frm_danado_picking extends PBase {
                 return;
             }
 
-            /*msgMover("Producto: "+gBeProducto.Nombre
+            msgMover("Producto: "+gBeProducto.Nombre
                             + "\n Destino: "+lblNomUbic.getText().toString()
                             + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
-                            + "\n ¿Mover?");*/
+                            + "\n ¿Mover?");
 
 
         }catch (Exception e){
