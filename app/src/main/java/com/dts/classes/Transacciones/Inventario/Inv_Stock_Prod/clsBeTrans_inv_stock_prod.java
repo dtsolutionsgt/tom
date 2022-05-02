@@ -1,5 +1,7 @@
 package com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod;
 
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+
 import org.simpleframework.xml.Element;
 
 public class clsBeTrans_inv_stock_prod {
@@ -18,6 +20,7 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public int IdUbicacion=0;
     @Element(required=false) public String License_plate="";
     @Element(required=false) public String Codigo_variante="";
+    @Element(required=false) public clsBeProducto BeProducto=new clsBeProducto();
 
     public clsBeTrans_inv_stock_prod() {
     }
@@ -128,5 +131,13 @@ public class clsBeTrans_inv_stock_prod {
     public void setCodigo_variante(String value) {
         Codigo_variante=value;
     }
+
+    public clsBeProducto getBeProducto() {
+        return BeProducto;
+    }
+    public void setBeProducto(clsBeProducto value) {
+        BeProducto=value;
+    }
+
 }
 

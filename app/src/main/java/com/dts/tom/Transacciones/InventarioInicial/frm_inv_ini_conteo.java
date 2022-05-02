@@ -684,6 +684,7 @@ public class frm_inv_ini_conteo extends PBase {
             PresList.clear();
 
             if (InvTeorico != null) {
+
                 if (InvTeorico.items != null) {
 
                     //GT 19112021: si hay un prod sin presentacion, se carga primero op vacia y luego las existentes
@@ -1145,9 +1146,12 @@ public class frm_inv_ini_conteo extends PBase {
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 3:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH", "pCodigo", txtCodBarra.getText().toString(),
-                                "IdBodega", gl.IdBodega);
+                        callMethod("Get_Inventario_Teorico_By_Codigo_O_Licencia",
+                                   "pidinventario", BeInvEnc.Idinventarioenc,
+                                   "pCodigo", txtCodBarra.getText().toString(),
+                                   "pIdBodega", gl.IdBodega);
                         break;
+
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", BeProducto.IdProducto, "pActivo", true);
                         break;
@@ -1201,7 +1205,8 @@ public class frm_inv_ini_conteo extends PBase {
                     processUbic();
                     break;
                 case 3:
-                    processProducto();
+                    //·EJC20220502
+                    processInvTeorico();
                     break;
                 case 4:
                     processPresentacion();
@@ -1279,7 +1284,8 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            BeProducto = xobj.getresult(clsBeProducto.class, "Get_BeProducto_By_Codigo_For_HH");
+            //·EJC20220502: Obsoleto, obtener inv teòrico a partir del escaneo de producto o licencia.
+            //BeProducto = xobj.getresult(clsBeProducto.class, "Get_Inventario_Teorico_By_Codigo_O_Licencia");
 
             if (BeProducto != null) {
 
@@ -1346,9 +1352,15 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
-            InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo");
+            InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo_O_Licencia");
 
-            Valida_Inventario_Teorico();
+            if(InvTeorico!=null){
+
+                BeProducto= InvTeorico.items.get(0).BeProducto;
+
+                Valida_Inventario_Teorico();
+
+            }
 
         }catch (Exception e){
             mu.msgbox("processInvTeorico:"+e.getMessage());
