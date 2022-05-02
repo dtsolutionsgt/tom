@@ -163,9 +163,9 @@
 
                 <EditText
                     android:id="@+id/txtCantidadPick"
-                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:focusableInTouchMode="true"
                     android:inputType="number"
                     tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
@@ -303,8 +303,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/color_light">
 
                 <TextView

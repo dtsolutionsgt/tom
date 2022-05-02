@@ -252,7 +252,6 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-
             if (txtLicencia !=null){
 //                txtLicencia.setOnClickListener(view -> {
 //
@@ -318,6 +317,16 @@ public class frm_picking_datos extends PBase {
                     }
 
                     return false;
+                }
+            });
+
+
+            txtLicencia.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        toast("aqui esta el focus");
+                    }
                 }
             });
 
@@ -608,11 +617,18 @@ public class frm_picking_datos extends PBase {
                             if (gBePickingUbic.Lic_plate.equals(pLP)){
                                 Continua_procesando_barra();
                             }else{
-                                mu.msgbox("la licencia no válida.");
-                                //txtBarra.setSelectAllOnFocus(true);
-                                //txtLicencia.setText("");
+
+                                //#GT02052022_1259 CEALSA: si la LP leida no es la esperada, pero existe en la ola validamos
+                                //#AT20220428 Se llama a la funcion ProcesaLicUbic si la licencia ingresada es diferente
+                                ProcesaLicUbic();
+
+                                if (ValidaLicUbic){
+                                    txtCodigoProducto.requestFocus();
+                                }
+
+                                //mu.msgbox("la licencia no válida.");
                                 //#GT22042022 se deja la licencia digitada, para ser editada caso cealsa, no se debe limpiar
-                                txtLicencia.requestFocus();
+                                //txtLicencia.requestFocus();
 
                             }
                         }else
@@ -649,7 +665,7 @@ public class frm_picking_datos extends PBase {
             //#AT20220428 Actualiza los datos de gBeProducto
             Load();
         } else {
-            mu.msgbox("El código ingresado no es el válido para la línea de picking");
+            mu.msgbox("la LP no es válida para la línea de picking");
             txtLicencia.setFocusable(true);
             return;
         }
