@@ -189,19 +189,6 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 }
             });
 
-          /*  txtLicPlate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus) {
-                        if (txtLicPlate.getText().toString().equals("") ||
-                            txtLicPlate.getText().toString().isEmpty() ||
-                            txtLicPlate.getText().toString()==null){
-                            msgbox("Debe ingresar el código del License Plate");
-                        }
-                    }
-                }
-            });
-*/
             txtUbicDestino.setOnKeyListener(new View.OnKeyListener(){
 
                 @Override
@@ -477,15 +464,16 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                         txtLicPlate.getText().toString().isEmpty() ||
                         txtLicPlate.getText().toString()==null){
 
-                    mu.msgbox("Debe ingresar el license plate del producto");
+                    mu.msgbox("Ingrese licencia del producto");
                     txtLicPlate.requestFocus();
                     return;
                 }
 
                 String Lp=txtLicPlate.getText().toString().replace("$","");
+
                 if (!gl.tareadet.Stock.getLic_plate().equals(Lp)){
 
-                    msgbox(String.format("El license plate %s ingresado no es válido", txtLicPlate.getText().toString()));
+                    msgbox(String.format("La licencia %s ingresada no es válida", txtLicPlate.getText().toString()));
                     txtLicPlate.setText("");
                     txtLicPlate.requestFocus();
                     return;

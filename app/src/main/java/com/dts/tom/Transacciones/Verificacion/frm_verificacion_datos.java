@@ -427,19 +427,29 @@ public class frm_verificacion_datos extends PBase {
 
                 }
             }else{
+
                 lblCantVeri.setText("Cantidad ("+UM+"): ");
-                factor = gBeProducto.Presentaciones.items.get(0).Factor;
+
+                if (gBeProducto.Presentaciones != null) {
+                    factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                }else{
+                    factor = 0;
+                }
+
                 double CantSol = Sol;
                 double CantRec = Ver;
 
-                if (CantSol > factor) {
+                if (CantSol > factor && factor > 0) {
+
                     //#AT Cantidad Solicitada
                     double cantidadPresentacion = CantSol / factor;
                     double decimal = cantidadPresentacion % 1;
                     double cajas = cantidadPresentacion - decimal;
                     double unidades = decimal * factor;
 
-                    lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                    if (gBeProducto.Presentaciones != null) {
+                        lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                    }
 
                     txtUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
                     lblUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
@@ -477,7 +487,7 @@ public class frm_verificacion_datos extends PBase {
 
             if (Lp != ""){
                 lblLicPlate2.setVisibility(View.VISIBLE);
-                lblLicPlate2.setText(String.format("LP: %s", Lp));
+                lblLicPlate2.setText(String.format("Licencia: %s", Lp));
             }
 
             txtPesoVeri.setText(mu.frmdecimal(0, gl.gCantDecDespliegue));
@@ -488,6 +498,12 @@ public class frm_verificacion_datos extends PBase {
                             .select(clsBeTrans_picking_ubic::getPeso_recibido)
                             .sum((SelectorDouble<Double>) z -> z);
                     txtPesoVeri.setText(mu.frmdecimal(suma, gl.gCantDecDespliegue));
+
+                    if (suma>0){
+                        llPeso.setVisibility(View.VISIBLE);
+                    }
+
+
                 }
             }
 
@@ -623,7 +639,16 @@ public class frm_verificacion_datos extends PBase {
             }
 
             pCantidad = Double.parseDouble(txtCantVeri.getText().toString());
-            pPeso =  Double.parseDouble(txtPesoVeri.getText().toString());
+
+            String vPeso = txtPesoVeri.getText().toString();
+
+            if(!vPeso.isEmpty()){
+                if(vPeso.contains(",")){
+                    vPeso = vPeso.replace(",","");
+                }
+            }
+
+            pPeso =  Double.parseDouble(vPeso);
 
             pSubListPickingU = new clsBeTrans_picking_ubicList();
 

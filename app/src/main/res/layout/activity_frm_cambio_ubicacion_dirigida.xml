@@ -67,7 +67,7 @@
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="LP:"
+                    android:text="Licencia:"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:enabled="true"
-                    android:hint="LP"
+                    android:hint="Licencia"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"

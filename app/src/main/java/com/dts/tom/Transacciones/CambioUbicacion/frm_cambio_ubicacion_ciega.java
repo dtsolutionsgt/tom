@@ -2068,7 +2068,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try {
 
-            progress.setMessage("Cargando stock de producto con License Plate");
+            progress.setMessage("Cargando stock con licencias");
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
@@ -2119,7 +2119,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try {
 
-            progress.setMessage("Obteniendo nuevo correlativo de License Plate");
+            progress.setMessage("Obteniendo nueva licencia");
             progress.show();
 
             vNuevoPalletId = (String) xobj.getSingle("Get_Nuevo_Correlativo_LicensePlateResult",String.class);
@@ -2128,7 +2128,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //Set_Nuevo_Pallet_Id
                 execws(9);
             }else{
-                msgbox("Ocurrió un error obteniendo el nuevo correlativo License Plate");
+                msgbox("Error al obtener correlativo de licencia!");
             }
 
         } catch (Exception e) {

@@ -653,17 +653,12 @@ public class frm_picking_datos extends PBase {
 
             if (!txtLicencia.getText().toString().isEmpty()) {
 
-                //String vStarWithParameter = "$";
-
-               /* if (txtBarra.getText().toString().startsWith("$") |
-                        txtBarra.getText().toString().startsWith("(01)") |
-                        txtBarra.getText().toString().startsWith(vStarWithParameter)) {*/
-
                     int vLengthBarra = txtLicencia.getText().toString().length();
 
                     if (vLengthBarra > 0) {
 
                         Escaneo_Pallet = true;
+
                         pLP = txtLicencia.getText().toString().replace("$", "");
 
                         if ( confirmar_codigo_en_picking ){
@@ -690,13 +685,6 @@ public class frm_picking_datos extends PBase {
                         }
 
                     }
-
-
-               /* } else {
-                    Escaneo_Pallet = false;
-                    Continua_procesando_barra();
-                }*/
-
             }
 
 

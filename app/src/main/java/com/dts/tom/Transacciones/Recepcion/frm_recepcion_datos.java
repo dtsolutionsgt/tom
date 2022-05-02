@@ -1109,7 +1109,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if(vCant>1){
-                    mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de un pallet");
+                    mu.msgbox("Las licencias van a ser ingresados manualmente, no puede recepcionar más de un pallet");
 //                    txtCantidadRec.setText(mu.frmdecimal(1,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.setText(1+"");
                     txtCantidadRec.requestFocus();
@@ -1124,7 +1124,7 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 if (vCant>bePresentacion.CajasPorCama*bePresentacion.CamasPorTarima){
-                    mu.msgbox("Los license plate van a ser ingresados manualmente, no puede recepcionar más de "+bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima
+                    mu.msgbox("Las licencias van a ser ingresadas manualmente, no puede recepcionar más de "+bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima
                             + " "+ bePresentacion.Nombre);
 //                    txtCantidadRec.setText(mu.frmdecimal(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima,gl.gCantDecDespliegue)+"");
                     txtCantidadRec.setText(bePresentacion.CajasPorCama * bePresentacion.CamasPorTarima+"");
@@ -6947,7 +6947,7 @@ public class frm_recepcion_datos extends PBase {
             txtLicPlate.setClickable(false);
 
         }catch (Exception e){
-            mu.msgbox("processLicensePallet: "+e.getMessage());
+            mu.msgbox("processLicencia: "+e.getMessage());
         }
     }
 
@@ -6958,7 +6958,7 @@ public class frm_recepcion_datos extends PBase {
             PallCorrecto  = xobj.getresult(Boolean.class,"Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet");
 
             if (!PallCorrecto){
-                mu.msgbox("El License Plate ya existe, debe ingresar otro valor");
+                mu.msgbox("Licencia ya existe, ingrese otro valor");
             }else{
                 ContinuaValidandoParametros();
             }
@@ -7055,7 +7055,7 @@ public class frm_recepcion_datos extends PBase {
             EsCorrecto  = xobj.getresult(Boolean.class,"Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet");
 
             if (!EsCorrecto){
-                mu.msgbox("El License Plate ya existe, debe ingresar otro valor");
+                mu.msgbox("Licencia ya existe, ingrese otro valor");
                 execws(15);
             }
 
@@ -7519,9 +7519,9 @@ public class frm_recepcion_datos extends PBase {
             if (Existe_Lp){
                 //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
                 if (gl.bloquear_lp_hh){
-                    msgExisteLp("El Lp: "+pLp+ " ya existe, debe ingresar una nueva licencia");
+                    msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
                 }else{
-                    msgAskExisteLp("El Lp: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
+                    msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
                 }
             }else{
                 if (guardando_recepcion){
