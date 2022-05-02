@@ -603,12 +603,11 @@ public class frm_picking_datos extends PBase {
                         Escaneo_Pallet = true;
                         pLP = txtLicencia.getText().toString().replace("$", "");
 
-
                         if ( confirmar_codigo_en_picking ){
                             if (gBePickingUbic.Lic_plate.equals(pLP)){
                                 Continua_procesando_barra();
                             }else{
-                                mu.msgbox("la licencia no válida.");
+                                mu.msgbox("Licencia no válida.");
                                 //txtBarra.setSelectAllOnFocus(true);
                                 //txtLicencia.setText("");
                                 //#GT22042022 se deja la licencia digitada, para ser editada caso cealsa, no se debe limpiar
