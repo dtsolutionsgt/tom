@@ -67,6 +67,7 @@ public class frm_picking_datos extends PBase {
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
+    private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
 
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad, lblPresSol, lblPresRec, lblUnidadSol, lblUnidadRec;
@@ -1335,7 +1336,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            lblPresSol.setText(auxPres.Nombre+":");
             txtPreSol.setText(String.valueOf(mu.frmdec(CantPresentacion)));
             txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
 
@@ -1351,7 +1352,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+            lblPresSol.setText(auxPres.Nombre+":");
             txtPreSol.setText("0");
             txtUnidadSol.setText(String.valueOf(mu.frmdec(CantidadUMBas)));
 
@@ -1527,7 +1528,9 @@ public class frm_picking_datos extends PBase {
                 /*List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                 int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                 cmbPresentacion.setSelection(inx);*/
-                lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
+                auxPres = stream(gBeProducto.Presentaciones.items).where(c-> c.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+
+                lblCantidad.setText("Cantidad ("+auxPres.Nombre+"): ");
             } else {
                 lblCantidad.setText("Cantidad ("+vUnidadMedida+"): ");
             }
@@ -2115,7 +2118,8 @@ public class frm_picking_datos extends PBase {
                     if (gBeProducto.Presentaciones!=null){
                         if (gBeProducto.Presentaciones.items!=null){
 
-                            factor = gBeProducto.Presentaciones.items.get(0).Factor;
+                            auxPres = stream(gBeProducto.Presentaciones.items).where(c-> c.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+                            factor = auxPres.Factor;
 
                             double cantidad_solicitada = gBePickingUbic.Cantidad_Solicitada;
 
@@ -2160,7 +2164,7 @@ public class frm_picking_datos extends PBase {
                                         lblUnidadRec.setVisibility(View.GONE);
                                     }
 
-                                    lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                    lblPresRec.setText(auxPres.Nombre+":");
                                     txtPresRec.setText(String.valueOf(mu.frmdec(CantidadPresentacionRec)));
                                     txtUnidadRec.setText(String.valueOf(mu.frmdec(CantidadUMBasRec)));
 
@@ -2182,7 +2186,7 @@ public class frm_picking_datos extends PBase {
                                     txtPresRec.setVisibility(View.GONE);
                                 }
 
-                                lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+                                lblPresRec.setText(auxPres.Nombre+":");
                                 txtPresRec.setText("0.00");
                                 txtUnidadRec.setText("0.00");
                             }
@@ -2196,7 +2200,7 @@ public class frm_picking_datos extends PBase {
                         double CantSol = gBePickingUbic.Cantidad_Solicitada;
                         double CantRec = gBePickingUbic.Cantidad_Recibida;
 
-                        if (CantSol > factor) {
+                        if (CantSol > factor && factor > 0) {
                             //#AT Cantidad Solicitada
                             double cantidadPresentacion = CantSol / factor;
                             double decimal = cantidadPresentacion % 1;
@@ -2439,7 +2443,9 @@ public class frm_picking_datos extends PBase {
                        /* List Aux = stream(gBeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         int inx= Aux.indexOf(gBePickingUbic.IdPresentacion);
                         cmbPresentacion.setSelection(inx);*/
-                    lblCantidad.setText("Cantidad ("+gBeProducto.Presentaciones.items.get(0).Nombre+"): ");
+                    auxPres = stream(gBeProducto.Presentaciones.items).where(c-> c.IdPresentacion == gBePickingUbic.IdPresentacion).first();
+
+                    lblCantidad.setText("Cantidad ("+auxPres.Nombre+"): ");
 
                     //#CKFK 20211104 Agregué esta validacion en base a lo conversado con Erik
                     gBePresentacion= stream(gBeProducto.Presentaciones.items).
