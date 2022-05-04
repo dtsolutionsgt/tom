@@ -4768,9 +4768,18 @@ public class frm_recepcion_datos extends PBase {
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
+
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
+
                 Imprimir_Licencia(CantCopias);
+
+                //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
+                //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
+                if (gl.Mostrar_Area_En_HH) {
+                    Imprimir_Codigo_Barra_Producto(CantCopias);
+                }
+
                 progress.cancel();
             });
 
