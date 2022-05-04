@@ -163,6 +163,7 @@ public class frm_inv_ini_conteo extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtCodBarra.getText().toString().isEmpty()) {
+                            emptyPres = false;
                             execws(3);
                         }
                     }
@@ -692,9 +693,12 @@ public class frm_inv_ini_conteo extends PBase {
                     for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
 
                         if (BeLotes.IdPresentacion ==0) {
-                            PresList.add("Sin Presentación");
                             emptyPres = true;
                         }
+                    }
+
+                    if (emptyPres) {
+                        PresList.add("Sin Presentación");
                     }
 
                     if(BeProducto.Control_lote){
@@ -1147,7 +1151,7 @@ public class frm_inv_ini_conteo extends PBase {
                         break;
                     case 3:
                         callMethod("Get_Inventario_Teorico_By_Codigo_O_Licencia",
-                                   "pidinventario", BeInvEnc.Idinventarioenc,
+                                   "pIdInventario", BeInvEnc.Idinventarioenc,
                                    "pCodigo", txtCodBarra.getText().toString(),
                                    "pIdBodega", gl.IdBodega);
                         break;
@@ -1357,9 +1361,17 @@ public class frm_inv_ini_conteo extends PBase {
             if(InvTeorico!=null){
 
                 BeProducto= InvTeorico.items.get(0).BeProducto;
+                lblDescProd.setText(BeProducto.Codigo+" - "+BeProducto.Nombre);
+                lblUnidadInv.setText(BeProducto.UnidadMedida.Nombre);
 
                 Valida_Inventario_Teorico();
 
+            } else {
+                if (BeInvEnc.Capturar_no_existente) {
+                    execws(7);
+                }else{
+                    mu.msgbox("No se puede agregar productos nuevos");
+                }
             }
 
         }catch (Exception e){
