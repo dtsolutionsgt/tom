@@ -276,8 +276,6 @@ public class frm_inv_ini_verificacion extends PBase {
 
             execws(1);
 
-            lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
-
         }catch (Exception e){
             mu.msgbox("Load:"+e.getMessage());
         }
@@ -722,6 +720,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
             txtUbicVer.setSelectAllOnFocus(true);
             txtUbicVer.requestFocus();
+            lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
 
         }catch (Exception e){
             mu.msgbox("processTramosInv:"+e.getMessage());
