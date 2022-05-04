@@ -2731,7 +2731,8 @@ public class frm_recepcion_datos extends PBase {
 
                         if (gl.gBeOrdenCompra.Push_To_NAV &&
                                 (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC ||
-                                 dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC)){
+                                 dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
+                                 dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC)){
                             if (gl.gBeOrdenCompra.DetalleLotes.items == null) {
                                msgSinUbicaciones("Este tipo de documentos deben tener definidos los lotes a recibir");
                                return;
@@ -6468,10 +6469,9 @@ public class frm_recepcion_datos extends PBase {
                         msgboxErrorCallBack(e.getMessage(),false);
                         break;
                     default:
-                        msgboxErrorCallBack(e.getMessage(),true);
+                        msgboxErrorCallBack(e.getClass() + " WebServiceHandler: " + e.getMessage(),true);
                         break;
                 }
-                mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }finally{
                 progress.cancel();
             }
