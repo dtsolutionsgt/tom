@@ -4291,6 +4291,12 @@ public class frm_recepcion_datos extends PBase {
             imprimirDesdeBoton=false;
             guardando_recepcion=true;
 
+           if (gl.gBeOrdenCompra.Push_To_NAV &&
+                    (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC)){
+                msgbox("Este tipo de documentos deben tener licencia para poder recibirse");
+                return;
+            }
+
             if (!txtNoLP.getText().toString().isEmpty()){
                 Procesa_Barra_Producto();
             }else{

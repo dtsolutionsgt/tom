@@ -20,6 +20,8 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Requerir_Proveedor_Es_Bodega_WMS=false;
     @Element(required=false) public boolean Requerir_Documento_Ref_WMS=false;
     @Element(required=false) public boolean Requerir_Ubic_Rec_Ingreso=false;
+    @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
+    @Element(required=false) public boolean Exigir_Campo_Referencia=false;
 
 
     public clsBeTrans_oc_ti() {
@@ -153,6 +155,20 @@ public class clsBeTrans_oc_ti {
     }
     public void setRequerir_Ubic_Rec_Ingreso(boolean value) {
         Requerir_Ubic_Rec_Ingreso=value;
+    }
+
+    public boolean getExigir_Campo_Referencia() {
+        return Requerir_Ubic_Rec_Ingreso;
+    }
+    public void setExigir_Campo_Referencia(boolean value) {
+        Exigir_Campo_Referencia=value;
+    }
+
+    public boolean getMarcar_Registros_Enviados_MI3() {
+        return Marcar_Registros_Enviados_MI3;
+    }
+    public void setMarcar_Registros_Enviados_MI3(boolean value) {
+        Marcar_Registros_Enviados_MI3=value;
     }
 
 }
