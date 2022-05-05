@@ -914,8 +914,9 @@ public class frm_inv_ini_conteo extends PBase {
             txtVenceInvIni.setText("");
             txtLoteInvIni.setText("");
             txtPesoInvIni.setText("");
-            lblPeso.setVisibility(View.VISIBLE);
-            txtPesoInvIni.setVisibility(View.VISIBLE);
+            //#AT20220505 setVisibility(View.GONE) lblPeso y txtPeso luego de guardar el conteo de inventario
+            lblPeso.setVisibility(View.GONE);
+            txtPesoInvIni.setVisibility(View.GONE);
 
             lblVenceList.setVisibility(View.GONE);
             lblLotes.setVisibility(View.GONE);
@@ -1366,6 +1367,9 @@ public class frm_inv_ini_conteo extends PBase {
                 BeProducto= InvTeorico.items.get(0).BeProducto;
                 lblDescProd.setText(BeProducto.Codigo+" - "+BeProducto.Nombre);
                 lblUnidadInv.setText(BeProducto.UnidadMedida.Nombre);
+
+                //#AT20220505 Si control_peso = true se muestran lblPeso y txtPeso
+                muestra_peso(BeProducto.Control_peso);
 
                 Valida_Inventario_Teorico();
 
