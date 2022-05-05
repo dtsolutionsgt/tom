@@ -279,20 +279,6 @@
             android:layout_marginBottom="0dp"
             android:background="@drawable/back"
             android:onClick="BotonExit" />
-
-        <Button
-            android:id="@+id/btnCompletar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="BotonCompletar"
-            android:text="Completar"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -325,5 +311,21 @@
             android:textSize="18sp" />
 
     </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnInvIncial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/medium"
+        android:clickable="true"
+        android:onClick="BotonCompletar"
+        android:src="@drawable/ok_btn"
+        app:fabCustomSize="60dp"
+        app:maxImageSize="35dp" />
 
 </RelativeLayout>
