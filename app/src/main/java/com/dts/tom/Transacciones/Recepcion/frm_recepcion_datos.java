@@ -4293,7 +4293,8 @@ public class frm_recepcion_datos extends PBase {
             guardando_recepcion=true;
 
            if (gl.gBeOrdenCompra.Push_To_NAV &&
-                    (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC)){
+                    (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC
+                    && txtNoLP.getText().toString().isEmpty())){
                 msgbox("Este tipo de documentos deben tener licencia para poder recibirse");
                 return;
             }
@@ -7543,6 +7544,13 @@ public class frm_recepcion_datos extends PBase {
                 }
             }else{
                 if (guardando_recepcion){
+
+                   /* if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
+                        if (lblUbicacion.getText().toString().isEmpty())
+                        {
+                            fillUbicacion();
+                        }
+                    }*/
 
                     if (BeProducto!=null){
                         if(ValidaDatosIngresados()){
