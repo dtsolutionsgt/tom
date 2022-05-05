@@ -21,6 +21,7 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public String License_plate="";
     @Element(required=false) public String Codigo_variante="";
     @Element(required=false) public clsBeProducto BeProducto=new clsBeProducto();
+    @Element(required=false) public int IdPropietarioBodega=0;
 
     public clsBeTrans_inv_stock_prod() {
     }
@@ -28,7 +29,7 @@ public class clsBeTrans_inv_stock_prod {
     public clsBeTrans_inv_stock_prod(int Idinventario,int Idinvstockprod,int IdProducto,int IdPresentacion,
                                      double Cant,double Peso,int IdUnidadMedida,String Lote,
                                      String Fecha_vence,String Codigo, int IdBodega, int IdUbicacion,
-                                     String License_Plate, String Codigo_variante) {
+                                     String License_Plate, String Codigo_variante, int IdPropietarioBodega) {
 
         this.Idinventario=Idinventario;
         this.Idinvstockprod=Idinvstockprod;
@@ -44,6 +45,7 @@ public class clsBeTrans_inv_stock_prod {
         this.IdUbicacion=IdUbicacion;
         this.License_plate=License_Plate;
         this.Codigo_variante=Codigo_variante;
+        this.IdPropietarioBodega = IdPropietarioBodega;
 
     }
 

@@ -3115,6 +3115,7 @@ public class frm_recepcion_datos extends PBase {
                                 .first();
 
                         IdPreseSelect = auxPres.IdPresentacion;
+                        chkPresentacion.setText(auxPres.Nombre);
 
                         /*List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                         Indx =AxuListPres.indexOf(vPresentacion);
@@ -7211,8 +7212,10 @@ public class frm_recepcion_datos extends PBase {
                 //#AT20220329 Si no esta en marcado chkPresentacion
                 //BeTransReDet.cantidad_recibida es =  al valor de txtCantidadRec / Factor
                 if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
-                    if (BeProducto.Presentaciones.items != null) {
-                         BeTransReDet.cantidad_recibida = Double.valueOf(txtCantidadRec.getText().toString()) / BeProducto.Presentaciones.items.get(0).Factor;
+                    if (auxPres != null) {
+                        if (auxPres.getFactor() > 0) {
+                            BeTransReDet.cantidad_recibida = Double.valueOf(txtCantidadRec.getText().toString()) / auxPres.Factor;
+                        }
                     }
                 }
 

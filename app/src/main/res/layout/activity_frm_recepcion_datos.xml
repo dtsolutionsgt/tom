@@ -306,7 +306,7 @@
                         android:layout_marginEnd="7dp"
                         android:layout_marginBottom="5dp"
                         android:text="UMBas"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
                 </RelativeLayout>
 
             </TableRow>

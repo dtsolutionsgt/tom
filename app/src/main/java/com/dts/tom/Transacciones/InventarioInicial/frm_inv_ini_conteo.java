@@ -836,6 +836,9 @@ public class frm_inv_ini_conteo extends PBase {
             ditem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
             ditem.Carga = 0;
             ditem.Peso = Double.parseDouble(txtPesoInvIni.getText().toString());
+            //#AT20220504 Se agrega IdPropietarioBodega e IdBodega para ser guardados
+            ditem.IdPropietarioBodega = InvTeorico.items.get(0).IdPropietarioBodega;
+            ditem.IdBodega = gl.IdBodega;
 
         }catch (Exception e){
             mu.msgbox("Crea_Item:"+e.getMessage());

@@ -28,6 +28,7 @@ public class clsBeTrans_inv_detalle {
     @Element(required=false) public String Codigo_variante="";
     @Element(required=false) public int Carga=0;
     @Element(required=false) public double Peso=0;
+    @Element(required=false) public int IdBodega=0;
 
 
     public clsBeTrans_inv_detalle() {
@@ -38,7 +39,8 @@ public class clsBeTrans_inv_detalle {
                                   String Lote,String Fecha_vence,String Serie,String Idproductoestado,
                                   double Cantidad,String Fecha_captura,String Host,String Nom_producto,
                                   String Nom_operador,int Carga,double Peso, int IdPropietarioBodega,
-                                  String nombre_propietario, String License_plate, String Codigo_variante) {
+                                  String nombre_propietario, String License_plate, String Codigo_variante,
+                                  int IdBodega) {
 
         this.Idinventariodet=Idinventariodet;
         this.Idinventarioenc=Idinventarioenc;
@@ -63,6 +65,7 @@ public class clsBeTrans_inv_detalle {
         this.nombre_propietario = nombre_propietario;
         this.License_plate = License_plate;
         this.Codigo_variante = Codigo_variante;
+        this.IdBodega = IdBodega;
 
     }
 
@@ -204,6 +207,12 @@ public class clsBeTrans_inv_detalle {
     }
     public void setCodigo_variante(String value) {
         Codigo_variante=value;
+    }
+    public int getIdBodega() {
+        return IdBodega;
+    }
+    public void setIdBodega(int value) {
+        IdBodega=value;
     }
 }
 
