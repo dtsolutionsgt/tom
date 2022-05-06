@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,11 +49,13 @@ import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.Ing
 public class frm_inv_ini_conteo extends PBase {
 
     private EditText txtUbicInv, txtCodBarra, txtLoteInvIni, txtVenceInvIni, txtCantInvIni, txtPesoInvIni;
-    private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote,lblLotes, lblPeso, lblTituloForma, lblVence, lblVenceList;
+    private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote,lblLotes, lblPeso, lblTituloForma, lblVence, lblVenceList,
+            txtLote, txtFechaVen;
     private Button btnGuardarConteo, btnCompletar, btnBack;
     private Spinner cmbPresInvIni, cmbEstadoInvIni, cmbLotes,cmbFechasVence;
     private DatePicker dpResult;
-    private ImageView imgDate;
+    private ImageView imgDate, btnEditarLote, btnLoteCancel, btnEditarFecha, btnFechaCancel;
+    private RelativeLayout relFechaItems;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -65,6 +68,7 @@ public class frm_inv_ini_conteo extends PBase {
 
     private boolean tiene_lotes,tiene_fechas;
     private String LoteSelect,FechaSelect;
+    private boolean editarFecha, editarLote;
 
     // date
     private int year;
@@ -104,6 +108,8 @@ public class frm_inv_ini_conteo extends PBase {
         txtVenceInvIni = (EditText) findViewById(R.id.txtVenceInvIni);
         txtCantInvIni = (EditText) findViewById(R.id.txtCantInvIni);
         txtPesoInvIni = (EditText) findViewById(R.id.txtPesoInvIni);
+        txtLote = findViewById(R.id.txtLote);
+        txtFechaVen = findViewById(R.id.txtFechaVen);
 
         lblUbicDesc = (TextView) findViewById(R.id.lblUbicDesc);
         lblDescProd = (TextView) findViewById(R.id.lblDescProd);
@@ -119,6 +125,12 @@ public class frm_inv_ini_conteo extends PBase {
         btnGuardarConteo = (Button) findViewById(R.id.btnGuardarConteo);
         btnCompletar = (Button) findViewById(R.id.btnCompletar);
         btnBack = (Button) findViewById(R.id.btnBack);
+        btnEditarLote = findViewById(R.id.btnEditarLote);
+        btnLoteCancel = findViewById(R.id.btnLoteCancel);
+        btnEditarFecha = findViewById(R.id.btnEditarFecha);
+        btnFechaCancel = findViewById(R.id.btnFechaCancel);
+
+        relFechaItems = findViewById(R.id.relFechaItems);
 
         dpResult = (DatePicker) findViewById(R.id.datePicker3);
         imgDate = (ImageView) findViewById(R.id.imgDate2);
@@ -132,6 +144,8 @@ public class frm_inv_ini_conteo extends PBase {
         LoteSelect = "";
         FechaSelect = "";
         emptyPres = false;
+        editarFecha = false;
+        editarLote = false;
 
         setCurrentDateOnView();
 
@@ -275,6 +289,60 @@ public class frm_inv_ini_conteo extends PBase {
 
             });
 
+            btnEditarLote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editarLote = true;
+
+                    btnLoteCancel.setVisibility(View.VISIBLE);
+                    txtLote.setVisibility(View.VISIBLE);
+                    txtLote.requestFocus();
+
+                    btnEditarLote.setVisibility(View.GONE);
+                    cmbLotes.setVisibility(View.GONE);
+                }
+            });
+
+            btnLoteCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editarLote = false;
+                    btnEditarLote.setVisibility(View.VISIBLE);
+                    cmbLotes.setVisibility(View.VISIBLE);
+
+                    btnLoteCancel.setVisibility(View.GONE);
+                    txtLote.setVisibility(View.GONE);
+                    txtLote.setText("");
+                }
+            });
+
+            btnEditarFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editarFecha = true;
+                    relFechaItems.setVisibility(View.VISIBLE);
+                    btnFechaCancel.setVisibility(View.VISIBLE);
+                    txtFechaVen.requestFocus();
+                    txtFechaVen.requestFocus();
+
+                    cmbFechasVence.setVisibility(View.GONE);
+                    btnEditarFecha.setVisibility(View.GONE);
+
+                }
+            });
+
+            btnFechaCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editarFecha = false;
+                    cmbFechasVence.setVisibility(View.VISIBLE);
+                    btnEditarFecha.setVisibility(View.VISIBLE);
+
+                    relFechaItems.setVisibility(View.GONE);
+                    btnFechaCancel.setVisibility(View.GONE);
+                }
+            });
+
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }
@@ -344,7 +412,12 @@ public class frm_inv_ini_conteo extends PBase {
     // #AT 20211126 Se da formato a la fecha
     public void setFecha(StringBuilder tmpFecha) {
         String fecha = du.convierteFechaSinHora(String.valueOf(tmpFecha));
-        txtVenceInvIni.setText(fecha);
+
+        if (editarFecha) {
+            txtFechaVen.setText(fecha);
+        } else {
+            txtVenceInvIni.setText(fecha);
+        }
     }
 
     private void Load() {
@@ -374,6 +447,10 @@ public class frm_inv_ini_conteo extends PBase {
             lblPeso.setVisibility(View.GONE);
             txtPesoInvIni.setVisibility(View.GONE);
 
+            relFechaItems.setVisibility(View.GONE);
+            btnEditarFecha.setVisibility(View.GONE);
+            btnEditarLote.setVisibility(View.GONE);
+
             // #AT 20211126 Se da formato a la fecha
             String tmpFecha = du.convierteFechaMostrar(du.getFechaActual());
             String fecha = du.convierteFechaSinHora(tmpFecha);
@@ -384,6 +461,7 @@ public class frm_inv_ini_conteo extends PBase {
             if (BeUbic.IdUbicacion > 0) {
                 txtUbicInv.setText("" + BeUbic.IdUbicacion);
                 lblUbicDesc.setText(BeUbic.Descripcion);
+                txtCodBarra.requestFocus();
             }
 
             if (IngUbic){
@@ -512,6 +590,7 @@ public class frm_inv_ini_conteo extends PBase {
             if (LoteList.size() > 0) {
 
                 tiene_lotes = true;
+                btnEditarLote.setVisibility(View.VISIBLE);
                 lblLotes.setVisibility(View.VISIBLE);
                 cmbLotes.setVisibility(View.VISIBLE);
                 cmbLotes.setSelection(0);
@@ -555,6 +634,7 @@ public class frm_inv_ini_conteo extends PBase {
             if (FechasVenceList.size() > 0) {
 
                 tiene_fechas = true;
+                btnEditarFecha.setVisibility(View.VISIBLE);
                 lblVenceList.setVisibility(View.VISIBLE);
                 cmbFechasVence.setVisibility(View.VISIBLE);
                 cmbFechasVence.setSelection(0);
@@ -724,6 +804,8 @@ public class frm_inv_ini_conteo extends PBase {
                         lblVence.setVisibility(View.VISIBLE);
                         txtVenceInvIni.setVisibility(View.VISIBLE);
                         imgDate.setVisibility(View.VISIBLE);
+                        btnEditarLote.setVisibility(View.GONE);
+                        btnEditarFecha.setVisibility(View.GONE);
                     }
                 }
             }
@@ -826,7 +908,12 @@ public class frm_inv_ini_conteo extends PBase {
             if (BeProducto.Control_lote){
                 //GT 17112021: si existe un lote al producto
                 if(tiene_lotes){
-                    ditem.Lote = LoteSelect;
+                    //#AT20220506 Opción para editar lote obtiene el valor de txtLote
+                    if (editarLote) {
+                        ditem.Lote = txtLote.getText().toString();
+                    } else {
+                        ditem.Lote = LoteSelect;
+                    }
                 }else{
                     ditem.Lote = txtLoteInvIni.getText().toString();
                 }
@@ -839,7 +926,12 @@ public class frm_inv_ini_conteo extends PBase {
 
                 //GT 17112021: si existe una fecha vencimiento
                 if(tiene_fechas){
-                    ditem.Fecha_vence = FechaSelect;
+                    //#AT20220506 Opción para editar fecha obtiene el valor de txtFechaVen
+                    if (editarFecha) {
+                        ditem.Fecha_vence = du.convierteFecha(txtFechaVen.getText().toString());
+                    } else {
+                        ditem.Fecha_vence = FechaSelect;
+                    }
                 }else{
                     ditem.Fecha_vence = du.convierteFecha(txtVenceInvIni.getText().toString());
                 }
@@ -926,6 +1018,13 @@ public class frm_inv_ini_conteo extends PBase {
 
         try{
 
+            relFechaItems.setVisibility(View.GONE);
+            btnEditarFecha.setVisibility(View.GONE);
+            btnEditarLote.setVisibility(View.GONE);
+            btnLoteCancel.setVisibility(View.GONE);
+            btnFechaCancel.setVisibility(View.GONE);
+            txtLote.setVisibility(View.GONE);
+
             txtUbicInv.setText("");
             lblUbicDesc.setText("");
             txtCodBarra.setText("");
@@ -935,6 +1034,9 @@ public class frm_inv_ini_conteo extends PBase {
             txtVenceInvIni.setText("");
             txtLoteInvIni.setText("");
             txtPesoInvIni.setText("");
+
+            txtLote.setText("");
+            txtFechaVen.setText("");
             //#AT20220505 setVisibility(View.GONE) lblPeso y txtPeso luego de guardar el conteo de inventario
             lblPeso.setVisibility(View.GONE);
             txtPesoInvIni.setVisibility(View.GONE);
@@ -970,6 +1072,8 @@ public class frm_inv_ini_conteo extends PBase {
             LoteSelect="";
             tiene_fechas = false;
             tiene_lotes = false;
+            editarFecha = false;
+            editarLote = false;
 
             setCurrentDateOnView();
 
@@ -1284,8 +1388,10 @@ public class frm_inv_ini_conteo extends PBase {
             BeInvTramo = utramo;
 
             lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
-            txtUbicInv.setSelectAllOnFocus(true);
-            txtUbicInv.requestFocus();
+            if (txtUbicInv.getText().toString().isEmpty()) {
+                txtUbicInv.setSelectAllOnFocus(true);
+                txtUbicInv.requestFocus();
+            }
 
         } catch (Exception e) {
             mu.msgbox("processBeTramo:" + e.getMessage());
@@ -1318,7 +1424,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeProducto != null) {
 
-               Carga_Datos_Producto();
+                Carga_Datos_Producto();
 
             } else {
 
@@ -1450,7 +1556,7 @@ public class frm_inv_ini_conteo extends PBase {
                 Guardar_Item();
             }else{
                 msgRegConteo("La ubicacion no está configurada para producto dañado."
-                             +"\n¿Registrar conteo en ésta ubicación de todas formas?");
+                        +"\n¿Registrar conteo en ésta ubicación de todas formas?");
             }
 
         }catch (Exception e){
@@ -1468,7 +1574,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (ubPallet==1){
                 msgRegPallet("Ya se contó un pallet en esta ubicación."
-                            +"\n¿Registrar el pallet en esta ubicación de todas formas?");
+                        +"\n¿Registrar el pallet en esta ubicación de todas formas?");
             }else{
                 Continua_Guardando_Item();
             }
