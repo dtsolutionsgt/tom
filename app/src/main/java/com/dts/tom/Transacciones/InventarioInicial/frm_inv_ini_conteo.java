@@ -245,6 +245,7 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     LoteSelect=InvTeorico.items.get(position).Lote;
+                    cmbFechasVence.setSelection(position);
 
                 }
 
@@ -455,7 +456,13 @@ public class frm_inv_ini_conteo extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbPresInvIni.setAdapter(dataAdapter);
 
-            if (PresList.size() > 0) cmbPresInvIni.setSelection(0);
+            if (PresList.size() > 0){
+                if (emptyPres) {
+                    cmbPresInvIni.setSelection(1);
+                } else {
+                    cmbPresInvIni.setSelection(0);
+                }
+            }
 
         } catch (Exception e) {
             mu.msgbox("llenaDetPresentacionProducto:" + e.getMessage());
@@ -703,6 +710,20 @@ public class frm_inv_ini_conteo extends PBase {
 
                     if(BeProducto.Control_lote){
                         Llena_Lotes();
+                    } else if(InvTeorico.items.size() == 1 && InvTeorico.items.get(0).Lote.isEmpty()) {
+                        lblLotes.setVisibility(View.GONE);
+                        cmbLotes.setVisibility(View.GONE);
+
+                        lblVenceList.setVisibility(View.GONE);
+                        cmbFechasVence.setVisibility(View.GONE);
+
+                        String tmpFecha = du.convierteFechaMostrar(du.getFechaActual());
+                        String fecha = du.convierteFechaSinHora(tmpFecha);
+                        txtVenceInvIni.setText(fecha);
+
+                        lblVence.setVisibility(View.VISIBLE);
+                        txtVenceInvIni.setVisibility(View.VISIBLE);
+                        imgDate.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -1161,7 +1182,7 @@ public class frm_inv_ini_conteo extends PBase {
                         break;
 
                     case 4:
-                        callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", BeProducto.IdProducto, "pActivo", true);
+                        callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", BeProducto.IdProducto, "pIdBodega",gl.IdBodega, "pActivo", true);
                         break;
                     case 5:
                         callMethod("Get_Estados_By_IdPropietario", "pIdPropietario", BeProducto.IdPropietario);
@@ -1323,6 +1344,17 @@ public class frm_inv_ini_conteo extends PBase {
             if (BeListPres!=null){
                 if (BeListPres.items!=null){
                     Llena_Det_Presentacion_Producto();
+                }
+            } else {
+                //#AT20220505 Si no se tiene presentación del producto
+                if (emptyPres) {
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PresList);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresInvIni.setAdapter(dataAdapter);
+
+                    cmbPresInvIni.setSelection(0);
+                } else {
+                    cmbPresInvIni.setVisibility(View.GONE);
                 }
             }
 
