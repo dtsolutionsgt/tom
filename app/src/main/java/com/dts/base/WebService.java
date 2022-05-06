@@ -130,7 +130,8 @@ public class WebService {
 
            //#EJC20200331: Es probable que falta incluir algunos otros códigos de respuesta válidos....
            //#EJC20200514: Actualizado
-           if (responsecode!=299 && responsecode!=404) {
+            //#EJC20220506: Actualizado agregué responsecode = 500
+           if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                while ((line = rd.readLine()) != null) mResult += line;
                rd.close();rd.close();

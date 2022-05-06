@@ -1,5 +1,6 @@
 package com.dts.tom.Transacciones.InventarioInicial;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -8,11 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -30,6 +33,9 @@ import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_st
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen;
+import com.dts.classes.Transacciones.Inventario.Productos_Sugeridos.Inv_Stock_Prod.clsBeTrans_inv_stock_prod_sug;
+import com.dts.classes.Transacciones.Inventario.Productos_Sugeridos.Inv_Stock_Prod.clsBeTrans_inv_stock_prod_sugList;
+import com.dts.classes.Transacciones.Inventario.clsBeTrans_inv_enc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -49,7 +55,8 @@ public class frm_inv_ini_verificacion extends PBase {
     private XMLObject xobj;
 
     private ProgressDialog progress;
-    private EditText txtUbicVer, txtBarraVer, txtUmbasVeri, txtCantVer;
+    private EditText txtUbicVer, txtUmbasVeri, txtCantVer;
+    private AutoCompleteTextView txtBarraVer;
     private Spinner cmbPresVeri, cmbEstadoVeri;
     private TextView lblDescVer, lblTituloForma, lblUbicDes;
     private Button btnDetVeri;
@@ -63,6 +70,7 @@ public class frm_inv_ini_verificacion extends PBase {
     private clsBeProducto_estadoList BeListEstado = new clsBeProducto_estadoList();
     private clsBeTrans_inv_resumen vitem = new clsBeTrans_inv_resumen();
     private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
+    public clsBeTrans_inv_stock_prod_sugList listProductosSugeridos;
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
@@ -80,7 +88,7 @@ public class frm_inv_ini_verificacion extends PBase {
         xobj = new XMLObject(ws);
 
         txtUbicVer = (EditText)findViewById(R.id.txtUbicVer);
-        txtBarraVer = (EditText)findViewById(R.id.txtBarraVer);
+        txtBarraVer = (AutoCompleteTextView) findViewById(R.id.txtBarraVer);
         txtUmbasVeri = (EditText)findViewById(R.id.txtUmbasVeri);
         txtCantVer = (EditText)findViewById(R.id.txtCantVer);
 
@@ -655,6 +663,10 @@ public class frm_inv_ini_verificacion extends PBase {
                     case 9:
                         callMethod("Get_Inventario_Teorico_By_Codigo","IdInventarioEnc",BeInvEnc.Idinventarioenc,
                                 "IdProducto",BeProducto.IdProducto);
+
+                    case 10:
+                        callMethod("Get_All_Codigos_By_IdInventario_And_IdBodega","pIdInventario",BeInvEnc.Idinventarioenc,
+                                "pIdBodega",BeInvEnc.IdBodega);
                 }
 
                 progress.cancel();
@@ -666,6 +678,7 @@ public class frm_inv_ini_verificacion extends PBase {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
         try {
@@ -701,6 +714,9 @@ public class frm_inv_ini_verificacion extends PBase {
                 case 9:
                     processInvTeorico();
                     break;
+                case 10:
+                    processCodigosSugeridos();
+                    break;
 
             }
 
@@ -721,6 +737,9 @@ public class frm_inv_ini_verificacion extends PBase {
             txtUbicVer.setSelectAllOnFocus(true);
             txtUbicVer.requestFocus();
             lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+
+            //#EJC20220506: Obtener listado de códigos sugeridos del inv.
+            execws(10);
 
         }catch (Exception e){
             mu.msgbox("processTramosInv:"+e.getMessage());
@@ -837,4 +856,33 @@ public class frm_inv_ini_verificacion extends PBase {
         ws.execute();
     }
 
+    private List<String> CodigosSugeridos = new ArrayList<>();
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void processCodigosSugeridos(){
+
+        try {
+
+            listProductosSugeridos = xobj.getresult(clsBeTrans_inv_stock_prod_sugList.class,"Get_All_Codigos_By_IdInventario_And_IdBodega");
+
+            if (listProductosSugeridos != null) {
+
+                if (listProductosSugeridos.items != null) {
+
+                    CodigosSugeridos.clear();
+
+                    for (clsBeTrans_inv_stock_prod_sug psg: listProductosSugeridos.items){
+                        CodigosSugeridos.add(psg.Codigo);
+                    }
+
+                    ArrayAdapter arrayAdapter=new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, CodigosSugeridos);
+                    txtBarraVer.setAdapter(arrayAdapter);
+                    txtBarraVer.setThreshold(1);
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processInvTeorico:"+e.getMessage());
+        }
+    }
 }

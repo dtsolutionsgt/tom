@@ -1182,7 +1182,7 @@ public class frm_inv_ini_conteo extends PBase {
                         break;
 
                     case 4:
-                        callMethod("Get_All_Presentaciones_By_IdProducto", "pIdProducto", BeProducto.IdProducto, "pIdBodega",gl.IdBodega, "pActivo", true);
+                        callMethod("Get_All_Presentaciones_By_IdProducto_IdBodega", "pIdProducto", BeProducto.IdProducto, "pIdBodega",gl.IdBodega, "pActivo", true);
                         break;
                     case 5:
                         callMethod("Get_Estados_By_IdPropietario", "pIdPropietario", BeProducto.IdPropietario);
@@ -1339,7 +1339,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         try{
 
-            BeListPres = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
+            BeListPres = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto_IdBodega");
 
             if (BeListPres!=null){
                 if (BeListPres.items!=null){
