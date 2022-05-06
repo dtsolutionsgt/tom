@@ -111,7 +111,6 @@ public class frm_verificacion_datos extends PBase {
         lblLoteVeri = (TextView) findViewById(R.id.lblLoteVeri);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
         lblLicPlate2 = (TextView) findViewById(R.id.lblLicPlate2);
-        btnConfirmarV = (Button) findViewById(R.id.btnConfirmarV);
         btnBack = (Button) findViewById(R.id.btnBack);
         cmbPresVeri = (Spinner) findViewById(R.id.cmbPresVeri);
         llFechaVence = (LinearLayout) findViewById(R.id.llFechaVence);
@@ -447,7 +446,7 @@ public class frm_verificacion_datos extends PBase {
                     double unidades = decimal * factor;
 
                     if (gBeProducto.Presentaciones != null) {
-                        lblPresSol.setText(auxPres.Nombre+":");
+                        lblPresSol.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
                     }
 
                     txtUnidadSol.setVisibility(unidades > 0 ? View.VISIBLE: View.GONE);
@@ -462,7 +461,7 @@ public class frm_verificacion_datos extends PBase {
                     double cajasRec = cantidadPresentacionRec - decimalRec;
                     double unidadesRec = decimalRec * factor;
 
-                    lblPresRec.setText(auxPres.Nombre+":");
+                    lblPresRec.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
 
                     txtUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
                     lblUnidadRec.setVisibility(unidadesRec > 0 ? View.VISIBLE: View.GONE);
