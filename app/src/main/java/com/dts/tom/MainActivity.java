@@ -827,8 +827,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //#CKFK20220422 Cambié el execws(7); por el execws(9);
-                    execws(9);
+                    //execws(9);
                     //ejecuta();
+                    //#CKFK20220506 Cambie el execws(9) por el execws(10)
+                    execws(10);
                 }
             });
 
