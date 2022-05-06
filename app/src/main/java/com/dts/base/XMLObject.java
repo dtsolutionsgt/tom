@@ -55,6 +55,7 @@ public class XMLObject  {
         String xnode="";
 
         try {
+
             xnode=getXMLRegion(source+"Result");
             Serializer serializer = new Persister();
 

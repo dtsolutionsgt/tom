@@ -357,7 +357,7 @@ public class Mainmenu extends PBase {
 
         try {
 
-            lblBodega.setText("Bodega: "+ gl.CodigoBodega);
+            lblBodega.setText(gl.CodigoBodega + "-" + gl.gNomBodega);
 
             try {
                 lblUsuario.setText("Usuario: "+ gl.gOperadorBodega.get(0).Operador.Nombres + " "+ gl.gOperadorBodega.get(0).Operador.Apellidos );

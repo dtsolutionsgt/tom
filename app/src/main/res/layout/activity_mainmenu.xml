@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Menú principal - WMS"
+            android:text="Menú principal - TOMWMS"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -53,7 +53,8 @@
             android:gravity="center_horizontal|top"
             android:paddingTop="2dp"
             android:text="Nombre bodega"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/lblVersion"

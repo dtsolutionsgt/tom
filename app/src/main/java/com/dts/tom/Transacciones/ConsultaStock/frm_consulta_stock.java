@@ -75,7 +75,7 @@ public class frm_consulta_stock extends PBase {
     private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
     //clsBeVW_stock_res_CI  ItemSelected;
-
+    private TextView lblTituloForma;
     private Spinner cmbEstadoExist, spOrdenar;
     private boolean Mostrar_Area_En_HH;
 
@@ -115,10 +115,11 @@ public class frm_consulta_stock extends PBase {
         chkDetalle=(CheckBox)findViewById(R.id.chkDetalle);
         btnFiltros = findViewById(R.id.btnFiltros);
         relFiltros = findViewById(R.id.relFiltros);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
 
         gl.mostar_filtros = false;
         setHandlers();
-
+        lblTituloForma.setText(gl.CodigoBodega + "-" + gl.gNomBodega + "\n Consulta de Existencias ");
         txtUbic.requestFocus();
     }
 
