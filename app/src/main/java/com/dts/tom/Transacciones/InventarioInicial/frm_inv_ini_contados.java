@@ -588,7 +588,7 @@ public class frm_inv_ini_contados extends PBase {
                         callMethod("Get_BeProducto_By_IdProducto","pIdProducto",dditem.Idproducto);
                         break;
                     case 6:
-                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",BBeProducto.IdProducto,"pActivo",true);
+                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",BBeProducto.IdProducto, "pIdBodega",gl.IdBodega,"pActivo",true);
                         break;
                     case 7:
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BBeProducto.IdPropietario);
