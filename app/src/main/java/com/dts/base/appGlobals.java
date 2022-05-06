@@ -196,7 +196,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="4.6.0.28";
+    public final String version="4.6.0.29";
 
     @Override
     public void onCreate() {
