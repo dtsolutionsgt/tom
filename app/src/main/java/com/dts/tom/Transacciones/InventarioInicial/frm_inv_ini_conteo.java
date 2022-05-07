@@ -771,6 +771,8 @@ public class frm_inv_ini_conteo extends PBase {
 
             PresList.clear();
 
+            emptyPres = true;
+
             if (InvTeorico != null) {
 
                 if (InvTeorico.items != null) {
