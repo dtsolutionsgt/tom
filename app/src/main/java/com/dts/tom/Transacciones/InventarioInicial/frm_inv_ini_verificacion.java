@@ -523,7 +523,7 @@ public class frm_inv_ini_verificacion extends PBase {
             txtBarraVer.setText("");
             lblUbicDes.setText("");
             txtCantVer.setText("");
-            lblTituloForma.setText("");
+            //lblTituloForma.setText("");
             txtUmbasVeri.setText("");
 
             BeProducto = new clsBeProducto();
@@ -532,8 +532,8 @@ public class frm_inv_ini_verificacion extends PBase {
 
             vitem = new clsBeTrans_inv_resumen();
 
-            EstadoList = new ArrayList<String>();
-            PresList = new ArrayList<String>();
+            EstadoList = new ArrayList<>();
+            PresList = new ArrayList<>();
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, PresList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -548,8 +548,16 @@ public class frm_inv_ini_verificacion extends PBase {
 
             IngUbic = false;
 
+            if(BeInvTramo.Nombre_Tramo!=null){
+                //#REFRESH TITULO FORMA
+                lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+                pIdTramo=BeUbic.IdTramo;
+            }else{
+                mu.msgbox("El tramo se ha perdido.");
+            }
+
         }catch (Exception e){
-            mu.msgbox("");
+            mu.msgbox("Error: " + e.getMessage());
         }
     }
 

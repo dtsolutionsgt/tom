@@ -1390,6 +1390,7 @@ public class frm_inv_ini_conteo extends PBase {
             BeInvTramo = utramo;
 
             lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+
             if (txtUbicInv.getText().toString().isEmpty()) {
                 txtUbicInv.setSelectAllOnFocus(true);
                 txtUbicInv.requestFocus();
