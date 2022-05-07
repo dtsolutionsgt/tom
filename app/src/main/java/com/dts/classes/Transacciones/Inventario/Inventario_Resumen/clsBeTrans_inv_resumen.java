@@ -18,6 +18,7 @@ public class clsBeTrans_inv_resumen {
     @Element(required=false) public String Host="";
     @Element(required=false) public String Nom_producto="";
     @Element(required=false) public String Nom_operador="";
+    @Element(required=false) public int IdUbicacion=0;
 
 
     public clsBeTrans_inv_resumen() {
@@ -26,7 +27,7 @@ public class clsBeTrans_inv_resumen {
     public clsBeTrans_inv_resumen(int Idinventariores,int Idinventarioenct,int Idtramo,int Idproducto,
                                   int Idoperador,int IdUnidadMedida,int Idpresentacion,int Idproductoestado,
                                   double Cantidad,String Fecha_captura,String Host,String Nom_producto,
-                                  String Nom_operador) {
+                                  String Nom_operador, int IdUbicacion) {
 
         this.Idinventariores=Idinventariores;
         this.Idinventarioenct=Idinventarioenct;
@@ -41,6 +42,7 @@ public class clsBeTrans_inv_resumen {
         this.Host=Host;
         this.Nom_producto=Nom_producto;
         this.Nom_operador=Nom_operador;
+        this.IdUbicacion=IdUbicacion;
 
     }
 
@@ -122,6 +124,12 @@ public class clsBeTrans_inv_resumen {
     }
     public void setNom_operador(String value) {
         Nom_operador=value;
+    }
+    public int getIdUbicacion() {
+        return IdUbicacion;
+    }
+    public void setIdUbicacion(int value) {
+        IdUbicacion=value;
     }
 
 }

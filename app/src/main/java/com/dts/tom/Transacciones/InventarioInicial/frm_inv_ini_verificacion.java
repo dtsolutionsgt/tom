@@ -507,8 +507,7 @@ public class frm_inv_ini_verificacion extends PBase {
             vitem.Host = "1";
             vitem.Nom_producto = BeProducto.Nombre;
             vitem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
-
-
+            vitem.IdUbicacion = Integer.valueOf(txtUbicVer.getText().toString());
 
         }catch (Exception e){
             mu.msgbox("creaVerifItem:"+e.getMessage());
