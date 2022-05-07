@@ -772,9 +772,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                                     //#CKFK 20201021 Agregué este else para agregar_marcaje
                                     //execws(7);
                                     //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    //execws(9);
-                                    //#CKFK 20210914 Validar licencia antes de ingresar.Método loginHH
-                                    execws(10);
+                                    execws(9);
+                                    //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
+                                    //se dejó en comentario por solicitud de EJC
+                                    //execws(10);
                                 }
                             } else  {
                                 //progress.cancel();
