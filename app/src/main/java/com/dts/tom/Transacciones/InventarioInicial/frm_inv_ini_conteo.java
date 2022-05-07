@@ -123,7 +123,7 @@ public class frm_inv_ini_conteo extends PBase {
         cmbEstadoInvIni = (Spinner) findViewById(R.id.cmbEstadoInvIni);
 
         btnGuardarConteo = (Button) findViewById(R.id.btnGuardarConteo);
-        btnCompletar = (Button) findViewById(R.id.btnCompletar);
+        //btnCompletar = (Button) findViewById(R.id.btnCompletar);
         btnBack = (Button) findViewById(R.id.btnBack);
         btnEditarLote = findViewById(R.id.btnEditarLote);
         btnLoteCancel = findViewById(R.id.btnLoteCancel);
