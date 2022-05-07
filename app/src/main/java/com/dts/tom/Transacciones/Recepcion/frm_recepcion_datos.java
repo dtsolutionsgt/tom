@@ -7545,12 +7545,22 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 if (guardando_recepcion){
 
-                   /* if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
+                    //Agregué esta validación para que no se quede vacía la ubicación y se puede hacer el push en NAV
+                    if (gl.gBeOrdenCompra.Push_To_NAV &&
+                            (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
                             fillUbicacion();
                         }
-                    }*/
+                    }
+
+                    if (gl.gBeOrdenCompra.Push_To_NAV &&
+                            (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
+                        if (lblUbicacion.getText().toString().isEmpty())
+                        {
+                           msgbox("La ubicación de los lotes no puede ser vacía");
+                        }
+                    }
 
                     if (BeProducto!=null){
                         if(ValidaDatosIngresados()){
