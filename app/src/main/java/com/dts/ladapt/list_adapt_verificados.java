@@ -63,6 +63,7 @@ public class list_adapt_verificados extends BaseAdapter {
             holder.lblEstadoRes = (TextView) convertView.findViewById(R.id.lblEstadoRes);
             holder.lblPresRes = (TextView) convertView.findViewById(R.id.lblPresRes);
             holder.lblCantRes = (TextView) convertView.findViewById(R.id.lblCantRes);
+            holder.lblUbicacion = (TextView) convertView.findViewById(R.id.lblUbicacion);
 
             convertView.setTag(holder);
         }else {
@@ -73,6 +74,8 @@ public class list_adapt_verificados extends BaseAdapter {
 
             holder.lblInvRes.setText("IdInventarioRes");
             holder.lblInvRes.setTextColor(R.style.titlestyle);
+            holder.lblUbicacion.setText("Ubicación");
+            holder.lblUbicacion.setTextColor(R.style.titlestyle);
             holder.lblEstadoRes.setText("Estado");
             holder.lblEstadoRes.setTextColor(R.style.titlestyle);
             holder.lblPresRes.setText("Presentación");
@@ -83,12 +86,17 @@ public class list_adapt_verificados extends BaseAdapter {
         }else{
 
             holder.lblInvRes.setText("0");
+            holder.lblUbicacion.setText("0");
             holder.lblEstadoRes.setText("--");
             holder.lblPresRes.setText("--");
             holder.lblCantRes.setText("0");
 
             if (BeListContados.get(position).Idinventariores > 0) {
                 holder.lblInvRes.setText("" + BeListContados.get(position).Idinventariores);
+            }
+
+            if (!BeListContados.get(position).Nom_Ubicacion.isEmpty()) {
+                holder.lblUbicacion.setText("" + BeListContados.get(position).Nom_Ubicacion);
             }
 
             if (!BeListContados.get(position).productoestado.isEmpty()) {
@@ -121,6 +129,6 @@ public class list_adapt_verificados extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblInvRes,lblEstadoRes,lblPresRes,lblCantRes;
+        TextView lblInvRes,lblEstadoRes,lblPresRes,lblCantRes, lblUbicacion;
     }
 }

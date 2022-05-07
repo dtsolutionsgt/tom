@@ -13,13 +13,18 @@ public class clsBeTrans_inv_resumen_grid {
     @Element(required=false) public String presentacion="";
     @Element(required=false) public String UnidadMedida="";
     @Element(required=false) public double Cantidad=0;
+    @Element(required=false) public int IdUbicacion=0;
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public String Nom_Ubicacion="";
+
 
 
     public clsBeTrans_inv_resumen_grid() {
     }
 
     public clsBeTrans_inv_resumen_grid(int Idinventariores,int Idinventarioenct,int Idtramo,int Idproducto,
-                                       String productoestado,String presentacion,String UnidadMedida,double Cantidad
+                                       String productoestado,String presentacion,String UnidadMedida,double Cantidad,
+                                       int IdUbicacion, String Nom_Ubicacion, int IdBodega
     ) {
 
         this.Idinventariores=Idinventariores;
@@ -30,6 +35,9 @@ public class clsBeTrans_inv_resumen_grid {
         this.presentacion=presentacion;
         this.UnidadMedida=UnidadMedida;
         this.Cantidad=Cantidad;
+        this.IdUbicacion = IdUbicacion;
+        this.Nom_Ubicacion = Nom_Ubicacion;
+        this.IdBodega = IdBodega;
 
     }
 

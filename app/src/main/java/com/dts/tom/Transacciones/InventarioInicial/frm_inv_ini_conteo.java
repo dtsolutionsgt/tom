@@ -68,7 +68,7 @@ public class frm_inv_ini_conteo extends PBase {
 
     private boolean tiene_lotes,tiene_fechas;
     private String LoteSelect,FechaSelect;
-    private boolean editarFecha, editarLote;
+    private boolean editarFecha, editarLote, bloqueaConteo;
 
     // date
     private int year;
@@ -146,6 +146,7 @@ public class frm_inv_ini_conteo extends PBase {
         emptyPres = false;
         editarFecha = false;
         editarLote = false;
+        bloqueaConteo = true;
 
         setCurrentDateOnView();
 
@@ -164,12 +165,18 @@ public class frm_inv_ini_conteo extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicInv.getText().toString().isEmpty()) {
+                            bloqueaConteo = false;
                             execws(2);
                         }
                     }
 
                     return false;
                 }
+            });
+
+            txtCodBarra.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) { }
             });
 
             txtCodBarra.setOnKeyListener(new View.OnKeyListener() {
@@ -486,7 +493,17 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeUbic.Tramo.IdTramo != 0) {
                 if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
-                    mu.msgbox("La ubicación no partenece al tramo: " + BeUbic.Tramo.Descripcion);
+                    bloqueaConteo = true;
+
+                    txtUbicInv.requestFocus();
+                    txtUbicInv.setSelectAllOnFocus(true);
+                    txtCodBarra.setEnabled(false);
+
+                    mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
+                } else {
+                    txtCodBarra.setEnabled(true);
+                    txtCodBarra.requestFocus();
+                    txtCodBarra.setSelectAllOnFocus(true);
                 }
             }
 
@@ -841,10 +858,14 @@ public class frm_inv_ini_conteo extends PBase {
             boolean aceptamalo=false;
             int vest=0;
 
-            if (IdEstadoSelect==codestmalo){
-                execws(8);
-            }else{
-                Guardar_Item();
+            if (!bloqueaConteo) {
+                if (IdEstadoSelect == codestmalo) {
+                    execws(8);
+                } else {
+                    Guardar_Item();
+                }
+            } else {
+                msgbox("El ubicación no pertenece al tramo: "+ BeInvTramo.Nombre_Tramo);
             }
 
 
@@ -1076,6 +1097,7 @@ public class frm_inv_ini_conteo extends PBase {
             tiene_lotes = false;
             editarFecha = false;
             editarLote = false;
+            bloqueaConteo = false;
 
             setCurrentDateOnView();
 

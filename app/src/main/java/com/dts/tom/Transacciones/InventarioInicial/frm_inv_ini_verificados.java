@@ -45,7 +45,7 @@ public class frm_inv_ini_verificados extends PBase {
     private XMLObject xobj;
 
     private ProgressDialog progress;
-    private EditText txtCodProdVeri,txtCantRes;
+    private EditText txtCodProdVeri,txtCantRes, txtUbic;
     private TextView lblPrdContVeri,lblUniRes;
     private ListView ListView;
     private Button btnRegs,btnGuardarRes,btnBack;
@@ -79,6 +79,7 @@ public class frm_inv_ini_verificados extends PBase {
 
         txtCodProdVeri = (EditText)findViewById(R.id.txtCodProdVeri);
         lblPrdContVeri = (TextView)findViewById(R.id.lblPrdContVeri);
+        txtUbic = findViewById(R.id.txtUbic);
         ListView = (ListView)findViewById(R.id.listContVeri);
         btnRegs = (Button)findViewById(R.id.btnRegs);
 
@@ -131,6 +132,21 @@ public class frm_inv_ini_verificados extends PBase {
                 }
             });
 
+            txtUbic.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (!txtUbic.getText().toString().isEmpty()) {
+                            execws(2);
+
+                            if (txtCodProdVeri.getText().toString().isEmpty()) {
+                                lblPrdContVeri.setText("");
+                            }
+                        }
+                    }
+                    return false;
+                }
+            });
 
 
         }catch (Exception e){
@@ -411,8 +427,12 @@ public class frm_inv_ini_verificados extends PBase {
                         callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodProdVeri.getText().toString(),"IdBodega",gl.IdBodega);
                         break;
                     case 2:
+                        int ubic = 0;
+                        if (!txtUbic.getText().toString().isEmpty()) {
+                            ubic = Integer.valueOf(txtUbic.getText().toString());
+                        }
                         callMethod("Get_All_Inventario_Inicial_By_IdInventario_Enc_And_Idtramo_And_IdProducto",
-                                "pIdinventarioenct",BeInvEnc.Idinventarioenc,"pIdtramo",BeInvTramo.Idtramo,"pIdProducto",BeProducto.IdProducto);
+                                "pIdinventarioenct",BeInvEnc.Idinventarioenc,"pIdtramo",BeInvTramo.Idtramo,"pIdProducto",BeProducto.IdProducto, "pIdUbicacion", ubic, "pIdBodega", gl.IdBodega);
                         break;
                     case 3:
                         callMethod("InventarioInicialVerGet","pIdinventariores",selItem.Idinventariores);
