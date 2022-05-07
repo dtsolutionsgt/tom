@@ -212,8 +212,11 @@ public class frm_inv_ini_contados extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    IdPresSelect=BeListPres.items.get(position).IdPresentacion;
-
+                    if (position == 0) {
+                        IdPresSelect = 0;
+                    } else {
+                        IdPresSelect = BeListPres.items.get(position-1).IdPresentacion;
+                    }
                 }
 
                 @Override
@@ -379,6 +382,8 @@ public class frm_inv_ini_contados extends PBase {
 
             PresList.clear();
 
+            PresList.add("Sin presentación");
+
             for (clsBeProducto_Presentacion BePres: BeListPres.items){
                 PresList.add(BePres.Nombre);
             }
@@ -394,7 +399,7 @@ public class frm_inv_ini_contados extends PBase {
                 List AuxPres = stream(BeListPres.items).select(c->c.IdPresentacion).toList();
                 int indx=AuxPres.indexOf(dditem.IdPresentacion);
 
-                cmbPresDetalle.setSelection(indx);
+                cmbPresDetalle.setSelection(indx+1);
             }
 
         }catch (Exception e){
