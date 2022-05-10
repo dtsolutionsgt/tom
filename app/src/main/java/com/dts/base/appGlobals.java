@@ -199,6 +199,9 @@ public class appGlobals extends Application {
     public final String version="4.6.0.33";
     public boolean VerificacionSinLoteFechaVen = false;
 
+    //Voz Picking
+    public boolean Notificacion_Voz = false;
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -669,10 +669,13 @@ public class frm_verificacion_datos extends PBase {
 
                 if (gl.VerificacionSinLoteFechaVen) {
                     if (Lote.equals("") && Expira.equals("01/01/1900")) {
+                        int tmpPresentacion = BePedidoDetVerif.IdPresentacion > 0 ? BePedidoDetVerif.IdPresentacion: 0;
+
                         AuxList = stream(BePickingUbicList.items)
-                                .where (c -> c.CodigoProducto.equals(Codigo))
+                                .where(c -> c.CodigoProducto.equals(Codigo))
                                 .where(c -> c.Lic_plate.equals(Lp))
-                                .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                                .where(c -> c.IdPresentacion == tmpPresentacion)
+                                .where(c -> c.getCantidad_Recibida() - c.getCantidad_Verificada() != 0)
                                 .toList();
 
                         pSubListPickingU.items = AuxList;
