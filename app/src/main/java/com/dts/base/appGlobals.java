@@ -197,6 +197,7 @@ public class appGlobals extends Application {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public final String version="4.6.0.33";
+    public boolean VerificacionSinLoteFechaVen = false;
 
     @Override
     public void onCreate() {

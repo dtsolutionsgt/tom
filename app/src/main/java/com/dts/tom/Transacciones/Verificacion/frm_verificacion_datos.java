@@ -80,6 +80,7 @@ public class frm_verificacion_datos extends PBase {
     private String UM = "";
     private double pPeso;
     private double pCantidad;
+    private int pTipo = 0;
 
     // Fecha
     private int anno;
@@ -135,6 +136,7 @@ public class frm_verificacion_datos extends PBase {
         lblUnidadRec = findViewById(R.id.lblUnidadRec);
 
         BePickingUbicList = gl.gBePickingUbicList;
+        pTipo = 0;
 
         setCurrentDateOnView();
 
@@ -308,8 +310,14 @@ public class frm_verificacion_datos extends PBase {
 
             Lp = BePedidoDetVerif.getLicPlate();
 
-            lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
-                    Codigo, Nombre, Expira, Lote));
+            if (gl.VerificacionSinLoteFechaVen) {
+                lblTituloForma.setText(String.format("Prod: %s-%s",
+                        Codigo, Nombre));
+            } else {
+                lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
+                        Codigo, Nombre, Expira, Lote));
+            }
+
 
             if (gBeProducto == null){
                 throw new Exception("El producto no está definido");
@@ -328,10 +336,17 @@ public class frm_verificacion_datos extends PBase {
 
             }
 
+            if (BePedidoDetVerif.Fecha_Vence.equals("01/01/1900")) {
+                llFechaVence.setVisibility(View.GONE);
+            }
+
             txtVenceVeri.setText(Expira);
             txtCantVeri.setText(String.valueOf(Rec-Ver));
 
             //txtUmbasVeri.setText(UM);
+            if (BePedidoDetVerif.Lote.isEmpty()) {
+                llLote.setVisibility(View.GONE);
+            }
             txtLoteVeri.setText(BePedidoDetVerif.getLote());
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
@@ -652,30 +667,46 @@ public class frm_verificacion_datos extends PBase {
 
             if (BePickingUbicList!=null){
 
-                if (Lp.equals("")){
-                    AuxList = stream(BePickingUbicList.items)
-                            .where (z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
-                            .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
-                            .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
-                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                            .toList();
-                }else{
-                    AuxList = stream(BePickingUbicList.items)
-                            .where (c -> c.CodigoProducto.equals(Codigo))
-                            .where(c -> c.Lote.equals(Lote))
-                            .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
-                            .where(c -> c.Lic_plate.equals(Lp))
-                            .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
-                            .toList();
+                if (gl.VerificacionSinLoteFechaVen) {
+                    if (Lote.equals("") && Expira.equals("01/01/1900")) {
+                        AuxList = stream(BePickingUbicList.items)
+                                .where (c -> c.CodigoProducto.equals(Codigo))
+                                .where(c -> c.Lic_plate.equals(Lp))
+                                .where(c -> c.getCantidad_Recibida()-c.getCantidad_Verificada()!=0)
+                                .toList();
 
+                        pSubListPickingU.items = AuxList;
+                    }
+                } else {
+                    if (Lp.equals("")) {
+                        AuxList = stream(BePickingUbicList.items)
+                                .where(z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                                .where(z -> z.Lote.equals(BePedidoDetVerif.Lote))
+                                .where(z -> app.strFecha(z.Fecha_Vence).equals(BePedidoDetVerif.Fecha_Vence))
+                                .where(c -> c.getCantidad_Recibida() - c.getCantidad_Verificada() != 0)
+                                .toList();
+                    } else {
+                        AuxList = stream(BePickingUbicList.items)
+                                .where(c -> c.CodigoProducto.equals(Codigo))
+                                .where(c -> c.Lote.equals(Lote))
+                                .where(c -> (app.strFecha(c.Fecha_Vence).equals(Expira)))
+                                .where(c -> c.Lic_plate.equals(Lp))
+                                .where(c -> c.getCantidad_Recibida() - c.getCantidad_Verificada() != 0)
+                                .toList();
+
+                    }
+
+                    pSubListPickingU.items = AuxList;
                 }
 
-                pSubListPickingU.items = AuxList;
-
+                //pSubListPickingU.items = AuxList;
             }
 
             //Llama al método del WS Actualiza_Cant_Peso_Verificacion
             if (pSubListPickingU.items.size()!=0){
+                if (gl.VerificacionSinLoteFechaVen) {
+                    pTipo = 1;
+                }
                 execws(3);
             }else{
                 throw new Exception("#ERR_20220406: No se obtuvo la lista de verificación.");
@@ -719,7 +750,8 @@ public class frm_verificacion_datos extends PBase {
                                    "pBePickingUbicList",pSubListPickingU.items,
                                    "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
                                    "pCantidad",pCantidad,
-                                   "pPeso",pPeso);
+                                   "pPeso",pPeso,
+                                   "pTipo", pTipo);
                         break;
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);

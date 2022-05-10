@@ -29,6 +29,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion3;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
@@ -52,11 +53,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private list_adapt_detalle_tareas_verificacion adapter;
     private list_adapt_detalle_tareas_verificacion2 adapter2;
+    private list_adapt_detalle_tareas_verificacion3 adapter3;
 
     private ListView listDetVeri;
     private EditText txtCodProd;
     private TextView lblNoDocumento, lblTituloForma;
-    private LinearLayout encabezado1, encabezado2;
+    private LinearLayout encabezado1, encabezado2, encabezado3;
     private ImageView imgReemplazo;
     private RelativeLayout relbot;
     private Button btnRegs;
@@ -73,7 +75,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeDetallePedidoAVerificar selitem;
 
     private double cantReemplazar = 0;
-    private boolean preguntoPorDiferencia = false, mostrar_area;
+    private boolean preguntoPorDiferencia = false, mostrar_area, VerSinLoteFechaVen = false;
     private boolean finalizar = true;
     private int selidx = -1,sortord;
 
@@ -86,7 +88,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             super.InitBase();
 
+            VerSinLoteFechaVen = false;
+            gl.VerificacionSinLoteFechaVen = false;
+
+            if (gl.CodigoBodega.equals("BA0002")) {
+                gl.VerificacionSinLoteFechaVen = true;
+            }
+
             mostrar_area = gl.Mostrar_Area_En_HH;
+            VerSinLoteFechaVen = gl.VerificacionSinLoteFechaVen;
 
             ws = new frm_detalle_tareas_verificacion.WebServiceHandler(frm_detalle_tareas_verificacion.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -98,12 +108,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
             lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
             encabezado1 = (LinearLayout) findViewById(R.id.encabezado_1);
             encabezado2 = (LinearLayout) findViewById(R.id.encabezado_2);
+            encabezado3 = findViewById(R.id.encabezado_3);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             relbot = (RelativeLayout) findViewById(R.id.relbot);
 
             if (mostrar_area) {
                 encabezado2.setVisibility(View.VISIBLE);
-            } else {
+            } else if(VerSinLoteFechaVen) {
+                encabezado3.setVisibility(View.VISIBLE);
+            }else {
                 encabezado1.setVisibility(View.VISIBLE);
             }
 
@@ -165,6 +178,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                     if (mostrar_area) {
                         adapter2.setSelectedIndex(position);
+                    } else if(VerSinLoteFechaVen) {
+                        adapter3.setSelectedIndex(position);
                     } else {
                         adapter.setSelectedIndex(position);
                     }
@@ -173,6 +188,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                     if (mostrar_area) {
                         adapter2.refreshItems();
+                    } else if(VerSinLoteFechaVen) {
+                        adapter3.refreshItems();
                     } else {
                         adapter.refreshItems();
                     }
@@ -304,6 +321,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         callMethod("Get_Reemplazo_Producto_By_IdPedidoEnc",
                                    "pIdPedidoEnc", gl.pIdPedidoEnc);
                         break;
+                    case 10:
+                        callMethod("Get_Detalle_Verificacion_Consolidada",
+                                "pIdPedidoEnc",gl.pIdPedidoEnc);
+                        break;
                 }
 
             }catch (Exception e){
@@ -344,6 +365,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     break;
                 case 8:
                     processActualizarPickingVerificado();
+                    break;
+                case 10:
+                    processTareasVerificacionSinLoteFechaVen();
                     break;
             }
 
@@ -445,6 +469,36 @@ public class frm_detalle_tareas_verificacion extends PBase {
         }
     }
 
+    private void processTareasVerificacionSinLoteFechaVen(){
+
+        try {
+            VerSinLoteFechaVen = true;
+            progress.setMessage("Obteniendo Tareas de verificación en HH...");
+
+            pListaPedidoDet = xobj.getresult(clsBeDetallePedidoAVerificarList.class,"Get_Detalle_Verificacion_Consolidada");
+
+            listDetVeri.setAdapter(null);
+
+            if (pListaPedidoDet!=null){
+                if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
+            } else {
+                lblTituloForma.setText("Tarea de Verificación - Verificado");
+                btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
+                btnRegs.setText("Registros: 0");
+                btnRegs.setTextColor(Color.BLACK);
+
+                progress.cancel();
+                toast("Este pedido ya no tiene productos pendientes de verificar");
+            }
+            orderar();
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
     private void processPickingUbic(){
 
         try{
@@ -457,7 +511,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             if (gl.pIdPedidoEnc>0){
                 //Llama al método del WS Get_Detalle_By_IdPedidoEnc
-                execws(1);
+                if (VerSinLoteFechaVen) {
+                    execws(10);
+                } else {
+                    execws(1);
+                }
             }else{
                 progress.cancel();
             }
@@ -657,6 +715,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         if (mostrar_area) {
                             adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
                             listDetVeri.setAdapter(adapter2);
+                        } else if(VerSinLoteFechaVen) {
+                            adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter3);
                         } else {
                             adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
                             listDetVeri.setAdapter(adapter);
@@ -665,6 +726,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         if (pListaPedidoDet.items.size()>0){
                             if (mostrar_area) {
                                 adapter2.setSelectedIndex(-1);
+                            } else if (VerSinLoteFechaVen) {
+                                adapter3.setSelectedIndex(-1);
                             } else {
                                 adapter.setSelectedIndex(-1);
                             }
@@ -909,9 +972,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private void listSortedItems() {
 
         try {
-          if (mostrar_area) {
+            if (mostrar_area) {
                 adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
                 listDetVeri.setAdapter(adapter2);
+            } else if(VerSinLoteFechaVen) {
+                adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter3);
             } else {
                 adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
                 listDetVeri.setAdapter(adapter);
@@ -949,7 +1015,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 progress.show();
 
                 //Llama al método del WS Get_Detalle_By_IdPedidoEnc
-                execws(1);
+                if (VerSinLoteFechaVen) {
+                    execws(10);
+                } else {
+                    execws(1);
+                }
             }
 
         }catch (Exception e){
