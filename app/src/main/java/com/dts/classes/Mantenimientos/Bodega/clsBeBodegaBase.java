@@ -21,6 +21,7 @@ public class clsBeBodegaBase
     @Element(required=false) public boolean confirmar_codigo_en_picking=false;
     @Element(required=false) public boolean control_operador_ubicacion=false;
     @Element(required=false) public boolean inferir_origen_en_cambio_ubic=false;
+    @Element(required=false) public boolean despachar_producto_vencido=false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -125,6 +126,13 @@ public class clsBeBodegaBase
     }
     public void setinferir_origen_en_cambio_ubic(boolean value) {
         inferir_origen_en_cambio_ubic=value;
+    }
+
+    public boolean getdespachar_producto_vencido() {
+        return despachar_producto_vencido;
+    }
+    public void setdespachar_producto_vencido(boolean value) {
+        despachar_producto_vencido=value;
     }
 
 }
