@@ -1543,6 +1543,8 @@ public class frm_picking_datos extends PBase {
                 txtCantidadPick.setText(""+0);
             }else{
                 txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                //#CKFK20220510:No formatear para aquellos casos que tienen muchos decimales.
+                txtCantidadPick.setText(""+CantARec);
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
