@@ -412,7 +412,7 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Load(){
-
+        String titulo = "";
         try {
 
             TipoOrden.add("Ubicacion");
@@ -430,7 +430,8 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
-            lblTituloForma.setText("Picking #"+gl.gIdPickingEnc);
+            titulo = gl.gReferencia.isEmpty() ? "Picking #" + gl.gIdPickingEnc : "Picking #" + gl.gIdPickingEnc +" - "+gl.gReferencia;
+            lblTituloForma.setText(titulo);
 
             if (gl.gIdPickingEnc>0){
                 execws(1);

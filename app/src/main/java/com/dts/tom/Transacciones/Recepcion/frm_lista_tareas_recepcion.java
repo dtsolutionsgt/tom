@@ -181,6 +181,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                     selitempicking = sitem;
 
                     selid = sitem.IdPickingEnc;
+                    gl.gReferencia = selitempicking.Referencia;
+
                     selidx = position;
                     adapterPicking.setSelectedIndex(position);
 
@@ -400,6 +402,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Fecha_picking=du.convierteFechaMostrar(BePicking.Fecha_picking);
                         vItem.Hora_ini=du.convierteHoraMostar(BePicking.Hora_ini);
                         vItem.Hora_fin=du.convierteHoraMostar(BePicking.Hora_fin);
+                        vItem.Referencia = BePicking.Referencia;
 
                         BeListTareasPicking.add(vItem);
 

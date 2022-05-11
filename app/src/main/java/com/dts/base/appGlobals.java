@@ -115,6 +115,7 @@ public class appGlobals extends Application {
 
     //Variables para picking
     public int gIdPickingEnc = 0;
+    public String gReferencia = "";
 
     //Variables para verificación
     public int pIdPedidoEnc;

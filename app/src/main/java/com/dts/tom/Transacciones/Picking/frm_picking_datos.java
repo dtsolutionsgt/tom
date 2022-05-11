@@ -1542,7 +1542,7 @@ public class frm_picking_datos extends PBase {
             if (CantARec<=0){
                 txtCantidadPick.setText(""+0);
             }else{
-                txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
+                txtCantidadPick.setText(""+CantARec);
             }
 
             if (gBePickingUbic.IdProductoEstado>0){
