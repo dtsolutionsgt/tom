@@ -1442,7 +1442,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     case 9://Actualiza la tabla trans_movimientos
                         callMethod("Set_Nuevo_Pallet_Id",
                                 "pIdBodega",gl.IdBodega,
-                                "pIdUsuario",gl.OperadorBodega.getIdOperador(),
+                                "pIdUsuario",gl.OperadorBodega.getIdOperadorBodega(),
                                 "pLicPlateAnt",BeStockPallet.getLic_plate(),
                                 "pLicPlateNuevo", vNuevoPalletId,
                                 "pIdStockNuevo", vIdStockNuevo,
