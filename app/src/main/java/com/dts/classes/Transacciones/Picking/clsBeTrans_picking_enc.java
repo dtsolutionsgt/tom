@@ -36,6 +36,7 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public String Estado_Preparacion="";
     @Element(required=false) public String Fecha_Inicio_Preparacion="";
     @Element(required=false) public String Fecha_Fin_Preparacion="";
+    @Element(required=false) public String Referencia = "";
 
     public clsBeTrans_picking_enc() {
     }
@@ -46,8 +47,8 @@ public class clsBeTrans_picking_enc {
                                   boolean Detalle_operador, boolean Activo,
                                   boolean verifica_auto,boolean procesado_bof, boolean Requiere_Preparacion,String Tipo_Preparacion,
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
-                                  clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc
-
+                                  clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
+                                  String Referencia
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -76,6 +77,7 @@ public class clsBeTrans_picking_enc {
         this.IdPedidoEnc=IdPedidoEnc;
         this.Requiere_Preparacion=Requiere_Preparacion;
         this.Tipo_Preparacion=Tipo_Preparacion;
+        this.Referencia = Referencia;
     }
 
 
