@@ -4827,9 +4827,13 @@ public class frm_recepcion_datos extends PBase {
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
                 //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
-                if (gl.Mostrar_Area_En_HH) {
+
+                //#GT13052022: mejora velocidad, si se imprime desde LP el SKU sin estar abriendo y cerrando conexión
+                //probando si al imprimir en LP sin cerrar conexión, tambien lo hace con SKU.
+
+               /* if (gl.Mostrar_Area_En_HH) {
                     Imprimir_Codigo_Barra_Producto(CantCopias);
-                }
+                }*/
 
                 progress.cancel();
             });
@@ -5029,6 +5033,7 @@ public class frm_recepcion_datos extends PBase {
                 //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
                 String zpl="";
+                String zplSKU = "";
 
                 if (BeProducto.IdTipoEtiqueta==1){
 
@@ -5052,7 +5057,33 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre,
                                         "$"+pNumeroLP,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.getFechaActual());
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
+
+                    zplSKU = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            BeProducto.Codigo_barra,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
 
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
@@ -5079,7 +5110,33 @@ public class frm_recepcion_datos extends PBase {
                             gl.gNomEmpresa,
                             "$"+pNumeroLP,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+
+
+
+                    zplSKU = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW600\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,440^GB670,14,14^FS\n" +
+                                    "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
+                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            BeProducto.Codigo_barra,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
 /*
                     zpl = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -5125,7 +5182,35 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                         BeProducto.Codigo+" - "+BeProducto.Nombre,
                                         "$"+pNumeroLP,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+
+
+
+                    zplSKU = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW812\n" +
+                                    "^LL609\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,440^GB670,14,14^FS\n" +
+                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
+                                    "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            BeProducto.Codigo_barra,
+                            BeProducto.Codigo + " - " + BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+
+
+
                 }
 
                 if (!zpl.isEmpty()){
@@ -5135,7 +5220,21 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
                 }else{
-                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
+                }
+
+                //#GT13052022_0805: validación de Erik, para imprimir el SKU junto a la LP usando MOSTRAR_AREA
+                if (gl.Mostrar_Area_En_HH) {
+
+                      if (!zplSKU.isEmpty()){
+                          if (Copias > 0) {
+                              for (int i = 0; i < Copias; i++ ) {
+                                  zPrinterIns.sendCommand(zplSKU);
+                              }
+                          }
+                      }else{
+                          msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (SKU)");
+                      }
                 }
 
                 //#EJC20220309: Que pasa si no se cierra la conexión BT?, será más rápida la próxima impresión?
