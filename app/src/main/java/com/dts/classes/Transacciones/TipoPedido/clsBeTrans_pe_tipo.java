@@ -22,7 +22,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
     @Element(required=false) public boolean Generar_Recepcion_Auto_Bodega_Destino=false;
     @Element(required=false) public boolean Recibir_Producto_Auto_Bodega_Destino=false;
-
+    @Element(required=false) public boolean Control_Cliente_En_Detalle=false;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -39,7 +39,8 @@ public class clsBeTrans_pe_tipo {
                               boolean Generar_pedido_ingreso_bodega_destino,
                               int IdTipoIngresoOC,
                               boolean Control_Poliza,
-                              boolean Requerir_Cliente_Es_Bodega_WMS
+                              boolean Requerir_Cliente_Es_Bodega_WMS,
+                              boolean Control_Cliente_En_Detalle
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -55,6 +56,7 @@ public class clsBeTrans_pe_tipo {
         this.IdTipoIngresoOC = IdTipoIngresoOC;
         this.Control_Poliza = Control_Poliza;
         this.Requerir_Cliente_Es_Bodega_WMS=Requerir_Cliente_Es_Bodega_WMS;
+        this.Control_Cliente_En_Detalle=Control_Cliente_En_Detalle;
 
     }
 
@@ -177,4 +179,10 @@ public class clsBeTrans_pe_tipo {
         Recibir_Producto_Auto_Bodega_Destino=value;
     }
 
+    public boolean getControl_Cliente_En_Detalle() {
+        return Control_Cliente_En_Detalle;
+    }
+    public void setControl_Cliente_En_Detalle(boolean value) {
+        Control_Cliente_En_Detalle=value;
+    }
 }

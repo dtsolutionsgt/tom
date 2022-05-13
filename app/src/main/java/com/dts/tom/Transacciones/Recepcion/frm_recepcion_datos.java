@@ -412,7 +412,11 @@ public class frm_recepcion_datos extends PBase {
         vPosiciones=0;
         chkPalletNoEstandar.setChecked(false);
 
-        txtCantidadRec.requestFocus();
+        if (!txtNoLP.getText().toString().isEmpty()){
+            txtCantidadRec.requestFocus();
+        }else{
+            txtNoLP.requestFocus();
+        }
 
     }
 
@@ -3840,7 +3844,8 @@ public class frm_recepcion_datos extends PBase {
                 //#CKFK 20211030 Inicialicé esta variable de ubicaciones
                 BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
-                if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+                if ((BeProducto.getControl_vencimiento() && VenceList.size()>0)
+                    && (BeProducto.getControl_lote() && LotesList.size()>0)){
 
                     //#CKFK 20211030 Validé que ubic.items no fuera nulo
                     if (ubic.items!=null){
@@ -3857,14 +3862,52 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
                     //#CKFK 20211030 Validé que ubic.items no fuera nulo
-                    if (ubic.items!=null){
-                        BeUbicaciones = stream(ubic.items)
-                                .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                        c.No_linea == BeOcDet.No_Linea &&
-                                        c.Lote.equals(finalSelectedLote)  &&
-                                        c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                        c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
-                                .toList();
+                    if (BeProducto.getControl_lote() && LotesList.size()>0
+                            && !BeProducto.getControl_vencimiento()){
+                        if (ubic.items!=null){
+                            try{
+                                BeUbicaciones = stream(ubic.items)
+                                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                c.No_linea == BeOcDet.No_Linea &&
+                                                c.Lote.equals(finalSelectedLote)  &&
+                                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                        .toList();
+                            }catch (Exception e){
+                                toast("No hay lotes ni vencimientos definidos");
+                            }
+
+                        }
+                    }else{
+                        if (BeProducto.getControl_vencimiento() && VenceList.size()>0 &&
+                                !BeProducto.getControl_lote()){
+                            if (ubic.items!=null){
+                                try{
+                                    BeUbicaciones = stream(ubic.items)
+                                            .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                    c.No_linea == BeOcDet.No_Linea &&
+                                                    c.Fecha_vence.equals(finalFechaVence)&&
+                                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                            .toList();
+                                }catch (Exception e){
+                                    toast(e.getMessage());
+                                }
+                            }
+                        }else{
+                            if (ubic.items!=null) {
+                                try {
+                                    BeUbicaciones = stream(ubic.items)
+                                            .where(c -> c.IdProductoBodega == BeProducto.IdProductoBodega &&
+                                                    c.No_linea == BeOcDet.No_Linea &&
+                                                    c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                    c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                            .toList();
+                                } catch (Exception e) {
+                                    toast(e.getMessage());
+                                }
+                            }
+                        }
                     }
                 }
 
