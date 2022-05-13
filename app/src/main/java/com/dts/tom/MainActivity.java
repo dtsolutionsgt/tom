@@ -469,11 +469,17 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     idemp=empresas.items.get(position).IdEmpresa;
                     gl.IdEmpresa = idemp;
                     gl.gNomEmpresa = empresas.items.get(position).Nombre;
+                    gl.buscar_actualizacion_hh = empresas.items.get(position).buscar_actualizacion_hh;
                     idbodega=0;
 
                     execws(2);//Lista las bodegas
 
-                    if (idle) validaVersion();
+                    //#GT valida si busca o no update
+                    if (gl.buscar_actualizacion_hh){
+
+                        if (idle) validaVersion();
+                    }
+
 
                 } catch (Exception e)
                 {

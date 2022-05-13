@@ -203,6 +203,8 @@ public class appGlobals extends Application {
     //Voz Picking
     public boolean Notificacion_Voz = false;
 
+    public boolean buscar_actualizacion_hh= false;
+
     @Override
     public void onCreate() {
         super.onCreate();
