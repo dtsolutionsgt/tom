@@ -186,7 +186,7 @@ public class frm_recepcion_datos extends PBase {
     private boolean Existe_Lp=false;
     private boolean Existe_Serie=false;
     private String ubiDetLote="";
-    private boolean guardando_recepcion = false;
+    private boolean guardando_recepcion = false, editarSinPresentacion = false;
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
@@ -3321,13 +3321,18 @@ public class frm_recepcion_datos extends PBase {
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
                 }
 
-                List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
+                auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == vPresentacion).first();
+                lblCantidad.setText("Cantidad ("+auxPres.Nombre+"): ");
+                /*List AxuListPres = stream(BeProducto.Presentaciones.items).select(c->c.IdPresentacion).toList();
                 Indx =AxuListPres.indexOf(vPresentacion);
 
-                cmbPresRec.setSelection(Indx);
+                cmbPresRec.setSelection(Indx);*/
 
             }else{
+                editarSinPresentacion = true;
+                auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == BeOcDet.IdPresentacion).first();
 
+                lblCantidad.setText("Cantidad ("+BeProducto.UnidadMedida.Nombre+"): ");
                 lblPres.setVisibility(View.GONE);
                 cmbPresRec.setVisibility(View.GONE);
 
@@ -5473,7 +5478,7 @@ public class frm_recepcion_datos extends PBase {
 
                 BeTransReDet.No_Linea = pLineaOC;
 
-                if (txtUmbasRec.getText().toString().isEmpty()){
+                if (BeProducto.UnidadMedida.Nombre.isEmpty()){
                     mu.msgbox("No existe Unidad de Medida en Producto "+BeProducto.Codigo);
                     return;
                 }else{
@@ -7354,7 +7359,7 @@ public class frm_recepcion_datos extends PBase {
 
                 //#AT20220329 Si no esta en marcado chkPresentacion
                 //BeTransReDet.cantidad_recibida es =  al valor de txtCantidadRec / Factor
-                if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+                if ((!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE)) {
                     if (auxPres != null) {
                         if (auxPres.getFactor() > 0) {
                             BeTransReDet.cantidad_recibida = Double.valueOf(txtCantidadRec.getText().toString()) / auxPres.Factor;
@@ -7365,8 +7370,17 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.mode==1){
                     gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;
                 }else{
-                    //#CKFK 20210630 Calcular la cantidad recibida
-                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida - vCantAnteriorRec;
+                    //#CKFK 20210630 Calcular la cantidad recibid
+                    //#AT20220518 Si se actualiza  sin presentación realizar la conversión
+                    if (editarSinPresentacion) {
+                        double cantidadRec = BeTransReDet.cantidad_recibida / auxPres.Factor;
+                        double cantidadRecAnt = vCantAnteriorRec / auxPres.Factor;
+
+                        gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += cantidadRec - cantidadRecAnt;
+
+                    } else {
+                        gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida - vCantAnteriorRec;
+                    }
                 }
 
             }
