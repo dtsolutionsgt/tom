@@ -6173,9 +6173,26 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
-            if (Cant_Pendiente > Cantidad){
+            double vAuxCantidad =0;
+            //#EJC20220520:Evitar mensaje que excede si es en UMBAS check.
+            if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+
+                if (BeProducto.Presentaciones !=null){
+
+                    auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == BeOcDet.IdPresentacion).first();
+
+                    if (auxPres!=null){
+                        vAuxCantidad = Cantidad / auxPres.Factor;
+                    }
+                }
+
+            }else{
+                vAuxCantidad =Cantidad;
+            }
+
+            if (Cant_Pendiente > vAuxCantidad){
                 msgValidaCantidad("La cantidad "+Cantidad+" ingresada es correcta para el producto "+BeProducto.Codigo);
-            }else if(Cant_Pendiente < Cantidad){
+            }else if(Cant_Pendiente < vAuxCantidad){
                  msgExcedeCantidad();
             }else if (BeProducto.Control_vencimiento){
                 valida_fecha_vencimiento();
