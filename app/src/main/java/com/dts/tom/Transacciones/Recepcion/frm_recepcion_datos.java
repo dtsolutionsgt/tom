@@ -396,10 +396,12 @@ public class frm_recepcion_datos extends PBase {
 
         if (gl.bloquear_lp_hh) {
             txtNoLP.setEnabled(false);
-            txtCantidadRec.requestFocus();
+            //#CKFK20220520 Creo que esto ya no aplica dadas las validaciones actuales
+            //txtCantidadRec.requestFocus();
         } else{
             txtNoLP.setEnabled(true);
-            txtNoLP.requestFocus();
+            //#CKFK20220520 Creo que esto ya no aplica dadas las validaciones actuales
+            //txtNoLP.requestFocus();
         }
 
         if(!gl.Escaneo_Pallet){
@@ -411,12 +413,6 @@ public class frm_recepcion_datos extends PBase {
         //#EJC20220427: Inicializar en 0 : Setear en No estandard
         vPosiciones=0;
         chkPalletNoEstandar.setChecked(false);
-
-        if (!txtNoLP.getText().toString().isEmpty()){
-            txtCantidadRec.requestFocus();
-        }else{
-            txtNoLP.requestFocus();
-        }
 
     }
 
@@ -587,7 +583,8 @@ public class frm_recepcion_datos extends PBase {
 
                     guardando_recepcion=false;
 
-                    if (BeProducto.Control_vencimiento){
+                    //#CKFK20220520 Creo que estas validaciones ya no aplican
+                    /*if (BeProducto.Control_vencimiento){
                         cmbVenceRec.setSelectAllOnFocus(true);
                         cmbVenceRec.requestFocus();
                     }else if (BeProducto.Control_lote){
@@ -595,7 +592,7 @@ public class frm_recepcion_datos extends PBase {
                         txtLoteRec.requestFocus();
                     }else {
                        txtCantidadRec.requestFocus();
-                    }
+                    }*/
 
                     Procesa_Barra_Producto();
 
@@ -2873,14 +2870,16 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#GT04042022: focus en cantidad.
-            txtCantidadRec.requestFocus();
-            txtCantidadRec.selectAll();
+            if (!txtNoLP.getText().toString().isEmpty()){
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            }else{
+                txtNoLP.requestFocus();
+            }
 
         }catch (Exception e){
             mu.msgbox("Load:"+ e.getMessage());
         }
-
-
     }
 
     private void Carga_Datos_Producto_Por_Pallet(){
@@ -3166,8 +3165,9 @@ public class frm_recepcion_datos extends PBase {
                // #CKFK 20210218 Quité la cantidad pendiente de recibir en la CantidadRec por instrucción de Erik
                 txtCantidadRec.setText("");
 
-                txtNoLP.requestFocus();
-                txtNoLP.selectAll();
+                //#CKFK20220520 Creo que esto ya no aplica dada las validaciones actuales
+                //txtNoLP.requestFocus();
+                //txtNoLP.selectAll();
 
                 /*if (BeOcDet!=null){
 
@@ -3330,7 +3330,10 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
                 editarSinPresentacion = true;
-                auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == BeOcDet.IdPresentacion).first();
+
+                if(BeProducto.Presentaciones != null && BeOcDet.IdPresentacion!=0){
+                    auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == BeOcDet.IdPresentacion).first();
+                }
 
                 lblCantidad.setText("Cantidad ("+BeProducto.UnidadMedida.Nombre+"): ");
                 lblPres.setVisibility(View.GONE);
@@ -3571,6 +3574,10 @@ public class frm_recepcion_datos extends PBase {
                     execws(6);
                     if (nBeResolucion == null) {
                         if (!txtNoLP.getText().toString().isEmpty()) {
+                            //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
+                            //  txtNoLP.requestFocus();
+                            txtCantidadRec.requestFocus();
+                        }else{
                             txtNoLP.requestFocus();
                         }
                     } else {
@@ -3585,8 +3592,12 @@ public class frm_recepcion_datos extends PBase {
 
             }else {
                 //GT04042022: focus a cantidad
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    txtCantidadRec.requestFocus();
+                    txtCantidadRec.selectAll();
+                }else{
+                    txtNoLP.requestFocus();
+                }
             }
 
             progress.cancel();
@@ -3718,14 +3729,16 @@ public class frm_recepcion_datos extends PBase {
                     .toList();
 
             double CantRec;
+            double CantSol;
 
             for (int i = 0; i <BeVence.size(); i++)
             {
                 valor = du.convierteFechaMostrarDiagonal(BeVence.get(i).Fecha_vence);
                 CantRec = BeVence.get(i).Cantidad_recibida;
+                CantSol = BeVence.get(i).Cantidad;
 
                 if (!VenceList.contains(valor)){
-                    if (CantRec==0){
+                    if (CantRec!=CantSol){
                         VenceList.add(valor);
                     }
                 }
@@ -3971,6 +3984,8 @@ public class frm_recepcion_datos extends PBase {
                 }
 
             }
+
+            txtCantidadRec.requestFocus();
 
         } catch (Exception e) {
             mu.msgbox("FillUbicacion " + e.getMessage());
@@ -6172,6 +6187,16 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
             }
+            //#CKFK 20211129 Agregué validación para saber si la cantidad ingresada es mayor a la
+            // cantidad permitida en la ubicación
+            if ((gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Transferencia_de_Ingreso ||
+                gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta) &&
+                gl.gBeOrdenCompra.Push_To_NAV){
+                if (Cant_Pendiente > Cantidad) {
+                    msgbox("Excede la cantidad solicitada del producto (" + Cant_Pendiente + ")");
+                    return;
+                }
+            }
 
             if (Cant_Pendiente > Cantidad){
                 msgValidaCantidad("La cantidad "+Cantidad+" ingresada es correcta para el producto "+BeProducto.Codigo);
@@ -6340,7 +6365,7 @@ public class frm_recepcion_datos extends PBase {
 
         @Override
         public void wsExecute(){
-            //#CKFK20220421: Obtener el mensaje de erro
+            //#CKFK20220421: Obtener el mensaje de error
             String vMensajeError="";
 
             try{
@@ -6349,7 +6374,6 @@ public class frm_recepcion_datos extends PBase {
                 double vCantidad=0;
                 //#CKFK20220421: Obtener el tipo de Push
                 String vTipoPush="";
-
 
                 if (!txtCantidadRec.getText().toString().isEmpty()){
                     if (IdPreseSelect!=-1){
@@ -6832,8 +6856,12 @@ public class frm_recepcion_datos extends PBase {
 
 
             //GT04042022: focus a cantidad
-            txtCantidadRec.requestFocus();
-            txtCantidadRec.selectAll();
+            if (!txtNoLP.getText().toString().isEmpty()){
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            }else{
+                txtNoLP.requestFocus();
+            }
 
         }catch (Exception e){
             progress.cancel();
@@ -7592,6 +7620,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.setMessage(msg);
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.ic_quest);
+
             dialog.setPositiveButton("OK", (dialog12, which) -> {
                 txtNoLP.setText("");
                 txtNoLP.setSelectAllOnFocus(true);
@@ -7888,6 +7917,13 @@ public class frm_recepcion_datos extends PBase {
                 //toastlong("etiqueta "+ pBeTipo_etiqueta.Nombre);
             }
 
+            //GT04042022: focus a cantidad
+            if (!txtNoLP.getText().toString().isEmpty()){
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
+            }else{
+                txtNoLP.requestFocus();
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {
