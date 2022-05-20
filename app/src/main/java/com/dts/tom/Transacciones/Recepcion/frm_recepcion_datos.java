@@ -3331,7 +3331,7 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 editarSinPresentacion = true;
 
-                if(BeProducto.Presentaciones != null){
+                if(BeProducto.Presentaciones != null && BeOcDet.IdPresentacion!=0){
                     auxPres = stream(BeProducto.Presentaciones.items).where(c-> c.IdPresentacion == BeOcDet.IdPresentacion).first();
                 }
 
