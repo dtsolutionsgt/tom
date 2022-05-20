@@ -835,6 +835,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //#CKFK20220422 Cambié el execws(7); por el execws(9);
+                    //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
                     //execws(9);
                     //ejecuta();
                     //#CKFK20220506 Cambie el execws(9) por el execws(10)
@@ -844,7 +845,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
+                    execws(10);
                 }
             });
 
@@ -877,7 +878,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
+                    execws(7);
                 }
             });
 
