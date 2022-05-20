@@ -1027,7 +1027,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     {
                         if (users.items.get(i).Operador.Activo)
                         {
-                            users.items.get(i).Nombre_Completo=users.items.get(i).Operador.Apellidos+" "+users.items.get(i).Operador.Nombres;
+                            users.items.get(i).Nombre_Completo=users.items.get(i).Operador.Nombres+" "+users.items.get(i).Operador.Apellidos;
 
                         } else
                         {
