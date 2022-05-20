@@ -46,6 +46,9 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2905,6 +2908,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //Imprime la etiqueta
+                    Imprimir();
                     /*
                   ZPLString As String = String.Format( _
                                                     "^XA " & _
@@ -2944,6 +2948,76 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    //#AT20220520 Imprime etiqueta
+    private void Imprimir(){
+
+        try{
+
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
+
+            if (printerIns.isConnected()){
+
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+
+                String zpl="";
+
+                if (BeStockPallet!=null){
+
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeStockPallet.Codigo_Producto + " - " + BeStockPallet.Nombre_Producto,
+                            (!vNuevoPalletId.isEmpty() ? "$" + vNuevoPalletId: BeStockPallet.Codigo_Producto));
+
+                    if (!zpl.isEmpty()){
+                        zPrinterIns.sendCommand(zpl);
+                    }else{
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                    }
+
+                    Thread.sleep(500);
+
+                    // Close the connection to release resources.
+                    printerIns.close();
+
+                }else{
+                    mu.msgbox("Información de producto no definida.");
+                }
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir. No existe conexión a la impresora: "+ gl.MacPrinter);
+            }else{
+                mu.msgbox("Imprimir etiqueta cambio de ubicación: "+e.getMessage());
+            }
+        }finally {
+            progress.cancel();
+        }
     }
 
     private void validaOrigen(){
