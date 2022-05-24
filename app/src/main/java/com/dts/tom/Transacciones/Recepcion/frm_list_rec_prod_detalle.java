@@ -572,8 +572,9 @@ public class frm_list_rec_prod_detalle extends PBase {
             }
 
         }catch (Exception e){
-            progress.cancel();
             mu.msgbox("processDetRec:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 
@@ -618,7 +619,6 @@ public class frm_list_rec_prod_detalle extends PBase {
 
     private void doExit(){
         try{
-
             gl.mode=1;
             super.finish();
             gl.Carga_Producto_x_Pallet=false;
@@ -640,6 +640,8 @@ public class frm_list_rec_prod_detalle extends PBase {
 
             if (browse==1){
                 browse=0;
+                progress.setMessage("Eliminando registro");
+                progress.show();
                 //Llama a processDetRec
                 execws(2);
             }
