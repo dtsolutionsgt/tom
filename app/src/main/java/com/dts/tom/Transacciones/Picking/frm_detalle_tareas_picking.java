@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.Picking;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,10 +10,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,7 +54,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private ProgressDialog progress;
+    private Dialog progress;
     private ListView listView;
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
@@ -77,49 +83,61 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
 
+    public Activity myActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appGlobals gll;
-        gll=((appGlobals) this.getApplication());
-        areaprimera = gll.Mostrar_Area_En_HH;
+        try {
+            myActivity = this;
 
-        if (areaprimera) {
-            setContentView(R.layout.activity_frm_detalle_tareas_picking2);
-        } else {
-            setContentView(R.layout.activity_frm_detalle_tareas_picking);
+            appGlobals gll;
+
+            gll=((appGlobals) this.getApplication());
+
+            areaprimera = gll.Mostrar_Area_En_HH;
+
+            if (areaprimera) {
+                setContentView(R.layout.activity_frm_detalle_tareas_picking2);
+            } else {
+                setContentView(R.layout.activity_frm_detalle_tareas_picking);
+            }
+
+            super.InitBase();
+
+            ws = new WebServiceHandler(frm_detalle_tareas_picking.this, gl.wsurl);
+            xobj = new XMLObject(ws);
+
+            listView = (ListView) findViewById(R.id.listTareasPicking);
+            cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
+            btnPendientes = (Button) findViewById(R.id.btnPendientes);
+            btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
+            txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
+            lblBodega = (TextView) findViewById(R.id.lblBodega);
+            lblOperador = (TextView) findViewById(R.id.lblOperador);
+            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+            txtFiltro = (EditText) findViewById(R.id.txtFiltro);
+            btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
+            btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
+            relbot = (RelativeLayout) findViewById(R.id.relbot);
+            relFiltros = findViewById(R.id.relFiltros);
+
+            lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
+            lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
+
+            gl.mostar_filtros = false;
+            gl.termino = "";
+
+            ProgressDialog("Obteniendo Picking...");
+
+            setHandlers();
+
+            Load();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        super.InitBase();
-
-        ws = new WebServiceHandler(frm_detalle_tareas_picking.this, gl.wsurl);
-        xobj = new XMLObject(ws);
-
-        listView = (ListView) findViewById(R.id.listTareasPicking);
-        cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
-        btnPendientes = (Button) findViewById(R.id.btnPendientes);
-        btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
-        txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
-        lblBodega = (TextView) findViewById(R.id.lblBodega);
-        lblOperador = (TextView) findViewById(R.id.lblOperador);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        txtFiltro = (EditText) findViewById(R.id.txtFiltro);
-        btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
-        btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
-        relbot = (RelativeLayout) findViewById(R.id.relbot);
-        relFiltros = findViewById(R.id.relFiltros);
-
-        lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
-        lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
-
-        gl.mostar_filtros = false;
-        gl.termino = "";
-
-        ProgressDialog("Cargando forma...");
-
-        setHandlers();
-        Load();
 
     }
 
@@ -291,15 +309,27 @@ public class frm_detalle_tareas_picking extends PBase {
         btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
     }
 
-
-    public void ProgressDialog(String mensaje) {
-        progress = new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
-    }
+//    public void ProgressDialog(String mensaje) {
+//
+//        try {
+//
+//            if (progress ==null){
+//                progress = new ProgressDialog(myActivity);
+//            }
+//
+//            progress_setMessage(mensaje);
+//            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            progress.setIndeterminate(true);
+//            progress.setCancelable(false);
+//            progress.setProgress(0);
+//
+//            new Handler().postDelayed(() -> progress.show(),100);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     private void procesar_registro() {
 
@@ -412,7 +442,9 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Load(){
+
         String titulo = "";
+
         try {
 
             TipoOrden.add("Ubicacion");
@@ -433,6 +465,8 @@ public class frm_detalle_tareas_picking extends PBase {
             titulo = gl.gReferencia.isEmpty() ? "Picking #" + gl.gIdPickingEnc : "Picking #" + gl.gIdPickingEnc +" - "+gl.gReferencia;
             lblTituloForma.setText(titulo);
 
+            progress_setMessage("Obteniendo picking");
+
             if (gl.gIdPickingEnc>0){
                 execws(1);
             }
@@ -449,7 +483,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            progress.setMessage("Listando detalle de picking");
+            progress_setMessage("Listando detalle");
 
             if (plistPickingUbi!=null){
 
@@ -504,9 +538,13 @@ public class frm_detalle_tareas_picking extends PBase {
                 listView.setAdapter(adapter);
             }
 
-            progress.cancel();
+            //progress.cancel();
+
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Lista_Detalle_Picking:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 
@@ -567,7 +605,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             progress.show();
 
-            progress.setMessage("Finalizando picking...");
+            progress_setMessage("Finalizando picking...");
 
             if (plistPickingUbi != null){
                 if (plistPickingUbi.items != null){
@@ -599,7 +637,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (Finalizar) {
 
-                progress.setMessage("Actualizando estado de picking...");
+                progress_setMessage("Actualizando estado de picking...");
 
                 gBePicking.Estado = "Procesado";
                 gBePicking.Fec_mod = du.getFechaActual();
@@ -699,7 +737,7 @@ public class frm_detalle_tareas_picking extends PBase {
                         break;
                 }
 
-                progress.cancel();
+                //progress.cancel();
 
             } catch (Exception e) {
                 progress.cancel();
@@ -740,15 +778,13 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo valores de picking");
-            progress.show();
+            progress_setMessage("Serializando Picking...");
 
-            //-----------------------------
             gBePicking =xobj.getresult(clsBeTrans_picking_enc.class,"Get_Picking_By_IdPickingEnc");
 
             if (gBePicking!=null){
 
-                progress.setMessage("Actualizando picking a estado pendiente...");
+                progress_setMessage("Actualizando picking a estado pendiente...");
 
                 if (gBePicking.Estado.equals("Nuevo")){
                     gBePicking.Estado = "Pendiente";
@@ -764,6 +800,8 @@ public class frm_detalle_tareas_picking extends PBase {
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processGetPicking:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 
@@ -771,14 +809,15 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            progress.setMessage("Cargando detalle del picking...");
-
             plistPickingUbi = gBePicking.ListaPickingUbic;
 
             Lista_Detalle_Picking();
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("procesActualizarEstadoPicking:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
 
     }
@@ -803,11 +842,13 @@ public class frm_detalle_tareas_picking extends PBase {
 
     public void ActualizaLista(View view) {
         try {
-            progress.setMessage("Actualizando Lista de Picking...");
+            progress_setMessage("Actualizando Lista de Picking...");
             progress.show();
             execws(1);
         } catch (Exception e) {
             mu.msgbox("ActualizaLista: "+e.getMessage());
+        }finally {
+            //progress.cancel();
         }
     }
 
@@ -815,7 +856,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            progress.setMessage("Finalizando actualización de estado...");
+            progress_setMessage("Finalizando actualización de estado...");
 
             int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
 
@@ -932,4 +973,57 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
+    private TextView txtMensajeDialog;
+    private String mensaje_progress ="";
+
+    public void ProgressDialog(String mensaje){
+
+        progress= new Dialog(this);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        Window window=progress.getWindow();
+
+       /* if(window!=null){
+            window.setBackgroundDrawable(new ColorDrawable(0));
+        }*/
+
+        runOnUiThread(() -> {
+            txtMensajeDialog= progress.findViewById(R.id.txtMensajeDialog);
+            if(txtMensajeDialog!=null){
+                txtMensajeDialog.setText(mensaje);
+            }
+        });
+
+        progress.show();
+
+    }
+
+    public void progress_setMessage(String mensaje){
+        try {
+            if(progress!=null){
+                runOnUiThread(() -> {
+                    txtMensajeDialog = progress.findViewById(R.id.txtMensajeDialog);
+                    if(txtMensajeDialog!=null){
+                        txtMensajeDialog.setText(mensaje);
+                        mensaje_progress = mensaje;
+                        txtMensajeDialog.postDelayed(mUpdate,100);
+                    }
+                });
+            }else{
+                Log.println(Log.DEBUG,"Progress","Isnull");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Runnable mUpdate = new Runnable() {
+
+        public void run() {
+
+            txtMensajeDialog.setText(mensaje_progress);
+            txtMensajeDialog.postDelayed(this, 1000);
+
+        }
+    };
 }

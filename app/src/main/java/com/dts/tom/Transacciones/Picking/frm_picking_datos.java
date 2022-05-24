@@ -1,6 +1,7 @@
 package com.dts.tom.Transacciones.Picking;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -70,7 +72,7 @@ public class frm_picking_datos extends PBase {
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
 
-    private ProgressDialog progress;
+    private Dialog progress;
     private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad, lblPresSol, lblPresRec, lblUnidadSol, lblUnidadRec;
     private Button btnDanado, btNE;
     private FloatingActionButton btnConfirmarPk;
@@ -103,6 +105,7 @@ public class frm_picking_datos extends PBase {
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private boolean PressEnterLp, PressEnterProducto, escaneo_licencia_diferente = false;
+    private boolean ReubicarPickingAereo = false;
 
 
     @Override
@@ -200,10 +203,10 @@ public class frm_picking_datos extends PBase {
 
                                 if (gBePickingUbic.Lic_plate.length() > 4) {
                                     String lic_short = gBePickingUbic.Lic_plate.substring(gBePickingUbic.Lic_plate.length() - 4);
-                                    text = "Escanee licencia con terminación: " + lic_short + ".";
+                                    text = "Escanée licencia con terminación: " + lic_short + ".";
 
                                 } else {
-                                    text = "Escanee licencia: " + gBePickingUbic.Lic_plate + ".";
+                                    text = "Escanée licencia: " + gBePickingUbic.Lic_plate + ".";
                                 }
 
                             }
@@ -304,8 +307,6 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
-
-
             //GT06042022: no remover, hacen de pivote para retener el focus
             txtCantidadPick.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -385,15 +386,6 @@ public class frm_picking_datos extends PBase {
         }
     }
 
-    public void ProgressDialog(String mensaje) {
-        progress = new ProgressDialog(this);
-        progress.setMessage(mensaje);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
-    }
-
     private void Load() {
 
         try {
@@ -437,14 +429,9 @@ public class frm_picking_datos extends PBase {
 
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
-                    " Expira: " + gBePickingUbic.Fecha_Vence :"" ) +((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
+                    " Vence: " + gBePickingUbic.Fecha_Vence :"" ) +((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " (" + DifDias +"d)" :"" )
                     + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:""));
-
-            //txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            //txtCantidadPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
-            //txtPesoPick.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            //txtPesoPick.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(gl.gCantDecDespliegue)});
 
             gBeProducto = new clsBeProducto();
 
@@ -500,7 +487,7 @@ public class frm_picking_datos extends PBase {
 
             lblTituloForma.setText("Prod: " + gBePickingUbic.CodigoProducto + "-" + gBePickingUbic.NombreProducto + "\r\n"
                     + ((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
-                    " Expira: " + gBePickingUbic.Fecha_Vence :"" ) +((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
+                    " Vence: " + gBePickingUbic.Fecha_Vence :"" ) +((!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty())?
                     " (" + DifDias +"d)" :"" )
                     + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:""));
 
@@ -517,7 +504,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            progress.setMessage("Listando estados de producto");
+            progress_setMessage("Listando estados de producto");
 
             EstadoList.clear();
 
@@ -543,7 +530,7 @@ public class frm_picking_datos extends PBase {
         try {
             if (gBeProducto.Presentaciones != null) {
 
-                progress.setMessage("Listando presentaciones de producto");
+                progress_setMessage("Listando presentaciones de producto");
 
                 if (gBeProducto.Presentaciones.items != null) {
 
@@ -574,19 +561,16 @@ public class frm_picking_datos extends PBase {
         try {
 
             if (!escaneo_licencia_diferente) {
-                txtLicencia.setSelectAllOnFocus(true);
-                txtLicencia.requestFocus();
-                Log.d("focus: ", "20220502_8");
+                if (txtLicencia.getText().toString().isEmpty()){
+                    txtLicencia.setSelectAllOnFocus(true);
+                    txtLicencia.requestFocus();
+                    Log.d("txtLicencia_focus: ", "20220502_8");
+                }
             }
 
             txtLote.setFocusable(false);
             txtLote.setFocusableInTouchMode(false);
             txtLote.setClickable(false);
-
-            /*cmbPresentacion.setFocusable(false);
-            cmbPresentacion.setFocusableInTouchMode(false);
-            cmbPresentacion.setClickable(false);
-            cmbPresentacion.setEnabled(false);*/
 
             txtUniBas.setFocusable(false);
             txtUniBas.setFocusableInTouchMode(false);
@@ -631,7 +615,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            progress.setMessage("Bloqueando controles");
+            progress_setMessage("Bloqueando controles");
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
@@ -747,10 +731,12 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private boolean vPalletValido = false;
+
     private void Continua_procesando_barra(){
 
+        vPalletValido = false;
 
-        boolean vPalletValido = false;
         boolean vMarcarComoNoEncontrado =false;
 
         try{
@@ -1000,6 +986,7 @@ public class frm_picking_datos extends PBase {
                     if (!gBePickingUbic.Lic_plate.isEmpty()){
 
                         if (!gBePickingUbic.Lic_plate.equals(pLP)){
+
                             if (ListBeStockPalletEscaneado!=null){
 
                                 if (ListBeStockPalletEscaneado.items!=null){
@@ -1373,8 +1360,8 @@ public class frm_picking_datos extends PBase {
         double vCantUniXTarima = 0;
 
         try{
-            txtCantidadPick.setEnabled(true);
 
+            txtCantidadPick.setEnabled(true);
 
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
 
@@ -1482,14 +1469,22 @@ public class frm_picking_datos extends PBase {
             //#GT25042022: le quito el focus al campo código, porque retorna despues del set en cantidad.
             txtCodigoProducto.setFocusable(false);
             txtCodigoProducto.clearFocus();
-            //#GT25042022: con el campo codigo sin focus, dejo el de cantidad pick
-            txtCantidadPick.setEnabled(true);
-            txtCantidadPick.requestFocus();
-            Log.d("focus: ", "20220502_40");
-            txtCantidadPick.setFocusable(true);
-
             btnConfirmarPk.setEnabled(true);
             PressEnterProducto = true;
+
+            //#EJC20220524: Si no se hace esto, el focus vuelve a la licencia
+            //porque en orden, fue el primero que  hizo el request del focus.
+            if (Escaneo_Pallet && vPalletValido){
+                txtLicencia.setFocusable(false);
+                txtLicencia.clearFocus();
+                txtLicencia.setEnabled(false);
+            }
+
+            //#GT25042022: con el campo codigo sin focus, dejo el de cantidad pick
+            txtCantidadPick.setEnabled(true);
+            txtCantidadPick.setFocusable(true);
+            txtCantidadPick.requestFocus();
+            Log.d("txtCantidadPick_focus: ", "20220502_40");
 
         }catch (Exception e){
             mu.msgbox("Cargar_Datos_Producto_Picking:"+e.getMessage());
@@ -1609,6 +1604,7 @@ public class frm_picking_datos extends PBase {
                         if (txtLicencia.getText().toString().isEmpty()) {
                             msgCodigoProducto("Ingresar licencia de producto");
                             txtLicencia.requestFocus();
+                            Log.d("txtLicencia: ", "20220502_41");
                             return;
                         }
 
@@ -1623,12 +1619,14 @@ public class frm_picking_datos extends PBase {
                 }else{
                     msgCodigoProducto("Confirme código de producto y luego presione Enter.");
                     txtLicencia.requestFocus();
+                    Log.d("txtLicencia: ", "20220502_42");
                     return;
                 }
 
             }else{
                 msgCodigoProducto("Confirme licencia y luego presione Enter.");
                 txtLicencia.requestFocus();
+                Log.d("txtLicencia: ", "20220502_43");
                 return;
             }
 
@@ -1701,7 +1699,7 @@ public class frm_picking_datos extends PBase {
         double CantPendiente = 0;
         double Cantidad = 0;
 
-        progress.setMessage("Procesando registro...");
+        progress_setMessage("Procesando registro...");
         progress.show();
 
         try {
@@ -1815,6 +1813,7 @@ public class frm_picking_datos extends PBase {
                     mu.msgbox("Ingrese LP del producto");
                     txtLicencia.setSelectAllOnFocus(true);
                     txtLicencia.requestFocus();
+                    Log.d("txtLicencia: ", "20220502_44");
                     return false;
                 }
 
@@ -1822,6 +1821,7 @@ public class frm_picking_datos extends PBase {
                     mu.msgbox("Ingrese código del producto");
                     txtCodigoProducto.setSelectAllOnFocus(true);
                     txtCodigoProducto.requestFocus();
+                    Log.d("txtCodigoProducto: ", "20220502_45");
                     return false;
                 }
             }
@@ -1836,7 +1836,7 @@ public class frm_picking_datos extends PBase {
     private void processGetFotosProducto() {
 
         try {
-            progress.setMessage("Cargando imágenes...");
+            progress_setMessage("Cargando imágenes...");
             BeListProductoImagen = xobj.getresult(clsBeProducto_imagenList.class,"Get_All_Producto_Imagen");
 
             gl.ListImagen.clear();
@@ -1870,7 +1870,7 @@ public class frm_picking_datos extends PBase {
     }
 
     public void verImagenes(View view) {
-        progress.setMessage("Cargando imágenes...");
+        progress_setMessage("Cargando imágenes...");
         progress.show();
         execws(10);
     }
@@ -2069,10 +2069,6 @@ public class frm_picking_datos extends PBase {
                     processBeStockRes();
                     break;
                 case 7:
-                    if (TipoLista==2){
-                        doExit();
-                    }
-                    break;
                 case 8:
                     if (TipoLista==2){
                         doExit();
@@ -2094,7 +2090,7 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            progress.setMessage("Cargando datos de producto");
+            progress_setMessage("Cargando datos de producto");
 
             gBeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
@@ -2122,7 +2118,9 @@ public class frm_picking_datos extends PBase {
 
                 //#AT20220419 Se muestra Cajas y Unidades en cantidad solicitada y recibida
                 if (gBePickingUbic.IdPresentacion>0){
+
                     if (gBeProducto.Presentaciones!=null){
+
                         if (gBeProducto.Presentaciones.items!=null){
 
                             auxPres = stream(gBeProducto.Presentaciones.items).where(c-> c.IdPresentacion == gBePickingUbic.IdPresentacion).first();
@@ -2260,21 +2258,11 @@ public class frm_picking_datos extends PBase {
 
                 }
 
-                execws(2);
-
                 if (escaneo_licencia_diferente) {
-
                     LlenaPresentacion();
-
-//                    if (confirmar_codigo_en_picking){
-//                        txtCodigoProducto.requestFocus();
-//                        txtCodigoProducto.setSelectAllOnFocus(true);
-//                    }else{
-//                        txtCantidadPick.requestFocus();
-//                        txtCantidadPick.setSelectAllOnFocus(true);
-//                    }
-
                 }
+
+                execws(2);
 
             }else{
                 progress.cancel();
@@ -2293,11 +2281,12 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo estados de producto");
+            progress_setMessage("Obteniendo estados de producto");
 
             LProductoEstadoIngreso = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodegaHH");
 
             if (gBeProducto.Presentaciones!=null){
+
                 if (gBeProducto.Presentaciones.items!=null){
 
                     factor = gBeProducto.Presentaciones.items.get(0).Factor;
@@ -2309,9 +2298,11 @@ public class frm_picking_datos extends PBase {
                     if (!gBePickingUbic.Lic_plate.isEmpty()) {
                         if (!escaneo_licencia_diferente) {
                             txtLicencia.requestFocus();
+                            Log.d("txtLicencia_focus: ", "20220524_1538");
                         }
                     } else {
                         txtCodigoProducto.requestFocus();
+                        Log.d("txtCodigoProducto: ", "20220524_1539");
                     }
 
                 }else{
@@ -2331,7 +2322,7 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            progress.setMessage("Obteniendo presentaciones de producto");
+            progress_setMessage("Obteniendo presentaciones de producto");
 
             gBeProducto.Presentaciones = xobj.getresult(clsBeProducto_PresentacionList.class,"Get_All_Presentaciones_By_IdProducto");
 
@@ -2357,6 +2348,12 @@ public class frm_picking_datos extends PBase {
                 }
             } else {
                 txtCodigoProducto.requestFocus();
+            }
+
+            ReubicarPickingAereo = false;
+            //#EJC20220524: Validar si se reubica a posición de piso.
+            if(gBePickingUbic.Ubicacion.Nivel>=2){
+                ReubicarPickingAereo = true;
             }
 
         }catch (Exception e){
@@ -2557,5 +2554,64 @@ public class frm_picking_datos extends PBase {
         }
 
     }
+    public void progress_setMessage(String mensaje){
+        try {
+            if(progress!=null){
+                runOnUiThread(() -> {
+                    txtMensajeDialog = progress.findViewById(R.id.txtMensajeDialog);
+                    if(txtMensajeDialog!=null){
+                        txtMensajeDialog.setText(mensaje);
+                        mensaje_progress = mensaje;
+                        txtMensajeDialog.postDelayed(mUpdate,0);
+                    }
+                });
+            }else{
+                Log.println(Log.DEBUG,"Progress","Isnull");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private TextView txtMensajeDialog;
+    private String mensaje_progress ="";
+
+    public void ProgressDialog(String mensaje){
+
+        progress= new Dialog(this);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        Window window=progress.getWindow();
+
+        runOnUiThread(() -> {
+            txtMensajeDialog= progress.findViewById(R.id.txtMensajeDialog);
+            if(txtMensajeDialog!=null){
+                txtMensajeDialog.setText(mensaje);
+            }
+        });
+
+        progress.show();
+
+    }
+
+    private Runnable mUpdate = new Runnable() {
+
+        public void run() {
+
+            txtMensajeDialog.setText(mensaje_progress);
+            txtMensajeDialog.postDelayed(this, 1000);
+
+        }
+    };
+
+    //    public void ProgressDialog(String mensaje) {
+//        progress = new ProgressDialog(this);
+//        progress_setMessage(mensaje);
+//        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progress.setIndeterminate(true);
+//        progress.setProgress(0);
+//        progress.show();
+//    }
+
 
 }
