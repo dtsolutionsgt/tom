@@ -39,6 +39,7 @@ import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class frm_picking_datos extends PBase {
 
     private ProgressDialog progress;
     private TextView lblTituloForma, lblLicPlate, lblEstiba, lblPresentacion, lblCantidad, lblPresSol, lblPresRec, lblUnidadSol, lblUnidadRec;
-    private Button btnDanado, btNE,btnConfirmarPk;
+    private Button btnDanado, btNE;
+    private FloatingActionButton btnConfirmarPk;
     private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick,
                      txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec;
     private Spinner cmbPresentacion, cmbEstado;
@@ -137,7 +139,7 @@ public class frm_picking_datos extends PBase {
         lblEstiba = (TextView) findViewById(R.id.lblEstiba);
         lblCantidad = (TextView) findViewById(R.id.lblCantidad);
 
-        btnConfirmarPk = (Button) findViewById(R.id.btnConfirmarPk);
+        btnConfirmarPk = (FloatingActionButton) findViewById(R.id.btnConfirmarPk);
 
         cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
 
