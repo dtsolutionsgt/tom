@@ -3108,7 +3108,6 @@ public class frm_recepcion_datos extends PBase {
                     Factor = Factor * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CajasPorCama).first() * stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.CamasPorTarima).first();
                 }
 
-
                 if (BeProducto.Presentaciones != null) {
                     if (BeProducto.Presentaciones.items != null) {
                         //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
@@ -3366,7 +3365,7 @@ public class frm_recepcion_datos extends PBase {
                     Cant_Pendiente = mu.round(Cant_A_Recibir - Cant_Recibida,gl.gCantDecCalculo);
                 }
 
-//                txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
+//              txtCantidadRec.setText(mu.frmdecimal(pListTransRecDet.items.get(0).cantidad_recibida,gl.gCantDecDespliegue)+"");
                 txtCantidadRec.setText(pListTransRecDet.items.get(0).cantidad_recibida+"");
                 txtCantidadRec.requestFocus();
 
@@ -3424,6 +3423,12 @@ public class frm_recepcion_datos extends PBase {
                 cmbVenceRec.setVisibility(View.GONE);
                 lblVence.setVisibility(View.GONE);
                 imgDate.setVisibility(View.GONE);
+            }else{
+                if (gl.mode==1){
+                    if (!gl.gFechaVenceAnterior.isEmpty() && gl.gProductoAnterior.equals(BeProducto.getCodigo())){
+                        cmbVenceRec.setText(gl.gFechaVenceAnterior);
+                    }
+                }
             }
 
             if (gl.mode==1){
@@ -5132,8 +5137,6 @@ public class frm_recepcion_datos extends PBase {
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
 
-
-
                     zplSKU = String.format("^XA\n" +
                                     "^MMT\n" +
                                     "^PW600\n" +
@@ -5203,8 +5206,6 @@ public class frm_recepcion_datos extends PBase {
                                         BeProducto.Codigo+" - "+BeProducto.Nombre,
                                         "$"+pNumeroLP,
                                         gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
-
-
 
                     zplSKU = String.format("^XA\n" +
                                     "^MMT\n" +
@@ -6189,10 +6190,11 @@ public class frm_recepcion_datos extends PBase {
             }
             //#CKFK 20211129 Agregué validación para saber si la cantidad ingresada es mayor a la
             // cantidad permitida en la ubicación
+            //#CKFK20220524 Corregi la condicion if (Cant_Pendiente>Cantidad) {
             if ((gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Transferencia_de_Ingreso ||
                 gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta) &&
                 gl.gBeOrdenCompra.Push_To_NAV){
-                if (Cant_Pendiente > Cantidad) {
+                if (Cantidad>Cant_Pendiente) {
                     msgbox("Excede la cantidad solicitada del producto (" + Cant_Pendiente + ")");
                     return;
                 }
@@ -6643,13 +6645,14 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
                         break;
                     case 31:
-                        callMethod("Guardar_Transaccion_Error", "pDocumentoUbicacion",ubiDetLote,
-                                                "pTipoPush",vTipoPush,
-                                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
-                                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
-                                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
-                                                "pIdUsuario",gl.OperadorBodega.IdOperador,
-                                                "pMensaje",vMensajeError);
+                        callMethod("Guardar_Transaccion_Error",
+                                "pDocumentoUbicacion",ubiDetLote,
+                                "pTipoPush",vTipoPush,
+                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
+                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                "pMensaje",vMensajeError);
                         break;
 
                     case 32:
@@ -7343,12 +7346,12 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
                     progress.cancel();
-                    mu.msgbox("No se pudo guardar la recepción");
+                    mu.msgbox("No se pudo guardar la recepción el resultado fue nulo");
                 }
 
             }else{
                 progress.cancel();
-                mu.msgbox("No se pudo guardar la recepción:  " + ws.xmlresult);
+                mu.msgbox("No se pudo guardar la recepción el XML tiene error:  " + ws.xmlresult);
             }
 
         }catch (Exception e){
@@ -7415,7 +7418,7 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.mode==1){
                     gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;
                 }else{
-                    //#CKFK 20210630 Calcular la cantidad recibid
+                    //#CKFK 20210630 Calcular la cantidad recibida
                     //#AT20220518 Si se actualiza  sin presentación realizar la conversión
                     if (editarSinPresentacion) {
                         double cantidadRec = BeTransReDet.cantidad_recibida / auxPres.Factor;

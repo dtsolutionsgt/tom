@@ -643,7 +643,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             }
         });
 
-
     }
 
     //endregion
