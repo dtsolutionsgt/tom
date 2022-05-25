@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
@@ -30,6 +31,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion3;
+import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion4;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
@@ -54,6 +56,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private list_adapt_detalle_tareas_verificacion adapter;
     private list_adapt_detalle_tareas_verificacion2 adapter2;
     private list_adapt_detalle_tareas_verificacion3 adapter3;
+    private list_adapt_detalle_tareas_verificacion4 adapter4;
 
     private ListView listDetVeri;
     private EditText txtCodProd;
@@ -77,6 +80,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false, mostrar_area, VerSinLoteFechaVen = false;
     private boolean finalizar = true;
+    private int TipoPantallaPicking = 0;
     private int selidx = -1,sortord;
 
     @Override
@@ -84,14 +88,23 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
+
+            appGlobals gll;
+            gll=((appGlobals) this.getApplication());
+            TipoPantallaPicking = gll.TipoPantallaPicking;
+
+            if (gll.TipoPantallaPicking > 0) {
+                setContentView(R.layout.activity_frm_detalle_tareas_verificacion2);
+            } else {
+                setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
+            }
 
             super.InitBase();
 
             VerSinLoteFechaVen = false;
             gl.VerificacionSinLoteFechaVen = false;
 
-            if (gl.CodigoBodega.equals("BA0002")) {
+            if (gl.CodigoBodega.equals("SI")) {
                 gl.VerificacionSinLoteFechaVen = true;
             }
 
@@ -112,12 +125,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             relbot = (RelativeLayout) findViewById(R.id.relbot);
 
-            if (mostrar_area) {
-                encabezado2.setVisibility(View.VISIBLE);
-            } else if(VerSinLoteFechaVen) {
-                encabezado3.setVisibility(View.VISIBLE);
-            }else {
-                encabezado1.setVisibility(View.VISIBLE);
+            if (TipoPantallaPicking == 0) {
+                if (mostrar_area) {
+                    encabezado2.setVisibility(View.VISIBLE);
+                } else if (VerSinLoteFechaVen) {
+                    encabezado3.setVisibility(View.VISIBLE);
+                } else {
+                    encabezado1.setVisibility(View.VISIBLE);
+                }
             }
 
             setHandlers();
@@ -176,22 +191,31 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     Object lvObj = listDetVeri.getItemAtPosition(position);
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
-                    if (mostrar_area) {
-                        adapter2.setSelectedIndex(position);
-                    } else if(VerSinLoteFechaVen) {
-                        adapter3.setSelectedIndex(position);
+                    if (TipoPantallaPicking > 0) {
+                        adapter4.setSelectedIndex(position);
                     } else {
-                        adapter.setSelectedIndex(position);
+                        if (mostrar_area) {
+                            adapter2.setSelectedIndex(position);
+                        } else if (VerSinLoteFechaVen) {
+                            adapter3.setSelectedIndex(position);
+                        } else {
+                            adapter.setSelectedIndex(position);
+                        }
                     }
+
                     int index = position;
                     Procesa_Registro(vItem);
 
-                    if (mostrar_area) {
-                        adapter2.refreshItems();
-                    } else if(VerSinLoteFechaVen) {
-                        adapter3.refreshItems();
+                    if (TipoPantallaPicking > 0) {
+                        adapter4.refreshItems();
                     } else {
-                        adapter.refreshItems();
+                        if (mostrar_area) {
+                            adapter2.refreshItems();
+                        } else if (VerSinLoteFechaVen) {
+                            adapter3.refreshItems();
+                        } else {
+                            adapter.refreshItems();
+                        }
                     }
 
                 }
@@ -712,24 +736,33 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         btnRegs.setText("Registros: "+pListaPedidoDet.items.size());
 
-                        if (mostrar_area) {
-                            adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
-                            listDetVeri.setAdapter(adapter2);
-                        } else if(VerSinLoteFechaVen) {
-                            adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
-                            listDetVeri.setAdapter(adapter3);
+                        if (gl.TipoPantallaPicking > 0) {
+                            adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
+                            listDetVeri.setAdapter(adapter4);
                         } else {
-                            adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
-                            listDetVeri.setAdapter(adapter);
-                        }
-
-                        if (pListaPedidoDet.items.size()>0){
                             if (mostrar_area) {
-                                adapter2.setSelectedIndex(-1);
+                                adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                                listDetVeri.setAdapter(adapter2);
                             } else if (VerSinLoteFechaVen) {
-                                adapter3.setSelectedIndex(-1);
+                                adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
+                                listDetVeri.setAdapter(adapter3);
                             } else {
-                                adapter.setSelectedIndex(-1);
+                                adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                                listDetVeri.setAdapter(adapter);
+                            }
+                        }
+                        if (pListaPedidoDet.items.size()>0){
+
+                            if (gl.TipoPantallaPicking > 0) {
+                                adapter4.setSelectedIndex(-1);
+                            } else {
+                                if (mostrar_area) {
+                                    adapter2.setSelectedIndex(-1);
+                                } else if (VerSinLoteFechaVen) {
+                                    adapter3.setSelectedIndex(-1);
+                                } else {
+                                    adapter.setSelectedIndex(-1);
+                                }
                             }
 
                             index = -1;
@@ -972,15 +1005,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private void listSortedItems() {
 
         try {
-            if (mostrar_area) {
-                adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
-                listDetVeri.setAdapter(adapter2);
-            } else if(VerSinLoteFechaVen) {
-                adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
-                listDetVeri.setAdapter(adapter3);
+            if (TipoPantallaPicking > 0) {
+                adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
+                listDetVeri.setAdapter(adapter4);
             } else {
-                adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
-                listDetVeri.setAdapter(adapter);
+                if (mostrar_area) {
+                    adapter2 = new list_adapt_detalle_tareas_verificacion2(this, pListBeTareasVerificacionHH);
+                    listDetVeri.setAdapter(adapter2);
+                } else if (VerSinLoteFechaVen) {
+                    adapter3 = new list_adapt_detalle_tareas_verificacion3(this, pListBeTareasVerificacionHH);
+                    listDetVeri.setAdapter(adapter3);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                    listDetVeri.setAdapter(adapter);
+                }
             }
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());

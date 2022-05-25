@@ -204,6 +204,7 @@ public class appGlobals extends Application {
     public boolean Notificacion_Voz = false;
 
     public boolean buscar_actualizacion_hh= false;
+    public int TipoPantallaPicking = 0;
 
     @Override
     public void onCreate() {

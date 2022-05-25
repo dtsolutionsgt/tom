@@ -38,6 +38,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
+import com.dts.ladapt.list_adapt_detalle_tareas_picking3;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking;
@@ -72,7 +73,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
-
+    private list_adapt_detalle_tareas_picking3 adapter3;
     public static clsBeTrans_picking_ubic selitem, tmpPickingUbic;
 
     private List TipoOrden = new ArrayList();
@@ -82,27 +83,42 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
+    private int TipoPantallaPicking = 0;
+
 
     public Activity myActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try {
             myActivity = this;
-
             appGlobals gll;
-
             gll=((appGlobals) this.getApplication());
-
             areaprimera = gll.Mostrar_Area_En_HH;
+            TipoPantallaPicking = gll.TipoPantallaPicking;
+            int tipo = 0;
 
+
+
+            if(TipoPantallaPicking > 0) {
+                tipo = 3;
+            } else if(areaprimera) {
+                tipo = 2;
+            } else {
+                tipo = 1;
+            }
+
+            cargaPantallaPicking(tipo);
+       /* if (TipoPantallaPicking) {
+            setContentView(R.layout.activity_frm_detalle_tareas_picking3);
+        } else {
             if (areaprimera) {
                 setContentView(R.layout.activity_frm_detalle_tareas_picking2);
             } else {
                 setContentView(R.layout.activity_frm_detalle_tareas_picking);
             }
+        }*/
 
             super.InitBase();
 
@@ -141,6 +157,25 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
+    private void cargaPantallaPicking(int tipo){
+        try {
+            switch (tipo) {
+                case 1:
+                    setContentView(R.layout.activity_frm_detalle_tareas_picking);
+                    break;
+                case 2:
+                    setContentView(R.layout.activity_frm_detalle_tareas_picking2);
+                    break;
+                case 3:
+                    setContentView(R.layout.activity_frm_detalle_tareas_picking3);
+                    break;
+            }
+        }catch(Exception e) {
+            mu.msgbox("caraPantallaRecepion :"+e.getMessage());
+        }
+    }
+
+
     private void setHandlers() {
 
         try {
@@ -164,10 +199,14 @@ public class frm_detalle_tareas_picking extends PBase {
                         selid = sitem.IdPickingUbic;
                         selidx = position;
 
-                        if (areaprimera) {
-                            adapter2.getItem(position);
+                        if (TipoPantallaPicking > 0) {
+                            adapter3.getItem(position);
                         } else {
-                            adapter.getItem(position);
+                            if (areaprimera) {
+                                adapter2.getItem(position);
+                            } else {
+                                adapter.getItem(position);
+                            }
                         }
 
                         procesar_registro();
@@ -298,12 +337,17 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         }
 
-        if (areaprimera) {
-            adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-            listView.setAdapter(adapter2);
+        if (TipoPantallaPicking > 0) {
+            adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+            listView.setAdapter(adapter3);
         } else {
-            adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-            listView.setAdapter(adapter);
+            if (areaprimera) {
+                adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                listView.setAdapter(adapter2);
+            } else {
+                adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                listView.setAdapter(adapter);
+            }
         }
 
         btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
@@ -451,6 +495,7 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoOrden.add("Codigo");
             TipoOrden.add("Vence");
             TipoOrden.add("Estado");
+            TipoOrden.add("Clasificación");
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, TipoOrden);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -530,12 +575,17 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            if (areaprimera) {
-                adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
-                listView.setAdapter(adapter2);
+            if (TipoPantallaPicking > 0) {
+                adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
+                listView.setAdapter(adapter3);
             } else {
-                adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
-                listView.setAdapter(adapter);
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                    listView.setAdapter(adapter2);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                    listView.setAdapter(adapter);
+                }
             }
 
             //progress.cancel();
@@ -700,6 +750,8 @@ public class frm_detalle_tareas_picking extends PBase {
                 return left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
             }else if(pOrden==4){
                 return left.ProductoEstado.compareTo(rigth.ProductoEstado);
+            } else if(pOrden==5) {
+                return left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
             }
             return left.CodigoProducto.compareTo(rigth.CodigoProducto);
         }

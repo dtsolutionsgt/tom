@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    tools:context="com.dts.ladapt.list_adapt_detalle_tareas_picking">
+
+    <RelativeLayout
+        android:id="@+id/tbrArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lblArea"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Área:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtArea"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/lblArea"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relLicencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbrArea"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblLic"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Licencia :"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblLicencia"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblLic"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relUbicacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLicencia"
+        android:layout_marginTop="0dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblUbic"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Ubicación :"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtUbic"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblUbic"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relUbicacion"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblProdCod"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Producto:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtProdDoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblProdCod"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relClasificacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relProducto"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblClasificacion"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Clasificación:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtClasificacion"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblClasificacion"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relLote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relClasificacion"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblLote"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Lote:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtLote"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblLote"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relVence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLote"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblVence"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Vence:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtVence"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblVence"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relCantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relVence"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblCantidad"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="CAJA0001"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtCantidad"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblCantidad"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relCantidad"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Estado:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtEstado"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblEstado"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relTarima"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relEstado"
+        android:layout_marginTop="0dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblTarima"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Tarima: "
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtTarima"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblTarima"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relPeso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relTarima"
+        android:layout_marginTop="0dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblPeso"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Peso: "
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtPeso"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblPeso"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
