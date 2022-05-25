@@ -37,21 +37,15 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
-import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion2;
-import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
-import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
-import com.dts.ladapt.list_adapt_detalle_tareas_picking;
-import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.tom.DrawingView;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
-import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -1081,7 +1075,6 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
-
                         callMethod("Finalizar_Recepcion",
                                             "pRecEnc",gl.gBeRecepcion,
                                             "backOrder",backorder,
@@ -1092,6 +1085,10 @@ public class frm_list_rec_prod extends PBase {
                                             "pIdUsuario",gl.IdOperador,
                                             "pListObjDetR",pListTransRecDet.items,
                                             "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
+                        break;
+                    case 15:
+
+                        callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH","pIdOrdenCompraEnc",vIdOrdenCompra);
                         break;
                 }
 
@@ -1161,6 +1158,9 @@ public class frm_list_rec_prod extends PBase {
                     case 14:
                         //doExit();
                         process_finalizar_recepcion();
+                        break;
+                    case 15:
+                        process_actualizar_oc();
                         break;
                 }
 
@@ -1347,6 +1347,26 @@ public class frm_list_rec_prod extends PBase {
         }catch (Exception e){
             progress.hide();
             mu.msgbox("process_finalizar_recepcion:"+e.getMessage());
+        }
+    }
+
+    private void process_actualizar_oc(){
+        try{
+
+            gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH");
+
+            pListDetalleOC.items = gl.gpListDetalleOC.items;
+
+            Lista_Detalle_Documento_Ingreso();
+            ordenar();
+            progress.cancel();
+
+            if(Recepcion_Completa()){
+                msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+            }
+        }catch (Exception e){
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            progress.cancel();
         }
     }
 
@@ -1583,7 +1603,7 @@ public class frm_list_rec_prod extends PBase {
         menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 gl.sortOrd = item;
-                orderar();
+                ordenar();
                 listSortedItems();
                 dialog.cancel();
             }
@@ -1624,7 +1644,7 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-    private void orderar() {
+    private void ordenar() {
         switch (gl.sortOrd) {
             case 0:
                 sortord=1;
@@ -1735,21 +1755,30 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==1){
                 browse=0;
-                pListDetalleOC.items= gl.gpListDetalleOC.items;
-                Lista_Detalle_Documento_Ingreso();
-                orderar();
-               if(Recepcion_Completa()){
-                   msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
-               }
+                if (!gl.gSinPresentacion){
+                    pListDetalleOC.items= gl.gpListDetalleOC.items;
+                    Lista_Detalle_Documento_Ingreso();
+                    ordenar();
+                    if(Recepcion_Completa()){
+                        msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                    }
+                }else{
+                    gl.gSinPresentacion=false;
+
+                    progress.setMessage("Actualizando OC");
+                    progress.show();
+
+                    execws(15);
+                }
+
             }
 
             if (browse==2){
                 browse=0;
                 pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_Documento_Ingreso();
-              Recepcion_Completa();
+                Recepcion_Completa();
             }
-
 
         }catch (Exception e){
             mu.msgbox("OnResume"+e.getMessage());

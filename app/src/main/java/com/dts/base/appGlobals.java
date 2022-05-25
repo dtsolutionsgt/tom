@@ -112,6 +112,7 @@ public class appGlobals extends Application {
     public String gUbicMerma = "";
     public int gUbicProdNe;
     public int IdProductoEstadoNE;
+    public boolean gSinPresentacion=false;
 
     //Variables para picking
     public int gIdPickingEnc = 0;

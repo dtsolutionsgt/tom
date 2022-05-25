@@ -612,11 +612,14 @@ public class frm_recepcion_datos extends PBase {
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
-                    if (tbLPeso.getVisibility()==View.VISIBLE){
+                    guardar_recepcion();
+                    //#CKFK20220525 Modifiqué esto para que en el enter se guarde la recepción
+                    /*if (tbLPeso.getVisibility()==View.VISIBLE){
                         txtPeso.requestFocus();
                     }else{
                         ValidaCampos();
-                    }
+                    }*/
+
                 }
 
                 return false;
@@ -4409,6 +4412,11 @@ public class frm_recepcion_datos extends PBase {
 
     public void BotonGuardarRecepcion(View view){
 
+       guardar_recepcion();
+    }
+
+    private void guardar_recepcion(){
+
         try{
 
             imprimirDesdeBoton=false;
@@ -4738,7 +4746,6 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //Productos_Pallet
-
             if (gl.mode==1){
                 execws(16);
             }else{
@@ -6476,19 +6483,35 @@ public class frm_recepcion_datos extends PBase {
                             gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
                             gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
 
+                            callMethod("Guardar_Recepcion_Sin_Presentacion",
+                                       "pRecEnc",gl.gBeRecepcion,
+                                       "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
+                                       "pListStockRecSer",pListBeStockSeRec.items,
+                                       "pListStockRec",pListBeStockRec.items,
+                                       "pListProductoPallet",listaProdPalletsNuevos.items,
+                                       "pLotesRec", BeDetalleLotes,
+                                       "pIdEmpresa",gl.IdEmpresa,
+                                       "pIdBodega",gl.IdBodega,
+                                       "pIdUsuario",gl.IdOperador,
+                                       "pIdResolucionLp",gl.IdResolucionLpOperador,
+                                       "pBeTransOcDet",gl.gselitem);
+
+                        }else{
+
+                            callMethod("Guardar_Recepcion",
+                                       "pRecEnc",gl.gBeRecepcion,
+                                       "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
+                                       "pListStockRecSer",pListBeStockSeRec.items,
+                                       "pListStockRec",pListBeStockRec.items,
+                                       "pListProductoPallet",listaProdPalletsNuevos.items,
+                                       "pLotesRec", BeDetalleLotes,
+                                       "pIdEmpresa",gl.IdEmpresa,
+                                       "pIdBodega",gl.IdBodega,
+                                       "pIdUsuario",gl.IdOperador,
+                                       "pIdResolucionLp",gl.IdResolucionLpOperador);
+
                         }
 
-                        callMethod("Guardar_Recepcion",
-                                "pRecEnc",gl.gBeRecepcion,
-                                "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                "pListStockRecSer",pListBeStockSeRec.items,
-                                "pListStockRec",pListBeStockRec.items,
-                                "pListProductoPallet",listaProdPalletsNuevos.items,
-                                "pLotesRec", BeDetalleLotes,
-                                "pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,
-                                "pIdUsuario",gl.IdOperador,
-                                "pIdResolucionLp",gl.IdResolucionLpOperador);
                         break;
 
                     case 17 :
@@ -7326,7 +7349,13 @@ public class frm_recepcion_datos extends PBase {
             //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
             if(!xobj.ws.xmlresult.contains("CustomError")){
 
-                Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+                if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+                    gl.gSinPresentacion = true;
+                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion_Sin_Presentacion");
+                }else{
+                    gl.gSinPresentacion = false;
+                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+                }
 
                 if (Resultado!=null){
                     if (ubiDetLote!=null){
@@ -7407,20 +7436,24 @@ public class frm_recepcion_datos extends PBase {
 
                 //#AT20220329 Si no esta en marcado chkPresentacion
                 //BeTransReDet.cantidad_recibida es =  al valor de txtCantidadRec / Factor
-                if ((!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE)) {
+                //#CKFK20220525 Puse esto en comentario porque con el cambio que hice
+                //ya no se van a recibir decimales
+               /* if ((!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE)) {
                     if (auxPres != null) {
                         if (auxPres.getFactor() > 0) {
                             BeTransReDet.cantidad_recibida = Double.valueOf(txtCantidadRec.getText().toString()) / auxPres.Factor;
                         }
                     }
-                }
+                }*/
 
                 if (gl.mode==1){
                     gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida;
                 }else{
                     //#CKFK 20210630 Calcular la cantidad recibida
                     //#AT20220518 Si se actualiza  sin presentación realizar la conversión
-                    if (editarSinPresentacion) {
+                    //#CKFK20220525 Puse esto en comentario porque con el cambio que hice
+                    //ya no se van a recibir decimales
+                    /*if (editarSinPresentacion) {
                         double cantidadRec = BeTransReDet.cantidad_recibida / auxPres.Factor;
                         double cantidadRecAnt = vCantAnteriorRec / auxPres.Factor;
 
@@ -7428,7 +7461,8 @@ public class frm_recepcion_datos extends PBase {
 
                     } else {
                         gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida - vCantAnteriorRec;
-                    }
+                    }*/
+                    gl.gpListDetalleOC.items.get(vIndex).Cantidad_recibida += BeTransReDet.cantidad_recibida - vCantAnteriorRec;
                 }
 
             }
@@ -8005,6 +8039,22 @@ public class frm_recepcion_datos extends PBase {
         } catch (Exception e) {
             progress.cancel();
             msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
+
+    private void processGetDetalleByIdRepcionEnc(){
+        try{
+
+            pListTransRecDet = xobj.getresult(clsBeTrans_re_detList.class,"Get_Detalle_By_IdRecepcionEnc");
+
+            if (pListTransRecDet!=null){
+                if (pListTransRecDet.items!=null){
+
+                }
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processGetDetalleByIdRepcionEnc"+e.getMessage());
         }
     }
 
