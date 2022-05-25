@@ -1073,7 +1073,11 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         try {
 
-            validaVersion();
+            //#GT23052022: se valida nuevamente si busca o no update de la versión, según la empresa en BOF
+            if (gl.buscar_actualizacion_hh){
+                validaVersion();
+
+            }
 
             idle=true;
 

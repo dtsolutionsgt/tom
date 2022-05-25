@@ -23,6 +23,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Generar_Recepcion_Auto_Bodega_Destino=false;
     @Element(required=false) public boolean Recibir_Producto_Auto_Bodega_Destino=false;
     @Element(required=false) public boolean Control_Cliente_En_Detalle=false;
+    @Element(required=false) public boolean permitir_despacho_parcial =true;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -40,7 +41,8 @@ public class clsBeTrans_pe_tipo {
                               int IdTipoIngresoOC,
                               boolean Control_Poliza,
                               boolean Requerir_Cliente_Es_Bodega_WMS,
-                              boolean Control_Cliente_En_Detalle
+                              boolean Control_Cliente_En_Detalle,
+                              boolean permitir_despacho_parcial
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -57,6 +59,7 @@ public class clsBeTrans_pe_tipo {
         this.Control_Poliza = Control_Poliza;
         this.Requerir_Cliente_Es_Bodega_WMS=Requerir_Cliente_Es_Bodega_WMS;
         this.Control_Cliente_En_Detalle=Control_Cliente_En_Detalle;
+        this.permitir_despacho_parcial = permitir_despacho_parcial;
 
     }
 
@@ -184,5 +187,12 @@ public class clsBeTrans_pe_tipo {
     }
     public void setControl_Cliente_En_Detalle(boolean value) {
         Control_Cliente_En_Detalle=value;
+    }
+
+    public boolean getPermitir_despacho_parcial() {
+        return permitir_despacho_parcial;
+    }
+    public void setPermitir_despacho_parcial(boolean value) {
+        permitir_despacho_parcial=value;
     }
 }
