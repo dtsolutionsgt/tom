@@ -82,6 +82,7 @@
         <activity android:name=".Transacciones.Verificacion.frm_list_prod_reemplazo_verif" />
         <activity android:name=".Transacciones.ProcesaImagen.frm_imagenes" />
         <activity android:name=".Transacciones.ProcesaImagen.frm_imagen_completa" />
+        <activity android:name=".Transacciones.Picking.frm_editar_ubicacion_picking"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

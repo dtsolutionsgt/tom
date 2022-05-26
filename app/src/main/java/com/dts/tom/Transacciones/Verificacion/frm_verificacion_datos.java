@@ -52,7 +52,8 @@ public class frm_verificacion_datos extends PBase {
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
     private RelativeLayout relDesglose, relConDesglose;
-
+    private EditText txtPresPick, txtUnidadPick;
+    private TextView lblPresPick, lblUnidadPick;
     private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
 
     public static clsBeProducto gBeProducto = new clsBeProducto();
@@ -134,6 +135,10 @@ public class frm_verificacion_datos extends PBase {
         lblPresSol = findViewById(R.id.lblPresSol);
         lblUnidadSol = findViewById(R.id.lblUnidadSol);
         lblUnidadRec = findViewById(R.id.lblUnidadRec);
+        txtPresPick = findViewById(R.id.txtPresPick);
+        txtUnidadPick = findViewById(R.id.txtUnidadPick);
+        lblPresPick = findViewById(R.id.lblPresPick);
+        lblUnidadPick = findViewById(R.id.lblUnidadPick);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -437,6 +442,35 @@ public class frm_verificacion_datos extends PBase {
                             txtPresRec.setText("0.00");
                             txtUnidadRec.setText("0.00");
                         }
+
+                        //#AT20220525 Cantidad Pickeada
+                        double CantidadPick = Rec;
+                        double CantidadDecimalPick = CantidadPick % 1;
+                        double CantidadPresentacionPick = 0;
+                        CantidadPresentacionPick = CantidadPick - CantidadDecimalPick;
+                        double CantidadUMBasPick = CantidadDecimalPick * factor;
+
+                        if (Rec >  0) {
+                            if (CantidadPresentacionPick > 0) {
+
+                                if ((CantidadPick % 1) > 0 || (CantidadPick >= factor)) { }
+
+                                if (CantidadUMBasPick == 0) {
+                                    txtUnidadPick.setVisibility(View.GONE);
+                                    lblUnidadPick.setVisibility(View.GONE);
+                                }
+
+                                lblPresPick.setText(auxPres.Nombre+":");
+                                txtPresPick.setText(String.valueOf(mu.frmdec(CantidadPresentacionPick)));
+                                txtUnidadPick.setText(String.valueOf(mu.frmdec(CantidadUMBasPick)));
+
+                            }else if ((CantidadPick % 1) > 0 || (factor > 0)) {
+                                lblPresPick.setVisibility(View.GONE);
+                                txtPresPick.setVisibility(View.GONE);
+
+                                txtUnidadPick.setText(String.valueOf(mu.frmdec(CantidadUMBasPick)));
+                            }
+                        }
                     }
                 }
             } else {
@@ -451,6 +485,7 @@ public class frm_verificacion_datos extends PBase {
 
                 double CantSol = Sol;
                 double CantRec = Ver;
+                double CantPick = Rec;
 
                 if (CantSol > factor && factor > 0) {
 
@@ -484,14 +519,31 @@ public class frm_verificacion_datos extends PBase {
                     txtPresRec.setText(String.valueOf(mu.frmdec(cajasRec)));
                     txtUnidadRec.setText(String.valueOf(mu.frmdec(unidadesRec)));
 
+                    //#AT Cantidad Pickeada
+                    double cantidadPresentacionPick = CantPick / factor;
+                    double decimalPick = cantidadPresentacionPick % 1;
+                    double cajasPick = cantidadPresentacionPick - decimalPick;
+                    double unidadesPick = decimalPick * factor;
+
+                    lblPresPick.setText(gBeProducto.Presentaciones.items.get(0).Nombre+":");
+
+                    txtUnidadPick.setVisibility(unidadesPick > 0 ? View.VISIBLE: View.GONE);
+                    lblUnidadPick.setVisibility(unidadesPick > 0 ? View.VISIBLE: View.GONE);
+
+                    txtPresPick.setText(String.valueOf(mu.frmdec(cajasPick)));
+                    txtUnidadPick.setText(String.valueOf(mu.frmdec(unidadesPick)));
+
                 } else {
                     lblPresSol.setVisibility(View.GONE);
                     txtPreSol.setVisibility(View.GONE);
                     lblPresRec.setVisibility(View.GONE);
                     txtPresRec.setVisibility(View.GONE);
+                    lblPresPick.setVisibility(View.GONE);
+                    txtPresPick.setVisibility(View.GONE);
 
                     txtUnidadSol.setText(""+mu.frmdec(Sol));
                     txtUnidadRec.setText(""+mu.frmdec(Ver));
+                    txtUnidadPick.setText(""+mu.frmdec(Rec));
                 }
                 //llPresentacion.setVisibility(View.GONE);
 
@@ -615,12 +667,25 @@ public class frm_verificacion_datos extends PBase {
         boolean result = false;
 
         try{
-
+            Double cantPendiente = Rec - Ver;
             double valor =Double.valueOf(txt.getText().toString());
 
-            if(valor<=0) throw  new Exception("El valor es incorrecto, ingréselo nuevamente");
+            //#AT20220525 Validación de cantidad antes de verificar
+            if (valor > 0) {
+                if (valor > BePedidoDetVerif.Cantidad_Recibida) {
+                    mu.msgbox("La cantidad ingresada es mayor a la pickeada");
+                    result = false;
+                } else if (valor > cantPendiente) {
+                    mu.msgbox("La cantidad ingresada es mayor a la pendiente de verificar");
+                    result = false;
+                } else {
+                    result = true;
+                }
 
-            result = true;
+            }else {
+                mu.msgbox("El valor es incorrecto, ingréselo nuevamente");
+                result = false;
+            }
 
         }catch (Exception ex){
             result = false;

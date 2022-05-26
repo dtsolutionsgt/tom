@@ -2312,6 +2312,16 @@ public class frm_picking_datos extends PBase {
                 execws(3);
             }
 
+            ReubicarPickingAereo = false;
+            //#EJC20220524: Validar si se reubica a posición de piso.
+            if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+                if (gBePickingUbic.Ubicacion.Nivel >= 2) {
+                    ReubicarPickingAereo = true;
+
+                    msgCambioUbicacion("Desea realizar un cambio de ubicacion");
+                }
+            }
+
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processEstadoProducto:"+e.getMessage());
@@ -2348,12 +2358,6 @@ public class frm_picking_datos extends PBase {
                 }
             } else {
                 txtCodigoProducto.requestFocus();
-            }
-
-            ReubicarPickingAereo = false;
-            //#EJC20220524: Validar si se reubica a posición de piso.
-            if(gBePickingUbic.Ubicacion.Nivel>=2){
-                ReubicarPickingAereo = true;
             }
 
         }catch (Exception e){
@@ -2486,6 +2490,32 @@ public class frm_picking_datos extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     doExit();
+                }
+            });
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgCambioUbicacion(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿"+msg+"?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(frm_picking_datos.this, frm_editar_ubicacion_picking.class));
                 }
             });
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {

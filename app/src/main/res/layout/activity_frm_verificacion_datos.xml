@@ -270,6 +270,77 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relPick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/color_light">
+
+                <TextView
+                    android:id="@+id/lblPickeado"
+                    style="@style/StyleText"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center_vertical"
+                    android:text="Pickeado:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/lblPickeado"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lblPresPick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="FARDO80: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPresPick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+
+                    <TextView
+                        android:id="@+id/lblUnidadPick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="UNI: "
+                        android:textColor="#000000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtUnidadPick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="textPersonName"
+                        android:text="500" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/relRec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

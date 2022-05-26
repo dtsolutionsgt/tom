@@ -20,9 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="10dp"
-            android:orientation="vertical"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
             <TableRow
                 android:id="@+id/trLP"
@@ -30,10 +30,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
+                <ImageView
+                    android:id="@+id/imageView20"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="7dp"
+                    android:src="@drawable/scanner" />
+
                 <TextView
                     android:id="@+id/textView10"
                     style="@style/StyleText"
-                    android:layout_width="150dp"
+                    android:layout_width="113dp"
                     android:layout_height="match_parent"
                     android:text="@string/licencia" />
 

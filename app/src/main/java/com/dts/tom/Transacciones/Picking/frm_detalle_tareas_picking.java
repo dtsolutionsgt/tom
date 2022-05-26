@@ -99,9 +99,7 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoPantallaPicking = gll.TipoPantallaPicking;
             int tipo = 0;
 
-
-
-            if(TipoPantallaPicking > 0) {
+            if(TipoPantallaPicking == 3) {
                 tipo = 3;
             } else if(areaprimera) {
                 tipo = 2;
@@ -110,15 +108,15 @@ public class frm_detalle_tareas_picking extends PBase {
             }
 
             cargaPantallaPicking(tipo);
-       /* if (TipoPantallaPicking) {
-            setContentView(R.layout.activity_frm_detalle_tareas_picking3);
-        } else {
-            if (areaprimera) {
-                setContentView(R.layout.activity_frm_detalle_tareas_picking2);
+           /* if (TipoPantallaPicking) {
+                setContentView(R.layout.activity_frm_detalle_tareas_picking3);
             } else {
-                setContentView(R.layout.activity_frm_detalle_tareas_picking);
-            }
-        }*/
+                if (areaprimera) {
+                    setContentView(R.layout.activity_frm_detalle_tareas_picking2);
+                } else {
+                    setContentView(R.layout.activity_frm_detalle_tareas_picking);
+                }
+            }*/
 
             super.InitBase();
 
@@ -199,7 +197,7 @@ public class frm_detalle_tareas_picking extends PBase {
                         selid = sitem.IdPickingUbic;
                         selidx = position;
 
-                        if (TipoPantallaPicking > 0) {
+                        if (TipoPantallaPicking == 3) {
                             adapter3.getItem(position);
                         } else {
                             if (areaprimera) {
@@ -337,7 +335,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         }
 
-        if (TipoPantallaPicking > 0) {
+        if (TipoPantallaPicking == 3) {
             adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
             listView.setAdapter(adapter3);
         } else {
@@ -575,7 +573,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            if (TipoPantallaPicking > 0) {
+            if (TipoPantallaPicking == 3) {
                 adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
                 listView.setAdapter(adapter3);
             } else {
