@@ -431,6 +431,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
                                 msgIngresaDetalle("Este picking no está asignado a este operador- ¿Quiere continuar con la tarea?");
+                            }else{
+                                AbreFormaDatos();
                             }
 
                         }
