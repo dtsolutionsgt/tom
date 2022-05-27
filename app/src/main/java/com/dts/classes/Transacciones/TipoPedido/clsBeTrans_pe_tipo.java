@@ -23,8 +23,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Generar_Recepcion_Auto_Bodega_Destino=false;
     @Element(required=false) public boolean Recibir_Producto_Auto_Bodega_Destino=false;
     @Element(required=false) public boolean Control_Cliente_En_Detalle=false;
-    @Element(required=false) public boolean permitir_despacho_parcial =true;
-    @Element(required=false) public boolean capitalizado =true;
+    @Element(required=false) public boolean Permitir_Despacho_Parcial =true;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -43,8 +42,7 @@ public class clsBeTrans_pe_tipo {
                               boolean Control_Poliza,
                               boolean Requerir_Cliente_Es_Bodega_WMS,
                               boolean Control_Cliente_En_Detalle,
-                              boolean permitir_despacho_parcial,
-                              boolean capitalizado
+                              boolean Permitir_Despacho_Parcial
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -61,8 +59,7 @@ public class clsBeTrans_pe_tipo {
         this.Control_Poliza = Control_Poliza;
         this.Requerir_Cliente_Es_Bodega_WMS=Requerir_Cliente_Es_Bodega_WMS;
         this.Control_Cliente_En_Detalle=Control_Cliente_En_Detalle;
-        this.permitir_despacho_parcial = permitir_despacho_parcial;
-        this.capitalizado = capitalizado;
+        this.Permitir_Despacho_Parcial = Permitir_Despacho_Parcial;
 
     }
 
@@ -192,17 +189,10 @@ public class clsBeTrans_pe_tipo {
         Control_Cliente_En_Detalle=value;
     }
 
-    public boolean getPermitir_despacho_parcial() {
-        return permitir_despacho_parcial;
+    public boolean getPermitir_Despacho_Parcial() {
+        return Permitir_Despacho_Parcial;
     }
-    public void setPermitir_despacho_parcial(boolean value) {
-        permitir_despacho_parcial=value;
-    }
-
-    public boolean getCapitalizado() {
-        return capitalizado;
-    }
-    public void setCapitalizado(boolean value) {
-        capitalizado=value;
+    public void setPermitir_Despacho_Parcial(boolean value) {
+        Permitir_Despacho_Parcial=value;
     }
 }
