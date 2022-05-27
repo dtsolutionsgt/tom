@@ -412,7 +412,8 @@ public class frm_consulta_stock extends PBase {
 
     private void listaStock() {
         String lpid,cod,lname="";
-        double uni,tuni;
+        double uni,tuni,tExistUmbas, tResUmbas, tDispUmbas, tResPres, tDisPres;
+        double existUmbas, resUmbas, dispUmbas,resPres, disPres;
         int lcnt;
 
         clsBeVW_stock_res_CI vItem;
@@ -448,7 +449,7 @@ public class frm_consulta_stock extends PBase {
                     registros.setText("REGISTROS: "+ conteo);
 
                     if (pListStock2.items.size()>0) lpid=pListStock2.items.get(0).Codigo;else lpid=" ";
-                    tuni=0;lcnt=0;
+                    tuni=0;lcnt=0;tExistUmbas=0; tDispUmbas = 0; tResUmbas=0; tResPres = 0; tDisPres = 0;
 
                     for (int i = 0; i < pListStock2.items.size(); i++) {
 
@@ -462,11 +463,11 @@ public class frm_consulta_stock extends PBase {
                                 item.Codigo = "Total:";
                                 item.Nombre = lname;
                                 item.UM = "";
-                                item.ExistUMBAs = "";
+                                item.ExistUMBAs = mu.frmdec(tExistUmbas);
                                 item.Pres = "";
                                 item.ExistPres =mu.frmdec(tuni);
-                                item.ReservadoUMBAs = "";
-                                item.DisponibleUMBas = "";
+                                item.ReservadoUMBAs = mu.frmdec(tResUmbas);
+                                item.DisponibleUMBas = mu.frmdec(tDispUmbas);
                                 item.Lote = "";
                                 item.Vence = "";
                                 item.Estado = "";
@@ -479,8 +480,8 @@ public class frm_consulta_stock extends PBase {
                                 item.factor = 0;
                                 item.ingreso=  "";
                                 item.IdTipoEtiqueta= 0;
-                                item.ResPres =  "";
-                                item.DispPres =  "";
+                                item.ResPres =  mu.frmdec(tResPres);
+                                item.DispPres =  mu.frmdec(tDisPres);
                                 item.NombreArea =  "";
                                 item.Clasificacion =  "";
 
@@ -489,6 +490,12 @@ public class frm_consulta_stock extends PBase {
                             }
 
                             lpid= cod;tuni=0;lcnt=0;
+                            tDisPres = 0;
+                            tResPres = 0;
+                            tDispUmbas = 0;
+                            tResUmbas = 0;
+                            tExistUmbas = 0;
+
                         }
 
                         item = new clsBeVW_stock_res_CI();
@@ -496,11 +503,11 @@ public class frm_consulta_stock extends PBase {
                         item.Codigo = pListStock2.items.get(i).Codigo;
                         item.Nombre = pListStock2.items.get(i).Nombre;lname=item.Nombre;
                         item.UM = pListStock2.items.get(i).UM;
-                        item.ExistUMBAs = pListStock2.items.get(i).ExistUMBAs;
+                        item.ExistUMBAs = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistUMBAs));
                         item.Pres = pListStock2.items.get(i).Pres;
                         item.ExistPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ExistPres));
-                        item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
-                        item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
+                        item.ReservadoUMBAs = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ReservadoUMBAs));
+                        item.DisponibleUMBas = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DisponibleUMBas));
                         item.Lote = pListStock2.items.get(i).Lote;
                         item.Vence = pListStock2.items.get(i).Vence;
                         item.Estado = pListStock2.items.get(i).Estado;
@@ -531,11 +538,29 @@ public class frm_consulta_stock extends PBase {
 
                         try {
                             uni=Double.parseDouble(pListStock2.items.get(i).ExistPres);
+                            existUmbas = Double.parseDouble(pListStock2.items.get(i).ExistUMBAs);
+                            dispUmbas = Double.parseDouble(pListStock2.items.get(i).DisponibleUMBas);
+                            resUmbas = Double.parseDouble(pListStock2.items.get(i).ReservadoUMBAs);
+
+                            resPres = Double.parseDouble(pListStock2.items.get(i).ResPres);
+                            disPres = Double.parseDouble(pListStock2.items.get(i).DispPres);
+
                         } catch (NumberFormatException e) {
                             uni=0;
-                        }
-                        tuni+=uni;lcnt++;
+                            existUmbas = 0;
+                            dispUmbas = 0;
+                            resUmbas = 0;
+                            resPres = 0;
+                            disPres = 0;
 
+                        }
+
+                        tuni+=uni;lcnt++;
+                        tExistUmbas += existUmbas;
+                        tDispUmbas += dispUmbas;
+                        tResUmbas += resUmbas;
+                        tDisPres += disPres;
+                        tResPres += resPres;
                     }
 
                     if (lcnt>1) {
@@ -545,11 +570,11 @@ public class frm_consulta_stock extends PBase {
                         item.Codigo = "Total:";
                         item.Nombre = lname;
                         item.UM = "";
-                        item.ExistUMBAs = "";
+                        item.ExistUMBAs = mu.frmdec(tExistUmbas);
                         item.Pres = "";
                         item.ExistPres =mu.frmdec(tuni);
-                        item.ReservadoUMBAs = "";
-                        item.DisponibleUMBas = "";
+                        item.ReservadoUMBAs = mu.frmdec(tResUmbas);
+                        item.DisponibleUMBas = mu.frmdec(tDispUmbas);
                         item.Lote = "";
                         item.Vence = "";
                         item.Estado = "";
@@ -562,8 +587,8 @@ public class frm_consulta_stock extends PBase {
                         item.factor = 0;
                         item.ingreso=  "";
                         item.IdTipoEtiqueta= 0;
-                        item.ResPres =  "";
-                        item.DispPres =  "";
+                        item.ResPres =  mu.frmdec(tResPres);
+                        item.DispPres =  mu.frmdec(tDisPres);
                         item.NombreArea =  "";
                         item.Clasificacion =  "";
 

@@ -2318,7 +2318,7 @@ public class frm_picking_datos extends PBase {
                 if (gBePickingUbic.Ubicacion.Nivel >= 2) {
                     ReubicarPickingAereo = true;
 
-                    msgCambioUbicacion("Desea realizar un cambio de ubicacion");
+                    msgCambioUbicacion("Desea realizar un cambio de ubicación");
                 }
             }
 

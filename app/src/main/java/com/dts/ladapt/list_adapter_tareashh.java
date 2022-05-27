@@ -137,7 +137,7 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblObservacion.setText(BeListTareasHH.get(position).Observacion);
         }
 
-        holder.lblRequiereTarima.setText(BeListTareasHH.get(position).RequiereTarima+"");
+        //holder.lblRequiereTarima.setText(BeListTareasHH.get(position).RequiereTarima+"");
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));

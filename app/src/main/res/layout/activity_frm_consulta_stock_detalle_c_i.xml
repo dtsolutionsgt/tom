@@ -27,10 +27,14 @@
 
                 <TextView
                     android:id="@+id/textView47"
-                    android:layout_width="150dp"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Código"
+                    android:gravity="center_vertical"
+                    android:text="Código:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="31dp" />
 
@@ -38,7 +42,9 @@
                     android:id="@+id/lblcodigoCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:gravity="center_vertical"
                     android:text="123"
+                    android:textSize="18sp"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="60dp" />
 
@@ -52,9 +58,11 @@
                 <TextView
                     android:id="@+id/lbldescripcionCI"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="Descripción" />
+                    android:gravity="center_vertical"
+                    android:text="Descripción"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -63,12 +71,16 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/textView53"
-                    android:layout_width="150dp"
+                    android:id="@+id/lblUnidad"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
-                    android:text="Existencia"
+                    android:gravity="center_vertical"
+                    android:text="UmBas"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="88dp" />
 
@@ -77,22 +89,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="15dp"
+                    android:gravity="center_vertical"
                     android:text="0"
+                    android:textSize="18sp"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="107dp" />
             </TableRow>
 
             <TableRow
+                android:id="@+id/trPresentacion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/textView103"
-                    android:layout_width="150dp"
+                    android:id="@+id/lblPresentacion"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Existencia"
+                    android:gravity="center_vertical"
+                    android:text="Caja20:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="130dp" />
 
@@ -100,7 +119,9 @@
                     android:id="@+id/lblexPresCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:gravity="center_vertical"
                     android:text="0"
+                    android:textSize="18sp"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="163dp" />
             </TableRow>
@@ -112,10 +133,14 @@
 
                 <TextView
                     android:id="@+id/textView107"
-                    android:layout_width="150dp"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Estado"
+                    android:gravity="center_vertical"
+                    android:text="Estado:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="195dp" />
 
@@ -123,7 +148,9 @@
                     android:id="@+id/lblestadoCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:gravity="center_vertical"
                     android:text="Bueno"
+                    android:textSize="18sp"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="230dp" />
             </TableRow>
@@ -135,10 +162,14 @@
 
                 <TextView
                     android:id="@+id/textView109"
-                    android:layout_width="150dp"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Pedido"
+                    android:gravity="center_vertical"
+                    android:text="Pedido:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="264dp" />
 
@@ -146,7 +177,9 @@
                     android:id="@+id/lblpedidoCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:gravity="center_vertical"
                     android:text="0"
+                    android:textSize="18sp"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="301dp" />
 
@@ -159,10 +192,14 @@
 
                 <TextView
                     android:id="@+id/textView111"
-                    android:layout_width="150dp"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Picking"
+                    android:gravity="center_vertical"
+                    android:text="Picking:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteX="22dp"
                     tools:layout_editor_absoluteY="336dp" />
 
@@ -170,7 +207,9 @@
                     android:id="@+id/lblpickingCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="0" />
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -180,16 +219,22 @@
 
                 <TextView
                     android:id="@+id/textView114"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Vence" />
+                    android:gravity="center_vertical"
+                    android:text="Vence:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblvenceCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="11/11/2020" />
+                    android:gravity="center_vertical"
+                    android:text="11/11/2020"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -199,16 +244,22 @@
 
                 <TextView
                     android:id="@+id/textView116"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Lote" />
+                    android:gravity="center_vertical"
+                    android:text="Lote:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblloteCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="0" />
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -218,16 +269,22 @@
 
                 <TextView
                     android:id="@+id/textView119"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="idUbic" />
+                    android:gravity="center_vertical"
+                    android:text="IdUbicacion:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblubicCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="0" />
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -237,16 +294,22 @@
 
                 <TextView
                     android:id="@+id/textView120"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:text="Ubic" />
+                    android:gravity="center_vertical"
+                    android:text="Ubicación:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lblnomUbicCI"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="0" />
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -255,11 +318,23 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/textView122"
+                    android:layout_width="115dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:text="Licencia:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/lblLicPlate"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:text="LicPlate">
+                    android:layout_marginStart="0dp"
+                    android:gravity="center_vertical"
+                    android:text="L0001"
+                    android:textSize="18sp">
 
                 </TextView>
 

@@ -146,7 +146,8 @@
             android:paddingBottom="5dp"
             android:text="RequiereTarima"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtRutaDespacho"
@@ -158,7 +159,8 @@
             android:paddingBottom="5dp"
             android:text="RutaDespacho"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtObservacion"
@@ -170,7 +172,8 @@
             android:paddingBottom="5dp"
             android:text="OBS"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
     </LinearLayout>
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.tom.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
@@ -66,8 +68,7 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
                 holder.txtClasificacion = (TextView) convertView.findViewById(R.id.txtClasificacion);
                 holder.txtLote = (TextView) convertView.findViewById(R.id.txtLote);
                 holder.txtVence = (TextView) convertView.findViewById(R.id.txtVence);
-                holder.txtCantidad =(TextView) convertView.findViewById(R.id.txtCantidad);
-                holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
+                holder.txtUm =(TextView) convertView.findViewById(R.id.txtUm);
                 holder.relLicencia = (RelativeLayout) convertView.findViewById(R.id.relLicencia);
                 holder.relTarima = (RelativeLayout) convertView.findViewById(R.id.relTarima);
                 holder.relLote  = (RelativeLayout) convertView.findViewById(R.id.relLote);
@@ -75,6 +76,9 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
                 holder.txtTarima = (TextView) convertView.findViewById(R.id.txtTarima);
                 holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
                 holder.txtPeso = (TextView) convertView.findViewById(R.id.txtPeso);
+                holder.txtPendiente  = (TextView) convertView.findViewById(R.id.txtPendiente);
+                holder.txtVerificado = (TextView) convertView.findViewById(R.id.txtVerificado);
+                holder.txtSolicitado = (TextView) convertView.findViewById(R.id.txtSolicitado);
 
                 convertView.setTag(holder);
 
@@ -101,17 +105,16 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
                 holder.txtVence.setText(this.pListBeTareasVerificacionHH.get(0).Fecha_Vence);
             }
 
-
-
             holder.txtProdDoc.setText(this.pListBeTareasVerificacionHH.get(position).Codigo+" - "+this.pListBeTareasVerificacionHH.get(position).Nombre_Producto);
 
-            if (this.pListBeTareasVerificacionHH.get(position).IdPresentacion > 0) {
-                holder.lblCantidad.setText(this.pListBeTareasVerificacionHH.get(position).Nom_Presentacion+" :");
-                holder.txtCantidad.setText("Sol: "+ this.pListBeTareasVerificacionHH.get(position).Cantidad_Solicitada+"       Ver: "+ this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada);
-            } else {
-                holder.lblCantidad.setText(this.pListBeTareasVerificacionHH.get(position).Nom_Unid_Med+" :");
-                holder.txtCantidad.setText("Sol: "+ this.pListBeTareasVerificacionHH.get(position).Cantidad_Solicitada+"       Ver: "+ this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada);
-            }
+            String presentacion = this.pListBeTareasVerificacionHH.get(position).IdPresentacion > 0 ? this.pListBeTareasVerificacionHH.get(position).Nom_Presentacion:this.pListBeTareasVerificacionHH.get(position).Nom_Unid_Med;
+            holder.txtUm.setText(presentacion);
+
+            holder.txtSolicitado.setText(""+this.pListBeTareasVerificacionHH.get(position).Cantidad_Solicitada);
+            holder.txtVerificado.setText(""+this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada);
+
+            double pendiente = this.pListBeTareasVerificacionHH.get(position).Cantidad_Recibida - this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada;
+            holder.txtPendiente.setText(""+pendiente);
 
             holder.txtEstado.setText(this.pListBeTareasVerificacionHH.get(position).Nom_Estado);
             holder.txtClasificacion.setText(this.pListBeTareasVerificacionHH.get(position).NombreClasificacion);
@@ -130,7 +133,7 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
 
     static class ViewHolder {
         TextView txtArea, txtUbicacion, txtLicencia, txtProdDoc, txtClasificacion, txtLote, txtVence, txtCantidad, lblCantidad,
-                txtPeso, txtTarima, txtEstado;
+                txtPeso, txtTarima, txtEstado, txtUm, txtPendiente, txtSolicitado, txtVerificado;
         RelativeLayout relLicencia, relTarima, relLote, relVence;
     }
 
