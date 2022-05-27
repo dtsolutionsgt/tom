@@ -602,7 +602,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            if (BeListPickingUbic.size()==0){
+            if (BeListPickingUbic.size()==0 && !gBePicking.Detalle_operador){
 
                 btnPendientes.setText("Completa");
                 btnPendientes.setBackgroundColor(Color.parseColor("#C8E6C9"));
@@ -610,7 +610,6 @@ public class frm_detalle_tareas_picking extends PBase {
                 relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
 
                 Finalizar_Picking();
-
             }
 
         }catch (Exception e){
@@ -630,7 +629,6 @@ public class frm_detalle_tareas_picking extends PBase {
                 btnRes_Det.setText("D.");
 
                 TipoLista=2;
-
 
                 execws(3);
 
@@ -971,7 +969,7 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
-                execws(3);
+                execws(1);
             }
 
             if (browse==2){

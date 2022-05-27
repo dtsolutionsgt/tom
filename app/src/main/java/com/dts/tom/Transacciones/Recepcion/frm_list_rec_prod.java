@@ -1087,7 +1087,7 @@ public class frm_list_rec_prod extends PBase {
                                             "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                     case 15:
-
+                        //#CKFK20220524 Agregué esta funcion para obtener el detalle de la OC
                         callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH","pIdOrdenCompraEnc",vIdOrdenCompra);
                         break;
                 }
