@@ -53,6 +53,8 @@ import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePi
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selitem;
 
+//import androidx.core.R;
+
 public class frm_picking_datos extends PBase {
 
     private WebServiceHandler ws;
@@ -275,6 +277,15 @@ public class frm_picking_datos extends PBase {
                 });
 
             }
+
+
+            //GT06042022: no remover, hacen de pivote para retener el focus
+            txtLicencia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
             txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
