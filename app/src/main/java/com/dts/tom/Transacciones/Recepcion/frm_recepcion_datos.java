@@ -72,6 +72,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_det;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametros;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det_parametros.clsBeTrans_re_det_parametrosList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Parametros.clsBeStock_parametro;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
@@ -273,6 +274,8 @@ public class frm_recepcion_datos extends PBase {
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
+    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
+    private int tipoCaptura = 1;
 
     private clsBeStock pStock;
 
@@ -6682,6 +6685,12 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Tiene_Posiciones",
                                 "pStock",pStock);
                         break;
+                    case 33:
+                        callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
+                        break;
+                    case 34:
+                        callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
+                        break;
 
                 }
 
@@ -6815,6 +6824,9 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 32:
                     processTienePosiciones();
+                    break;
+                case 34:
+                    processGetFotosRec();
                     break;
             }
 
@@ -8042,6 +8054,42 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    private void processGetFotosRec() {
+
+        try {
+            progress.setMessage("Cargando imágenes...");
+            BeListTranReImagen = xobj.getresult(clsBeTrans_re_imgList.class,"Get_All_Imagen_Recepcion");
+
+            gl.ListImagen.clear();
+            if (BeListTranReImagen != null) {
+                if (BeListTranReImagen.items != null) {
+
+                    for (int i=0; i < BeListTranReImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = "Recepción";
+                        BeImagen.Imagen = BeListTranReImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                //toastlong("El producto no tiene imágenes");
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
+
     private void processGetDetalleByIdRepcionEnc(){
         try{
 
@@ -8278,6 +8326,12 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void Capturar(View view) {
+        tipoCaptura = 1;
+        abrirCamara();
+    }
+
+    public void CapturarRec(View view) {
+        tipoCaptura = 2;
         abrirCamara();
     }
 
@@ -8285,6 +8339,12 @@ public class frm_recepcion_datos extends PBase {
         progress.setMessage("Cargando imágenes...");
         progress.show();
         execws(30);
+    }
+
+    public void verImagenesRec(View view) {
+        progress.setMessage("Cargando imágenes recepción...");
+        progress.show();
+        execws(34);
     }
 
     private void abrirCamara() {
@@ -8343,12 +8403,20 @@ public class frm_recepcion_datos extends PBase {
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
             //#AT 20220322 Se guarda la imagen
-            BeProductoImagen = new clsBeProducto_imagen();
-            BeProductoImagen.IdProducto = BeProducto.IdProducto;
-            BeProductoImagen.Imagen = encoded;
-            BeProductoImagen.Etiqueta = BeProducto.Codigo;
+            //#AT 20220530 Si tipoCaptura = 1 es producto,
+            //tipoCaptura = 2 es recepción
+            if (tipoCaptura == 1) {
+                BeProductoImagen = new clsBeProducto_imagen();
+                BeProductoImagen.IdProducto = BeProducto.IdProducto;
+                BeProductoImagen.Imagen = encoded;
+                BeProductoImagen.Etiqueta = BeProducto.Codigo;
 
-            execws(29);
+                execws(29);
+            } else if(tipoCaptura == 2) {
+                execws(33);
+            } else {
+                mu.msgbox("Error en la  captura de fotos del producto o recepción");
+            }
         }
     }
 

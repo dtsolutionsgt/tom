@@ -11,12 +11,13 @@
     <RelativeLayout
         android:id="@+id/tbrArea"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="35dp">
 
         <TextView
             android:id="@+id/lblArea"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Área:"
             android:textColor="#000000"
@@ -26,10 +27,11 @@
         <TextView
             android:id="@+id/txtArea"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_marginBottom="0dp"
             android:layout_toEndOf="@+id/lblArea"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -38,14 +40,15 @@
     <RelativeLayout
         android:id="@+id/relLicencia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/tbrArea"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblLic"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Licencia :"
             android:textColor="#000000"
@@ -55,9 +58,10 @@
         <TextView
             android:id="@+id/lblLicencia"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblLic"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -66,14 +70,15 @@
     <RelativeLayout
         android:id="@+id/relUbicacion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relLicencia"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblUbic"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Ubicación :"
             android:textColor="#000000"
@@ -83,9 +88,10 @@
         <TextView
             android:id="@+id/txtUbic"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblUbic"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -95,14 +101,15 @@
     <RelativeLayout
         android:id="@+id/relProducto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_below="@+id/relUbicacion"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblProdCod"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Producto:"
             android:textColor="#000000"
@@ -112,9 +119,12 @@
         <TextView
             android:id="@+id/txtProdDoc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/lblProdCod"
             android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
             android:layout_toEndOf="@+id/lblProdCod"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -123,14 +133,15 @@
     <RelativeLayout
         android:id="@+id/relClasificacion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relProducto"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblClasificacion"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Clasificación:"
             android:textColor="#000000"
@@ -140,9 +151,10 @@
         <TextView
             android:id="@+id/txtClasificacion"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblClasificacion"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -151,14 +163,15 @@
     <RelativeLayout
         android:id="@+id/relLote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relClasificacion"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblLote"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Lote:"
             android:textColor="#000000"
@@ -168,9 +181,10 @@
         <TextView
             android:id="@+id/txtLote"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblLote"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -179,14 +193,15 @@
     <RelativeLayout
         android:id="@+id/relVence"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relLote"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblVence"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Vence:"
             android:textColor="#000000"
@@ -196,53 +211,147 @@
         <TextView
             android:id="@+id/txtVence"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblVence"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relCantidad"
+        android:id="@+id/relUm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relVence"
         android:layout_marginTop="0dp">
 
         <TextView
-            android:id="@+id/lblCantidad"
+            android:id="@+id/lblUm"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
-            android:text="CAJA0001"
+            android:text="U.M.:"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtCantidad"
+            android:id="@+id/txtUm"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
-            android:layout_toEndOf="@+id/lblCantidad"
+            android:layout_toEndOf="@+id/lblUm"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relSolicitado"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/relUm"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblSolicitado"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Solicitado:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtSolicitado"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblSolicitado"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relRecibido"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/relSolicitado"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblRecibido"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Recibido:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtRecibido"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblRecibido"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relPendiente"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/relRecibido"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/lblPendiente"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:text="Pendiente:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtPendiente"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@+id/lblPendiente"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relEstado"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relCantidad"
+        android:layout_height="35dp"
+        android:layout_below="@+id/relPendiente"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblEstado"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Estado:"
             android:textColor="#000000"
@@ -252,9 +361,10 @@
         <TextView
             android:id="@+id/txtEstado"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblEstado"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -263,14 +373,15 @@
     <RelativeLayout
         android:id="@+id/relTarima"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relEstado"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblTarima"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Tarima: "
             android:textColor="#000000"
@@ -280,9 +391,10 @@
         <TextView
             android:id="@+id/txtTarima"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblTarima"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />
@@ -291,14 +403,15 @@
     <RelativeLayout
         android:id="@+id/relPeso"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_below="@+id/relTarima"
         android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/lblPeso"
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Peso: "
             android:textColor="#000000"
@@ -308,9 +421,10 @@
         <TextView
             android:id="@+id/txtPeso"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/lblPeso"
+            android:gravity="center_vertical"
             android:text=""
             android:textColor="#000000"
             android:textSize="18sp" />

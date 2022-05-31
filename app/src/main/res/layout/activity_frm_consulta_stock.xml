@@ -418,7 +418,7 @@
     <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:background="@drawable/color_medium"

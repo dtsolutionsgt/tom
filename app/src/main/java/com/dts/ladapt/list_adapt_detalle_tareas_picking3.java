@@ -14,6 +14,8 @@ import androidx.annotation.ColorRes;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.tom.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
@@ -66,13 +68,16 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
             holder.txtClasificacion = (TextView) convertView.findViewById(R.id.txtClasificacion);
             holder.txtLote = (TextView) convertView.findViewById(R.id.txtLote);
             holder.txtVence = (TextView) convertView.findViewById(R.id.txtVence);
-            holder.txtCantidad =(TextView) convertView.findViewById(R.id.txtCantidad);
+            holder.txtUm =(TextView) convertView.findViewById(R.id.txtUm);
             holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
             holder.relLicencia = (RelativeLayout) convertView.findViewById(R.id.relLicencia);
             holder.relTarima = (RelativeLayout) convertView.findViewById(R.id.relTarima);
             holder.txtTarima = (TextView) convertView.findViewById(R.id.txtTarima);
             holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
             holder.txtPeso = (TextView) convertView.findViewById(R.id.txtPeso);
+            holder.txtSolicitado = (TextView) convertView.findViewById(R.id.txtSolicitado);
+            holder.txtRecibido = (TextView) convertView.findViewById(R.id.txtRecibido);
+            holder.txtPendiente = (TextView) convertView.findViewById(R.id.txtPendiente);
 
             convertView.setTag(holder);
 
@@ -87,6 +92,7 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
         holder.txtUbicacion.setText(""+BeListTareasHH.get(position).IdUbicacion + " - " + BeListTareasHH.get(position).NombreUbicacion+"");
 
         if (!BeListTareasHH.get(position).Lic_plate.isEmpty()) {
+            holder.relLicencia.setVisibility(View.VISIBLE);
             holder.txtLicencia.setText(BeListTareasHH.get(position).Lic_plate);
         } else {
             holder.relLicencia.setVisibility(View.GONE);
@@ -97,13 +103,15 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
         holder.txtLote.setText(BeListTareasHH.get(position).Lote);
         holder.txtVence.setText(BeListTareasHH.get(position).Fecha_Vence);
 
-        if (BeListTareasHH.get(position).IdPresentacion > 0) {
-            holder.lblCantidad.setText(BeListTareasHH.get(position).ProductoPresentacion+" :");
-            holder.txtCantidad.setText("Sol: "+ BeListTareasHH.get(position).Cantidad_Solicitada+"       Rec: "+ BeListTareasHH.get(position).Cantidad_Recibida);
-        } else {
-            holder.lblCantidad.setText(BeListTareasHH.get(position).ProductoUnidadMedida+" :");
-            holder.txtCantidad.setText("Sol: "+ BeListTareasHH.get(position).Cantidad_Solicitada+"       Rec: "+ BeListTareasHH.get(position).Cantidad_Recibida);
-        }
+        String um = BeListTareasHH.get(position).IdPresentacion > 0 ? BeListTareasHH.get(position).ProductoPresentacion : BeListTareasHH.get(position).ProductoUnidadMedida;
+        holder.txtUm.setText(um);
+
+        holder.txtSolicitado.setText(""+BeListTareasHH.get(position).Cantidad_Solicitada);
+
+        holder.txtRecibido.setText(""+BeListTareasHH.get(position).Cantidad_Recibida);
+
+        double pendiente = BeListTareasHH.get(position).Cantidad_Solicitada - BeListTareasHH.get(position).Cantidad_Recibida;
+        holder.txtPendiente.setText(""+pendiente);
 
         if (BeListTareasHH.get(position).Tarima > 0) {
             holder.txtTarima.setText(BeListTareasHH.get(position).Tarima+"");
@@ -126,7 +134,7 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
     static class ViewHolder {
 
         TextView txtArea, txtUbicacion, txtLicencia, txtProdDoc, txtClasificacion, txtLote, txtVence, txtCantidad, lblCantidad,
-        txtPeso, txtTarima, txtEstado;
+        txtPeso, txtTarima, txtEstado, txtUm, txtSolicitado, txtRecibido, txtPendiente;
         RelativeLayout relLicencia, relTarima;
     }
 

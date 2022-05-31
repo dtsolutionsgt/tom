@@ -104,7 +104,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             VerSinLoteFechaVen = false;
             gl.VerificacionSinLoteFechaVen = false;
 
-            if (gl.CodigoBodega.equals("SI")) {
+            if (gl.CodigoBodega.equals("BA0002")) {
                 gl.VerificacionSinLoteFechaVen = true;
             }
 

@@ -61,7 +61,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="0dp"
             android:text="Ubicación actual:"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lblProducto"
@@ -73,7 +73,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="10dp"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="center_vertical"
             android:text="Producto"
             android:textColor="#000000"
             android:textSize="20sp" />
@@ -135,7 +135,8 @@
             android:text="Ubicación destino"
             android:textColor="#24678C"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <TableRow
             android:id="@+id/tbUbic"

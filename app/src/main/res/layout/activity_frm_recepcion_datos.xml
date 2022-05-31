@@ -52,22 +52,6 @@
             android:onClick="ExitForm" />
 
         <Button
-            android:id="@+id/btnFinalizarRece"
-            android:layout_width="268dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            android:layout_toStartOf="@+id/btnIr"
-            android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="BotonGuardarRecepcion"
-            android:text="Recibir"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <Button
             android:id="@+id/btnIr"
             android:layout_width="61dp"
             android:layout_height="match_parent"
@@ -574,7 +558,7 @@
             <ImageView
                 android:id="@+id/imgGaleria"
                 android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_height="35dp"
                 android:src="@android:drawable/ic_menu_gallery" />
 
             <TextView
@@ -587,7 +571,41 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
-                android:text="Galería"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Galería Producto"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relFotosRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/relVerFoto"
+            android:gravity="center_horizontal"
+            android:onClick="verImagenesRec">
+
+            <ImageView
+                android:id="@+id/imgGaleria"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/lblGaleria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgGaleria"
+                android:layout_alignEnd="@+id/imgGaleria"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Galería Recepción"
                 android:textAlignment="center"
                 android:textSize="11sp" />
         </RelativeLayout>
@@ -597,11 +615,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/relFotosRec"
             android:gravity="center_horizontal"
             android:onClick="Capturar">
 
@@ -621,12 +639,61 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
-                android:text="Capturar"
+                android:text="Producto"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relRecepcion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/relTomarFoto"
+            android:gravity="center_horizontal"
+            android:onClick="CapturarRec">
+
+            <ImageView
+                android:id="@+id/imgCamaraRec"
+                android:layout_width="55dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <TextView
+                android:id="@+id/lblCamaraRec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgCamaraRec"
+                android:layout_alignEnd="@+id/imgCamaraRec"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="Recepción"
                 android:textAlignment="center"
                 android:textSize="11sp" />
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnTareas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/medium"
+        android:clickable="true"
+        android:onClick="BotonGuardarRecepcion"
+        android:src="@drawable/ok_btn"
+        app:maxImageSize="32dp" />
 
 
 </RelativeLayout>

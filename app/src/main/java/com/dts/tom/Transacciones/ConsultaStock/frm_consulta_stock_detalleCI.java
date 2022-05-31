@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -22,7 +23,10 @@ import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 public class frm_consulta_stock_detalleCI extends PBase {
 
-    private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate;
+    private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,
+            lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate,
+            lblPresentacion, lblUnidad;
+    private TableRow trPresentacion;
     private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
@@ -52,6 +56,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblubic = findViewById(R.id.lblubicCI);
         lblnomUbic = findViewById(R.id.lblnomUbicCI);
         lblLicPlate= findViewById(R.id.lblLicPlate);
+        lblPresentacion = findViewById(R.id.lblPresentacion);
+        lblUnidad = findViewById(R.id.lblUnidad);
+        trPresentacion = findViewById(R.id.trPresentacion);
 
         ProgressDialog();
 
@@ -86,22 +93,25 @@ public class frm_consulta_stock_detalleCI extends PBase {
             if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
 
                 Double existencia = Double.valueOf(gl.existencia.ExistUMBAs);
-                String stringDecimal = String.format("%.6f", existencia);
-                lblexUnidad.setText(gl.existencia.UM +" "+ stringDecimal);
+                String stringDecimal = String.format("%.2f", existencia);
+                lblUnidad.setText(gl.existencia.UM+":");
+                lblexUnidad.setText(stringDecimal);
 
             }else {
-                lblexUnidad.setText(gl.existencia.UM +" 0.00");
+                lblexUnidad.setText("0.00");
             }
 
 
             if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
                 Double factor= Double.valueOf(gl.existencia.ExistUMBAs)/Double.valueOf(gl.existencia.factor);
-                String stringDecimal = String.format("%.6f", factor);
+                String stringDecimal = String.format("%.2f", factor);
 
-                lblexPres.setText( "EXIST: " + gl.existencia.Pres +": "+ stringDecimal);
+                lblPresentacion.setText(gl.existencia.Pres+":");
+                lblexPres.setText(stringDecimal);
             }else {
-                lblexPres.setText( "EXIST: " + gl.existencia.Pres);
+                trPresentacion.setVisibility(View.GONE);
+                lblexPres.setText(gl.existencia.Pres);
             }
 
             lblestado.setText( gl.existencia.Estado+"");
@@ -113,9 +123,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
             lblnomUbic.setText( gl.existencia.Ubic+"");
 
             if(gl.existencia.LicPlate.equals(0)){
-                lblLicPlate.setText( "LP : " + "");
+                lblLicPlate.setText("");
             }else{
-                lblLicPlate.setText( "LP : " + gl.existencia.LicPlate);
+                lblLicPlate.setText(gl.existencia.LicPlate);
             }
 
 
