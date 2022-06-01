@@ -22,6 +22,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Requerir_Ubic_Rec_Ingreso=false;
     @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
     @Element(required=false) public boolean Exigir_Campo_Referencia=false;
+    @Element(required=false) public boolean Preguntar_En_BackOrder=false;
 
 
     public clsBeTrans_oc_ti() {
@@ -171,5 +172,11 @@ public class clsBeTrans_oc_ti {
         Marcar_Registros_Enviados_MI3=value;
     }
 
-}
+    public boolean getPreguntar_En_BackOrder() {
+        return Preguntar_En_BackOrder;
+    }
+    public void setPreguntar_En_BackOrder(boolean value) {
+        Preguntar_En_BackOrder=value;
+    }
 
+}
