@@ -476,6 +476,7 @@ public class frm_list_rec_prod extends PBase {
 
                     gBeOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.OC;
                     gl.gBeOrdenCompra = gBeOrdenCompra;
+                    gl.PreguntarEnBackOrder= gBeOrdenCompra.TipoIngreso.Preguntar_En_BackOrder;
 
                     vIdOrdenCompra=0;
 
@@ -1470,10 +1471,12 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
-                    //#CKFK20220317 Agregué pregunta para dejar o no en BackOrder
-//                    Finalizar = true;
-//                    Termina_Finalizacion_Recepcion();
+                    if  (gl.PreguntarEnBackOrder){
+                        msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
+                    }else{
+                         Finalizar = true;
+                         Termina_Finalizacion_Recepcion();
+                    }
                 }
             });
 
