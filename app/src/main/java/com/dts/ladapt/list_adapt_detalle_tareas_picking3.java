@@ -123,9 +123,9 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
         holder.txtPeso.setText(""+BeListTareasHH.get(position).Peso_solicitado);
 
         if (BeListTareasHH.get(position).Cantidad_Recibida > 0) {
-            convertView.setBackgroundColor(Color.parseColor("#FFF9C4"));
+            convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
         } else {
-           convertView.setBackgroundColor(Color.parseColor("#FFCDD2"));
+           convertView.setBackgroundColor(Color.parseColor("#EF5350"));
         }
 
         return convertView;

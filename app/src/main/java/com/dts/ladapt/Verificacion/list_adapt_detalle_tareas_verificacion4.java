@@ -119,11 +119,34 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
             holder.txtEstado.setText(this.pListBeTareasVerificacionHH.get(position).Nom_Estado);
             holder.txtClasificacion.setText(this.pListBeTareasVerificacionHH.get(position).NombreClasificacion);
 
-            if (this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada > 0) {
+            /*if (this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada > 0) {
                 convertView.setBackgroundColor(Color.parseColor("#FFF9C4"));
             } else {
                 convertView.setBackgroundColor(Color.parseColor("#FFCDD2"));
+            }*/
+
+            //#AT20220531 Colores y estados según la cantidad solicitada, pickeada y verificada.
+            double Pick  = this.pListBeTareasVerificacionHH.get(position).Cantidad_Recibida;
+            double Sol = this.pListBeTareasVerificacionHH.get(position).Cantidad_Solicitada;
+            double Ver = this.pListBeTareasVerificacionHH.get(position).Cantidad_Verificada;
+
+            if (Pick == 0 && Ver == 0) {
+                //Rojo - No Pickeado
+                convertView.setBackgroundColor(Color.parseColor("#EF5350"));
+            } else if(Pick == Sol && Ver < Pick) {
+                //Celeste - Faltante en verificación
+                convertView.setBackgroundColor(Color.parseColor("#81D4FA"));
+            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick)) {
+                //Naranja - Faltante en Picking
+                convertView.setBackgroundColor(Color.parseColor("#FFCA28"));
+            }else if((Pick > 0 && Ver == 0) || (Pick > 0 && Ver < Pick)) {
+                //Amarillo - Pendiente de Verificar
+                convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
+            } else if (Pick == Sol && Ver == Sol) {
+                //Verde - Verificación completa
+                convertView.setBackgroundColor(Color.parseColor("#00E676"));
             }
+
 
         }catch (Exception ex){
 

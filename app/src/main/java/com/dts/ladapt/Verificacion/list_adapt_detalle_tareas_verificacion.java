@@ -77,6 +77,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
                 holder.lblNDias = (TextView) convertView.findViewById(R.id.lblNDias);
                 holder.lblArea = (TextView) convertView.findViewById(R.id.lblArea);
                 holder.lblClasificacion = (TextView) convertView.findViewById(R.id.lblClasificacion);
+                holder.lblEstadoVer = (TextView) convertView.findViewById(R.id.lblEstadoVer);
 
                 holder.lblEPedidoEnc = (TextView) convertView.findViewById(R.id.lblEPedEnc);
                 holder.lblEPedidoDet = (TextView) convertView.findViewById(R.id.lblEPedDet);
@@ -115,10 +116,37 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
             holder.lblIdPresentacion.setVisibility(View.GONE);
             holder.lblNDias.setVisibility(View.GONE);
 
-            if(selectedIndex!= -1 && position == selectedIndex) {
+            /*if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
             }else{
                 convertView.setBackgroundColor(Color.TRANSPARENT);
+            }*/
+
+            //#AT20220531 Colores y estados según la cantidad solicitada, pickeada y verificada.
+            double Pick  = pListBeTareasVerificacionHH.get(position).Cantidad_Recibida;
+            double Sol = pListBeTareasVerificacionHH.get(position).Cantidad_Solicitada;
+            double Ver = pListBeTareasVerificacionHH.get(position).Cantidad_Verificada;
+
+            if (Pick == 0 && Ver == 0) {
+                //Rojo - No Pickeado
+                convertView.setBackgroundColor(Color.parseColor("#EF5350"));
+                holder.lblEstadoVer.setText("No pickeado");
+            } else if(Pick == Sol && Ver < Pick) {
+                //Celeste - Faltante en verificación
+                convertView.setBackgroundColor(Color.parseColor("#81D4FA"));
+                holder.lblEstadoVer.setText("Faltante en verificación");
+            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick)) {
+                //Naranja - Faltante en Picking
+                convertView.setBackgroundColor(Color.parseColor("#FFCA28"));
+                holder.lblEstadoVer.setText("Faltante en picking");
+            }else if((Pick > 0 && Ver == 0) || (Pick > 0 && Ver < Pick)) {
+                //Amarillo - Pendiente de Verificar
+                convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
+                holder.lblEstadoVer.setText("Pendiente de verificar");
+            } else if (Pick == Sol && Ver == Sol) {
+                //Verde - Verificación completa
+                convertView.setBackgroundColor(Color.parseColor("#00E676"));
+                holder.lblEstadoVer.setText("Verificación completa");
             }
 
         }catch (Exception ex){
@@ -130,7 +158,8 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
     static class ViewHolder {
         TextView lblPedidoEnc,lblPedidoDet,lblCodigo,lblProducto,lblLote,lblVence,lblLicPlate,lblUmBas,lblPresentacion,
                 lblSolicitado,lblPickeado, lblVerificado, lblEstado, lblIdPresentacion, lblIdProductoBodega, lblNDias,
-                lblEPedidoEnc,lblEPedidoDet, lblEIdPresentacion, lblEIdProductoBodega, lblENDias, lblArea, lblClasificacion;
+                lblEPedidoEnc,lblEPedidoDet, lblEIdPresentacion, lblEIdProductoBodega, lblENDias, lblArea, lblClasificacion,
+                lblEstadoVer;
     }
 
 }

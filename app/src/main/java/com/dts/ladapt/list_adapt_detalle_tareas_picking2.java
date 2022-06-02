@@ -214,12 +214,10 @@ public class list_adapt_detalle_tareas_picking2 extends BaseAdapter {
             holder.lblNombreClasificacion.setText("--");
         }
 
-        if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        if (BeListTareasHH.get(position).Cantidad_Recibida > 0) {
+            convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
         } else {
-            
-            convertView.setBackgroundColor(Color.TRANSPARENT);
-
+            convertView.setBackgroundColor(Color.parseColor("#EF5350"));
         }
 
         return convertView;

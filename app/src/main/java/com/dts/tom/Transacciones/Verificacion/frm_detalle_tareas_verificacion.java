@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +43,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -65,9 +68,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private ImageView imgReemplazo;
     private RelativeLayout relbot;
     private Button btnRegs;
+    private CheckBox chkPendientes;
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
+    private clsBeDetallePedidoAVerificarList auxListaDetPed = new clsBeDetallePedidoAVerificarList();
     private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
 
     private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
@@ -93,7 +98,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             gll=((appGlobals) this.getApplication());
             TipoPantallaPicking = gll.TipoPantallaPicking;
 
-            if (gll.TipoPantallaPicking > 0) {
+            if (gll.TipoPantallaPicking == 3) {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion2);
             } else {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
@@ -104,6 +109,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             VerSinLoteFechaVen = false;
             gl.VerificacionSinLoteFechaVen = false;
 
+            //BA0002
             if (gl.CodigoBodega.equals("BA0002")) {
                 gl.VerificacionSinLoteFechaVen = true;
             }
@@ -124,6 +130,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             encabezado3 = findViewById(R.id.encabezado_3);
             lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
             relbot = (RelativeLayout) findViewById(R.id.relbot);
+            chkPendientes = (CheckBox) findViewById(R.id.chkPendientes);
 
             if (TipoPantallaPicking == 0) {
                 if (mostrar_area) {
@@ -239,6 +246,23 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 @Override
                 public void onClick(View v) {
                     mostrar_Reemplazados();
+                }
+            });
+
+            chkPendientes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    if (isChecked) {
+                        Lista_Detalle_Pedido();
+                    } else {
+                        if (VerSinLoteFechaVen) {
+                            execws(10);
+                        } else {
+                            execws(1);
+                        }
+                    }
                 }
             });
 
@@ -701,6 +725,17 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                     if (pListaPedidoDet.items!=null ){
 
+                        List AuxList;
+
+                        //#AT20220601 Lista lineas pendientes de verificar
+                        if (chkPendientes.isChecked()) {
+                             AuxList = stream(pListaPedidoDet.items)
+                                    .where(c -> c.Cantidad_Verificada < c.Cantidad_Recibida || c.Cantidad_Recibida == 0 || c.Cantidad_Verificada < c.Cantidad_Solicitada)
+                                    .toList();
+
+                             pListaPedidoDet.items = AuxList;
+                        }
+
                         for (int i = 0; i<=pListaPedidoDet.items.size()-1; i++) {
 
                             vItem = new clsBeDetallePedidoAVerificar();
@@ -736,7 +771,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         btnRegs.setText("Registros: "+pListaPedidoDet.items.size());
 
-                        if (gl.TipoPantallaPicking > 0) {
+                        if (gl.TipoPantallaPicking == 3) {
                             adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
                             listDetVeri.setAdapter(adapter4);
                         } else {
@@ -753,7 +788,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         }
                         if (pListaPedidoDet.items.size()>0){
 
-                            if (gl.TipoPantallaPicking > 0) {
+                            if (gl.TipoPantallaPicking == 3) {
                                 adapter4.setSelectedIndex(-1);
                             } else {
                                 if (mostrar_area) {
