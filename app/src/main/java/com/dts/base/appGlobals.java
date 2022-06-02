@@ -113,6 +113,7 @@ public class appGlobals extends Application {
     public int gUbicProdNe;
     public int IdProductoEstadoNE;
     public boolean gSinPresentacion=false;
+    public boolean PreguntarEnBackOrder=true;
 
     //Variables para picking
     public int gIdPickingEnc = 0;

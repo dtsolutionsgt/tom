@@ -81,6 +81,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String No_Documento_Externo="";
     @Element(required=false) public String NombreRutaDespacho="";
     @Element(required=false) public boolean Requiere_Tarimas=false;
+    @Element(required=false) public String Fecha_Preparacion="";
 
     public clsBeTrans_pe_enc() {
     }
@@ -101,7 +102,8 @@ public class clsBeTrans_pe_enc {
                              boolean Enviado_A_ERP,String Referencia_Documento_Ingreso_Bodega_Destino,boolean Sync_MI3,boolean IsNew,clsBeTrans_pe_detList Detalle,
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
-                             int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho, boolean Requiere_Tarimas) {
+                             int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
+                             boolean Requiere_Tarimas, String Fecha_Preparacion) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -172,6 +174,7 @@ public class clsBeTrans_pe_enc {
         this.No_Documento_Externo = No_Documento_Externo;
         this.NombreRutaDespacho = NombreRutaDespacho;
         this.Requiere_Tarimas = Requiere_Tarimas;
+        this.Fecha_Preparacion = Fecha_Preparacion;
 
     }
 
@@ -601,4 +604,10 @@ public class clsBeTrans_pe_enc {
         return Requiere_Tarimas;
     }
 
+    public String getFecha_Preparacion() {
+        return Fecha_Preparacion;
+    }
+    public void setFecha_Preparacion(String value) {
+        Fecha_Preparacion=value;
+    }
 }
