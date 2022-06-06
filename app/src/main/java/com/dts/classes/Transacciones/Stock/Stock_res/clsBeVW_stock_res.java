@@ -109,8 +109,9 @@ public class clsBeVW_stock_res {
 
   @Element(required=false) public String Area="";
   @Element(required=false) public String NombreUbicacion="";
-  @Element(required = false) public int IdPresentacion_Anterior = 0;
+  @Element(required=false) public int IdPresentacion_Anterior = 0;
   @Element(required=false) public int IdUbicacionVirtual=0;
+  @Element(required=false) public int IdOperadorBodega_Asignado=0;
 
   public clsBeVW_stock_res() {
   }
@@ -137,7 +138,8 @@ public class clsBeVW_stock_res {
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
-                           String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion, int no_linea, int IdPresentacion_Anterior) {
+                           String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion, int no_linea, int IdPresentacion_Anterior,
+                           int IdOperadorBodega_Asignado) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -230,6 +232,7 @@ public class clsBeVW_stock_res {
     this.NombreUbicacion = NombreUbicacion;
     this.no_linea = no_linea;
     this.IdPresentacion_Anterior = IdPresentacion_Anterior;
+    this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
   }
 
 
@@ -837,6 +840,9 @@ public class clsBeVW_stock_res {
   public void setIdUbicacionVirtual(int value) {
     IdUbicacionVirtual=value;
   }
+
+  public int getIdOperadorBodega_Asignado() {return IdOperadorBodega_Asignado;}
+  public void  setIdOperadorBodega_Asignado(int value) {IdOperadorBodega_Asignado = value;}
 
 }
 
