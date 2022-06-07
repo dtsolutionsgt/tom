@@ -135,7 +135,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
                 //Celeste - Faltante en verificación
                 convertView.setBackgroundColor(Color.parseColor("#81D4FA"));
                 holder.lblEstadoVer.setText("Faltante en verificación");
-            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick)) {
+            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick && Ver != 0)) {
                 //Naranja - Faltante en Picking
                 convertView.setBackgroundColor(Color.parseColor("#FFCA28"));
                 holder.lblEstadoVer.setText("Faltante en picking");
