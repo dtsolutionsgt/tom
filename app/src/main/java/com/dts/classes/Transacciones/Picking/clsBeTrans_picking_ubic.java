@@ -72,6 +72,8 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String NombreClasificacion="";
     @Element(required=false) public int IdUbicacionTemporal=0;
     @Element(required=false) public String NombreUbicacionTemporal="";
+    @Element(required=false) public int IdOperadorBodega_Asignado=0;
+
 
     public clsBeTrans_picking_ubic() {
     }
@@ -91,7 +93,8 @@ public class clsBeTrans_picking_ubic {
                                    int IdUnidadMedida, int IdPedidoEnc, clsBeBodega_ubicacion Ubicacion, int IdPropietarioBodega,
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
                                    int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
-                                   boolean No_encontrado, String NombreClasificacion, int IdUbicacionTemporal, String NombreUbicacionTemporal) {
+                                   boolean No_encontrado, String NombreClasificacion, int IdUbicacionTemporal, String NombreUbicacionTemporal,
+                                   int IdOperadorBodega_Asignado ) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.NombreArea = NombreArea;
@@ -158,6 +161,7 @@ public class clsBeTrans_picking_ubic {
         this.NombreClasificacion = NombreClasificacion;
         this.IdUbicacionTemporal = IdUbicacionTemporal;
         this.NombreUbicacionTemporal = NombreUbicacionTemporal;
+        this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
     }
 
 
@@ -546,11 +550,19 @@ public class clsBeTrans_picking_ubic {
     public void setIdUbicacionTemporal(int value) {
         IdUbicacionTemporal=value;
     }
+
     public String getNombreUbicacionTemporal() {
         return NombreUbicacionTemporal;
     }
     public void setNombreUbicacionTemporal(String value) {
         NombreUbicacionTemporal=value;
+    }
+
+    public int getIdOperadorBodega_Asignado() {
+        return IdOperadorBodega_Asignado;
+    }
+    public void setIdOperadorBodega_Asignado(int value) {
+        IdOperadorBodega_Asignado=value;
     }
 
 
