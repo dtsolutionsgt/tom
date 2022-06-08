@@ -199,7 +199,16 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     if (TipoPantallaPicking > 0) {
-                        adapter4.setSelectedIndex(position);
+
+                        //adapter4.setSelectedIndex(position);
+                        //#GT08062022: si TipoPantallaPicking es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
+                        if (gl.TipoPantallaPicking == 3) {
+                            adapter4.setSelectedIndex(position);
+                        } else {
+                            adapter2.setSelectedIndex(position);
+                        }
+
+
                     } else {
                         if (mostrar_area) {
                             adapter2.setSelectedIndex(position);
@@ -214,7 +223,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     Procesa_Registro(vItem);
 
                     if (TipoPantallaPicking > 0) {
-                        adapter4.refreshItems();
+
+                        //adapter4.refreshItems();
+                        //#GT08062022: si TipoPantallaPicking es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
+                        if (gl.TipoPantallaPicking == 3) {
+                            adapter4.refreshItems();
+                        } else {
+                            adapter2.refreshItems();
+                        }
+
                     } else {
                         if (mostrar_area) {
                             adapter2.refreshItems();
