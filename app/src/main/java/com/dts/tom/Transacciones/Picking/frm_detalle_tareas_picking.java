@@ -770,7 +770,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         callMethod("Get_Picking_By_IdPickingEnc","pIdPickingEnc",gl.gIdPickingEnc);
                         break;
                     case 2:
-                        callMethod("Actualizar_Estado_Picking","oBeTrans_picking_enc",gBePicking);
+                        //#EJC20220608: Cambio en método.
+                        callMethod("Actualizar_Estado_Picking_Andr","pEstadoPicking",gBePicking.Estado,"pIdPickingEnc", gBePicking.IdPickingEnc);
                         break;
                     case 3:
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_Tipo",
