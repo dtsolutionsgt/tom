@@ -71,6 +71,7 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblRutaDespacho = (TextView) convertView.findViewById(R.id.txtRutaDespacho);
             holder.lblObservacion = (TextView) convertView.findViewById(R.id.txtObservacion);
             holder.lblRequiereTarima = (TextView) convertView.findViewById(R.id.txtRequiereTarima);
+            holder.lblMuelle = (TextView) convertView.findViewById(R.id.lblMuelle);
 
             convertView.setTag(holder);
 
@@ -137,6 +138,12 @@ public class list_adapter_tareashh extends BaseAdapter {
             holder.lblObservacion.setText(BeListTareasHH.get(position).Observacion);
         }
 
+        if(BeListTareasHH.get(position).Muelle!=null){
+            holder.lblMuelle.setText(BeListTareasHH.get(position).Muelle);
+        } else {
+            holder.lblMuelle.setText("--");
+        }
+
         //holder.lblRequiereTarima.setText(BeListTareasHH.get(position).RequiereTarima+"");
 
         if(selectedIndex!= -1 && position == selectedIndex) {
@@ -161,7 +168,8 @@ public class list_adapter_tareashh extends BaseAdapter {
                 lblNumPoliza,
                 lblRutaDespacho,
                 lblObservacion,
-                lblRequiereTarima;
+                lblRequiereTarima,
+                lblMuelle;
     }
 
 }

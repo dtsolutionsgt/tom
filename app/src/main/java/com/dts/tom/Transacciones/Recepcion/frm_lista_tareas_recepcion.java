@@ -519,6 +519,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.NombrePropietario = pListBeTareasIngresoHH.items.get(i).NombrePropietario;
                         vItem.NumPoliza = pListBeTareasIngresoHH.items.get(i).NumPoliza;
                         vItem.NumOrden = pListBeTareasIngresoHH.items.get(i).NumOrden;
+                        vItem.Muelle = pListBeTareasIngresoHH.items.get(i).Muelle;
                         BeListTareas.add(vItem);
 
                     }

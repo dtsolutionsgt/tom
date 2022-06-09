@@ -23,6 +23,7 @@ public class clsBeTareasIngresoHH {
     @Element(required=false) public String RutaDespacho="";
     @Element(required=false) public String Observacion="";
     @Element(required=false) public boolean RequiereTarima=false;
+    @Element(required=false) public String Muelle = "";
 
 
     public clsBeTareasIngresoHH() {
@@ -31,7 +32,7 @@ public class clsBeTareasIngresoHH {
     public clsBeTareasIngresoHH(int IdRecepcionEnc,int IdPropietarioBodega,int IdPropietario,String NombrePropietario,
                                 int IdProveedor,String NombreProveedor,String NoDocumentoOc,String NombreMotivoDevolucion,
                                 String NombreTipoIngresoOC,String NoReferenciaOC,int IdOrderCompraEnc,String NombreTipoRecepcion,
-                                String NumOrden,String NumPoliza
+                                String NumOrden,String NumPoliza, String Muelle
     ) {
 
         this.IdRecepcionEnc=IdRecepcionEnc;
@@ -48,6 +49,7 @@ public class clsBeTareasIngresoHH {
         this.NombreTipoRecepcion=NombreTipoRecepcion;
         this.NumOrden= NumOrden;
         this.NumPoliza=NumPoliza;
+        this.Muelle = Muelle;
     }
 
 
@@ -157,4 +159,11 @@ public class clsBeTareasIngresoHH {
         RequiereTarima=value;
     }
 
+    public String getMuelle() {
+        return Muelle;
+    }
+
+    public void setMuelle(String value) {
+        Muelle = value;
+    }
 }
