@@ -2,7 +2,6 @@ package com.dts.tom.Transacciones.Picking;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,6 +106,7 @@ public class frm_picking_datos extends PBase {
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private boolean PressEnterLp, PressEnterProducto, escaneo_licencia_diferente = false;
+    private boolean btnEnterLp = false, btnEnterCod = false;
     private boolean ReubicarPickingAereo = false;
 
 
@@ -180,6 +180,8 @@ public class frm_picking_datos extends PBase {
         PressEnterLp = false;
         PressEnterProducto = false;
         escaneo_licencia_diferente = false;
+        btnEnterLp = false;
+        btnEnterCod = false;
 
         setHandlers();
 
@@ -1371,6 +1373,12 @@ public class frm_picking_datos extends PBase {
         double vCantUniXTarima = 0;
 
         try{
+            //#AT20220806 Valida si se confirmo la licencia o codigo
+            if (trLP.getVisibility() == View.GONE) {
+                btnEnterCod = true;
+            } else {
+                btnEnterLp = true;
+            }
 
             txtCantidadPick.setEnabled(true);
 
@@ -1510,6 +1518,13 @@ public class frm_picking_datos extends PBase {
         double CantRec=0;
 
         try{
+            //#AT20220806 Valida si se confirmo la licencia o codigo
+            if (trLP.getVisibility() == View.GONE) {
+                btnEnterCod = true;
+            } else {
+                btnEnterLp = true;
+            }
+
             txtCantidadPick.setEnabled(true);
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
             /*CantSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);
@@ -1642,6 +1657,19 @@ public class frm_picking_datos extends PBase {
             }
 
         }else{
+
+            if (trLP.getVisibility() == View.GONE) {
+                if (!btnEnterCod) {
+                    mu.msgbox("Confirme código de producto.");
+                    return;
+                }
+            } else {
+                if (!btnEnterLp) {
+                    mu.msgbox("Confirme licencia de producto.");
+                    return;
+                }
+            }
+
             Procesar_Registro();
             //gl.termino = "";
         }
