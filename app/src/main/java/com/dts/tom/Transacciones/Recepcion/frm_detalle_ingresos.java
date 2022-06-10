@@ -263,31 +263,42 @@ public class frm_detalle_ingresos extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
+                        callMethod("Get_Banderas_Recepcion",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "pFinalizada",Finalizada,
+                                   "pAnulada",Anulada);
                         break;
                     case 2:
-                        callMethod("Get_IdProductoBuenEstado_Por_Defecto_By_IdBodega_And_IdEmpresa","pIdBodega",gl.IdBodega,"pIdEmpresa",gl.IdEmpresa);
+                        callMethod("Get_IdProductoBuenEstado_Por_Defecto_By_IdBodega_And_IdEmpresa",
+                                   "pIdBodega",gl.IdBodega,
+                                   "pIdEmpresa",gl.IdEmpresa);
                         break;
                     case 3:
-                        callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("GetSingleRec",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 4:
-                        callMethod("Get_Configuracion_Barra_Pallet_By_IdConfiguracion","pIdConfiguracionBarraPallet",gBeOrdenCompra.ProveedorBodega.Proveedor.IdConfiguracionBarraPallet);
+                        callMethod("Get_Configuracion_Barra_Pallet_By_IdConfiguracion",
+                                   "pIdConfiguracionBarraPallet",gBeOrdenCompra.ProveedorBodega.Proveedor.IdConfiguracionBarraPallet);
                         break;
                     case 5:
-                        callMethod("Get_Stock_Rec_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("Get_Stock_Rec_By_IdRecepcionEnc",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 6:
                         //aquí mando la imagen ya convertida, así como se hizo con la firma.
-                        callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
+                        callMethod("Guardar_Fotos_Recepcion",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "Foto",encoded);
                         break;
                     case 7:
-                        callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
+                        callMethod("Get_All_Imagen_Recepcion",
+                                   "pIdRecepcion", gl.gIdRecepcionEnc);
                         break;
                     case 8:
                         callMethod("Get_Ubicacion_Recepcion_By_Codigo_Barra_And_IdBodega",
-                                "pBarra",txtUbicacion.getText().toString(),
-                                "pIdBodega",gl.IdBodega);
+                                   "pBarra",txtUbicacion.getText().toString(),
+                                   "pIdBodega",gl.IdBodega);
                         break;
 
                 }

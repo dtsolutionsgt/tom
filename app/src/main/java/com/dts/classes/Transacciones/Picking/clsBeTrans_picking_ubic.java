@@ -74,7 +74,6 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String NombreUbicacionTemporal="";
     @Element(required=false) public int IdOperadorBodega_Asignado=0;
 
-
     public clsBeTrans_picking_ubic() {
     }
 

@@ -1046,20 +1046,24 @@ public class frm_list_rec_prod extends PBase {
                     case 1:
                         //callMethod("Iniciar_Recepcion_OC","oBeTrans_oc_enc",gBeOrdenCompra);
                         //GT0712021:Se envian por separado los 2 parametros requeridos, y no una entidad
-                        callMethod("Iniciar_Recepcion_OC","pIdOrdenCompraEnc",gBeOrdenCompra.IdOrdenCompraEnc,
-                                "pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("Iniciar_Recepcion_OC",
+                                   "pIdOrdenCompraEnc",gBeOrdenCompra.IdOrdenCompraEnc,
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 2:
-                        callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "Estado","Pendiente");
+                        callMethod("Actualizar_Estado_Recepcion",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "Estado","Pendiente");
                         break;
                     case 3:
-                        callMethod("Get_Single_BeTrans_OC_Estado","pBeTrans_oc_estado",gBeOrdenCompra.EstadoOC);
+                        callMethod("Get_Single_BeTrans_OC_Estado",
+                                   "pBeTrans_oc_estado",gBeOrdenCompra.EstadoOC);
                         break;
                     case 4:
-                        callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pFinalizada",Finalizada,
-                                "pAnulada",Anulada);
+                        callMethod("Get_Banderas_Recepcion",
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "pFinalizada",Finalizada,
+                                   "pAnulada",Anulada);
                         break;
                     case 5:
                        callMethod("Get_All_Pallet_Ingreso_By_Barra","pCodigoBarraPallet",pLP,
@@ -1067,18 +1071,26 @@ public class frm_list_rec_prod extends PBase {
                                "BeProducto",BeProducto);
                         break;
                     case 6:
-                        callMethod("Get_BeProducto_By_LP_For_HH","pLic_Plate",pLP,
-                                "IdRecepcionEnc",gl.gIdRecepcionEnc,"pBeStockRec",gBeStockRec);
+                        callMethod("Get_BeProducto_By_LP_For_HH",
+                                   "pLic_Plate",pLP,
+                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "pBeStockRec",gBeStockRec);
                         break;
                     case 7:
-                        callMethod("Finalizar_Recepcion_Parcial","pRecEnc",gl.gBeRecepcion,
-                                "pIdOrdenCompraEnc",vIdOrdenCompra,"pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pIdEmpresa",gl.IdEmpresa,"pIdBodega",gl.IdBodega,
-                                "pIdUsuario",gl.IdOperador,"pBeStockRec",gBeStockRec);
+                        callMethod("Finalizar_Recepcion_Parcial",
+                                   "pRecEnc",gl.gBeRecepcion,
+                                   "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "pIdEmpresa",gl.IdEmpresa,
+                                   "pIdBodega",gl.IdBodega,
+                                   "pIdUsuario",gl.IdOperador,
+                                   "pBeStockRec",gBeStockRec);
                         break;
                     case 8:
-                        callMethod("Get_BeProducto_By_LP_For_HH","pLic_Plate",pLP,
-                                "IdRecepcionEnc",gl.gIdRecepcionEnc,"pBeStockRec",gBeStockRec);
+                        callMethod("Get_BeProducto_By_LP_For_HH",
+                                   "pLic_Plate",pLP,
+                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "pBeStockRec",gBeStockRec);
                         break;
                     case 9:
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
