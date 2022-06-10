@@ -781,8 +781,11 @@ public class frm_detalle_tareas_picking extends PBase {
                                 "Tipo",TipoLista);
                         break;
                     case 4:
-                        callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
+                        //#EJC20220608:Evitar enviar objetos completos.
+                        //callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
+                        callMethod("Actualizar_PickingEnc_Procesado_Andr","pIdPickingEnc",gBePicking.IdPickingEnc);
                         break;
+
                     case 5:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicacionFiltro.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;

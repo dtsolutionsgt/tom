@@ -2043,8 +2043,8 @@ public class frm_picking_datos extends PBase {
                         break;
                     case 4:
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                "pCodigo",pCodigo.replace("$", ""),
-                                "IdBodega",gl.IdBodega);
+                                         "pCodigo",pCodigo.replace("$", ""),
+                                               "IdBodega",gl.IdBodega);
                         break;
                     case 5:
                         callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
@@ -2053,14 +2053,19 @@ public class frm_picking_datos extends PBase {
                         callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
-                        callMethod("Actualizar_Picking","oBeTrans_picking_ubic",gBePickingUbic,
-                                                        "BeStockRes",BeStockRes,
-                                                        "oBeTrans_picking_det",BePickingDet,
-                                                        "IdBodega",gl.IdBodega);
+                        callMethod("Actualizar_Picking",
+                                         "oBeTrans_picking_ubic",gBePickingUbic,
+                                               "BeStockRes",BeStockRes,
+                                               "oBeTrans_picking_det",BePickingDet,
+                                               "IdBodega",gl.IdBodega);
                         break;
                     case 8:
-                        callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet","oBeTrans_picking_ubic",gBePickingUbic,
-                                "BeStockRes",BeStockRes,"oBeTrans_picking_det",BePickingDet,"IdBodega",gl.IdBodega,"pBeStockPalletReemplazo",BeStockPallet.Stock);
+                        callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet",
+                                               "oBeTrans_picking_ubic",gBePickingUbic,
+                                               "BeStockRes",BeStockRes,
+                                               "oBeTrans_picking_det",BePickingDet,
+                                               "IdBodega",gl.IdBodega,
+                                               "pBeStockPalletReemplazo",BeStockPallet.Stock);
                         break;
                     case 9:
                         gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
