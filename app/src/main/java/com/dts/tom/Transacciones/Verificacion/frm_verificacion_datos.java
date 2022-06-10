@@ -82,7 +82,8 @@ public class frm_verificacion_datos extends PBase {
     private double pPeso;
     private double pCantidad;
     private int pTipo = 0;
-
+    //#GT10062022: variable para guardar el peso del picking...luego se modifique el editext, no hay contra que validar el peso original
+    private double peso_picking = 0;
     // Fecha
     private int anno;
     private int mes;
@@ -246,7 +247,9 @@ public class frm_verificacion_datos extends PBase {
                             case KeyEvent.KEYCODE_ENTER:
 
                                 if (gBeProducto.getControl_peso()){
-                                    valida_Valor(txtPesoVeri);
+                                    //#GT10062022: porque usar un metodo que valida cantidad, para validar peso, dejando las mismas variables??
+                                    //valida_Valor(txtPesoVeri);
+                                    valida_Valor_Peso(txtPesoVeri);
                                 }
 
                                 return true;
@@ -565,6 +568,7 @@ public class frm_verificacion_datos extends PBase {
                     txtPesoVeri.setText(mu.frmdecimal(suma, gl.gCantDecDespliegue));
 
                     if (suma>0){
+                        peso_picking = suma;
                         llPeso.setVisibility(View.VISIBLE);
                     }
 
@@ -662,6 +666,7 @@ public class frm_verificacion_datos extends PBase {
         }
     }
 
+    //#GT10062022: esto valida si la cantidad coincide con lo pickeado, pero no se debe usar para validar el peso del producto
     private boolean valida_Valor(EditText txt){
 
         boolean result = false;
@@ -703,6 +708,46 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
+    //#GT10062022: esto valida si el peso coincide con el peso pickeado. Es una copia del proceso valida_valor, porque lo usaban para lo mismo
+    private boolean valida_Valor_Peso(EditText txt){
+
+        boolean result = false;
+
+        try{
+
+            //Double cantPendiente = Rec - Ver;
+
+            //#GT10062022: antes de castear el valor, se le debe remover la "," porque no forma parte del valor númerico
+            //double valor =Double.valueOf(txt.getText().toString());
+            double valor =Double.valueOf(txt.getText().toString().replace(",",""));
+
+            if (valor > 0) {
+                if (valor > peso_picking) {
+                    mu.msgbox("El peso ingresado es mayor al pickeado");
+                    result = false;
+                } else {
+                    result = true;
+                }
+
+            }else {
+                mu.msgbox("El valor es incorrecto, ingréselo nuevamente");
+                result = false;
+            }
+
+        }catch (Exception ex){
+            result = false;
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName() + " " + ex.getMessage());
+            txt.selectAll();
+            txt.requestFocus();
+            //showkeyb();
+        }
+
+        return result;
+
+    }
+
+
+
     private boolean Guardar_Verificacion() {
 
         boolean result = false;
@@ -715,7 +760,9 @@ public class frm_verificacion_datos extends PBase {
             }
 
             if (gBeProducto.getControl_peso()){
-                if (!valida_Valor(txtPesoVeri)){
+                //#GT10062022: para validar el peso, no usar mismo metodo que valida cantidad
+                //if (!valida_Valor(txtPesoVeri)){
+                if (!valida_Valor_Peso(txtPesoVeri)){
                     return result;
                 }
             }
