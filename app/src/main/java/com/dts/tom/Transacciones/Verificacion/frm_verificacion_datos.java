@@ -668,7 +668,11 @@ public class frm_verificacion_datos extends PBase {
 
         try{
             Double cantPendiente = Rec - Ver;
-            double valor =Double.valueOf(txt.getText().toString());
+
+
+            //#GT10062022: antes de castear el valor, se le debe remover la "," porque no forma parte del valor númerico
+            //double valor =Double.valueOf(txt.getText().toString());
+            double valor =Double.valueOf(txt.getText().toString().replace(",",""));
 
             //#AT20220525 Validación de cantidad antes de verificar
             if (valor > 0) {
