@@ -92,7 +92,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
 
-                Double existencia = Double.valueOf(gl.existencia.ExistUMBAs);
+                Double existencia = Double.valueOf(gl.existencia.ExistUMBAs.replace(",",""));
                 String stringDecimal = String.format("%.2f", existencia);
                 lblUnidad.setText(gl.existencia.UM+":");
                 lblexUnidad.setText(stringDecimal);
@@ -104,7 +104,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
-                Double factor= Double.valueOf(gl.existencia.ExistUMBAs)/Double.valueOf(gl.existencia.factor);
+                Double factor= Double.valueOf(gl.existencia.ExistUMBAs.replace(",",""))/Double.valueOf(gl.existencia.factor);
                 String stringDecimal = String.format("%.2f", factor);
 
                 lblPresentacion.setText(gl.existencia.Pres+":");
