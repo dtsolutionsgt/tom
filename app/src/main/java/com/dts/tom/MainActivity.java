@@ -526,6 +526,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.Permitir_Cambio_Ubic_Producto_Picking = bodegas.items.get(position).Permitir_Cambio_Ubic_Producto_Picking;
                     gl.Notificacion_Voz = bodegas.items.get(position).Notificacion_Voz;
                     gl.TipoPantallaPicking = bodegas.items.get(position).tipo_pantalla_picking;
+                    gl.VerificacionConsolidada = bodegas.items.get(position).Verificacion_Consolidada;
 
                     idimpres=0;
                     execws(3);

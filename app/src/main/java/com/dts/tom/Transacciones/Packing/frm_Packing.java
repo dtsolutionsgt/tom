@@ -444,26 +444,6 @@ public class frm_Packing extends PBase {
 
                 Escaneo_Pallet=false;
 
-                if (txtNuevoLp.getText().toString().isEmpty()){
-                    int cyear,cmonth,cday,ch,cm;
-                    final Calendar c = Calendar.getInstance();
-                    cyear = c.get(Calendar.YEAR);
-                    cmonth = c.get(Calendar.MONTH)+1;
-                    cday = c.get(Calendar.DAY_OF_MONTH);
-                    ch= c.get(Calendar.HOUR_OF_DAY);
-                    cm= c.get(Calendar.MINUTE);
-
-                    String vCodigoBodega =  FormatBodega(gl.CodigoBodega);
-                    String vCodigoProducto = FormatProducto(txtPrd.getText().toString());
-                    String vCorrelativo = (cyear-2000) +
-                            ("00"+cmonth).substring(("00"+cmonth).length()-2) +
-                            ("00"+cday).substring(("00"+cday).length()-2)  +
-                            ("00"+ch).substring(("00"+ch).length()-2)  +
-                            ("00"+cm).substring(("00"+cm).length()-2) ;
-
-                    txtNuevoLp.setText(vCodigoBodega + "" + vCodigoProducto + "W"+vCorrelativo); // & vCorrelativo
-                }
-
                 //Get_BeProducto_By_Codigo_For_HH
                 if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
                     Escaneo_Pallet = true;
@@ -2156,20 +2136,14 @@ public class frm_Packing extends PBase {
                 int intLPSig = (int) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
-                String str = String.valueOf(intLPSig);
-                StringBuilder sb = new StringBuilder();
-
-                for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
-                    sb.append('0');
-                }
-
-                sb.append(str);
-                String result = sb.toString();
+                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
 
                 txtNuevoLp.setText(resolucionActivaLpByBodega.Serie + result);
 
             }else{
                 gl.IdResolucionLpOperador =0;
+                toast("Este usuario no tiene resoluciones configuradas");
             }
 
         }catch (Exception e){
@@ -2284,10 +2258,8 @@ public class frm_Packing extends PBase {
         if (BeProductoUbicacionOrigen!=null){
             msgAskImprimir("¿Imprimir licencia?");
         }else{
-            msgAskImprimirLicenciaNoHomogenea("¿Imprimir licencia para producto no homogéneo?");
+           msgAskImprimirLicenciaNoHomogenea("¿Imprimir licencia para producto no homogéneo?");
         }
-
-
     }
 
     private void msgAskImprimirLicenciaNoHomogenea(String msg) {
@@ -2387,48 +2359,51 @@ public class frm_Packing extends PBase {
                 if (BeProductoUbicacionOrigen!=null){
 
                     //NuevoLp = txtNuevoLp.getText().toString();
+
                     NuevoLp = tmpLicencia;
 
-                    if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
-                        zpl = String.format("^XA \n" +
-                                        "^MMT \n" +
-                                        "^PW700 \n" +
-                                        "^LL0406 \n" +
-                                        "^LS0 \n" +
-                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
-                                        "^FO2,340^GB670,0,14^FS \n" +
-                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                        "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                                "$"+NuevoLp);
-                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
-                                zpl = String.format("^XA\n" +
-                                "^MMT\n" +
-                                "^PW609\n" +
-                                "^LL0406\n" +
-                                "^LS0\n" +
-                                "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
-                                "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
-                                "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
-                                "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
-                                "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
-                                "^FO2,450^GB670,14,14^FS\n" +
-                                "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
-                                "^FD%1$s^FS\n" +
-                                "^PQ1,0,1,Y \n" +
-                                "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                                "$"+NuevoLp);
-                    }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
-                        zpl = String.format("^XA \n" +
+                    if (NuevoLp!=null && !NuevoLp.isEmpty()){
+
+                        if (BeProductoUbicacionOrigen.IdTipoEtiqueta==1){
+                            zpl = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW700 \n" +
+                                            "^LL0406 \n" +
+                                            "^LS0 \n" +
+                                            "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                    "$"+NuevoLp);
+                        }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==2){
+                            zpl = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW609\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT221,61^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT480,61^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT600,400^A0I,35,40^FH^FD%3$s^FS\n" +
+                                            "^FT322,61^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT600,61^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^FT600,500^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                            "^FO2,450^GB670,14,14^FS\n" +
+                                            "^BY3,3,160^FT550,180^BCI,,Y,N\n" +
+                                            "^FD%1$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                    "$"+NuevoLp);
+                        }else if (BeProductoUbicacionOrigen.IdTipoEtiqueta==4){
+                            zpl = String.format("^XA \n" +
                                             "^MMT \n" +
                                             "^PW812 \n" +
                                             "^LL0630 \n" +
@@ -2444,20 +2419,24 @@ public class frm_Packing extends PBase {
                                             "^FD%4$s^FS \n" +
                                             "^PQ1,0,1,Y " +
                                             "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                            BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
-                                            "$"+NuevoLp);
-                    }
+                                    BeProductoUbicacionOrigen.Codigo+" - "+BeProductoUbicacionOrigen.Nombre,
+                                    "$"+NuevoLp);
+                        }
 
-                    if (!zpl.isEmpty()){
-                        zPrinterIns.sendCommand(zpl);
+                        if (!zpl.isEmpty()){
+                            zPrinterIns.sendCommand(zpl);
+                        }else{
+                            msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                        }
+
+                        Thread.sleep(500);
+
+                        // Close the connection to release resources.
+                        printerIns.close();
+
                     }else{
-                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido");
+                        mu.msgbox("No se definió licencia, no se puede imprimir.");
                     }
-
-                    Thread.sleep(500);
-
-                    // Close the connection to release resources.
-                    printerIns.close();
 
                 }else{
                     mu.msgbox("Información de producto no definida.");

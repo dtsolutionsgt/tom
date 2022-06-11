@@ -23,6 +23,7 @@ public class clsBeBodegaBase
     @Element(required=false) public boolean inferir_origen_en_cambio_ubic=false;
     @Element(required=false) public boolean despachar_producto_vencido=false;
     @Element(required=false) public int tipo_pantalla_picking = 0;
+    @Element(required=false) public boolean Verificacion_Consolidada=false;
 
     public int getIdBodega() {
         return IdBodega;
@@ -141,6 +142,13 @@ public class clsBeBodegaBase
     }
     public void settipo_pantalla_picking(int value) {
         tipo_pantalla_picking=value;
+    }
+
+    public boolean getVerificacion_Consolidada() {
+        return Verificacion_Consolidada;
+    }
+    public void setVerificacion_Consolidada(boolean value) {
+        Verificacion_Consolidada=value;
     }
 
 }
