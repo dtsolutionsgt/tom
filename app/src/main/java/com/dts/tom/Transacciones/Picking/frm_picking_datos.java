@@ -2036,7 +2036,9 @@ public class frm_picking_datos extends PBase {
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",gBePickingUbic.IdProductoBodega);
                         break;
                     case 2:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH","pIdPropietario",gBeProducto.Propietario.IdPropietario,"pIdBodega",gl.IdBodega);
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
+                                "pIdPropietario",gBeProducto.Propietario.IdPropietario,
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.IdProducto,"pActivo",true);
