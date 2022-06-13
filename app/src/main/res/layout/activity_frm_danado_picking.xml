@@ -71,7 +71,7 @@
                 android:layout_marginStart="150dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Nombre completo de ubicación"
+                android:text="-"
                 android:textColor="#0119A2"
                 android:textStyle="bold" />
 
