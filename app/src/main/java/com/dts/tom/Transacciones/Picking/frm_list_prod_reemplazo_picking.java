@@ -62,6 +62,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private double vCant=0, CantidadTotal = 0;
     private boolean Completo=false;
     private boolean Distinto=false;
+    private boolean ConExistencia = false;
     private String resultado="";
     private double CantidadPendiente=0, CantPendSel = 0;
 
@@ -84,6 +85,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
         btnBack = (Button)findViewById(R.id.btnBack);
+
+        ConExistencia = false;
 
         lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
                 "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
@@ -351,7 +354,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     }
 
     private void Marcar_No_Encontrado(){
-        execws(8);
+        TipoLista  = 1;
+        execws(4);
     }
 
     private void Load(){
@@ -381,10 +385,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             progress.setMessage("Listando stock disponible...");
 
             if (DT.getCount()>0) {
-
-                /*vItem=new clsBeStockReemplazo();
-                BeListStock.add(vItem);*/
-
+                ConExistencia = true;
                 DT.moveToFirst();
 
                 while (!DT.isAfterLast()) {
@@ -478,20 +479,41 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "IdEstDestino",IdEstDanadoSelect);
                         break;
                     case 4:
-                        callMethod("Reemplazar_ListaPu_By_Stock",
-                                "pBeStock_res",tmpBeStock_Res,
-                                "CantSol",CantReemplazar,
-                                "MaquinaQueSolicita","1",
-                                "IdPickingEnc",gBePickingUbic.IdPickingEnc,
-                                "IdPedidoEnc",gBePickingUbic.IdPedidoEnc,
-                                "IdUsuarioHH",gl.OperadorBodega.IdOperador,
-                                "IdPedidoDet",gBePickingUbic.IdPedidoDet,
-                                "BePickingUbic",gBePickingUbic,
-                                "EsPicking",true,
-                                "Tipo", Tipo,
-                                "IdUbicDestino",IdUbicacionDestino,
-                                "IdEstDestino",IdEstadoDanadoSelect,
-                                "CantidadTotal", CantidadTotal);
+
+                        if (ConExistencia) {
+                            callMethod("Reemplazar_ListaPu_By_Stock",
+                                    "pBeStock_res", tmpBeStock_Res,
+                                    "CantSol", CantReemplazar,
+                                    "MaquinaQueSolicita", "1",
+                                    "IdPickingEnc", gBePickingUbic.IdPickingEnc,
+                                    "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
+                                    "IdUsuarioHH", gl.OperadorBodega.IdOperador,
+                                    "IdPedidoDet", gBePickingUbic.IdPedidoDet,
+                                    "BePickingUbic", gBePickingUbic,
+                                    "EsPicking", true,
+                                    "Tipo", Tipo,
+                                    "IdUbicDestino", IdUbicacionDestino,
+                                    "IdEstDestino", IdEstadoDanadoSelect,
+                                    "CantidadTotal", CantidadTotal,
+                                    "ConExistencia", ConExistencia);
+                        } else {
+                            //tmpBeStock_Res = null;
+                            callMethod("Reemplazar_ListaPu_By_Stock",
+                                    "pBeStock_res", tmpBeStock_Res,
+                                    "CantSol", CantReemplazar,
+                                    "MaquinaQueSolicita", "1",
+                                    "IdPickingEnc", gBePickingUbic.IdPickingEnc,
+                                    "IdPedidoEnc", gBePickingUbic.IdPedidoEnc,
+                                    "IdUsuarioHH", gl.OperadorBodega.IdOperador,
+                                    "IdPedidoDet", gBePickingUbic.IdPedidoDet,
+                                    "BePickingUbic", gBePickingUbic,
+                                    "EsPicking", true,
+                                    "Tipo", Tipo,
+                                    "IdUbicDestino", IdUbicacionDestino,
+                                    "IdEstDestino", IdEstadoDanadoSelect,
+                                    "CantidadTotal", CantidadTotal,
+                                    "ConExistencia", ConExistencia);
+                        }
                         break;
                     case 6:
                         callMethod("Sustituir_Producto_NE_Picking",

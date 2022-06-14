@@ -247,7 +247,7 @@ public class frm_danado_verificacion extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
                                    "pIdPropietario",gBeProducto.Propietario.IdPropietario,
                                    "pIdBod0.ega",gl.IdBodega);
                         break;
@@ -304,7 +304,7 @@ public class frm_danado_verificacion extends PBase {
         try{
             boolean existe = false;
 
-            LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
+            LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodegaHH");
 
             lblProdDanadoVeri.setText(BePedidoDetVerif.getCodigo()+" "+BePedidoDetVerif.getNombre_Producto()+
                     "\n Cad: "+BePedidoDetVerif.Fecha_Vence+
