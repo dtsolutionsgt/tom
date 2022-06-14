@@ -29,6 +29,7 @@ public class clsBeOperador {
     @Element(required=false) public boolean Transporta=false;
     @Element(required=false) public boolean Pickea=false;
     @Element(required=false) public boolean Verifica=false;
+    @Element(required=false) public boolean Montacarga=false;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public  String Foto;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
@@ -220,12 +221,17 @@ public class clsBeOperador {
     public void setRolOperador(clsBeRol_operador value) {
         RolOperador=value;
     }
-
     public String getFoto() {
         return Foto;
     }
     public void setFoto(String value) {
         Foto=value;
+    }
+    public boolean getMontacarga() {
+        return Montacarga;
+    }
+    public void setMontacarga(boolean value) {
+        Montacarga =value;
     }
 
 }

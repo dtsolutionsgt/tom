@@ -76,6 +76,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
     </ScrollView>
 
     <RelativeLayout
