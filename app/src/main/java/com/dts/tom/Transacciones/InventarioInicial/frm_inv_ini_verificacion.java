@@ -32,6 +32,8 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prod;
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
+import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalle;
+import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalleList;
 import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen;
 import com.dts.classes.Transacciones.Inventario.Productos_Sugeridos.Inv_Stock_Prod.clsBeTrans_inv_stock_prod_sug;
 import com.dts.classes.Transacciones.Inventario.Productos_Sugeridos.Inv_Stock_Prod.clsBeTrans_inv_stock_prod_sugList;
@@ -71,11 +73,14 @@ public class frm_inv_ini_verificacion extends PBase {
     private clsBeTrans_inv_resumen vitem = new clsBeTrans_inv_resumen();
     private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
     public clsBeTrans_inv_stock_prod_sugList listProductosSugeridos;
+    private clsBeTrans_inv_detalle InvDetalle = new clsBeTrans_inv_detalle();
+    private clsBeTrans_inv_detalleList listInvDet = new clsBeTrans_inv_detalleList();
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
 
     private int pIdTramo=0;
+    private double CantidadVer = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +116,11 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try {
 
+            txtUbicVer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) { }
+            });
+
             txtUbicVer.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -141,7 +151,9 @@ public class frm_inv_ini_verificacion extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                            Guardar_Verificacion();
+                            //Guardar_Verificacion();
+
+                        ProcesaRegistro();
                     }
 
                     return false;
@@ -290,19 +302,51 @@ public class frm_inv_ini_verificacion extends PBase {
 
     }
 
+    private boolean validaUbicacion() {
+        boolean esValida = false;
+
+        try {
+            if (BeUbic.Tramo.IdTramo != 0) {
+                if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
+                    esValida =  false;
+                } else {
+                    esValida =  true;
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("validaUbicacion: "+ e.getMessage());
+        }
+        return  esValida;
+    }
+
     private void Procesa_Ubicacion() {
 
         try {
 
-            if (BeUbic.Tramo.IdTramo != 0) {
+            if (!validaUbicacion()) {
+                txtUbicVer.requestFocus();
+                txtUbicVer.setSelectAllOnFocus(true);
+                txtBarraVer.setText("");
+                txtBarraVer.setEnabled(false);
+
+                mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
+            } else {
+                txtBarraVer.setEnabled(true);
+                txtBarraVer.requestFocus();
+                txtBarraVer.setSelectAllOnFocus(true);
+            }
+
+            /*if (BeUbic.Tramo.IdTramo != 0) {
                 if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
-                    mu.msgbox("La ubicación no partenece al tramo: " + BeUbic.Tramo.Descripcion);
+
+
                 }
             }
 
             if (BeUbic.Nivel > 1) {
 
-            }
+            }*/
 
             lblUbicDes.setText("" + BeUbic.Descripcion);
 
@@ -442,7 +486,20 @@ public class frm_inv_ini_verificacion extends PBase {
     }
 
     public void BotonGuardarVerificacion(View view){
-        Guardar_Verificacion();
+        ProcesaRegistro();
+    }
+
+    private void ProcesaRegistro() {
+        try {
+            if (validaUbicacion()) {
+                execws(11);
+                //Guardar_Verificacion();
+            } else {
+                mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
+            }
+        } catch (Exception e) {
+            mu.msgbox("ProcesaRegistro: "+ e.getMessage());
+        }
     }
 
     private void Guardar_Verificacion(){
@@ -672,8 +729,22 @@ public class frm_inv_ini_verificacion extends PBase {
                                 "IdProducto",BeProducto.IdProducto);
 
                     case 10:
-                        callMethod("Get_All_Codigos_By_IdInventario_And_IdBodega","pIdInventario",BeInvEnc.Idinventarioenc,
-                                "pIdBodega",BeInvEnc.IdBodega);
+                        callMethod("Get_All_Codigos_By_IdInventario_And_IdBodega",
+                                         "pIdInventario",BeInvEnc.Idinventarioenc,
+                                               "pIdBodega",BeInvEnc.IdBodega);
+                    case 11:
+                        callMethod("Get_CantidadInvConteo_By_Producto",
+                                         "pIdUbicacion",BeUbic.IdUbicacion,
+                                               "pIdProducto",BeProducto.IdProducto,
+                                               "pIdBodega", gl.IdBodega,
+                                               "pIdPresentacion", IdPresSelect);
+                        break;
+                    case 12:
+                        callMethod("Existe_Conteo",
+                                "pIdUbicacion",BeUbic.IdUbicacion,
+                                      "pIdBodega", gl.IdBodega,
+                                      "pIdProducto", BeProducto.IdProducto);
+                        break;
                 }
 
                 progress.cancel();
@@ -723,6 +794,12 @@ public class frm_inv_ini_verificacion extends PBase {
                     break;
                 case 10:
                     processCodigosSugeridos();
+                    break;
+                case 11:
+                    processValidaCantidadConteo();
+                    break;
+                case 12:
+                    processExisteConteo();
                     break;
 
             }
@@ -892,4 +969,99 @@ public class frm_inv_ini_verificacion extends PBase {
             mu.msgbox("processInvTeorico:"+e.getMessage());
         }
     }
+
+    private void processValidaCantidadConteo() {
+        try {
+            InvDetalle = xobj.getresult(clsBeTrans_inv_detalle.class, "Get_CantidadInvConteo_By_Producto");
+
+            execws(12);
+
+        } catch (Exception e) {
+             mu.msgbox("processValidaCantidadConteo: "+ e.getMessage());
+        }
+    }
+    private void processExisteConteo() {
+        try {
+            listInvDet = xobj.getresult(clsBeTrans_inv_detalleList.class, "Existe_Conteo");
+
+            if (InvDetalle != null) {
+                CantidadVer = Double.valueOf(txtCantVer.getText().toString());
+                if (CantidadVer != InvDetalle.Cantidad) {
+                    msgValidaCantidadConteo();
+                } else {
+                    Guardar_Verificacion();
+                }
+            } else {
+                if (listInvDet != null) {
+                    if (listInvDet.items != null) {
+                        if (listInvDet.items.size() > 0) {
+                            msgAgregarProducto();
+                        }
+                    } else {
+                        Guardar_Verificacion();
+                    }
+                } else {
+                    Guardar_Verificacion();
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("processExisteConteo: "+e.getMessage());
+        }
+    }
+
+    private void msgValidaCantidadConteo() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("La cantidad contada ("+ InvDetalle.Cantidad +") no coincide con la cantidad  ("+ CantidadVer +") de la verificación. ¿La cantidad es correcta?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Procede a guardar
+                Guardar_Verificacion();
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
+
+    private void msgAgregarProducto() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("El código de producto no coincide, ¿Agregar verificación de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Procede a guardar
+                Guardar_Verificacion();
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
+
+
 }

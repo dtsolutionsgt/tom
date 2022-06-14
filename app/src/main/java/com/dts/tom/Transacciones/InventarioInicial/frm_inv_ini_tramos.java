@@ -44,7 +44,7 @@ public class frm_inv_ini_tramos extends PBase {
 
     public static boolean IngUbic=false;
 
-    private clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
+    public static clsBeTrans_inv_tramoList Listtramos = new clsBeTrans_inv_tramoList();
     private ArrayList<clsBeTrans_inv_tramo> BeListTramos = new ArrayList<clsBeTrans_inv_tramo>();
     private list_adapt_tramos_inv_ini adapter;
     public static clsBeTrans_inv_tramo BeInvTramo;

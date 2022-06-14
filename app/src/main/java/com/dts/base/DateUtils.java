@@ -964,11 +964,20 @@ public class DateUtils {
 
 	}
 
-	public String Fecha_Completa() {
+	public String Fecha_CompletaT() {
 
 			Calendar c = Calendar.getInstance();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			String strDate = sdf.format(c.getTime());
+
+		return strDate;
+	}
+
+	public String Fecha_Completa() {
+
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String strDate = sdf.format(c.getTime());
 
 		return strDate;
 	}

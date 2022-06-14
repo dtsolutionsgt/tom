@@ -33,18 +33,22 @@ import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_st
 import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_stock_prodList;
 import com.dts.classes.Transacciones.Inventario.InventarioTramo.clsBeTrans_inv_tramo;
 import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalle;
+import com.dts.classes.Transacciones.Inventario.Inventario_Detalle.clsBeTrans_inv_detalleList;
+import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumen;
+import com.dts.classes.Transacciones.Inventario.Inventario_Resumen.clsBeTrans_inv_resumenList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeInvTramo;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.BeUbic;
 import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.IngUbic;
+//import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.Listtramos;
 
 public class frm_inv_ini_conteo extends PBase {
 
@@ -69,6 +73,7 @@ public class frm_inv_ini_conteo extends PBase {
     private boolean tiene_lotes,tiene_fechas;
     private String LoteSelect,FechaSelect;
     private boolean editarFecha, editarLote, bloqueaConteo;
+    private double CantidadConteo = 0;
 
     // date
     private int year;
@@ -83,6 +88,9 @@ public class frm_inv_ini_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_detalle  ditem = new clsBeTrans_inv_detalle();
     private clsBeTrans_inv_stock_prod BeLotes = new clsBeTrans_inv_stock_prod();
+    private clsBeTrans_inv_detalleList listInvDet = new clsBeTrans_inv_detalleList();
+    private clsBeTrans_inv_resumen BeInvResumen = new clsBeTrans_inv_resumen();
+    private clsBeTrans_inv_resumenList listInvRes= new clsBeTrans_inv_resumenList();
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
@@ -160,12 +168,16 @@ public class frm_inv_ini_conteo extends PBase {
 
         try {
 
+            txtUbicInv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) { }
+            });
+
             txtUbicInv.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtUbicInv.getText().toString().isEmpty()) {
-                            bloqueaConteo = false;
                             execws(2);
                         }
                     }
@@ -201,7 +213,7 @@ public class frm_inv_ini_conteo extends PBase {
                             txtPesoInvIni.setSelectAllOnFocus(true);
                             txtPesoInvIni.requestFocus();
                         }else{
-                            Guardar_Inventario_Conteo();
+                            execws(14);
                         }
                     }
 
@@ -487,16 +499,48 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    private boolean validaUbicacion() {
+        boolean esValida = false;
+        try {
+            if (BeUbic != null) {
+                if (BeUbic.Tramo.IdTramo != 0) {
+                    if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
+                        esValida = false;
+                    } else {
+                        esValida = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("validaUbicacion: "+ e.getMessage());
+        }
+
+        return esValida;
+    }
+
     private void Procesa_Ubicacion() {
 
         try {
 
-            if (BeUbic.Tramo.IdTramo != 0) {
+            if (!validaUbicacion()) {
+                txtUbicInv.requestFocus();
+                txtUbicInv.setSelectAllOnFocus(true);
+                txtCodBarra.setText("");
+                txtCodBarra.setEnabled(false);
+
+                mu.msgbox("La ubicación "+ txtUbicInv.getText().toString() +" no pertenece al tramo: " + BeInvTramo.Nombre_Tramo);
+            } else {
+                txtCodBarra.setEnabled(true);
+                txtCodBarra.requestFocus();
+                txtCodBarra.setSelectAllOnFocus(true);
+            }
+
+            /*if (BeUbic.Tramo.IdTramo != 0) {
                 if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
-                    bloqueaConteo = true;
 
                     txtUbicInv.requestFocus();
                     txtUbicInv.setSelectAllOnFocus(true);
+                    txtCodBarra.setText("");
                     txtCodBarra.setEnabled(false);
 
                     mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
@@ -509,7 +553,7 @@ public class frm_inv_ini_conteo extends PBase {
 
             if (BeUbic.Nivel > 1) {
 
-            }
+            }*/
 
             lblUbicDesc.setText("" + BeUbic.Descripcion);
 
@@ -858,19 +902,55 @@ public class frm_inv_ini_conteo extends PBase {
             boolean aceptamalo=false;
             int vest=0;
 
-            if (!bloqueaConteo) {
-                if (IdEstadoSelect == codestmalo) {
-                    execws(8);
+            if (validaUbicacion()) {
+                if (IdEstadoSelect != 0) {
+                    if (IdEstadoSelect == codestmalo) {
+                        execws(8);
+                    } else {
+                        Guardar_Item();
+                    }
                 } else {
-                    Guardar_Item();
+                    mu.msgbox("El estado no es válido");
                 }
             } else {
-                msgbox("El ubicación no pertenece al tramo: "+ BeInvTramo.Nombre_Tramo);
+                mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
+                txtUbicInv.setText("");
+                lblUbicDesc.setText("");
             }
-
 
         }catch (Exception e){
             mu.msgbox("Guardar_Inventario_Conteo:"+e.getMessage());
+        }
+    }
+
+    private void ExisteConteo() {
+        //clsBeTrans_inv_tramo BeTramo = new clsBeTrans_inv_tramo();
+
+        try {
+            Crea_Item();
+
+            /*if (Listtramos != null) {
+                if (Listtramos.items != null) {
+                    BeTramo = stream(Listtramos.items).where(c-> c.Idtramo == BeUbic.Tramo.IdTramo).first();
+                }
+            }*/
+
+            if (BeInvTramo != null) {
+                if (BeInvTramo.Es_Rack) {
+                    execws(13);
+                } else {
+                    if (ditem.IdPresentacion > 0) {
+                        execws(9);
+                    } else {
+                        Continua_Guardando_Item();
+                    }
+                }
+            } else {
+                mu.msgbox("El tramo no es válido");
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("ExisteConteo: "+e.getMessage());
         }
     }
 
@@ -882,13 +962,13 @@ public class frm_inv_ini_conteo extends PBase {
                 return;
             }
 
-            Crea_Item();
+            ExisteConteo();
 
-            if (ditem.IdPresentacion>0){
+            /*if (ditem.IdPresentacion>0){
                 execws(9);
             }else{
                 Continua_Guardando_Item();
-            }
+            }*/
 
         }catch (Exception e){
             mu.msgbox("Guardar_Item:"+e.getMessage());
@@ -966,7 +1046,7 @@ public class frm_inv_ini_conteo extends PBase {
             ditem.Serie="";
             ditem.Idproductoestado = ""+IdEstadoSelect;
             ditem.Cantidad = Double.parseDouble(txtCantInvIni.getText().toString());
-            ditem.Fecha_captura = du.getFechaActual();
+            ditem.Fecha_captura = du.Fecha_CompletaT();
             ditem.Host = "1";
             ditem.Nom_producto = BeProducto.Nombre;
             ditem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
@@ -975,6 +1055,9 @@ public class frm_inv_ini_conteo extends PBase {
             //#AT20220504 Se agrega IdPropietarioBodega e IdBodega para ser guardados
             ditem.IdPropietarioBodega = InvTeorico.items.get(0).IdPropietarioBodega;
             ditem.IdBodega = gl.IdBodega;
+
+            //Valida si existe un conteo con el  producto y ubicacion
+            //execws(13);
 
         }catch (Exception e){
             mu.msgbox("Crea_Item:"+e.getMessage());
@@ -1028,6 +1111,11 @@ public class frm_inv_ini_conteo extends PBase {
                 }
             }else{
                 txtPesoInvIni.setText("0");
+            }
+
+            if (InvTeorico == null) {
+                mu.msgbox("El producto no es válido: "+txtCodBarra.getText().toString());
+                return false;
             }
 
         }catch (Exception e){
@@ -1138,7 +1226,11 @@ public class frm_inv_ini_conteo extends PBase {
     }
 
     public void BotonGuardar(View view){
-        Guardar_Inventario_Conteo();
+        try {
+            execws(14);
+        } catch (Exception e) {
+            mu.msgbox("BotonGuardar: "+e.getMessage());
+        }
     }
 
     private void Completar_tramo(){
@@ -1337,6 +1429,27 @@ public class frm_inv_ini_conteo extends PBase {
                         break;
                     case 12:
                         callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",utramo);
+                        break;
+                    case 13:
+                        callMethod("Existe_Conteo",
+                                        "pIdUbicacion",BeUbic.IdUbicacion,
+                                              "pIdBodega", gl.IdBodega,
+                                              "pIdProducto", BeProducto.IdProducto);
+                        break;
+                    case 14:
+                        callMethod("Get_CantidadInvVer_By_Producto",
+                                        "pIdUbicacion",BeUbic.IdUbicacion,
+                                              "pIdProducto", BeProducto.IdProducto,
+                                              "pIdBodega", gl.IdBodega,
+                                              "pIdPresentacion", IdPresSelect);
+                        break;
+                    case 15:
+                        callMethod("Existe_Verificacion",
+                                "pIdUbicacion",BeUbic.IdUbicacion,
+                                "pIdBodega", gl.IdBodega,
+                                "pIdProducto", BeProducto.IdProducto);
+                        break;
+
                 }
 
             } catch (Exception e) {
@@ -1394,6 +1507,16 @@ public class frm_inv_ini_conteo extends PBase {
                 case 12:
                     Limpiar_Campos();
                     super.finish();
+                    break;
+                case 13:
+                    processExisteConteo();
+                    break;
+                case 14:
+                    processValidaCantidadVerificacion();
+                    break;
+                case 15:
+                    processExisteVerificacion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1432,7 +1555,9 @@ public class frm_inv_ini_conteo extends PBase {
             if (BeUbic != null) {
                 Procesa_Ubicacion();
             } else {
-                mu.msgbox("La ubicación no existe");
+                mu.msgbox("La ubicación "+ txtUbicInv.getText().toString()+" no existe.");
+                txtUbicInv.setText("");
+                lblUbicDesc.setText("");
             }
 
         } catch (Exception e) {
@@ -1629,6 +1754,72 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    private void processExisteConteo() {
+        try {
+
+            listInvDet = xobj.getresult(clsBeTrans_inv_detalleList.class, "Existe_Conteo");
+
+            if (listInvDet != null) {
+                if (listInvDet.items.size() > 0) {
+                    msgExisteConteo();
+                }
+            } else {
+                if (ditem.IdPresentacion>0){
+                    execws(9);
+                }else{
+                    Continua_Guardando_Item();
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processExisteConteo: "+e.getMessage());
+        }
+    }
+
+    private void processValidaCantidadVerificacion() {
+        try {
+            BeInvResumen = xobj.getresult(clsBeTrans_inv_resumen.class, "Get_CantidadInvVer_By_Producto");
+
+            execws(15);
+
+
+
+        } catch (Exception e) {
+            mu.msgbox("processValidaCantidadVerificacion: "+e.getMessage());
+        }
+    }
+
+    private void processExisteVerificacion() {
+        try {
+
+            listInvRes = xobj.getresult(clsBeTrans_inv_resumenList.class, "Existe_Verificacion");
+
+            if (BeInvResumen != null) {
+                CantidadConteo = Double.valueOf(txtCantInvIni.getText().toString());
+
+                if (CantidadConteo != BeInvResumen.Cantidad) {
+                    msgValidaCantidadVer();
+                } else {
+                    Guardar_Inventario_Conteo();
+                }
+            } else {
+                if (listInvRes != null) {
+                    if (listInvRes.items != null) {
+                        if (listInvRes.items.size() > 0) {
+                            msgAgregarProducto();
+                        }
+                    } else {
+                        Guardar_Inventario_Conteo();
+                    }
+                } else {
+                    Guardar_Inventario_Conteo();
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("processExisteVerificacion: "+ e.getMessage());
+        }
+    }
+
     private void doExit(){
         BeProducto = new clsBeProducto();
         BeListPres = new clsBeProducto_PresentacionList();
@@ -1639,6 +1830,92 @@ public class frm_inv_ini_conteo extends PBase {
         CodBarra = "";
         super.finish();
     }
+
+    private void msgExisteConteo() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("La ubicación ya reporta un conteo, ¿Quiere contar producto nuevamente en esta ubicación?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Contar de nuevo
+                if (ditem.IdPresentacion>0){
+                    execws(9);
+                }else{
+                    Continua_Guardando_Item();
+                }
+
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
+
+    private void msgValidaCantidadVer() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("La cantidad verificada ("+ BeInvResumen.Cantidad +") no coincide con la cantidad ("+ CantidadConteo +") del conteo,  ¿La cantidad es correcta?.");
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Procede a guardar
+                Guardar_Inventario_Conteo();
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
+
+    private void msgAgregarProducto() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("El código de producto no coincide, ¿Agregar conteo de todas formas?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Procede a guardar
+                Guardar_Inventario_Conteo();
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgAgregarProducto"+e.getMessage());
+        }
+    }
+
 
     @Override
     protected void onResume() {

@@ -18,7 +18,7 @@ public class clsBeTrans_inv_tramo {
     @Element(required=false) public boolean Aplicado=false;
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public String Nombre_Tramo="";
-
+    @Element(required=false) public boolean Es_Rack=false;
 
     public clsBeTrans_inv_tramo() {
     }
@@ -26,7 +26,7 @@ public class clsBeTrans_inv_tramo {
     public clsBeTrans_inv_tramo(int Idinventario,int Idtramo,int Det_idoperador,String Det_estado,
                                 String Det_inicio,String Det_fin,int Res_idoperador,String Res_estado,
                                 String Res_inicio,String Res_fin,boolean Aplicado,int IdBodega,
-                                String Nombre_Tramo) {
+                                String Nombre_Tramo, boolean Es_Rack) {
 
         this.Idinventario=Idinventario;
         this.Idtramo=Idtramo;
@@ -41,6 +41,7 @@ public class clsBeTrans_inv_tramo {
         this.Aplicado=Aplicado;
         this.IdBodega=IdBodega;
         this.Nombre_Tramo=Nombre_Tramo;
+        this.Es_Rack = Es_Rack;
 
     }
 
@@ -122,6 +123,13 @@ public class clsBeTrans_inv_tramo {
     }
     public void setNombre_Tramo(String value) {
         Nombre_Tramo=value;
+    }
+
+    public boolean getEs_Rack() {
+        return Es_Rack;
+    }
+    public void setEs_Rack(Boolean value) {
+        Es_Rack=value;
     }
 
 }
