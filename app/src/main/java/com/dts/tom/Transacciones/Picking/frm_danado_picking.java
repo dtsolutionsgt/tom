@@ -284,7 +284,12 @@ public class frm_danado_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Estados_By_IdPropietario_And_IdBodega","pIdPropietario",gBeProducto.Propietario.IdPropietario,"pIdBodega",gl.IdBodega);
+                        /*callMethod("Get_Estados_By_IdPropietario_And_IdBodega",
+                                "pIdPropietario",gBeProducto.Propietario.IdPropietario,
+                                "pIdBodega",gl.IdBodega);*/
+                        callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
+                                "pIdPropietario",gBeProducto.Propietario.IdPropietario,
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",BeUbicDestino.IdUbicacion,"IdEstado",IdEstadoDanadoSelect,
@@ -329,7 +334,7 @@ public class frm_danado_picking extends PBase {
         try{
             boolean existe = false;
 
-            LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodega");
+            LProductoEstadoDanado = xobj.getresult(clsBeProducto_estadoList.class,"Get_Estados_By_IdPropietario_And_IdBodegaHH");
 
             lblProdDanado.setText(gBePickingUbic.CodigoProducto+" "+gBePickingUbic.NombreProducto+
                     "\n Cad: "+gBePickingUbic.Fecha_Vence+
