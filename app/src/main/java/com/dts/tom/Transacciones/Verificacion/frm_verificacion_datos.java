@@ -819,17 +819,28 @@ public class frm_verificacion_datos extends PBase {
                 }
 
                 //pSubListPickingU.items = AuxList;
+            }else{
+                throw new Exception("#ERR_20220612: La lista de verificación es nula.");
             }
 
             //Llama al método del WS Actualiza_Cant_Peso_Verificacion
-            if (pSubListPickingU.items.size()!=0){
-                if (gl.VerificacionSinLoteFechaVen) {
-                    pTipo = 1;
+            if (pSubListPickingU!=null){
+                if(pSubListPickingU.items!=null){
+                    if (pSubListPickingU.items.size()!=0){
+                        if (gl.VerificacionSinLoteFechaVen) {
+                            pTipo = 1;
+                        }
+                        execws(3);
+                    }else{
+                        throw new Exception("#ERR_20220406: No se obtuvo la lista de verificación.");
+                    }
+                }else{
+                    throw new Exception("#ERR_20220612: No se obtuvo la lista de verificación.");
                 }
-                execws(3);
             }else{
-                throw new Exception("#ERR_20220406: No se obtuvo la lista de verificación.");
+                throw new Exception("#ERR_20220612: No se obtuvo la lista de verificación.");
             }
+
 
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");

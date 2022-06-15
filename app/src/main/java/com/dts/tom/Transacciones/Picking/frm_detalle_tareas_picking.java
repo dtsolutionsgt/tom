@@ -783,7 +783,8 @@ public class frm_detalle_tareas_picking extends PBase {
                     case 4:
                         //#EJC20220608:Evitar enviar objetos completos.
                         //callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
-                        callMethod("Actualizar_PickingEnc_Procesado_Andr","pIdPickingEnc",gBePicking.IdPickingEnc);
+                        callMethod("Actualizar_PickingEnc_Procesado_Andr",
+                                "pIdPickingEnc",gBePicking.IdPickingEnc);
                         break;
 
                     case 5:
