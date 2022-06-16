@@ -292,8 +292,10 @@ public class frm_danado_picking extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",BeUbicDestino.IdUbicacion,"IdEstado",IdEstadoDanadoSelect,
-                                "IdBodega",gl.IdBodega,"pNombreUbicacion",BeUbicDestino.NombreCompleto);
+                        callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado",
+                                        "IdUbicacion",BeUbicDestino.IdUbicacion,
+                                              "IdEstado",IdEstadoDanadoSelect,
+                                              "IdBodega",gl.IdBodega,"pNombreUbicacion",BeUbicDestino.NombreCompleto);
                         break;
                     case 3:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",Integer.parseInt(txtUbicDest.getText().toString()),

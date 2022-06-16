@@ -374,6 +374,8 @@ public class frm_danado_verificacion extends PBase {
 
             Valida = xobj.getresult(Boolean.class,"Ubicacion_Valida_By_IdUbicacion_And_IdEstado");
 
+            //20220615 Revisar este proceso
+            //Valida = true;
             progress.cancel();
 
             if (!Valida){

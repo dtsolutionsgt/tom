@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -84,7 +85,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
     private int TipoPantallaPicking = 0;
-
+    private boolean asignar_operador_linea_picking = false;
 
     public Activity myActivity;
 
@@ -97,10 +98,12 @@ public class frm_detalle_tareas_picking extends PBase {
             gll=((appGlobals) this.getApplication());
             areaprimera = gll.Mostrar_Area_En_HH;
             TipoPantallaPicking = gll.TipoPantallaPicking;
+            asignar_operador_linea_picking = false;
+
             int tipo = 0;
 
             if(TipoPantallaPicking == 3) {
-                tipo = 3;
+                tipo = TipoPantallaPicking;
             } else if(areaprimera) {
                 tipo = 2;
             } else {
@@ -534,9 +537,12 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (plistPickingUbi.items!=null){
 
-                    //AT 20211222 Ya no se agrega un item vacío
-                    //vItem = new  clsBeTrans_picking_ubic();
-                    //BeListPickingUbic.add(vItem);
+                    //#AT20220611 Si asignar_operador_linea_picking = true : filtra por IdOperadorBodega
+                    //el listado de detalle de Picking
+                    /*if (asignar_operador_linea_picking) {
+                        plistPickingUbi.items = stream(plistPickingUbi.items)
+                                                .where(c->c.IdOperadorBodega_Asignado == gl.OperadorBodega.IdOperadorBodega).toList();
+                    }*/
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
@@ -767,7 +773,14 @@ public class frm_detalle_tareas_picking extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_Picking_By_IdPickingEnc","pIdPickingEnc",gl.gIdPickingEnc);
+                        int IdOperadorBodega = 0;
+
+                        if (asignar_operador_linea_picking) {
+                            IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
+                        }
+
+                        callMethod("Get_Picking_By_IdPickingEnc",
+                                         "pIdPickingEnc",gl.gIdPickingEnc, "pIdOperadorBodega", IdOperadorBodega);
                         break;
                     case 2:
                         //#EJC20220608: Cambio en método.
@@ -913,7 +926,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             progress_setMessage("Finalizando actualización de estado...");
 
-            int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado");
+            int Act = xobj.getresult(Integer.class,"Actualizar_PickingEnc_Procesado_Andr");
 
             progress.cancel();
 

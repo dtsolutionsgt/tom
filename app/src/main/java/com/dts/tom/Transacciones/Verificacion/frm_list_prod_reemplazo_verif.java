@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdEstadoDanado;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdUbicacionDestino;
@@ -56,6 +57,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private boolean Distinto=false;
 
     public static boolean reemplazoCorrecto=false;
+    private boolean ConExistencia = false;
 
     private Cursor DT;
 
@@ -80,6 +82,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         btnBack = (Button)findViewById(R.id.btnBack);
 
         pCantTotal = CantReemplazar;
+        ConExistencia = false;
         setHandlers();
 
         ProgressDialog("Listando existencias de producto:"+gBeProducto.Codigo);
@@ -174,19 +177,38 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                                 "gIdBodega", gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Reemplazar_ListPickingUbic_Verificacion",
-                                   "plistPickingUbi", BePickingUbic,
-                                   "pBeStockRes", tmpBeStock_Res,
-                                   "pIdPickingEnc", pSubListPickingU.items.get(0).getIdPickingEnc(),
-                                   "pIdOperador", gl.OperadorBodega.getIdOperador(),
-                                   "pHost", "1",
-                                   "pIdBodega", gl.IdBodega,
-                                   "pIdEmpresa", gl.IdEmpresa,
-                                   "pIdUbicDestino", IdUbicacionDestino,
-                                   "pIdEstadoDestino", IdEstadoDanado,
-                                   "pCantLinea", selitem.Cant,
-                                   "pCantReemplazar", CantReemplazar,
-                                   "pCantTotal", pCantTotal);
+                        if (ConExistencia) {
+                            callMethod("Reemplazar_ListPickingUbic_Verificacion",
+                                    "plistPickingUbi", BePickingUbic,
+                                    "pBeStockRes", tmpBeStock_Res,
+                                    "pIdPickingEnc", pSubListPickingU.items.get(0).getIdPickingEnc(),
+                                    "pIdOperador", gl.OperadorBodega.getIdOperador(),
+                                    "pHost", "1",
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdEmpresa", gl.IdEmpresa,
+                                    "pIdUbicDestino", IdUbicacionDestino,
+                                    "pIdEstadoDestino", IdEstadoDanado,
+                                    "pCantLinea", selitem.Cant,
+                                    "pCantReemplazar", CantReemplazar,
+                                    "pCantTotal", pCantTotal,
+                                    "ConExistencia", ConExistencia);
+                        } else {
+                            callMethod("Reemplazar_ListPickingUbic_Verificacion",
+                                    "plistPickingUbi", pSubListPickingU.items.get(0),
+                                    "pBeStockRes", tmpBeStock_Res,
+                                    "pIdPickingEnc", pSubListPickingU.items.get(0).getIdPickingEnc(),
+                                    "pIdOperador", gl.OperadorBodega.getIdOperador(),
+                                    "pHost", "1",
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdEmpresa", gl.IdEmpresa,
+                                    "pIdUbicDestino", IdUbicacionDestino,
+                                    "pIdEstadoDestino", IdEstadoDanado,
+                                    "pCantLinea", 0,
+                                    "pCantReemplazar", CantReemplazar,
+                                    "pCantTotal", pCantTotal,
+                                    "ConExistencia", ConExistencia);
+                        }
+
                         break;
                     case 3:
                         callMethod("Reemplaza_Producto_Dannado_Menor",
@@ -259,6 +281,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             //vCant = xobj.getresultSingle(Double.class,"vCant");
 
             if (DT.getCount()>0){
+                ConExistencia = true;
 
                 progress.setMessage("Procesando datos de StockRes...");
 
@@ -268,16 +291,12 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
                 Lista_Inventario_Disponible();
 
-            }else{
-                toastlong("No se ha encontrado stock disponible para el producto: "+BePedidoDetVerif.Codigo+" - "+BePedidoDetVerif.Nombre_Producto);
-                progress.cancel();
+            } else {
+                ConExistencia = false;
+                msgAskMarcarDanado("No hay existencia de este producto en otra ubicación"+
+                        "\n¿Marcar como producto para reemplazo de todas formas?");
             }
 
-            //#AT Pendiente de validar para aplicar No Encontrado en la Verificación
-            /*if (vCant == 0) {
-                msgAskMarcarDanado("No hay existencia de este producto en otra ubicación"+
-                            "\n¿Marcar como producto para reemplazo de todas formas?");
-            }*/
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("processListStockRes:"+e.getMessage());
@@ -511,7 +530,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             pSubListPickingU.items = AuxList;
 
             //Llama al método del WS Marcar_Danado
-            execws(4);
+            execws(2);
 
         }catch (Exception ex){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
