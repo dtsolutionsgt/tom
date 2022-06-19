@@ -1584,7 +1584,7 @@ public class frm_Packing extends PBase {
                     case 9:
                         callMethod("Existe_Lp_By_Licencia_And_IdBodega",
                                          "pLic_Plate",pLicensePlate,
-                                               "pIdBodega", gl.IdBodega);
+                                         "pIdBodega", gl.IdBodega);
                         break;
                     case 10:
                         //#CKFK 20210617 Agregué el llamado a esta función para obtener el LP para el Packing
@@ -1891,7 +1891,7 @@ public class frm_Packing extends PBase {
                         ListBeStockPallet = new clsBeProductoList();
                         ListBeStockPallet.items = AuxList;
 
-                        if (AuxList.size() == 1){
+                        if (AuxList.size() == 1 && !txtPrd.getText().toString().isEmpty()){
 
                             txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
                             BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
@@ -2208,7 +2208,7 @@ public class frm_Packing extends PBase {
                         ListBeStockPallet = new clsBeProductoList();
                         ListBeStockPallet.items = AuxList;
 
-                        if (AuxList.size() == 1){
+                        if (AuxList.size() == 1 && !txtPrd.getText().toString().isEmpty() ){
 
                             txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
                             BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);

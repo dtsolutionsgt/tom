@@ -1498,7 +1498,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 18:
-                        callMethod("Existe_Lp_In_Stock","pLic_Plate",pLicensePlate);
+                        callMethod("Existe_Lp_By_Licencia_And_IdBodega",
+                                "pLic_Plate",pLicensePlate,
+                                "pIdBodega",gl.IdBodega);
                         break;
                     case 19:
                         callMethod("Es_Pallet_No_Estandar","pStock",pStock);

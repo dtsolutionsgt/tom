@@ -109,6 +109,8 @@ public class frm_picking_datos extends PBase {
     private boolean btnEnterLp = false, btnEnterCod = false;
     private boolean ReubicarPickingAereo = false;
 
+    public static int IdUbicacionPicking = 0;
+    public static String NombreUbicacionPicking = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1951,6 +1953,8 @@ public class frm_picking_datos extends PBase {
         try {
             if (Tipo == 1) {
                 browse = 1;
+                IdUbicacionPicking = selitem.IdUbicacion;
+                NombreUbicacionPicking = selitem.NombreUbicacion;
                 startActivity(new Intent(this, frm_danado_picking.class));
             }else {
                 browse = 1;

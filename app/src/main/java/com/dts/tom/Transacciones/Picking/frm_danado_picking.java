@@ -88,6 +88,11 @@ public class frm_danado_picking extends PBase {
                     IdEstadoDanadoSelect=LProductoEstadoDanado.items.get(position).IdEstado;
                     txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
+                    if (txtUbicDest.getText().toString().isEmpty() || txtUbicDest.getText().toString().equals("0")) {
+                        txtUbicDest.setText(frm_picking_datos.IdUbicacionPicking+"");
+                        lblNomUbic.setText(frm_picking_datos.NombreUbicacionPicking);
+                    }
+
                     /*BeUbicDestino = new clsBeBodega_ubicacion();
                     BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                     IdUbicacionDestino = BeUbicDestino.IdUbicacion;
@@ -155,25 +160,37 @@ public class frm_danado_picking extends PBase {
             validaUbicacion();
 
             String destino = "";
+            BeUbicDestino = new clsBeBodega_ubicacion();
 
             if (existe) {
                 destino = lblNomUbic.getText().toString();
-                BeUbicDestino = new clsBeBodega_ubicacion();
                 BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
                 IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+
                 execws(2);
+
             } else {
-                destino = txtUbicDest.getText().toString();
+                destino = frm_picking_datos.NombreUbicacionPicking;//txtUbicDest.getText().toString();
+                BeUbicDestino.IdUbicacion = frm_picking_datos.IdUbicacionPicking;
+                IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+
+                msgMover("Producto: "+gBeProducto.Nombre
+                        + "\n Destino: "+ BeUbicDestino.NombreCompleto
+                        + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                        + "\n ¿Mover?");
             }
 
-            BeUbicDestino = new clsBeBodega_ubicacion();
+            //#CKFK20220618 Puse esto en comentario y lo llamo dentro del process del execws(3)
+            // porque es el que se llama dentro del process del 2
+            /*BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
             IdUbicacionDestino = BeUbicDestino.IdUbicacion;
 
             msgMover("Producto: "+gBeProducto.Nombre
-                    + "\n Destino: "+ destino
+                    + "\n Destino: "+ BeUbicDestino.NombreCompleto
                     + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
                     + "\n ¿Mover?");
+*/
         }
     }
 
@@ -381,7 +398,6 @@ public class frm_danado_picking extends PBase {
 
             execws(3);
 
-
         }catch (Exception e){
             mu.msgbox("processUbicacion:"+e.getMessage());
         }
@@ -402,11 +418,14 @@ public class frm_danado_picking extends PBase {
                 return;
             }
 
-            msgMover("Producto: "+gBeProducto.Nombre
-                            + "\n Destino: "+lblNomUbic.getText().toString()
-                            + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
-                            + "\n ¿Mover?");
+            BeUbicDestino = new clsBeBodega_ubicacion();
+            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
+            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
 
+            msgMover("Producto: "+gBeProducto.Nombre
+                    + "\n Destino: "+ BeUbicDestino.NombreCompleto
+                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
+                    + "\n ¿Mover?");
 
         }catch (Exception e){
             mu.msgbox("processUbicacionValida:"+e.getMessage());
