@@ -520,12 +520,20 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     }
 
     private void Marcar_Danado(){
+        List AuxList;
         try{
 
-            List AuxList = stream(pSubListPickingU.items)
-                    .where (z -> z.getIdPedidoDet() == BePedidoDetVerif.getIdPedidoDet())
-                    .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() !=  0)
-                    .toList();
+            if (gl.VerificacionConsolidada) {
+                AuxList = stream(pSubListPickingU.items)
+                        .where(z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                        .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() != 0)
+                        .toList();
+            } else {
+                AuxList = stream(pSubListPickingU.items)
+                        .where(z -> z.getIdPedidoDet() == BePedidoDetVerif.getIdPedidoDet())
+                        .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() != 0)
+                        .toList();
+            }
 
             pSubListPickingU.items = AuxList;
 

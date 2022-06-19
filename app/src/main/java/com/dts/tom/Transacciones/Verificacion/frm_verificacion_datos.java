@@ -333,11 +333,26 @@ public class frm_verificacion_datos extends PBase {
 
                 if (BePickingUbicList !=null){
 
-                    AuxList = stream(BePickingUbicList.items)
-                            .where (z -> z.CodigoProducto.equals(Codigo))
-                            .where(z -> z.Lote.equals(Lote))
-                            .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
-                            .toList();
+                    if  (gl.VerificacionConsolidada) {
+                        AuxList = stream(BePickingUbicList.items)
+                                .where (z -> z.CodigoProducto.equals(Codigo))
+                                .toList();
+                    } else {
+                        if (Lp.equals("")) {
+                            AuxList = stream(BePickingUbicList.items)
+                                    .where(z -> z.CodigoProducto.equals(Codigo))
+                                    .where(z -> z.Lote.equals(Lote))
+                                    .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                                    .toList();
+                        } else {
+                            AuxList = stream(BePickingUbicList.items)
+                                    .where(z -> z.CodigoProducto.equals(Codigo))
+                                    .where(z -> z.Lote.equals(Lote))
+                                    .where(z -> z.Lic_plate.equals(Lp))
+                                    .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                                    .toList();
+                        }
+                    }
 
                     pSubListPickingU.items = AuxList;
                 }
@@ -789,7 +804,6 @@ public class frm_verificacion_datos extends PBase {
 
                         AuxList = stream(BePickingUbicList.items)
                                 .where(c -> c.CodigoProducto.equals(Codigo))
-                                .where(c -> c.Lic_plate.equals(Lp))
                                 .where(c -> c.IdPresentacion == tmpPresentacion)
                                 .where(c -> c.getCantidad_Recibida() - c.getCantidad_Verificada() != 0)
                                 .toList();
@@ -1135,7 +1149,18 @@ public class frm_verificacion_datos extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Reemplazar();
+
+                    if (gl.VerificacionConsolidada) {
+                        if (pSubListPickingU != null) {
+                            if (pSubListPickingU.items != null) {
+                                if (pSubListPickingU.items.size() > 1) {
+                                    startActivity(new Intent(frm_verificacion_datos.this, frm_verificacion_consolidada_detalle.class));
+                                }
+                            }
+                        }
+                    } else {
+                        Reemplazar();
+                    }
                 }
             });
 

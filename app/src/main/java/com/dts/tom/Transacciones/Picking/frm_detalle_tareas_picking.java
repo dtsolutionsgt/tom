@@ -633,17 +633,16 @@ public class frm_detalle_tareas_picking extends PBase {
             if (btnRes_Det.getText().toString().equals("C.")){
 
                 btnRes_Det.setText("D.");
-
                 TipoLista=2;
-
                 execws(3);
 
             }else{
-                btnRes_Det.setText("C.");
+                //AT20220618 Se puso en comentario por nuevos cambios solicitados por Erik, aun sigue en desarrollo
+               /* btnRes_Det.setText("C.");
 
                 TipoLista=1;
 
-                execws(3);
+                execws(3);*/
             }
 
         }catch (Exception e) {

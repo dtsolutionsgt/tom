@@ -350,12 +350,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     }
 
     private void Marcar_Danado(){
-        TipoLista  = 1;
         execws(4);
     }
 
     private void Marcar_No_Encontrado(){
-        TipoLista  = 1;
         execws(4);
     }
 

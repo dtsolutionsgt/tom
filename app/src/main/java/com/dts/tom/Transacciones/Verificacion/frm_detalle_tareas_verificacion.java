@@ -25,6 +25,7 @@ import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -74,6 +75,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
     private clsBeDetallePedidoAVerificarList auxListaDetPed = new clsBeDetallePedidoAVerificarList();
     private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
+    private clsBeProducto BeProducto = new clsBeProducto();
+    private boolean buscarPres = false;
 
     private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
 
@@ -250,7 +253,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
-                                GetFila();
+                                //AT20220618 Ahora vamos a busacar el codigo en el WS
+                                //en base al codigo de barra que ingrese el usuario
+                                execws(11);
+
                                 return true;
                         }
                     }
@@ -290,7 +296,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     }
 
     private void GetFila(){
-
+        clsBeDetallePedidoAVerificar vPedidoVerif;
         try{
 
             if (!txtCodProd.getText().toString().isEmpty()) {
@@ -302,9 +308,17 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 }
 
                 String finalSelProd = selProd;
-                clsBeDetallePedidoAVerificar vPedidoVerif  = stream(pListaPedidoDet.items)
-                                                        .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
-                                                        .first();
+
+                if (buscarPres) {
+                     vPedidoVerif  = stream(pListaPedidoDet.items)
+                            .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
+                            .where(c -> c.IdPresentacion != 0)
+                            .first();
+                } else {
+                    vPedidoVerif  = stream(pListaPedidoDet.items)
+                            .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
+                            .first();
+                }
 
                 if (vPedidoVerif != null) {
                     vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
@@ -389,6 +403,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         callMethod("Get_Detalle_Verificacion_Consolidada",
                                 "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
+                    case 11:
+                        callMethod("Get_Codigo_By_CodigoBarra",
+                                        "pCodigoBarra", txtCodProd.getText().toString(),
+                                              "pIdBodega", gl.IdBodega);
+                        break;
                 }
 
             }catch (Exception e){
@@ -432,6 +451,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     break;
                 case 10:
                     processTareasVerificacionSinLoteFechaVen();
+                    break;
+                case 11:
+                    processCodigoBarraProducto();
                     break;
             }
 
@@ -559,6 +581,32 @@ public class frm_detalle_tareas_verificacion extends PBase {
         } catch (Exception e) {
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processCodigoBarraProducto() {
+        try {
+            buscarPres = false;
+
+            BeProducto = xobj.getresult(clsBeProducto.class, "Get_Codigo_By_CodigoBarra");
+
+            if (BeProducto != null) {
+
+                if (!BeProducto.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Codigo_barra)) {
+                    buscarPres = false;
+                } else if(!BeProducto.Presentacion.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Presentacion.Codigo_barra)) {
+                    buscarPres = true;
+                }
+
+                txtCodProd.setText(BeProducto.Codigo);
+                GetFila();
+            } else {
+                GetFila();
+            }
+
+
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }

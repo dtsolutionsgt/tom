@@ -185,7 +185,6 @@
     </RelativeLayout>
 
 
-
     <Button
         android:id="@+id/btnRes_Det"
         android:layout_width="49dp"
