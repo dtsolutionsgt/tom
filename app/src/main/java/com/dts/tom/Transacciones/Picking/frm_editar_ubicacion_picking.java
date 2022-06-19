@@ -30,6 +30,7 @@ public class frm_editar_ubicacion_picking extends PBase {
     private XMLObject xobj;
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
+    private boolean CambioUbicRealizado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class frm_editar_ubicacion_picking extends PBase {
         lblProducto.setText(selitem.CodigoProducto+" - "+selitem.NombreProducto);
         lblUbicActual.setText(selitem.NombreUbicacion);
 
+        CambioUbicRealizado = false;
         setHandlers();
 
     }
@@ -86,7 +88,7 @@ public class frm_editar_ubicacion_picking extends PBase {
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra", IdUbicacion, "pIdBodega", gl.IdBodega);
                         break;
                     case 2:
-                        callMethod("Actualiza_Ubicacion_Picking", "pUbicacion",IdUbicacion, "pIdStock", selitem.IdStock);
+                        callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock", "pIdStock", selitem.IdStock, "pIdBodega", gl.IdBodega, "pIdUbicacion",IdUbicacion);
                         break;
                 }
 
@@ -134,8 +136,14 @@ public class frm_editar_ubicacion_picking extends PBase {
     private void processCambioUbic() {
         try {
 
-        } catch (Exception e) {
+            CambioUbicRealizado = xobj.get(Boolean.class, "Actualizar_Ubicaciones_Reservadas_By_IdStock");
 
+            if (CambioUbicRealizado) {
+                super.finish();
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processCambioUbic: "+e.getMessage());
         }
     }
 
@@ -164,7 +172,7 @@ public class frm_editar_ubicacion_picking extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    toast("Esto es una prueba");
+                    execws(2);
                 }
             });
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {

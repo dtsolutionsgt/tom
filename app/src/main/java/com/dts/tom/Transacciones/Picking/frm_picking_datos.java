@@ -1910,6 +1910,21 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void processReservaIdStock() {
+
+        try {
+
+            ReubicarPickingAereo = xobj.get(Boolean.class, "Get_All_Reserva_By_IdStock");
+
+            if (ReubicarPickingAereo) {
+                msgCambioUbicacion("Desea realizar un cambio de ubicación");
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processReservaIdStock: "+e.getMessage());
+        }
+    }
+
     public void verImagenes(View view) {
         progress_setMessage("Cargando imágenes...");
         progress.show();
@@ -2085,6 +2100,12 @@ public class frm_picking_datos extends PBase {
                     case 10:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
                         break;
+                    case 11:
+                        callMethod("Get_All_Reserva_By_IdStock",
+                                        "pIdStock", selitem.IdStock,
+                                              "pIdBodega", gl.IdBodega,
+                                              "pIdPedido", selitem.IdPedidoEnc);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -2128,6 +2149,9 @@ public class frm_picking_datos extends PBase {
                     doExit();
                 case 10:
                     processGetFotosProducto();
+                    break;
+                case 11:
+                    processReservaIdStock();
                     break;
             }
 
@@ -2366,9 +2390,7 @@ public class frm_picking_datos extends PBase {
             //#EJC20220524: Validar si se reubica a posición de piso.
             if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
                 if (gBePickingUbic.Ubicacion.Nivel >= 2) {
-                    ReubicarPickingAereo = true;
-
-                    msgCambioUbicacion("Desea realizar un cambio de ubicación");
+                    execws(11);
                 }
             }
 
@@ -2565,6 +2587,7 @@ public class frm_picking_datos extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    frm_picking_datos.super.finish();
                     startActivity(new Intent(frm_picking_datos.this, frm_editar_ubicacion_picking.class));
                 }
             });
