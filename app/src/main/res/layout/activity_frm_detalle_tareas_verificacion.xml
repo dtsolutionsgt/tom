@@ -944,7 +944,9 @@
         android:layout_above="@+id/relbot"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
+        android:minHeight="48dp"
         android:text="Pendientes"
+        android:checked="true"
         android:textSize="18sp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -961,6 +963,7 @@
         android:onClick="finalizarTareaVerificacion"
         android:src="@drawable/ok_btn"
         app:fabCustomSize="60dp"
-        app:maxImageSize="35dp" />
+        app:maxImageSize="35dp"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </RelativeLayout>
