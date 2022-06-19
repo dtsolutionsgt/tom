@@ -29,6 +29,8 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBeProducto;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.IdUbicacionPicking;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.NombreUbicacionPicking;
 
 public class frm_danado_picking extends PBase {
 
@@ -89,8 +91,8 @@ public class frm_danado_picking extends PBase {
                     txtUbicDest.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
 
                     if (txtUbicDest.getText().toString().isEmpty() || txtUbicDest.getText().toString().equals("0")) {
-                        txtUbicDest.setText(frm_picking_datos.IdUbicacionPicking+"");
-                        lblNomUbic.setText(frm_picking_datos.NombreUbicacionPicking);
+                        txtUbicDest.setText(IdUbicacionPicking+"");
+                        lblNomUbic.setText(NombreUbicacionPicking);
                     }
 
                     /*BeUbicDestino = new clsBeBodega_ubicacion();
@@ -170,8 +172,8 @@ public class frm_danado_picking extends PBase {
                 execws(2);
 
             } else {
-                destino = frm_picking_datos.NombreUbicacionPicking;//txtUbicDest.getText().toString();
-                BeUbicDestino.IdUbicacion = frm_picking_datos.IdUbicacionPicking;
+                destino = NombreUbicacionPicking;//txtUbicDest.getText().toString();
+                BeUbicDestino.IdUbicacion = IdUbicacionPicking;
                 IdUbicacionDestino = BeUbicDestino.IdUbicacion;
 
                 msgMover("Producto: "+gBeProducto.Nombre
@@ -315,8 +317,11 @@ public class frm_danado_picking extends PBase {
                                               "IdBodega",gl.IdBodega,"pNombreUbicacion",BeUbicDestino.NombreCompleto);
                         break;
                     case 3:
-                        callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado","IdUbicacion",Integer.parseInt(txtUbicDest.getText().toString()),
-                                "IdEstado",IdEstadoDanadoSelect,"IdBodega",gl.IdBodega,"pNombreUbicacion",vNomUbicDestino);
+                        callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado",
+                                "IdUbicacion",Integer.parseInt(txtUbicDest.getText().toString()),
+                                "IdEstado",IdEstadoDanadoSelect,
+                                "IdBodega",gl.IdBodega,
+                                "pNombreUbicacion",vNomUbicDestino);
                         break;
                 }
 

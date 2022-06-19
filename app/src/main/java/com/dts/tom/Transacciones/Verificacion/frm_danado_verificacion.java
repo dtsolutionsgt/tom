@@ -22,6 +22,7 @@ import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.Picking.frm_picking_datos;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,7 @@ public class frm_danado_verificacion extends PBase {
     public static int IdUbicacionDestino=0;
     public static int IdEstadoDanado = 0;
     public static String vNomUbicDestino="";
+    public static boolean existe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,7 @@ public class frm_danado_verificacion extends PBase {
 
                     aplicarReemplazo= false;
 
-                    getNombreUbicacion(txtUbicDestVeri.getText().toString());
+                   // getNombreUbicacion(txtUbicDestVeri.getText().toString());
 
                 }
 
@@ -139,7 +141,26 @@ public class frm_danado_verificacion extends PBase {
 
                         aplicarReemplazo = true;
 
-                        getNombreUbicacion(txtUbicDestVeri.getText().toString());
+                        //getNombreUbicacion(txtUbicDestVeri.getText().toString());
+
+                        if (!txtUbicDestVeri.getText().toString().isEmpty()){
+
+                            validaUbicacion();
+
+                            BeUbicDestino = new clsBeBodega_ubicacion();
+                            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDestVeri.getText().toString().trim());
+                            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+
+                            if (existe) {
+                                execws(2);
+                            } else {
+                                msgMover("Producto: "+ gBeProducto.Nombre
+                                        + "\n Destino: "+txtUbicDestVeri.getText().toString()
+                                        + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanado).select(c->c.Nombre).first()
+                                        + "\n ¿Mover?");
+                            }
+
+                        }
 
                     }
 
@@ -159,6 +180,16 @@ public class frm_danado_verificacion extends PBase {
             mu.msgbox( e.getMessage());
         }
 
+    }
+
+    public void validaUbicacion() {
+        existe = false;
+        for(int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
+            if (LProductoEstadoDanado.items.get(i).IdUbicacionBodegaDefecto == Integer.parseInt(txtUbicDestVeri.getText().toString().trim())) {
+                existe = true;
+                break;
+            }
+        }
     }
 
     private void reemplazaProducto(){
@@ -199,7 +230,7 @@ public class frm_danado_verificacion extends PBase {
 
             aplicarReemplazo = true;
 
-            getNombreUbicacion(txtUbicDestVeri.getText().toString());
+            //getNombreUbicacion(txtUbicDestVeri.getText().toString());
 
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -374,8 +405,6 @@ public class frm_danado_verificacion extends PBase {
 
             Valida = xobj.getresult(Boolean.class,"Ubicacion_Valida_By_IdUbicacion_And_IdEstado");
 
-            //20220615 Revisar este proceso
-            Valida = true;
             progress.cancel();
 
             if (!Valida){
