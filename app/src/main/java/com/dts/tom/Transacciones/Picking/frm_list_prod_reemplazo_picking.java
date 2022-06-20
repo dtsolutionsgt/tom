@@ -666,7 +666,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             boolean StockReservado = false;
 
-            if (TipoLista == 1) {
+            if (TipoLista == 1 || !ConExistencia) {
                 StockReservado = xobj.getresult(Boolean.class,"Reemplazar_ListaPu_By_Stock");
             } else {
                 StockReservado = xobj.getresult(Boolean.class,"Reservar_Stock_By_Stock");
