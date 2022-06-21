@@ -2414,7 +2414,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try{
 
-            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_In_Stock");
+            Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp_By_Licencia_And_IdBodega");
 
             if (Existe_Lp){
                 progress.cancel();
