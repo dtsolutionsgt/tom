@@ -122,11 +122,11 @@ public class frm_editar_ubicacion_picking extends PBase {
            BeUbic = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
            if (BeUbic != null) {
-               msgValidaCambio("Está seguro de realizar el cambio de ubicación a "+BeUbic.Descripcion);
+               msgValidaCambio("Reubicar producto a: "+BeUbic.Descripcion);
                lblUbicDest.setVisibility(View.VISIBLE);
                lblUbicDest.setText(BeUbic.Descripcion);
            } else {
-               toast("Ubicación inválida");
+               toast("Ubicación no válida");
            }
        } catch (Exception e) {
            mu.msgbox("processValidaUbic: "+ e.getMessage());

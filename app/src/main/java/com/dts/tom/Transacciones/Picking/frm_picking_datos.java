@@ -1914,10 +1914,10 @@ public class frm_picking_datos extends PBase {
 
         try {
 
-            ReubicarPickingAereo = xobj.get(Boolean.class, "Get_All_Reserva_By_IdStock");
+            ReubicarPickingAereo = (Boolean) xobj.getSingle("Get_All_Reservas_By_IdStockResult",boolean.class);
 
             if (ReubicarPickingAereo) {
-                msgCambioUbicacion("Desea realizar un cambio de ubicación");
+                msgCambioUbicacion("El producto tiene reservas, reubicar a zona de picking");
             }
 
         } catch (Exception e) {
@@ -2093,15 +2093,12 @@ public class frm_picking_datos extends PBase {
                         callMethod("Actualiza_Picking_Consolidado","pBePickingUbic",gBePickingUbic,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);
-                        /*callMethod("Actualiza_Picking_Consolidado","pBePickingUbicList",pSubListPickingU.items,
-                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
-                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);*/
                         break;
                     case 10:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
                         break;
                     case 11:
-                        callMethod("Get_All_Reserva_By_IdStock",
+                        callMethod("Get_All_Reservas_By_IdStock",
                                         "pIdStock", selitem.IdStock,
                                               "pIdBodega", gl.IdBodega,
                                               "pIdPedido", selitem.IdPedidoEnc);
@@ -2141,8 +2138,19 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 7:
                 case 8:
-                    if (TipoLista==2){
-                        doExit();
+                    //#EJC20220524: Validar si se reubica a posición de piso.
+                    if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+                        if (gBePickingUbic.Ubicacion.Nivel >= 2) {
+                            execws(11);
+                        }else{
+                            if (TipoLista==2){
+                                doExit();
+                            }
+                        }
+                    }else{
+                        if (TipoLista==2){
+                            doExit();
+                        }
                     }
                     break;
                 case 9:
@@ -2387,12 +2395,12 @@ public class frm_picking_datos extends PBase {
             }
 
             ReubicarPickingAereo = false;
-            //#EJC20220524: Validar si se reubica a posición de piso.
-            if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
-                if (gBePickingUbic.Ubicacion.Nivel >= 2) {
-                    execws(11);
-                }
-            }
+//            //#EJC20220524: Validar si se reubica a posición de piso.
+//            if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+//                if (gBePickingUbic.Ubicacion.Nivel >= 2) {
+//                    execws(11);
+//                }
+//            }
 
         }catch (Exception e){
             progress.cancel();
