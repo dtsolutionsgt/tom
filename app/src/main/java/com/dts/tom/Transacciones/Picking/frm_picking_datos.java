@@ -1918,6 +1918,8 @@ public class frm_picking_datos extends PBase {
 
             if (ReubicarPickingAereo) {
                 msgCambioUbicacion("El producto tiene reservas, reubicar a zona de picking");
+            } else {
+                doExit();
             }
 
         } catch (Exception e) {
@@ -2143,14 +2145,12 @@ public class frm_picking_datos extends PBase {
                         if (gBePickingUbic.Ubicacion.Nivel >= 2) {
                             execws(11);
                         }else{
-                            if (TipoLista==2){
-                                doExit();
-                            }
-                        }
-                    }else{
-                        if (TipoLista==2){
+                            //AT20220621 Por instrucción de Carolina quite la condición si TipoLista == 2
                             doExit();
                         }
+                    }else{
+                        //AT20220621 Por instrucción de Carolina quite la condición si TipoLista == 2
+                        doExit();
                     }
                     break;
                 case 9:

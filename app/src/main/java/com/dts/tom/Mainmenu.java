@@ -29,6 +29,7 @@ import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
 import com.dts.tom.Transacciones.Packing.frm_lista_packing;
+import com.dts.tom.Transacciones.Reabastecimiento.frm_reabastecimiento_manual;
 import com.dts.tom.Transacciones.Recepcion.frm_lista_tareas_recepcion;
 
 import java.io.BufferedReader;
@@ -286,6 +287,12 @@ public class Mainmenu extends PBase {
 
               /*  item = clsCls.new clsMenu();
                 item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
+                items.add(item);*/
+
+                //Preguntar si se muestra por operador.
+                /*item = clsCls.new clsMenu();
+                item.ID=12;item.Icon=12;
+                item.Name="Reabastecimiento manual";item.cant=-1;
                 items.add(item);*/
 
                 item = clsCls.new clsMenu();
@@ -682,6 +689,9 @@ public class Mainmenu extends PBase {
 
                 case 11:// Packing
                     startActivity(new Intent(this, frm_lista_packing.class)); break;
+                case 12:// Reabastecimiento manual
+                    startActivity(new Intent(this, frm_reabastecimiento_manual.class));
+                    break;
             }
 
         } catch (Exception e){

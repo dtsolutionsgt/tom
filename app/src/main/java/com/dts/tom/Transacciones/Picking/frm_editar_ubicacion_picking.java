@@ -30,7 +30,7 @@ public class frm_editar_ubicacion_picking extends PBase {
     private XMLObject xobj;
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
-    private boolean CambioUbicRealizado = false;
+    private int CambioUbicRealizado = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class frm_editar_ubicacion_picking extends PBase {
         lblProducto.setText(selitem.CodigoProducto+" - "+selitem.NombreProducto);
         lblUbicActual.setText(selitem.NombreUbicacion);
 
-        CambioUbicRealizado = false;
+        CambioUbicRealizado = 0;
         setHandlers();
 
     }
@@ -122,9 +122,15 @@ public class frm_editar_ubicacion_picking extends PBase {
            BeUbic = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
            if (BeUbic != null) {
-               msgValidaCambio("Reubicar producto a: "+BeUbic.Descripcion);
-               lblUbicDest.setVisibility(View.VISIBLE);
-               lblUbicDest.setText(BeUbic.Descripcion);
+               if ((BeUbic.Nivel == 1 || BeUbic.Nivel == 0 || BeUbic.Ubicacion_picking)
+                    && BeUbic.IdUbicacion != selitem.IdUbicacion){
+
+                   msgValidaCambio("Reubicar producto a: " + BeUbic.Descripcion);
+                   lblUbicDest.setVisibility(View.VISIBLE);
+                   lblUbicDest.setText(BeUbic.Descripcion);
+               } else {
+                   toast("Ubicación no válida");
+               }
            } else {
                toast("Ubicación no válida");
            }
@@ -136,9 +142,10 @@ public class frm_editar_ubicacion_picking extends PBase {
     private void processCambioUbic() {
         try {
 
-            CambioUbicRealizado = xobj.get(Boolean.class, "Actualizar_Ubicaciones_Reservadas_By_IdStock");
+            //CambioUbicRealizado = xobj.get(Integer.class, "Actualizar_Ubicaciones_Reservadas_By_IdStock");
+            CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult",int.class);
 
-            if (CambioUbicRealizado) {
+            if (CambioUbicRealizado > 0) {
                 super.finish();
             }
 

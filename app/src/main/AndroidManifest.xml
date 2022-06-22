@@ -30,6 +30,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".frm_reabastecimiento_manual"
+            android:exported="false" />
+        <activity
             android:name=".frm_verificacion_consolidada_detalle"
             android:exported="false" />
         <activity android:name=".Transacciones.Packing.frm_lista_packing_lp" />
@@ -87,6 +90,7 @@
         <activity android:name=".Transacciones.ProcesaImagen.frm_imagen_completa" />
         <activity android:name=".Transacciones.Picking.frm_editar_ubicacion_picking" />
         <activity android:name=".Transacciones.Verificacion.frm_verificacion_consolidada_detalle" />
+        <activity android:name=".Transacciones.Reabastecimiento.frm_reabastecimiento_manual" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
