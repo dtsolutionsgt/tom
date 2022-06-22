@@ -5484,6 +5484,8 @@ public class frm_recepcion_datos extends PBase {
 
                 BeTransReDet.Presentacion = new clsBeProducto_Presentacion();
 
+                IdPreseSelect = pListTransRecDet.items.get(0).IdPresentacion;
+
                 if (IdPreseSelect>0){
 
                     BeTransReDet.Presentacion.IdPresentacion = IdPreseSelect;

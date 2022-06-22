@@ -327,10 +327,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         mu.msgbox(String.format("No existe el producto %s en esta Verificación",selProd));
                     }
 
-                }else{
+                }else if (AuxList.stream().count() > 1){
 
                     pListaPedidoDet.items = AuxList;
                     Lista_Detalle_Pedido();
+
+                } else if (AuxList.stream().count() == 0) {
+                    toast("No existe el producto en esta verificación.");
                 }
 
                /* if (buscarPres) {
