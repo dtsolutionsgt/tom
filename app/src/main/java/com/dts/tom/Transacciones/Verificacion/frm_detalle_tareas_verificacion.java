@@ -425,9 +425,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                 "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 11:
-                        callMethod("Get_Codigo_By_CodigoBarra",
+                        callMethod("Get_Codigo_By_CodigoBarra_By_Picking",
                                         "pCodigoBarra", txtCodProd.getText().toString(),
-                                              "pIdBodega", gl.IdBodega);
+                                        "pIdBodega", gl.IdBodega,
+                                        "pIdPickingEnc",gl.gIdPickingEnc);
                         break;
                 }
 
@@ -610,7 +611,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
         try {
             buscarPres = false;
 
-            BeProducto = xobj.getresult(clsBeProducto.class, "Get_Codigo_By_CodigoBarra");
+            BeProducto = xobj.getresult(clsBeProducto.class, "Get_Codigo_By_CodigoBarra_By_Picking");
 
             if (BeProducto != null) {
 
@@ -622,6 +623,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 txtCodProd.setText(BeProducto.Codigo);
                 GetFila();
+
             } else {
                 GetFila();
             }
