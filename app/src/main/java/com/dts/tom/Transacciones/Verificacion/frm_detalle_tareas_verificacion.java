@@ -590,7 +590,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             if (gl.gIdPickingEnc>0){
                 //Llama a método del WS Get_All_PickingUbic_By_IdPickingEnc
-                execws(3);
+                //execws(3);
+                plistPickingUbic = gBePedido.Picking.getListaPickingUbic();
+                processPickingUbic();
             }else{
                 progress.cancel();
             }
@@ -704,11 +706,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo listado de Picking Ubic...");
+            /*progress.setMessage("Obteniendo listado de Picking Ubic...");
 
             plistPickingUbic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_For_Verificacion");
 
-            progress.setMessage("Cargando detalle de tarea de verificación");
+            progress.setMessage("Cargando detalle de tarea de verificación");*/
 
             if (gl.pIdPedidoEnc>0){
                 //Llama al método del WS Get_Detalle_By_IdPedidoEnc
