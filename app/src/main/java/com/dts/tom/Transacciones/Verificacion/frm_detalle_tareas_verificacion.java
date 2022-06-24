@@ -24,8 +24,10 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
@@ -45,6 +47,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -76,6 +79,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private clsBeDetallePedidoAVerificarList auxListaDetPed = new clsBeDetallePedidoAVerificarList();
     private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
     private clsBeProducto BeProducto = new clsBeProducto();
+    private clsBeProductoList lBeProducto = new clsBeProductoList();
     private boolean buscarPres = false;
 
     private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
@@ -296,6 +300,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
     }
 
     private void GetFila(){
+        List AuxList = null;
+
         clsBeDetallePedidoAVerificar vPedidoVerif;
         try{
 
@@ -308,7 +314,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 }
 
                 String finalSelProd = selProd;
-                List AuxList;
 
                 AuxList = stream(pListaPedidoDet.items)
                         .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
@@ -335,17 +340,67 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 } else if (AuxList.stream().count() == 0) {
                     toast("No existe el producto en esta verificación.");
                 }
+            }else{
 
-               /* if (buscarPres) {
-                     vPedidoVerif  = stream(pListaPedidoDet.items)
-                            .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
-                            .where(c -> c.IdPresentacion != 0)
-                            .first();
-                } else {
-                    vPedidoVerif  = stream(pListaPedidoDet.items)
-                            .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
-                            .first();
-                }*/
+                if (lBeProducto.items.stream().count()>1){
+
+                    List TempList;
+                    int j = 0;
+
+                    for (clsBeProducto BeProd: lBeProducto.items){
+
+                        if (j==0){
+                            AuxList = stream(pListaPedidoDet.items)
+                                    .where(c -> c.getCodigo().equals(BeProd.Codigo))
+                                    .toList();
+                        }else{
+
+                            TempList = stream(pListaPedidoDet.items)
+                                    .where(c -> c.getCodigo().equals(BeProd.Codigo))
+                                    .toList();
+
+                            if (TempList.size()>0) {
+                                for (int i = 0; i <TempList.size(); i++) {
+                                    AuxList.add(AuxList.size(),TempList.get(i));
+                                }
+                            }
+                        }
+                        j+=1;
+                    }
+                }
+
+                if (AuxList!=null){
+
+                    if (AuxList.size()==1){
+
+                        clsBeDetallePedidoAVerificarList pListaAux = new clsBeDetallePedidoAVerificarList();
+
+                        pListaAux.items = AuxList;
+
+                        String finalSelProd1  = pListaAux.items.get(0).Codigo;
+
+                        vPedidoVerif  = stream(pListaPedidoDet.items)
+                                .where(c -> c.getCodigo().equals(finalSelProd1) || c.getLicPlate().equals(finalSelProd1))
+                                .first();
+
+                        if (vPedidoVerif != null) {
+                            vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
+                            Procesa_Registro(vPedidoVerif);
+                        } else {
+                            mu.msgbox(String.format("No existe el producto %s en esta Verificación",finalSelProd1));
+                        }
+
+                    }else if (AuxList.size() > 1){
+
+                        pListaPedidoDet.items = AuxList;
+                        Lista_Detalle_Pedido();
+
+                    } else if (AuxList.stream().count() == 0) {
+                        toast("No existe el producto en esta verificación.");
+                    }
+                }else {
+                    toast("No existe el producto en esta verificación.");
+                }
 
             }
 
@@ -425,9 +480,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                 "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 11:
-                        callMethod("Get_Codigo_By_CodigoBarra",
-                                        "pCodigoBarra", txtCodProd.getText().toString(),
-                                              "pIdBodega", gl.IdBodega);
+                        callMethod("Get_Lista_Codigos_By_CodigoBarra_By_Picking",
+                                    "pCodigoBarra", txtCodProd.getText().toString(),
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdPickingEnc",gl.gIdPickingEnc);
                         break;
                 }
 
@@ -610,19 +666,31 @@ public class frm_detalle_tareas_verificacion extends PBase {
         try {
             buscarPres = false;
 
-            BeProducto = xobj.getresult(clsBeProducto.class, "Get_Codigo_By_CodigoBarra");
+            lBeProducto = xobj.getresult(clsBeProductoList.class, "Get_Lista_Codigos_By_CodigoBarra_By_Picking");
 
-            if (BeProducto != null) {
+            if (lBeProducto != null){
+                if(lBeProducto.items != null){
 
-                if (!BeProducto.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Codigo_barra)) {
-                    buscarPres = false;
-                } else if(!BeProducto.Presentacion.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Presentacion.Codigo_barra)) {
-                    buscarPres = true;
+                    if (lBeProducto.items.stream().count()==1){
+
+                        BeProducto=lBeProducto.items.get(0);
+                        txtCodProd.setText(BeProducto.Codigo);
+
+                        if (BeProducto != null) {
+
+                            if (!BeProducto.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Codigo_barra)) {
+                                buscarPres = false;
+                            } else if(!BeProducto.Presentacion.Codigo_barra.isEmpty() && txtCodProd.getText().toString().equals(BeProducto.Presentacion.Codigo_barra)) {
+                                buscarPres = true;
+                            }
+                        }
+                        GetFila();
+                    } else {
+                        txtCodProd.setText("");
+                        GetFila();
+                    }
                 }
-
-                txtCodProd.setText(BeProducto.Codigo);
-                GetFila();
-            } else {
+            }else{
                 GetFila();
             }
 
