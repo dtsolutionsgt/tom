@@ -40,6 +40,7 @@ public class clsBeProducto_Presentacion {
     @Element(required=false) public boolean ExisteStock=false;
     @Element(required=false) public clsBeProducto_presentacion_tarimaList MedidasPorTarima=new clsBeProducto_presentacion_tarimaList();
     @Element(required=false) public clsBeProducto_rellenadoList RellenadoPorUbicacionDePicking=new clsBeProducto_rellenadoList();
+    @Element(required=false) public String Codigo="";
 
 
     public clsBeProducto_Presentacion() {
@@ -52,7 +53,8 @@ public class clsBeProducto_Presentacion {
                                       boolean Activo,boolean EsPallet,double Precio,double MinimoPeso,
                                       double MaximoPeso,double Costo,double CamasPorTarima,double CajasPorCama,
                                       boolean Genera_lp_auto,boolean Permitir_paletizar,boolean Sistema,int IdPresentacionPallet,
-                                      boolean IsNew,boolean ExisteStock,clsBeProducto_presentacion_tarimaList MedidasPorTarima,clsBeProducto_rellenadoList RellenadoPorUbicacionDePicking
+                                      boolean IsNew,boolean ExisteStock,clsBeProducto_presentacion_tarimaList MedidasPorTarima,clsBeProducto_rellenadoList RellenadoPorUbicacionDePicking,
+                                      String Codigo
     ) {
 
         this.IdPresentacion=IdPresentacion;
@@ -87,6 +89,7 @@ public class clsBeProducto_Presentacion {
         this.ExisteStock=ExisteStock;
         this.MedidasPorTarima=MedidasPorTarima;
         this.RellenadoPorUbicacionDePicking=RellenadoPorUbicacionDePicking;
+        this.Codigo = Codigo;
 
     }
 
@@ -284,5 +287,11 @@ public class clsBeProducto_Presentacion {
         RellenadoPorUbicacionDePicking=value;
     }
 
+    public void setCodigo(String value) {
+        Codigo=value;
+    }
+    public String getCodigo() {
+        return Codigo;
+    }
 }
 
