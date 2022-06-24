@@ -453,6 +453,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         });
 
         txtLicPlate.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+        txtCodigoPrd.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
         txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
 
         txtUbicOrigen.setOnKeyListener(new View.OnKeyListener() {
@@ -1011,7 +1012,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             String vStarWithParameter = "$";
 
-            if (!txtLicPlate.getText().toString().isEmpty()) {
+            if (!txtLicPlate.getText().toString().isEmpty() && !txtLicPlate.getText().toString().equals("0")) {
 
                escaneoPallet = true;
 
@@ -1022,6 +1023,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 progress.cancel();
 
+            } else {
+                mu.msgbox("Búsqueda por licencia 0 no está permitida, realice búsqueda por código de producto.");
+                txtLicPlate.setText("");
+                txtCodigoPrd.requestFocus();
             }
 
         } catch (Exception ex) {
@@ -1960,7 +1965,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (escaneoPallet && productoList == null) {
                 lblDescProducto.setTextColor(Color.RED);
                 cvProdID = 0;
-                lblDescProducto.setText ("Código de LP no válido");
+                lblDescProducto.setText ("Código de licencia no válido");
                 progress.cancel();
             }else{
 
@@ -1984,10 +1989,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             .toList();
 
                     if (AuxList.size() == 0){
-                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;
-                        lblDescProducto.setText ("LP N.E.E.U");
+                        lblDescProducto.setText ("Licencia N.E.E.U");
                         progress.cancel();
                     }else{
 
