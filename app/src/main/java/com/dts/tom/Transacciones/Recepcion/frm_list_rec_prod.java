@@ -33,10 +33,12 @@ import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
@@ -83,6 +85,7 @@ public class frm_list_rec_prod extends PBase {
     public static clsBeStock_rec gBeStockRec = new clsBeStock_rec();
     private static ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
     public  static clsBeProducto BeProducto = new clsBeProducto();
+    public static clsBeProductoList lBeProducto = new clsBeProductoList();
     private int gotop;
 
     private boolean Escaneo_Pallet;
@@ -662,51 +665,136 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void ValidaProductoForRece(){
-
+        List AuxList = null;
         try{
 
-            if (BeProducto!=null){
+            if (lBeProducto!=null){
 
-                List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+                if(lBeProducto.items!=null){
 
-                Idx = AuxList.indexOf(txtCodigoProductoRecepcion.getText().toString());
+                    if (lBeProducto.items.size()>1){
 
-                if (Idx>-1){
+                        List TempList;
+                        int j = 0;
 
-                    if (gBeStockRec!=null){
-                        if (gBeStockRec.IdStockRec>0){
-                            gl.Carga_Producto_x_Pallet=true;
-                        }else{
-                            gl.Carga_Producto_x_Pallet=false;
+                        for (clsBeProducto BeProd: lBeProducto.items){
+
+                            if (j==0){
+                                AuxList = stream(pListDetalleOC.items)
+                                        .where(c -> c.Codigo_Producto.equals(BeProd.Codigo))
+                                        .toList();
+                            }else{
+
+                                TempList = stream(pListDetalleOC.items)
+                                        .where(c -> c.Codigo_Producto.equals(BeProd.Codigo))
+                                        .toList();
+
+                                if (TempList.size()>0) {
+                                    for (int i = 0; i <TempList.size(); i++) {
+                                        AuxList.add(AuxList.size(),TempList.get(i));
+                                    }
+                                }
+                            }
+                            j+=1;
                         }
+
+                        if (AuxList.size()==1){
+
+                            clsBeTrans_oc_detList pListaAux = new clsBeTrans_oc_detList();
+                            clsBeTrans_oc_det vOrdenCompraDet = new clsBeTrans_oc_det();
+                            pListaAux.items = AuxList;
+
+                            String finalSelProd1  = pListaAux.items.get(0).Codigo_Producto;
+
+                            vOrdenCompraDet  = stream(pListDetalleOC.items)
+                                    .where(c -> c.getCodigo_Producto().equals(finalSelProd1))
+                                    .first();
+
+                            if (vOrdenCompraDet != null) {
+
+                                selitem = vOrdenCompraDet;
+                                gl.gselitem = selitem;
+
+                                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                                gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                                gl.mode =1;
+                                browse=1;
+
+                                startActivity(new Intent(this, frm_recepcion_datos.class));
+
+                            } else {
+                                txtCodigoProductoRecepcion.setText("");
+                                mu.msgbox(String.format("No existe el producto %s en esta Recepción",finalSelProd1));
+                            }
+
+                        }else if (AuxList.size() > 1){
+
+                            //pListDetalleOC.items= gl.gpListDetalleOC.items;
+                            pListDetalleOC.items= AuxList;
+                            Lista_Detalle_Documento_Ingreso();
+                            ordenar();
+
+                        } else if (AuxList.size() == 0) {
+                            txtCodigoProductoRecepcion.setText("");
+                            toast("No existe el producto en esta Recepción.");
+                        }
+
                     }else{
-                        gl.Carga_Producto_x_Pallet= false;
+
+                        BeProducto = lBeProducto.items.get(0);
+
+                        if (BeProducto!=null){
+
+                            AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+
+                            txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
+
+                            Idx = AuxList.indexOf(txtCodigoProductoRecepcion.getText().toString());
+
+                            if (Idx>-1){
+
+                                if (gBeStockRec!=null){
+                                    if (gBeStockRec.IdStockRec>0){
+                                        gl.Carga_Producto_x_Pallet=true;
+                                    }else{
+                                        gl.Carga_Producto_x_Pallet=false;
+                                    }
+                                }else{
+                                    gl.Carga_Producto_x_Pallet= false;
+                                }
+
+                                selitem = pListDetalleOC.items.get(Idx);
+                                gl.gselitem = selitem;
+
+                                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                                gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                                gl.mode =1;
+                                browse=1;
+
+                                startActivity(new Intent(this, frm_recepcion_datos.class));
+
+                            }else{
+
+                                AuxList = stream(pListDetalleOC.items)
+                                        .where(c->c.Codigo_Producto.equals( BeProducto.Codigo)).toList();
+
+                                txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
+
+
+
+                            }
+
+                        }else{
+                            mu.msgbox("El código de producto no es válido para la recepción");
+                            txtCodigoProductoRecepcion.setText("");
+                            txtCodigoProductoRecepcion.requestFocus();
+                            return;
+                        }
+
                     }
-
-                    selitem = pListDetalleOC.items.get(Idx);
-                    gl.gselitem = selitem;
-
-                    gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                    gl.gpListDetalleOC.items = pListDetalleOC.items;
-
-                    gl.mode =1;
-                    browse=1;
-
-                    startActivity(new Intent(this, frm_recepcion_datos.class));
-
-
-                }else{
-                    mu.msgbox("El código de producto no es válido para la recepción");
-                    txtCodigoProductoRecepcion.setText("");
-                    txtCodigoProductoRecepcion.requestFocus();
-                    return;
                 }
-
-            }else{
-                mu.msgbox("El código de producto no es válido para la recepción");
-                txtCodigoProductoRecepcion.setText("");
-                txtCodigoProductoRecepcion.requestFocus();
-                return;
             }
 
         }catch (Exception e){
@@ -1093,8 +1181,13 @@ public class frm_list_rec_prod extends PBase {
                                    "pBeStockRec",gBeStockRec);
                         break;
                     case 9:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                "pCodigo",txtCodigoProductoRecepcion.getText().toString(),"IdBodega",gl.IdBodega);
+                       /* callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                   "pCodigo",txtCodigoProductoRecepcion.getText().toString(),
+                                   "IdBodega",gl.IdBodega);*/
+                        callMethod("Get_List_Product_By_CodigoBarra_By_OrdenCompraEnc",
+                                   "pCodigo",txtCodigoProductoRecepcion.getText().toString(),
+                                   "IdBodega",gl.IdBodega,
+                                   "IdOrdenCompraEnc",gl.gBeOrdenCompra.IdOrdenCompraEnc);
                         break;
                     case 10:
                         callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
@@ -1307,7 +1400,8 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+          // BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+           lBeProducto = xobj.get(clsBeProductoList.class,"Get_List_Product_By_CodigoBarra_By_OrdenCompraEnc");
 
            ValidaProductoForRece();
 

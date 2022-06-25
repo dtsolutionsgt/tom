@@ -259,7 +259,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             case KeyEvent.KEYCODE_ENTER:
                                 //AT20220618 Ahora vamos a busacar el codigo en el WS
                                 //en base al codigo de barra que ingrese el usuario
-                                execws(11);
+                                if (txtCodProd.getText().toString().isEmpty()){
+                                    if (VerSinLoteFechaVen) {
+                                        execws(10);
+                                    } else {
+                                        execws(1);
+                                    }
+                                }else{
+                                    execws(11);
+                                }
 
                                 return true;
                         }
@@ -319,7 +327,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
                         .toList();
 
-                if (AuxList.stream().count()==1){
+                if (AuxList.size()==1){
 
                     vPedidoVerif  = stream(pListaPedidoDet.items)
                             .where(c -> c.getCodigo().equals(finalSelProd) || c.getLicPlate().equals(finalSelProd))
@@ -329,20 +337,22 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
                         Procesa_Registro(vPedidoVerif);
                     } else {
+                        txtCodProd.setText("");
                         mu.msgbox(String.format("No existe el producto %s en esta Verificación",selProd));
                     }
 
-                }else if (AuxList.stream().count() > 1){
+                }else if (AuxList.size() > 1){
 
                     pListaPedidoDet.items = AuxList;
                     Lista_Detalle_Pedido();
 
-                } else if (AuxList.stream().count() == 0) {
+                } else if (AuxList.size() == 0) {
+                    txtCodProd.setText("");
                     toast("No existe el producto en esta verificación.");
                 }
             }else{
 
-                if (lBeProducto.items.stream().count()>1){
+                if (lBeProducto.items.size()>1){
 
                     List TempList;
                     int j = 0;
@@ -387,6 +397,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vPedidoVerif.Fecha_Vence = app.strFecha(vPedidoVerif.Fecha_Vence);
                             Procesa_Registro(vPedidoVerif);
                         } else {
+                            txtCodProd.setText("");
                             mu.msgbox(String.format("No existe el producto %s en esta Verificación",finalSelProd1));
                         }
 
@@ -396,13 +407,17 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         Lista_Detalle_Pedido();
 
                     } else if (AuxList.stream().count() == 0) {
+                        txtCodProd.setText("");
                         toast("No existe el producto en esta verificación.");
                     }
                 }else {
+                    txtCodProd.setText("");
                     toast("No existe el producto en esta verificación.");
                 }
 
             }
+
+            txtCodProd.requestFocus();
 
         }catch (Exception e){
             if (e.getMessage() !=null){
@@ -696,6 +711,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 GetFila();
             }
 
+            txtCodProd.requestFocus();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -990,6 +1006,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 mu.msgbox( e.getMessage());
             }
 
+            txtCodProd.requestFocus();
             progress.cancel();
 
         } catch (Exception e) {
