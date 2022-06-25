@@ -133,10 +133,10 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
             if (Pick == 0 && Ver == 0) {
                 //Rojo - No Pickeado
                 convertView.setBackgroundColor(Color.parseColor("#EF5350"));
-            } else if(Pick == Sol && Ver < Pick) {
+            } else if(Pick == Sol && Ver < Pick && Ver != 0) {
                 //Celeste - Faltante en verificación
                 convertView.setBackgroundColor(Color.parseColor("#81D4FA"));
-            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick)) {
+            } else if ((Pick < Sol && Ver == Pick) || (Pick < Sol && Ver < Pick && Ver != 0)) {
                 //Naranja - Faltante en Picking
                 convertView.setBackgroundColor(Color.parseColor("#FFCA28"));
             }else if((Pick > 0 && Ver == 0) || (Pick > 0 && Ver < Pick)) {
