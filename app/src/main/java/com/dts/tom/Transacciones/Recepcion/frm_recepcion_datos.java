@@ -6991,11 +6991,15 @@ public class frm_recepcion_datos extends PBase {
 
             Etapa ++;
 
-            if (stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega
-                    && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).first()>0){
-                if (BeProducto.Presentaciones!=null){
-                    if (BeProducto.Presentaciones.items!=null){
-                        PTiene_Pres=true;
+            List AuxList = stream(gl.gpListDetalleOC.items).where(c -> c.IdProductoBodega == pIdProductoBodega
+                            && c.IdOrdenCompraDet == pIdOrdenCompraDet).select(c -> c.IdPresentacion).toList();
+
+            if (AuxList!=null){
+                if (AuxList.size()>0){
+                    if (BeProducto.Presentaciones!=null){
+                        if (BeProducto.Presentaciones.items!=null){
+                            PTiene_Pres=true;
+                        }
                     }
                 }
             }

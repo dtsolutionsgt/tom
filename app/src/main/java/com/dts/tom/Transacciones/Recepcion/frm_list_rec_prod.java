@@ -78,6 +78,7 @@ public class frm_list_rec_prod extends PBase {
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
     private  clsBeTrans_re_oc gBeReOC = new clsBeTrans_re_oc();
     private clsBeTrans_oc_detList pListDetalleOC = new clsBeTrans_oc_detList();
+    private clsBeTrans_oc_detList pListDetalleOC_Aux = new clsBeTrans_oc_detList();
     public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private static clsBeI_nav_barras_palletList lBeINavBarraPallet = new clsBeI_nav_barras_palletList();
     public static clsBeI_nav_barras_pallet BeINavBarraPallet= new clsBeI_nav_barras_pallet();
@@ -407,7 +408,10 @@ public class frm_list_rec_prod extends PBase {
                                 gl.gEscaneo_Pallet = true;
 
                                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                                gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
+                                // lo que tengo en la global
+                               // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                                 browse=1;
                                 startActivity(new Intent(this, frm_recepcion_datos.class));
@@ -619,6 +623,14 @@ public class frm_list_rec_prod extends PBase {
 
                         if (!txtCodigoProductoRecepcion.getText().toString().isEmpty()){
                             Procesa_Barra_Producto();
+                        }else{
+                            //#CKFK20220625 Al parecer esta asignación es innecesaria
+                            // pListDetalleOC.items= gl.gpListDetalleOC.items;
+                            txtCodigoProductoRecepcion.setText("");
+                            txtCodigoProductoRecepcion.requestFocus();
+
+                            Lista_Detalle_Documento_Ingreso();
+                            ordenar();
                         }
 
                     }
@@ -716,11 +728,15 @@ public class frm_list_rec_prod extends PBase {
                                 gl.gselitem = selitem;
 
                                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                                gl.gpListDetalleOC.items = pListDetalleOC.items;
+                                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
+                                // lo que tengo en la global
+                               // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                                 gl.mode =1;
                                 browse=1;
 
+                                txtCodigoProductoRecepcion.setText("");
+                                txtCodigoProductoRecepcion.requestFocus();
                                 startActivity(new Intent(this, frm_recepcion_datos.class));
 
                             } else {
@@ -730,7 +746,9 @@ public class frm_list_rec_prod extends PBase {
 
                         }else if (AuxList.size() > 1){
 
-                            //pListDetalleOC.items= gl.gpListDetalleOC.items;
+                            txtCodigoProductoRecepcion.setText("");
+                            txtCodigoProductoRecepcion.requestFocus();
+
                             pListDetalleOC.items= AuxList;
                             Lista_Detalle_Documento_Ingreso();
                             ordenar();
@@ -746,43 +764,60 @@ public class frm_list_rec_prod extends PBase {
 
                         if (BeProducto!=null){
 
-                            AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+                            AuxList = stream(pListDetalleOC.items)
+                                    .where(c->c.Codigo_Producto.equals( BeProducto.Codigo)).toList();
 
-                            txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
-
-                            Idx = AuxList.indexOf(txtCodigoProductoRecepcion.getText().toString());
-
-                            if (Idx>-1){
-
-                                if (gBeStockRec!=null){
-                                    if (gBeStockRec.IdStockRec>0){
-                                        gl.Carga_Producto_x_Pallet=true;
-                                    }else{
-                                        gl.Carga_Producto_x_Pallet=false;
-                                    }
-                                }else{
-                                    gl.Carga_Producto_x_Pallet= false;
-                                }
-
-                                selitem = pListDetalleOC.items.get(Idx);
-                                gl.gselitem = selitem;
-
-                                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                                gl.gpListDetalleOC.items = pListDetalleOC.items;
-
-                                gl.mode =1;
-                                browse=1;
-
-                                startActivity(new Intent(this, frm_recepcion_datos.class));
-
-                            }else{
-
-                                AuxList = stream(pListDetalleOC.items)
-                                        .where(c->c.Codigo_Producto.equals( BeProducto.Codigo)).toList();
+                            if (AuxList.size()==1){
+                                AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
 
                                 txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
 
+                                Idx = AuxList.indexOf(txtCodigoProductoRecepcion.getText().toString());
 
+                                if (Idx>-1){
+
+                                    if (gBeStockRec!=null){
+                                        if (gBeStockRec.IdStockRec>0){
+                                            gl.Carga_Producto_x_Pallet=true;
+                                        }else{
+                                            gl.Carga_Producto_x_Pallet=false;
+                                        }
+                                    }else{
+                                        gl.Carga_Producto_x_Pallet= false;
+                                    }
+
+                                    selitem = pListDetalleOC.items.get(Idx);
+                                    gl.gselitem = selitem;
+
+                                    gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                                    //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
+                                    // lo que tengo en la global
+                                    // gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                                    gl.mode =1;
+                                    browse=1;
+
+                                    txtCodigoProductoRecepcion.setText("");
+                                    txtCodigoProductoRecepcion.requestFocus();
+
+                                    startActivity(new Intent(this, frm_recepcion_datos.class));
+
+                                }else{
+                                    mu.msgbox("El código de producto no es válido para la recepción");
+                                    txtCodigoProductoRecepcion.setText("");
+                                    txtCodigoProductoRecepcion.requestFocus();
+                                    return;
+                                }
+                            } else{
+
+                                txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
+
+                                pListDetalleOC.items= AuxList;
+                                Lista_Detalle_Documento_Ingreso();
+                                ordenar();
+
+                                txtCodigoProductoRecepcion.setText("");
+                                txtCodigoProductoRecepcion.requestFocus();
 
                             }
 
@@ -795,6 +830,8 @@ public class frm_list_rec_prod extends PBase {
 
                     }
                 }
+            }else{
+
             }
 
         }catch (Exception e){
@@ -815,7 +852,9 @@ public class frm_list_rec_prod extends PBase {
                 gl.gselitem = selitem;
 
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                gl.gpListDetalleOC.items = pListDetalleOC.items;
+                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
+                // lo que tengo en la global
+                // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                 gl.mode = 1;
 
@@ -844,7 +883,8 @@ public class frm_list_rec_prod extends PBase {
                     gl.gselitem = selitem;
 
                     gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                    gl.gpListDetalleOC.items = pListDetalleOC.items;
+                    //#CKFK20220625 Al parecer esta asignación es innecesaria
+                 // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                     browse=1;
                     startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
@@ -1400,10 +1440,15 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-          // BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
-           lBeProducto = xobj.get(clsBeProductoList.class,"Get_List_Product_By_CodigoBarra_By_OrdenCompraEnc");
+            pListDetalleOC_Aux = new clsBeTrans_oc_detList();
+            pListDetalleOC_Aux.items= pListDetalleOC.items;
+
+            // BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+           lBeProducto = xobj.getresult(clsBeProductoList.class,"Get_List_Product_By_CodigoBarra_By_OrdenCompraEnc");
 
            ValidaProductoForRece();
+
+           gl.gpListDetalleOC.items = pListDetalleOC_Aux.items;
 
         }catch (Exception e){
             mu.msgbox("processGetProductoByCodigo");
@@ -1484,7 +1529,7 @@ public class frm_list_rec_prod extends PBase {
 
             gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH");
 
-            pListDetalleOC.items = gl.gpListDetalleOC.items;
+            //pListDetalleOC.items = gl.gpListDetalleOC.items;
 
             Lista_Detalle_Documento_Ingreso();
             ordenar();
@@ -1895,7 +1940,8 @@ public class frm_list_rec_prod extends PBase {
             if (browse==1){
                 browse=0;
                 if (!gl.gSinPresentacion){
-                    pListDetalleOC.items= gl.gpListDetalleOC.items;
+                    //#CKFK20220625 Al parecer esta asignación es innecesaria
+                    // pListDetalleOC.items= gl.gpListDetalleOC.items;
                     Lista_Detalle_Documento_Ingreso();
                     ordenar();
                     if(Recepcion_Completa()){
@@ -1914,7 +1960,8 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==2){
                 browse=0;
-                pListDetalleOC.items= gl.gpListDetalleOC.items;
+                //#CKFK20220625 Al parecer esta asignación es innecesaria
+                //pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_Documento_Ingreso();
                 Recepcion_Completa();
             }
