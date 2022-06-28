@@ -99,6 +99,8 @@ public class clsBeVW_stock_res {
   @Element(required=false) public boolean ubicacion_picking=false;
   @Element(required=false) public String Host="";
   @Element(required=false) public int no_linea=0;
+  @Element(required=false) public String Fecha_Pedido="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_Preparacion="1900-01-01T00:00:01";
 
   //#EJC20220129:
   @Element(required=false) public double CamasPorTarima=0;
@@ -139,7 +141,7 @@ public class clsBeVW_stock_res {
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
                            String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion, int no_linea, int IdPresentacion_Anterior,
-                           int IdOperadorBodega_Asignado) {
+                           int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -233,6 +235,8 @@ public class clsBeVW_stock_res {
     this.no_linea = no_linea;
     this.IdPresentacion_Anterior = IdPresentacion_Anterior;
     this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
+    this.Fecha_Pedido = Fecha_Pedido;
+    this.Fecha_Preparacion = Fecha_Preparacion;
   }
 
 
@@ -843,6 +847,12 @@ public class clsBeVW_stock_res {
 
   public int getIdOperadorBodega_Asignado() {return IdOperadorBodega_Asignado;}
   public void  setIdOperadorBodega_Asignado(int value) {IdOperadorBodega_Asignado = value;}
+
+  public String getFecha_Preparacion() {return Fecha_Preparacion;}
+  public void  setFecha_Preparacion(String value) {Fecha_Preparacion = value;}
+
+  public String getFecha_Pedido() {return Fecha_Pedido;}
+  public void  setFecha_Pedido(String value) {Fecha_Pedido = value;}
 
 }
 
