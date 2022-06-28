@@ -84,7 +84,6 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
-    private int TipoPantallaPicking = 0;
     private boolean asignar_operador_linea_picking = false;
 
     public Activity myActivity;
@@ -94,16 +93,17 @@ public class frm_detalle_tareas_picking extends PBase {
         super.onCreate(savedInstanceState);
         try {
             myActivity = this;
-            appGlobals gll;
-            gll=((appGlobals) this.getApplication());
-            areaprimera = gll.Mostrar_Area_En_HH;
-            TipoPantallaPicking = gll.TipoPantallaPicking;
+
+            super.InitBase();
+
             asignar_operador_linea_picking = false;
+
+            areaprimera = gl.Mostrar_Area_En_HH;
 
             int tipo = 0;
 
-            if(TipoPantallaPicking == 3) {
-                tipo = TipoPantallaPicking;
+            if(gl.TipoPantallaPicking == 3) {
+                tipo = gl.TipoPantallaPicking;
             } else if(areaprimera) {
                 tipo = 2;
             } else {
@@ -111,17 +111,6 @@ public class frm_detalle_tareas_picking extends PBase {
             }
 
             cargaPantallaPicking(tipo);
-           /* if (TipoPantallaPicking) {
-                setContentView(R.layout.activity_frm_detalle_tareas_picking3);
-            } else {
-                if (areaprimera) {
-                    setContentView(R.layout.activity_frm_detalle_tareas_picking2);
-                } else {
-                    setContentView(R.layout.activity_frm_detalle_tareas_picking);
-                }
-            }*/
-
-            super.InitBase();
 
             ws = new WebServiceHandler(frm_detalle_tareas_picking.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -200,7 +189,7 @@ public class frm_detalle_tareas_picking extends PBase {
                         selid = sitem.IdPickingUbic;
                         selidx = position;
 
-                        if (TipoPantallaPicking == 3) {
+                        if (gl.TipoPantallaPicking == 3) {
                             adapter3.getItem(position);
                         } else {
                             if (areaprimera) {
@@ -338,7 +327,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }
         }
 
-        if (TipoPantallaPicking == 3) {
+        if (gl.TipoPantallaPicking == 3) {
             adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
             listView.setAdapter(adapter3);
         } else {
@@ -581,7 +570,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            if (TipoPantallaPicking == 3) {
+            if (gl.TipoPantallaPicking == 3) {
                 adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
                 listView.setAdapter(adapter3);
             } else {

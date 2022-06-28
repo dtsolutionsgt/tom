@@ -123,11 +123,11 @@ public class frm_list_rec_prod extends PBase {
 
         super.onCreate(savedInstanceState);
 
-        appGlobals gll;
-        gll=((appGlobals) this.getApplication());
-        areaprimera = gll.Mostrar_Area_En_HH;
+        super.InitBase();
 
-        if (gll.TipoPantallaPicking == 3) {
+        areaprimera = gl.Mostrar_Area_En_HH;
+
+        if (gl.TipoPantallaRecepcion == 3) {
             setContentView(R.layout.activity_frm_list_rec_prod3);
         } else {
             if (areaprimera) {
@@ -136,8 +136,6 @@ public class frm_list_rec_prod extends PBase {
                 setContentView(R.layout.activity_frm_list_rec_prod);
             }
         }
-
-        super.InitBase();
 
         ws = new WebServiceHandler(frm_list_rec_prod.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -566,7 +564,7 @@ public class frm_list_rec_prod extends PBase {
                     selidx = position;
 
                     //#GT09032022: si tiene mostrar_area cealsa
-                    if (gl.TipoPantallaPicking == 3) {
+                    if (gl.TipoPantallaRecepcion == 3) {
                         listdetadpater3.setSelectedIndex(position);
                     } else {
                         if (areaprimera) {
@@ -599,7 +597,7 @@ public class frm_list_rec_prod extends PBase {
                     selidx = position;
 
                     //#GT09032022: si tiene mostrar_area cealsa
-                    if (gl.TipoPantallaPicking == 3) {
+                    if (gl.TipoPantallaRecepcion == 3) {
                         listdetadpater3.setSelectedIndex(position);
                     } else {
                         if (areaprimera) {
@@ -1044,14 +1042,14 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            if (gl.TipoPantallaPicking != 3) {
+            if (gl.TipoPantallaRecepcion != 3) {
                 if (!es_poliza_consolidada) {
                     lblIdPropietarioBodega.setVisibility(View.GONE);
                     lblNombrePropietario.setVisibility(View.GONE);
                 }
             }
 
-            if (gl.TipoPantallaPicking == 3) {
+            if (gl.TipoPantallaRecepcion == 3) {
                 listdetadpater3 = new list_adapt_detalle_recepcion3(this, BeListDetalleOC, es_poliza_consolidada, gl.gCantDecCalculo);
                 listView.setAdapter(listdetadpater3);
             } else {
@@ -1803,7 +1801,7 @@ public class frm_list_rec_prod extends PBase {
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
-            if (gl.TipoPantallaPicking != 3) {
+            if (gl.TipoPantallaRecepcion != 3) {
                 if (!es_poliza_consolidada) {
                     lblIdPropietarioBodega.setVisibility(View.GONE);
                     lblNombrePropietario.setVisibility(View.GONE);
@@ -1811,7 +1809,7 @@ public class frm_list_rec_prod extends PBase {
             }
 
 
-            if (gl.TipoPantallaPicking == 3) {
+            if (gl.TipoPantallaRecepcion == 3) {
                 listdetadpater3 = new list_adapt_detalle_recepcion3(this, BeListDetalleOC, es_poliza_consolidada, gl.gCantDecCalculo);
                 listView.setAdapter(listdetadpater3);
             } else {

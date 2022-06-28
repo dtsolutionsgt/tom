@@ -171,7 +171,6 @@ public class appGlobals extends Application {
     public clsBeOperador beOperador = new clsBeOperador();
 
     //#EJC20220129: Validar si la ubicación destino tiene producto o está "libre" antes de colocar producto allí
-
     public boolean validar_disponibilidad_ubicaicon_destino = false;
 
     public boolean Mostrar_Area_En_HH=false;
@@ -211,6 +210,8 @@ public class appGlobals extends Application {
 
     public boolean buscar_actualizacion_hh= false;
     public int TipoPantallaPicking = 0;
+    public int TipoPantallaRecepcion = 0;
+    public int TipoPantallaVerificacion = 0;
 
     @Override
     public void onCreate() {

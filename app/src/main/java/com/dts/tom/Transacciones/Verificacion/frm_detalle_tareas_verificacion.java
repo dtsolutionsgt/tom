@@ -92,7 +92,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false, mostrar_area, VerSinLoteFechaVen = false;
     private boolean finalizar = true;
-    private int TipoPantallaPicking = 0;
     private int selidx = -1,sortord;
 
     @Override
@@ -101,17 +100,13 @@ public class frm_detalle_tareas_verificacion extends PBase {
         try{
             super.onCreate(savedInstanceState);
 
-            appGlobals gll;
-            gll=((appGlobals) this.getApplication());
-            TipoPantallaPicking = gll.TipoPantallaPicking;
+            super.InitBase();
 
-            if (gll.TipoPantallaPicking == 3) {
+            if (gl.TipoPantallaVerificacion == 3) {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion2);
             } else {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
             }
-
-            super.InitBase();
 
             VerSinLoteFechaVen = false;
             gl.VerificacionSinLoteFechaVen = false;
@@ -138,7 +133,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             relbot = (RelativeLayout) findViewById(R.id.relbot);
             chkPendientes = (CheckBox) findViewById(R.id.chkPendientes);
 
-            if (TipoPantallaPicking == 0) {
+            if (gl.TipoPantallaVerificacion == 0) {
                 if (mostrar_area) {
                     encabezado2.setVisibility(View.VISIBLE);
                 } else if (VerSinLoteFechaVen) {
@@ -204,11 +199,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     Object lvObj = listDetVeri.getItemAtPosition(position);
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
-                    if (TipoPantallaPicking > 0) {
+                    if (gl.TipoPantallaVerificacion > 0) {
 
                         //adapter4.setSelectedIndex(position);
-                        //#GT08062022: si TipoPantallaPicking es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
-                        if (gl.TipoPantallaPicking == 3) {
+                        //#GT08062022: si TipoPantallaVerificacion es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
+                        if (gl.TipoPantallaVerificacion == 3) {
                             adapter4.setSelectedIndex(position);
                         } else {
                             adapter2.setSelectedIndex(position);
@@ -228,11 +223,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     int index = position;
                     Procesa_Registro(vItem);
 
-                    if (TipoPantallaPicking > 0) {
+                    if (gl.TipoPantallaVerificacion > 0) {
 
                         //adapter4.refreshItems();
-                        //#GT08062022: si TipoPantallaPicking es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
-                        if (gl.TipoPantallaPicking == 3) {
+                        //#GT08062022: si TipoPantallaVerificacion es mayor a 0, hay que ver en cual adapter esta lleno, porque estaba adapter4 por defecto
+                        if (gl.TipoPantallaVerificacion == 3) {
                             adapter4.refreshItems();
                         } else {
                             adapter2.refreshItems();
@@ -942,7 +937,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                         btnRegs.setText("Registros: "+pListaPedidoDet.items.size());
 
-                        if (gl.TipoPantallaPicking == 3) {
+                        if (gl.TipoPantallaVerificacion == 3) {
                             adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
                             listDetVeri.setAdapter(adapter4);
                         } else {
@@ -959,7 +954,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         }
                         if (pListaPedidoDet.items.size()>0){
 
-                            if (gl.TipoPantallaPicking == 3) {
+                            if (gl.TipoPantallaVerificacion == 3) {
                                 adapter4.setSelectedIndex(-1);
                             } else {
                                 if (mostrar_area) {
@@ -1212,7 +1207,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private void listSortedItems() {
 
         try {
-            if (TipoPantallaPicking > 0) {
+            if (gl.TipoPantallaVerificacion > 0) {
                 adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
                 listDetVeri.setAdapter(adapter4);
             } else {

@@ -333,28 +333,31 @@ public class frm_verificacion_datos extends PBase {
 
                 if (BePickingUbicList !=null){
 
-                    if  (gl.VerificacionConsolidada) {
-                        AuxList = stream(BePickingUbicList.items)
-                                .where (z -> z.CodigoProducto.equals(Codigo))
-                                .toList();
-                    } else {
-                        if (Lp.equals("")) {
+                    if (BePickingUbicList.items !=null){
+                        if  (gl.VerificacionConsolidada) {
                             AuxList = stream(BePickingUbicList.items)
-                                    .where(z -> z.CodigoProducto.equals(Codigo))
-                                    .where(z -> z.Lote.equals(Lote))
-                                    .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                                    .where (z -> z.CodigoProducto.equals(Codigo))
                                     .toList();
                         } else {
-                            AuxList = stream(BePickingUbicList.items)
-                                    .where(z -> z.CodigoProducto.equals(Codigo))
-                                    .where(z -> z.Lote.equals(Lote))
-                                    .where(z -> z.Lic_plate.equals(Lp))
-                                    .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
-                                    .toList();
+                            if (Lp.equals("")) {
+                                AuxList = stream(BePickingUbicList.items)
+                                        .where(z -> z.CodigoProducto.equals(Codigo))
+                                        .where(z -> z.Lote.equals(Lote))
+                                        .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                                        .toList();
+                            } else {
+                                AuxList = stream(BePickingUbicList.items)
+                                        .where(z -> z.CodigoProducto.equals(Codigo))
+                                        .where(z -> z.Lote.equals(Lote))
+                                        .where(z -> z.Lic_plate.equals(Lp))
+                                        .where(z -> app.strFecha(z.Fecha_Vence).equals(Expira))
+                                        .toList();
+                            }
                         }
+
+                        pSubListPickingU.items = AuxList;
                     }
 
-                    pSubListPickingU.items = AuxList;
                 }
 
             }
