@@ -31,6 +31,7 @@ import com.dts.tom.Transacciones.Packing.frm_Packing;
 import com.dts.tom.Transacciones.Packing.frm_lista_packing;
 import com.dts.tom.Transacciones.Reabastecimiento.frm_reabastecimiento_manual;
 import com.dts.tom.Transacciones.Recepcion.frm_lista_tareas_recepcion;
+import com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -293,6 +294,11 @@ public class Mainmenu extends PBase {
                 /*item = clsCls.new clsMenu();
                 item.ID=12;item.Icon=12;
                 item.Name="Reabastecimiento manual";item.cant=-1;
+                items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID=13;item.Icon=13;
+                item.Name="Reubicar stock reservado";item.cant=-1;
                 items.add(item);*/
 
                 item = clsCls.new clsMenu();
@@ -691,6 +697,9 @@ public class Mainmenu extends PBase {
                     startActivity(new Intent(this, frm_lista_packing.class)); break;
                 case 12:// Reabastecimiento manual
                     startActivity(new Intent(this, frm_reabastecimiento_manual.class));
+                    break;
+                case 13:// Reubicar stock reservado
+                    startActivity(new Intent(this, frm_lista_stock_res.class));
                     break;
             }
 

@@ -1917,7 +1917,7 @@ public class frm_picking_datos extends PBase {
             ReubicarPickingAereo = (Boolean) xobj.getSingle("Get_All_Reservas_By_IdStockResult",boolean.class);
 
             if (ReubicarPickingAereo) {
-                msgCambioUbicacion("El producto tiene reservas, reubicar a zona de picking");
+                msgCambioUbicacion("Reubicar a zona de picking");
             } else {
                 doExit();
             }
@@ -2141,7 +2141,8 @@ public class frm_picking_datos extends PBase {
                 case 7:
                 case 8:
                     //#EJC20220524: Validar si se reubica a posición de piso.
-                    if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+
+                    /*if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
                         if (gBePickingUbic.Ubicacion.Nivel >= 2) {
                             execws(11);
                         }else{
@@ -2150,6 +2151,15 @@ public class frm_picking_datos extends PBase {
                         }
                     }else{
                         //AT20220621 Por instrucción de Carolina quite la condición si TipoLista == 2
+                        doExit();
+                    }*/
+                    if (gBePickingUbic.Ubicacion.Nivel >= 2) {
+                        if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+                            msgCambioUbicacion("Reubicar a zona de picking");
+                        } else {
+                            doExit();
+                        }
+                    } else {
                         doExit();
                     }
                     break;

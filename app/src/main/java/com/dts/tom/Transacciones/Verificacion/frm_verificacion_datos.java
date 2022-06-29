@@ -30,6 +30,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,9 +52,10 @@ public class frm_verificacion_datos extends PBase {
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
-    private RelativeLayout relDesglose, relConDesglose;
+    private RelativeLayout relDesglose, relPick;
     private EditText txtPresPick, txtUnidadPick;
     private TextView lblPresPick, lblUnidadPick;
+    private FloatingActionButton btnTareas;
     private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
 
     public static clsBeProducto gBeProducto = new clsBeProducto();
@@ -140,6 +142,8 @@ public class frm_verificacion_datos extends PBase {
         txtUnidadPick = findViewById(R.id.txtUnidadPick);
         lblPresPick = findViewById(R.id.lblPresPick);
         lblUnidadPick = findViewById(R.id.lblUnidadPick);
+        btnTareas = findViewById(R.id.btnTareas);
+        relPick = findViewById(R.id.relPick);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -472,6 +476,9 @@ public class frm_verificacion_datos extends PBase {
                         double CantidadUMBasPick = CantidadDecimalPick * factor;
 
                         if (Rec >  0) {
+                            btnTareas.setVisibility(View.VISIBLE);
+                            txtCantVeri.setEnabled(true);
+
                             if (CantidadPresentacionPick > 0) {
 
                                 if ((CantidadPick % 1) > 0 || (CantidadPick >= factor)) { }
@@ -491,6 +498,21 @@ public class frm_verificacion_datos extends PBase {
 
                                 txtUnidadPick.setText(String.valueOf(mu.frmdec(CantidadUMBasPick)));
                             }
+                        } else {
+                            btnTareas.setVisibility(View.GONE);
+                            txtCantVeri.setEnabled(false);
+                            if (CantidadUMBas == 0) {
+                                lblUnidadPick.setVisibility(View.GONE);
+                                txtUnidadPick.setVisibility(View.GONE);
+                            }
+
+                            if (CantidadPresentacion == 0) {
+                                lblPresPick.setVisibility(View.GONE);
+                                txtPresPick.setVisibility(View.GONE);
+                            }
+
+                            lblPresPick.setText(auxPres.Nombre+":");
+                            txtPresPick.setText(""+Rec);
                         }
                     }
                 }
