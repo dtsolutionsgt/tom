@@ -626,6 +626,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 execws(3);
 
             }else{
+
                 btnRes_Det.setText("C.");
 
                 TipoLista=1;
