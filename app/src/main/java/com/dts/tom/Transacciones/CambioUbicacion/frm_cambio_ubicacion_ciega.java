@@ -37,6 +37,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_est
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucStage5List;
@@ -1350,7 +1351,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     processProductoUbic();
                     break;
                 case 8:
-                    processNuevoCorrelativoLP();
+                    processNuevoLPA();
+                    //processNuevoCorrelativoLP();
                     break;
                 case 9:
                     processIdNuevoPallet();
@@ -1440,11 +1442,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdProductoBodega",BeProductoUbicacion.IdProductoBodega);
                         break;
                     case 8://Obtiene el nuevo correlativo de un License Plate
-                        callMethod("Get_Nuevo_Correlativo_LicensePlate",
-                                "pIdEmpresa", gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,
-                                "pIdPropietario",BeStockPallet.IdPropietario,
-                                "pIdProducto",BeStockPallet.IdProducto);
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador", gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
 
                         break;
                     case 9://Actualiza la tabla trans_movimientos
@@ -2145,6 +2145,47 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
 
+        }
+
+    }
+
+    private void processNuevoLPA(){
+
+        try {
+
+            vNuevoPalletId = "";
+
+            clsBeResolucion_lp_operador resolucionActivaLpByBodega = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+
+            if (resolucionActivaLpByBodega !=null){
+
+                gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
+
+                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
+
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
+
+                 vNuevoPalletId= resolucionActivaLpByBodega.Serie + result;
+
+            }else{
+                gl.IdResolucionLpOperador =0;
+                toast("Este usuario no tiene resoluciones configuradas");
+            }
+
+            if (!vNuevoPalletId.isEmpty()){
+                //Set_Nuevo_Pallet_Id
+                execws(9);
+            }else{
+                msgbox("Error al obtener correlativo de licencia!");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP_packing: "+e.getMessage());
         }
 
     }
