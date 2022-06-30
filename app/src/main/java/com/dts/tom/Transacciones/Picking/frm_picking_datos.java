@@ -1968,6 +1968,7 @@ public class frm_picking_datos extends PBase {
     private void Continua_reemplazo(){
 
         try {
+
             if (Tipo == 1) {
                 browse = 1;
                 IdUbicacionPicking = selitem.IdUbicacion;
@@ -1979,7 +1980,7 @@ public class frm_picking_datos extends PBase {
                 if (gl.gUbicProdNe > 0 && gl.IdProductoEstadoNE > 0) {
                     startActivity(new Intent(this, frm_list_prod_reemplazo_picking.class));
                 } else {
-                    msgProdNe("No existe un estado/ubicación disponible para marcar como no encontrado al producto: "+
+                    msgProdNe("No existe estado/ubicación disponible para marcar como no encontrado el producto: "+
                             "\n \n"+gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto);
                 }
             }
