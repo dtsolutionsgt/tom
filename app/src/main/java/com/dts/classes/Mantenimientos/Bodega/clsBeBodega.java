@@ -59,7 +59,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Eliminar_Documento_Salida = false;
     @Element(required=false) public boolean Operador_Picking_Realiza_Verificacion = false;
     @Element(required=false) public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
-
+    @Element(required=false) public boolean Permitir_Buen_Estado_En_Reemplazo = false;
 
     public clsBeBodega() {
     }
@@ -472,4 +472,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setPermitir_Cambio_Ubic_Producto_Picking(boolean value) {
         Permitir_Cambio_Ubic_Producto_Picking=value;
     }
+
+    public boolean getPermitir_Buen_Estado_En_Reemplazo() {
+        return Permitir_Buen_Estado_En_Reemplazo;
+    }
+    public void setPermitir_Buen_Estado_En_Reemplazo(boolean value) {
+        Permitir_Buen_Estado_En_Reemplazo=value;
+    }
+
 }

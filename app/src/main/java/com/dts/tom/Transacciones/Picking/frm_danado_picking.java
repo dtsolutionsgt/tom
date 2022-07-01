@@ -153,6 +153,7 @@ public class frm_danado_picking extends PBase {
     }
 
     public void BotonGuardarDanado(View view){
+
         if (!txtUbicDest.getText().toString().isEmpty()){
             /*BeUbicDestino = new clsBeBodega_ubicacion();
             BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
@@ -181,18 +182,6 @@ public class frm_danado_picking extends PBase {
                         + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
                         + "\n ¿Mover?");
             }
-
-            //#CKFK20220618 Puse esto en comentario y lo llamo dentro del process del execws(3)
-            // porque es el que se llama dentro del process del 2
-            /*BeUbicDestino = new clsBeBodega_ubicacion();
-            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
-            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-
-            msgMover("Producto: "+gBeProducto.Nombre
-                    + "\n Destino: "+ BeUbicDestino.NombreCompleto
-                    + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
-                    + "\n ¿Mover?");
-*/
         }
     }
 
@@ -217,7 +206,6 @@ public class frm_danado_picking extends PBase {
             cmbEstadoDanado.setAdapter(dataAdapter);
 
             if (EstadoList.size() > 0) cmbEstadoDanado.setSelection(0);
-
 
         } catch (Exception e) {
             mu.msgbox("Listar_Producto_Estado:" + e.getMessage());

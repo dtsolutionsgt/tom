@@ -214,6 +214,8 @@ public class appGlobals extends Application {
     public int TipoPantallaRecepcion = 0;
     public int TipoPantallaVerificacion = 0;
 
+    public  boolean Permitir_Buen_Estado_En_Reemplazo =false;
+
     @Override
     public void onCreate() {
         super.onCreate();
