@@ -249,6 +249,24 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Reabastecimiento manual")){
+                        item = clsCls.new clsMenu();
+                        item.ID = 12;
+                        item.Icon = 12;
+                        item.Name = "Reabastecimiento manual";
+                        item.cant = -1;
+                        items.add(item);
+                    }
+
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Reubicar stock reservado")){
+                        item = clsCls.new clsMenu();
+                        item.ID = 13;
+                        item.Icon = 13;
+                        item.Name = "Reubicar stock reservado";
+                        item.cant = -1;
+                        items.add(item);
+                    }
+
                 }
 
 
@@ -288,17 +306,6 @@ public class Mainmenu extends PBase {
 
               /*  item = clsCls.new clsMenu();
                 item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
-                items.add(item);*/
-
-                //Preguntar si se muestra por operador.
-                /*item = clsCls.new clsMenu();
-                item.ID=12;item.Icon=12;
-                item.Name="Reabastecimiento manual";item.cant=-1;
-                items.add(item);
-
-                item = clsCls.new clsMenu();
-                item.ID=13;item.Icon=13;
-                item.Name="Reubicar stock reservado";item.cant=-1;
                 items.add(item);*/
 
                 item = clsCls.new clsMenu();
@@ -654,7 +661,7 @@ public class Mainmenu extends PBase {
 
                     break;
 
-                case 4://Implosión   //antes tenia packing
+                case 4://ImplosiónImplosión   //antes tenia packing
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_Packing.class));
 
