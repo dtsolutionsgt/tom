@@ -30,7 +30,7 @@ public class frm_datos_stock_res extends PBase {
     private EditText txtUbicOrigen, txtLicensePlate, txtCodigoPrd, txtCantidad, txtUbicDestino;
     private TableRow trDestino, trPresentacion, trLote, trVence, trProducto;
 
-    private int IdUbicacion = 0, IdUbicacionDest = 0;
+    private int IdUbicacion = 0, IdUbicacionDest = 0, CambioUbicRealizado = 0;
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
 
     @Override
@@ -321,6 +321,12 @@ public class frm_datos_stock_res extends PBase {
     private void processActualizaUbic() {
         try {
 
+            CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult",int.class);
+
+            if (CambioUbicRealizado > 0) {
+                super.finish();
+            }
+
         } catch (Exception e) {
             mu.msgbox("processActualizaUbic: "+e.getMessage());
         }
@@ -390,7 +396,8 @@ public class frm_datos_stock_res extends PBase {
                         callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
                                          "pIdStock", selitem.IdStock,
                                                "pIdBodega", gl.IdBodega,
-                                               "pIdUbicacion",IdUbicacion);
+                                               "pIdUbicacion",IdUbicacion,
+                                               "pIdOperador", gl.IdOperador);
                         break;
                 }
 
