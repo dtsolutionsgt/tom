@@ -97,6 +97,8 @@ public class clsBeProducto {
   @Element(required=false) public int IdTipoEtiqueta=0;
   @Element(required=false) public String User_agr="";
   @Element(required=false) public int Dias_Inventario_Promedio =90;
+  @Element(required=false) public int IdProductoParametroA =0;
+  @Element(required=false) public int IdProductoParametroB =0;
 
 //EJC
 
@@ -742,6 +744,20 @@ public class clsBeProducto {
   }
   public void setIdTipoEtiqueta(int value) {
     IdTipoEtiqueta=value;
+  }
+
+  public int getIdProductoParametroA() {
+    return IdProductoParametroA;
+  }
+  public void setIdProductoParametroA(int value) {
+    IdProductoParametroA=value;
+  }
+
+  public int getIdProductoParametroB() {
+    return IdProductoParametroB;
+  }
+  public void setIdProductoParametroB(int value) {
+    IdProductoParametroB=value;
   }
 
 }
