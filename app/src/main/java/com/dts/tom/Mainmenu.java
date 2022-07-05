@@ -70,18 +70,11 @@ public class Mainmenu extends PBase {
 
     private static String PathDataDir = "";
 
-    private boolean areaprimera = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
-
-
-        appGlobals gll;
-        gll=((appGlobals) this.getApplication());
-        areaprimera = gll.Mostrar_Area_En_HH;
 
         super.InitBase();
 
@@ -644,7 +637,7 @@ public class Mainmenu extends PBase {
                     gl.modo_cambio = 1;
 
                     //#GT14032022_1348: si tiene parametro mostrarArea, se hace ubicacion no dirigida
-                    if (areaprimera) {
+                    if (gl.Mostrar_Area_En_HH) {
                         Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
                         startActivity(intent);
 
