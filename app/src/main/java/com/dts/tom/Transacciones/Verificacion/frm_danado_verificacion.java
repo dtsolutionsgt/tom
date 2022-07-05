@@ -244,7 +244,10 @@ public class frm_danado_verificacion extends PBase {
 
             EstadoList.clear();
 
-            LProductoEstadoDanado.items = stream(LProductoEstadoDanado.items).where(c->c.Danado==true).toList();
+            //#AT20220705 Si Permitir_Buen_Estado_En_Reemplazo = falso filtra por estados donde danado = true
+            if (!gl.Permitir_Buen_Estado_En_Reemplazo) {
+                LProductoEstadoDanado.items = stream(LProductoEstadoDanado.items).where(c -> c.Danado == true).toList();
+            }
 
             for (int i = 0; i < LProductoEstadoDanado.items.size(); i++) {
                 EstadoList.add(LProductoEstadoDanado.items.get(i).Nombre);
