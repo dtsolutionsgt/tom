@@ -156,6 +156,7 @@ public class frm_lista_stock_res extends PBase {
     
     private void ProcesarRegistro() {
         try {
+            browse = 1;
             startActivity(new Intent(this, frm_datos_stock_res.class));
         } catch (Exception e) {
             mu.msgbox("ProcesarRegistro: "+e.getMessage());
@@ -273,6 +274,15 @@ public class frm_lista_stock_res extends PBase {
             progress.show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (browse == 1) {
+            browse = 0;
+            execws(1);
         }
     }
 }

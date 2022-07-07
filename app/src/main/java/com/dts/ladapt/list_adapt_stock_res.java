@@ -71,10 +71,13 @@ public class list_adapt_stock_res extends BaseAdapter {
             holder.txtFechaVen = (TextView) convertView.findViewById(R.id.txtFechaVen);
             holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
             holder.txtCantidad = (TextView) convertView.findViewById(R.id.txtCantidad);
+            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
 
             holder.trLicencia = (TableRow) convertView.findViewById(R.id.trLicencia);
             holder.trLote = (TableRow) convertView.findViewById(R.id.trLote);
             holder.trFechaVen = (TableRow) convertView.findViewById(R.id.trFechaVen);
+
+
 
             convertView.setTag(holder);
 
@@ -132,7 +135,13 @@ public class list_adapt_stock_res extends BaseAdapter {
             holder.txtEstado.setText(BeListStockRes.get(position).NomEstado);
         }
 
-        holder.txtCantidad.setText(""+BeListStockRes.get(position).CantidadReservadaUMBas);
+        if (BeListStockRes.get(position).IdPresentacion > 0) {
+            holder.lblCantidad.setText("Cantidad ("+BeListStockRes.get(position).Nombre_Presentacion+"): ");
+            holder.txtCantidad.setText(""+BeListStockRes.get(position).CantidadPresentacion);
+        } else {
+            holder.lblCantidad.setText("Cantidad ("+BeListStockRes.get(position).UMBas+"): ");
+            holder.txtCantidad.setText(""+BeListStockRes.get(position).CantidadReservadaUMBas);
+        }
 
         return convertView;
     }
@@ -140,7 +149,8 @@ public class list_adapt_stock_res extends BaseAdapter {
     static class ViewHolder {
 
         TextView txtPedido, txtPicking, txtFechaPedido, txtFechaPreparacion, txtCliente,
-                txtUbicacion, txtProducto, txtLicencia, txtLote, txtFechaVen, txtCantidad, txtEstado;
+                txtUbicacion, txtProducto, txtLicencia, txtLote, txtFechaVen, txtCantidad, txtEstado,
+                lblCantidad;
         TableRow trLicencia, trLote, trFechaVen;
     }
 

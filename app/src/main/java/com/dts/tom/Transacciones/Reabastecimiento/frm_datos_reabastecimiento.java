@@ -105,6 +105,27 @@ public class frm_datos_reabastecimiento extends PBase {
                 }
             });
 
+            if (trLicPlate.getVisibility() == View.GONE) {
+                txtCodigoPrd.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                            if (!txtCodigoPrd.getText().toString().isEmpty()) {
+                                if (selitem.Codigo_Producto.equals(txtCodigoPrd.getText().toString())) {
+                                    CargaDatos();
+                                } else {
+                                    mu.msgbox("El código producto no coincide.");
+                                }
+                            } else {
+                                mu.msgbox("Ingrese código válido.");
+                            }
+                        }
+
+                        return false;
+                    }
+                });
+            }
+
             txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -127,7 +148,11 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void CargaDatos() {
         try {
-            txtCodigoPrd.setText(selitem.Codigo_Producto);
+
+            if (trLicPlate.getVisibility() != View.GONE) {
+                txtCodigoPrd.setText(selitem.Codigo_Producto);
+            }
+
             lblDescProducto.setText( selitem.Codigo_Producto+" - "+selitem.Nombre_Producto);
             txtLote.setText(selitem.Lote);
             txtVence.setText(selitem.Fecha_Vence);
@@ -155,7 +180,7 @@ public class frm_datos_reabastecimiento extends PBase {
                 txtLipPlate.requestFocus();
             } else {
                 trLicPlate.setVisibility(View.GONE);
-                txtCodigoPrd.requestFocus();
+                txtCodigoPrd.setFocusable(true);
             }
 
         } catch (Exception e) {

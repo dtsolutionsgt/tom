@@ -46,7 +46,8 @@
                     android:layout_marginEnd="10dp"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:imeOptions="actionNext"/>
 
 
             </TableRow>
@@ -79,7 +80,8 @@
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:imeOptions="actionNext"/>
             </TableRow>
 
             <TableRow
@@ -109,7 +111,7 @@
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"/>
             </TableRow>
 
             <TableRow
@@ -135,7 +137,8 @@
                 android:id="@+id/trUnidad"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblUnidadMedida"
@@ -166,7 +169,8 @@
                 android:id="@+id/trPresentacion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/lblPresentacion"
@@ -350,7 +354,8 @@
                     android:layout_marginEnd="10dp"
                     android:inputType="number"
                     android:paddingStart="5dp"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:singleLine="true"/>
 
             </TableRow>
 
@@ -540,7 +545,7 @@
             android:layout_toEndOf="@+id/btnBack"
             android:background="@drawable/color_medium"
             android:onClick="AplicarCambio"
-            android:text="Ubicar"
+            android:text="Procesar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold" />
