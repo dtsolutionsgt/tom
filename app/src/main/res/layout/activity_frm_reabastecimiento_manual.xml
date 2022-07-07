@@ -39,7 +39,8 @@
             android:text="Procesar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,115 +65,152 @@
 
     </RelativeLayout>
 
-    <ScrollView
-        android:id="@+id/scrollCiego"
+
+    <LinearLayout
+        android:id="@+id/LinearCiego"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="0dp"
+        android:background="@color/rosado"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relCodigo"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/lblCodigo"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Código:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtCodigoPrd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="0dp"
+                android:layout_toStartOf="@+id/imageView22"
+                android:layout_toEndOf="@+id/lblCodigo"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="0dp"
+                android:padding="1dp"
+                android:src="@drawable/btn_buscar" />
+
+        </RelativeLayout>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/lblOrigen"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Origen:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtUbicOrigen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@android:color/black" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView26"
+                style="@style/StyleText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Licencia:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtLicencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </TableRow>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearDetalle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
-        android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true"
-        android:background="#F8DEDE">
+        android:layout_below="@+id/LinearCiego"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/LinearCiego"
+            android:id="@+id/encabezado"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/color_medium"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Detalle"
+                android:textColor="#FFFFFF"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listExist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/relCodigo"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="true">
-
-                <TextView
-                    android:id="@+id/lblCodigo"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Código:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtCodigoPrd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toStartOf="@+id/imageView22"
-                    android:layout_toEndOf="@+id/lblCodigo"
-                    android:inputType="textPersonName"
-                    android:textColor="@android:color/black" />
-
-                <ImageView
-                    android:id="@+id/imageView22"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="0dp"
-                    android:padding="1dp"
-                    android:src="@drawable/btn_buscar" />
-
-            </RelativeLayout>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/lblOrigen"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Origen:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtUbicOrigen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textColor="@android:color/black" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView26"
-                    style="@style/StyleText"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Licencia:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtLicencia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </TableRow>
-        </LinearLayout>
-    </ScrollView>
+            android:divider="#757575"
+            android:dividerHeight="5px"
+            android:scrollbars="horizontal|vertical" />
+    </LinearLayout>
 </RelativeLayout>

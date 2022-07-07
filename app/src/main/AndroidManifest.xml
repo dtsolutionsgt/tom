@@ -96,6 +96,7 @@
         <activity android:name=".Transacciones.Reabastecimiento.frm_reabastecimiento_manual" />
         <activity android:name=".Transacciones.ReubicarStockRes.frm_lista_stock_res" />
         <activity android:name=".Transacciones.ReubicarStockRes.frm_datos_stock_res" />
+        <activity android:name=".Transacciones.Reabastecimiento.frm_datos_reabastecimiento" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
