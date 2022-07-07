@@ -2612,7 +2612,8 @@ public class frm_picking_datos extends PBase {
             });
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    return;
+                    progress.cancel();
+                    doExit();
                 }
             });
             dialog.show();
@@ -2638,8 +2639,7 @@ public class frm_picking_datos extends PBase {
 
     private void doExit(){
         try{
-
-          Escaneo_Pallet = false;
+            Escaneo_Pallet = false;
             super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

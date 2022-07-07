@@ -355,6 +355,8 @@ public class frm_recepcion_datos extends PBase {
         }
 
         lblUbicacion.setText("");
+        txtLoteRec.setText("");
+        cmbVenceRec.setText(du.getActDateStr());
 
         txtPosiciones = new EditText(this,null);
         txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
