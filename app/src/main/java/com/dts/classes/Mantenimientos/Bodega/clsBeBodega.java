@@ -60,6 +60,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Operador_Picking_Realiza_Verificacion = false;
     @Element(required=false) public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
     @Element(required=false) public boolean Permitir_Buen_Estado_En_Reemplazo = false;
+    @Element(required=false) public boolean industria_motriz = false;
 
     public clsBeBodega() {
     }
@@ -79,7 +80,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Es_Bodega_Fiscal, boolean habilitar_ingreso_consolidado,
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
-                       boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking) {
+                       boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
+                       boolean industria_motriz) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -135,6 +137,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Operador_Picking_Realiza_Verificacion = Operador_Picking_Realiza_Verificacion;
         this.Permitir_Cambio_Ubic_Producto_Picking = Permitir_Cambio_Ubic_Producto_Picking;
         //this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
+        this.industria_motriz = industria_motriz;
     }
 
     public int getIdPais() {
@@ -480,4 +483,10 @@ public class clsBeBodega extends clsBeBodegaBase {
         Permitir_Buen_Estado_En_Reemplazo=value;
     }
 
+    public boolean getIndustria_motriz() {
+        return industria_motriz;
+    }
+    public void setIndustria_motriz(boolean value) {
+        industria_motriz=value;
+    }
 }
