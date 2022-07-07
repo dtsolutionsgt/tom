@@ -158,13 +158,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
             super.onCreate(savedInstanceState);
 
-            appGlobals gll;
-            gll=((appGlobals) this.getApplication());
-            areaprimera = gll.Mostrar_Area_En_HH;
+            super.InitBase();
 
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
 
-            super.InitBase();
             ocultar_mensajes = gl.Mostrar_Area_En_HH;
             inferir_origen_en_cambio_ubic = gl.inferir_origen_en_cambio_ubic;
 

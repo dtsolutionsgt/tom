@@ -77,23 +77,18 @@ public class frm_consulta_stock extends PBase {
     //clsBeVW_stock_res_CI  ItemSelected;
     private TextView lblTituloForma;
     private Spinner cmbEstadoExist, spOrdenar;
-    private boolean Mostrar_Area_En_HH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appGlobals gll;
-        gll=((appGlobals) this.getApplication());
-        Mostrar_Area_En_HH = gll.Mostrar_Area_En_HH;
+        super.InitBase();
 
-        if (Mostrar_Area_En_HH) {
+        if (gl.Mostrar_Area_En_HH) {
             setContentView(R.layout.activity_frm_consulta_stock2);
         } else {
             setContentView(R.layout.activity_frm_consulta_stock);
         }
-
-        super.InitBase();
 
         ws = new WebServiceHandler(frm_consulta_stock.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -597,7 +592,7 @@ public class frm_consulta_stock extends PBase {
                     }
 
 
-                    if (Mostrar_Area_En_HH) {
+                    if (gl.Mostrar_Area_En_HH) {
                         adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                         listView.setAdapter(adapter_stock2);
                     } else {
@@ -631,7 +626,7 @@ public class frm_consulta_stock extends PBase {
                 }
             } else {
                 //limpiar el grid.
-                if (Mostrar_Area_En_HH) {
+                if (gl.Mostrar_Area_En_HH) {
                     adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                     listView.setAdapter(adapter_stock2);
                 } else {
@@ -690,7 +685,7 @@ public class frm_consulta_stock extends PBase {
                 items_stock.add(item);
             }
 
-            if (Mostrar_Area_En_HH) {
+            if (gl.Mostrar_Area_En_HH) {
                 adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock2);
             } else {
@@ -751,7 +746,7 @@ public class frm_consulta_stock extends PBase {
                 items_stock2.add(items);
 
             }
-            if (Mostrar_Area_En_HH) {
+            if (gl.Mostrar_Area_En_HH) {
                 adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock2);
             } else {
@@ -799,7 +794,7 @@ public class frm_consulta_stock extends PBase {
                     items_stock2.add(items);
                 }
             }
-            if (Mostrar_Area_En_HH) {
+            if (gl.Mostrar_Area_En_HH) {
                 adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                 listView.setAdapter(adapter_stock2);
             } else {
@@ -852,7 +847,7 @@ public class frm_consulta_stock extends PBase {
             ) {
                 items_stock.clear();
 
-                if (Mostrar_Area_En_HH) {
+                if (gl.Mostrar_Area_En_HH) {
                     adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                     listView.setAdapter(adapter_stock2);
                 } else {
