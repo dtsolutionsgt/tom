@@ -195,9 +195,10 @@ public class frm_danado_picking extends PBase {
 
             EstadoList.clear();
 
-            //Si Permitir_Buen_Estado_En_Reemplazo = falso filtra por estados donde danado = true
-            if (!gl.Permitir_Buen_Estado_En_Reemplazo) {
-                LProductoEstadoDanado.items = stream(LProductoEstadoDanado.items).where(c -> c.Danado == true).toList();
+            //#EJC20220701: Por defecto la lista trae todos los estado y aquí solo se dejan los dañados
+            //Si el paramtro permitir buen estado está en true, entonces no se filtrarán unicamente los que están dañados.
+            if(!gl.Permitir_Buen_Estado_En_Reemplazo){
+                LProductoEstadoDanado.items = stream(LProductoEstadoDanado.items).where(c->c.Danado==true).toList();
             }
 
             for (int i = 0; i < LProductoEstadoDanado.items.size(); i++) {

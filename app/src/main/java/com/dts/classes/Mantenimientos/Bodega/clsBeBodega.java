@@ -61,6 +61,10 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
     @Element(required=false) public boolean Permitir_Buen_Estado_En_Reemplazo = false;
     @Element(required=false) public boolean industria_motriz = false;
+    @Element(required=false) public boolean Restringir_Vencimiento_En_Reemplazo = false;
+    @Element(required=false) public boolean Restringir_Lote_En_Reemplazo  = false;
+
+//#EJC2022071953: CAMPOS NUEVOS HH
 
     public clsBeBodega() {
     }
@@ -489,4 +493,20 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setIndustria_motriz(boolean value) {
         industria_motriz=value;
     }
+
+    public boolean getRestringir_Vencimiento_En_Reemplazo () {
+        return Restringir_Vencimiento_En_Reemplazo;
+    }
+    public void setRestringir_Vencimiento_En_Reemplazo(boolean value) {
+        Restringir_Vencimiento_En_Reemplazo=value;
+    }
+
+    public boolean getRestringir_Lote_En_Reemplazo () {
+        return Restringir_Lote_En_Reemplazo;
+    }
+    public void setRestringir_Lote_En_Reemplazo(boolean value) {
+        Restringir_Lote_En_Reemplazo=value;
+    }
+
+
 }
