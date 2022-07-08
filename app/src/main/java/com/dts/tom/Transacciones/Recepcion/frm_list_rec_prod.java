@@ -1527,7 +1527,8 @@ public class frm_list_rec_prod extends PBase {
 
             gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH");
 
-            //pListDetalleOC.items = gl.gpListDetalleOC.items;
+            //#AT20220708 Si esta linea ocasiona algún error por favor notificar, ya que es necesario cuando se recibe la presentación con unidades.
+            pListDetalleOC.items = gl.gpListDetalleOC.items;
 
             Lista_Detalle_Documento_Ingreso();
             ordenar();
