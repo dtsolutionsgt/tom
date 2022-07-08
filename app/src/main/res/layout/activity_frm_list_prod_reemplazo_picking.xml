@@ -6,59 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Picking.frm_list_prod_reemplazo_picking">
 
-    <TextView
-        android:id="@+id/lbldDetProducto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reltop"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:text="Detalle Producto"
-        android:textColor="@color/medium"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <RelativeLayout
-        android:id="@+id/relbot"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="1dp"
-        android:background="@drawable/color_medium">
-
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="61dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
-            android:background="@drawable/back"
-            android:onClick="Regresar" />
-
-        <Button
-            android:id="@+id/btnActualizaPickingDet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:text="Actualizar"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
@@ -82,15 +29,66 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/lbldDetProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="0dp"
+        android:text="Detalle Producto"
+        android:textColor="@color/medium"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linearFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lbldDetProducto"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/lblFiltro"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Filtro: "
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtFiltro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Licencia o ubicación"
+                android:inputType="textPersonName"
+                android:paddingStart="5dp" />
+        </TableRow>
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/relCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
-        android:layout_below="@+id/lbldDetProducto"
+        android:layout_below="@+id/linearFiltros"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="0dp">
 
         <HorizontalScrollView
             android:id="@+id/hrPicking"
@@ -100,9 +98,9 @@
             android:layout_marginBottom="0dp">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -304,6 +302,41 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="Registros: 0" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relbot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"
+            android:onClick="Regresar" />
+
+        <Button
+            android:id="@+id/btnActualizaPickingDet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/btnBack"
+            android:background="@drawable/color_medium"
+            android:text="Actualizar"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </RelativeLayout>

@@ -45,9 +45,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:ems="10"
+                    android:imeOptions="actionNext"
                     android:inputType="textPersonName"
-                    android:textSize="24sp"
-                    android:imeOptions="actionNext"/>
+                    android:textSize="24sp" />
 
 
             </TableRow>
@@ -77,11 +77,11 @@
                     android:layout_marginEnd="10dp"
                     android:enabled="true"
                     android:hint="Licencia"
+                    android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"
-                    android:imeOptions="actionNext"/>
+                    android:textSize="24sp" />
             </TableRow>
 
             <TableRow
@@ -111,7 +111,7 @@
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
             </TableRow>
 
             <TableRow
@@ -354,8 +354,8 @@
                     android:layout_marginEnd="10dp"
                     android:inputType="number"
                     android:paddingStart="5dp"
-                    android:textSize="24sp"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:textSize="24sp" />
 
             </TableRow>
 
@@ -402,6 +402,7 @@
                     android:id="@+id/txtCantidad"
                     android:layout_width="171dp"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:inputType="numberDecimal"
                     android:paddingStart="5dp"
                     android:text="0.00"

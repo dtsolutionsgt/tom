@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_reemplazo_verif;
+import com.dts.ladapt.list_adapt_detalle_reemplazo_picking;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -41,10 +45,12 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private ProgressDialog progress;
 
     private TextView lblTituloForma,lblCantRegs,lbldDetProducto;
+    private EditText txtFiltro;
     private ListView listDispProd;
     private Button btnActualizaPickingDet,btnBack;
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
+    private ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_verif adapter;
     private clsBeStockReemplazo selitem;
     private clsBeStock_res StockResReemplazo;
@@ -78,11 +84,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         listDispProd = (ListView)findViewById(R.id.listDispProd);
 
+        txtFiltro = findViewById(R.id.txtFiltro);
+
         btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
         btnBack = (Button)findViewById(R.id.btnBack);
 
         pCantTotal = CantReemplazar;
         ConExistencia = false;
+        gl.termino = "";
         setHandlers();
 
         ProgressDialog("Listando existencias de producto:"+gBeProducto.Codigo);
@@ -134,7 +143,11 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     Object lvObj = listDispProd.getItemAtPosition(position);
                     clsBeStockReemplazo sitem = (clsBeStockReemplazo) lvObj;
                     selitem = new clsBeStockReemplazo();
-                    selitem = BeListStock.get(position);
+                    //selitem = BeListStock.get(position);
+
+                    //#AT20220707 Ya no se obtiene de la lista directamente según la posición,
+                    //ahora selitem = sitem
+                    selitem = sitem;
 
                     selid = sitem.IdStock;
                     selidx = position;
@@ -147,6 +160,28 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
                 }
 
+            });
+
+            txtFiltro.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
+                    if (!txtFiltro.getText().toString().isEmpty()) {
+                        gl.termino = txtFiltro.getText().toString();
+                        Lista_Filtrada();
+                    } else {
+                        Lista_Inventario_Disponible();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
             });
 
         }catch (Exception e){
@@ -373,6 +408,79 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         } catch (Exception e){
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void Lista_Filtrada(){
+
+        clsBeStockReemplazo vItem;
+
+        try{
+
+            TempBeListStock.clear();
+
+            if (DT.getCount()>0) {
+                ConExistencia = true;
+                DT.moveToFirst();
+
+                while (!DT.isAfterLast()) {
+
+                    vItem=new clsBeStockReemplazo();
+
+                    vItem.Codigo = DT.getString(0);
+                    vItem.Producto = DT.getString(1);
+                    vItem.Presentacion = DT.getString(2);
+                    vItem.UMBas = DT.getString(3);
+                    vItem.Cant = DT.getDouble(4);
+                    vItem.IdUbicacion = DT.getInt(5);
+                    vItem.NombreUbicacion = DT.getString(40);
+
+                    if (DT.getString(6)!=null){
+                        vItem.FechaVence = du.convierteFechaMostrar(DT.getString(6));
+                    }else{
+                        vItem.FechaVence = "";
+                    }
+
+                    if (DT.getString(7)!=null){
+                        vItem.LicPlate = DT.getString(7);
+                    }else{
+                        vItem.LicPlate = "";
+                    }
+                    if (DT.getString(8)!=null){
+                        vItem.Lote = DT.getString(8);
+                    }else{
+                        vItem.Lote = "";
+                    }
+                    vItem.CodigoProducto = DT.getString(0);
+                    vItem.Peso = DT.getDouble(9);
+                    vItem.Estado = DT.getString(10);
+                    vItem.IdStock = 0; //DT.getInt(11);
+                    vItem.Despachar = DT.getString(11);
+                    vItem.IdEstado = DT.getInt(12);
+                    vItem.IdPresentacion = DT.getInt(13) ;
+                    vItem.IdProductoBodega = DT.getInt(14);
+                    vItem.IdUnidadMedida = DT.getInt(20);
+
+                    if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains(gl.termino.toLowerCase()) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                        TempBeListStock.add(vItem);
+                    }
+
+                    DT.moveToNext();
+                }
+
+                int count =TempBeListStock.size();
+                lblCantRegs.setText("No.Reg: "+count);
+            }
+
+            adapter=new list_adapt_detalle_reemplazo_verif(this,TempBeListStock);
+            listDispProd.setAdapter(adapter);
+
+            progress.cancel();
+
+        } catch (Exception e){
+            progress.cancel();
+            mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
         }
 
     }
