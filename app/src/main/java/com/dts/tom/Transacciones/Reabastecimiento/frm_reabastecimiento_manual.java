@@ -179,13 +179,7 @@ public class frm_reabastecimiento_manual extends PBase {
                                                "IdBodega", gl.IdBodega);
                         break;
                     case 2:
-
-                        if (!txtUbicOrigen.getText().toString().isEmpty()) {
-                            IdUbicacion = Integer.valueOf(txtUbicOrigen.getText().toString());
-                        }
-
                         callMethod("Get_All_Products_For_Reabastecimiento",
-                                         "pIdUbicacion", IdUbicacion,
                                                "pIdProducto", BeProducto.IdProducto,
                                                "pIdBodega", gl.IdBodega);
                         break;
