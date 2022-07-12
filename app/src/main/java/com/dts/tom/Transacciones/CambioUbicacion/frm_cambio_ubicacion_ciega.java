@@ -205,6 +205,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             relbot = (RelativeLayout) findViewById(R.id.relbot);
             reltop = (RelativeLayout) findViewById(R.id.reltop);
 
+            tblPresentacion = findViewById(R.id.tblPresentacion);
+
             tblExplosionar.setVisibility(View.GONE);
 
             txtPosiciones = new EditText(this,null);
@@ -268,7 +270,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         spinlabel.setTextSize(18);
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
+                        //#AT20220711 Se agrega valor a cvPresId segun lo selccionado en el combo
+                        //tambien se actualizan los datos según vaya cambiando la presentación
                         cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                        String NombrePres = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
+
+                        if (cvPresID > 0) {
+                            lblCantidad.setText("Cantidad ("+NombrePres+"): ");
+                        } else {
+                            lblCantidad.setText("Cantidad ("+BeProductoUbicacion.UnidadMedida.Nombre+")");
+                        }
                         LlenaLotes();
                     }
 
@@ -686,6 +697,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     //#AT20220412 Cree esta función para asignar a cvPresId el idPresentación
     //sin utilizar el cmb
     private void setPresentacion() {
+        String valor = "";
         try {
 
             List AuxList = stream(stockResList.items)
@@ -694,15 +706,39 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             presentacionList.items = AuxList;
 
+            //#20220711 Si el tamaño de la lista es mayor a 1,
+            //se muestra el combo con todas su presentaciones disponibles.
             if (presentacionList.items.size() > 0) {
-                cvPresID = presentacionList.items.get(0).IdPresentacion;
+                if (presentacionList.items.size() == 1) {
+                    cvPresID = presentacionList.items.get(0).IdPresentacion;
 
-                if (cvPresID == 0){
-                    tblExplosionar.setVisibility(View.GONE);
-                    lblCantidad.setText("Cantidad (UNI): ");
+                    if (cvPresID == 0) {
+                        tblExplosionar.setVisibility(View.GONE);
+                        lblCantidad.setText("Cantidad ("+BeProductoUbicacion.UnidadMedida.Nombre+"): ");
+                    } else {
+                        tblExplosionar.setVisibility(View.VISIBLE);
+                        lblCantidad.setText("Cantidad (" + presentacionList.items.get(0).Nombre_Presentacion + "): ");
+                    }
                 } else {
-                    tblExplosionar.setVisibility(View.VISIBLE);
-                    lblCantidad.setText("Cantidad ("+presentacionList.items.get(0).Nombre_Presentacion+"): ");
+
+                    tblPresentacion.setVisibility(View.VISIBLE);
+
+                    cmbPresentacionList.clear();
+
+                    for (int i = 0; i < presentacionList.items.size(); i++) {
+
+                        String NombrePres = presentacionList.items.get(i).getIdPresentacion() == 0 ? "Sin Presentación": presentacionList.items.get(i).getNombre_Presentacion();
+                        valor = presentacionList.items.get(i).getIdPresentacion() + " - " + NombrePres;
+
+                        if (cmbPresentacionList.indexOf(valor)==-1){
+                            cmbPresentacionList.add(valor);
+                        }
+
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbPresentacionList);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cmbPresentacion.setAdapter(dataAdapter);
                 }
             }
 
@@ -2622,7 +2658,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtPeso.setText("");
             txtCodigoPrd.setText("");
 
-            cmbPresentacion.setEnabled(false);
+            //cmbPresentacion.setEnabled(false);
+            tblPresentacion.setVisibility(View.GONE);
             cmbLote.setEnabled(true);
             cmbVence.setEnabled(true);
             cmbEstadoDestino.setEnabled(true);
@@ -2694,7 +2731,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtPeso.setText("");
             txtCodigoPrd.setText("");
 
-            cmbPresentacion.setEnabled(false);
+            //cmbPresentacion.setEnabled(false);
+            tblPresentacion.setVisibility(View.GONE);
             cmbLote.setEnabled(true);
             cmbVence.setEnabled(true);
             cmbEstadoDestino.setEnabled(true);
@@ -2751,7 +2789,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtPeso.setText("");
             txtCodigoPrd.setText("");
 
-            cmbPresentacion.setEnabled(false);
+            //cmbPresentacion.setEnabled(false);
+            tblPresentacion.setVisibility(View.GONE);
             cmbLote.setEnabled(true);
             cmbVence.setEnabled(true);
             cmbEstadoDestino.setEnabled(true);
