@@ -1227,11 +1227,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#CKFK 20200414 quité la condiciones de si se había escaneado un pallet porque el license plate se filtra al inicio
             //cuando se obtiene el stockResList
+            //#AT20220713 Utilice equals en lugar de == para comprar los valores
             AuxList = stream(stockResList.items)
                     .where(c -> c.IdProducto == cvProdID)
                     .where(c -> c.IdPresentacion == cvPresID)
                     .where(c -> (BeProductoUbicacion.Control_lote?c.Lote.equals(cvLote):1==1))
-                    .where(c -> c.Atributo_variante_1 == (cvAtrib == null ? "" : cvAtrib))
+                    .where(c -> c.Atributo_variante_1.equals((cvAtrib == null ? "" : cvAtrib)))
                     .where(c -> (cvEstOrigen > 0 ? c.IdProductoEstado == cvEstOrigen : c.IdProductoEstado >= 0))
                     .where(c -> (BeProductoUbicacion.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
                     .toList();
@@ -2055,6 +2056,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                             cvLote = BeStockPallet.Lote;
                             cvPresID = BeStockPallet.IdPresentacion;
+                            //#AT20220713 Asigne valor a la variable cvAtrib
+                            cvAtrib = BeStockPallet.Atributo_variante_1;
                             cvEstOrigen = BeStockPallet.IdProductoEstado;
                             cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
 
@@ -2463,6 +2466,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         cvLote = BeStockPallet.Lote;
                         cvPresID = BeStockPallet.IdPresentacion;
+                        //#AT20220713 Asigne valor a la variable cvAtrib
+                        cvAtrib = BeStockPallet.Atributo_variante_1;
                         cvEstOrigen = BeStockPallet.IdProductoEstado;
                         cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
 
@@ -2639,6 +2644,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             cvProdID = 0;
             cvPresID = 0;
+            cvAtrib = "";
             cvLote  = "";
             cvVence = "";
             cvUbicDestID = 0;
@@ -2716,6 +2722,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             cvProdID = 0;
             cvPresID = 0;
+            cvAtrib = "";
             cvLote  = "";
             cvVence = "";
             cvUbicDestID = 0;
@@ -2776,6 +2783,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             cvProdID = 0;
             cvPresID = 0;
+            cvAtrib = "";
             cvLote  = "";
             cvVence = "";
             cvUbicDestID = 0;

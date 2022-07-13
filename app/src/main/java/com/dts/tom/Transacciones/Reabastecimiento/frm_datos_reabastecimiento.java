@@ -26,7 +26,7 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private EditText txtUbicOrigen, txtLipPlate, txtCodigoPrd, txtLote, txtVence,
                      txtEstado, txtCantidad, txtUbicDestino;
-    private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino;
+    private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino, lblCantidad;
     private TableRow trLicPlate;
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
@@ -55,8 +55,10 @@ public class frm_datos_reabastecimiento extends PBase {
         lblUbicCompleta = findViewById(R.id.lblUbicCompleta);
         lblDescProducto = findViewById(R.id.lblDescProducto);
         lblUbicCompDestino = findViewById(R.id.lblUbicCompDestino);
+        lblCantidad = findViewById(R.id.lblCantidad);
 
         trLicPlate = findViewById(R.id.trLicPlate);
+        txtUbicOrigen.setEnabled(false);
 
         Load();
         setHandlers();
@@ -65,13 +67,6 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void setHandlers() {
         try {
-            txtLipPlate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
             txtCodigoPrd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -79,7 +74,7 @@ public class frm_datos_reabastecimiento extends PBase {
                 }
             });
 
-            txtCantidad.setOnClickListener(new View.OnClickListener() {
+            txtUbicDestino.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -149,22 +144,30 @@ public class frm_datos_reabastecimiento extends PBase {
     private void CargaDatos() {
         try {
 
+            txtCantidad.setEnabled(false);
+
             if (trLicPlate.getVisibility() != View.GONE) {
                 txtCodigoPrd.setText(selitem.Codigo_Producto);
             }
 
+            lblDescProducto.setVisibility(View.VISIBLE);
             lblDescProducto.setText( selitem.Codigo_Producto+" - "+selitem.Nombre_Producto);
             txtLote.setText(selitem.Lote);
             txtVence.setText(selitem.Fecha_Vence);
             txtEstado.setText(selitem.NomEstado);
 
             if (selitem.IdPresentacion > 0) {
-                txtCantidad.setText(""+selitem.CantidadPresentacion);
+                Double CantPres;
+                lblCantidad.setText("Cantidad ("+selitem.Nombre_Presentacion+"): ");
+
+                CantPres = selitem.CantidadReservadaUMBas / selitem.Factor;
+                txtCantidad.setText(""+CantPres);
             } else {
+                lblCantidad.setText("Cantidad ("+selitem.UMBas+"): ");
                 txtCantidad.setText(""+selitem.CantidadUmBas);
             }
 
-            txtCantidad. requestFocus();
+            txtUbicDestino.requestFocus();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -173,15 +176,20 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void Load() {
         try {
+            lblDescProducto.setVisibility(View.GONE);
+
             txtUbicOrigen.setText(""+selitem.IdUbicacion);
-            lblUbicCompleta.setText(""+selitem.NombreUbicacion);
+            lblUbicCompleta.setText(""+selitem.Ubicacion_Nombre);
 
             if (!selitem.Lic_plate.isEmpty()) {
+                txtLipPlate.setHint(selitem.Lic_plate);
                 txtLipPlate.requestFocus();
             } else {
                 trLicPlate.setVisibility(View.GONE);
-                txtCodigoPrd.setFocusable(true);
+                txtCodigoPrd.requestFocus();
             }
+
+            txtCodigoPrd.setHint(selitem.Codigo_Producto);
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

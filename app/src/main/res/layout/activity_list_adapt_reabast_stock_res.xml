@@ -129,12 +129,12 @@
         <TableRow
             android:id="@+id/trUbicacion"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/lblUbicacion"
                 android:layout_width="180dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -146,7 +146,7 @@
             <TextView
                 android:id="@+id/txtUbicacion"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
