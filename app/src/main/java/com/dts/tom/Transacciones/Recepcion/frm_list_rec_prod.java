@@ -551,6 +551,7 @@ public class frm_list_rec_prod extends PBase {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     selid = 0;
+                    BeProducto = null;
 
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;

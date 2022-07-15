@@ -3133,7 +3133,7 @@ public class frm_recepcion_datos extends PBase {
                         cmbPresRec.setSelection(Indx);*/
                         lblCantidad.setText("Cantidad (" + auxPres.Nombre +") :");
                         //#AT20220411 Este proceso se realizaba seleccionar un item de  cmbPresRec
-                        mostarEstiba();
+                        mostrarEstiba();
                     }
                 }
             } else {
@@ -3153,7 +3153,7 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
 
-                execws(22);
+                    execws(22);
 
                 }
 
@@ -3222,7 +3222,7 @@ public class frm_recepcion_datos extends PBase {
     private boolean Call_From_C = false;
     private boolean Call_From_D = false;
 
-    private void mostarEstiba()
+    private void mostrarEstiba()
     {
 
         CajasPorCama = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.CajasPorCama).first();
@@ -6848,6 +6848,10 @@ public class frm_recepcion_datos extends PBase {
             progress.setMessage("Obteniendo valores de producto");
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
+
+            //#CKFK20220714 Agregué esto aquí también porque no siempre entra a la otra opción a actualizar estos label
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             Load();
 
