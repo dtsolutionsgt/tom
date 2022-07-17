@@ -1312,7 +1312,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     toastlong("Ubicación temporal para stagin");
                 }else{
-                    //#EJC20220331: Este escneario falta probar..
+                    //#EJC20220331: Este escenario falta probar...
+
                 }
             }
 
