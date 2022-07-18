@@ -43,24 +43,24 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/trUmBas"
+            android:id="@+id/trCantidad"
             android:layout_width="match_parent"
             android:layout_height="35dp">
 
             <TextView
-                android:id="@+id/lblUmBas"
+                android:id="@+id/lblCantidad"
                 android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="UMBas:"
+                android:text="Cantidad (CAJA20):"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtUmBas"
+                android:id="@+id/txtCantidad"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -73,7 +73,8 @@
         <TableRow
             android:id="@+id/trPresentacion"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lblPresentacion"

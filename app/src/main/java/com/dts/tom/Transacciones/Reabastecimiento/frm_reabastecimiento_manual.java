@@ -104,6 +104,8 @@ public class frm_reabastecimiento_manual extends PBase {
 
     private void ProcesarRegistro() {
         try {
+            txtCodigoPrd.setText("");
+
             startActivity(new Intent(this, frm_datos_reabastecimiento.class));
         } catch (Exception e) {
             mu.msgbox("ProcesarRegistro: "+e.getMessage());

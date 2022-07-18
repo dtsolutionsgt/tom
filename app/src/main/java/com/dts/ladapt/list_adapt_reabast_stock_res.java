@@ -5,11 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.tom.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -63,8 +66,10 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
             holder.txtLote = (TextView) convertView.findViewById(R.id.txtLote);
             holder.txtFechaVen = (TextView) convertView.findViewById(R.id.txtFechaVen);
             holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
-            holder.txtUmBas = (TextView) convertView.findViewById(R.id.txtUmBas);
+            holder.txtCantidad = (TextView) convertView.findViewById(R.id.txtCantidad);
             holder.txtPresentacion = (TextView) convertView.findViewById(R.id.txtPresentacion);
+
+            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
 
             holder.trLicencia = (TableRow) convertView.findViewById(R.id.trLicencia);
             holder.trLote = (TableRow) convertView.findViewById(R.id.trLote);
@@ -106,8 +111,13 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
             holder.txtEstado.setText(BeListStockRes.get(position).NomEstado);
         }
 
-        if (!BeListStockRes.get(position).UMBas.isEmpty()) {
-            holder.txtUmBas.setText(BeListStockRes.get(position).UMBas);
+        if (BeListStockRes.get(position).IdPresentacion > 0) {
+            BeListStockRes.get(position).CantidadPresentacion = BeListStockRes.get(position).CantidadReservadaUMBas / BeListStockRes.get(position).Factor;
+            holder.lblCantidad.setText("Cantidad ("+BeListStockRes.get(position).Nombre_Presentacion+"): ");
+            holder.txtCantidad.setText(""+BeListStockRes.get(position).CantidadPresentacion);
+        } else {
+            holder.lblCantidad.setText("Cantidad ("+BeListStockRes.get(position).UMBas+"): ");
+            holder.txtCantidad.setText(""+BeListStockRes.get(position).CantidadReservadaUMBas);
         }
 
         if (!BeListStockRes.get(position).Nombre_Presentacion.isEmpty()) {
@@ -119,7 +129,8 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
 
     static class ViewHolder {
 
-        TextView txtUbicacion, txtProducto, txtLicencia, txtLote, txtFechaVen, txtEstado, txtUmBas, txtPresentacion;
+        TextView txtUbicacion, txtProducto, txtLicencia, txtLote, txtFechaVen, txtEstado, txtCantidad, txtPresentacion,
+                 lblCantidad;
         TableRow trLicencia, trLote, trFechaVen;
     }
 
