@@ -112,6 +112,9 @@ public class frm_picking_datos extends PBase {
     public static int IdUbicacionPicking = 0;
     public static String NombreUbicacionPicking = "";
 
+    //GT18072022_1130: lista para codigos de barra
+    public static clsBeProductoList lBeProducto = new clsBeProductoList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -362,10 +365,17 @@ public class frm_picking_datos extends PBase {
 
                     }
                 } else {
-                    msgCodigoProducto("El código del producto no es válido para esta licencia");
-                    txtCodigoProducto.requestFocus();
-                    txtCodigoProducto.selectAll();
-                    Log.d("focus: ", "20220502_2");
+
+                    //GT1872022_1030: sino existe por codigo producto, validar existencia como codigo_barras
+                    execws(12);
+
+                    //GT1872022_1520: este aviso se traslado al result del llamado, donde se valida como codigo_barra
+//                        msgCodigoProducto("El código del producto no es válido para esta licencia");
+//                        txtCodigoProducto.requestFocus();
+//                        txtCodigoProducto.selectAll();
+//                        Log.d("focus: ", "20220502_2");
+//
+
                 }
             } else {
                 msgCodigoProducto("Debe ingresar el código del producto");
@@ -2106,6 +2116,12 @@ public class frm_picking_datos extends PBase {
                                               "pIdBodega", gl.IdBodega,
                                               "pIdPedido", selitem.IdPedidoEnc);
                         break;
+
+                    case 12:
+                        callMethod("Exist_Codigo_By_CodigoBarra",
+                                "pCodigoBarra", txtCodigoProducto.getText().toString(),
+                                "pIdProductoBodega", gBeProducto.IdProductoBodega);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -2171,6 +2187,9 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 11:
                     processReservaIdStock();
+                    break;
+                case 12:
+                    processGetBarrasProducto();
                     break;
             }
 
@@ -2523,6 +2542,37 @@ public class frm_picking_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processBeStockRes:"+e.getMessage());
+        }
+    }
+
+    private void processGetBarrasProducto(){
+
+        boolean existe_barra = false;
+        try{
+
+            progress_setMessage("Validando Barra del producto");
+
+            existe_barra = xobj.getresult(Boolean.class,"Exist_Codigo_By_CodigoBarra");
+
+            if (existe_barra){
+
+                if (TipoLista == 1) {//Resumido
+                    Cargar_Datos_Producto_Picking_Consolidado();
+                } else {
+                    Cargar_Datos_Producto_Picking();
+                }
+
+            }else{
+
+                msgCodigoProducto("El código del producto no es válido para esta licencia");
+                        txtCodigoProducto.requestFocus();
+                        txtCodigoProducto.selectAll();
+                        Log.d("focus: ", "20220502_2");
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processProductoBarras:"+e.getMessage());
         }
     }
 

@@ -289,7 +289,6 @@ public class frm_list_rec_prod extends PBase {
 
                     Escaneo_Pallet = false;
                     gl.Escaneo_Pallet=false;
-
                     BeProducto = new clsBeProducto();
 
                     execws(9);
