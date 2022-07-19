@@ -17,7 +17,8 @@
         <TableRow
             android:id="@+id/trNoPedido"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lblNoPedido"
@@ -45,7 +46,8 @@
         <TableRow
             android:id="@+id/trPicking"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lblNoPicking"
@@ -73,7 +75,8 @@
         <TableRow
             android:id="@+id/trFechaPedido"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lblFechaPedido"
@@ -101,7 +104,8 @@
         <TableRow
             android:id="@+id/trFechaPreparacion"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/lblFechaPreparacion"

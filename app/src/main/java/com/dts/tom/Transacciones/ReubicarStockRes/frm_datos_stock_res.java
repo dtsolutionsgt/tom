@@ -208,7 +208,7 @@ public class frm_datos_stock_res extends PBase {
             if (selitem.Fecha_Vence.equals("01-01-1900")) {
                 trVence.setVisibility(View.GONE);
             } else {
-                txtVence.setText(du.convierteFechaMostrar(selitem.Fecha_Vence));
+                txtVence.setText(selitem.Fecha_Vence);
             }
 
             trProducto.setVisibility(View.GONE);
