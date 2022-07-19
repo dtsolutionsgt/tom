@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
+import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.selitem;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -151,6 +153,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean areaprimera = true;
     private boolean inferir_origen_en_cambio_ubic = false;
     private boolean licencia_reservada_completamente = false;
+    private boolean reservada_parcialmente = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1257,8 +1260,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (!gl.Permitir_Cambio_Ubic_Producto_Picking){
                     vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
                 } else {
+
                     vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas();
-                    licencia_reservada_completamente =  ((tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas)==0);
+
+                    if (tmpStockResList.items.get(0).IdPedido != 0) {
+                        licencia_reservada_completamente = ((tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas) == 0);
+                        reservada_parcialmente = tmpStockResList.items.get(0).CantidadReservadaUMBas > 0;
+                    } else {
+                        vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
+                    }
+
                 }
                 vFactorPres = (tmpStockResList.items.get(0).getFactor()==0?1:tmpStockResList.items.get(0).getFactor());
                 vPesoAUbicar = tmpStockResList.items.get(0).getPeso();
@@ -1428,6 +1439,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 21:
                     processUbicacion_Valida();
                     break;
+                case 22:
+                    processCambioUbicacion();
+                    break;
 
             }
 
@@ -1552,6 +1566,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Ubicacion_Es_Valida",
                                 "pIdProducto",BeProductoUbicacion.IdProducto,
                                 "pIdUbicacion",txtUbicDestino.getText().toString(),"pIdBodega",gl.IdBodega);
+                        break;
+                    case 22:
+                        callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
+                                         "pIdStock", cvStockID,
+                                               "pIdBodega", gl.IdBodega,
+                                               "pIdUbicacion",Integer.valueOf(txtUbicDestino.getText().toString()),
+                                               "pIdOperador", gl.IdOperador);
                         break;
 
                 }
@@ -1821,7 +1842,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
 
+    private void processCambioUbicacion() {
+        try {
+
+            int CambioUbicRealizado;
+
+            CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult",int.class);
+
+            if (CambioUbicRealizado > 0) {
+                msgbox("Cambio aplicado.");
+                inicializaTarea(true);
+            }
+
+        }catch (Exception e) {
+            msgbox(new Object() .getClass().getEnclosingMethod().getName() +" ."+ e.getMessage());
+        }
     }
 
     private void processUbicDestinoSug(){
@@ -2655,6 +2692,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vCantidadAUbicar = 0;
             vCantidadDisponible = 0;
             vPosiciones =0;
+            licencia_reservada_completamente = false;
+            reservada_parcialmente = false;
 
             lblUbicCompleta.setText("");
 
@@ -2732,6 +2771,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cvEstOrigen = 0;
             vCantidadAUbicar = 0;
             vCantidadDisponible = 0;
+            licencia_reservada_completamente = false;
+            reservada_parcialmente = false;
 
             lblCant.setText("");
             txtUbicDestino.setText("");
@@ -2791,6 +2832,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cvEstDestino = 0;
             vCantidadAUbicar = 0;
             vCantidadDisponible = 0;
+            licencia_reservada_completamente = false;
+            reservada_parcialmente = false;
 
             lblCant.setText("");
             txtUbicDestino.setText("");
@@ -3416,14 +3459,30 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             //#EJC20220330: De momento mover licencias completas y no permitir explosión.
-            if (gl.Permitir_Cambio_Ubic_Producto_Picking){
+            //Por solicitud de mercosal se va permitir el cambio de ubicacion de licencias que esten reservadas parciales o completas
+            //Por esta razón vamos a poner esto en comentario
+            /*if (gl.Permitir_Cambio_Ubic_Producto_Picking){
                 if(licencia_reservada_completamente){
                     vStockRes.IdUbicacionVirtual= cvUbicDestID;
                 }
-            }
+            }*/
 
-            //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
-            execws(14);
+            if (gl.modo_cambio == 1) {
+                if (gl.Permitir_Cambio_Ubic_Producto_Picking) {
+                    if (licencia_reservada_completamente || reservada_parcialmente) {
+                        execws(22);
+                    } else {
+                        //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
+                        execws(14);
+                    }
+                } else {
+                    //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
+                    execws(14);
+                }
+            } else {
+                //Aplica_Cambio_Estado_Ubic_HH(gMovimientoDet, vStockRes, vIdStockNuevo, vIdMovimientoNuevo);
+                execws(14);
+            }
 
         }catch (Exception e){
             progress.cancel();
