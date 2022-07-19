@@ -294,7 +294,7 @@ public class frm_datos_stock_res extends PBase {
             BeUbic = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (BeUbic != null) {
-                if ((BeUbic.Nivel == 1 || BeUbic.Nivel == 0 || BeUbic.Ubicacion_picking)
+                if ((BeUbic.Nivel <= selitem.Ubicacion_Nivel || BeUbic.Ubicacion_picking)
                         && BeUbic.IdUbicacion != selitem.IdUbicacion){
 
                     trDestino.setVisibility(View.VISIBLE);
