@@ -324,7 +324,10 @@ public class frm_datos_stock_res extends PBase {
             CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult",int.class);
 
             if (CambioUbicRealizado > 0) {
+                msgbox("Cambio aplicado correctamente.");
                 super.finish();
+            } else {
+                msgbox("No se pudo completar el cambio.");
             }
 
         } catch (Exception e) {

@@ -283,6 +283,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         } else {
                             lblCantidad.setText("Cantidad ("+BeProductoUbicacion.UnidadMedida.Nombre+")");
                         }
+
                         LlenaLotes();
                     }
 
@@ -1280,10 +1281,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if( escaneoPallet && productoList != null) {
 
-                if(BeStockPallet.Factor >0)
-                {
+                //Pusimos esto en comentario porque se debe de tomar el factor de la presentacion aunque se haya escaneado pallet
+                //Si genera algún problema debemos analizar que se debe hacer.
+                /*if(BeStockPallet.Factor >0) {
                     vCantidadAUbicar = (vCantidadAUbicar / BeStockPallet.Factor);
+                }*/
+
+                if(vFactorPres >0) {
+                    vCantidadAUbicar = (vCantidadAUbicar / vFactorPres);
                 }
+
             }else if (cvPresID != 0) {
                 if( vFactorPres >0){
                     vCantidadAUbicar = (vCantidadAUbicar / vFactorPres);
