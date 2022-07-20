@@ -650,7 +650,17 @@ public class Mainmenu extends PBase {
                 case 3://Cambio de Estado
 
                     gl.modo_cambio = 2;
-                    msgAskUbicNoDirigida("Cambio de estado dirigido");
+
+                    //GT20072022_1030: para cealsa, no pregunta si quieren ubicacion dirigida
+                    if (gl.Mostrar_Area_En_HH) {
+                        Intent intent = new Intent(Mainmenu.this, frm_cambio_ubicacion_ciega.class);
+                        startActivity(intent);
+
+                    } else {
+                        msgAskUbicNoDirigida("Ubicación dirigida");
+                    }
+
+                    //msgAskUbicNoDirigida("Cambio de estado dirigido");
 
                     break;
 
