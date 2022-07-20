@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
@@ -441,7 +442,9 @@ public class frm_datos_reabastecimiento extends PBase {
             vIdMovimientoNuevo= (Integer) xobj.getSingle("pIdMovimientoNuevo",int.class);
 
             if( resultado){
-                msgAsk("Reabastecimiento aplicado");
+                msgExito("Reabastecimiento aplicado");
+            } else {
+                msgbox("Error al completar el proceso de reabastecimiento.");
             }
 
         } catch (Exception e) {
@@ -585,6 +588,21 @@ public class frm_datos_reabastecimiento extends PBase {
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void msgExito(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.show();
+
     }
 
     private void execws(int callbackvalue) {
