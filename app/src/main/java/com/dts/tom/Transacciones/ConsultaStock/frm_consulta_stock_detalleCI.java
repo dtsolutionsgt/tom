@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.ConsultaStock;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -33,6 +35,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private ProgressDialog progress;
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     private Integer CantCopias =1;
+    public static boolean CambioUbicExistencia = false;
 
     @Override
 
@@ -67,6 +70,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
         //Aquí llamamos al método del WS Get_Tipo_Etiqueta_By_IdTipoEtiqueta
         pBeTipo_etiqueta = new clsBeTipo_etiqueta();
         pBeTipo_etiqueta.IdTipoEtiqueta= gl.existencia.getIdTipoEtiqueta();
+
+        CambioUbicExistencia = false;
 
         execws(1);
 
@@ -458,6 +463,19 @@ public class frm_consulta_stock_detalleCI extends PBase {
             }
         }finally {
             progress.cancel();
+        }
+    }
+
+    public void CambiarUbicacion(View view) {
+        try {
+            gl.modo_cambio = 1;
+            CambioUbicExistencia = true;
+
+            startActivity(new Intent(this, frm_cambio_ubicacion_ciega.class));
+            super.finish();
+
+        } catch (Exception e) {
+            msgbox(new Object() .getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
     }
 

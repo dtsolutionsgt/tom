@@ -31,6 +31,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
@@ -49,6 +50,7 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -61,6 +63,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -244,13 +247,34 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void Load() {
 
         try {
+
             if(gl.modo_cambio==1){
-                if (!inferir_origen_en_cambio_ubic) {
-                    execws(1);
+
+                //#AT20220722 Solo aplica si el cambio se hace desde la pantalla de Consulta de Existencias
+                if (CambioUbicExistencia) {
+                    txtUbicOrigen.setText(gl.existencia.idUbic);
+                    cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
+
+                    lblUbicCompleta.setText(gl.existencia.Ubic);
+                    txtLicPlate.setText(gl.existencia.LicPlate);
+                    txtCodigoPrd.setText(gl.existencia.Codigo);
+
+                    if (!gl.existencia.getLicPlate().isEmpty()) {
+                        pLicensePlate = gl.existencia.LicPlate;
+                    } else {
+                        pLicensePlate = "";
+                    }
+
+                    execws(3);
                 } else {
-                    progress.cancel();
-                    txtLicPlate.requestFocus();
-                    txtUbicOrigen.setEnabled(false);
+
+                    if (!inferir_origen_en_cambio_ubic) {
+                        execws(1);
+                    } else {
+                        progress.cancel();
+                        txtLicPlate.requestFocus();
+                        txtUbicOrigen.setEnabled(false);
+                    }
                 }
             }else{
                 txtUbicOrigen.requestFocus();
@@ -709,11 +733,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     //sin utilizar el cmb
     private void setPresentacion() {
         String valor = "";
+        List AuxList;
         try {
 
-            List AuxList = stream(stockResList.items)
-                    .where(c -> c.IdProducto == cvProdID)
-                    .toList();
+            //#AT20220722 Filtra lista de Stock con la presentación en gl.existencia
+            if (CambioUbicExistencia && gl.existencia.IdPresentacion > 0) {
+                AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == cvProdID && c.IdPresentacion == gl.existencia.IdPresentacion)
+                        .toList();
+            } else {
+                 AuxList = stream(stockResList.items)
+                        .where(c -> c.IdProducto == cvProdID)
+                        .toList();
+            }
 
             presentacionList.items = AuxList;
 
@@ -750,6 +782,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbPresentacionList);
                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     cmbPresentacion.setAdapter(dataAdapter);
+
+                    //#AT20220722 Selecciona prensentación en el combo
+                    if (CambioUbicExistencia) {
+                        int IndexAux = cmbPresentacionList.indexOf(gl.existencia.IdPresentacion +" - "+gl.existencia.Pres);
+                        cmbPresentacion.setSelection(IndexAux);
+                    }
                 }
             }
 
@@ -2371,46 +2409,51 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if( resultado){
 
-                txtCodigoPrd.setText(gl.gCProdAnterior);
-                txtUbicOrigen.setText(gl.gCUbicAnterior);
-
-                if (cmbEstadoOrigen.getAdapter()!=null  && cmbEstadoOrigen.getAdapter().getCount()>0){
-                    gl.gCEstadoAnterior = Integer.valueOf( cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
-                    gl.gCNomEstadoAnterior = cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[1];
-                }else{
-                    gl.gCEstadoAnterior = -1;
-                    gl.gCNomEstadoAnterior = "";
-                }
-
-                if (cmbVence.getAdapter()!=null && cmbVence.getAdapter().getCount()>0){
-                    gl.gCFechaAnterior = cmbVence.getSelectedItem().toString();
-                }else{
-                    gl.gCFechaAnterior="01/01/1900";
-                }
-
-                if (cmbLote.getAdapter()!=null  && cmbLote.getAdapter().getCount()>0){
-                    gl.gCLoteAnterior = cmbLote.getSelectedItem().toString();
-                }else{
-                    gl.gCLoteAnterior = "";
-                }
-
-                if (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0){
-                    gl.gCPresAnterior = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
-                    if (cmbPresentacion.getSelectedItem().toString().split(" - ").length>1){
-                        gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
-                    }
-                }else{
-                    gl.gCPresAnterior = -1;
-                    gl.gCNomPresAnterior = "";
-                }
-
-                progress.cancel();
-
-                //#AT 202203011 Si ocultar mensajes es falso se muestran los mensajes de lo contrario se ocultan
-                if (!ocultar_mensajes) {
-                    msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                if (CambioUbicExistencia) {
+                    msgCambioUbicExistencia("Cambio de ubicación aplicado.");
                 } else {
-                    completaProceso();
+
+                    txtCodigoPrd.setText(gl.gCProdAnterior);
+                    txtUbicOrigen.setText(gl.gCUbicAnterior);
+
+                    if (cmbEstadoOrigen.getAdapter() != null && cmbEstadoOrigen.getAdapter().getCount() > 0) {
+                        gl.gCEstadoAnterior = Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
+                        gl.gCNomEstadoAnterior = cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[1];
+                    } else {
+                        gl.gCEstadoAnterior = -1;
+                        gl.gCNomEstadoAnterior = "";
+                    }
+
+                    if (cmbVence.getAdapter() != null && cmbVence.getAdapter().getCount() > 0) {
+                        gl.gCFechaAnterior = cmbVence.getSelectedItem().toString();
+                    } else {
+                        gl.gCFechaAnterior = "01/01/1900";
+                    }
+
+                    if (cmbLote.getAdapter() != null && cmbLote.getAdapter().getCount() > 0) {
+                        gl.gCLoteAnterior = cmbLote.getSelectedItem().toString();
+                    } else {
+                        gl.gCLoteAnterior = "";
+                    }
+
+                    if (cmbPresentacion.getAdapter() != null && cmbPresentacion.getAdapter().getCount() > 0) {
+                        gl.gCPresAnterior = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                        if (cmbPresentacion.getSelectedItem().toString().split(" - ").length > 1) {
+                            gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
+                        }
+                    } else {
+                        gl.gCPresAnterior = -1;
+                        gl.gCNomPresAnterior = "";
+                    }
+
+                    progress.cancel();
+
+                    //#AT 202203011 Si ocultar mensajes es falso se muestran los mensajes de lo contrario se ocultan
+                    if (!ocultar_mensajes) {
+                        msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                    } else {
+                        completaProceso();
+                    }
                 }
             }
             lblCantidad.setText("Cantidad:");
@@ -2908,6 +2951,22 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    private void msgCambioUbicExistencia(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startActivity(new Intent(frm_cambio_ubicacion_ciega.this, frm_consulta_stock.class));
+                finish();
+            }
+        });
+
+        dialog.show();
+
+    }
+
     //#CKFK 20211215 Explosionar el producto de presentación a unidades
     private void msgAskExplosionar(String msg){
 
@@ -3196,10 +3255,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void validaDestino(){
 
         try{
-            
+
             progress.setMessage("Procesando ubicación destino...");
             progress.show();
-            
+
             if (!txtUbicDestino.getText().toString().isEmpty()){
 
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();

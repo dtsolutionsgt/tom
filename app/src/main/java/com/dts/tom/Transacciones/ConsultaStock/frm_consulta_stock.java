@@ -519,6 +519,7 @@ public class frm_consulta_stock extends PBase {
                         item.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                         item.NombreArea = pListStock2.items.get(i).NombreArea;
                         item.Clasificacion = pListStock2.items.get(i).Clasificacion;
+                        item.IdPresentacion = pListStock2.items.get(i).IdPresentacion;
 
                         items_stock.add(item);
 
@@ -682,6 +683,7 @@ public class frm_consulta_stock extends PBase {
                 item.DispPres = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DispPres));
                 item.NombreArea = pListStock2.items.get(i).NombreArea;
                 item.Clasificacion = pListStock2.items.get(i).Clasificacion;
+                item.IdPresentacion = pListStock2.items.get(i).IdPresentacion;
                 items_stock.add(item);
             }
 
