@@ -5004,7 +5004,33 @@ public class frm_recepcion_datos extends PBase {
                                     BeProducto.Codigo_barra,
                                     BeProducto.Codigo + " - " + BeProducto.Nombre,
                                     gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
-                 }
+                 }else if (BeProducto.IdTipoEtiqueta==5) {
+                    zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW400\n" +
+                                        "^LL400\n" +
+                                        "^LS0\n" +
+                                        "^FT380,5^A0I,15,12^FH^FD%8$s^FS\n" +
+                                        "^FT380,25^A0I,15,12^FH^FDEmpresa: %7$s - Bodega: %6$s^FS\n" +
+                                        "^FO2,40^GB390,0,5^FS\n" +
+                                        "^FT380,95^A0I,15,12^FH^FDMarca: %5$s^FS\n" +
+                                        "^FT380,75^A0I,15,12^FH^FDLinea: %4$s^FS\n" +
+                                        "^FT380,55^A0I,15,12^FH^FDModelo: %3$s^FS\n" +
+                                        "^BY3,3,140^FT380,150^BCI,,Y,N\n" +
+                                        "^FD%2$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^FT380,320^A0I,25,20^FH^FD%1$s^FS\n" +
+                                        "^FO2,350^GB390,0,5^FS\n" +
+                                        "^FT380,370^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
+                                        "^XZ", BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                        BeProducto.Codigo_barra,
+                                        BeProducto.Clasificacion.Nombre,
+                                        BeProducto.Familia.Nombre,
+                                        BeProducto.Marca.Nombre,
+                                        gl.CodigoBodega + "-" + gl.gNomBodega,
+                                        gl.gNomEmpresa,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+                }
 
                 if (!zpl.isEmpty()){
                     if (Copias > 0) {
