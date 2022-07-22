@@ -61,7 +61,7 @@
                     android:minHeight="50dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:text="Nombre"
+                    android:text="Nombre/Lote"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
