@@ -8,8 +8,10 @@ import com.dts.classes.Mantenimientos.Producto.Producto_clasificacion.clsBeProdu
 import com.dts.classes.Mantenimientos.Producto.Producto_codigos_barra.clsBeProducto_codigos_barraList;
 import com.dts.classes.Mantenimientos.Producto.Producto_familia.clsBeProducto_familia;
 import com.dts.classes.Mantenimientos.Producto.Producto_marca.clsBeProducto_marca;
+import com.dts.classes.Mantenimientos.Producto.Producto_parametro_a.clsBeProducto_parametro_a;
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametrosList;
 import com.dts.classes.Mantenimientos.Producto.Producto_tipo.clsBeProducto_tipo;
+import com.dts.classes.Mantenimientos.Producto.Producto_parametro_b.clsBeProducto_parametro_b;
 import com.dts.classes.Mantenimientos.Propietario.Propietario.clsBePropietarios;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
@@ -99,6 +101,8 @@ public class clsBeProducto {
   @Element(required=false) public int Dias_Inventario_Promedio =90;
   @Element(required=false) public int IdProductoParametroA =0;
   @Element(required=false) public int IdProductoParametroB =0;
+  @Element(required=false) public clsBeProducto_parametro_a ParametroA=new clsBeProducto_parametro_a();
+  @Element(required=false) public clsBeProducto_parametro_b ParametroB=new clsBeProducto_parametro_b();
 
 //EJC
 
