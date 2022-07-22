@@ -419,6 +419,15 @@ public class frm_recepcion_datos extends PBase {
         vPosiciones=0;
         chkPalletNoEstandar.setChecked(false);
 
+        gl.Permitir_Decimales = true;
+
+        //AT20220721 Si Permitir_Decimales = true  txtCantidadRec  cambia a decimal si no a entero
+        if (gl.Permitir_Decimales) {
+            txtCantidadRec.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        } else {
+            txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+
     }
 
 

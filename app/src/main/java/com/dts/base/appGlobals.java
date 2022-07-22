@@ -215,6 +215,7 @@ public class appGlobals extends Application {
     public int TipoPantallaVerificacion = 0;
 
     public  boolean Permitir_Buen_Estado_En_Reemplazo =false;
+    public  boolean Permitir_Decimales = false;
 
     @Override
     public void onCreate() {

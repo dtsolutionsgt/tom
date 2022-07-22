@@ -64,6 +64,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Restringir_Vencimiento_En_Reemplazo = false;
     @Element(required=false) public boolean Restringir_Lote_En_Reemplazo  = false;
     @Element(required=false) public int Top_Reabastecimiento_Manual = 20;
+    @Element(required=false) public boolean Permitir_Decimales  = false;
+
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -86,7 +88,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
                        boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
-                       boolean industria_motriz, int Top_Reabastecimiento_Manual) {
+                       boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -144,6 +146,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         //this.priorizar_ubicrec_sobre_ubicest = priorizar_ubicrec_sobre_ubicest;
         this.industria_motriz = industria_motriz;
         this.Top_Reabastecimiento_Manual = Top_Reabastecimiento_Manual;
+        this.Permitir_Decimales = Permitir_Decimales;
     }
 
     public int getIdPais() {
@@ -515,6 +518,13 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setTop_Reabastecimiento_Manual(int value) {
         Top_Reabastecimiento_Manual=value;
+    }
+
+    public boolean getPermitir_Decimales () {
+        return Permitir_Decimales;
+    }
+    public void setPermitir_Decimales(boolean value) {
+        Permitir_Decimales=value;
     }
 
 }

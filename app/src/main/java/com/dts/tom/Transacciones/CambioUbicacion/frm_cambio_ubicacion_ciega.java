@@ -220,6 +220,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             lblTituloForma.setText(String.format("Cambio de %s",(gl.modo_cambio==1?"ubicación N.D.":"estado N.D")));
 
+            //AT20220721 Si Permitir_Decimales = true  txtCantidad  cambia a decimal si no a entero
+            if (gl.Permitir_Decimales) {
+                txtCantidad.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            } else {
+                txtCantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+
             ProgressDialog("Cargando forma");
 
             setHandlers();

@@ -278,7 +278,7 @@
                         android:layout_toStartOf="@+id/conPresentacion"
                         android:layout_toEndOf="@+id/textView85"
                         android:ems="10"
-                        android:inputType="number|numberDecimal"
+                        android:inputType="numberDecimal"
                         android:selectAllOnFocus="true" />
 
                     <CheckBox
