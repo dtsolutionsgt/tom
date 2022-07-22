@@ -185,6 +185,8 @@ public class clsBeProducto {
     this.Cantidad=Cantidad;
     this.IdUnidadMedidaCobro = IdUnidadMedidaCobro;
     this.IdTipoEtiqueta = IdTipoEtiqueta;
+    this.ParametroA=ParametroA;
+    this.ParametroB=ParametroB;
   }
 
   public clsBeProducto(int IdProducto,int IdPropietario,int IdClasificacion,int IdFamilia,
@@ -205,7 +207,8 @@ public class clsBeProducto {
                        clsBeUnidad_medida UnidadMedida,clsBeArancel Arancel,clsBeProducto_PresentacionList Presentaciones,clsBeProducto_codigos_barraList Codigos_Barra,
                        clsBeProducto_parametrosList Parametros,clsBeVW_stock_res Stock,boolean IsNew,Object Tag,
                        int IdPresentacionOrigen,int IdPresentacionDestino,double Factor,double ExistenciaUMBas,
-                       String Lote,String FechaVence,double Cantidad, int IdUnidadMedidaCobro, int IdTipoEtiqueta) {
+                       String Lote,String FechaVence,double Cantidad, int IdUnidadMedidaCobro, int IdTipoEtiqueta,
+                       clsBeProducto_parametro_a ParametroA,clsBeProducto_parametro_b ParametroB) {
 
     this.IdProducto=IdProducto;
     this.IdPropietario=IdPropietario;
@@ -284,6 +287,8 @@ public class clsBeProducto {
     this.Cantidad=Cantidad;
     this.IdUnidadMedidaCobro = IdUnidadMedidaCobro;
     this.IdTipoEtiqueta = IdTipoEtiqueta;
+    this.ParametroA = ParametroA;
+    this.ParametroB = ParametroB;
   }
 
 
@@ -764,4 +769,17 @@ public class clsBeProducto {
     IdProductoParametroB=value;
   }
 
+  public clsBeProducto_parametro_a getParametroA() {
+    return ParametroA;
+  }
+  public void setParametroA(clsBeProducto_parametro_a value) {
+    ParametroA=value;
+  }
+
+  public clsBeProducto_parametro_b getParametroB() {
+    return ParametroB;
+  }
+  public void setParametroB(clsBeProducto_parametro_b value) {
+    ParametroB=value;
+  }
 }
