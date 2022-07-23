@@ -419,8 +419,6 @@ public class frm_recepcion_datos extends PBase {
         vPosiciones=0;
         chkPalletNoEstandar.setChecked(false);
 
-        gl.Permitir_Decimales = true;
-
         //AT20220721 Si Permitir_Decimales = true  txtCantidadRec  cambia a decimal si no a entero
         if (gl.Permitir_Decimales) {
             txtCantidadRec.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -5022,7 +5020,10 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT380,320^A0I,25,20^FH^FD%1$s^FS\n" +
                                         "^FO2,350^GB390,0,5^FS\n" +
                                         "^FT380,370^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
-                                        "^XZ", BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                        "^XZ", BeProducto.Codigo + " - " +
+                                        BeProducto.TipoProducto.NombreTipoProducto + " " +
+                                        BeProducto.ParametroA.Nombre + " " +
+                                        BeProducto.ParametroB.Nombre,
                                         BeProducto.Codigo_barra,
                                         BeProducto.Clasificacion.Nombre,
                                         BeProducto.Familia.Nombre,
