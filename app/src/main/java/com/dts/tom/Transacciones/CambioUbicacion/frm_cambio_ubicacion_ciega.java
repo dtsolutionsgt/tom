@@ -310,8 +310,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         String NombrePres = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
 
                         if (cvPresID > 0) {
+                            tblExplosionar.setVisibility(View.VISIBLE);
                             lblCantidad.setText("Cantidad ("+NombrePres+"): ");
                         } else {
+                            tblExplosionar.setVisibility(View.GONE);
                             lblCantidad.setText("Cantidad ("+BeProductoUbicacion.UnidadMedida.Nombre+")");
                         }
 
