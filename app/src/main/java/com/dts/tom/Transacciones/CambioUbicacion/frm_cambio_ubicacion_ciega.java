@@ -3519,7 +3519,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
 
-                if( BeStockPallet.Factor > 0){
+               //#AT20220725 Agregue la validación para que el IdPresentacion  sea diferente a 0
+                if( BeStockPallet.Factor > 0 && cvPresID != 0) {
                     vStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
                 }
 
