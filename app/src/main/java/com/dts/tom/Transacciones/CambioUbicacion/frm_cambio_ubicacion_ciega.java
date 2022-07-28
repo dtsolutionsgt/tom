@@ -601,7 +601,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                                 if(Double.valueOf(Cantwithformat)>0) {
 
-                                    Recalcula_Peso();
+                                    //Recalcula_Peso();
+                                    //#GT27072022_1450: si cambia la cantidad a reubicar, el peso se redistribuye
+                                    //pero con Recalcula_peso, multiplica cantidad x el factor y no es lo deseado
+                                    Redistribuye_Peso();
 
                                     if (trPeso.getVisibility()==View.VISIBLE){
                                         txtPeso.requestFocus();
@@ -1409,6 +1412,39 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+
+    private void Redistribuye_Peso(){
+        double vCantidad_reubicar = 0, vPesoRef = 0, vPesoReCalculado =0, vPeso=0;
+
+
+        try{
+
+            if (BeProductoUbicacion.getControl_peso()){
+                vPesoRef = BeProductoUbicacion.Peso_referencia;
+                vCantidad_reubicar = Double.valueOf(txtCantidad.getText().toString());
+
+                //#GT2772022_1530: Si no existe un peso de referencia, se distribuye el peso original total dentro
+                //de la cantidad original, y se distribuye entre las unidades a reubicar
+                if (vPesoRef == 0){
+
+
+                    Double cantidad_original = Double.valueOf(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue)) ;
+                    Double vPesoOrigen = Double.valueOf(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
+
+                    Double peso_calculado_x_Umbas  =  vPesoOrigen/cantidad_original ;
+                    vPesoReCalculado = peso_calculado_x_Umbas*vCantidad_reubicar;
+
+                    txtPeso.setText(String.valueOf(vPesoReCalculado));
+
+                }else {
+                    txtPeso.setText(String.valueOf(vPesoRef * vCantidad_reubicar));
+                }
+            }
+        }catch (Exception ex){
+            mu.msgbox("ReDistribuye_Peso:" + ex.getMessage());
+        }
+    }
+
     public void ProgressDialog(String mensaje){
         progress=new ProgressDialog(this);
         progress.setMessage(mensaje);
@@ -1773,7 +1809,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     datosCorrectos = false;
                 }
 
-                Recalcula_Peso();
+                //#GT27072022-1610: el peso se recalcula solo si cambia la cantidad
+                //a reubicar, y eso se hizo cuando se digito un valor
+                //Recalcula_Peso();
 
                 if(cvUbicDestID == 0){
                     msgbox("La ubicación de destino no puede ser vacía");
@@ -3266,7 +3304,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino
                 execws(12);
+            }else
+            {
+                //#GT27072022_1635: Avisar que no se ha digitado el destino.
+                mu.msgbox("No hay una úbicación destino ingresada.");
             }
+
+            progress.cancel();
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -3510,7 +3554,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             vStockRes.CantidadUmBas = vCantidadAUbicar;
-            vStockRes.Peso = cvStockItem.Peso;
+
+            //vStockRes.Peso = cvStockItem.Peso;
+            //#GT27072022_1655: envio el peso recalculado cuando se modificó la cantidad a reubicar.
+            vStockRes.Peso = Double.valueOf(txtPeso.getText().toString());
+
             vStockRes.IdPresentacion =cvPresID;
             vStockRes.IdProductoEstado = cvEstOrigen;
             vStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
@@ -3601,11 +3649,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             if (gl.modo_cambio==2) {
-                if (cvEstDestino == 0){
+                if (cvEstDestino == 0 || txtUbicDestino.getText().toString().contains("")){
                     msgbox("Estado destino incorrecto");
                     cmbEstadoDestino.requestFocus();
                     datosCorrectos = false;
                 }
+
+
+
             }
 
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString().replace(",",""));
@@ -3629,7 +3680,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 datosCorrectos = false;
             }
 
-            Recalcula_Peso();
+            //#GT2772022_1550: el recalculo del peso, se hace cuando se modifica la cantidad a reubicar
+            //para guardar ya se tiene calculado en los inputs, ya no se requiere volver a hacerlo
+            //Recalcula_Peso();
+
 
             if(cvUbicDestID == 0 && txtUbicDestino.getText().toString().isEmpty()){
                 msgbox("La ubicación de destino no puede ser vacía");
@@ -3777,7 +3831,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.IdRecepcion = cvStockItem.IdRecepcionEnc;
             gMovimientoDet.Cantidad = vCantidadAUbicar;
             gMovimientoDet.Serie = cvStockItem.Serial;
-            gMovimientoDet.Peso = 0;
+
+
+            //#GT2772022_1850: se envia el peso del textobox si al caso, se modificó la cantidad e hizo recalculo.
+            if(BeProductoUbicacion.Control_peso){
+                gMovimientoDet.Peso =  Double.valueOf(txtPeso.getText().toString());
+            }else{
+                gMovimientoDet.Peso = 0;
+            }
+
 
             if(cmbLote.getAdapter()!=null  && cmbLote.getAdapter().getCount()>0){
                 gMovimientoDet.Lote = cmbLote.getSelectedItem().toString();

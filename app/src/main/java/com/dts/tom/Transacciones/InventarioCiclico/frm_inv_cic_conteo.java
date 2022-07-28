@@ -171,6 +171,12 @@ public class frm_inv_cic_conteo extends PBase {
                         gl.inv_ciclico.index = position;
                         gl.IndexCiclico = gl.inv_ciclico.index;
 
+                        if (gl.inv_ciclico.idinvreconteo> 0){
+                            gl.Es_Reconteo =true;
+                        }else{
+                            gl.Es_Reconteo =false;
+                        }
+
                         execws(4);
 
                     }
@@ -785,6 +791,18 @@ public class frm_inv_cic_conteo extends PBase {
             gl.pprod.IdProducto = Integer.valueOf( xobj.getresultSingle(String.class,"IdProducto"));
             gl.pprod.Control_lote= xobj.getresultSingle(Boolean.class,"Control_lote");
             gl.pprod.Control_vencimiento = xobj.getresultSingle(Boolean.class,"Control_vencimiento");
+
+
+//            if(BeInvEnc.Idpropietario>0){
+//                if(BeInvEnc.multi_propietario){
+//                    gl.multipropietario = BeInvEnc.multi_propietario;
+//                    execws(6);
+//                }else{
+//                    execws(5);
+//                }
+//            }else{
+//                msgbox("El inventario no tiene asignado un propietario.");
+//            }
 
             if (BeInvEnc.Idpropietario >0){
                 execws(5);

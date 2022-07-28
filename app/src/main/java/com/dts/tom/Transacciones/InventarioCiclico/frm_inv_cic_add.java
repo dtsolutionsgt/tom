@@ -785,27 +785,57 @@ public class frm_inv_cic_add extends PBase {
             gl.inv_ciclico.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
         }
 
-        if( gl.pprod.Control_lote){
+    //----------------------------------------------------------------------------------------------
+        //#GT26072022-1150: Se valida si es tarea de conteo o reconteo
+        if(gl.Es_Reconteo){
+            EnviarReconteo();
+        }else{
+
+            //GT 18012021 set para la clase que se envia como conteo.
+            pitem= new clsBeTrans_inv_ciclico();
+
+            pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+            pitem.IdStock=0;
+            pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+            pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
+            pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
+            pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
+            pitem.Lote = gl.inv_ciclico.Lote;
+            pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
+
+            pitem.Cantidad = gl.inv_ciclico.cantidad;
+            pitem.Peso = gl.inv_ciclico.Peso;
+            pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+            pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
+            pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+            pitem.lic_plate = gl.inv_ciclico.Licence_plate;
+
+            if(pitem.IdPresentacion > 0){
+
+                pitem.Cantidad = pitem.Cantidad *vFactor;
+            }
+            //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
+            execws(1);
+        }
+
+//-- ESTO SE COMENTARIZO PORQUE ESTA DENTRO DE CONTROL_LOTE, :(
+/*        if( gl.pprod.Control_lote){
 
             if(noubicflag){
 
                 if(!AgregaNuevoRegistro(0)){
-                    //return;
-                    toast("errror con correlativo =0");
+                    toast("error con correlativo =0");
                 }
 
             }else if(!(gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim()))){
 
                 //se omite funcionalidad, no actualiza registro de reconteo, sino agrega otra linea en la tabla
-                /*if(!AgregaNuevoRegistro(1)){
+                *//*if(!AgregaNuevoRegistro(1)){
                     toast("Registro reconteo agregado!");
-                }*/
+                }*//*
 
                 //Es registro para reconteo
                 EnviarReconteo();
-
-
-
             }else{
 
                 //GT 18012021 set para la clase que se envia como conteo.
@@ -873,7 +903,7 @@ public class frm_inv_cic_add extends PBase {
 
             }
 
-        }
+        }*/
 
     }
 

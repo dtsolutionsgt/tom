@@ -138,6 +138,7 @@ public class appGlobals extends Application {
     public ArrayList<clsBe_inv_reconteo_data> reconteo_list = new ArrayList<clsBe_inv_reconteo_data>();
     public clsBe_inv_reconteo_dataList reconteo_ciclico = new clsBe_inv_reconteo_dataList();
     public int IndexCiclico;
+    public boolean Es_Reconteo = false;
 
 
     public clsBeProducto pprod = new clsBeProducto();
