@@ -1832,7 +1832,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
 
                 //#GT14032022_1348: si tiene parametro mostrarArea, se hace ubicacion no dirigida sin preguntar
-                if (areaprimera) {
+                //#CKFK20220801 Modifiqué areaprimera por ocultar_mensajes
+                if (ocultar_mensajes) {
 
                     //Llamar método para aplicar el cambio de estado
                     aplicarCambio();
