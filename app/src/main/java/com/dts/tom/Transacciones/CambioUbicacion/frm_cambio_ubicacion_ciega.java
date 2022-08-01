@@ -3557,7 +3557,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //vStockRes.Peso = cvStockItem.Peso;
             //#GT27072022_1655: envio el peso recalculado cuando se modificó la cantidad a reubicar.
-            vStockRes.Peso = Double.valueOf(txtPeso.getText().toString());
+            vStockRes.Peso = Double.valueOf(txtPeso.getText().toString().replace(",",""));
 
             vStockRes.IdPresentacion =cvPresID;
             vStockRes.IdProductoEstado = cvEstOrigen;
@@ -3649,7 +3649,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             if (gl.modo_cambio==2) {
-                if (cvEstDestino == 0 || txtUbicDestino.getText().toString().contains("")){
+                //if (cvEstDestino == 0 || txtUbicDestino.getText().toString().contains("")){
+                if (cvEstDestino == 0 || txtUbicDestino.getText().toString().isEmpty()){
                     msgbox("Estado destino incorrecto");
                     cmbEstadoDestino.requestFocus();
                     datosCorrectos = false;
@@ -3835,7 +3836,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#GT2772022_1850: se envia el peso del textobox si al caso, se modificó la cantidad e hizo recalculo.
             if(BeProductoUbicacion.Control_peso){
-                gMovimientoDet.Peso =  Double.valueOf(txtPeso.getText().toString());
+                gMovimientoDet.Peso =  Double.valueOf(txtPeso.getText().toString().replace(",",""));
             }else{
                 gMovimientoDet.Peso = 0;
             }
