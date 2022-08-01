@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.Reabastecimiento;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -42,6 +43,7 @@ public class frm_reabastecimiento_manual extends PBase {
     private list_adapt_reabast_stock_res adapter_stock;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
 
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class frm_reabastecimiento_manual extends PBase {
         listExist = findViewById(R.id.listExist);
 
         setHandlers();
+
+        ProgressDialog();
 
     }
 
@@ -93,6 +97,7 @@ public class frm_reabastecimiento_manual extends PBase {
                     Object lvObj = listExist.getItemAtPosition(i);
                     selitem = (clsBeVW_stock_res) lvObj;
 
+                    browse = 1;
                     ProcesarRegistro();
                 }
             });
@@ -100,6 +105,14 @@ public class frm_reabastecimiento_manual extends PBase {
         } catch (Exception e) {
             mu.msgbox("setHandlers: "+e.getMessage());
         }
+    }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 
     private void ProcesarRegistro() {
@@ -225,4 +238,33 @@ public class frm_reabastecimiento_manual extends PBase {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    @Override
+    protected void onResume() {
+
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+
+                progress.setMessage("Cargando los datos");
+                progress.show();
+
+                if (!txtCodigoPrd.getText().toString().isEmpty()) {
+                    execws(1);
+                } else {
+                    execws(2);
+                }
+            }
+
+        }catch (Exception e) {
+            mu.msgbox("OnResume" + e.getMessage());
+        }finally{
+            progress.cancel();
+        }
+
+    }
+
 }

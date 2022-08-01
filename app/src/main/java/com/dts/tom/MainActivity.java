@@ -963,6 +963,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
                 }
 
+            }else{
+                msgbox("No se obtuvieron bodegas");
+                progress.cancel();
             }
 
         } catch (Exception e) {

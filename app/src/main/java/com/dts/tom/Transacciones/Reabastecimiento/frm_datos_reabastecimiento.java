@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.Reabastecimiento;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +40,6 @@ public class frm_datos_reabastecimiento extends PBase {
     private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino, lblCantidad, lblCant;
     private TableRow trLicPlate;
     private CheckBox chkExplosionar;
-
 
     private clsBeTrans_movimientos gMovimientoDet = new clsBeTrans_movimientos();
     private clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
@@ -83,6 +83,8 @@ public class frm_datos_reabastecimiento extends PBase {
 
         trLicPlate = findViewById(R.id.trLicPlate);
         txtUbicOrigen.setEnabled(false);
+
+        browse = 0;
 
         Load();
         setHandlers();
@@ -618,4 +620,5 @@ public class frm_datos_reabastecimiento extends PBase {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

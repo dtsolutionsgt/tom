@@ -1203,8 +1203,6 @@ public class frm_Packing extends PBase {
                 vUbicacionProducto = BeStockPallet.IdUbicacion;
             }
 
-
-
             if (pUbicacionLP!=0){
                 if (vUbicacionProducto!=pUbicacionLP){
                     progress.cancel();
