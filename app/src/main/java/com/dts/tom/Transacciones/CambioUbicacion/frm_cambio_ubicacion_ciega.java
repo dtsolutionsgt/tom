@@ -3650,7 +3650,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (gl.modo_cambio==2) {
                 //if (cvEstDestino == 0 || txtUbicDestino.getText().toString().contains("")){
-                if (cvEstDestino == 0 || txtUbicDestino.getText().toString().isEmpty()){
+                //#CKFK20220801 Quité esto || txtUbicDestino.getText().toString().isEmpty()
+                //porque la ubicación se valida abajo
+                if (cvEstDestino == 0 ){
                     msgbox("Estado destino incorrecto");
                     cmbEstadoDestino.requestFocus();
                     datosCorrectos = false;
@@ -3685,8 +3687,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //para guardar ya se tiene calculado en los inputs, ya no se requiere volver a hacerlo
             //Recalcula_Peso();
 
-
-            if(cvUbicDestID == 0 && txtUbicDestino.getText().toString().isEmpty()){
+            //#CKFK20220801 Modifique esto && txtUbicDestino.getText().toString().isEmpty() por ||
+            if(cvUbicDestID == 0 || txtUbicDestino.getText().toString().isEmpty()){
                 msgbox("La ubicación de destino no puede ser vacía");
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;

@@ -1489,9 +1489,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     private void validaVersion() {
 
-        if (empresas.items.size()==0) return;
-
         try {
+
+            if (empresas.items.size()==0) throw new Exception("No se obtuvieron Empresas");
 
             final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
             String VersionRemoteConfigFireBase = remoteConfig.getString("KEY_CURRENT_VERSION");
