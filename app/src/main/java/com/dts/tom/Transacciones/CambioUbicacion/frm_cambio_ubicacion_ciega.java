@@ -153,7 +153,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextToSpeech mTTS;
     private String textToSpeeach = "";
     private boolean ocultar_mensajes;
-    private boolean areaprimera = true;
     private boolean inferir_origen_en_cambio_ubic = false;
     private boolean licencia_reservada_completamente = false;
     private boolean reservada_parcialmente = false;
