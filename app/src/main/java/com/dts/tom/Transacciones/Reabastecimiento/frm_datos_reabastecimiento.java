@@ -30,6 +30,8 @@ import com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res;
 
 import static com.dts.tom.Transacciones.Reabastecimiento.frm_reabastecimiento_manual.selitem;
 
+import java.util.concurrent.ExecutionException;
+
 public class frm_datos_reabastecimiento extends PBase {
 
     private  frm_datos_reabastecimiento.WebServiceHandler ws;
@@ -38,7 +40,7 @@ public class frm_datos_reabastecimiento extends PBase {
     private EditText txtUbicOrigen, txtLipPlate, txtCodigoPrd, txtLote, txtVence,
                      txtEstado, txtCantidad, txtUbicDestino;
     private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino, lblCantidad, lblCant;
-    private TableRow trLicPlate;
+    private TableRow trLicPlate, tblExplosionar;
     private CheckBox chkExplosionar;
 
     private clsBeTrans_movimientos gMovimientoDet = new clsBeTrans_movimientos();
@@ -51,6 +53,7 @@ public class frm_datos_reabastecimiento extends PBase {
     private String vNuevoPalletId = "";
 
     private boolean explosionar = false;
+    private boolean UbicValida = false;
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
 
@@ -82,7 +85,11 @@ public class frm_datos_reabastecimiento extends PBase {
         chkExplosionar = findViewById(R.id.chkExplosionar);
 
         trLicPlate = findViewById(R.id.trLicPlate);
+        tblExplosionar = findViewById(R.id.tblExplosionar);
+
         txtUbicOrigen.setEnabled(false);
+
+        UbicValida = false;
 
         browse = 0;
 
@@ -252,6 +259,13 @@ public class frm_datos_reabastecimiento extends PBase {
                 trLicPlate.setVisibility(View.GONE);
             }
 
+            //#AT20220802 Si tiene presentación muestra el check para explosionar
+            if (selitem.IdPresentacion > 0) {
+                tblExplosionar.setVisibility(View.VISIBLE);
+            } else {
+                tblExplosionar.setVisibility(View.GONE);
+            }
+
             txtCodigoPrd.setHint(selitem.Codigo_Producto);
 
         } catch (Exception e) {
@@ -287,7 +301,14 @@ public class frm_datos_reabastecimiento extends PBase {
 
             gMovimientoDet.IdEstadoDestino = selitem.IdProductoEstado;
             gMovimientoDet.IdUnidadMedida = selitem.IdUnidadMedida;
-            gMovimientoDet.IdTipoTarea = 23;
+
+            //#AT20220802 Si explosionar es true se cambia el tipo de tarea a explosión
+            if (explosionar) {
+                gMovimientoDet.IdTipoTarea = 20;
+            } else {
+                gMovimientoDet.IdTipoTarea = 23;
+            }
+
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = selitem.IdRecepcionEnc;
 
@@ -311,12 +332,34 @@ public class frm_datos_reabastecimiento extends PBase {
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
             gMovimientoDet.setIsNew(true);
 
-            AplicarCambio();
+            if (!txtUbicDestino.getText().toString().isEmpty()) {
+                AplicarCambio();
+            } else {
+                toast("Ingrese una ubicación de destino");
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" . " + e.getMessage());
         }
     }
+    public void BotonAplicaCambio(View view) {
+        try {
+
+            if (!txtUbicDestino.getText().toString().isEmpty()) {
+                if (UbicValida) {
+                    CreaMovimiento();
+                } else {
+                    execws(3);
+                }
+            } else {
+                toast("Ingrese una ubicación de destino");
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" . " + e.getMessage());
+        }
+    }
+
 
     private void AplicarCambio() {
         try {
@@ -357,13 +400,16 @@ public class frm_datos_reabastecimiento extends PBase {
 
                     lblUbicCompDestino.setText(BeUbic.Descripcion);
                     txtCantidad.requestFocus();
+                    UbicValida = true;
 
                     CreaMovimiento();
                 } else {
+                    UbicValida = false;
                     lblUbicCompDestino.setText("");
                     toast("Ubicación no válida");
                 }
             } else {
+                UbicValida = false;
                 lblUbicCompDestino.setText("");
                 toast("Ubicación no válida");
             }

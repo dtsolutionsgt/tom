@@ -172,7 +172,10 @@ public class frm_reabastecimiento_manual extends PBase {
                     adapter_stock = new list_adapt_reabast_stock_res(getApplicationContext(),ListStock);
                     listExist.setAdapter(adapter_stock);
                 }
+            } else {
+                toast("No se encontró stock para reabastecer.");
             }
+
         } catch (Exception e) {
             mu.msgbox("processGetStock: "+ e.getMessage());
         }

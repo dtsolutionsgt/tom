@@ -22,6 +22,8 @@ import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 
 import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.selitem;
 
+import java.util.concurrent.ExecutionException;
+
 public class frm_datos_stock_res extends PBase {
 
     private frm_datos_stock_res.WebServiceHandler ws;
@@ -33,6 +35,8 @@ public class frm_datos_stock_res extends PBase {
     private TableRow trDestino, trPresentacion, trLote, trVence, trProducto;
 
     private int IdUbicacion = 0, IdUbicacionDest = 0, CambioUbicRealizado = 0;
+    private boolean UbicValida = false;
+
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
 
     @Override
@@ -68,6 +72,8 @@ public class frm_datos_stock_res extends PBase {
         trLote = findViewById(R.id.trLote);
         trVence = findViewById(R.id.trVence);
         trProducto = findViewById(R.id.trProducto);
+
+        UbicValida = false;
 
         Load();
         setHandlers();
@@ -137,25 +143,6 @@ public class frm_datos_stock_res extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
                                     ValidaCodigoPrd();
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                }
-            });
-
-            txtCantidad.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    try {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-
-                            switch (keyCode) {
-
-                                case KeyEvent.KEYCODE_ENTER:
-                                    ActualizaUbicacion();
                             }
                         }
                     } catch (Exception e) {
@@ -302,6 +289,10 @@ public class frm_datos_stock_res extends PBase {
                     lblNomDestino.setText(BeUbic.Descripcion);
                     txtCantidad.requestFocus();
                     txtCantidad.setSelectAllOnFocus(true);
+                    UbicValida = true;
+
+                    ActualizaUbicacion();
+
                 } else {
                     txtUbicDestino.requestFocus();
                     txtUbicDestino.selectAll();
@@ -335,43 +326,67 @@ public class frm_datos_stock_res extends PBase {
         }
     }
 
-    private void ValidaDatos() {
+    private boolean ValidaDatos() {
+        boolean permite = true;
+
         try {
             if (txtUbicOrigen.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese ubicación de origen.");
-                return;
+                permite = false;
             }
 
             if (txtLicensePlate.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese licencia.");
-                return;
+                permite = false;
             }
 
             if (txtCodigoPrd.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese código.");
-                return;
+                permite = false;
             }
 
             if (txtUbicDestino.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese ubicación destino.");
-                return;
+                permite = false;
             }
 
             if (txtCantidad.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese cantidad.");
-                return;
+                permite = false;
             }
 
         } catch (Exception e) {
             mu.msgbox("ValidaDatos: "+e.getMessage());
         }
+
+        return permite;
+    }
+
+    public void BotonAplicaCambio(View view) {
+        try {
+
+            if (!txtUbicDestino.getText().toString().isEmpty()) {
+                if (UbicValida) {
+                    ActualizaUbicacion();
+                } else {
+                    execws(1);
+                }
+            } else {
+                toast("Ingrese una ubicación de destino");
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" . " + e.getMessage());
+        }
     }
 
     private void ActualizaUbicacion() {
         try {
-            ValidaDatos();
 
-            execws(2);
+            if (ValidaDatos()) {
+                execws(2);
+            }
+
         } catch (Exception e) {
             mu.msgbox("ActualizaUbicacion: "+e.getMessage());
         }
@@ -407,14 +422,6 @@ public class frm_datos_stock_res extends PBase {
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
-        }
-    }
-
-    public void AplicarCambio (View v) {
-        try {
-            ActualizaUbicacion();
-        } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
