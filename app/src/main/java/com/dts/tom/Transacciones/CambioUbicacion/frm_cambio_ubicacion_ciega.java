@@ -2931,7 +2931,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vCantidadDisponible = 0;
             licencia_reservada_completamente = false;
             reservada_parcialmente = false;
-
             lblCant.setText("");
             txtUbicDestino.setText("");
             txtCantidad.setText("");
@@ -3892,6 +3891,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     public void Regresar(View view){
+
+        if (CambioUbicExistencia) {
+            CambioUbicExistencia=false;
+            gl.existencia = null;
+        }
+
         finish();
     }
 

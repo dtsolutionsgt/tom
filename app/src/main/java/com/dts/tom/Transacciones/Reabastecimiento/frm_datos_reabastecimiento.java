@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -100,6 +102,13 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void setHandlers() {
         try {
+            txtLipPlate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
             txtCodigoPrd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -107,12 +116,6 @@ public class frm_datos_reabastecimiento extends PBase {
                 }
             });
 
-            txtUbicDestino.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
 
             txtLipPlate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -179,8 +182,14 @@ public class frm_datos_reabastecimiento extends PBase {
                                 lblUbicCompleta.setText(selitem.Ubicacion_Nombre);
 
                                 if (trLicPlate.getVisibility() != View.GONE) {
+                                    txtLipPlate.setFocusable(true);
+                                    txtLipPlate.setFocusableInTouchMode(true);
+                                    txtLipPlate.setCursorVisible(true);
                                     txtLipPlate.requestFocus();
                                 } else {
+                                    txtCodigoPrd.setFocusable(true);
+                                    txtCodigoPrd.setFocusableInTouchMode(true);
+                                    txtCodigoPrd.setCursorVisible(true);
                                     txtCodigoPrd.requestFocus();
                                 }
 
@@ -238,6 +247,19 @@ public class frm_datos_reabastecimiento extends PBase {
                 lblCant.setText(""+selitem.CantidadReservadaUMBas);
             }
 
+            txtLipPlate.setFocusableInTouchMode(false);
+            txtLipPlate.setFocusable(false);
+            txtLipPlate.setCursorVisible(false);
+
+            if (trLicPlate.getVisibility() == View.GONE) {
+                txtCodigoPrd.setFocusableInTouchMode(false);
+                txtCodigoPrd.setFocusable(false);
+                txtCodigoPrd.setCursorVisible(false);
+            }
+
+            txtUbicDestino.setFocusable(true);
+            txtUbicDestino.setFocusableInTouchMode(true);
+            txtUbicDestino.setCursorVisible(true);
             txtUbicDestino.requestFocus();
 
         } catch (Exception e) {
@@ -253,7 +275,7 @@ public class frm_datos_reabastecimiento extends PBase {
             txtUbicOrigen.setHint(""+selitem.IdUbicacion);
             txtUbicOrigen.setEnabled(true);
 
-            if (!selitem.Lic_plate.isEmpty()) {
+            if (!selitem.Lic_plate.isEmpty()  && !selitem.Lic_plate.equals("-")) {
                 txtLipPlate.setHint(selitem.Lic_plate);
             } else {
                 trLicPlate.setVisibility(View.GONE);

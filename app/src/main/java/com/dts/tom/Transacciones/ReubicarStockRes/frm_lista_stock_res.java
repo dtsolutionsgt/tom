@@ -59,6 +59,7 @@ public class frm_lista_stock_res extends PBase {
         lblRegs = findViewById(R.id.lblRegs);
         listStockRes = findViewById(R.id.listStockRes);
 
+        ProgressDialog("Cargando pantalla...");
         setHandlers();
 
     }
@@ -80,6 +81,7 @@ public class frm_lista_stock_res extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
                                     if (ValidaCampos()) {
+                                        ProgressDialog("Listando detalle...");
                                         execws(1);
                                     } else {
                                         mu.msgbox("Ingrese ubicación o código válidos.");
@@ -104,6 +106,7 @@ public class frm_lista_stock_res extends PBase {
 
                                 case KeyEvent.KEYCODE_ENTER:
                                     if (ValidaCampos()) {
+                                        ProgressDialog("Listando detalle...");
                                         execws(1);
                                     } else {
                                         mu.msgbox("Ingrese ubicación o código válidos.");
@@ -206,6 +209,8 @@ public class frm_lista_stock_res extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("processGetStockRes: "+e.getMessage());
+        } finally {
+            progress.cancel();
         }
     }
 
@@ -280,9 +285,16 @@ public class frm_lista_stock_res extends PBase {
     @Override
     protected void onResume() {
         super.onResume();
-        if (browse == 1) {
-            browse = 0;
-            execws(1);
+
+        try {
+            if (browse == 1) {
+                browse = 0;
+                execws(1);
+            }
+        } catch (Exception e) {
+            mu.msgbox("OnResume" + e.getMessage());
+        } finally {
+            progress.cancel();
         }
     }
 }
