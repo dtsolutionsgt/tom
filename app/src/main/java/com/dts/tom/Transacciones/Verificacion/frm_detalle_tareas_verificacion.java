@@ -108,7 +108,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
             }
 
-            VerSinLoteFechaVen = false;
             gl.VerificacionSinLoteFechaVen = false;
 
             if (gl.VerificacionConsolidada) {
@@ -133,7 +132,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             relbot = (RelativeLayout) findViewById(R.id.relbot);
             chkPendientes = (CheckBox) findViewById(R.id.chkPendientes);
 
-            if (gl.TipoPantallaVerificacion == 0) {
+            if (gl.TipoPantallaVerificacion != 3) {
                 if (mostrar_area) {
                     encabezado2.setVisibility(View.VISIBLE);
                 } else if (VerSinLoteFechaVen) {
@@ -206,10 +205,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         if (gl.TipoPantallaVerificacion == 3) {
                             adapter4.setSelectedIndex(position);
                         } else {
-                            adapter2.setSelectedIndex(position);
+                            //#AT20220803 Agregué estas validaciones porque si no era 3, probocaba que la aplicacion se cerrara
+                            if (mostrar_area) {
+                                adapter2.setSelectedIndex(position);
+                            } else if (VerSinLoteFechaVen) {
+                                adapter3.setSelectedIndex(position);
+                            } else {
+                                adapter.setSelectedIndex(position);
+                            }
                         }
-
-
                     } else {
                         if (mostrar_area) {
                             adapter2.setSelectedIndex(position);
@@ -230,9 +234,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         if (gl.TipoPantallaVerificacion == 3) {
                             adapter4.refreshItems();
                         } else {
-                            adapter2.refreshItems();
+                            //#AT20220803 Agregué estas validaciones porque si no era 3, probocaba que la aplicacion se cerrara
+                            if (mostrar_area) {
+                                adapter2.refreshItems();
+                            } else if (VerSinLoteFechaVen) {
+                                adapter3.refreshItems();
+                            } else {
+                                adapter.refreshItems();
+                            }
                         }
-
                     } else {
                         if (mostrar_area) {
                             adapter2.refreshItems();
