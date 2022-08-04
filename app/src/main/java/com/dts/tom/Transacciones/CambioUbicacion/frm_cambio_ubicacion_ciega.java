@@ -3866,7 +3866,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             }
 
-            gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+            //#AT20220804 Se agrego fecha y hora, antes se mandaba unicamente la fecha
+            gMovimientoDet.Fecha = du.Fecha_CompletaT();
 
             if(escaneoPallet &&  productoList != null ) {
                 gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
@@ -3874,9 +3875,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 gMovimientoDet.Barra_pallet = "";
             }
 
-            gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+            //#AT20220804 Se agrego fecha y hora, antes se mandaba unicamente la fecha
+            gMovimientoDet.Hora_ini =  du.Fecha_CompletaT();
+            gMovimientoDet.Hora_fin =  du.Fecha_CompletaT();
+            gMovimientoDet.Fecha_agr =  du.Fecha_CompletaT();
             gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
