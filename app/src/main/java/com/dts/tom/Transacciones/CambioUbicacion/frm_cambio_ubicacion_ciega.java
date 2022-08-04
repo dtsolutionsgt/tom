@@ -551,9 +551,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_ENTER:
-                            if (txtUbicDestino.getText().toString().length() > 0)
-                                AplicarCambioBoton();
-                            else
+                            if (txtUbicDestino.getText().toString().length() > 0) {
+                                if (txtUbicSug.getText().toString().isEmpty()) {
+                                    validaDestino();
+                                }else{
+                                    AplicarCambioBoton();
+                                }
+                            }else
                                 toast("Debe ingresar la ubicación destino");
                     }
                 }
