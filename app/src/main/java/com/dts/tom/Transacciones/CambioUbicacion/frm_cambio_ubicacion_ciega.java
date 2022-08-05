@@ -1845,8 +1845,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgAskAplicar((gl.modo_cambio ==1? "Mover producto a ubicación: " + bodega_ubicacion_destino.Descripcion: "Aplicar cambio de estado?"));
                 }
 
-
-
             }else{
                 progress.cancel();
                 txtLicPlate.requestFocus();
@@ -3795,6 +3793,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.IdProductoBodega = cvProd.IdProductoBodega;
             gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
+            //#CKFK20220804 Inicializamos el IdTipoTarea en -1
+            gMovimientoDet.IdTipoTarea = -1;
 
             /*if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
                 gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()));
@@ -3821,7 +3821,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             gMovimientoDet.IdUnidadMedida = cvStockItem.IdUnidadMedida;
 
-            if(EsCambioEstado ) {
+            if(EsCambioEstado) {
                 gMovimientoDet.IdTipoTarea = 3;
             }else{
                 if (!Es_Explosion && !Es_Explosion_Manual){
@@ -3838,14 +3838,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.Cantidad = vCantidadAUbicar;
             gMovimientoDet.Serie = cvStockItem.Serial;
 
-
             //#GT2772022_1850: se envia el peso del textobox si al caso, se modificó la cantidad e hizo recalculo.
             if(BeProductoUbicacion.Control_peso){
                 gMovimientoDet.Peso =  Double.valueOf(txtPeso.getText().toString().replace(",",""));
             }else{
                 gMovimientoDet.Peso = 0;
             }
-
 
             if(cmbLote.getAdapter()!=null  && cmbLote.getAdapter().getCount()>0){
                 gMovimientoDet.Lote = cmbLote.getSelectedItem().toString();
