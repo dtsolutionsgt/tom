@@ -27,6 +27,7 @@ import com.dts.tom.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class frm_lista_stock_res extends PBase {
 
@@ -60,6 +61,7 @@ public class frm_lista_stock_res extends PBase {
         listStockRes = findViewById(R.id.listStockRes);
 
         ProgressDialog("Cargando pantalla...");
+        Load();
         setHandlers();
 
     }
@@ -133,6 +135,14 @@ public class frm_lista_stock_res extends PBase {
             });
         } catch (Exception e) {
             mu.msgbox("setHandlers: "+e.getMessage());
+        }
+    }
+
+    private void Load() {
+        try {
+            execws(1);
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
         }
     }
 
