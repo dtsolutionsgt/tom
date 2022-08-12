@@ -468,7 +468,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     //inferir_origen_en_cambio_ubic es verdadero
                     if (inferir_origen_en_cambio_ubic) {
                         if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                            escaneoPallet = true;
                             pLicensePlate = txtLicPlate.getText().toString();
+                            //Procesa_Lp();
                             execws(17);
                         } else {
                             toast("No se puede ubicar sin licencia");
@@ -1148,7 +1150,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //Comentario: La barra de pallet puede comenzar con $ y no con (01)
             if (txtLicPlate.getText().toString().startsWith("$") ||
                     txtLicPlate.getText().toString().startsWith("(01)") ||
-                    txtLicPlate.getText().toString().startsWith(vStarWithParameter)) {
+                    txtLicPlate.getText().toString().startsWith(vStarWithParameter) ||
+                    !txtLicPlate.getText().toString().isEmpty()) {
 
                 //Es una barra de pallet válida por tamaño
                 int vLengthBarra = txtLicPlate.getText().toString().length();
@@ -2575,6 +2578,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (escaneoPallet && productoList != null){
 
+                    if (cvUbicOrigID == 0) {
+                        cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
+                        txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                    }
+
                     List AuxList = stream(productoList.items)
                             .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
                             .toList();
@@ -2618,6 +2627,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
                         txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
                         lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                    }
+
+                    if (!pLicensePlate.isEmpty()) {
+                        pLicensePlate = txtLicPlate.getText().toString();
+                        escaneoPallet = true;
                     }
 
                     execws(3);
