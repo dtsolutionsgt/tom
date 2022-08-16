@@ -34,6 +34,8 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public int IdMotivoAjusteInventario=0;
     @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
     @Element(required=false) public boolean Generar_Stock_Jornada=false;
+    @Element(required=false) public String Version_BD="0";
+    @Element(required=false) public String AWS_Token="";
 
     public clsBeEmpresa()
     {
@@ -65,6 +67,8 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
         this.politica_contrasenas=politica_contrasenas;
         this.IdMotivoAjusteInventario=IdMotivoAjusteInventario;
         this.Generar_Stock_Jornada=Generar_Stock_Jornada;
+        this.Version_BD=Version_BD;
+        this.AWS_Token = AWS_Token;
     }
 
     public clsBeEmpresa(int IdEmpresa,String Nombre,String Direccion,String Telefono,
@@ -74,7 +78,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
                         boolean Operador_logistico,int Puerto_escaner,boolean Control_presentaciones,boolean Anulaciones_por_supervisor,
                         String Codigo,String Clave,int Intento,int Duracionclave,
                         int Duracionclavetemporal,boolean codigo_automatico,boolean politica_contrasenas,int IdMotivoAjusteInventario,
-                        boolean Generar_Stock_Jornada
+                        boolean Generar_Stock_Jornada, String Version_BD, String AWS_Token
     ) {
 
         this.IdEmpresa=IdEmpresa;
@@ -105,6 +109,8 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
         this.politica_contrasenas=politica_contrasenas;
         this.IdMotivoAjusteInventario=IdMotivoAjusteInventario;
         this.Generar_Stock_Jornada = Generar_Stock_Jornada;
+        this.Version_BD = Version_BD;
+        this.AWS_Token = AWS_Token;
 
     }
 
@@ -294,6 +300,20 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     }
     public void setGenerar_Stock_Jornada(boolean value) {
         Generar_Stock_Jornada=value;
+    }
+
+    public String getVersion_BD() {
+        return Version_BD;
+    }
+    public void setVersion_BD(String value) {
+        Version_BD =value;
+    }
+
+    public String getAWS_Token() {
+        return AWS_Token;
+    }
+    public void setAWS_Token(String value) {
+        AWS_Token =value;
     }
 
 }

@@ -571,9 +571,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
-                    if (txtUbicDestino.getText().toString().equals("") ||
-                            txtUbicDestino.getText().toString().isEmpty() ||
-                            txtUbicDestino.getText().toString()==null){
+                   if (txtUbicDestino.getText().toString().equals("") ||
+                       txtUbicDestino.getText().toString().isEmpty() ||
+                       txtUbicDestino.getText().toString()==null){
 
                         if (validarDatos){
                             mu.msgbox("Debe ingresar la ubicación destino");
@@ -588,6 +588,34 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         }
                     }
                 }
+            }
+        });
+
+        //#CKFK20220815 Agregué este método para la ubicación destino
+        txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+
+                            try {
+
+                                if (!txtUbicDestino.getText().toString().equals("") &&
+                                        !txtUbicDestino.getText().toString().isEmpty() &&
+                                        txtUbicDestino.getText().toString()!=null){
+                                    cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
+                                    validaDestino();
+                                }else{
+                                    msgbox("Debe ingresar la ubicación destino");
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                }
+                return false;
             }
         });
 
