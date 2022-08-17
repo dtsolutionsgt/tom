@@ -158,7 +158,12 @@ public class WebService {
            } if (responsecode==404) {
                errorflag=true;error="Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.";
                throw new Exception(error);
-           }
+           }if (responsecode==500) {
+
+                errorflag=true;error=parseError();
+                throw new Exception("Error al procesar la solicitud :\n " + methodName + " Code: 500");
+
+            }
 
        } catch (Exception e)  {
            errorflag=true;error=e.getMessage();

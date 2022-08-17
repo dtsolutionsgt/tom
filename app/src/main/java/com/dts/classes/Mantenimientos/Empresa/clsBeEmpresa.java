@@ -34,7 +34,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public int IdMotivoAjusteInventario=0;
     @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
     @Element(required=false) public boolean Generar_Stock_Jornada=false;
-    @Element(required=false) public String Version_BD="0";
+    @Element(required=false) public String Version_BD="0";//#CKFK Enviar a EG
     @Element(required=false) public String AWS_Token="";
 
     public clsBeEmpresa()
