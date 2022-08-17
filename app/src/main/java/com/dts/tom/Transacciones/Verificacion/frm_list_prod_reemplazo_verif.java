@@ -171,7 +171,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 @Override
                 public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                     if (!txtFiltro.getText().toString().isEmpty()) {
-                        gl.termino = txtFiltro.getText().toString();
+
+                        //AT20220817 Si la barra comienza con $  se reemplaza
+                        if (txtFiltro.getText().toString().startsWith("$")) {
+                            gl.termino = txtFiltro.getText().toString().replace("$","");
+                        } else {
+                            gl.termino = txtFiltro.getText().toString();
+                        }
+
                         Lista_Filtrada();
                     } else {
                         Lista_Inventario_Disponible();
