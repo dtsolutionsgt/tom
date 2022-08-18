@@ -1617,6 +1617,14 @@ public class frm_picking_datos extends PBase {
                 }
             }*/
 
+            //#AT20220818 se hacia unicamente en el picking detallado
+            //para no perder el orden del cambio de focus
+            if (Escaneo_Pallet && vPalletValido){
+                txtLicencia.setFocusable(false);
+                txtLicencia.clearFocus();
+                txtLicencia.setEnabled(false);
+            }
+
             txtCantidadPick.selectAll();
             txtCantidadPick.setSelectAllOnFocus(true);
             txtCantidadPick.requestFocus();
