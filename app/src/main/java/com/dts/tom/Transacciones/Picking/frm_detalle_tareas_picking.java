@@ -974,7 +974,13 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
-                execws(1);
+                TipoLista = TipoLista;
+                //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
+                if (TipoLista > 0) {
+                    execws(3);
+                } else {
+                    execws(1);
+                }
             }
 
             if (browse==2){
