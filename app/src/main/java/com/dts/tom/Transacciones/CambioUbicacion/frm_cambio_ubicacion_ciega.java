@@ -1339,7 +1339,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             clsBeVW_stock_resList tmpStockResList = new clsBeVW_stock_resList();
 
             tmpStockResList.items = AuxList;
-
             if (tmpStockResList.items.size() >0){
                 cvStockID = tmpStockResList.items.get(0).getIdStock();
                 if (!gl.Permitir_Cambio_Ubic_Producto_Picking){
