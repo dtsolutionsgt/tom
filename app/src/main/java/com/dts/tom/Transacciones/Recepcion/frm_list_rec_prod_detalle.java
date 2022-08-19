@@ -589,7 +589,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }
 
 
-                //#GT19082022_1223: Este codigo no esta adecuado al tipo de etiqueta del producto en el BOF.
+                //#GT19082022_1223: Este codigo no esta adecuado al tipo de etiqueta del producto en el BOF...#EJC
 //                String zpl = String.format("^XA \n" +
 //                                    "^MMT \n" +
 //                                    "^PW700 \n" +
