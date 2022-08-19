@@ -368,24 +368,105 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
 
-                String zpl = String.format("^XA \n" +
-                                           "^MMT \n" +
-                                           "^PW700 \n" +
-                                           "^LL0406 \n" +
-                                           "^LS0 \n" +
-                                           "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                           "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-                                           "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-                                           "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                           "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                           "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-                                           "^FO2,340^GB670,0,14^FS \n" +
-                                           "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                           "^FD%4$s^FS \n" +
-                                           "^PQ1,0,1,Y " +
-                                           "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                            "$"+pNumeroLP);
+
+                //#GT19082022: valido que tipo de etiqueta tiene el producto para asociar el tipo de impresión
+                String zpl="";
+
+                if (BeProducto.IdTipoEtiqueta==1){
+
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            "$"+pNumeroLP,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                }else if (BeProducto.IdTipoEtiqueta==2){
+                    //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
+                    //Dado que la descripción salía muy pequeña
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW600\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                                    "^BY3,3,160^FT550,280^BCI,,N,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,520^GB670,14,14^FS\n" +
+                                    "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            "$"+pNumeroLP,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+
+                }else if (BeProducto.IdTipoEtiqueta==4){
+
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW812 \n" +
+                                    "^LL0630 \n" +
+                                    "^LS0 \n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            "$"+pNumeroLP,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+                }
+
+                //#GT19082022: este formato no esta adecuado al tipo de etiqueta definido en el BOF
+//                String zpl = String.format("^XA \n" +
+//                                           "^MMT \n" +
+//                                           "^PW700 \n" +
+//                                           "^LL0406 \n" +
+//                                           "^LS0 \n" +
+//                                           "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+//                                           "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+//                                           "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+//                                           "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+//                                           "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+//                                           "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+//                                           "^FO2,340^GB670,0,14^FS \n" +
+//                                           "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+//                                           "^FD%4$s^FS \n" +
+//                                           "^PQ1,0,1,Y " +
+//                                           "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+//                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+//                                            "$"+pNumeroLP);
 
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);
@@ -429,24 +510,104 @@ public class frm_list_rec_prod_detalle extends PBase {
                 ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
                 //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
 
-                String zpl = String.format("^XA \n" +
+                String zpl="";
+
+                //#GT19082022_1220: se valida el tipo de etiqueta de acuerdo al BOF y producto
+                if (BeProducto.IdTipoEtiqueta==1){
+
+                    zpl = String.format("^XA \n" +
                                     "^MMT \n" +
                                     "^PW700 \n" +
                                     "^LL0406 \n" +
                                     "^LS0 \n" +
-                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
                                     "^FO2,340^GB670,0,14^FS \n" +
                                     "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                     "^FD%4$s^FS \n" +
                                     "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
+                            BeProducto.Codigo_barra,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                }else if (BeProducto.IdTipoEtiqueta==2){
+
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW600\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,440^GB670,14,14^FS\n" +
+                                    "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
+                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            BeProducto.Codigo_barra,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                }else if (BeProducto.IdTipoEtiqueta==4){
+
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW812\n" +
+                                    "^LL609\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                    "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                    "^FD%3$s^FS\n" +
+                                    "^PQ1,0,1,Y \n" +
+                                    "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                    "^FO2,440^GB670,14,14^FS\n" +
+                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
+                                    "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            BeProducto.Codigo_barra,
+                            BeProducto.Codigo + " - " + BeProducto.Nombre,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+                }
+
+
+                //#GT19082022_1223: Este codigo no esta adecuado al tipo de etiqueta del producto en el BOF.
+//                String zpl = String.format("^XA \n" +
+//                                    "^MMT \n" +
+//                                    "^PW700 \n" +
+//                                    "^LL0406 \n" +
+//                                    "^LS0 \n" +
+//                                    "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
+//                                    "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
+//                                    "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
+//                                    "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
+//                                    "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
+//                                    "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
+//                                    "^FO2,340^GB670,0,14^FS \n" +
+//                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+//                                    "^FD%4$s^FS \n" +
+//                                    "^PQ1,0,1,Y " +
+//                                    "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
+//                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+//                            (!pNumeroLP.equals(""))?"$"+pNumeroLP:BeProducto.Codigo);
 
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);

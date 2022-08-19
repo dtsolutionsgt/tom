@@ -4809,7 +4809,7 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void Actualiza_Valores_Despues_Imprimir(boolean salir){
+    private void  Actualiza_Valores_Despues_Imprimir(boolean salir){
 
         try{
             //EJC20210125: Actualiza valores de la OC después imprimir
