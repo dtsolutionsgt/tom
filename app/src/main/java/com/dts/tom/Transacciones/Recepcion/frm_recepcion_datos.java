@@ -6520,6 +6520,16 @@ public class frm_recepcion_datos extends PBase {
                     case 16:
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
+
+                        //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
+                        if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
+                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
+                            if (!txtNoLP.getText().toString().isEmpty()){
+                                toast("#CKFK20220823: Por una causa desconocida la licencia está vacía");
+                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate=txtNoLP.getText().toString();
+                            }
+                        }
+
                         //#AT 20220328 Si chkPresentacion no esta marcado, IdPresentación = 0
                         if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
                             pListBeStockRec.items.get(0).IdPresentacion = 0;
