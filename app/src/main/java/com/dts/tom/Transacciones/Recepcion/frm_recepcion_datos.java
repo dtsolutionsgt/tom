@@ -4424,7 +4424,11 @@ public class frm_recepcion_datos extends PBase {
 
     public void BotonGuardarRecepcion(View view){
 
-       guardar_recepcion();
+        //guardar_recepcion();
+
+        //#GT22082022_845: valida si la LP no se ha utlizado en caso sea mismo operador con login en 2 dispositivos.
+        execws(35);
+
     }
 
     private void guardar_recepcion(){
@@ -4809,7 +4813,7 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void Actualiza_Valores_Despues_Imprimir(boolean salir){
+    private void  Actualiza_Valores_Despues_Imprimir(boolean salir){
 
         try{
             //EJC20210125: Actualiza valores de la OC después imprimir
@@ -6731,6 +6735,17 @@ public class frm_recepcion_datos extends PBase {
                     case 34:
                         callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
                         break;
+                    case 35:
+
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
+//                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
+//                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
+//                                "pIdProducto",BeProducto.IdProducto);
+
+                        break;
 
                 }
 
@@ -6867,6 +6882,9 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 34:
                     processGetFotosRec();
+                    break;
+                case 35:
+                    Valida_LP_Previo_Guardar();
                     break;
             }
 
@@ -7066,12 +7084,72 @@ public class frm_recepcion_datos extends PBase {
 
     private clsBeResolucion_lp_operador nBeResolucion = null;
 
+
+    //#GT22082022_0828: valida si la LP ya fue registrada previo a guardar, porque se puede asignar a varios dispositivos
+    // si es el mismo Operador de la bodega.
+
+    private void Valida_LP_Previo_Guardar(){
+        try {
+
+            String LPvalidado = "";
+            String LPInicial = txtNoLP.getText().toString();
+
+            if (nBeResolucion == null){
+                //toast("Buscando la resolución");
+                nBeResolucion = new clsBeResolucion_lp_operador();
+                //toast("Inicializando la instancia");
+                if (xobj!=null){
+                    //toast("El objeto no es nulo");
+                    nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+
+                }else{
+                    toast("El objeto SI es nulo");
+                }
+            }
+
+            //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
+            if (nBeResolucion !=null){
+
+                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+
+                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
+                LPvalidado= nBeResolucion.Serie + result;
+
+
+                //#GT23082022_0803: Si la LP en resolución ya cambio porque la grabaron desde otro dispositivo alerta, sino continua registrando
+                if (LPvalidado.equals(LPInicial)){
+                    //toast("Continuar grabando");
+                    guardar_recepcion();
+                }else{
+                    toast("La LP ya no esta disponible, retorne a la lista principal para reintentar la recepción del producto.");
+                }
+
+            }else{
+                Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
+                gl.IdResolucionLpOperador =0;
+                return;
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP_RE: "+e.getMessage());
+        }
+    }
+
+
     private void processNuevoLPA(){
 
 
         try {
 
-            CantVeces+=1;
+            //CantVeces+=1;
 
             //toast("Cuantas veces entró " + CantVeces);
 
