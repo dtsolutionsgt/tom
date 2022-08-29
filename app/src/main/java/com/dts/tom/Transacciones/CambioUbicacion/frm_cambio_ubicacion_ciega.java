@@ -3420,14 +3420,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         if (BeStockPallet.getIdPresentacion()!=0) {
 
                             if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
-                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nueva licencia y continuar?");
                             } else {
                                 inicializaTarea(true);
                             }
 
                         }else{
                             if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
-                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nueva licencia y continuar?");
                             }else{
                                 inicializaTarea(true);
                             }

@@ -938,8 +938,8 @@ public class frm_consulta_stock extends PBase {
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                "pCodigo",txtCodigo.getText().toString(),
-                                "IdBodega",gl.IdBodega);
+                                        "pCodigo",txtCodigo.getText().toString(),
+                                              "IdBodega",gl.IdBodega);
                         break;
 
                     case 4:
@@ -950,7 +950,6 @@ public class frm_consulta_stock extends PBase {
                                                "pNombre", nomProducto,
                                                "pDetallado", chkDetalle.isChecked());
                         break;
-
                 }
 
                 if (progress !=null){

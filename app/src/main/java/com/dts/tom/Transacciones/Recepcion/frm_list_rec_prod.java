@@ -342,17 +342,11 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                   Guardar_Pallet();
-                }
-            });
+            dialog.setPositiveButton("Si", (dialog12, which) -> Guardar_Pallet());
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    execws(8);
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+                execws(8);
+                return;
             });
 
             dialog.show();

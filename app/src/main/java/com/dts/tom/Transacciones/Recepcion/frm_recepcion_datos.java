@@ -3089,6 +3089,8 @@ public class frm_recepcion_datos extends PBase {
                         if (gl.gBeOrdenCompra.DetalleLotes.items.size() == 0) {
                             cmbVenceRec.setText(gl.gFechaVenceAnterior);
                         }
+                    }else{
+                        cmbVenceRec.setText(gl.gFechaVenceAnterior);
                     }
                 }
 
@@ -3102,6 +3104,7 @@ public class frm_recepcion_datos extends PBase {
             vPresentacion = Get_Presentacion_A_Recibir();
 
             if (vPresentacion>0){
+
                 chkPresentacion.setVisibility(View.VISIBLE);
                 chkPresentacion.setChecked(true);
                 Factor =Get_Factor_Presentacion(vPresentacion);
@@ -3110,6 +3113,7 @@ public class frm_recepcion_datos extends PBase {
                 //Por eso agregué este try catch así.
 
                 try {
+
                     if (BeProducto.Presentaciones!=null){
                         if(BeProducto.Presentaciones.items!=null){
                             EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==vPresentacion).select(c->c.EsPallet).first();
@@ -3168,6 +3172,7 @@ public class frm_recepcion_datos extends PBase {
 
                 Cant_Recibida = gl.gselitem.Cantidad_recibida;//stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad_recibida).first();
                 Cant_A_Recibir = gl.gselitem.Cantidad; //stream(gl.gpListDetalleOC.items).where(c->c.IdOrdenCompraDet ==pIdOrdenCompraDet).select(c->c.Cantidad).first();
+
                 if(Cant_A_Recibir - Cant_Recibida<0){
                     Cant_Pendiente = 0;
                 }else{
@@ -3195,6 +3200,7 @@ public class frm_recepcion_datos extends PBase {
                                             && c.Codigo_producto.equals(BeOcDet.Codigo_Producto)).first();
 
                             if (BeLoteLinea!=null){
+
                                 txtLoteRec.setText(BeLoteLinea.Lote);
 
                                 if (!BeLoteLinea.Fecha_vence.isEmpty()){
@@ -6980,7 +6986,6 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 LlenaDatosFaltantes_Existente();
             }
-
 
             //GT04042022: focus a cantidad
             if (!txtNoLP.getText().toString().isEmpty()){

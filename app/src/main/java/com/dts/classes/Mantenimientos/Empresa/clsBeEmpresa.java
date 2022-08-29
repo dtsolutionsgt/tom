@@ -34,7 +34,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public int IdMotivoAjusteInventario=0;
     @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
     @Element(required=false) public boolean Generar_Stock_Jornada=false;
-    @Element(required=false) public String Version_BD="0";//#CKFK Enviar a EG
+    @Element(required=false) public String Version_BD="";
     @Element(required=false) public String AWS_Token="";
 
     public clsBeEmpresa()
@@ -263,24 +263,28 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     public void setDuracionclave(int value) {
         Duracionclave=value;
     }
+
     public int getDuracionclavetemporal() {
         return Duracionclavetemporal;
     }
     public void setDuracionclavetemporal(int value) {
         Duracionclavetemporal=value;
     }
+
     public boolean getcodigo_automatico() {
         return codigo_automatico;
     }
     public void setcodigo_automatico(boolean value) {
         codigo_automatico=value;
     }
+
     public boolean getpolitica_contraseñas() {
         return politica_contrasenas;
     }
     public void setpolitica_contraseñas(boolean value) {
         politica_contrasenas=value;
     }
+
     public int getIdMotivoAjusteInventario() {
         return IdMotivoAjusteInventario;
     }

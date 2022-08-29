@@ -68,7 +68,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relOpciones"
         android:layout_below="@id/reltop"
-        android:layout_marginBottom="0dp">
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="-1266dp">
 
         <LinearLayout
             android:id="@+id/lnDatos"
