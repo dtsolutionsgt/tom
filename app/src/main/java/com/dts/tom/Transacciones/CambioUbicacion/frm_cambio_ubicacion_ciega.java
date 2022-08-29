@@ -1626,7 +1626,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pLicPlateAnt",BeStockPallet.getLic_plate(),
                                 "pLicPlateNuevo", vNuevoPalletId,
                                 "pIdStockNuevo", vIdStockNuevo,
-                                "pIdMovimientoNuevo",vIdMovimientoNuevo);
+                                "pIdMovimientoNuevo",vIdMovimientoNuevo,
+                                "pIdResolucion", gl.IdResolucionLpOperador);
                         break;
                     case 10://Obtiene los estados por propietario
                         callMethod("Get_Estados_By_IdPropietario",
