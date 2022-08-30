@@ -4493,6 +4493,7 @@ public class frm_recepcion_datos extends PBase {
                 if (Escaneo_Pallet){
                     //Guardar_Recepcion_Pallet
                 }else{
+
                     ValidaCampos();
                 }
 
