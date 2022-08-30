@@ -256,12 +256,16 @@ public class frm_list_rec_prod extends PBase {
 
                                 if (vLP.equals("")){
                                     txtCodigoProductoRecepcion.setText("");
-                                    mu.msgbox("La barra de pallet no tiene el formato correcto");
+                                    mu.msgbox("La licencia no tiene el formato correcto");
                                     return;
                                 }
 
                             }else{
-                                vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
+                                try {
+                                    vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                             if (gBeOrdenCompra.IdTipoIngresoOC == 4){
@@ -279,7 +283,7 @@ public class frm_list_rec_prod extends PBase {
                          }
 
                      }else{
-                         mu.msgbox("El código de pallet : "+pLP+" no tiene la longitud válida");
+                         mu.msgbox("El código de licencia : "+pLP+" no tiene la longitud válida");
                          txtCodigoProductoRecepcion.setText("");
                          txtCodigoProductoRecepcion.requestFocus();
                          return;
@@ -306,34 +310,42 @@ public class frm_list_rec_prod extends PBase {
 
     private void ValidaEstadoPallet(){
 
-        if (gBeStockRec!=null && gBeStockRec.IdStockRec>0 ){
+        try {
+            if (gBeStockRec!=null && gBeStockRec.IdStockRec>0 ){
 
-            mu.msgbox("El número de pallet "+ pLP+" no es válido para la recepción");
-            txtCodigoProductoRecepcion.setText("");
-            txtCodigoProductoRecepcion.requestFocus();
-            return;
-
-        }else{
-
-            if (gBeStockRec.Uds_lic_plate == gBeStockRec.Cantidad){
-                mu.msgbox("El pallet ya fue recibido");
+                mu.msgbox("El número de licencia: "+ pLP+" no es válido para la recepción");
                 txtCodigoProductoRecepcion.setText("");
                 txtCodigoProductoRecepcion.requestFocus();
                 return;
+
+            }else{
+
+                if (!gBeStockRec.Lic_plate.isEmpty()){
+                    if (gBeStockRec.Uds_lic_plate == gBeStockRec.Cantidad){
+                        mu.msgbox("La licencia ya fue recibida");
+                        txtCodigoProductoRecepcion.setText("");
+                        txtCodigoProductoRecepcion.requestFocus();
+                        return;
+                    }
+                }
+
+                if (BeProducto==null){
+                    execws(6);
+                }
+
             }
 
-            if (BeProducto==null){
-                execws(6);
-            }
+            msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
     }
 
     private void msgValidaProductoPallet(String msg) {
 
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -389,10 +401,13 @@ public class frm_list_rec_prod extends PBase {
                 Idx = AuxList.indexOf(vCodigoProductoBarraPallet);
 
                 if (Idx>-1){
+
                     if (BeINavBarraPallet!=null){
 
                         if (!BeINavBarraPallet.Recibido){
+
                             if (BeINavBarraPallet.Activo){
+
                                 gl.mode=1;
                                 selitem = pListDetalleOC.items.get(Idx);
                                 gl.gselitem = selitem;
@@ -405,35 +420,39 @@ public class frm_list_rec_prod extends PBase {
                                // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                                 browse=1;
+
                                 startActivity(new Intent(this, frm_recepcion_datos.class));
 
                             }else{
-                                mu.msgbox("El código de pallet : "+ BeINavBarraPallet.Codigo_barra +" está inactivo: "+BeINavBarraPallet.Codigo_barra+" valide tabla de interface");
+                                mu.msgbox("El código de licencia : "+ BeINavBarraPallet.Codigo_barra +" está inactivo: "+BeINavBarraPallet.Codigo_barra+" valide tabla de interface");
                                 txtCodigoProductoRecepcion.setText("");
                                 txtCodigoProductoRecepcion.requestFocus();
                                 return;
                             }
+
                         }else{
-                            mu.msgbox("El código de pallet: "+BeINavBarraPallet.Codigo_barra+" ya fue recibido con fecha: "+BeINavBarraPallet.Fecha_Agregado);
+                            mu.msgbox("El código de licencia: "+BeINavBarraPallet.Codigo_barra+" ya fue recibido con fecha: "+BeINavBarraPallet.Fecha_Agregado);
                             txtCodigoProductoRecepcion.setText("");
                             txtCodigoProductoRecepcion.requestFocus();
                             return;
                         }
 
                     }else{
-                        mu.msgbox("El código de pallet: "+pLP+" no existe en el listado de barras válidas para ingreso");
+                        mu.msgbox("El código de licencia: "+pLP+" no existe en el listado de licencias válidas para ingreso");
                         txtCodigoProductoRecepcion.setText("");
                         txtCodigoProductoRecepcion.requestFocus();
                         return;
                     }
+
                 }else{
                     mu.msgbox("El producto: "+vCodigoProductoBarraPallet+" no coincide con ningún artículo del documento");
                     txtCodigoProductoRecepcion.setText("");
                     txtCodigoProductoRecepcion.requestFocus();
                     return;
                 }
+
             }else{
-                mu.msgbox("El almacen emisor: "+vCodigoBodegaBarraPallet+" no coincide con el proveedor del documento: "+gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo);
+                mu.msgbox("El almacén emisor: "+vCodigoBodegaBarraPallet+" no coincide con el proveedor del documento: "+gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo);
                 txtCodigoProductoRecepcion.setText("");
                 txtCodigoProductoRecepcion.requestFocus();
                 return;
@@ -669,7 +688,9 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void ValidaProductoForRece(){
+
         List AuxList = null;
+
         try{
 
             if (lBeProducto!=null){
@@ -1271,11 +1292,11 @@ public class frm_list_rec_prod extends PBase {
 
                 switch (ws.callback) {
                     case 1:
-                        progress.setMessage("Actualizando estado de oc");
+                        progress.setMessage("Actualizando estado de D.I.");
                         execws(2);
                         break;
                     case 2:
-                        progress.setMessage("Obteniendo valores de OC");
+                        progress.setMessage("Obteniendo valores D.I.");
                         execws(3);
                         break;
                     case 3:
@@ -1293,7 +1314,7 @@ public class frm_list_rec_prod extends PBase {
                         processProductoByLP();
                         break;
                     case 7:
-                        mu.msgbox("Pallet procesado correctamente");
+                        mu.msgbox("Licencia procesada correctamente");
                         txtCodigoProductoRecepcion.setText("");
                         txtCodigoProductoRecepcion.requestFocus();
                         break;
@@ -1376,6 +1397,7 @@ public class frm_list_rec_prod extends PBase {
             ValidaEstadoPallet();
 
             if (lBeINavBarraPallet!=null){
+
                 if (lBeINavBarraPallet.items!=null){
 
                     if (lBeINavBarraPallet.items.size()==1){
@@ -1384,17 +1406,17 @@ public class frm_list_rec_prod extends PBase {
                         if(gBeOrdenCompra.IdTipoIngresoOC ==4){
                             BeINavBarraPallet = stream(lBeINavBarraPallet.items).where(c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo) && c.Bodega_Destino.equals(gl. gCodigoBodega)).first();
                         }else{
-                            mu.msgbox("Excepción no controlada por barra de pallet en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
+                            mu.msgbox("Excepción no controlada por licencia en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
                         return;
                         }
                     }
 
                 }else{
-                    mu.msgbox("El código de pallet : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                    mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
                     return;
                 }
             }else{
-                mu.msgbox("El código de pallet : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
                 return;
             }
 
@@ -1420,6 +1442,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void procesProductoByLPNo(){
+
         try{
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
             ValidaProductoForRece();
