@@ -308,7 +308,7 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    private void ValidaEstadoPallet(){
+    private boolean ValidaEstadoPallet(){
 
         try {
             if (gBeStockRec!=null && gBeStockRec.IdStockRec>0 ){
@@ -316,7 +316,7 @@ public class frm_list_rec_prod extends PBase {
                 mu.msgbox("El número de licencia: "+ pLP+" no es válido para la recepción");
                 txtCodigoProductoRecepcion.setText("");
                 txtCodigoProductoRecepcion.requestFocus();
-                return;
+                return false;
 
             }else{
 
@@ -325,21 +325,20 @@ public class frm_list_rec_prod extends PBase {
                         mu.msgbox("La licencia ya fue recibida");
                         txtCodigoProductoRecepcion.setText("");
                         txtCodigoProductoRecepcion.requestFocus();
-                        return;
+                        return false;
                     }
                 }
 
                 if (BeProducto==null){
                     execws(6);
+                    return false;
                 }
 
             }
-
-            msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     private void msgValidaProductoPallet(String msg) {
@@ -348,17 +347,16 @@ public class frm_list_rec_prod extends PBase {
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-            dialog.setTitle(R.string.app_name);
-            dialog.setCancelable(false);
+            dialog.setTitle("TOMWMS");
             dialog.setMessage( msg);
+            dialog.setCancelable(false);
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", (dialog12, which) -> Guardar_Pallet());
+            dialog.setPositiveButton("Si", (dialog1, which) -> Guardar_Pallet());
 
-            dialog.setNegativeButton("No", (dialog1, which) -> {
+            dialog.setNegativeButton("No", (dialog12, which) -> {
                 execws(8);
-                return;
             });
 
             dialog.show();
@@ -380,10 +378,12 @@ public class frm_list_rec_prod extends PBase {
                 }
             }
 */
+
             gBeStockRec.Uds_lic_plate = gBeStockRec.Cantidad;
             gBeStockRec.No_bulto = 0;
 
             execws(7);
+
 
         }catch (Exception e){
             mu.msgbox("Guardar_Pallet"+e.getMessage());
@@ -419,6 +419,7 @@ public class frm_list_rec_prod extends PBase {
                                 // lo que tengo en la global
                                // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
+                                //#CKFK20220830 cambié el browse = 1 porque necesitamos que sea 3
                                 browse=1;
 
                                 startActivity(new Intent(this, frm_recepcion_datos.class));
@@ -1214,8 +1215,8 @@ public class frm_list_rec_prod extends PBase {
                     case 6:
                         callMethod("Get_BeProducto_By_LP_For_HH",
                                    "pLic_Plate",pLP,
-                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                   "pBeStockRec",gBeStockRec);
+                                   "pBeStockRec",gBeStockRec,
+                                   "pIdBodega",gl.IdBodega);
                         break;
                     case 7:
                         callMethod("Finalizar_Recepcion_Parcial",
@@ -1230,8 +1231,8 @@ public class frm_list_rec_prod extends PBase {
                     case 8:
                         callMethod("Get_BeProducto_By_LP_For_HH",
                                    "pLic_Plate",pLP,
-                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                   "pBeStockRec",gBeStockRec);
+                                   "pBeStockRec",gBeStockRec,
+                                   "pIdBodega",gl.IdBodega);
                         break;
                     case 9:
                        /* callMethod("Get_BeProducto_By_Codigo_For_HH",
@@ -1394,7 +1395,13 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
 
-            ValidaEstadoPallet();
+            if (ValidaEstadoPallet()){
+
+                execws(8);
+                //msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
+
+            }
+/*
 
             if (lBeINavBarraPallet!=null){
 
@@ -1422,6 +1429,12 @@ public class frm_list_rec_prod extends PBase {
 
             Continua_Validando_Barra();
 
+            //#CKFK20220830 Voy a poner esto aqui porque cuando se hace por esta opción no se limpian los campos
+            mu.msgbox("Licencia procesada correctamente");
+                txtCodigoProductoRecepcion.setText("");
+                txtCodigoProductoRecepcion.requestFocus();
+*/
+
         }catch (Exception e){
             mu.msgbox("processPalletIngreso"+e.getMessage());
         }
@@ -1435,7 +1448,6 @@ public class frm_list_rec_prod extends PBase {
 
             msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
 
-
         }catch (Exception e){
             mu.msgbox("processProductoByLP");
         }
@@ -1444,8 +1456,44 @@ public class frm_list_rec_prod extends PBase {
     private void procesProductoByLPNo(){
 
         try{
-            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
-            ValidaProductoForRece();
+
+            if (BeProducto==null){
+                BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
+            }
+
+            if (gl.Escaneo_Pallet){
+
+                if (lBeINavBarraPallet!=null){
+
+                    if (lBeINavBarraPallet.items!=null){
+
+                        if (lBeINavBarraPallet.items.size()==1){
+                            BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
+                        }else {
+                            if(gBeOrdenCompra.IdTipoIngresoOC ==4){
+                                BeINavBarraPallet = stream(lBeINavBarraPallet.items).where(c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo) && c.Bodega_Destino.equals(gl. gCodigoBodega)).first();
+                            }else{
+                                mu.msgbox("Excepción no controlada por licencia en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
+                                return;
+                            }
+                        }
+
+                    }else{
+                        mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                        return;
+                    }
+
+                    Continua_Validando_Barra();
+
+                }else{
+                    mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
+                    return;
+                }
+
+            }else {
+                ValidaProductoForRece();
+            }
+
         }catch (Exception e){
             mu.msgbox("procesProductoByLPNo:"+e.getMessage());
         }
@@ -1954,7 +2002,15 @@ public class frm_list_rec_prod extends PBase {
             super.onResume();
 
             if (browse==1){
+
                 browse=0;
+
+                if (Escaneo_Pallet){
+                    mu.msgbox("Licencia procesada correctamente");
+                    txtCodigoProductoRecepcion.setText("");
+                    txtCodigoProductoRecepcion.requestFocus();
+                }
+
                 if (!gl.gSinPresentacion){
                     //#CKFK20220625 Al parecer esta asignación es innecesaria
                     // pListDetalleOC.items= gl.gpListDetalleOC.items;
