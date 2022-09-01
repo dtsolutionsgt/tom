@@ -142,6 +142,7 @@ public class frm_recepcion_datos extends PBase {
     private TextView lblSerialIni;
     private TextView lblSerialFin;
     private TextView lblCantidad;
+    private TextView lblLicenciaRec;
     private EditText txtLicPlate;
     private EditText txtSerial;
     private EditText txtAnada;
@@ -399,14 +400,27 @@ public class frm_recepcion_datos extends PBase {
 
         pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
+        //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
+        if (!BeProducto.Genera_lp){
+            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
+            lblLicPlate.setVisibility(View.GONE);
+            txtLicPlate.setFocusable(false);
+            txtLicPlate.setFocusableInTouchMode(false);
+            txtLicPlate.setClickable(false);
+            txtLicPlate.setVisibility(View.GONE);
+        }else{
+            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
+            lblLicPlate.setVisibility(View.VISIBLE);
+            txtLicPlate.setFocusable(true);
+            txtLicPlate.setFocusableInTouchMode(true);
+            txtLicPlate.setClickable(true);
+            txtLicPlate.setVisibility(View.VISIBLE);
+        }
+
         if (gl.bloquear_lp_hh) {
             txtNoLP.setEnabled(false);
-            //#CKFK20220520 Creo que esto ya no aplica dadas las validaciones actuales
-            //txtCantidadRec.requestFocus();
         } else{
             txtNoLP.setEnabled(true);
-            //#CKFK20220520 Creo que esto ya no aplica dadas las validaciones actuales
-            //txtNoLP.requestFocus();
         }
 
         if(!gl.Escaneo_Pallet){
@@ -562,14 +576,18 @@ public class frm_recepcion_datos extends PBase {
                     if (BeProducto.Presentacion != null){
 
                         if (BeProducto.Presentacion.Genera_lp_auto) {
+
+                            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
+                            lblLicPlate.setVisibility(View.VISIBLE);
+                            txtLicPlate.setFocusable(true);
+                            txtLicPlate.setFocusableInTouchMode(true);
+                            txtLicPlate.setClickable(true);
+                            txtLicPlate.setVisibility(View.VISIBLE);
+
                             progress.setMessage("Buscando Licencia");
                             progress.show();
-
-                            //String valores = gl.IdOperador +"-"+ gl.IdBodega;
-                            //toastlong("GT: cmb_pres resolución LP " + valores);
-                            //#EJC20220412: Evaluar si es necesario que se llame aqui.
-                            //execws(6);
                             progress.cancel();
+
                         }else{
                             toastlong("La presentación no genera lp Auto..");
                         }
@@ -1162,12 +1180,6 @@ public class frm_recepcion_datos extends PBase {
                 Guardar_Recepcion_Nueva();
             }
 
-//           if (existen_parametros_para_mostrar()){
-//                MuestraParametros1(this );
-//            }else{
-//               Guardar_Recepcion_Nueva();
-//           }
-
         }catch (Exception e){
             mu.msgbox("Muestra_Propiedades_Producto: "+e.getMessage());
         }
@@ -1419,7 +1431,9 @@ public class frm_recepcion_datos extends PBase {
                     txtLicPlate.setClickable(false);
                     txtLicPlate.setVisibility(View.GONE);
                     lblLicPlate.setVisibility(View.GONE);
+
                 }else{
+
                     if (bePresentacion.EsPallet ||chkPaletizar.isChecked()|| bePresentacion.Permitir_paletizar){
 
                         if (bePresentacion.Genera_lp_auto){
@@ -2730,7 +2744,6 @@ public class frm_recepcion_datos extends PBase {
             if (gl.gselitem != null) {
 
                 Escaneo_Pallet = gl.gEscaneo_Pallet;
-
                 BeProducto.IdProductoBodega = BeOcDet.IdProductoBodega;
                 pIdOrdenCompraDet= BeOcDet.IdOrdenCompraDet;
                 pIdOrdenCompraEnc = BeOcDet.IdOrdenCompraEnc;
@@ -2844,7 +2857,9 @@ public class frm_recepcion_datos extends PBase {
                     BeINavBarraPallet = frm_list_rec_prod.BeINavBarraPallet;
 
                     if (frm_list_rec_prod.BeProducto!=null){
+
                         if (frm_list_rec_prod.BeProducto.IdProducto>0){
+
                             BeProducto = frm_list_rec_prod.BeProducto;
                             BeProducto.Presentaciones.items = stream(BeProducto.Presentaciones.items).where(c->c.Codigo_barra.equals(BeINavBarraPallet.UM_Producto)).toList();
 
@@ -2976,7 +2991,9 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     if (BeProducto.Presentacion != null){
+
                         if (BeProducto.Presentacion.Genera_lp_auto) {
+
                             txtLicPlate.setFocusable(true);
                             txtLicPlate.setFocusableInTouchMode(true);
                             txtLicPlate.setClickable(true);
@@ -2988,6 +3005,7 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
                 }else{
+
                     pListTransRecDet.items = new ArrayList<>();
 
                     execws(19);
@@ -4393,7 +4411,9 @@ public class frm_recepcion_datos extends PBase {
             }else{
 
                 if (BeProducto!=null){
+
                     if(ValidaDatosIngresados()){
+
                         if (Mostrar_Propiedades_Parametros){
                             Muestra_Propiedades_Producto();
                         }else{
@@ -4470,9 +4490,11 @@ public class frm_recepcion_datos extends PBase {
 //            }
 
             if (BeProducto.Presentaciones != null) {
+
                 if (BeProducto.Presentaciones.items != null){
 
                     if (IdPreseSelect!=-1){
+
                         boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
 
                         if (EsPallet){
