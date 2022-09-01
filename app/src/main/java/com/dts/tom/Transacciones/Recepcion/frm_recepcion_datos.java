@@ -3528,7 +3528,7 @@ public class frm_recepcion_datos extends PBase {
             txtUmbasRec.setFocusableInTouchMode(false);
             txtUmbasRec.setClickable(false);
 
-            if (gl.mode==1){
+            if (gl.mode==1 && !Escaneo_Pallet){
                 txtNoLP.setText(BeProducto.Codigo);
                 txtNoLP.setText("");
             }
@@ -4039,6 +4039,8 @@ public class frm_recepcion_datos extends PBase {
     private void Guardar_Pallet(){
 
         try{
+            progress.setMessage("Guardando Pallet");
+            progress.show();
 
             vBeStockRecPallet.Uds_lic_plate = BeINavBarraPallet.Cantidad_UMP;
             vBeStockRecPallet.No_bulto = 0;
@@ -4047,6 +4049,7 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("Guardar_Pallet:"+e.getMessage());
+            progress.cancel();
         }
 
     }
@@ -7301,7 +7304,7 @@ public class frm_recepcion_datos extends PBase {
                            //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
                            if (BeUbicaciones!=null){
                                //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
-                               if (BeUbicaciones.size()==0){
+                               if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
                                    txtNoLP.setText(pNumeroLP);
                                }
                            }else{
@@ -7671,7 +7674,9 @@ public class frm_recepcion_datos extends PBase {
     }
 
     public void ExitForm(View view){
-        doExit();
+        //#CKFK20220830 quité el doExit
+       // doExit();
+        onBackPressed();
     }
 
     public void BotonMostrar(View view){
