@@ -86,6 +86,7 @@ public class frm_Packing extends PBase {
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
     public static clsBeBodega_ubicacion cUbicDest = new clsBeBodega_ubicacion();
     private clsBeProductoList ListBeStockPallet = new clsBeProductoList();
+    private clsBeProducto_PresentacionList ListBeProductoPresentacion = new clsBeProducto_PresentacionList();
     private clsBeProducto BeProductoUbicacionOrigen;
     private clsBeVW_stock_res BeStockPallet;
     private clsBeVW_stock_res cvStockItem;
@@ -204,6 +205,7 @@ public class frm_Packing extends PBase {
                             if (position > 0 && stockResList.items.get(0).IdPresentacion == 0) {
                                 spinlabel.setTextColor(Color.RED);
                                 Toast.makeText(frm_Packing.this, "Se le asignará la presentación '"+cmbPresentacion.getSelectedItem()+"' al producto '"+BeProductoUbicacionOrigen.getNombre()+"'", Toast.LENGTH_LONG).show();
+
                                 IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
                             } else {
                                 IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
@@ -1112,6 +1114,8 @@ public class frm_Packing extends PBase {
                 txtLpAnt.setVisibility(View.GONE);
             }
 
+            double resto=0;
+
             if( Escaneo_Pallet && ListBeStockPallet != null) {
 
                 if(BeStockPallet.Factor >0)
@@ -1177,6 +1181,32 @@ public class frm_Packing extends PBase {
                 datosCorrectos = false;
             }
 
+            List AuxList = stream(BeProductoUbicacionOrigen.Presentaciones.items)
+                    .where(c->c.IdPresentacion==IdPresCmb)
+                    .toList();
+
+            if (AuxList.size() == 0) {
+                msgbox("La presentación: " + IdPresCmb + " no existe");
+                datosCorrectos = false;
+            }else {
+
+                ListBeProductoPresentacion = new clsBeProducto_PresentacionList();
+                ListBeProductoPresentacion.items = AuxList;
+
+                if (AuxList.size() == 1) {
+
+                    double resto=0;
+                    double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
+
+                    if (!gl.Permitir_Decimales){
+                        resto = vCantidadAUbicar % vFactor;
+                        if (resto!=0){
+                           msgbox("Existencia disponible("+ vCantidadAUbicar  +") del producto no es múltiplo del factor " + vFactor);
+                            datosCorrectos = false;
+                        }
+                    }
+                }
+            }
 
         }catch (Exception e){
 
@@ -1195,7 +1225,10 @@ public class frm_Packing extends PBase {
             progress.setMessage("Aplicando el cambio");
             progress.show();
 
-            if (!ValidaDatos())return;
+            if (!ValidaDatos()){
+                progress.cancel();
+                return;
+            }
 
             if(BeStockPallet == null){
                 vUbicacionProducto = cUbicOrig.IdUbicacion;
@@ -1710,7 +1743,11 @@ public class frm_Packing extends PBase {
                     for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
                         valor = gBeProducto.Presentaciones.items.get(i).getIdPresentacion() + " - " +
                                 gBeProducto.Presentaciones.items.get(i).getNombre();
-                        ListPres.add(valor);
+
+                        if (ListPres.indexOf(valor)==-1){
+                            ListPres.add(valor);
+                        }
+
                     }
 
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ListPres);
