@@ -349,15 +349,19 @@ public class clsBeTrans_re_enc {
     public void setOrdenCompraRec(clsBeTrans_re_oc value) {
         OrdenCompraRec=value;
     }
+
     public clsBeTrans_re_detList getDetalle() {
         return Detalle;
     }
+
     public void setDetalle(clsBeTrans_re_detList value) {
         Detalle=value;
     }
+
     public clsBeTrans_re_det_parametrosList getDetalleParametros() {
         return DetalleParametros;
     }
+
     public void setDetalleParametros(clsBeTrans_re_det_parametrosList value) {
         DetalleParametros=value;
     }

@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -239,7 +240,6 @@ public class frm_recepcion_datos extends PBase {
     Boolean parametro_personalizado_valido;
 
     private int pIdPropietarioBodega=0;
-
     double vFactorNuevaRec=0;
     double vCantNuevaRec=0;
     double vCantAnteriorRec=0;
@@ -270,6 +270,9 @@ public class frm_recepcion_datos extends PBase {
     private double CantTotal =0;
     private double DifCantUbic =0;
 
+    /** guardar la LP inicial para validar si ya fue grabada ***/
+    String LPInicial = "";
+
     //Imagen
     private String encoded="";
     private clsBeImagen BeImagen;
@@ -288,156 +291,161 @@ public class frm_recepcion_datos extends PBase {
 
         super.InitBase();
 
-        ws = new WebServiceHandler(frm_recepcion_datos.this, gl.wsurl);
-        xobj = new XMLObject(ws);
-        dataContractDI = new clsDataContractDI();
+        try {
+            ws = new WebServiceHandler(frm_recepcion_datos.this, gl.wsurl);
+            xobj = new XMLObject(ws);
+            dataContractDI = new clsDataContractDI();
 
-        cmbEstadoProductoRec = findViewById(R.id.cmbEstadoProductoRec);
-        cmbPresRec = findViewById(R.id.cmbPresRec);
-        cmbVence = findViewById(R.id.cmbVence);
-        cmbLote = findViewById(R.id.cmbLote);
-        cmbVenceRec = findViewById(R.id.cmbVenceRec);
+            cmbEstadoProductoRec = findViewById(R.id.cmbEstadoProductoRec);
+            cmbPresRec = findViewById(R.id.cmbPresRec);
+            cmbVence = findViewById(R.id.cmbVence);
+            cmbLote = findViewById(R.id.cmbLote);
+            cmbVenceRec = findViewById(R.id.cmbVenceRec);
 
-        txtNoLP = findViewById(R.id.txtLP);
-        txtLoteRec = findViewById(R.id.txtLoteRec);
-        txtUmbasRec = findViewById(R.id.txtUmbasRec);
-        txtCantidadRec = findViewById(R.id.txtCantidadRec);
-        txtPeso= findViewById(R.id.txtPeso);
-        txtPesoUnitario = findViewById(R.id.txtPesoUnitario);
-        txtCostoReal = findViewById(R.id.txtCostoReal);
-        txtCostoOC = findViewById(R.id.txtCostoOC);
+            txtNoLP = findViewById(R.id.txtLP);
+            txtLoteRec = findViewById(R.id.txtLoteRec);
+            txtUmbasRec = findViewById(R.id.txtUmbasRec);
+            txtCantidadRec = findViewById(R.id.txtCantidadRec);
+            txtPeso= findViewById(R.id.txtPeso);
+            txtPesoUnitario = findViewById(R.id.txtPesoUnitario);
+            txtCostoReal = findViewById(R.id.txtCostoReal);
+            txtCostoOC = findViewById(R.id.txtCostoOC);
 
-        lblDatosProd = findViewById(R.id.lblTituloForma);
-        lblPropPrd = findViewById(R.id.lblPropPrd);
-        lblPeso = findViewById(R.id.textView87);
-        lblPUn = findViewById(R.id.textView86);
-        lblCReal = findViewById(R.id.textView89);
-        lblCosto = findViewById(R.id.textView88);
-        lblVence = findViewById(R.id.textView81);
-        lblLote = findViewById(R.id.textView82);
-        lblPres = findViewById(R.id.textView83);
-        lblEstiba = findViewById(R.id.lblEstiba);
-        lblCantidad = findViewById(R.id.textView85);
-        lblUbicacion = findViewById(R.id.lblUbicacion);
-        relOpciones = findViewById(R.id.relOpciones);
-        chkPresentacion = findViewById(R.id.conPresentacion);
-        lblPresentacion = findViewById(R.id.textView83);
-        tblSinPresentacion = findViewById(R.id.tblSinPresentacion);
+            lblDatosProd = findViewById(R.id.lblTituloForma);
+            lblPropPrd = findViewById(R.id.lblPropPrd);
+            lblPeso = findViewById(R.id.textView87);
+            lblPUn = findViewById(R.id.textView86);
+            lblCReal = findViewById(R.id.textView89);
+            lblCosto = findViewById(R.id.textView88);
+            lblVence = findViewById(R.id.textView81);
+            lblLote = findViewById(R.id.textView82);
+            lblPres = findViewById(R.id.textView83);
+            lblEstiba = findViewById(R.id.lblEstiba);
+            lblCantidad = findViewById(R.id.textView85);
+            lblUbicacion = findViewById(R.id.lblUbicacion);
+            relOpciones = findViewById(R.id.relOpciones);
+            chkPresentacion = findViewById(R.id.conPresentacion);
+            lblPresentacion = findViewById(R.id.textView83);
+            tblSinPresentacion = findViewById(R.id.tblSinPresentacion);
 
-        btnCantRecibida = findViewById(R.id.btnCantRecibida);
-        btnCantPendiente = findViewById(R.id.btnCantPendiente);
+            btnCantRecibida = findViewById(R.id.btnCantRecibida);
+            btnCantPendiente = findViewById(R.id.btnCantPendiente);
 
-        dpResult = findViewById(R.id.datePicker);
+            dpResult = findViewById(R.id.datePicker);
 
-        imgDate = findViewById(R.id.imgDate);
-        cmdImprimir = findViewById(R.id.cmdImprimir);
+            imgDate = findViewById(R.id.imgDate);
+            cmdImprimir = findViewById(R.id.cmdImprimir);
 
-        chkPaletizar = findViewById(R.id.chkPaletizar);
-        chkPalletNoEstandar = findViewById(R.id.chkPalletNoEstandar);
-        chkEstiba = findViewById(R.id.chkEstiba);
+            chkPaletizar = findViewById(R.id.chkPaletizar);
+            chkPalletNoEstandar = findViewById(R.id.chkPalletNoEstandar);
+            chkEstiba = findViewById(R.id.chkEstiba);
 
-        findViewById(R.id.btnBack);
-        findViewById(R.id.btnIr);
+            findViewById(R.id.btnBack);
+            findViewById(R.id.btnIr);
 
-        tblEstiba  = findViewById(R.id.tblEstiba);
-        tbLPeso  = findViewById(R.id.tbLPeso);
-        tblVence  = findViewById(R.id.tblVence);
-        tblUbicacion = findViewById(R.id.tblUbicacion);
+            tblEstiba  = findViewById(R.id.tblEstiba);
+            tbLPeso  = findViewById(R.id.tbLPeso);
+            tblVence  = findViewById(R.id.tblVence);
+            tblUbicacion = findViewById(R.id.tblUbicacion);
 
-        tblEstiba.setVisibility(View.GONE);
-        tblUbicacion.setVisibility(View.GONE);
-        chkPaletizar.setVisibility(View.GONE);
-        chkEstiba.setVisibility(View.GONE);
+            tblEstiba.setVisibility(View.GONE);
+            tblUbicacion.setVisibility(View.GONE);
+            chkPaletizar.setVisibility(View.GONE);
+            chkEstiba.setVisibility(View.GONE);
 
-        if (gl.gCapturaPalletNoEstandar){
-            chkPalletNoEstandar.setVisibility(View.VISIBLE);
-        }else{
-            chkPalletNoEstandar.setVisibility(View.GONE);
-        }
+            if (gl.gCapturaPalletNoEstandar){
+                chkPalletNoEstandar.setVisibility(View.VISIBLE);
+            }else{
+                chkPalletNoEstandar.setVisibility(View.GONE);
+            }
 
-        lblUbicacion.setText("");
-        txtLoteRec.setText("");
-        cmbVenceRec.setText(du.getActDateStr());
+            lblUbicacion.setText("");
+            txtLoteRec.setText("");
+            cmbVenceRec.setText(du.getActDateStr());
 
-        txtPosiciones = new EditText(this,null);
-        txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
+            txtPosiciones = new EditText(this,null);
+            txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        setCurrentDateOnView();
+            setCurrentDateOnView();
 
-        setHandlers();
+            setHandlers();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, PresList);
-        cmbPresRec.setAdapter(dataAdapter);
-        cmbPresRec.setSelection(-1);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, PresList);
+            cmbPresRec.setAdapter(dataAdapter);
+            cmbPresRec.setSelection(-1);
 
-        ProgressDialog();
+            ProgressDialog();
 
-        progress.setMessage("Inicializando valores");
+            progress.setMessage("Inicializando valores");
 
-        if (gl.gselitem != null) {
-            BeOcDet=gl.gselitem;
-        }
+            if (gl.gselitem != null) {
+                BeOcDet=gl.gselitem;
+            }
 
-        if(gl.gBeOrdenCompra.TipoIngreso.getEs_Poliza_Consolidada()){
-            pIdPropietarioBodega =  BeOcDet.IdPropietarioBodega;
-        }else{
-            pIdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
-        }
+            if(gl.gBeOrdenCompra.TipoIngreso.getEs_Poliza_Consolidada()){
+                pIdPropietarioBodega =  BeOcDet.IdPropietarioBodega;
+            }else{
+                pIdPropietarioBodega = gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
+            }
 
-        if (gl.gBeRecepcion.Tomar_fotos) {
-            relOpciones.setVisibility(View.VISIBLE);
-        }else{
-            relOpciones.setVisibility(View.INVISIBLE);
-        }
+            if (gl.gBeRecepcion.Tomar_fotos) {
+                relOpciones.setVisibility(View.VISIBLE);
+            }else{
+                relOpciones.setVisibility(View.INVISIBLE);
+            }
 
-        //#EJC20220325: Ocultar boton de imprimir para CEALSA.
-        //Solicitud de Axel.
-        if (gl.Mostrar_Area_En_HH) {
-            cmdImprimir.setVisibility(View.INVISIBLE);
-        }else{
-            cmdImprimir.setVisibility(View.VISIBLE);
-        }
+            //#EJC20220325: Ocultar boton de imprimir para CEALSA.
+            //Solicitud de Axel.
+            if (gl.Mostrar_Area_En_HH) {
+                cmdImprimir.setVisibility(View.INVISIBLE);
+            }else{
+                cmdImprimir.setVisibility(View.VISIBLE);
+            }
 
-        pBeTipo_etiqueta = new clsBeTipo_etiqueta();
+            pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
-        //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-        if (!BeProducto.Genera_lp){
-            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
-            lblLicPlate.setVisibility(View.GONE);
-            txtLicPlate.setFocusable(false);
-            txtLicPlate.setFocusableInTouchMode(false);
-            txtLicPlate.setClickable(false);
-            txtLicPlate.setVisibility(View.GONE);
-        }else{
-            TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
-            lblLicPlate.setVisibility(View.VISIBLE);
-            txtLicPlate.setFocusable(true);
-            txtLicPlate.setFocusableInTouchMode(true);
-            txtLicPlate.setClickable(true);
-            txtLicPlate.setVisibility(View.VISIBLE);
-        }
+            //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
+            if (!BeProducto.Genera_lp){
+                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+                lblLicPlate.setVisibility(View.GONE);
+                txtNoLP.setFocusable(false);
+                txtNoLP.setFocusableInTouchMode(false);
+                txtNoLP.setClickable(false);
+                txtNoLP.setVisibility(View.GONE);
+            }else{
+                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+                lblLicPlate.setVisibility(View.VISIBLE);
+                txtNoLP.setFocusable(true);
+                txtNoLP.setFocusableInTouchMode(true);
+                txtNoLP.setClickable(true);
+                txtNoLP.setVisibility(View.VISIBLE);
+            }
 
-        if (gl.bloquear_lp_hh) {
-            txtNoLP.setEnabled(false);
-        } else{
-            txtNoLP.setEnabled(true);
-        }
+            if (gl.bloquear_lp_hh) {
+                txtNoLP.setEnabled(false);
+            } else{
+                txtNoLP.setEnabled(true);
+            }
 
-        if(!gl.Escaneo_Pallet){
-            execws(1);
-        }else{
-            Load();
-        }
+            if(!gl.Escaneo_Pallet){
+                execws(1);
+            }else{
+                Load();
+            }
 
-        //#EJC20220427: Inicializar en 0 : Setear en No estandard
-        vPosiciones=0;
-        chkPalletNoEstandar.setChecked(false);
+            //#EJC20220427: Inicializar en 0 : Setear en No estandard
+            vPosiciones=0;
+            chkPalletNoEstandar.setChecked(false);
 
-        //AT20220721 Si Permitir_Decimales = true  txtCantidadRec  cambia a decimal si no a entero
-        if (gl.Permitir_Decimales) {
-            txtCantidadRec.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        } else {
-            txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER);
+            //AT20220721 Si Permitir_Decimales = true  txtCantidadRec  cambia a decimal si no a entero
+            if (gl.Permitir_Decimales) {
+                txtCantidadRec.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            } else {
+                txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -4451,12 +4459,14 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    public void BotonGuardarRecepcion(View view){
+    public void BotonGuardarRecepcion(View view) {
 
-        //guardar_recepcion();
-
+        guardar_recepcion();
         //#GT22082022_845: valida si la LP no se ha utlizado en caso sea mismo operador con login en 2 dispositivos.
-        execws(35);
+        //LPInicial = txtNoLP.getText().toString();
+        //execws(35);
+
+
 
     }
 
@@ -4813,7 +4823,7 @@ public class frm_recepcion_datos extends PBase {
             progress.show();
             progress.setMessage("Validando imprimir barra");
 
-            if (gl.IdImpresora>0){
+            if (gl.IdImpresora>0 && gl.MacPrinter!=null){
 
                 progress.cancel();
                 imprimirDesdeBoton=false;
@@ -7133,7 +7143,6 @@ public class frm_recepcion_datos extends PBase {
         try {
 
             String LPvalidado = "";
-            String LPInicial = txtNoLP.getText().toString();
 
             if (nBeResolucion == null){
                 //toast("Buscando la resolución");
@@ -7162,14 +7171,14 @@ public class frm_recepcion_datos extends PBase {
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
                 LPvalidado= nBeResolucion.Serie + result;
-
-
+                //DIANA
                 //#GT23082022_0803: Si la LP en resolución ya cambio porque la grabaron desde otro dispositivo alerta, sino continua registrando
-                if (LPvalidado.equals(LPInicial)){
+                if (LPInicial.contains(LPvalidado)){
                     //toast("Continuar grabando");
                     guardar_recepcion();
                 }else{
-                    toast("La LP ya no esta disponible, retorne a la lista principal para reintentar la recepción del producto.");
+                    toast("Se ha asignado una nueva LP, porque la anterior ya fue asignada, reintente Guardar o, regrese a la lista de tareas.");
+                    txtNoLP.setText(LPvalidado);
                 }
 
             }else{
@@ -7179,8 +7188,10 @@ public class frm_recepcion_datos extends PBase {
             }
 
 
+            //GT23082022_0939: recargamos el resto de codigo de una carga normal de LP, aunque esto sea un reload
+
         }catch (Exception e){
-            mu.msgbox("processNuevoLP_RE: "+e.getMessage());
+            mu.msgbox("Valida_LP_Previo_Guardar: "+e.getMessage());
         }
     }
 
@@ -7773,6 +7784,40 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    private void msgAskAsignarNuevaLp(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+
+                //#GT23082022_1250: se recarga nueva LP porque entro en primer validación
+                //de que LP ya esta aisgnada o usada
+                txtNoLP.setText("");
+                execws(6);
+
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+                txtNoLP.setText("");
+                txtNoLP.setSelectAllOnFocus(true);
+                txtNoLP.requestFocus();
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
     private void msgAskExisteLp(String msg) {
 
         try{
@@ -7955,10 +8000,14 @@ public class frm_recepcion_datos extends PBase {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             }
 
+            //DIANA
             if (Existe_Lp){
                 //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
                 if (gl.bloquear_lp_hh){
-                    msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
+                    //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
+                    //#GT23082022_1130: Se obtiene nueva LP por que la que se cargo, ya se grabo con mismo operador, distinta HH
+                    msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+
                 }else{
                     msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
                 }
@@ -8323,15 +8372,31 @@ public class frm_recepcion_datos extends PBase {
             dialog.setCancelable(false);
             dialog.setMessage(msg);
 
-            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    if (guardo){
-                        Imprime_Barra_Despues_Guardar();
-                    }else{
-                        Actualiza_Valores_Despues_Imprimir(true);
+            if(msg.contains("ERROR_202208182042")){
+
+                dialog.setPositiveButton("La LP ya esta en uso, se asignara una nueva.", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //Obtiene nueva Resolución y nueva LP
+                        //execws(35);
+                        execws(6);
                     }
-                }
-            });
+                });
+
+            }else{
+
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (guardo){
+                            Imprime_Barra_Despues_Guardar();
+                        }else{
+                            Actualiza_Valores_Despues_Imprimir(true);
+                        }
+                    }
+                });
+            }
+
+
 
             dialog.show();
         }catch (Exception e){

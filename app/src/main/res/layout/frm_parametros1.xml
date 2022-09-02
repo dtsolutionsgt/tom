@@ -59,7 +59,7 @@
                     style="@style/StyleText"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Lic Plate:" />
+                    android:text="Licencia:" />
 
                 <EditText
                     android:id="@+id/txtLicPlate"
