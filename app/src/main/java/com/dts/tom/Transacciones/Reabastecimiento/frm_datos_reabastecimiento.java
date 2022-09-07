@@ -394,7 +394,8 @@ public class frm_datos_reabastecimiento extends PBase {
                 Double Cant = Double.valueOf(txtCantidad.getText().toString().replace(",",""));
                 vStockRes.CantidadUmBas =  Cant * selitem.Factor;
             } else {
-                vStockRes.CantidadUmBas = selitem.CantidadUmBas;
+                //#AT20220907 Se cambio de selitem.CantidadUmBas a selitem.CantidadReservadaUMBas porque esto selitem.CantidadUmBas era = 0
+                vStockRes.CantidadUmBas = selitem.CantidadReservadaUMBas;
             }
 
             vStockRes.Peso = selitem.Peso;

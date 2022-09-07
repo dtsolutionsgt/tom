@@ -171,19 +171,25 @@ public class frm_reabastecimiento_manual extends PBase {
     }
 
     private void ListarStock() {
-        ListStock.clear();
 
-        for (clsBeVW_stock_res  obj: BeStockList.items) {
+        try {
+            ListStock.clear();
 
-            if (obj.Fecha_Vence.contains("T")) {
-                obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+            for (clsBeVW_stock_res obj : BeStockList.items) {
+
+                if (obj.Fecha_Vence.contains("T")) {
+                    obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                }
+
+                ListStock.add(obj);
             }
 
-            ListStock.add(obj);
-        }
+            adapter_stock = new list_adapt_reabast_stock_res(getApplicationContext(), ListStock);
+            listExist.setAdapter(adapter_stock);
 
-        adapter_stock = new list_adapt_reabast_stock_res(getApplicationContext(),ListStock);
-        listExist.setAdapter(adapter_stock);
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
+        }
 
     }
 
