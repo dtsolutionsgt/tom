@@ -217,11 +217,16 @@ public class frm_datos_stock_res extends PBase {
                     mu.msgbox("La ubicación ingresada " + UbicOrigen + " no coincide con: " + selitem.IdUbicacion);
                     txtUbicOrigen.requestFocus();
                     txtUbicOrigen.selectAll();
+                    txtUbicOrigen.setText("");
+                    UbicOrigen = 0;
                 } else {
                     //txtLicensePlate.requestFocus();
                 }
             } else {
                 txtUbicOrigen.requestFocus();
+                txtUbicOrigen.selectAll();
+                txtUbicOrigen.setText("");
+                UbicOrigen = 0;
                 mu.msgbox("Ingrese ubicación de origen.");
             }
         } catch (Exception e) {
@@ -237,14 +242,19 @@ public class frm_datos_stock_res extends PBase {
                 Lic = txtLicensePlate.getText().toString();
 
                 if (!Lic.equals(selitem.Lic_plate)) {
-                    mu.msgbox("La licencia ingresada " + Lic + " no coincide con: " + selitem.Lic_plate);
                     txtLicensePlate.requestFocus();
                     txtLicensePlate.selectAll();
+                    txtLicensePlate.setText("");
+                    Lic= "";
+                    mu.msgbox("La licencia ingresada " + Lic + " no coincide con: " + selitem.Lic_plate);
                 } else {
                     //txtCodigoPrd.requestFocus();
                 }
             } else {
                 txtLicensePlate.requestFocus();
+                txtLicensePlate.selectAll();
+                txtLicensePlate.setText("");
+                Lic= "";
                 mu.msgbox("Ingrese licencia.");
             }
         } catch (Exception e) {
@@ -332,31 +342,41 @@ public class frm_datos_stock_res extends PBase {
         try {
             if (txtUbicOrigen.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese ubicación de origen.");
-                permite = false;
+                return false;
+            } else if (Integer.valueOf(txtUbicOrigen.getText().toString()) != selitem.IdUbicacion) {
+                mu.msgbox("La ubicación origen no coincide.");
+                return false;
             }
 
             if (txtLicensePlate.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese licencia.");
-                permite = false;
+                return false;
+            } else if (!txtLicensePlate.getText().toString().equals(selitem.Lic_plate)) {
+                mu.msgbox("La licencia no coincide.");
+                return false;
             }
 
             if (txtCodigoPrd.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese código.");
-                permite = false;
+                return false;
+            } else if (!txtCodigoPrd.getText().toString().equals(selitem.Codigo_Producto)) {
+                mu.msgbox("El código no coincide.");
+                return false;
             }
 
-            if (txtUbicDestino.getText().toString().isEmpty()) {
+            if (txtUbicDestino.getText().toString().isEmpty() ) {
                 mu.msgbox("Ingrese ubicación destino.");
-                permite = false;
+                return false;
             }
 
             if (txtCantidad.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese cantidad.");
-                permite = false;
+                return false;
             }
 
         } catch (Exception e) {
             mu.msgbox("ValidaDatos: "+e.getMessage());
+            return false;
         }
 
         return permite;

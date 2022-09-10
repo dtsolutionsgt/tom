@@ -109,13 +109,8 @@ public class frm_datos_reabastecimiento extends PBase {
                 }
             });
 
-            txtCodigoPrd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
+            txtCodigoPrd.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { } });
+            //txtUbicOrigen.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { } });
 
             txtLipPlate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -146,6 +141,8 @@ public class frm_datos_reabastecimiento extends PBase {
                                     CargaDatos();
                                 } else {
                                     mu.msgbox("El código producto no coincide.");
+                                    txtCodigoPrd.setText("");
+                                    txtCodigoPrd.requestFocus();
                                 }
                             } else {
                                 mu.msgbox("Ingrese código válido.");
@@ -195,6 +192,8 @@ public class frm_datos_reabastecimiento extends PBase {
 
                             } else {
                                 mu.msgbox("La ubicación no coincide.");
+                                txtLipPlate.setText("");
+                                txtLipPlate.requestFocus();
                             }
                         } else {
                             mu.msgbox("Ingrese la ubicación.");
@@ -385,6 +384,11 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void AplicarCambio() {
         try {
+            //#AT20220909 Se valida antes de enviar a guardar
+            if (!ValidaDatos()) {
+                return;
+            }
+
             vStockRes.IdProductoBodega = selitem.IdProductoBodega;
             vStockRes.IdUbicacion = selitem.IdUbicacion;
             vStockRes.Lote = selitem.Lote;
@@ -411,6 +415,47 @@ public class frm_datos_reabastecimiento extends PBase {
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private boolean ValidaDatos() {
+
+        try {
+
+            if (txtUbicOrigen.getText().toString().isEmpty()) {
+                msgbox("Ingrese ubicación de origen.");
+                return false;
+            } else if (Integer.valueOf(txtUbicOrigen.getText().toString()) != selitem.IdUbicacion) {
+                txtUbicOrigen.requestFocus();
+                txtUbicOrigen.selectAll();
+                msgbox("La ubicación origen no coincide.");
+                return false;
+            }
+
+            if (txtLipPlate.getText().toString().isEmpty()) {
+                msgbox("Ingrese licencia.");
+                return false;
+            } else if (!txtLipPlate.getText().toString().equals(selitem.Lic_plate)) {
+                txtLipPlate.requestFocus();
+                txtLipPlate.selectAll();
+                msgbox("La licencia no coincide.");
+                return false;
+            }
+
+            if (txtCodigoPrd.getText().toString().isEmpty()) {
+                msgbox("Ingrese código producto.");
+                return false;
+            } else if (!txtCodigoPrd.getText().toString().equals(selitem.Lic_plate)) {
+                txtCodigoPrd.requestFocus();
+                txtCodigoPrd.selectAll();
+                msgbox("El código producto no coincide.");
+                return false;
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
+        }
+
+        return true;
     }
 
     private void processValidaUbicacion() {

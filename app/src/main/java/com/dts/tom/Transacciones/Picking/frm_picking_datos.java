@@ -2526,10 +2526,16 @@ public class frm_picking_datos extends PBase {
             BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
             BePickingDet.Fec_mod =  du.getFechaActual();
             BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
+
+            if (BePickingDet.Cantidad_recibida > BePickingDet.Cantidad) {
+                progress.cancel();
+                throw  new Exception(String.format("La cantidad recibida %1s no puede ser mayor a la solicitada %2s", BePickingDet.Cantidad_recibida, BePickingDet.Cantidad));
+            }
+
             execws(6);
 
         }catch (Exception e){
-            mu.msgbox("processBePickingDet:"+e.getMessage());
+            mu.msgbox("processBePickingDet: "+e.getMessage());
         }
     }
 
