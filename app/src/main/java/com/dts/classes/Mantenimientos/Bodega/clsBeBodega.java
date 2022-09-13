@@ -66,7 +66,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int Top_Reabastecimiento_Manual = 20;
     @Element(required=false) public boolean Permitir_Decimales  = false;
     @Element(required=false) public int Dias_Maximo_Vencimiento_Reemplazo = 0;
-
+    @Element(required=false) public boolean Permitir_Repeticiones_En_Ingreso = false;
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -533,6 +533,13 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setDias_Maximo_Vencimiento_Reemplazo(int value) {
         Dias_Maximo_Vencimiento_Reemplazo=value;
+    }
+
+    public boolean getPermitir_Repeticiones_En_Ingreso() {
+        return Permitir_Repeticiones_En_Ingreso;
+    }
+    public void setPermitir_Repeticiones_En_Ingreso(boolean value) {
+        Permitir_Repeticiones_En_Ingreso=value;
     }
 
 }
