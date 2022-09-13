@@ -7366,7 +7366,6 @@ public class frm_recepcion_datos extends PBase {
             }
 
             txtLicPlate.setVisibility(View.VISIBLE);
-
             txtLicPlate.setFocusable(false);
             txtLicPlate.setFocusableInTouchMode(false);
             txtLicPlate.setClickable(false);
