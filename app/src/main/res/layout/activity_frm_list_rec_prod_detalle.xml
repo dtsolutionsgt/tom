@@ -56,8 +56,7 @@
     <ImageView
         android:id="@+id/cmdEliminar"
         android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView97"
+        android:layout_height="54dp"
         android:layout_below="@+id/lblNoDocumento2"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
