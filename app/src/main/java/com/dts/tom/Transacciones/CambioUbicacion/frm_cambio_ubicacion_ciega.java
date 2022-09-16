@@ -473,8 +473,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             //Procesa_Lp();
                             execws(17);
                         } else {
-                            toast("No se puede ubicar sin licencia");
-                            txtLicPlate.requestFocus();
+                            if (gl.modo_cambio == 2){
+                                toast("No se puede cambiar estado sin licencia cuando el parámetro inferir ubicación está activo");
+                                txtLicPlate.requestFocus();
+
+                            }else{
+                                toast("No se puede ubicar sin licencia cuando el parámetro inferir ubicación está activo");
+                                txtLicPlate.requestFocus();
+                            }
                         }
                     } else {
                         llenaDatosProducto();
@@ -1089,7 +1095,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void LlenaEstadoDestino(int idPropietario) {
+
         try {
+
             cmbEstadoDestinoList.clear();
 
             for (int i = 0; i < productoEstadoDestinoList.items.size(); i++) {
@@ -1106,8 +1114,29 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //LLama este procedimiento del WS Get_Productos_By_IdUbicacion_And_LicPlate
                 execws(6);
             } else {
-                //LLama este procedimiento del WS Get_Productos_By_IdUbicacion
-                execws(7);
+
+                if(!txtUbicOrigen.getText().toString().isEmpty()){
+
+                    cvUbicOrigID =Integer.valueOf(txtUbicOrigen.getText().toString());
+
+                    if (cvUbicOrigID == 0) {
+                        msgbox("Ubicación origen no válida.");
+                        txtUbicOrigen.requestFocus();
+                        datosCorrectos = false;
+                        progress.cancel();
+                        return;
+                    }else{
+                        //LLama este procedimiento del WS Get_Productos_By_IdUbicacion
+                        execws(7);
+                    }
+                }else{
+                    msgbox("Ubicación origen no válida.");
+                    txtUbicOrigen.requestFocus();
+                    datosCorrectos = false;
+                    progress.cancel();
+                    return;
+                }
+
             }
 
         } catch (Exception e) {
@@ -3677,18 +3706,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 msgbox("Ubicación origen no válida");
                 txtUbicOrigen.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (cvProdID == 0) {
                 msgbox("Producto no válido");
                 txtCodigoPrd.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (vCantidadDisponible == 0) {
                 msgbox("Cantidad disponible es 0, no se puede realizar el movimiento");
                 txtCodigoPrd.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (gl.modo_cambio==2) {
@@ -3699,10 +3731,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgbox("Estado destino incorrecto");
                     cmbEstadoDestino.requestFocus();
                     datosCorrectos = false;
+                    return;
                 }
-
-
-
             }
 
             vCantidadAUbicar = Double.parseDouble(txtCantidad.getText().toString().replace(",",""));
@@ -3712,18 +3742,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 mu.msgbox("La cantidad no puede ser negativa");
                 txtCantidad.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (vCantidadAUbicar==0) {
                 msgbox("La cantidad debe ser mayor que 0");
                 txtCantidad.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (vCantidadAUbicar> vCantidadDisponible) {
                 msgbox("Cantidad incorrecta") ;
                 txtCantidad.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             //#GT2772022_1550: el recalculo del peso, se hace cuando se modifica la cantidad a reubicar
@@ -3735,12 +3768,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 msgbox("La ubicación de destino no puede ser vacía");
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)) {
                 msgbox("La ubicación de destino coincide con la de origen");
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;
+                return;
             }
 
             if (!datosCorrectos) return;

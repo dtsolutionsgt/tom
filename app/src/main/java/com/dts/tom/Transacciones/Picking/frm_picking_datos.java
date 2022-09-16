@@ -52,6 +52,8 @@ import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePi
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selitem;
 
+import org.w3c.dom.Text;
+
 //import androidx.core.R;
 
 public class frm_picking_datos extends PBase {
@@ -115,6 +117,8 @@ public class frm_picking_datos extends PBase {
     //GT18072022_1130: lista para codigos de barra
     public static clsBeProductoList lBeProducto = new clsBeProductoList();
 
+    private TextView lblLicenciaPicking;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -127,6 +131,7 @@ public class frm_picking_datos extends PBase {
         xobj = new XMLObject(ws);
 
         txtLicencia = (EditText) findViewById(R.id.txtLP);
+        lblLicenciaPicking = (TextView) findViewById(R.id.lblLicenciaPicking);
         txtFechaCad = (EditText) findViewById(R.id.txtFechaCad);
         txtLote = (EditText) findViewById(R.id.txtLote);
         txtUniBas = (EditText) findViewById(R.id.txtUniBas);
@@ -172,6 +177,7 @@ public class frm_picking_datos extends PBase {
         confirmar_codigo_en_picking = gl.confirmar_codigo_en_picking;
 
         if (selitem != null) {
+
             gBePickingUbic = selitem;
 
             //#AT 20220124 Se cambia el formato de fecha para mostrar
@@ -415,8 +421,10 @@ public class frm_picking_datos extends PBase {
 
         try {
             txtCantidadPick.setEnabled(false);
-            if (!gBePickingUbic.Lic_plate.isEmpty()) {
+            if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
+                txtLicencia.setVisibility(View.VISIBLE);
+                lblLicenciaPicking.setVisibility(View.VISIBLE);
                 trLP.setVisibility(View.VISIBLE);
                 txtCodigoProducto.setEnabled(false);
                 txtLicencia.requestFocus();
@@ -424,6 +432,8 @@ public class frm_picking_datos extends PBase {
             } else {
                 lblLicPlate.setText("");
                 trLP.setVisibility(View.GONE);
+                txtLicencia.setVisibility(View.GONE);
+                lblLicenciaPicking.setVisibility(View.GONE);
                 txtCodigoProducto.setEnabled(true);
                 txtCodigoProducto.requestFocus();
                 Log.d("focus: ", "20220502_5");
@@ -712,23 +722,26 @@ public class frm_picking_datos extends PBase {
     // esta en gBePickingUbic.IdUbicacion, si es la misma actualiza los datos del producto y picking
     private void ProcesaLicUbic() {
 
-        List AuxList = stream(plistPickingUbi.items).where(c ->c.Lic_plate.equalsIgnoreCase(pLP) &&
-                                                           c.IdUbicacion == selitem.IdUbicacion &&
-                                                           (c.Cantidad_Recibida < c.Cantidad_Solicitada)).toList();
+        if(!pLP.isEmpty() && !pLP.equals("0")){
 
-        if (AuxList.size() > 0) {
-            //#AT20220428 Bandera que indica que si encontró datos de la licencia ingresada
-            escaneo_licencia_diferente = true;
-            tmpListPickingUbi.items = AuxList;
-            gBePickingUbic = tmpListPickingUbi.items.get(0);
-            //#AT20220428 Actualiza los datos de gBeProducto
-            Load_Cambio_Licencia();
-        } else {
-            mu.msgbox("El código ingresado no es el válido para la lista de picking");
-            txtLicencia.setSelectAllOnFocus(true);
-            txtLicencia.requestFocus();
-            Log.d("focus: ", "20220502_10");
-            return;
+            List AuxList = stream(plistPickingUbi.items).where(c ->c.Lic_plate.equalsIgnoreCase(pLP) &&
+                    c.IdUbicacion == selitem.IdUbicacion &&
+                    (c.Cantidad_Recibida < c.Cantidad_Solicitada)).toList();
+
+            if (AuxList.size() > 0) {
+                //#AT20220428 Bandera que indica que si encontró datos de la licencia ingresada
+                escaneo_licencia_diferente = true;
+                tmpListPickingUbi.items = AuxList;
+                gBePickingUbic = tmpListPickingUbi.items.get(0);
+                //#AT20220428 Actualiza los datos de gBeProducto
+                Load_Cambio_Licencia();
+            } else {
+                mu.msgbox("El código ingresado no es el válido para la lista de picking");
+                txtLicencia.setSelectAllOnFocus(true);
+                txtLicencia.requestFocus();
+                Log.d("focus: ", "20220502_10");
+                return;
+            }
         }
     }
 
@@ -1642,6 +1655,8 @@ public class frm_picking_datos extends PBase {
         //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
         if (confirmar_codigo_en_picking){
 
+
+
             if (PressEnterLp){
 
                 if (PressEnterProducto){
@@ -1670,10 +1685,15 @@ public class frm_picking_datos extends PBase {
                 }
 
             }else{
-                msgCodigoProducto("Confirme licencia y luego presione Enter.");
-                txtLicencia.requestFocus();
-                Log.d("txtLicencia: ", "20220502_43");
-                return;
+
+                if (trLP.getVisibility() == View.VISIBLE ) {
+                    msgCodigoProducto("Confirme licencia y luego presione Enter.");
+                    txtLicencia.requestFocus();
+                    Log.d("txtLicencia: ", "20220502_43");
+                    return;
+                }else{
+                    Procesar_Registro();
+                }
             }
 
         }else{

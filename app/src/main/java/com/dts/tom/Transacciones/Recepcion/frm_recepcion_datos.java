@@ -404,22 +404,23 @@ public class frm_recepcion_datos extends PBase {
 
             pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
-            //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-            if (!BeProducto.Genera_lp){
-                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-                lblLicPlate.setVisibility(View.GONE);
-                txtNoLP.setFocusable(false);
-                txtNoLP.setFocusableInTouchMode(false);
-                txtNoLP.setClickable(false);
-                txtNoLP.setVisibility(View.GONE);
-            }else{
-                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-                lblLicPlate.setVisibility(View.VISIBLE);
-                txtNoLP.setFocusable(true);
-                txtNoLP.setFocusableInTouchMode(true);
-                txtNoLP.setClickable(true);
-                txtNoLP.setVisibility(View.VISIBLE);
-            }
+            //#GT09092022: ON CREATE TIENE TODOS LOS OBJETOS VACIOS, SIEMPRE SERA FALSO GENERA_LP
+//            //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
+//            if (!BeProducto.Genera_lp){
+//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+//                lblLicPlate.setVisibility(View.GONE);
+//                txtNoLP.setFocusable(false);
+//                txtNoLP.setFocusableInTouchMode(false);
+//                txtNoLP.setClickable(false);
+//                txtNoLP.setVisibility(View.GONE);
+//            }else{
+//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+//                lblLicPlate.setVisibility(View.VISIBLE);
+//                txtNoLP.setFocusable(true);
+//                txtNoLP.setFocusableInTouchMode(true);
+//                txtNoLP.setClickable(true);
+//                txtNoLP.setVisibility(View.VISIBLE);
+//            }
 
             if (gl.bloquear_lp_hh) {
                 txtNoLP.setEnabled(false);
@@ -2987,6 +2988,27 @@ public class frm_recepcion_datos extends PBase {
                 pListBeStockRec = new clsBeStock_recList();
                 pListBeProductoPallet = new clsBeProducto_palletList();
                 pListTransRecDet = new clsBeTrans_re_detList();
+
+                //#GT09092022: el obj Producto ya tiene propiedades, se puede o no
+                //mostrar el input de LP, mientras que en ONCREATE esta vacio.
+
+                //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
+                if (!BeProducto.Genera_lp){
+                    TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+                    lblLicPlate.setVisibility(View.GONE);
+                    txtNoLP.setFocusable(false);
+                    txtNoLP.setFocusableInTouchMode(false);
+                    txtNoLP.setClickable(false);
+                    txtNoLP.setVisibility(View.GONE);
+                }else{
+                    TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+                    lblLicPlate.setVisibility(View.VISIBLE);
+                    txtNoLP.setFocusable(true);
+                    txtNoLP.setFocusableInTouchMode(true);
+                    txtNoLP.setClickable(true);
+                    txtNoLP.setVisibility(View.VISIBLE);
+                }
+
 
                 if (pListTransRecDet.items!=null){
 
