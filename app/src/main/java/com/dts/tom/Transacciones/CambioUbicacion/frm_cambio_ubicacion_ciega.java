@@ -1721,11 +1721,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdUbicacion",txtUbicDestino.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
                     case 22:
-                        callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
-                                         "pIdStock", cvStockID,
-                                               "pIdBodega", gl.IdBodega,
-                                               "pIdUbicacion",Integer.valueOf(txtUbicDestino.getText().toString()),
-                                               "pIdOperador", gl.IdOperador);
+
+                        if (cvStockID != 0) {
+
+                            //#AT20220917 Se llama cuando el idstock es diferente a 0
+                            callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
+                                            "pIdStock", cvStockID,
+                                                  "pIdBodega", gl.IdBodega,
+                                                  "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                                  "pIdOperador", gl.IdOperador);
+
+                        } else {
+
+                            //#AT20220917 Se llama cuando el idstock es igual a 0
+                            callMethod("Actualizar_Ubicaciones_Reservadas_By_StockRes",
+                                            "pBeStockRes", vStockRes,
+                                                  "pIdBodega", gl.IdBodega,
+                                                  "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                                  "pIdOperador", gl.IdOperador);
+
+                        }
+
                         break;
 
                 }
@@ -2003,14 +2019,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             int CambioUbicRealizado;
 
-            CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult",int.class);
+            if (cvStockID != 0) {
+                CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_IdStockResult", int.class);
+            } else {
+                CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_By_StockResResult", int.class);
+            }
 
             if (CambioUbicRealizado > 0) {
                 msgbox("Cambio aplicado.");
                 inicializaTarea(true);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             msgbox(new Object() .getClass().getEnclosingMethod().getName() +" ."+ e.getMessage());
         }
     }
