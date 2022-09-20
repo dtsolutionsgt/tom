@@ -457,7 +457,7 @@ public class frm_inv_cic_add extends PBase {
                             respuesta = true;
                         }else{
                             respuesta = false;
-                            mu.msgbox("Producto o LP no asignado para conteo. Intente con otro!");
+                            mu.msgbox("Producto o licencia no asignado para conteo. Intente con otro!");
                         }
 
                     }

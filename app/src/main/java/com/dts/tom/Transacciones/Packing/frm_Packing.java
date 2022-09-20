@@ -179,7 +179,7 @@ public class frm_Packing extends PBase {
                             Procesa_Lp();
                         }else{
 
-                            mu.msgbox("el campo LP esta vacio");
+                            mu.msgbox("La licencia está vacía.");
                             txtLic_Plate.selectAll();
                             txtLic_Plate.requestFocus();
                         }
@@ -1887,7 +1887,7 @@ public class frm_Packing extends PBase {
             if (Escaneo_Pallet && ListBeStockPallet == null) {
                 lblDesProducto.setTextColor(Color.RED);
                 gIdProductoOrigen = 0;
-                lblDesProducto.setText("Código de LP no válido");
+                lblDesProducto.setText("Código de licencia no válido");
                 Limpiar_Valores();
             }else{
 
@@ -2223,7 +2223,7 @@ public class frm_Packing extends PBase {
             if (Escaneo_Pallet && ListBeStockPallet == null) {
                 lblDesProducto.setTextColor(Color.RED);
                 gIdProductoOrigen = 0;
-                lblDesProducto.setText("Código de LP no válido");
+                lblDesProducto.setText("Código de licencia no válido");
                 Limpiar_Valores();
             }else{
 
@@ -2234,7 +2234,7 @@ public class frm_Packing extends PBase {
                             .toList();
 
                     if (AuxList.size() == 0) {
-                        msgbox("El pallet no se encuentra en la ubicación: " + cvUbicOrigID);
+                        msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
                         lblDesProducto.setTextColor(Color.RED);
                         gIdProductoOrigen = 0;
                         lblDesProducto.setText("LP N.E.E.U");
