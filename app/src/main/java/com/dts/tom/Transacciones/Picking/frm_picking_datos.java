@@ -1889,7 +1889,7 @@ public class frm_picking_datos extends PBase {
             } else {
 
                 if (trLP.getVisibility() == View.VISIBLE && txtLicencia.getText().toString().isEmpty()) {
-                    mu.msgbox("Ingrese LP del producto");
+                    mu.msgbox("Ingrese licencia del producto");
                     txtLicencia.setSelectAllOnFocus(true);
                     txtLicencia.requestFocus();
                     Log.d("txtLicencia: ", "20220502_44");

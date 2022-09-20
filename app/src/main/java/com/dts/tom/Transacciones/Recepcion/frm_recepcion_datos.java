@@ -272,6 +272,7 @@ public class frm_recepcion_datos extends PBase {
 
     /** guardar la LP inicial para validar si ya fue grabada ***/
     String LPInicial = "";
+    boolean reload_lp = false;
 
     //Imagen
     private String encoded="";
@@ -598,7 +599,7 @@ public class frm_recepcion_datos extends PBase {
                             progress.cancel();
 
                         }else{
-                            toastlong("La presentación no genera lp Auto..");
+                            toastlong("La presentación no genera licencia Auto..");
                         }
                     }
                 }
@@ -4484,11 +4485,6 @@ public class frm_recepcion_datos extends PBase {
     public void BotonGuardarRecepcion(View view) {
 
         guardar_recepcion();
-        //#GT22082022_845: valida si la LP no se ha utlizado en caso sea mismo operador con login en 2 dispositivos.
-        //LPInicial = txtNoLP.getText().toString();
-        //execws(35);
-
-
 
     }
 
@@ -5946,7 +5942,15 @@ public class frm_recepcion_datos extends PBase {
                     Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
 
                     if (gl.mode==1){
+
+                        //#GT20092022_0920: reload_lp indica que hay concurrencia,
+                        // entonces validamos que se limpie la lista para recargar la linea antes de enviarla nuevamente con nueva LP
+                        if (reload_lp){
+                            pListTransRecDet.items.clear();
+                        }
+
                         pListTransRecDet.items.add(BeTransReDet);
+
                     }
                 }
 
@@ -6810,15 +6814,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
                         break;
                     case 35:
-
-                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
-                                "pIdOperador",gl.IdOperador,
-                                "pIdBodega",gl.IdBodega);
-                        //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
-//                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
-//                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
-//                                "pIdProducto",BeProducto.IdProducto);
-
+                        callMethod("Get_Detalle_OC_By_IdOrdeCompraDet","oBeTrans_oc_det",beTransOCDet);
                         break;
 
                 }
@@ -6826,9 +6822,16 @@ public class frm_recepcion_datos extends PBase {
             }catch (Exception e){
                 //#CKFK20220421 Agregué la funcionalidad de poder guardar los errores del push,
                 // cuando ocurran errores en el WS.
-                progress.hide();
+                progress.cancel();
                 switch (ws.callback) {
                     case 16:
+
+//                        if(e.getMessage().contains("ERROR_202208182042") || e.getMessage().contains("ERROR_20220823_1604")){
+//                            msgAskAsignarNuevaLp("La LP ya existe, se asignara una nueva.");
+//                        }else{
+//                            msgboxErrorCallBack(e.getMessage(),false);
+//                        }
+
                         msgboxErrorCallBack(e.getMessage(),false);
                         break;
                     case 25:
@@ -6958,15 +6961,73 @@ public class frm_recepcion_datos extends PBase {
                     processGetFotosRec();
                     break;
                 case 35:
-                    Valida_LP_Previo_Guardar();
+                    processActualizaCantidades();
                     break;
             }
 
         } catch (Exception e) {
-            msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+
+            switch (ws.callback) {
+                case 16:
+
+                    if(e.getMessage().contains("ERROR_202208182042") || e.getMessage().contains("ERROR_20220823_1604")){
+                        nBeResolucion = null;
+                        msgAskAsignarNuevaLp_Reload("La licencia ya existe. Se asignará una nueva.");
+                    }else{
+
+                        msgbox(Objects.requireNonNull(new Object() {
+                        }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                    }
+
+                    break;
+
+                default:
+                    msgbox(Objects.requireNonNull(new Object() {
+                    }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                    break;
+            }
+
+
+
+
         }
 
+    }
+
+    private void processActualizaCantidades() {
+
+            try {
+
+                progress.setMessage("Actualizando cantidad recibida");
+                progress.show();
+
+                beTransOCDet = xobj.getresultSingle(clsBeTrans_oc_det.class,"oBeTrans_oc_det");
+
+                if (beTransOCDet != null){
+
+                    gl.CantRec = beTransOCDet.Cantidad_recibida;
+
+                    Cant_Recibida = beTransOCDet.Cantidad_recibida;
+                    Cant_Pendiente = beTransOCDet.Cantidad - beTransOCDet.Cantidad_recibida;
+                    gl.gselitem.Cantidad = beTransOCDet.Cantidad;
+
+                    if (Cant_Recibida > 0) {
+                        btnCantPendiente.setText("Total: "+mu.frmdecimal(gl.gselitem.Cantidad, 2)+"\n"
+                                +"Recibido: "+ mu.frmdecimal(Cant_Recibida, 2)+"\n"
+                                +"Pendiente: -"+mu.frmdecimal(Cant_Pendiente, 2));
+                    } else {
+                        btnCantPendiente.setText("Pendiente: " + mu.frmdecimal(Cant_Pendiente, gl.gCantDecDespliegue));
+                    }
+                }else{
+                    toastlong("No se pudo recargar la linea con la nueva LP.");
+                }
+
+            }catch (Exception e){
+                progress.cancel();
+                mu.msgbox("processActualizaCantidades"+e.getMessage());
+            }
+
+            progress.hide();
     }
 
     private void processBeProducto(){
@@ -7805,10 +7866,42 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void msgAskAsignarNuevaLp(String msg) {
+    private void msgAskAsignarNuevaLp_Reload(String msg) {
+
 
         try{
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Ok", (dialog12, which) -> {
+
+                //#GT23082022_1250: se recarga nueva LP porque entro en primer validación
+                //de que LP ya esta aisgnada o usada
+                reload_lp = true;
+
+                txtNoLP.setText("");
+                execws(6);
+
+
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskAsignarNuevaLp(String msg) {
+
+
+        try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle(R.string.app_name);
@@ -8021,7 +8114,6 @@ public class frm_recepcion_datos extends PBase {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             }
 
-            //DIANA
             if (Existe_Lp){
                 //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
                 if (gl.bloquear_lp_hh){
@@ -8230,6 +8322,14 @@ public class frm_recepcion_datos extends PBase {
                 txtNoLP.requestFocus();
             }
 
+            if (reload_lp){
+
+                beTransOCDet =new clsBeTrans_oc_det();
+                beTransOCDet.IdOrdenCompraEnc = pIdOrdenCompraEnc;
+                beTransOCDet.IdOrdenCompraDet = pIdOrdenCompraDet;
+                execws(35);
+            }
+
         } catch (Exception e) {
             msgbox(new Object() {
             }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
@@ -8393,31 +8493,16 @@ public class frm_recepcion_datos extends PBase {
             dialog.setCancelable(false);
             dialog.setMessage(msg);
 
-            if(msg.contains("ERROR_202208182042")){
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
 
-                dialog.setPositiveButton("La LP ya esta en uso, se asignara una nueva.", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        //Obtiene nueva Resolución y nueva LP
-                        //execws(35);
-                        execws(6);
+                    if (guardo){
+                        Imprime_Barra_Despues_Guardar();
+                    }else{
+                        Actualiza_Valores_Despues_Imprimir(true);
                     }
-                });
-
-            }else{
-
-                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (guardo){
-                            Imprime_Barra_Despues_Guardar();
-                        }else{
-                            Actualiza_Valores_Despues_Imprimir(true);
-                        }
-                    }
-                });
-            }
-
-
+                }
+            });
 
             dialog.show();
         }catch (Exception e){

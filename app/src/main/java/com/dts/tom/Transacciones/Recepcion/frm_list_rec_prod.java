@@ -2011,22 +2011,32 @@ public class frm_list_rec_prod extends PBase {
                     txtCodigoProductoRecepcion.requestFocus();
                 }
 
+
+
                 if (!gl.gSinPresentacion){
                     //#CKFK20220625 Al parecer esta asignación es innecesaria
                     // pListDetalleOC.items= gl.gpListDetalleOC.items;
-                    Lista_Detalle_Documento_Ingreso();
-                    ordenar();
+
+                    //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS 16092022
+                    //Lista_Detalle_Documento_Ingreso();
+                    //ordenar();
                     if(Recepcion_Completa()){
                         msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                     }
                 }else{
+
                     gl.gSinPresentacion=false;
 
-                    progress.setMessage("Actualizando OC");
-                    progress.show();
-
-                    execws(15);
+                    //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS, 16092022
+//                    progress.setMessage("Actualizando OC");
+//                    progress.show();
+//
+//                    execws(15);
                 }
+
+                progress.setMessage("Actualizando OC");
+                progress.show();
+                execws(15);
 
             }
 
