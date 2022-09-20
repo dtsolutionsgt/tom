@@ -218,6 +218,8 @@ public class appGlobals extends Application {
     public  boolean Permitir_Buen_Estado_En_Reemplazo =false;
     public  boolean Permitir_Decimales = false;
     public int Dias_Maximo_Vencimiento_Reemplazo = 0;
+    public boolean Permitir_Repeticiones_En_Ingreso = false;
+    public boolean TieneResoluciones = false;
 
     @Override
     public void onCreate() {

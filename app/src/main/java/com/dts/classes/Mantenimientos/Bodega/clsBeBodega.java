@@ -89,7 +89,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
                        boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
-                       boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales) {
+                       boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales, boolean Permitir_Repeticiones_En_Ingreso) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -148,6 +148,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.industria_motriz = industria_motriz;
         this.Top_Reabastecimiento_Manual = Top_Reabastecimiento_Manual;
         this.Permitir_Decimales = Permitir_Decimales;
+        this.Permitir_Repeticiones_En_Ingreso = Permitir_Repeticiones_En_Ingreso;
     }
 
     public int getIdPais() {

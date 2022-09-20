@@ -532,6 +532,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.Permitir_Buen_Estado_En_Reemplazo = bodegas.items.get(position).Permitir_Buen_Estado_En_Reemplazo;
                     gl.Permitir_Decimales = bodegas.items.get(position).Permitir_Decimales;
                     gl.Dias_Maximo_Vencimiento_Reemplazo = bodegas.items.get(position).Dias_Maximo_Vencimiento_Reemplazo;
+                    gl.Permitir_Repeticiones_En_Ingreso = bodegas.items.get(position).Permitir_Repeticiones_En_Ingreso;
 
                     idimpres=0;
                     execws(3);
@@ -1101,6 +1102,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         try {
             ResolucionLpByBodega =xobj.getresult(clsBeResolucion_lp_operador.class,"Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
             if (ResolucionLpByBodega !=null){
+                gl.TieneResoluciones = true;
                 //#EJC20210504: Registra ingreso y carga menú principal.
                 execws(7);
             }else{
