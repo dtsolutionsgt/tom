@@ -2974,6 +2974,32 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+    private boolean Get_Genera_Lp_Presentacion(){
+        boolean resultado = false;
+        int pPresentacion;
+
+        try{
+
+            pPresentacion = gl.gselitem.IdPresentacion;
+
+            if (BeProducto.Presentaciones != null) {
+                if (BeProducto.Presentaciones.items != null) {
+                    //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
+                    //#AT20220426 Se obtiene la presentación según el distado de productos del documento de ingreso
+                    auxPres = stream(BeProducto.Presentaciones.items)
+                            .where(c -> c.IdPresentacion == pPresentacion)
+                            .first();
+
+                    resultado =  auxPres.Genera_lp_auto;
+                }
+            }
+
+        }catch (Exception ex){
+            mu.msgbox(new Object(){}.getClass().getEnclosingMethod() + " " + ex.getMessage());
+        }
+        return resultado;
+    }
+
     private void Carga_Datos_Producto(){
 
         try{
@@ -2993,8 +3019,11 @@ public class frm_recepcion_datos extends PBase {
                 //#GT09092022: el obj Producto ya tiene propiedades, se puede o no
                 //mostrar el input de LP, mientras que en ONCREATE esta vacio.
 
+                //#CKFK20220920 agregué esta condición porque el LP lo puede tener el producto o la presentación
+                boolean pPresentacion_Genera_Lp = Get_Genera_Lp_Presentacion();
+
                 //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-                if (!BeProducto.Genera_lp){
+                if (!BeProducto.Genera_lp && !pPresentacion_Genera_Lp){
                     TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
                     lblLicPlate.setVisibility(View.GONE);
                     txtNoLP.setFocusable(false);
