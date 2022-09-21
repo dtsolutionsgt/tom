@@ -1588,6 +1588,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void process_actualizar_oc(){
+
         try{
 
             gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH");
@@ -1596,12 +1597,15 @@ public class frm_list_rec_prod extends PBase {
             pListDetalleOC.items = gl.gpListDetalleOC.items;
 
             Lista_Detalle_Documento_Ingreso();
+
             ordenar();
+
             progress.cancel();
 
             if(Recepcion_Completa()){
                 msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
             }
+
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
             progress.cancel();
@@ -2011,8 +2015,6 @@ public class frm_list_rec_prod extends PBase {
                     txtCodigoProductoRecepcion.requestFocus();
                 }
 
-
-
                 if (!gl.gSinPresentacion){
                     //#CKFK20220625 Al parecer esta asignación es innecesaria
                     // pListDetalleOC.items= gl.gpListDetalleOC.items;
@@ -2034,7 +2036,7 @@ public class frm_list_rec_prod extends PBase {
 //                    execws(15);
                 }
 
-                progress.setMessage("Actualizando OC");
+                progress.setMessage("Actualizando D.I.");
                 progress.show();
                 execws(15);
 
