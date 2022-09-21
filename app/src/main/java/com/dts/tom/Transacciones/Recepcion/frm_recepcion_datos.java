@@ -114,7 +114,7 @@ public class frm_recepcion_datos extends PBase {
     Calendar calendario = Calendar.getInstance();
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
-    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
+    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec, txtCantidadCopias;
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit,lblsinPresentacion,lblPresentacion;
     private TextView lblFecIngreso;
     private Button btnCantPendiente;
@@ -126,8 +126,8 @@ public class frm_recepcion_datos extends PBase {
     private TableRow tblEstiba;
     private TableRow tbLPeso;
     private TableRow tblVence;
-    private TableRow tblUbicacion, tblSinPresentacion;
-    private CheckBox chkPresentacion;
+    private TableRow tblUbicacion, tblSinPresentacion, tblCantidadCopias;
+    private CheckBox chkPresentacion, chkCantidadCopias;
     private Dialog dialog;
 
     private boolean imprimirDesdeBoton=false;
@@ -213,6 +213,7 @@ public class frm_recepcion_datos extends PBase {
     private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
+    private clsBeStock_rec ItemStockRec = new clsBeStock_rec();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
     private clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
@@ -252,6 +253,7 @@ public class frm_recepcion_datos extends PBase {
     private final ArrayList<String> VenceList= new ArrayList<>();
     private final ArrayList<String> LotesList = new ArrayList<>();
     private final ArrayList<String> UbicLotesList = new ArrayList<>();
+    private ArrayList<String> NuevasLicencias = new ArrayList<>();
 
     // date
     private int year;
@@ -281,6 +283,8 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
     private int tipoCaptura = 1;
+    private int CorelSiguiente;
+    private int TmpMaxL;
 
     private clsBeStock pStock;
 
@@ -311,6 +315,7 @@ public class frm_recepcion_datos extends PBase {
             txtPesoUnitario = findViewById(R.id.txtPesoUnitario);
             txtCostoReal = findViewById(R.id.txtCostoReal);
             txtCostoOC = findViewById(R.id.txtCostoOC);
+            txtCantidadCopias = findViewById(R.id.txtCantidadCopias);
 
             lblDatosProd = findViewById(R.id.lblTituloForma);
             lblPropPrd = findViewById(R.id.lblPropPrd);
@@ -328,6 +333,7 @@ public class frm_recepcion_datos extends PBase {
             chkPresentacion = findViewById(R.id.conPresentacion);
             lblPresentacion = findViewById(R.id.textView83);
             tblSinPresentacion = findViewById(R.id.tblSinPresentacion);
+            tblCantidadCopias = findViewById(R.id.tblCantidadCopias);
 
             btnCantRecibida = findViewById(R.id.btnCantRecibida);
             btnCantPendiente = findViewById(R.id.btnCantPendiente);
@@ -340,6 +346,7 @@ public class frm_recepcion_datos extends PBase {
             chkPaletizar = findViewById(R.id.chkPaletizar);
             chkPalletNoEstandar = findViewById(R.id.chkPalletNoEstandar);
             chkEstiba = findViewById(R.id.chkEstiba);
+            chkCantidadCopias = findViewById(R.id.chkCantidadCopias);
 
             findViewById(R.id.btnBack);
             findViewById(R.id.btnIr);
@@ -445,6 +452,9 @@ public class frm_recepcion_datos extends PBase {
             } else {
                 txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER);
             }
+
+            //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
+            HabilitarCopias();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -857,11 +867,51 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
+            chkCantidadCopias.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    if (isChecked) {
+                        txtCantidadCopias.setText("1");
+                        txtCantidadCopias.setEnabled(true);
+                        txtCantidadCopias.requestFocus();
+                        txtCantidadCopias.selectAll();
+                        txtCantidadCopias.setSelectAllOnFocus(true);
+                        chkCantidadCopias.setText("Deshabilitar");
+                    } else {
+                        txtCantidadCopias.setText("0");
+                        txtCantidadCopias.setEnabled(false);
+                        txtCantidadCopias.clearFocus();
+                        chkCantidadCopias.setText("Habilitar");
+                    }
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
             progress.cancel();
         }
 
+    }
+
+    private void HabilitarCopias() {
+        try {
+
+            if (gl.Permitir_Repeticiones_En_Ingreso) {
+                if (gl.TieneResoluciones) {
+                    tblCantidadCopias.setVisibility(View.VISIBLE);
+                    chkCantidadCopias.setText("Habilitar");
+                    chkCantidadCopias.setChecked(false);
+                    txtCantidadCopias.setText("0");
+                    txtCantidadCopias.setEnabled(false);
+                } else {
+                    msgSinUbicaciones("El operador no tiene definida resolución de etiquetas para LP");
+                }
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}. getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
     }
 
     private boolean TienePosiciones=false;
@@ -4852,6 +4902,10 @@ public class frm_recepcion_datos extends PBase {
 
             //Productos_Pallet
             if (gl.mode==1){
+                //#AT20220921 Se llama el metodo para crear las copias del detalle de la recepcion
+                if (gl.Permitir_Repeticiones_En_Ingreso) {
+                    Crear_copias();
+                }
                 execws(16);
             }else{
                 execws(17);
@@ -4860,6 +4914,67 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             mu.msgbox("DespuesDeValidarCantidad"+e.getMessage());
 
+        }
+    }
+
+    private void Crear_copias() {
+        clsBeTrans_re_det ItemTrasReDet = new clsBeTrans_re_det();
+        clsBeStock_recList pListBeStockRecCopias = new clsBeStock_recList();
+
+        try {
+
+            int CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
+            String NuevoLp = "";
+
+            //#AT20220913 Se agrega la primera licencia de la lista, antes de cambiar el correlativo
+
+            NuevasLicencias.clear();
+            //NuevasLicencias.add(ItemStockRec.Lic_plate);
+
+            if (CantidadCopias > 0) {
+                //#AT20220913 Aca genero las nuevas licencias
+                //y tambien debo agregar los nuevos items a la lista de stock que se debe guardar
+                for (int i = 1; i <= CantidadCopias; i++) {
+
+                    CorelSiguiente++;
+
+                    String result = String.format("%0" + TmpMaxL + "d", CorelSiguiente);
+                    NuevoLp = nBeResolucion.Serie + result;
+
+                    ItemStockRec = new clsBeStock_rec();
+                    ItemTrasReDet = new clsBeTrans_re_det();
+
+                    ItemStockRec = (clsBeStock_rec) pListBeStockRec.items.get(0).clone();
+                    ItemTrasReDet = (clsBeTrans_re_det) gl.gBeRecepcion.Detalle.items.get(0).clone();
+
+                    //#AT20220913 Se genera la nueva licencia para cada nuevo objeto();
+                    ItemStockRec.Lic_plate = NuevoLp;
+                    ItemTrasReDet.Lic_plate = NuevoLp;
+
+                    NuevasLicencias.add(ItemStockRec.Lic_plate);
+                    pListBeStockRec.items.add(ItemStockRec);
+                    gl.gBeRecepcion.Detalle.items.add(ItemTrasReDet);
+
+                }
+            }
+
+            if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+
+                for (clsBeStock_rec Item : pListBeStockRec.items) {
+                    Item.IdPresentacion = 0;
+                    Item.Presentacion.IdPresentacion = 0;
+                    Item.Cantidad = Double.valueOf(txtCantidadRec.getText().toString());
+                }
+
+                for (clsBeTrans_re_det ItemDet : gl.gBeRecepcion.Detalle.items) {
+                    ItemDet.IdPresentacion = 0;
+                    ItemDet.Presentacion.IdPresentacion = 0;
+                    ItemDet.Nombre_presentacion = "";
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
     }
 
@@ -6618,6 +6733,7 @@ public class frm_recepcion_datos extends PBase {
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
 
+
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
                         if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
                                 gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
@@ -6652,17 +6768,31 @@ public class frm_recepcion_datos extends PBase {
 
                         }else{
 
-                            callMethod("Guardar_Recepcion",
-                                       "pRecEnc",gl.gBeRecepcion,
-                                       "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                       "pListStockRecSer",pListBeStockSeRec.items,
-                                       "pListStockRec",pListBeStockRec.items,
-                                       "pListProductoPallet",listaProdPalletsNuevos.items,
-                                       "pLotesRec", BeDetalleLotes,
-                                       "pIdEmpresa",gl.IdEmpresa,
-                                       "pIdBodega",gl.IdBodega,
-                                       "pIdUsuario",gl.IdOperador,
-                                       "pIdResolucionLp",gl.IdResolucionLpOperador);
+                            if (Integer.valueOf(txtCantidadCopias.getText().toString())  == 0) {
+                                callMethod("Guardar_Recepcion",
+                                        "pRecEnc", gl.gBeRecepcion,
+                                        "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+                                        "pListStockRecSer", pListBeStockSeRec.items,
+                                        "pListStockRec", pListBeStockRec.items,
+                                        "pListProductoPallet", listaProdPalletsNuevos.items,
+                                        "pLotesRec", BeDetalleLotes,
+                                        "pIdEmpresa", gl.IdEmpresa,
+                                        "pIdBodega", gl.IdBodega,
+                                        "pIdUsuario", gl.IdOperador,
+                                        "pIdResolucionLp", gl.IdResolucionLpOperador);
+                            } else {
+                                callMethod("Guardar_Recepcion_Copias",
+                                        "pRecEnc", gl.gBeRecepcion,
+                                        "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+                                        "pListStockRecSer", pListBeStockSeRec.items,
+                                        "pListStockRec", pListBeStockRec.items,
+                                        "pListProductoPallet", listaProdPalletsNuevos.items,
+                                        "pLotesRec", BeDetalleLotes,
+                                        "pIdEmpresa", gl.IdEmpresa,
+                                        "pIdBodega", gl.IdBodega,
+                                        "pIdUsuario", gl.IdOperador,
+                                        "pIdResolucionLp", gl.IdResolucionLpOperador);
+                            }
 
                         }
 
@@ -7342,6 +7472,11 @@ public class frm_recepcion_datos extends PBase {
                int intLPSig = (int) pLpSiguiente;
                int MaxL = (int) largoMaximo;
 
+                //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo
+                // siguiente cuando CantidadCopias > 1
+                CorelSiguiente = intLPSig;
+                TmpMaxL = MaxL;
+
 /*                   String str = String.valueOf(intLPSig);
                    StringBuilder sb = new StringBuilder();
 
@@ -7652,11 +7787,16 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
                     gl.gSinPresentacion = true;
-                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion_Sin_Presentacion");
-                }else{
-                    gl.gSinPresentacion = false;
-                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion_Sin_Presentacion");
+                } else {
+                    if (Integer.valueOf(txtCantidadCopias.getText().toString())  == 0) {
+                        gl.gSinPresentacion = false;
+                        Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
+                    } else {
+                        Resultado = xobj.getresult(String.class, "Guardar_Recepcion_Copias");
+                    }
                 }
+
 
                 if (Resultado!=null){
                     if (ubiDetLote!=null){

@@ -6,7 +6,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_est
 
 import org.simpleframework.xml.Element;
 
-public class clsBeStock_rec {
+public class clsBeStock_rec implements Cloneable{
 
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public int IdStockRec=0;
@@ -372,5 +372,7 @@ public class clsBeStock_rec {
     public void setPallet_No_Estandar(boolean value) {
         Pallet_No_Estandar=value;
     }
+
+    public Object clone() throws CloneNotSupportedException { return super.clone(); }
 }
 
