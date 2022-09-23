@@ -341,7 +341,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -353,7 +353,7 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:paddingTop="8dp"
-                        android:text="Cant. Copias:" />
+                        android:text="Lic adicionales: " />
 
                     <EditText
                         android:id="@+id/txtCantidadCopias"

@@ -885,6 +885,10 @@ public class frm_recepcion_datos extends PBase {
                         txtCantidadCopias.setEnabled(false);
                         txtCantidadCopias.clearFocus();
                         chkCantidadCopias.setText("Habilitar");
+                        CantidadCopias = 0;
+                        TmpMaxL = 0;
+                        CorelSiguiente = 0;
+                        NuevasLicencias.clear();
                     }
                 }
             });
@@ -996,6 +1000,8 @@ public class frm_recepcion_datos extends PBase {
     private void ValidaCampos(){
 
         try{
+
+            CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
@@ -4904,7 +4910,7 @@ public class frm_recepcion_datos extends PBase {
             //Productos_Pallet
             if (gl.mode==1){
                 //#AT20220921 Se llama el metodo para crear las copias del detalle de la recepcion
-                if (gl.Permitir_Repeticiones_En_Ingreso) {
+                if (gl.Permitir_Repeticiones_En_Ingreso && CantidadCopias > 0) {
                     Crear_copias();
                 }
                 execws(16);
@@ -4933,7 +4939,20 @@ public class frm_recepcion_datos extends PBase {
             NuevasLicencias.add(pListBeStockRec.items.get(0).Lic_plate);
             CorelSigDet = pListBeStockRec.items.get(0).IdRecepcionDet;
 
+            if (pListBeStockRec.items.size() > 1) {
+                for (int j = 1; j <= pListBeStockRec.items.size() - 1; j++) {
+                    pListBeStockRec.items.remove(j);
+                }
+            }
+
+            if (gl.gBeRecepcion.Detalle.items.size() > 1) {
+                for (int k = 1; k <= gl.gBeRecepcion.Detalle.items.size() - 1; k++) {
+                    gl.gBeRecepcion.Detalle.items.remove(k);
+                }
+            }
+
             if (CantidadCopias > 0) {
+
                 //#AT20220913 Aca genero las nuevas licencias y tambien debo agregar los nuevos items a la lista de stock que se debe guardar
                 for (int i = 1; i <= CantidadCopias; i++) {
 
@@ -6663,6 +6682,11 @@ public class frm_recepcion_datos extends PBase {
                 vAuxCantidad =Cantidad;
             }
 
+            if (CantidadCopias > 0) {
+                vAuxCantidad = vAuxCantidad * (CantidadCopias + 1);
+                Cantidad = vAuxCantidad;
+            }
+
             if (Cant_Pendiente > vAuxCantidad){
                 msgValidaCantidad("La cantidad "+Cantidad+" ingresada es correcta para el producto "+BeProducto.Codigo);
             }else if(Cant_Pendiente < vAuxCantidad){
@@ -7298,6 +7322,9 @@ public class frm_recepcion_datos extends PBase {
 
                     if(e.getMessage().contains("ERROR_202208182042") || e.getMessage().contains("ERROR_20220823_1604")){
                         nBeResolucion = null;
+                        CantidadCopias = 0;
+                        CorelSiguiente = 0;
+                        TmpMaxL = 0;
                         msgAskAsignarNuevaLp_Reload("La licencia ya existe. Se asignará una nueva.");
                     }else{
 
@@ -7344,6 +7371,10 @@ public class frm_recepcion_datos extends PBase {
                     } else {
                         btnCantPendiente.setText("Pendiente: " + mu.frmdecimal(Cant_Pendiente, gl.gCantDecDespliegue));
                     }
+
+                    pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
+                    gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+
                 }else{
                     toastlong("No se pudo recargar la linea con la nueva LP.");
                 }
@@ -8249,11 +8280,14 @@ public class frm_recepcion_datos extends PBase {
 
             });
 
-            dialog.setNegativeButton("No", (dialog1, which) -> {
-                txtNoLP.setText("");
-                txtNoLP.setSelectAllOnFocus(true);
-                txtNoLP.requestFocus();
-            });
+            if (!gl.bloquear_lp_hh) {
+                dialog.setNegativeButton("No", (dialog1, which) -> {
+                    txtNoLP.setText("");
+                    txtNoLP.setSelectAllOnFocus(true);
+                    txtNoLP.requestFocus();
+                    txtNoLP.setEnabled(true);
+                });
+            }
 
             dialog.show();
 
