@@ -8485,7 +8485,10 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.bloquear_lp_hh){
                     //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
                     //#GT23082022_1130: Se obtiene nueva LP por que la que se cargo, ya se grabo con mismo operador, distinta HH
-                    msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+                    //msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+                    //#GT23092022_0930: Se valida concurrencia, pero en este punto, la otra HH, ya grabo e imprimio, y aca apenas tenemos
+                    //los datos en memoria previo a Guardar.
+                    msgAskAsignarNuevaLp_Reload("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada");
 
                 }else{
                     msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
