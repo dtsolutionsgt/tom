@@ -3096,7 +3096,6 @@ public class frm_recepcion_datos extends PBase {
                     txtNoLP.setVisibility(View.VISIBLE);
                 }
 
-
                 if (pListTransRecDet.items!=null){
 
                     pIdRecepcionDet = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
