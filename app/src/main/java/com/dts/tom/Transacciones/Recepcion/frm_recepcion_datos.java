@@ -1001,7 +1001,9 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
+            if (!txtCantidadCopias.getText().toString().isEmpty()){
+                CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
+            }
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
@@ -7339,9 +7341,6 @@ public class frm_recepcion_datos extends PBase {
                     break;
             }
 
-
-
-
         }
 
     }
@@ -7371,8 +7370,17 @@ public class frm_recepcion_datos extends PBase {
                         btnCantPendiente.setText("Pendiente: " + mu.frmdecimal(Cant_Pendiente, gl.gCantDecDespliegue));
                     }
 
-                    pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
-                    gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+                    if ( pListBeStockRec!=null){
+                        if (pListBeStockRec.items!=null){
+                            pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
+
+                        }
+                    }
+                    if ( gl.gBeRecepcion.Detalle!=null){
+                        if (gl.gBeRecepcion.Detalle.items!=null){
+                            gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+                        }
+                    }
 
                 }else{
                     toastlong("No se pudo recargar la linea con la nueva LP.");
@@ -7634,7 +7642,6 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-
     private void processNuevoLPA(){
 
 
@@ -7661,13 +7668,13 @@ public class frm_recepcion_datos extends PBase {
 
                 //toast("Se obtuvo la resolución");
 
-               gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-               float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-               float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-               int intLPSig = (int) pLpSiguiente;
-               int MaxL = (int) largoMaximo;
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
 
                 //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo
                 // siguiente cuando CantidadCopias > 1
@@ -7684,92 +7691,92 @@ public class frm_recepcion_datos extends PBase {
                    sb.append(str);
                    String result = sb.toString();*/
 
-                   //#CKFK20220410 Reemplacé el código de arriba por esta línea
-                   String result = String.format("%0"+ MaxL + "d",intLPSig);
+                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
 
-                   pNumeroLP= nBeResolucion.Serie + result;
+                pNumeroLP= nBeResolucion.Serie + result;
 
-               }else{
+            }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
-                   //execws(6);
-                   //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
-                   gl.IdResolucionLpOperador =0;
-                   return;
-               }
+                //execws(6);
+                //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
+                gl.IdResolucionLpOperador =0;
+                return;
+            }
 
-               if (gl.mode==1){
-                   //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                   if (!txtNoLP.getText().toString().isEmpty()){
-                       if (txtLicPlate != null){
-                           txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+            if (gl.mode==1){
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
 
-                       }
-                   }else{
-                       if (txtLicPlate != null){
-                           txtLicPlate.setText(pNumeroLP);
+                    }
+                }else{
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(pNumeroLP);
 
-                       }else{
-                           clsBeTrans_oc_det_loteList BeOCDetLoteList;
-                           BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
+                    }else{
+                        clsBeTrans_oc_det_loteList BeOCDetLoteList;
+                        BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
 
-                           //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
-                           if(gl.gBeOrdenCompra!=null){
-                               if(gl.gBeOrdenCompra.DetalleLotes!=null){
-                                   if(gl.gBeOrdenCompra.DetalleLotes.items!=null){
-                                       for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
-                                           if(l.Lic_Plate==null){
-                                               l.Lic_Plate="";
-                                           }
-                                       }
-                                   }
-                               }
-                           }
+                        //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
+                        if(gl.gBeOrdenCompra!=null){
+                            if(gl.gBeOrdenCompra.DetalleLotes!=null){
+                                if(gl.gBeOrdenCompra.DetalleLotes.items!=null){
+                                    for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
+                                        if(l.Lic_Plate==null){
+                                            l.Lic_Plate="";
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-                           List<clsBeTrans_oc_det_lote> BeUbicaciones;
+                        List<clsBeTrans_oc_det_lote> BeUbicaciones;
 
-                           //#CKFK20220306 Agregué esta validación para el License Plate
-                           BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
+                        //#CKFK20220306 Agregué esta validación para el License Plate
+                        BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
-                           if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+                        if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
-                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
-                               if (BeOCDetLoteList.items!=null){
-                                   BeUbicaciones = stream(BeOCDetLoteList.items)
-                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                                   c.No_linea == BeOcDet.No_Linea &&
-                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
-                                                   !c.Lic_Plate.isEmpty())
-                                           .toList();
-                               }
+                            //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                            if (BeOCDetLoteList.items!=null){
+                                BeUbicaciones = stream(BeOCDetLoteList.items)
+                                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                c.No_linea == BeOcDet.No_Linea &&
+                                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
+                                                !c.Lic_Plate.isEmpty())
+                                        .toList();
+                            }
 
-                           }else{
-                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
-                               if (BeOCDetLoteList.items!=null){
-                                   BeUbicaciones = stream(BeOCDetLoteList.items)
-                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                                   c.No_linea == BeOcDet.No_Linea &&
-                                                   !c.Lic_Plate.isEmpty()  &&
-                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
-                                           .toList();
-                               }
-                           }
+                        }else{
+                            //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                            if (BeOCDetLoteList.items!=null){
+                                BeUbicaciones = stream(BeOCDetLoteList.items)
+                                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                c.No_linea == BeOcDet.No_Linea &&
+                                                !c.Lic_Plate.isEmpty()  &&
+                                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                        .toList();
+                            }
+                        }
 
-                           //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
-                           if (BeUbicaciones!=null){
-                               //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
-                               if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
-                                   txtNoLP.setText(pNumeroLP);
-                               }
-                           }else{
-                               txtNoLP.setText(pNumeroLP);
+                        //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
+                        if (BeUbicaciones!=null){
+                            //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
+                            if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
+                                txtNoLP.setText(pNumeroLP);
+                            }
+                        }else{
+                            txtNoLP.setText(pNumeroLP);
 
-                           }
+                        }
 
-                       }
-                   }
-               }
+                    }
+                }
+            }
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
@@ -7780,6 +7787,7 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
+
 
     private void processLicensePallet(){
 
@@ -8472,6 +8480,8 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            progress.setMessage("Comprobando si existe la licencia " + pNumeroLP);
+            progress.show();
             try {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             } catch (Exception e) {
@@ -8487,9 +8497,16 @@ public class frm_recepcion_datos extends PBase {
                     //msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
                     //#GT23092022_0930: Se valida concurrencia, pero en este punto, la otra HH, ya grabo e imprimio, y aca apenas tenemos
                     //los datos en memoria previo a Guardar.
+                    nBeResolucion = null;
+                    CantidadCopias = 0;
+                    CorelSiguiente = 0;
+                    TmpMaxL = 0;
+
+                    progress.hide();
                     msgAskAsignarNuevaLp_Reload("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada");
 
                 }else{
+                    progress.hide();
                     msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
                 }
             }else{
@@ -8508,6 +8525,7 @@ public class frm_recepcion_datos extends PBase {
                             (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
+                           progress.hide();
                            msgbox("La ubicación de los lotes no puede ser vacía");
                         }
                     }
@@ -8556,6 +8574,8 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 
