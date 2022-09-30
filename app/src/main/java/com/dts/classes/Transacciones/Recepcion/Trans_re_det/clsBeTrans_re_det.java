@@ -9,7 +9,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 
 import org.simpleframework.xml.Element;
 
-public class clsBeTrans_re_det {
+public class clsBeTrans_re_det implements Cloneable {
 
     @Element(required=false) public int IdPresentacion=0;
     @Element(required=false) public int IdUnidadMedida=0;
@@ -457,5 +457,6 @@ public class clsBeTrans_re_det {
         Posiciones=value;
     }
 
+    public Object clone() throws CloneNotSupportedException { return super.clone(); }
 }
 

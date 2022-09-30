@@ -239,14 +239,15 @@ public class frm_datos_stock_res extends PBase {
         try {
 
             if (!txtLicensePlate.getText().toString().isEmpty()) {
-                Lic = txtLicensePlate.getText().toString();
+                //#CKFK20220923 Agregué este replace para cuando escanen la barra
+                Lic = txtLicensePlate.getText().toString().replace("$","");
 
                 if (!Lic.equals(selitem.Lic_plate)) {
                     txtLicensePlate.requestFocus();
                     txtLicensePlate.selectAll();
                     txtLicensePlate.setText("");
-                    Lic= "";
                     mu.msgbox("La licencia ingresada " + Lic + " no coincide con: " + selitem.Lic_plate);
+                    Lic= "";
                 } else {
                     //txtCodigoPrd.requestFocus();
                 }
@@ -351,7 +352,7 @@ public class frm_datos_stock_res extends PBase {
             if (txtLicensePlate.getText().toString().isEmpty()) {
                 mu.msgbox("Ingrese licencia.");
                 return false;
-            } else if (!txtLicensePlate.getText().toString().equals(selitem.Lic_plate)) {
+            } else if (!txtLicensePlate.getText().toString().replace("$","").equals(selitem.Lic_plate)) {
                 mu.msgbox("La licencia no coincide.");
                 return false;
             }

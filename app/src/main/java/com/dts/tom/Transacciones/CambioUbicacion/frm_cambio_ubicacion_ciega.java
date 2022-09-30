@@ -3008,7 +3008,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void inicializaTareaLP(){
-
         try{
 
             progress.setMessage("Inicializando tarea");
@@ -3035,23 +3034,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vCantidadDisponible = 0;
             licencia_reservada_completamente = false;
             reservada_parcialmente = false;
+            txtCantidad.setText("");
             lblCant.setText("");
             txtUbicDestino.setText("");
-            txtCantidad.setText("");
             txtPeso.setText("");
             txtCodigoPrd.setText("");
-
             //cmbPresentacion.setEnabled(false);
+
             tblPresentacion.setVisibility(View.GONE);
             cmbLote.setEnabled(true);
             cmbVence.setEnabled(true);
             cmbEstadoDestino.setEnabled(true);
 
+            txtLicPlate.setEnabled(true);
             txtUbicDestino.setEnabled(true);
             txtCantidad.setEnabled(true);
             txtPeso.setEnabled(true);
             txtCodigoPrd.setEnabled(true);
-            txtLicPlate.setEnabled(true);
 
             validarDatos = false;
             vProcesar = false;
@@ -3065,6 +3064,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
+
     }
 
     private void msgAskExit(String msg) {

@@ -1,17 +1,11 @@
 package com.dts.tom.Transacciones.Reabastecimiento;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -22,24 +16,20 @@ import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
-import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res;
 
 import static com.dts.tom.Transacciones.Reabastecimiento.frm_reabastecimiento_manual.selitem;
-
-import java.util.concurrent.ExecutionException;
 
 public class frm_datos_reabastecimiento extends PBase {
 
     private  frm_datos_reabastecimiento.WebServiceHandler ws;
     private XMLObject xobj;
 
-    private EditText txtUbicOrigen, txtLipPlate, txtCodigoPrd, txtLote, txtVence,
+    private EditText txtUbicOrigen, txtLicPlate, txtCodigoPrd, txtLote, txtVence,
                      txtEstado, txtCantidad, txtUbicDestino;
     private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino, lblCantidad, lblCant;
     private TableRow trLicPlate, tblExplosionar;
@@ -70,7 +60,7 @@ public class frm_datos_reabastecimiento extends PBase {
         xobj = new XMLObject(ws);
 
         txtUbicOrigen = findViewById(R.id.txtUbicOrigen);
-        txtLipPlate = findViewById(R.id.txtLipPlate);
+        txtLicPlate = findViewById(R.id.txtLipPlate);
         txtCodigoPrd = findViewById(R.id.txtCodigoPrd);
         txtLote = findViewById(R.id.txtLote);
         txtVence = findViewById(R.id.txtVence);
@@ -102,7 +92,7 @@ public class frm_datos_reabastecimiento extends PBase {
 
     private void setHandlers() {
         try {
-            txtLipPlate.setOnClickListener(new View.OnClickListener() {
+            txtLicPlate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -112,12 +102,13 @@ public class frm_datos_reabastecimiento extends PBase {
             txtCodigoPrd.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { } });
             //txtUbicOrigen.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { } });
 
-            txtLipPlate.setOnKeyListener(new View.OnKeyListener() {
+            txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (!txtLipPlate.getText().toString().isEmpty()) {
-                            if (selitem.Lic_plate.equals(txtLipPlate.getText().toString())) {
+                        if (!txtLicPlate.getText().toString().isEmpty()) {
+                            //#CKFK20220923 Agregué este replace para cuando escanen la barra
+                            if (selitem.Lic_plate.equals(txtLicPlate.getText().toString().replace("$",""))) {
                                 CargaDatos();
                             } else {
                                 mu.msgbox("La licencia no coincide.");
@@ -179,10 +170,10 @@ public class frm_datos_reabastecimiento extends PBase {
                                 lblUbicCompleta.setText(selitem.Ubicacion_Nombre);
 
                                 if (trLicPlate.getVisibility() != View.GONE) {
-                                    txtLipPlate.setFocusable(true);
-                                    txtLipPlate.setFocusableInTouchMode(true);
-                                    txtLipPlate.setCursorVisible(true);
-                                    txtLipPlate.requestFocus();
+                                    txtLicPlate.setFocusable(true);
+                                    txtLicPlate.setFocusableInTouchMode(true);
+                                    txtLicPlate.setCursorVisible(true);
+                                    txtLicPlate.requestFocus();
                                 } else {
                                     txtCodigoPrd.setFocusable(true);
                                     txtCodigoPrd.setFocusableInTouchMode(true);
@@ -192,8 +183,8 @@ public class frm_datos_reabastecimiento extends PBase {
 
                             } else {
                                 mu.msgbox("La ubicación no coincide.");
-                                txtLipPlate.setText("");
-                                txtLipPlate.requestFocus();
+                                txtLicPlate.setText("");
+                                txtLicPlate.requestFocus();
                             }
                         } else {
                             mu.msgbox("Ingrese la ubicación.");
@@ -246,9 +237,9 @@ public class frm_datos_reabastecimiento extends PBase {
                 lblCant.setText(""+selitem.CantidadReservadaUMBas);
             }
 
-            txtLipPlate.setFocusableInTouchMode(false);
-            txtLipPlate.setFocusable(false);
-            txtLipPlate.setCursorVisible(false);
+            txtLicPlate.setFocusableInTouchMode(false);
+            txtLicPlate.setFocusable(false);
+            txtLicPlate.setCursorVisible(false);
 
             if (trLicPlate.getVisibility() == View.GONE) {
                 txtCodigoPrd.setFocusableInTouchMode(false);
@@ -275,7 +266,7 @@ public class frm_datos_reabastecimiento extends PBase {
             txtUbicOrigen.setEnabled(true);
 
             if (!selitem.Lic_plate.isEmpty()  && !selitem.Lic_plate.equals("-")) {
-                txtLipPlate.setHint(selitem.Lic_plate);
+                txtLicPlate.setHint(selitem.Lic_plate);
             } else {
                 trLicPlate.setVisibility(View.GONE);
             }
@@ -431,12 +422,12 @@ public class frm_datos_reabastecimiento extends PBase {
                 return false;
             }
 
-            if (txtLipPlate.getText().toString().isEmpty()) {
+            if (txtLicPlate.getText().toString().isEmpty()) {
                 msgbox("Ingrese licencia.");
                 return false;
-            } else if (!txtLipPlate.getText().toString().equals(selitem.Lic_plate)) {
-                txtLipPlate.requestFocus();
-                txtLipPlate.selectAll();
+            } else if (!txtLicPlate.getText().toString().replace("$","").equals(selitem.Lic_plate)) {
+                txtLicPlate.requestFocus();
+                txtLicPlate.selectAll();
                 msgbox("La licencia no coincide.");
                 return false;
             }

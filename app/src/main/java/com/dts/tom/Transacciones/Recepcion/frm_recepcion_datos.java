@@ -114,7 +114,7 @@ public class frm_recepcion_datos extends PBase {
     Calendar calendario = Calendar.getInstance();
 
     private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote;
-    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec;
+    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec, txtCantidadCopias;
     private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit,lblsinPresentacion,lblPresentacion;
     private TextView lblFecIngreso;
     private Button btnCantPendiente;
@@ -126,8 +126,8 @@ public class frm_recepcion_datos extends PBase {
     private TableRow tblEstiba;
     private TableRow tbLPeso;
     private TableRow tblVence;
-    private TableRow tblUbicacion, tblSinPresentacion;
-    private CheckBox chkPresentacion;
+    private TableRow tblUbicacion, tblSinPresentacion, tblCantidadCopias;
+    private CheckBox chkPresentacion, chkCantidadCopias;
     private Dialog dialog;
 
     private boolean imprimirDesdeBoton=false;
@@ -252,6 +252,7 @@ public class frm_recepcion_datos extends PBase {
     private final ArrayList<String> VenceList= new ArrayList<>();
     private final ArrayList<String> LotesList = new ArrayList<>();
     private final ArrayList<String> UbicLotesList = new ArrayList<>();
+    private ArrayList<String> NuevasLicencias = new ArrayList<>();
 
     // date
     private int year;
@@ -281,6 +282,9 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
     private int tipoCaptura = 1;
+    private int CorelSiguiente;
+    private int TmpMaxL;
+    private int CantidadCopias;
 
     private clsBeStock pStock;
 
@@ -311,6 +315,7 @@ public class frm_recepcion_datos extends PBase {
             txtPesoUnitario = findViewById(R.id.txtPesoUnitario);
             txtCostoReal = findViewById(R.id.txtCostoReal);
             txtCostoOC = findViewById(R.id.txtCostoOC);
+            txtCantidadCopias = findViewById(R.id.txtCantidadCopias);
 
             lblDatosProd = findViewById(R.id.lblTituloForma);
             lblPropPrd = findViewById(R.id.lblPropPrd);
@@ -328,6 +333,7 @@ public class frm_recepcion_datos extends PBase {
             chkPresentacion = findViewById(R.id.conPresentacion);
             lblPresentacion = findViewById(R.id.textView83);
             tblSinPresentacion = findViewById(R.id.tblSinPresentacion);
+            tblCantidadCopias = findViewById(R.id.tblCantidadCopias);
 
             btnCantRecibida = findViewById(R.id.btnCantRecibida);
             btnCantPendiente = findViewById(R.id.btnCantPendiente);
@@ -340,6 +346,7 @@ public class frm_recepcion_datos extends PBase {
             chkPaletizar = findViewById(R.id.chkPaletizar);
             chkPalletNoEstandar = findViewById(R.id.chkPalletNoEstandar);
             chkEstiba = findViewById(R.id.chkEstiba);
+            chkCantidadCopias = findViewById(R.id.chkCantidadCopias);
 
             findViewById(R.id.btnBack);
             findViewById(R.id.btnIr);
@@ -445,6 +452,10 @@ public class frm_recepcion_datos extends PBase {
             } else {
                 txtCantidadRec.setInputType(InputType.TYPE_CLASS_NUMBER);
             }
+
+            //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
+            CantidadCopias = 0;
+            HabilitarCopias();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -857,11 +868,55 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
+            chkCantidadCopias.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    if (isChecked) {
+                        txtCantidadCopias.setText("1");
+                        txtCantidadCopias.setEnabled(true);
+                        txtCantidadCopias.requestFocus();
+                        txtCantidadCopias.selectAll();
+                        txtCantidadCopias.setSelectAllOnFocus(true);
+                        chkCantidadCopias.setText("Deshabilitar");
+                    } else {
+                        txtCantidadCopias.setText("0");
+                        txtCantidadCopias.setEnabled(false);
+                        txtCantidadCopias.clearFocus();
+                        chkCantidadCopias.setText("Habilitar");
+                        CantidadCopias = 0;
+                        TmpMaxL = 0;
+                        CorelSiguiente = 0;
+                        NuevasLicencias.clear();
+                    }
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
             progress.cancel();
         }
 
+    }
+
+    private void HabilitarCopias() {
+        try {
+
+            if (gl.Permitir_Repeticiones_En_Ingreso) {
+                if (gl.TieneResoluciones) {
+                    tblCantidadCopias.setVisibility(View.VISIBLE);
+                    chkCantidadCopias.setText("Habilitar");
+                    chkCantidadCopias.setChecked(false);
+                    txtCantidadCopias.setText("0");
+                    txtCantidadCopias.setEnabled(false);
+                } else {
+                    msgSinUbicaciones("El operador no tiene definida resolución de etiquetas para LP");
+                }
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}. getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
     }
 
     private boolean TienePosiciones=false;
@@ -945,6 +1000,10 @@ public class frm_recepcion_datos extends PBase {
     private void ValidaCampos(){
 
         try{
+
+            if (!txtCantidadCopias.getText().toString().isEmpty()){
+                CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
+            }
 
             if (BeProducto.Presentaciones != null) {
                 if (BeProducto.Presentaciones.items != null){
@@ -3039,7 +3098,6 @@ public class frm_recepcion_datos extends PBase {
                     txtNoLP.setVisibility(View.VISIBLE);
                 }
 
-
                 if (pListTransRecDet.items!=null){
 
                     pIdRecepcionDet = stream(pListTransRecDet.items).max(c->c.IdRecepcionDet>0).IdRecepcionDet+1;
@@ -4852,6 +4910,10 @@ public class frm_recepcion_datos extends PBase {
 
             //Productos_Pallet
             if (gl.mode==1){
+                //#AT20220921 Se llama el metodo para crear las copias del detalle de la recepcion
+                if (gl.Permitir_Repeticiones_En_Ingreso && CantidadCopias > 0) {
+                    Crear_copias();
+                }
                 execws(16);
             }else{
                 execws(17);
@@ -4860,6 +4922,84 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             mu.msgbox("DespuesDeValidarCantidad"+e.getMessage());
 
+        }
+    }
+
+    private void Crear_copias() {
+        clsBeTrans_re_det ItemTrasReDet = new clsBeTrans_re_det();
+        clsBeStock_rec ItemStockRec = new clsBeStock_rec();
+        int CorelSigDet = 0;
+
+        try {
+
+            CantidadCopias = Integer.valueOf(txtCantidadCopias.getText().toString());
+            String NuevoLp = "";
+
+            //#AT20220913 Se agrega la primera licencia de la lista, antes de cambiar el correlativo
+            NuevasLicencias.clear();
+            NuevasLicencias.add(pListBeStockRec.items.get(0).Lic_plate);
+            CorelSigDet = pListBeStockRec.items.get(0).IdRecepcionDet;
+
+            if (pListBeStockRec.items.size() > 1) {
+                for (int j = 1; j <= pListBeStockRec.items.size() - 1; j++) {
+                    pListBeStockRec.items.remove(j);
+                }
+            }
+
+            if (gl.gBeRecepcion.Detalle.items.size() > 1) {
+                for (int k = 1; k <= gl.gBeRecepcion.Detalle.items.size() - 1; k++) {
+                    gl.gBeRecepcion.Detalle.items.remove(k);
+                }
+            }
+
+            if (CantidadCopias > 0) {
+
+                //#AT20220913 Aca genero las nuevas licencias y tambien debo agregar los nuevos items a la lista de stock que se debe guardar
+                for (int i = 1; i <= CantidadCopias; i++) {
+
+                    CorelSiguiente++;
+                    CorelSigDet++;
+                    ItemStockRec = new clsBeStock_rec();
+                    ItemTrasReDet = new clsBeTrans_re_det();
+
+                    String result = String.format("%0" + TmpMaxL + "d", CorelSiguiente);
+                    NuevoLp = nBeResolucion.Serie + result;
+
+                    //#AT20220913 Se genera la nueva Licencia y IdRecepcionDet para cada nuevo objeto();
+                    ItemStockRec = (clsBeStock_rec) pListBeStockRec.items.get(0).clone();
+                    ItemTrasReDet = (clsBeTrans_re_det) gl.gBeRecepcion.Detalle.items.get(0).clone();
+                    ItemStockRec.Lic_plate = NuevoLp;
+                    ItemStockRec.IdRecepcionDet = CorelSigDet;
+
+                    ItemTrasReDet.Lic_plate = NuevoLp;
+                    ItemTrasReDet.IdRecepcionDet = CorelSigDet;
+
+                    pListBeStockRec.items.add(ItemStockRec);
+                    gl.gBeRecepcion.Detalle.items.add(ItemTrasReDet);
+
+                    //#AT20220921 Se va agregando cada licencia nueva que se genera
+                    NuevasLicencias.add(ItemStockRec.Lic_plate);
+
+                }
+            }
+
+            if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
+
+                for (clsBeStock_rec Item : pListBeStockRec.items) {
+                    Item.IdPresentacion = 0;
+                    Item.Presentacion.IdPresentacion = 0;
+                    Item.Cantidad = Double.valueOf(txtCantidadRec.getText().toString());
+                }
+
+                for (clsBeTrans_re_det ItemDet : gl.gBeRecepcion.Detalle.items) {
+                    ItemDet.IdPresentacion = 0;
+                    ItemDet.Presentacion.IdPresentacion = 0;
+                    ItemDet.Nombre_presentacion = "";
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
     }
 
@@ -5201,9 +5341,10 @@ public class frm_recepcion_datos extends PBase {
                 String zpl="";
                 String zplSKU = "";
 
-                if (BeProducto.IdTipoEtiqueta==1){
+                if (NuevasLicencias.size() == 0) {
+                    if (BeProducto.IdTipoEtiqueta == 1) {
 
-                    zpl = String.format("^XA \n" +
+                        zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW700 \n" +
                                         "^LL0406 \n" +
@@ -5220,113 +5361,111 @@ public class frm_recepcion_datos extends PBase {
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                        "$"+pNumeroLP,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                "$" + pNumeroLP,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
 
-
-                    zplSKU = String.format("^XA \n" +
-                                    "^MMT \n" +
-                                    "^PW700 \n" +
-                                    "^LL0406 \n" +
-                                    "^LS0 \n" +
-                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
-                                    "^FO2,40^GB670,0,5^FS \n" +
-                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
-                                    "^FO2,340^GB670,0,14^FS \n" +
-                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                    "^FD%4$s^FS \n" +
-                                    "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            BeProducto.Codigo_barra,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
-
+                        zplSKU = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                BeProducto.Codigo_barra,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
 
-                }else if (BeProducto.IdTipoEtiqueta==2){
-                    //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
-                    //Dado que la descripción salía muy pequeña
-                    zpl = String.format("^XA\n" +
-                            "^MMT\n" +
-                            "^PW600\n" +
-                            "^LL0406\n" +
-                            "^LS0\n" +
-                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
-                            "^FO2,40^GB670,0,5^FS \n" +
-                            "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
-                            "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
-                            "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
-                            "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                            "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
-                            "^BY3,3,160^FT550,280^BCI,,N,N\n" +
-                            "^FD%3$s^FS\n" +
-                            "^PQ1,0,1,Y \n" +
-                            "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
-                            "^FO2,520^GB670,14,14^FS\n" +
-                            "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                            gl.gNomEmpresa,
-                            "$"+pNumeroLP,
-                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
-
-                    zplSKU = String.format("^XA\n" +
-                                    "^MMT\n" +
-                                    "^PW600\n" +
-                                    "^LL0406\n" +
-                                    "^LS0\n" +
-                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
-                                    "^FO2,40^GB670,0,5^FS \n" +
-                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
-                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
-                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
-                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                    "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
-                                    "^FD%3$s^FS\n" +
-                                    "^PQ1,0,1,Y \n" +
-                                    "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                    "^FO2,440^GB670,14,14^FS\n" +
-                                    "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
-                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                            gl.gNomEmpresa,
-                            BeProducto.Codigo_barra,
-                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
-
-/*
-                    zpl = String.format("^XA\n" +
+                    } else if (BeProducto.IdTipoEtiqueta == 2) {
+                        //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
+                        //Dado que la descripción salía muy pequeña
+                        zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
                                         "^LL0406\n" +
                                         "^LS0\n" +
-                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,280^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,520^GB670,14,14^FS\n" +
+                                        "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$" + pNumeroLP,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                        zplSKU = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
                                         "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
                                         "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
                                         "^FO2,440^GB670,14,14^FS\n" +
-                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                        gl.gNomEmpresa,
-                                        "$"+pNumeroLP,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
+                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                BeProducto.Codigo_barra,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+/*
+                        zpl = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW600\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
+                                            "^BY3,3,160^FT550,200^BCI,,N,N\n" +
+                                            "^FD%3$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                            "^FO2,440^GB670,14,14^FS\n" +
+                                            "^FT560,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                            gl.gNomEmpresa,
+                                            "$"+pNumeroLP,
+                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
 */
 
-                }else if (BeProducto.IdTipoEtiqueta==4){
-                    zpl = String.format("^XA \n" +
+                    } else if (BeProducto.IdTipoEtiqueta == 4) {
+                        zpl = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW812 \n" +
                                         "^LL0630 \n" +
@@ -5343,62 +5482,238 @@ public class frm_recepcion_datos extends PBase {
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
                                         "^PQ1,0,1,Y " +
-                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                        BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                        "$"+pNumeroLP,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                "$" + pNumeroLP,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
-                    zplSKU = String.format("^XA\n" +
-                                    "^MMT\n" +
-                                    "^PW812\n" +
-                                    "^LL609\n" +
-                                    "^LS0\n" +
-                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
-                                    "^FO2,40^GB670,0,5^FS \n" +
-                                    "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
-                                    "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
-                                    "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
-                                    "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                    "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
-                                    "^FD%3$s^FS\n" +
-                                    "^PQ1,0,1,Y \n" +
-                                    "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                    "^FO2,440^GB670,14,14^FS\n" +
-                                    "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
-                                    "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
-                            gl.gNomEmpresa,
-                            BeProducto.Codigo_barra,
-                            BeProducto.Codigo + " - " + BeProducto.Nombre,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
+                        zplSKU = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW812\n" +
+                                        "^LL609\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FO2,440^GB670,14,14^FS\n" +
+                                        "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
+                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                BeProducto.Codigo_barra,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
 
+                    }
 
-                }
+                    if (!zpl.isEmpty()) {
+                        if (Copias > 0) {
+                            for (int i = 0; i < Copias; i++) {
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+                    } else {
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
+                    }
 
-                if (!zpl.isEmpty()){
-                    if (Copias > 0) {
-                        for (int i = 0; i < Copias; i++ ) {
-                            zPrinterIns.sendCommand(zpl);
+                    //#GT13052022_0805: validación de Erik, para imprimir el SKU junto a la LP usando MOSTRAR_AREA
+                    if (gl.Mostrar_Area_En_HH) {
+
+                        if (!zplSKU.isEmpty()) {
+                            if (Copias > 0) {
+                                for (int i = 0; i < Copias; i++) {
+                                    zPrinterIns.sendCommand(zplSKU);
+                                }
+                            }
+                        } else {
+                            msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (SKU)");
                         }
                     }
-                }else{
-                    msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
+                } else {
+
+                    for(int j=0; j < NuevasLicencias.size(); j++) {
+
+                        pNumeroLP = NuevasLicencias.get(j);
+
+                        if (BeProducto.IdTipoEtiqueta == 1) {
+
+                            zpl = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW700 \n" +
+                                            "^LL0406 \n" +
+                                            "^LS0 \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    "$" + pNumeroLP,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
+                            zplSKU = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW700 \n" +
+                                            "^LL0406 \n" +
+                                            "^LS0 \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    BeProducto.Codigo_barra,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
+                        } else if (BeProducto.IdTipoEtiqueta == 2) {
+                            //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
+                            //Dado que la descripción salía muy pequeña
+                            zpl = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW600\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                                            "^BY3,3,160^FT550,280^BCI,,N,N\n" +
+                                            "^FD%3$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                                            "^FO2,520^GB670,14,14^FS\n" +
+                                            "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                            "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    "$" + pNumeroLP,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                            zplSKU = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW600\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^BY2,3,160^FT550,200^BCI,,Y,N\n" +
+                                            "^FD%3$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                            "^FO2,440^GB670,14,14^FS\n" +
+                                            "^FT560,470^A0I,25,24^FH^FDTOMWMS  Codigo de Producto^FS\n" +
+                                            "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    BeProducto.Codigo_barra,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                        } else if (BeProducto.IdTipoEtiqueta == 4) {
+                            zpl = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW812 \n" +
+                                            "^LL0630 \n" +
+                                            "^LS0 \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    "$" + pNumeroLP,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                            zplSKU = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW812\n" +
+                                            "^LL609\n" +
+                                            "^LS0\n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT440,90^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT560,90^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT440,125^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT560,125^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^BY3,3,160^FT550,200^BCI,,Y,N\n" +
+                                            "^FD%3$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^FT600,400^A0I,35,40^FH^FD%4$s^FS\n" +
+                                            "^FO2,440^GB670,14,14^FS\n" +
+                                            "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
+                                            "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    BeProducto.Codigo_barra,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
+                        }
+
+                        if (!zpl.isEmpty()) {
+                            if (Copias > 0) {
+                                for (int i = 0; i < Copias; i++) {
+                                    zPrinterIns.sendCommand(zpl);
+                                }
+                            }
+                        } else {
+                            msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
+                        }
+
+                        //#GT13052022_0805: validación de Erik, para imprimir el SKU junto a la LP usando MOSTRAR_AREA
+                        if (gl.Mostrar_Area_En_HH) {
+
+                            if (!zplSKU.isEmpty()) {
+                                if (Copias > 0) {
+                                    for (int i = 0; i < Copias; i++) {
+                                        zPrinterIns.sendCommand(zplSKU);
+                                    }
+                                }
+                            } else {
+                                msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (SKU)");
+                            }
+                        }
+                    }
                 }
-
-                //#GT13052022_0805: validación de Erik, para imprimir el SKU junto a la LP usando MOSTRAR_AREA
-                if (gl.Mostrar_Area_En_HH) {
-
-                      if (!zplSKU.isEmpty()){
-                          if (Copias > 0) {
-                              for (int i = 0; i < Copias; i++ ) {
-                                  zPrinterIns.sendCommand(zplSKU);
-                              }
-                          }
-                      }else{
-                          msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (SKU)");
-                      }
-                }
-
                 //#EJC20220309: Que pasa si no se cierra la conexión BT?, será más rápida la próxima impresión?
                 //Thread.sleep(500);
                 // Close the connection to release resources.
@@ -6368,6 +6683,11 @@ public class frm_recepcion_datos extends PBase {
                 vAuxCantidad =Cantidad;
             }
 
+            if (CantidadCopias > 0) {
+                vAuxCantidad = vAuxCantidad * (CantidadCopias + 1);
+                Cantidad = vAuxCantidad;
+            }
+
             if (Cant_Pendiente > vAuxCantidad){
                 msgValidaCantidad("La cantidad "+Cantidad+" ingresada es correcta para el producto "+BeProducto.Codigo);
             }else if(Cant_Pendiente < vAuxCantidad){
@@ -6618,6 +6938,7 @@ public class frm_recepcion_datos extends PBase {
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
 
+
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
                         if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
                                 gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
@@ -6629,13 +6950,16 @@ public class frm_recepcion_datos extends PBase {
 
                         //#AT 20220328 Si chkPresentacion no esta marcado, IdPresentación = 0
                         if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
-                            pListBeStockRec.items.get(0).IdPresentacion = 0;
-                            pListBeStockRec.items.get(0).Presentacion.IdPresentacion = 0;
-                            pListBeStockRec.items.get(0).Cantidad = Double.valueOf(txtCantidadRec.getText().toString());
 
-                            gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
-                            gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
-                            gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+                            if (CantidadCopias == 0) {
+                                pListBeStockRec.items.get(0).IdPresentacion = 0;
+                                pListBeStockRec.items.get(0).Presentacion.IdPresentacion = 0;
+                                pListBeStockRec.items.get(0).Cantidad = Double.valueOf(txtCantidadRec.getText().toString());
+
+                                gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
+                                gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
+                                gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+                            }
 
                             callMethod("Guardar_Recepcion_Sin_Presentacion",
                                        "pRecEnc",gl.gBeRecepcion,
@@ -6651,19 +6975,17 @@ public class frm_recepcion_datos extends PBase {
                                        "pBeTransOcDet",gl.gselitem);
 
                         }else{
-
                             callMethod("Guardar_Recepcion",
-                                       "pRecEnc",gl.gBeRecepcion,
-                                       "pRecOrdenCompra",gl.gBeRecepcion.OrdenCompraRec,
-                                       "pListStockRecSer",pListBeStockSeRec.items,
-                                       "pListStockRec",pListBeStockRec.items,
-                                       "pListProductoPallet",listaProdPalletsNuevos.items,
-                                       "pLotesRec", BeDetalleLotes,
-                                       "pIdEmpresa",gl.IdEmpresa,
-                                       "pIdBodega",gl.IdBodega,
-                                       "pIdUsuario",gl.IdOperador,
-                                       "pIdResolucionLp",gl.IdResolucionLpOperador);
-
+                                    "pRecEnc", gl.gBeRecepcion,
+                                    "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+                                    "pListStockRecSer", pListBeStockSeRec.items,
+                                    "pListStockRec", pListBeStockRec.items,
+                                    "pListProductoPallet", listaProdPalletsNuevos.items,
+                                    "pLotesRec", BeDetalleLotes,
+                                    "pIdEmpresa", gl.IdEmpresa,
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdUsuario", gl.IdOperador,
+                                    "pIdResolucionLp", gl.IdResolucionLpOperador);
                         }
 
                         break;
@@ -7001,6 +7323,9 @@ public class frm_recepcion_datos extends PBase {
 
                     if(e.getMessage().contains("ERROR_202208182042") || e.getMessage().contains("ERROR_20220823_1604")){
                         nBeResolucion = null;
+                        CantidadCopias = 0;
+                        CorelSiguiente = 0;
+                        TmpMaxL = 0;
                         msgAskAsignarNuevaLp_Reload("La licencia ya existe. Se asignará una nueva.");
                     }else{
 
@@ -7015,9 +7340,6 @@ public class frm_recepcion_datos extends PBase {
                     }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
                     break;
             }
-
-
-
 
         }
 
@@ -7047,6 +7369,19 @@ public class frm_recepcion_datos extends PBase {
                     } else {
                         btnCantPendiente.setText("Pendiente: " + mu.frmdecimal(Cant_Pendiente, gl.gCantDecDespliegue));
                     }
+
+                    if ( pListBeStockRec!=null){
+                        if (pListBeStockRec.items!=null){
+                            pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
+
+                        }
+                    }
+                    if ( gl.gBeRecepcion.Detalle!=null){
+                        if (gl.gBeRecepcion.Detalle.items!=null){
+                            gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+                        }
+                    }
+
                 }else{
                     toastlong("No se pudo recargar la linea con la nueva LP.");
                 }
@@ -7307,7 +7642,6 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-
     private void processNuevoLPA(){
 
 
@@ -7334,13 +7668,18 @@ public class frm_recepcion_datos extends PBase {
 
                 //toast("Se obtuvo la resolución");
 
-               gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-               float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-               float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-               int intLPSig = (int) pLpSiguiente;
-               int MaxL = (int) largoMaximo;
+                int intLPSig = (int) pLpSiguiente;
+                int MaxL = (int) largoMaximo;
+
+                //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo
+                // siguiente cuando CantidadCopias > 1
+                CorelSiguiente = intLPSig;
+                TmpMaxL = MaxL;
 
 /*                   String str = String.valueOf(intLPSig);
                    StringBuilder sb = new StringBuilder();
@@ -7352,92 +7691,92 @@ public class frm_recepcion_datos extends PBase {
                    sb.append(str);
                    String result = sb.toString();*/
 
-                   //#CKFK20220410 Reemplacé el código de arriba por esta línea
-                   String result = String.format("%0"+ MaxL + "d",intLPSig);
+                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
 
-                   pNumeroLP= nBeResolucion.Serie + result;
+                pNumeroLP= nBeResolucion.Serie + result;
 
-               }else{
+            }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
-                   //execws(6);
-                   //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
-                   gl.IdResolucionLpOperador =0;
-                   return;
-               }
+                //execws(6);
+                //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
+                gl.IdResolucionLpOperador =0;
+                return;
+            }
 
-               if (gl.mode==1){
-                   //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                   if (!txtNoLP.getText().toString().isEmpty()){
-                       if (txtLicPlate != null){
-                           txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+            if (gl.mode==1){
+                //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
+                if (!txtNoLP.getText().toString().isEmpty()){
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
 
-                       }
-                   }else{
-                       if (txtLicPlate != null){
-                           txtLicPlate.setText(pNumeroLP);
+                    }
+                }else{
+                    if (txtLicPlate != null){
+                        txtLicPlate.setText(pNumeroLP);
 
-                       }else{
-                           clsBeTrans_oc_det_loteList BeOCDetLoteList;
-                           BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
+                    }else{
+                        clsBeTrans_oc_det_loteList BeOCDetLoteList;
+                        BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
 
-                           //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
-                           if(gl.gBeOrdenCompra!=null){
-                               if(gl.gBeOrdenCompra.DetalleLotes!=null){
-                                   if(gl.gBeOrdenCompra.DetalleLotes.items!=null){
-                                       for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
-                                           if(l.Lic_Plate==null){
-                                               l.Lic_Plate="";
-                                           }
-                                       }
-                                   }
-                               }
-                           }
+                        //#EJC20220411:Vacío se traduce en null al parsear xml, asignar vacío.
+                        if(gl.gBeOrdenCompra!=null){
+                            if(gl.gBeOrdenCompra.DetalleLotes!=null){
+                                if(gl.gBeOrdenCompra.DetalleLotes.items!=null){
+                                    for (clsBeTrans_oc_det_lote l : gl.gBeOrdenCompra.DetalleLotes.items){
+                                        if(l.Lic_Plate==null){
+                                            l.Lic_Plate="";
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-                           List<clsBeTrans_oc_det_lote> BeUbicaciones;
+                        List<clsBeTrans_oc_det_lote> BeUbicaciones;
 
-                           //#CKFK20220306 Agregué esta validación para el License Plate
-                           BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
+                        //#CKFK20220306 Agregué esta validación para el License Plate
+                        BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
-                           if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+                        if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
 
-                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
-                               if (BeOCDetLoteList.items!=null){
-                                   BeUbicaciones = stream(BeOCDetLoteList.items)
-                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                                   c.No_linea == BeOcDet.No_Linea &&
-                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
-                                                   !c.Lic_Plate.isEmpty())
-                                           .toList();
-                               }
+                            //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                            if (BeOCDetLoteList.items!=null){
+                                BeUbicaciones = stream(BeOCDetLoteList.items)
+                                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                c.No_linea == BeOcDet.No_Linea &&
+                                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc &&
+                                                !c.Lic_Plate.isEmpty())
+                                        .toList();
+                            }
 
-                           }else{
-                               //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
-                               if (BeOCDetLoteList.items!=null){
-                                   BeUbicaciones = stream(BeOCDetLoteList.items)
-                                           .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
-                                                   c.No_linea == BeOcDet.No_Linea &&
-                                                   !c.Lic_Plate.isEmpty()  &&
-                                                   c.IdOrdenCompraDet == pIdOrdenCompraDet &&
-                                                   c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
-                                           .toList();
-                               }
-                           }
+                        }else{
+                            //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
+                            if (BeOCDetLoteList.items!=null){
+                                BeUbicaciones = stream(BeOCDetLoteList.items)
+                                        .where(c -> c.IdProductoBodega  == BeProducto.IdProductoBodega &&
+                                                c.No_linea == BeOcDet.No_Linea &&
+                                                !c.Lic_Plate.isEmpty()  &&
+                                                c.IdOrdenCompraDet == pIdOrdenCompraDet &&
+                                                c.IdOrdenCompraEnc == pIdOrdenCompraEnc)
+                                        .toList();
+                            }
+                        }
 
-                           //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
-                           if (BeUbicaciones!=null){
-                               //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
-                               if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
-                                   txtNoLP.setText(pNumeroLP);
-                               }
-                           }else{
-                               txtNoLP.setText(pNumeroLP);
+                        //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
+                        if (BeUbicaciones!=null){
+                            //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
+                            if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
+                                txtNoLP.setText(pNumeroLP);
+                            }
+                        }else{
+                            txtNoLP.setText(pNumeroLP);
 
-                           }
+                        }
 
-                       }
-                   }
-               }
+                    }
+                }
+            }
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
@@ -7448,6 +7787,7 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
+
 
     private void processLicensePallet(){
 
@@ -7652,11 +7992,12 @@ public class frm_recepcion_datos extends PBase {
 
                 if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
                     gl.gSinPresentacion = true;
-                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion_Sin_Presentacion");
-                }else{
+                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion_Sin_Presentacion");
+                } else {
                     gl.gSinPresentacion = false;
-                    Resultado = xobj.getresult(String.class,"Guardar_Recepcion");
+                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
                 }
+
 
                 if (Resultado!=null){
                     if (ubiDetLote!=null){
@@ -7946,11 +8287,14 @@ public class frm_recepcion_datos extends PBase {
 
             });
 
-            dialog.setNegativeButton("No", (dialog1, which) -> {
-                txtNoLP.setText("");
-                txtNoLP.setSelectAllOnFocus(true);
-                txtNoLP.requestFocus();
-            });
+            if (!gl.bloquear_lp_hh) {
+                dialog.setNegativeButton("No", (dialog1, which) -> {
+                    txtNoLP.setText("");
+                    txtNoLP.setSelectAllOnFocus(true);
+                    txtNoLP.requestFocus();
+                    txtNoLP.setEnabled(true);
+                });
+            }
 
             dialog.show();
 
@@ -8136,6 +8480,8 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            progress.setMessage("Comprobando si existe la licencia " + pNumeroLP);
+            progress.show();
             try {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             } catch (Exception e) {
@@ -8148,9 +8494,19 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.bloquear_lp_hh){
                     //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
                     //#GT23082022_1130: Se obtiene nueva LP por que la que se cargo, ya se grabo con mismo operador, distinta HH
-                    msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+                    //msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+                    //#GT23092022_0930: Se valida concurrencia, pero en este punto, la otra HH, ya grabo e imprimio, y aca apenas tenemos
+                    //los datos en memoria previo a Guardar.
+                    nBeResolucion = null;
+                    CantidadCopias = 0;
+                    CorelSiguiente = 0;
+                    TmpMaxL = 0;
+
+                    progress.hide();
+                    msgAskAsignarNuevaLp_Reload("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada");
 
                 }else{
+                    progress.hide();
                     msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
                 }
             }else{
@@ -8169,6 +8525,7 @@ public class frm_recepcion_datos extends PBase {
                             (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
+                           progress.hide();
                            msgbox("La ubicación de los lotes no puede ser vacía");
                         }
                     }
@@ -8217,6 +8574,8 @@ public class frm_recepcion_datos extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
+        }finally {
+            progress.cancel();
         }
     }
 
