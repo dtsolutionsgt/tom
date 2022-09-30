@@ -3480,14 +3480,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         if (BeStockPallet.getIdPresentacion()!=0) {
 
                             if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
-                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nueva licencia y continuar?");
+                                msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
                             } else {
                                 inicializaTarea(true);
                             }
 
                         }else{
                             if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
-                                msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nueva licencia y continuar?");
+                                msgAskExplosionar("La ubicación parcial requiere explosión, ¿generar nueva licencia?");
                             }else{
                                 inicializaTarea(true);
                             }
@@ -3668,7 +3668,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             vStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
             vStockRes.Pallet_No_Estandar = EsPalletNoEstandar;
 
-            if( escaneoPallet && productoList != null){
+            //#EJC20220930
+            if(!txtLicPlate.getText().toString().isEmpty()){
+                if(!escaneoPallet){
+                    mu.msgbox("Aquí tenemos un problema!");
+                }
+            }
+
+            if(escaneoPallet && productoList != null){
 
                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
 
@@ -3975,7 +3982,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //#AT20220804 Se agrego fecha y hora, antes se mandaba unicamente la fecha
             gMovimientoDet.Fecha = du.Fecha_CompletaT();
 
-            if(escaneoPallet &&  productoList != null ) {
+            if(escaneoPallet && productoList != null ) {
                 gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
             }else{
                 gMovimientoDet.Barra_pallet = "";
