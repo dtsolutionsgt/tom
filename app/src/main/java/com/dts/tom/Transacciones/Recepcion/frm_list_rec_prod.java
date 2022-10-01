@@ -1231,8 +1231,8 @@ public class frm_list_rec_prod extends PBase {
                     case 8:
                         callMethod("Get_BeProducto_By_LP_For_HH",
                                    "pLic_Plate",pLP,
-                                   "pBeStockRec",gBeStockRec,
-                                   "pIdBodega",gl.IdBodega);
+                                   "pIdBodega",gl.IdBodega,
+                                   "pBeStockRec",gBeStockRec);
                         break;
                     case 9:
                        /* callMethod("Get_BeProducto_By_Codigo_For_HH",
@@ -1471,7 +1471,9 @@ public class frm_list_rec_prod extends PBase {
                             BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
                         }else {
                             if(gBeOrdenCompra.IdTipoIngresoOC ==4){
-                                BeINavBarraPallet = stream(lBeINavBarraPallet.items).where(c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo) && c.Bodega_Destino.equals(gl. gCodigoBodega)).first();
+                                BeINavBarraPallet = stream(lBeINavBarraPallet.items).where
+                                                          (c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo)
+                                                           && c.Bodega_Destino.equals(gl.CodigoBodega)).first();
                             }else{
                                 mu.msgbox("Excepción no controlada por licencia en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
                                 return;
@@ -2010,7 +2012,7 @@ public class frm_list_rec_prod extends PBase {
                 browse=0;
 
                 if (Escaneo_Pallet){
-                    mu.msgbox("Licencia procesada correctamente");
+                    mu.toast("Licencia procesada correctamente");
                     txtCodigoProductoRecepcion.setText("");
                     txtCodigoProductoRecepcion.requestFocus();
                 }

@@ -435,7 +435,7 @@ public class frm_datos_reabastecimiento extends PBase {
             if (txtCodigoPrd.getText().toString().isEmpty()) {
                 msgbox("Ingrese código producto.");
                 return false;
-            } else if (!txtCodigoPrd.getText().toString().equals(selitem.Lic_plate)) {
+            } else if (!txtCodigoPrd.getText().toString().equals(selitem.Codigo_Producto)) {
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.selectAll();
                 msgbox("El código producto no coincide.");
@@ -639,30 +639,30 @@ public class frm_datos_reabastecimiento extends PBase {
                     case 1:
                         callMethod("Aplica_Cambio_Estado_Ubic_HH",
                                          "pMovimiento",gMovimientoDet,
-                                               "pStockRes",vStockRes,
-                                               "pIdStockNuevo",vIdStockNuevo,
-                                               "pIdMovimientoNuevo",vIdMovimientoNuevo);
+                                         "pStockRes",vStockRes,
+                                         "pIdStockNuevo",vIdStockNuevo,
+                                         "pIdMovimientoNuevo",vIdMovimientoNuevo);
                         break;
                     case 2:
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
                                          "pIdOperador", gl.IdOperador,
-                                               "pIdBodega",gl.IdBodega);
+                                         "pIdBodega",gl.IdBodega);
                         break;
                     case 3:
                         IdUbicacion = Integer.valueOf(txtUbicDestino.getText().toString());
 
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
                                          "pBarra", IdUbicacion,
-                                               "pIdBodega", gl.IdBodega);
+                                         "pIdBodega", gl.IdBodega);
                         break;
                     case 4:
                         callMethod("Set_Nuevo_Pallet_Id",
                                          "pIdBodega",gl.IdBodega,
-                                               "pIdUsuario",gl.OperadorBodega.getIdOperadorBodega(),
-                                               "pLicPlateAnt",selitem.getLic_plate(),
-                                               "pLicPlateNuevo", vNuevoPalletId,
-                                               "pIdStockNuevo", vIdStockNuevo,
-                                               "pIdMovimientoNuevo",vIdMovimientoNuevo);
+                                         "pIdUsuario",gl.OperadorBodega.getIdOperadorBodega(),
+                                         "pLicPlateAnt",selitem.getLic_plate(),
+                                         "pLicPlateNuevo", vNuevoPalletId,
+                                         "pIdStockNuevo", vIdStockNuevo,
+                                         "pIdMovimientoNuevo",vIdMovimientoNuevo);
                         break;
                 }
 

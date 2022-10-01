@@ -6906,8 +6906,10 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Licenses_Plates_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
                     case 8:
-                        callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet","IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "LicPlate",txtLicPlate.getText().toString(),"IdRecepcionDet",pIdRecepcionDet);
+                        callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
+                                "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "LicPlate",txtLicPlate.getText().toString(),
+                                "IdRecepcionDet",pIdRecepcionDet);
                         break;
                     case 9:
                         callMethod("MaxIDStockSeRec");

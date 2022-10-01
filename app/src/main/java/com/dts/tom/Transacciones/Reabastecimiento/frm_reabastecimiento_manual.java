@@ -42,6 +42,7 @@ public class frm_reabastecimiento_manual extends PBase {
 
     private TextView txtCodigoPrd, txtLicencia, txtUbicOrigen;
     private ListView listExist;
+    private TextView lblNumReg;
 
     private int IdUbicacion = 0;
     private clsBeProducto BeProducto = new clsBeProducto();
@@ -49,7 +50,6 @@ public class frm_reabastecimiento_manual extends PBase {
     private static ArrayList<clsBeVW_stock_res> ListStock = new ArrayList<clsBeVW_stock_res>() ;
     private list_adapt_reabast_stock_res adapter_stock;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +65,9 @@ public class frm_reabastecimiento_manual extends PBase {
         txtLicencia = findViewById(R.id.txtLicencia);
         txtUbicOrigen = findViewById(R.id.txtUbicOrigen);
         listExist = findViewById(R.id.listExist);
+        lblNumReg = findViewById(R.id.lblNumReg);
 
-        ProgressDialog("Cargando pantalla...");
         setHandlers();
-
     }
 
     private void setHandlers(){
@@ -84,12 +83,7 @@ public class frm_reabastecimiento_manual extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (!txtCodigoPrd.getText().toString().isEmpty()) {
-                            execws(1);
-                        } else {
-                            ProgressDialog("Listando detalle...");
-                            execws(2);
-                        }
+                        Buscar_Lista_Reabastecimiento();
                     }
 
                     return false;
@@ -123,24 +117,35 @@ public class frm_reabastecimiento_manual extends PBase {
         }
     }
 
-    private void GetProductos() {
-        try {
-            execws(2);
-        } catch (Exception e) {
-            mu.msgbox("GetProductos: "+e.getMessage());
+    private void Buscar_Lista_Reabastecimiento(){
+        try{
+            if (!txtCodigoPrd.getText().toString().isEmpty()) {
+                ProgressDialog("Obteniendo producto...");
+                execws(1);
+            } else {
+                ProgressDialog("Listando detalle...");
+                execws(2);
+            }
+        }catch (Exception ex){
+            if (progress!=null) progress.cancel();
+            mu.msgbox("Error Buscar_Lista_Reabastecimiento : " + ex.getMessage());
         }
     }
 
     private void processGetProducto() {
         try {
+
+            if (progress!=null) progress.hide();
+            ProgressDialog("Obtenido resultado del WS...");
+
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
 
             if (BeProducto != null) {
                 if (BeProducto.IdProducto > 0) {
-                    ProgressDialog("Listando detalle...");
                     execws(2);
                 }
             } else {
+                if (progress!=null) progress.cancel();
                 mu.msgbox("Código ingresado no válido.");
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.setSelectAllOnFocus(true);
@@ -160,13 +165,14 @@ public class frm_reabastecimiento_manual extends PBase {
                     ListarStock();
                 }
             } else {
+                if (progress!=null) progress.cancel();
                 toast("No se encontró stock para reabastecer.");
             }
         } catch (Exception e) {
-            progress.cancel();
+            if (progress!=null) progress.cancel();
             mu.msgbox("processGetStock: "+ e.getMessage());
         } finally {
-            progress.cancel();
+            if (progress!=null) progress.cancel();
         }
     }
 
@@ -187,7 +193,12 @@ public class frm_reabastecimiento_manual extends PBase {
             adapter_stock = new list_adapt_reabast_stock_res(getApplicationContext(), ListStock);
             listExist.setAdapter(adapter_stock);
 
+            lblNumReg.setText("Reg: " + ListStock.size());
+
+            if (progress!=null) progress.cancel();
+
         } catch (Exception e) {
+            if (progress!=null) progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
 
@@ -204,9 +215,9 @@ public class frm_reabastecimiento_manual extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                       callMethod("Get_BeProducto_By_Codigo_For_HH",
                                          "pCodigo", txtCodigoPrd.getText().toString(),
-                                               "IdBodega", gl.IdBodega);
+                                         "IdBodega", gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_All_Products_For_Reabastecimiento",
@@ -216,7 +227,9 @@ public class frm_reabastecimiento_manual extends PBase {
                 }
 
             } catch (Exception e) {
-                error=e.getMessage();errorflag =true;msgbox(error);
+                error=e.getMessage();errorflag =true;
+                if (progress!=null) progress.cancel();
+                msgbox(error);
             }
         }
     }
@@ -236,6 +249,7 @@ public class frm_reabastecimiento_manual extends PBase {
             }
 
         } catch (Exception e) {
+            if (progress!=null) progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -247,6 +261,10 @@ public class frm_reabastecimiento_manual extends PBase {
 
     public void Regresar(View view) {
         super.finish();
+    }
+
+    public void Buscar(View view) {
+        Buscar_Lista_Reabastecimiento();
     }
 
     public void ProgressDialog(String mensaje) {
@@ -277,18 +295,18 @@ public class frm_reabastecimiento_manual extends PBase {
             if (browse==1){
                 browse=0;
 
-                ProgressDialog("Listando detalle...");
                 if (!txtCodigoPrd.getText().toString().isEmpty()) {
+                    ProgressDialog("Listando detalle...");
                     execws(1);
                 } else {
+                    ProgressDialog("Listando detalle...");
                     execws(2);
                 }
             }
 
         }catch (Exception e) {
+            if (progress!=null) progress.cancel();
             mu.msgbox("OnResume" + e.getMessage());
-        } finally {
-            progress.cancel();
         }
 
     }
