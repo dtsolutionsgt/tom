@@ -1215,8 +1215,8 @@ public class frm_list_rec_prod extends PBase {
                     case 6:
                         callMethod("Get_BeProducto_By_LP_For_HH",
                                    "pLic_Plate",pLP,
-                                   "pBeStockRec",gBeStockRec,
-                                   "pIdBodega",gl.IdBodega);
+                                   "pIdBodega",gl.IdBodega,
+                                   "pBeStockRec",gBeStockRec);
                         break;
                     case 7:
                         callMethod("Finalizar_Recepcion_Parcial",
@@ -1230,9 +1230,9 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 8:
                         callMethod("Get_BeProducto_By_LP_For_HH",
-                                   "pLic_Plate",pLP,
-                                   "pIdBodega",gl.IdBodega,
-                                   "pBeStockRec",gBeStockRec);
+                                "pLic_Plate",pLP,
+                                "pIdBodega",gl.IdBodega,
+                                "pBeStockRec",gBeStockRec);
                         break;
                     case 9:
                        /* callMethod("Get_BeProducto_By_Codigo_For_HH",
