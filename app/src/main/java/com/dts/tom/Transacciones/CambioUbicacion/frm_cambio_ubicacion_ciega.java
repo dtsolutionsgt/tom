@@ -1904,7 +1904,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //Recalcula_Peso();
 
                 if(cvUbicDestID == 0){
-                    msgbox("La ubicación de destino no puede ser vacía");
+                    if(txtUbicDestino.getText().toString().isEmpty()){
+                        msgbox("La ubicación de destino no puede ser vacía");
+                    }else{
+                        msgbox("Confirme la ubicación de destino.");
+                    }
                     txtUbicDestino.requestFocus();
                     datosCorrectos = false;
                 }
@@ -3803,7 +3807,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#CKFK20220801 Modifique esto && txtUbicDestino.getText().toString().isEmpty() por ||
             if(cvUbicDestID == 0 || txtUbicDestino.getText().toString().isEmpty()){
-                msgbox("La ubicación de destino no puede ser vacía");
+                if(txtUbicDestino.getText().toString().isEmpty()){
+                    msgbox("La ubicación de destino no puede ser vacía.");
+                }else{
+                    msgbox("Confirme la ubicación de destino.");
+                }
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;
                 return;

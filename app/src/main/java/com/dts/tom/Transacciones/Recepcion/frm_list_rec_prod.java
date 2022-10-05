@@ -1254,7 +1254,9 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Actualizar_Estado_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Estado","Procesado");
                         break;
                     case 13:
-                        callMethod("Guarda_Firma_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Firma_piloto",gl.gBeRecepcion.Firma_piloto);
+                        callMethod("Guarda_Firma_Recepcion",
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
                         callMethod("Finalizar_Recepcion",
@@ -1446,7 +1448,7 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
 
-            msgValidaProductoPallet("¿El pallet está completo y en buen estado?");
+            msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
 
         }catch (Exception e){
             mu.msgbox("processProductoByLP");
