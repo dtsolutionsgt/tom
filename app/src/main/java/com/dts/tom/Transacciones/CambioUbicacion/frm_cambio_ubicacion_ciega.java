@@ -1496,22 +1496,33 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 vPesoRef = BeProductoUbicacion.Peso_referencia;
                 vCantidad_reubicar = Double.valueOf(txtCantidad.getText().toString());
 
+
+                Double cantidad_original = Double.valueOf(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue)) ;
+                Double vPesoOrigen = Double.valueOf(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
+
+                Double peso_calculado_x_Umbas  =  vPesoOrigen/cantidad_original ;
+                vPesoReCalculado = peso_calculado_x_Umbas*vCantidad_reubicar;
+                txtPeso.setText(String.valueOf(vPesoReCalculado));
+
+
+                //#GT30092022_1300: Aunque el producto tenga un peso referencia, este no es la bandera para hacer la distribución en caso
+                //se ubique parcialmente, por eso esta en comentario.
+
                 //#GT2772022_1530: Si no existe un peso de referencia, se distribuye el peso original total dentro
                 //de la cantidad original, y se distribuye entre las unidades a reubicar
-                if (vPesoRef == 0){
-
-
-                    Double cantidad_original = Double.valueOf(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue)) ;
-                    Double vPesoOrigen = Double.valueOf(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
-
-                    Double peso_calculado_x_Umbas  =  vPesoOrigen/cantidad_original ;
-                    vPesoReCalculado = peso_calculado_x_Umbas*vCantidad_reubicar;
-
-                    txtPeso.setText(String.valueOf(vPesoReCalculado));
-
-                }else {
-                    txtPeso.setText(String.valueOf(vPesoRef * vCantidad_reubicar));
-                }
+//                if (vPesoRef == 0){
+//
+//                    Double cantidad_original = Double.valueOf(mu.frmdecimal(vCantidadAUbicar, gl.gCantDecDespliegue)) ;
+//                    Double vPesoOrigen = Double.valueOf(mu.frmdecimal(vPesoAUbicar, gl.gCantDecDespliegue));
+//
+//                    Double peso_calculado_x_Umbas  =  vPesoOrigen/cantidad_original ;
+//                    vPesoReCalculado = peso_calculado_x_Umbas*vCantidad_reubicar;
+//
+//                    txtPeso.setText(String.valueOf(vPesoReCalculado));
+//
+//                }else {
+//                    txtPeso.setText(String.valueOf(vPesoRef * vCantidad_reubicar));
+//                }
             }
         }catch (Exception ex){
             mu.msgbox("ReDistribuye_Peso:" + ex.getMessage());
@@ -3916,6 +3927,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.IdProductoBodega = cvProd.IdProductoBodega;
             gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
+
+            //#GT05102022: se agrega al operador que tiene la tarea
+            gMovimientoDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
+
             //#CKFK20220804 Inicializamos el IdTipoTarea en -1
             gMovimientoDet.IdTipoTarea = -1;
 

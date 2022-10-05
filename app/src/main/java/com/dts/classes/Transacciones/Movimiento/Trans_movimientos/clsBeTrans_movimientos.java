@@ -33,6 +33,7 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public double Cantidad_hist;
     @Element(required=false) public double Peso_hist;
     @Element(required=false) public boolean IsNew;
+    @Element(required=false) public int IdOperadorBodega;
 
 
     public clsBeTrans_movimientos() {
@@ -45,7 +46,7 @@ public class clsBeTrans_movimientos {
                                   String Serie,double Peso,String Lote,String Fecha_vence,
                                   String Fecha,String Barra_pallet,String Hora_ini,String Hora_fin,
                                   String Fecha_agr,String Usuario_agr,double Cantidad_hist,double Peso_hist,
-                                  boolean IsNew) {
+                                  boolean IsNew, int IdOperadorBodega) {
 
         this.IdMovimiento=IdMovimiento;
         this.IdEmpresa=IdEmpresa;
@@ -76,6 +77,7 @@ public class clsBeTrans_movimientos {
         this.Cantidad_hist=Cantidad_hist;
         this.Peso_hist=Peso_hist;
         this.IsNew=IsNew;
+        this.IdOperadorBodega = IdOperadorBodega;
 
     }
 
@@ -253,6 +255,13 @@ public class clsBeTrans_movimientos {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+
+    public int getIdOperadorBodega() {
+        return IdOperadorBodega;
+    }
+    public void setIdOperadorBodega(int value) {
+        IdOperadorBodega=value;
     }
 
 }

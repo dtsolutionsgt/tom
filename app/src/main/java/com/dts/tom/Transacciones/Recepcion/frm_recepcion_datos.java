@@ -6987,7 +6987,8 @@ public class frm_recepcion_datos extends PBase {
                                     "pIdEmpresa", gl.IdEmpresa,
                                     "pIdBodega", gl.IdBodega,
                                     "pIdUsuario", gl.IdOperador,
-                                    "pIdResolucionLp", gl.IdResolucionLpOperador);
+                                    "pIdResolucionLp", gl.IdResolucionLpOperador,
+                                    "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
                         }
 
                         break;
@@ -7620,7 +7621,6 @@ public class frm_recepcion_datos extends PBase {
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
                 LPvalidado= nBeResolucion.Serie + result;
-                //DIANA
                 //#GT23082022_0803: Si la LP en resolución ya cambio porque la grabaron desde otro dispositivo alerta, sino continua registrando
                 if (LPInicial.contains(LPvalidado)){
                     //toast("Continuar grabando");
@@ -7648,10 +7648,6 @@ public class frm_recepcion_datos extends PBase {
 
 
         try {
-
-            //CantVeces+=1;
-
-            //toast("Cuantas veces entró " + CantVeces);
 
             if (nBeResolucion == null){
                 //toast("Buscando la resolución");
