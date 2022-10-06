@@ -67,6 +67,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Decimales  = false;
     @Element(required=false) public int Dias_Maximo_Vencimiento_Reemplazo = 0;
     @Element(required=false) public boolean Permitir_Repeticiones_En_Ingreso = false;
+    @Element(required=false) public boolean Validar_Existencias_Inv_Ini = false;
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -89,7 +90,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean control_banderas_cliente, int IdTamanoEtiquetaUbicacionDefecto,
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
                        boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
-                       boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales, boolean Permitir_Repeticiones_En_Ingreso) {
+                       boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales,
+                       boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -149,6 +151,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Top_Reabastecimiento_Manual = Top_Reabastecimiento_Manual;
         this.Permitir_Decimales = Permitir_Decimales;
         this.Permitir_Repeticiones_En_Ingreso = Permitir_Repeticiones_En_Ingreso;
+        this.Validar_Existencias_Inv_Ini  = Validar_Existencias_Inv_Ini;
     }
 
     public int getIdPais() {
@@ -541,6 +544,13 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setPermitir_Repeticiones_En_Ingreso(boolean value) {
         Permitir_Repeticiones_En_Ingreso=value;
+    }
+
+    public boolean getValidar_Existencias_Inv_Ini() {
+        return Validar_Existencias_Inv_Ini;
+    }
+    public void setValidar_Existencias_Inv_Ini(boolean value) {
+        Validar_Existencias_Inv_Ini=value;
     }
 
 }
