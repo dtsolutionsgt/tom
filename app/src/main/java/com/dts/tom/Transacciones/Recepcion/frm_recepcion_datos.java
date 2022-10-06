@@ -85,6 +85,7 @@ import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
+import com.google.android.material.button.MaterialButton;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -155,6 +156,8 @@ public class frm_recepcion_datos extends PBase {
     private EditText txtSerieIni;
     private EditText txtSerieFin;
     private EditText txtPosiciones;
+    private TextView txtMensaje;
+    private MaterialButton btnAceptar, btnCambiar;
     private Spinner cmbPresParams;
     private Spinner cmbCantidad;
     private RelativeLayout relOpciones;
@@ -4814,7 +4817,9 @@ public class frm_recepcion_datos extends PBase {
                     Date strDateNow = sdf.parse(FechaActual);
 
                     if (strDate.getTime()  <=  strDateNow.getTime() ) {
-                        msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
+                        //#AT20221006 Nuevo diseño de alerta
+                        msgAskFechaVencimiento();
+                        //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
                     }else{
                         DespuesDeValidarCantidad();
                     }
@@ -5124,6 +5129,55 @@ public class frm_recepcion_datos extends PBase {
             });
 
             dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskFechaVencimiento() {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog);
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.frm_fecha_vencimiento, null, false);
+
+
+            txtMensaje = vistaDialog.findViewById(R.id.txtMensaje);
+            btnAceptar = vistaDialog.findViewById(R.id.btnAceptar);
+            btnCambiar = vistaDialog.findViewById(R.id.btnCambiar);
+            dialog.setView(vistaDialog);
+
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.app_name);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            //#EJC202210061448: Abreviar para hacer mas grande el mensaje.
+            //txtMensaje.setText("La fecha de vencimiento del producto " +BeProducto.Codigo+ " - " + BeProducto.Nombre + " es igual o menor a la fecha de hoy.");
+            txtMensaje.setText("El vencimiento es igual o menor a la fecha de hoy.");
+
+            AlertDialog alert = dialog.create();
+
+            btnAceptar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    msgValidaFechaVence("El producto ingresará al inventario vencido, ¿continuar?");
+                    alert.cancel();
+                }
+            });
+
+            btnCambiar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    progress.cancel();
+                    cmbVenceRec.requestFocus();
+                    alert.cancel();
+                }
+            });
+
+
+            alert.show();
 
         }catch (Exception e){
             addlog(Objects.requireNonNull(new Object()

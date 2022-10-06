@@ -29,4 +29,10 @@
         <item name="colorAccent">#BA5536</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/nuevo_dialogo</item>
+        <item name="windowMinWidthMajor">0dp</item>
+        <item name="windowMinWidthMinor">0dp</item>
+    </style>
+
 </resources>

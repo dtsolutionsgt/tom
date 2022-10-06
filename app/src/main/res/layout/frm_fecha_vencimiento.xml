@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/color_light"
+    android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/txtMensaje"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView21"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:justificationMode="inter_word"
+            android:text="El vencimiento es igual o menor a la fecha actual"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="40sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCambiar"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="135dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/btnAceptar"
+            android:layout_alignEnd="@+id/txtMensaje"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:text="Cambiar"
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/editar2"
+            app:iconGravity="textStart"
+            app:iconSize="23dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAceptar"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="135dp"
+            android:layout_height="70dp"
+            android:layout_alignStart="@+id/txtMensaje"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="50dp"
+            android:text="Aceptar"
+            app:backgroundTint="@android:color/holo_red_dark"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ok_btn"
+            app:iconGravity="textStart"
+            app:iconSize="23dp" />
+
+        <ImageView
+            android:id="@+id/imageView21"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/vence" />
+    </RelativeLayout>
+
+</RelativeLayout>
