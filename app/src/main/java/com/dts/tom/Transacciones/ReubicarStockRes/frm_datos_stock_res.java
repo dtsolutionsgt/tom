@@ -428,15 +428,15 @@ public class frm_datos_stock_res extends PBase {
                         IdUbicacion = Integer.valueOf(txtUbicDestino.getText().toString());
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
                                          "pBarra", IdUbicacion,
-                                               "pIdBodega", gl.IdBodega);
+                                         "pIdBodega", gl.IdBodega);
                         break;
 
                     case 2:
                         callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
                                          "pIdStock", selitem.IdStock,
-                                               "pIdBodega", gl.IdBodega,
-                                               "pIdUbicacion",IdUbicacion,
-                                               "pIdOperador", gl.IdOperador);
+                                         "pIdBodega", gl.IdBodega,
+                                         "pIdUbicacion",IdUbicacion,
+                                         "pIdOperador", gl.IdOperador);
                         break;
                 }
 
