@@ -6884,7 +6884,11 @@ public class frm_recepcion_datos extends PBase {
                 //DespuesDeValidarCantidad();
             });
 
-            dialog.setNegativeButton("No", (dialog12, which) -> progress.cancel());
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                progress.cancel();
+                //#GT11102022_1600: sino queremos confirmar cantidad parcial, habilitar btn Guardar
+                btnTareas.setEnabled(true);
+            });
 
             dialog.show();
 
