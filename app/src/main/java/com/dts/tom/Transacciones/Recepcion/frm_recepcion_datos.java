@@ -86,6 +86,7 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -291,6 +292,11 @@ public class frm_recepcion_datos extends PBase {
 
     private clsBeStock pStock;
 
+    /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
+    private FloatingActionButton btnTareas;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -376,6 +382,9 @@ public class frm_recepcion_datos extends PBase {
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            /*** set boton guardar *****************************/
+            btnTareas = findViewById(R.id.btnTareas);
 
             setCurrentDateOnView();
 
@@ -610,7 +619,8 @@ public class frm_recepcion_datos extends PBase {
 
                             progress.setMessage("Buscando Licencia");
                             progress.show();
-                            progress.cancel();
+                            //AQUI
+                            //progress.cancel();
 
                         }else{
                             toastlong("La presentación no genera licencia Auto..");
@@ -4582,6 +4592,12 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            progress.setMessage("Guardando Recepción");
+            progress.show();
+
+            /***********Deshabilitar boton guardar para evitar doble clic *****************/
+            btnTareas.setEnabled(false);
+
             imprimirDesdeBoton=false;
 
             String valor= cmbVenceRec .getText().toString();
@@ -4644,7 +4660,10 @@ public class frm_recepcion_datos extends PBase {
                 ValidaCampos();
             }
 
+            //btnTareas.setEnabled(true);
+
         }catch (Exception e){
+            btnTareas.setEnabled(true);
             mu.msgbox("BotonGuardarRecepcion:"+e.getMessage());
         }
     }
@@ -4783,10 +4802,15 @@ public class frm_recepcion_datos extends PBase {
 
     private void ContinuaGuardandoRecepcion(){
 
-        progress.setMessage("Guardando recepción");
-        progress.show();
+        //progress.setMessage("Guardando recepción");
+        //progress.show();
 
         try{
+
+            //if (!progress.isShowing()) progress.show();
+
+            progress.setMessage("Guardando recepción");
+            progress.show();
 
             Valida_Cantidad_Recibida();
 
@@ -4848,8 +4872,10 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (!progress.isShowing()) progress.show();
+            //AQUI
+            //if (!progress.isShowing()) progress.show();
             progress.setMessage("Llenando detalle de recepción");
+            progress.show();
 
             switch (gl.TipoOpcion){
 
@@ -5012,13 +5038,17 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            progress.show();
+
             progress.setMessage("Validando imprimir barra");
+            progress.show();
 
             if (gl.IdImpresora>0 && gl.MacPrinter!=null){
 
                 progress.cancel();
                 imprimirDesdeBoton=false;
+
+                /****se habilita el boton guardar para evitar doble clic *****/
+                btnTareas.setEnabled(true);
 
                 String alert1 = "Seleccione una opción para imprimir";
                 String alert2 = "(" +  MensajeAdicionalParaImpresion + ")" + "\n" + "\n" + alert1;
@@ -6681,6 +6711,7 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             progress.setMessage("Validando cantidad");
+            progress.show();
 
             if (gl.TipoOpcion==2){
                 return;
@@ -7448,7 +7479,8 @@ public class frm_recepcion_datos extends PBase {
                 mu.msgbox("processActualizaCantidades"+e.getMessage());
             }
 
-            progress.hide();
+            //AQUI
+            //progress.hide();
     }
 
     private void processBeProducto(){
@@ -8036,8 +8068,9 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado;
 
-            progress.show();
             progress.setMessage("Finalizando proceso de guardar recepción");
+            progress.show();
+
 
             //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
             if(!xobj.ws.xmlresult.contains("CustomError")){
@@ -8172,7 +8205,8 @@ public class frm_recepcion_datos extends PBase {
             mu.msgbox("processActualizaCantidadRecibida"+e.getMessage());
         }
 
-        progress.hide();
+        //AQUI
+        //progress.hide();
     }
 
     private  void processMaxIdRecepcionDet(){
@@ -8685,6 +8719,7 @@ public class frm_recepcion_datos extends PBase {
             try {
 
                 progress.setMessage("Procesando respuesta de NAV.");
+                progress.show();
 
                 if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Ingreso){
 
@@ -8704,7 +8739,8 @@ public class frm_recepcion_datos extends PBase {
                 }
                 String respuesta =(String) xobj.getSingle("pRespuesta",String.class);
 
-                progress.cancel();
+                //AQUI
+                //progress.cancel();
 
                 if (procesada){
                     Imprime_Barra_Despues_Guardar();
