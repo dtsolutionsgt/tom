@@ -668,6 +668,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("Finalizar_Picking:"+e.getMessage());
         }
     }

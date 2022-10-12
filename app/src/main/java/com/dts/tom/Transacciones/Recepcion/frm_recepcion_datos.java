@@ -6859,7 +6859,14 @@ public class frm_recepcion_datos extends PBase {
                 valida_fecha_vencimiento();
             });
 
-            dialog.setNegativeButton("No", (dialog1, which) -> progress.cancel());
+            dialog.setNegativeButton("No", (dialog1, which) ->
+                    {
+                        //#GT12102022: sino confirma, habilitar boton Guardar Recepción
+                        progress.cancel();
+                        btnTareas.setEnabled(true);
+                    }
+
+            );
 
             dialog.show();
 
