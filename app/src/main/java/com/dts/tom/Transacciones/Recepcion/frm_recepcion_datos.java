@@ -1043,6 +1043,10 @@ public class frm_recepcion_datos extends PBase {
                         return;
                     }*/
                         Mostrar_Propiedades_Parametros();
+                    }else{
+                        //#GT12102022: habilitar boton porque no cumplio validaDatosIngresados
+                        btnTareas.setEnabled(true);
+                        progress.cancel();
                     }
                 }
             }else{
@@ -4569,6 +4573,10 @@ public class frm_recepcion_datos extends PBase {
                         }else{
                             ContinuaGuardandoRecepcion();
                         }
+                    }else{
+                        //#GT12102022_1400: sino pasa la validación cancelar el progress y habilitar Guardar
+                        progress.cancel();
+                        btnTareas.setEnabled(true);
                     }
                 }else{
                     msgbox("No está definido el producto que se va a recepcionar");
@@ -8437,9 +8445,13 @@ public class frm_recepcion_datos extends PBase {
 
                                 execws(12);
 
-                            }else{
+                            }else {
                                 ContinuaGuardandoRecepcion();
                             }
+                        }else {
+                            //#GT12102022_1410: cancelar progress y mostrar boton guardar
+                            progress.cancel();
+                            btnTareas.setEnabled(true);
                         }
                     }else{
                         msgbox("No está definido el producto que se va a recepcionar");
@@ -8653,6 +8665,10 @@ public class frm_recepcion_datos extends PBase {
                             }else{
                                 ContinuaGuardandoRecepcion();
                             }
+                        }else{
+                            //#GT12102022_1420: cancelar progress y mostrar boton guardar, porque no paso la validación de campos.
+                            progress.cancel();
+                            btnTareas.setEnabled(true);
                         }
                     }else{
                         msgbox("No está definido el producto que se va a recepcionar");
