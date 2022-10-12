@@ -7718,6 +7718,7 @@ public class frm_recepcion_datos extends PBase {
                 }else{
                     toast("Se ha asignado una nueva LP, porque la anterior ya fue asignada, reintente Guardar o, regrese a la lista de tareas.");
                     txtNoLP.setText(LPvalidado);
+                    btnTareas.setEnabled(true);
                 }
 
             }else{
@@ -8592,10 +8593,12 @@ public class frm_recepcion_datos extends PBase {
                     CorelSiguiente = 0;
                     TmpMaxL = 0;
 
+                    btnTareas.setEnabled(true);
                     progress.hide();
                     msgAskAsignarNuevaLp_Reload("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada");
 
                 }else{
+                    btnTareas.setEnabled(true);
                     progress.hide();
                     msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
                 }
