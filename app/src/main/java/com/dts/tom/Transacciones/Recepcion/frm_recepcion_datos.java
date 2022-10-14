@@ -3058,17 +3058,27 @@ public class frm_recepcion_datos extends PBase {
 
             pPresentacion = gl.gselitem.IdPresentacion;
 
-            if (BeProducto.Presentaciones != null) {
-                if (BeProducto.Presentaciones.items != null) {
-                    //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
-                    //#AT20220426 Se obtiene la presentación según el distado de productos del documento de ingreso
-                    auxPres = stream(BeProducto.Presentaciones.items)
-                            .where(c -> c.IdPresentacion == pPresentacion)
-                            .first();
+            //#GT13102022_1500: si existe presentacion en el item continuar validando contra el producto
+            if (pPresentacion>0){
 
-                    resultado =  auxPres.Genera_lp_auto;
+                if (BeProducto.Presentaciones != null) {
+                    if (BeProducto.Presentaciones.items != null) {
+                        //#AT20220411 Se obtiene el IdPresentación directamente de BeProducto.Presentaciones
+                        //#AT20220426 Se obtiene la presentación según el distado de productos del documento de ingreso
+                        auxPres = stream(BeProducto.Presentaciones.items)
+                                .where(c -> c.IdPresentacion == pPresentacion)
+                                .first();
+
+                        resultado =  auxPres.Genera_lp_auto;
+                    }
                 }
+
+            } else{
+                resultado = false;
             }
+
+
+
 
         }catch (Exception ex){
             mu.msgbox(new Object(){}.getClass().getEnclosingMethod() + " " + ex.getMessage());
@@ -5191,6 +5201,9 @@ public class frm_recepcion_datos extends PBase {
             dialog.setTitle(R.string.app_name);
             dialog.setIcon(R.drawable.ic_quest);
 
+            //#GT13102022_1520: habilitar boton guardar porque se cancelo proceso.
+            btnTareas.setEnabled(true);
+
             //#EJC202210061448: Abreviar para hacer mas grande el mensaje.
             //txtMensaje.setText("La fecha de vencimiento del producto " +BeProducto.Codigo+ " - " + BeProducto.Nombre + " es igual o menor a la fecha de hoy.");
             txtMensaje.setText("El vencimiento es igual o menor a la fecha de hoy.");
@@ -6834,11 +6847,13 @@ public class frm_recepcion_datos extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Si", (dialog1, which) -> {
+                btnTareas.setEnabled(false);
                 DespuesDeValidarCantidad();
                 //Continua_Llenando_Detalle_Recepcion_Nueva();
             });
 
             dialog.setNegativeButton("No", (dialog12, which) -> {
+                btnTareas.setEnabled(true);
                 progress.cancel();
                 cmbVenceRec.requestFocus();
             });
