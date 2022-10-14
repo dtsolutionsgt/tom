@@ -2603,7 +2603,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         completaProceso();
                     }
                 }
+            }else{
+                msgbox("No se pudo realizar el cambio de ubicación");
             }
+
             lblCantidad.setText("Cantidad:");
         }catch (Exception ex){
             progress.cancel();

@@ -146,6 +146,15 @@ public class frm_lista_stock_res extends PBase {
         }
     }
 
+    public void recargaRegistros(View view){
+        try {
+            ProgressDialog("Listando detalle...");
+            execws(1);
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
+    }
+
     private boolean ValidaCampos() {
         boolean permite = false;
 
@@ -243,8 +252,8 @@ public class frm_lista_stock_res extends PBase {
 
                         callMethod("Get_Stock_Res_By_Codigo_And_IdUbicacion",
                                          "pIdUbicacion", IdUbic,
-                                               "pCodigo", txtCodigo.getText().toString(),
-                                               "pIdBodega", gl.IdBodega);
+                                         "pCodigo", txtCodigo.getText().toString(),
+                                         "pIdBodega", gl.IdBodega);
                         break;
                 }
 
