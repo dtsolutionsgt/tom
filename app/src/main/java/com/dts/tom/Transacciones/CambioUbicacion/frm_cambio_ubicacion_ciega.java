@@ -1,9 +1,6 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
-import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.selitem;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +31,6 @@ import android.widget.Toast;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
@@ -47,7 +43,6 @@ import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucSta
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
@@ -2245,7 +2240,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (inferir_origen_en_cambio_ubic) {
                         //if (txtUbicOrigen.getText().toString().isEmpty()) {
                         int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                        String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
+                        String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
 
                         txtUbicOrigen.setText(String.valueOf(ubic));
                         lblUbicCompleta.setText(ubicompleta);
@@ -2687,7 +2682,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (cvUbicOrigID == 0) {
                         cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
                         txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
-                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.Nombre_Completo);
                     }
 
                     List AuxList = stream(productoList.items)
@@ -2732,7 +2727,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (inferir_origen_en_cambio_ubic) {
                         cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
                         txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
-                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.Nombre_Completo);
                     }
 
                     if (!pLicensePlate.isEmpty()) {
