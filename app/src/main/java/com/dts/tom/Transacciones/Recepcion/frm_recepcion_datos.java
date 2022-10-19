@@ -676,7 +676,19 @@ public class frm_recepcion_datos extends PBase {
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
-                    guardar_recepcion();
+
+                    //#GT19102022_0800: Mostrar el aviso con el delay
+                    progress.setMessage("Guardando Recepción");
+                    progress.show();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            guardar_recepcion();
+                        }
+                    }, 1000);
+
                     //#CKFK20220525 Modifiqué esto para que en el enter se guarde la recepción
                     /*if (tbLPeso.getVisibility()==View.VISIBLE){
                         txtPeso.requestFocus();
@@ -4602,7 +4614,17 @@ public class frm_recepcion_datos extends PBase {
 
     public void BotonGuardarRecepcion(View view) {
 
-        guardar_recepcion();
+        //#GT19102022_0800: Mostrar el aviso con el delay
+        progress.setMessage("Guardando Recepción");
+        progress.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                guardar_recepcion();
+            }
+        }, 1000);
 
     }
 
@@ -4610,8 +4632,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            progress.setMessage("Guardando Recepción");
-            progress.show();
+
 
             /***********Deshabilitar boton guardar para evitar doble clic *****************/
             btnTareas.setEnabled(false);
@@ -5057,9 +5078,6 @@ public class frm_recepcion_datos extends PBase {
         try{
 
 
-            progress.setMessage("Validando imprimir barra");
-            progress.show();
-
             if (gl.IdImpresora>0 && gl.MacPrinter!=null){
 
                 progress.cancel();
@@ -5142,18 +5160,38 @@ public class frm_recepcion_datos extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
 
             dialog.setPositiveButton("Código", (dialog1, which) -> {
+
+
+                //#GT19102022_0800: Mostrar el aviso con el delay
                 progress.setMessage("Imprimiendo Código");
                 progress.show();
-                Imprimir_Codigo_Barra_Producto(CantCopias);
-                progress.cancel();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Imprimir_Codigo_Barra_Producto(CantCopias);
+                        progress.cancel();
+                    }
+                }, 2000);
+
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
 
+                //#GT19102022_0800: Mostrar el aviso con el delay
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
 
-                Imprimir_Licencia(CantCopias);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Imprimir_Licencia(CantCopias);
+                        progress.cancel();
+                    }
+                }, 2000);
+
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
                 //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
@@ -5165,11 +5203,11 @@ public class frm_recepcion_datos extends PBase {
                     Imprimir_Codigo_Barra_Producto(CantCopias);
                 }*/
 
-                progress.cancel();
             });
 
             dialog.setNeutralButton("Salir", (dialog13, which) -> {
                 if (!imprimirDesdeBoton){
+
                     progress.setMessage("Actualizando valores D.I.");
                     progress.show();
                     Actualiza_Valores_Despues_Imprimir(true);
@@ -7380,7 +7418,19 @@ public class frm_recepcion_datos extends PBase {
                     processNuevoLPS();
                     break;
                 case 16:
-                    processGuardarRecNueva();
+
+                    //#GT19102022_0800: Mostrar el aviso con el delay
+                    progress.setMessage("Finalizando proceso de guardar recepción");
+                    progress.show();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            processGuardarRecNueva();
+                        }
+                    }, 1000);
+
                     break;
                 case 17:
                     processGuardarRecModif();
@@ -8088,10 +8138,34 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Registrando ingreso de compra en ERP");
                 execws(26);
             }else{
-                Imprime_Barra_Despues_Guardar();
+
+
+                //#GT19102022_0800: Mostrar el aviso con el delay
+                progress.setMessage("Validando imprimir barra");
+                progress.show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Imprime_Barra_Despues_Guardar();
+                    }
+                }, 1000);
+
             }
         }else{
-            Imprime_Barra_Despues_Guardar();
+
+            //#GT19102022_0800: Mostrar el aviso con el delay
+            progress.setMessage("Validando imprimir barra");
+            progress.show();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Imprime_Barra_Despues_Guardar();
+                }
+            }, 2000);
         }
 
     }
@@ -8102,10 +8176,6 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             String Resultado;
-
-            progress.setMessage("Finalizando proceso de guardar recepción");
-            progress.show();
-
 
             //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
             if(!xobj.ws.xmlresult.contains("CustomError")){
@@ -8159,8 +8229,18 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado;
 
-            progress.show();
+            //#GT19102022_0800: Mostrar el aviso con el delay
             progress.setMessage("Finalizando proceso de guardar recepción");
+            progress.show();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Aqui no se hace nada, solo es la pausa par amostrar el progress.
+                }
+            }, 1000);
+
 
             Resultado = xobj.getresult(String.class,"GuardarRecepcionModif");
 
