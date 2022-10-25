@@ -3121,14 +3121,24 @@ public class frm_recepcion_datos extends PBase {
                 boolean pPresentacion_Genera_Lp = Get_Genera_Lp_Presentacion();
 
                 //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-                if (!BeProducto.Genera_lp && !pPresentacion_Genera_Lp){
+                if (gl.gBeOrdenCompra.Push_To_NAV &&
+                        (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC ||
+                                dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
+                                dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC)){
+                    TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
+                    lblLicPlate.setVisibility(View.VISIBLE);
+                    txtNoLP.setFocusable(true);
+                    txtNoLP.setFocusableInTouchMode(true);
+                    txtNoLP.setClickable(true);
+                    txtNoLP.setVisibility(View.VISIBLE);
+                }else if (!BeProducto.Genera_lp && !pPresentacion_Genera_Lp){
                     TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
                     lblLicPlate.setVisibility(View.GONE);
                     txtNoLP.setFocusable(false);
                     txtNoLP.setFocusableInTouchMode(false);
                     txtNoLP.setClickable(false);
                     txtNoLP.setVisibility(View.GONE);
-                }else{
+                }else {
                     TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
                     lblLicPlate.setVisibility(View.VISIBLE);
                     txtNoLP.setFocusable(true);
