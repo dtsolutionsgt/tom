@@ -1763,10 +1763,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                             //#AT20220917 Se llama cuando el idstock es diferente a 0
                             callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
-                                            "pIdStock", cvStockID,
-                                                  "pIdBodega", gl.IdBodega,
-                                                  "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
-                                                  "pIdOperador", gl.IdOperador);
+                                       "pIdStock", cvStockID,
+                                       "pIdBodega", gl.IdBodega,
+                                       "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                       "pIdOperador", gl.IdOperador);
 
                         } else {
 
@@ -3738,6 +3738,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //#EJC20220930
             if(!txtLicPlate.getText().toString().isEmpty()){
                 if(!escaneoPallet){
+                    //escaneoPallet = true;
                     mu.msgbox("Aquí tenemos un problema!");
                 }
             }
