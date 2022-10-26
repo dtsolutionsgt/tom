@@ -1272,7 +1272,7 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 15:
                         //#CKFK20220524 Agregué esta funcion para obtener el detalle de la OC
-                        callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH","pIdOrdenCompraEnc",vIdOrdenCompra);
+                        callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH2","pIdOrdenCompraEnc",vIdOrdenCompra,"pIdBodega",gl.IdBodega);
                         break;
                 }
 
@@ -1595,7 +1595,9 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH");
+            progress.cancel();
+
+            gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH2");
 
             //#AT20220708 Si esta linea ocasiona algún error por favor notificar, ya que es necesario cuando se recibe la presentación con unidades.
             pListDetalleOC.items = gl.gpListDetalleOC.items;
@@ -1603,8 +1605,6 @@ public class frm_list_rec_prod extends PBase {
             Lista_Detalle_Documento_Ingreso();
 
             ordenar();
-
-            progress.cancel();
 
             if(Recepcion_Completa()){
                 msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");

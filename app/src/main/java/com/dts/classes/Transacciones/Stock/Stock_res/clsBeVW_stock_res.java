@@ -115,6 +115,14 @@ public class clsBeVW_stock_res {
   @Element(required=false) public int IdUbicacionVirtual=0;
   @Element(required=false) public int IdOperadorBodega_Asignado=0;
 
+  //#EJC202210140242AM_No_Existentes_BOF
+  @Element(required=false) public boolean Control_lote=false;
+  @Element(required=false) public boolean Control_vencimiento=false;
+  @Element(required=false) public boolean Control_peso=false;
+  @Element(required=false) public String Nombre_UnidadMedida="";
+  @Element(required=false) public double Peso_referencia=0;
+  @Element(required=false) public int IdTipoEtiqueta=0;
+
   public clsBeVW_stock_res() {
   }
 

@@ -3077,9 +3077,6 @@ public class frm_recepcion_datos extends PBase {
                 resultado = false;
             }
 
-
-
-
         }catch (Exception ex){
             mu.msgbox(new Object(){}.getClass().getEnclosingMethod() + " " + ex.getMessage());
         }
@@ -4975,6 +4972,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Crear_copias() {
+
         clsBeTrans_re_det ItemTrasReDet = new clsBeTrans_re_det();
         clsBeStock_rec ItemStockRec = new clsBeStock_rec();
         int CorelSigDet = 0;
@@ -7096,9 +7094,25 @@ public class frm_recepcion_datos extends PBase {
                                        "pBeTransOcDet",gl.gselitem);
 
                         }else{
-                            callMethod("Guardar_Recepcion",
-                                    "pRecEnc", gl.gBeRecepcion,
-                                    "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+//                            callMethod("Guardar_Recepcion",
+//                                    "pRecEnc", gl.gBeRecepcion,
+//                                    "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+//                                    "pListStockRecSer", pListBeStockSeRec.items,
+//                                    "pListStockRec", pListBeStockRec.items,
+//                                    "pListProductoPallet", listaProdPalletsNuevos.items,
+//                                    "pLotesRec", BeDetalleLotes,
+//                                    "pIdEmpresa", gl.IdEmpresa,
+//                                    "pIdBodega", gl.IdBodega,
+//                                    "pIdUsuario", gl.IdOperador,
+//                                    "pIdResolucionLp", gl.IdResolucionLpOperador,
+//                                    "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+
+                            callMethod("Guardar_Recepcion_S",
+                                    "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
+                                    "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
+                                    "pIdOrdenCompraEnc", pIdOrdenCompraEnc,
+                                    "BeRecDet", BeTransReDet,
+                                    "pListRecDetParam",plistBeReDetParametros.items,
                                     "pListStockRecSer", pListBeStockSeRec.items,
                                     "pListStockRec", pListBeStockRec.items,
                                     "pListProductoPallet", listaProdPalletsNuevos.items,
@@ -7108,6 +7122,7 @@ public class frm_recepcion_datos extends PBase {
                                     "pIdUsuario", gl.IdOperador,
                                     "pIdResolucionLp", gl.IdResolucionLpOperador,
                                     "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+
                         }
 
                         break;
@@ -8115,7 +8130,8 @@ public class frm_recepcion_datos extends PBase {
                     Resultado = xobj.getresult(String.class, "Guardar_Recepcion_Sin_Presentacion");
                 } else {
                     gl.gSinPresentacion = false;
-                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
+                    //Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
+                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion_S");
                 }
 
 
