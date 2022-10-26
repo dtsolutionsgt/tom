@@ -1897,7 +1897,7 @@ public class frm_Packing extends PBase {
                     //y la ubicación de origen esta vacia carga los datos del producto unicamente con la licencia
                     if (inferir_origen_en_cambio_ubic && txtUbicOr.getText().toString().isEmpty()) {
                         int tmpIdPres = ListBeStockPallet.items.get(0).Stock.IdUbicacion;
-                        String tmpNomPres = ListBeStockPallet.items.get(0).Stock.NombreUbicacion;
+                        String tmpNomPres = ListBeStockPallet.items.get(0).Stock.Nombre_Completo;
 
                         txtUbicOr.setText(String.valueOf(tmpIdPres));
                         lblUbicOrigen.setText(tmpNomPres);

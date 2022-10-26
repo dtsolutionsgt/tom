@@ -1,9 +1,6 @@
 package com.dts.tom.Transacciones.CambioUbicacion;
 
-import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.selitem;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +31,6 @@ import android.widget.Toast;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
@@ -47,7 +43,6 @@ import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucSta
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
@@ -64,6 +59,7 @@ import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
+import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -255,16 +251,29 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
 
                     lblUbicCompleta.setText(gl.existencia.Ubic);
-                    txtLicPlate.setText(gl.existencia.LicPlate);
                     txtCodigoPrd.setText(gl.existencia.Codigo);
 
-                    if (!gl.existencia.getLicPlate().isEmpty()) {
+                    if (!gl.existencia.getLicPlate().isEmpty() && !gl.existencia.LicPlate.equals("0")) {
+                        escaneoPallet = true;
+                        txtLicPlate.setText(gl.existencia.LicPlate);
                         pLicensePlate = gl.existencia.LicPlate;
+                        execws(18);
                     } else {
-                        pLicensePlate = "";
-                    }
+                        /*RegresarCambioExistencia();
+                        toastlong("Licencia 0 o es vacía.");
+                        super.finish();*/
 
-                    execws(3);
+                        //Obtiene el producto
+                        pLicensePlate = "";
+                        execws(3);
+                    }/*else {
+                        pLicensePlate = "";
+                        txtLicPlate.setText("");
+                        execws(3);
+                    }*/
+
+                    //Vamos a probar este cambio al execws(18):
+                    //execws(3);
                 } else {
 
                     if (!inferir_origen_en_cambio_ubic) {
@@ -1126,8 +1135,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         progress.cancel();
                         return;
                     }else{
-                        //LLama este procedimiento del WS Get_Productos_By_IdUbicacion
-                        execws(7);
+
+                        if (CambioUbicExistencia) {
+                            if (CambioUbicDetallado) {
+                                execws(23);
+                            } else {
+                                execws(7);
+                            }
+                        } else {
+                            execws(7);
+                        }
                     }
                 }else{
                     msgbox("Ubicación origen no válida.");
@@ -1616,6 +1633,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 22:
                     processCambioUbicacion();
                     break;
+                case 23:
+                    processProductoUbicDetallado();
+                    break;
 
             }
 
@@ -1748,10 +1768,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                             //#AT20220917 Se llama cuando el idstock es diferente a 0
                             callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
-                                            "pIdStock", cvStockID,
-                                                  "pIdBodega", gl.IdBodega,
-                                                  "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
-                                                  "pIdOperador", gl.IdOperador);
+                                       "pIdStock", cvStockID,
+                                       "pIdBodega", gl.IdBodega,
+                                       "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                       "pIdOperador", gl.IdOperador);
 
                         } else {
 
@@ -1764,6 +1784,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         }
 
+                        break;
+                    case 23:
+                        if (!gl.existencia.Vence.contains("T")) {
+                            gl.existencia.Vence = du.convierteFecha(gl.existencia.Vence);
+                        }
+
+                        callMethod("Get_Productos_By_StockResCI",
+                                         "BeStockResCI", gl.existencia);
                         break;
 
                 }
@@ -2245,7 +2273,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (inferir_origen_en_cambio_ubic) {
                         //if (txtUbicOrigen.getText().toString().isEmpty()) {
                         int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                        String ubicompleta = productoList.items.get(0).Stock.NombreUbicacion;
+                        String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
 
                         txtUbicOrigen.setText(String.valueOf(ubic));
                         lblUbicCompleta.setText(ubicompleta);
@@ -2380,6 +2408,33 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
+
+            if (stockResList != null){
+                //LlenaPresentaciones();
+                setPresentacion();
+            }else{
+
+                msgbox("El producto no existe en la ubicación origen");
+                txtCodigoPrd.requestFocus();
+                txtCodigoPrd.selectAll();
+                progress.cancel();
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
+    }
+
+    private void processProductoUbicDetallado(){
+
+        try {
+
+            progress.setMessage("Cargando producto en esta ubicación");
+            progress.show();
+
+            stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
 
             if (stockResList != null){
                 //LlenaPresentaciones();
@@ -2603,7 +2658,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         completaProceso();
                     }
                 }
+            }else{
+                msgbox("No se pudo realizar el cambio de ubicación");
             }
+
             lblCantidad.setText("Cantidad:");
         }catch (Exception ex){
             progress.cancel();
@@ -2684,7 +2742,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (cvUbicOrigID == 0) {
                         cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
                         txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
-                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.Nombre_Completo);
                     }
 
                     List AuxList = stream(productoList.items)
@@ -2729,7 +2787,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (inferir_origen_en_cambio_ubic) {
                         cvUbicOrigID = productoList.items.get(0).Stock.IdUbicacion;
                         txtUbicOrigen.setText(String.valueOf(cvUbicOrigID));
-                        lblUbicCompleta.setText(productoList.items.get(0).Stock.NombreUbicacion);
+                        lblUbicCompleta.setText(productoList.items.get(0).Stock.Nombre_Completo);
                     }
 
                     if (!pLicensePlate.isEmpty()) {
@@ -3116,7 +3174,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                startActivity(new Intent(frm_cambio_ubicacion_ciega.this, frm_consulta_stock.class));
+                CambioUbicExistencia=false;
+                gl.existencia = null;
+                //startActivity(new Intent(frm_cambio_ubicacion_ciega.this, frm_consulta_stock.class));
                 finish();
             }
         });
@@ -3686,6 +3746,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //#EJC20220930
             if(!txtLicPlate.getText().toString().isEmpty()){
                 if(!escaneoPallet){
+                    //escaneoPallet = true;
                     mu.msgbox("Aquí tenemos un problema!");
                 }
             }
@@ -4032,14 +4093,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    public void RegresarCambioExistencia() {
+        CambioUbicExistencia=false;
+        gl.existencia = null;
+    }
+
     public void Regresar(View view){
 
         if (CambioUbicExistencia) {
-            CambioUbicExistencia=false;
-            gl.existencia = null;
+            RegresarCambioExistencia();
         }
 
-        finish();
+        super.finish();
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (CambioUbicExistencia) {
+            RegresarCambioExistencia();
+        }
+
+        super.onBackPressed();
+    }
 }

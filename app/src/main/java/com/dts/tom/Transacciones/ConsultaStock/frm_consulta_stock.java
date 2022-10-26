@@ -77,6 +77,7 @@ public class frm_consulta_stock extends PBase {
     //clsBeVW_stock_res_CI  ItemSelected;
     private TextView lblTituloForma;
     private Spinner cmbEstadoExist, spOrdenar;
+    public static boolean CambioUbicDetallado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,6 +278,8 @@ public class frm_consulta_stock extends PBase {
                     // AT 20211221 lo hace sin importar que la posición sea  = a 0
                     //if (position > 0) {
                     gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+
+                    CambioUbicDetallado = chkDetalle.isChecked() ? true : false;
 
                     try {
                         if (gl.existencia.IdProductoBodega!=-1) {

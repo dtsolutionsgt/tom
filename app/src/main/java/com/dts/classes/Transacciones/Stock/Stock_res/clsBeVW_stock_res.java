@@ -94,7 +94,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public Boolean Pallet_No_Estandar=false;
   @Element(required=false) public int Posiciones=0;
   @Element(required=false) public String codigo_poliza="";
-  @Element(required=false) public String numero_orden="";
+  @Element(required=false) public String Numero_poliza ="";
   @Element(required=false) public String Documento_Ingreso="";
   @Element(required=false) public boolean ubicacion_picking=false;
   @Element(required=false) public String Host="";
@@ -110,7 +110,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Nombre_Clasificacion="";
 
   @Element(required=false) public String Area="";
-  @Element(required=false) public String NombreUbicacion="";
+  @Element(required=false) public String Nombre_Completo ="";
   @Element(required=false) public int IdPresentacion_Anterior = 0;
   @Element(required=false) public int IdUbicacionVirtual=0;
   @Element(required=false) public int IdOperadorBodega_Asignado=0;
@@ -148,7 +148,7 @@ public class clsBeVW_stock_res {
                            String No_Serie_Inicial,String No_Serie_Final,double CantidadReservada,int IdFamilia,
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
-                           String Documento_Ingreso, String Nombre_clasificacion, String NombreUbicacion, int no_linea, int IdPresentacion_Anterior,
+                           String Documento_Ingreso, String Nombre_clasificacion, String Nombre_Completo, int no_linea, int IdPresentacion_Anterior,
                            int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion) {
 
     this.IdBodega=IdBodega;
@@ -237,9 +237,9 @@ public class clsBeVW_stock_res {
     this.Pallet_No_Estandar=Pallet_No_Estandar;
     this.Posiciones = Posiciones;
     this.codigo_poliza = codigo_poliza;
-    this.numero_orden = numero_orden;
+    this.Numero_poliza = numero_orden;
     this.Documento_Ingreso = Documento_Ingreso;
-    this.NombreUbicacion = NombreUbicacion;
+    this.Nombre_Completo = Nombre_Completo;
     this.no_linea = no_linea;
     this.IdPresentacion_Anterior = IdPresentacion_Anterior;
     this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
@@ -764,11 +764,11 @@ public class clsBeVW_stock_res {
   public void setCodigo_poliza(String value) {
     codigo_poliza=value;
   }
-  public String getNumero_orden() {
-    return numero_orden;
+  public String getNumero_poliza() {
+    return Numero_poliza;
   }
-  public void setNumero_orden(String value) {
-    numero_orden=value;
+  public void setNumero_poliza(String value) {
+    Numero_poliza =value;
   }
   public String getDocumento_Ingreso() {
     return Documento_Ingreso;
@@ -825,11 +825,11 @@ public class clsBeVW_stock_res {
     Area=value;
   }
 
-  public String getNombreUbicacion() {
-    return NombreUbicacion;
+  public String getNombre_Completo() {
+    return Nombre_Completo;
   }
-  public void setNombreUbicacion(String value) {
-    NombreUbicacion=value;
+  public void setNombre_Completo(String value) {
+    Nombre_Completo =value;
   }
 
   public int getNo_linea() {

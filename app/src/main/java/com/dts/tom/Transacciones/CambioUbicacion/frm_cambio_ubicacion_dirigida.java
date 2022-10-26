@@ -504,10 +504,24 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 return;
             }
 
+            if (Integer.valueOf(txtUbicOrigen.getText().toString()) != gl.IdOrigen) {
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                mu.msgbox("La ubicación origen no coincide");
+            }
+
+            //#CKFK20221014 Agregué esta validación para que la ubicación origen sea válida
             if (txtUbicDestino.getText().toString().isEmpty()) {
                 mu.msgbox("Debe ingresar la ubicación destino");
                 txtUbicDestino.requestFocus();
                 return;
+            }
+
+            //#CKFK20221014 Agregué esta validación para que la ubicación destino sea válida
+            if (Integer.valueOf(txtUbicDestino.getText().toString()) != gl.IdDestino) {
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                mu.msgbox("La ubicación destino no coincide");
             }
 
             if (vCantidadAUbicar<0) {
