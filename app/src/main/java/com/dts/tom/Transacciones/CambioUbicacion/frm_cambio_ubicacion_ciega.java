@@ -59,7 +59,7 @@ import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
-//import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
+import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -259,9 +259,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         pLicensePlate = gl.existencia.LicPlate;
                         execws(18);
                     } else {
-                        RegresarCambioExistencia();
+                        /*RegresarCambioExistencia();
                         toastlong("Licencia 0 o es vacía.");
-                        super.finish();
+                        super.finish();*/
+
+                        //Obtiene el producto
+                        pLicensePlate = "";
+                        execws(3);
                     }/*else {
                         pLicensePlate = "";
                         txtLicPlate.setText("");
@@ -1131,15 +1135,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         progress.cancel();
                         return;
                     }else{
-                        /*if (CambioUbicExistencia) {
+
+                        if (CambioUbicExistencia) {
                             if (CambioUbicDetallado) {
                                 execws(23);
                             } else {
                                 execws(7);
                             }
-                        } else {*/
+                        } else {
                             execws(7);
-                        //}
+                        }
                     }
                 }else{
                     msgbox("Ubicación origen no válida.");
@@ -1781,9 +1786,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         break;
                     case 23:
-                        callMethod("Get_Productos_By_IdUbicacion_Detallado",
-                                "pIdUbicacion", txtUbicOrigen.getText().toString(),
-                                "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega);
+                        if (!gl.existencia.Vence.contains("T")) {
+                            gl.existencia.Vence = du.convierteFecha(gl.existencia.Vence);
+                        }
+
+                        callMethod("Get_Productos_By_StockResCI",
+                                         "BeStockResCI", gl.existencia);
                         break;
 
                 }
@@ -2426,7 +2434,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.setMessage("Cargando producto en esta ubicación");
             progress.show();
 
-            stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_Detallado");
+            stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
 
             if (stockResList != null){
                 //LlenaPresentaciones();
