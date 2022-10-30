@@ -6,6 +6,69 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.Recepcion.frm_list_rec_prod_detalle">
 
+    <TableRow
+        android:id="@+id/trOpcionees"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblNoDocumento2">
+
+        <ImageView
+            android:id="@+id/imgImprimir"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="Imprimir"
+            android:padding="10dp"
+            android:src="@drawable/login_printer"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/cmdEliminar"
+            android:layout_width="76dp"
+            android:layout_height="match_parent"
+            android:onClick="Eliminar"
+            android:src="@drawable/borrardet"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnCompletaRec2"
+            android:layout_width="204dp"
+            android:layout_height="wrap_content"
+            android:background="@color/rosado"
+            android:text="Incompleta"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            android:textStyle="normal" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/trFiltro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trOpcionees" >
+
+        <TextView
+            android:id="@+id/textView97"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Código:" />
+
+        <EditText
+            android:id="@+id/txtCodigoProductoRecepcion2"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnModo"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorPrimary"
+            android:text="R."
+            android:textColor="#FAF9F9" />
+    </TableRow>
+
     <HorizontalScrollView
         android:id="@+id/srollRecDet"
         android:layout_width="match_parent"
@@ -21,67 +84,6 @@
             android:layout_marginTop="1dp"
             android:layout_marginBottom="1dp" />
     </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/textView97"
-        style="@style/StyleText"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/txtCodigoProductoRecepcion2"
-        android:layout_alignBottom="@id/txtCodigoProductoRecepcion2"
-        android:text="Código:" />
-
-    <EditText
-        android:id="@+id/txtCodigoProductoRecepcion2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnCompletaRec2"
-        android:layout_alignStart="@id/btnCompletaRec2"
-        android:layout_alignEnd="@id/btnCompletaRec2"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="0dp"
-        android:inputType="textPersonName" />
-
-    <ImageView
-        android:id="@+id/imgImprimir"
-        android:layout_width="70dp"
-        android:layout_height="54dp"
-        android:layout_above="@id/textView97"
-        android:layout_below="@id/lblNoDocumento2"
-        android:onClick="Imprimir"
-        android:padding="10dp"
-        android:src="@drawable/login_printer"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/cmdEliminar"
-        android:layout_width="160dp"
-        android:layout_height="54dp"
-        android:layout_below="@+id/lblNoDocumento2"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="-72dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@+id/btnCompletaRec2"
-        android:layout_toEndOf="@+id/imgImprimir"
-        android:onClick="Eliminar"
-        android:src="@drawable/borrardet"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/btnCompletaRec2"
-        android:layout_width="204dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblNoDocumento2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="93dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="44dp"
-        android:background="@color/rosado"
-        android:text="Incompleta"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/lblNoDocumento2"
@@ -179,17 +181,5 @@
         android:background="#03508A"
         android:text="Regs: 1"
         android:textColor="#FDFCFC" />
-
-    <Button
-        android:id="@+id/btnModo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtCodigoProductoRecepcion2"
-        android:layout_alignBottom="@+id/txtCodigoProductoRecepcion2"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/txtCodigoProductoRecepcion2"
-        android:background="@color/colorPrimary"
-        android:text="R."
-        android:textColor="#FAF9F9" />
 
 </RelativeLayout>
