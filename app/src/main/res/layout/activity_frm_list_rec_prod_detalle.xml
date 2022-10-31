@@ -10,7 +10,8 @@
         android:id="@+id/trOpciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lblNoDocumento2">
+        android:layout_below="@id/lblNoDocumento2"
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/imgImprimir"
@@ -34,6 +35,7 @@
             android:layout_width="204dp"
             android:layout_height="wrap_content"
             android:background="@color/rosado"
+            android:gravity="center|center_horizontal|center_vertical"
             android:text="Incompleta"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
@@ -44,7 +46,8 @@
         android:id="@+id/trFiltro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/trOpciones" >
+        android:layout_below="@id/trOpciones"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/textView97"
@@ -55,27 +58,29 @@
 
         <EditText
             android:id="@+id/txtCodigoProductoRecepcion2"
-            android:layout_width="287dp"
-            android:layout_height="match_parent"
+            android:layout_width="302dp"
+            android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/btnModo"
-            android:layout_width="53dp"
+            android:layout_width="36dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_gravity="center|center_horizontal|center_vertical"
             android:background="@color/colorPrimary"
             android:text="R."
-            android:textColor="#FAF9F9" />
+            android:textColor="#FAF9F9"
+            android:textSize="18sp" />
     </TableRow>
 
     <HorizontalScrollView
         android:id="@+id/srollRecDet"
         android:layout_width="match_parent"
-        android:layout_height="437dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/btnCorregir"
         android:layout_below="@id/trFiltro"
-        android:layout_marginBottom="0dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <ListView
             android:id="@+id/listRecDet"
@@ -170,7 +175,7 @@
     <Button
         android:id="@+id/btnRegs"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignTop="@+id/btnCorregir"
         android:layout_alignBottom="@+id/btnCorregir"
         android:layout_alignParentEnd="true"
@@ -179,7 +184,9 @@
         android:layout_marginEnd="5dp"
         android:layout_toEndOf="@+id/btnCorregir"
         android:background="#03508A"
+        android:gravity="center|center_horizontal|center_vertical"
         android:text="Regs: 1"
-        android:textColor="#FDFCFC" />
+        android:textColor="#FDFCFC"
+        android:textSize="18sp" />
 
 </RelativeLayout>
