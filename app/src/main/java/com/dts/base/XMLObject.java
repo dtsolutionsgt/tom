@@ -4,9 +4,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
 import android.util.Xml;
-import com.ximpleware.AutoPilot;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
 
 import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
 

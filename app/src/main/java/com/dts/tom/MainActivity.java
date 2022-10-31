@@ -932,6 +932,14 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             String jsonArray = ws.xmlresult;
             List<clsBeEmpresaBase> vempresas = getList(jsonArray, clsBeEmpresaBase.class);
 
+            if(vempresas != null){
+
+                empresas = new clsBeEmpresaAndList();
+                empresas.items = new ArrayList<>();
+                empresas.items = vempresas;
+
+            }
+
             if(empresas != null){
 
                 if(empresas.items != null){
@@ -951,6 +959,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            Log.e("Error al listar empresas", e.getMessage());
         }
     }
 
@@ -1180,7 +1189,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         String filePathImg = null;
 
-        try    {
+        try{
+
             emplist.clear();
 
             String dirLogosEmpresa = getApplicationContext().getFilesDir() + "/LogosEmpresa/";
@@ -1230,7 +1240,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinemp.setAdapter(dataAdapter);
 
-            if (emplist.size()>0) spinemp.setSelection(0);
+            if (emplist.size()>0){
+                spinemp.setSelection(0);
+            }
 
             //#EJC20210223: Set las image get from empresa, por ahora solo funcionará para una empresa, en el futuro lo debo mejorar para que funcione para N
             if (filePathImg != null) {
@@ -1242,6 +1254,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         } catch (Exception e)
         {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
+            Log.e("Error en fillspin", e.getMessage());
         }
     }
 
