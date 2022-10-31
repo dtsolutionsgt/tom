@@ -421,7 +421,8 @@ public class frm_picking_datos extends PBase {
 
         try {
             txtCantidadPick.setEnabled(false);
-            if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")) {
+            //&& !gBePickingUbic.Lic_plate.equals("0")
+            if (!gBePickingUbic.Lic_plate.isEmpty() ) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 txtLicencia.setVisibility(View.VISIBLE);
                 lblLicenciaPicking.setVisibility(View.VISIBLE);
