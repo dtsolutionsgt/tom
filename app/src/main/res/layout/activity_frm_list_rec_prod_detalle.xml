@@ -7,14 +7,14 @@
     tools:context=".Transacciones.Recepcion.frm_list_rec_prod_detalle">
 
     <TableRow
-        android:id="@+id/trOpcionees"
+        android:id="@+id/trOpciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblNoDocumento2">
 
         <ImageView
             android:id="@+id/imgImprimir"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:onClick="Imprimir"
             android:padding="10dp"
@@ -23,7 +23,7 @@
 
         <ImageView
             android:id="@+id/cmdEliminar"
-            android:layout_width="76dp"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             android:onClick="Eliminar"
             android:src="@drawable/borrardet"
@@ -44,7 +44,7 @@
         android:id="@+id/trFiltro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/trOpcionees" >
+        android:layout_below="@id/trOpciones" >
 
         <TextView
             android:id="@+id/textView97"
@@ -55,7 +55,7 @@
 
         <EditText
             android:id="@+id/txtCodigoProductoRecepcion2"
-            android:layout_width="300dp"
+            android:layout_width="287dp"
             android:layout_height="match_parent"
             android:inputType="textPersonName" />
 
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="437dp"
         android:layout_above="@+id/btnCorregir"
-        android:layout_below="@id/txtCodigoProductoRecepcion2"
+        android:layout_below="@id/trFiltro"
         android:layout_marginBottom="0dp">
 
         <ListView
@@ -145,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/relbot"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="5dp"
         android:background="@android:color/holo_red_light"
         android:text="Borra todas"
@@ -158,7 +158,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/btnBorrarTd"
         android:layout_alignBottom="@+id/btnBorrarTd"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/btnBorrarTd"
@@ -174,9 +174,9 @@
         android:layout_alignTop="@+id/btnCorregir"
         android:layout_alignBottom="@+id/btnCorregir"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="5dp"
         android:layout_toEndOf="@+id/btnCorregir"
         android:background="#03508A"
         android:text="Regs: 1"

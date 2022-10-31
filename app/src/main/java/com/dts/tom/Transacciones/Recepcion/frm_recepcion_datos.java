@@ -286,7 +286,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
     private int tipoCaptura = 1;
-    private int CorelSiguiente;
+    private long CorelSiguiente;
     private int TmpMaxL;
     private int CantidadCopias;
 
@@ -7107,7 +7107,6 @@ public class frm_recepcion_datos extends PBase {
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
 
-
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
                         if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
                                 gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
@@ -7792,10 +7791,10 @@ public class frm_recepcion_datos extends PBase {
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                int intLPSig = (int) pLpSiguiente;
+                long intLPSig = (long) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
@@ -7849,10 +7848,10 @@ public class frm_recepcion_datos extends PBase {
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                int intLPSig = (int) pLpSiguiente;
+                long intLPSig = (long) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
                 //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo
