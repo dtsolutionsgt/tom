@@ -7170,7 +7170,6 @@ public class frm_recepcion_datos extends PBase {
                                     "pIdUsuario", gl.IdOperador,
                                     "pIdResolucionLp", gl.IdResolucionLpOperador,
                                     "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
-
                         }
 
                         break;

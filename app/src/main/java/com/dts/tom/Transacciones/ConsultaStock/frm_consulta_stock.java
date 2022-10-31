@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +36,8 @@ import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock2;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,6 +47,9 @@ import java.util.Map;
 import static java.util.stream.Collectors.groupingBy;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 
 public class frm_consulta_stock extends PBase {
@@ -355,6 +361,7 @@ public class frm_consulta_stock extends PBase {
     }
 
     private void processUbicacion() {
+
         try {
 
             cUbic =xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
@@ -409,6 +416,7 @@ public class frm_consulta_stock extends PBase {
     }
 
     private void listaStock() {
+
         String lpid,cod,lname="";
         double uni,tuni,tExistUmbas, tResUmbas, tDispUmbas, tResPres, tDisPres;
         double existUmbas, resUmbas, dispUmbas,resPres, disPres;
@@ -418,7 +426,11 @@ public class frm_consulta_stock extends PBase {
         clsBeVW_stock_res_CI item;
 
         try {
+
             items_stock.clear();
+
+            ProgressDialog("Procesando lista de existencias");
+
 
             switch (ws.callback) {
                 case 2:
@@ -430,6 +442,7 @@ public class frm_consulta_stock extends PBase {
             }
 
             if (pListStock2 != null) {
+
                 conteo = pListStock2.items.size();
 
                 if(conteo == 0 || pListStock2.items.isEmpty()){
@@ -437,12 +450,6 @@ public class frm_consulta_stock extends PBase {
                     lblNombreUbicacion.setText("U.S.P");
                     idle = true;
                 } else {
-
-                    // lbldescripcion.setText("");
-
-                    //AT 20211221 ya no se agrega un item vacío
-                    //vItem = new clsBeVW_stock_res_CI();
-                    //items_stock.add(vItem);
 
                     registros.setText("REGISTROS: "+ conteo);
 
@@ -454,6 +461,7 @@ public class frm_consulta_stock extends PBase {
                         cod=pListStock2.items.get(i).Codigo;
 
                         if (!cod.equals(lpid)) {
+
                             if (lcnt>1) {
 
                                 item = new clsBeVW_stock_res_CI();
@@ -497,7 +505,6 @@ public class frm_consulta_stock extends PBase {
                         }
 
                         item = new clsBeVW_stock_res_CI();
-
                         item.Codigo = pListStock2.items.get(i).Codigo;
                         item.Nombre = pListStock2.items.get(i).Nombre;lname=item.Nombre;
                         item.UM = pListStock2.items.get(i).UM;
@@ -595,7 +602,6 @@ public class frm_consulta_stock extends PBase {
 
                     }
 
-
                     if (gl.Mostrar_Area_En_HH) {
                         adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
                         listView.setAdapter(adapter_stock2);
@@ -641,6 +647,8 @@ public class frm_consulta_stock extends PBase {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            progress.cancel();
         }
     }
 
@@ -652,10 +660,6 @@ public class frm_consulta_stock extends PBase {
         try{
 
             items_stock.clear();
-
-            //AT 20211221 ya no se agrega un item vacío
-            //vItem = new clsBeVW_stock_res_CI();
-            //items_stock.add(vItem);
 
             registros.setText("REGISTROS: "+ conteo);
 
@@ -716,10 +720,6 @@ public class frm_consulta_stock extends PBase {
         clsBeVW_stock_res_CI vItem;
 
         if(estado == "" && selest>0){
-
-            //AT 20211221 ya no se agrega un item vacío
-            //vItem = new clsBeVW_stock_res_CI();
-            //items_stock2.add(vItem);
 
             for (int i = 0; i < pListStock2.items.size(); i++) {
 

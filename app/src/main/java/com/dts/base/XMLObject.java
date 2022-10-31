@@ -3,6 +3,10 @@ package com.dts.base;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
+import android.util.Xml;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
 
 import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
 
@@ -12,15 +16,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -166,27 +176,20 @@ public class XMLObject  {
 
             try {
 
-                mequedeaqui=1;
-
                 try{
 
-                    istream = new ByteArrayInputStream( ws.xmlresult.getBytes() );
+                    istream = new ByteArrayInputStream(ws.xmlresult.getBytes() );
 
                 }catch (Exception ex){
                     Log.i("A","B");
                 }
 
                 builderFactory = DocumentBuilderFactory.newInstance();
-                mequedeaqui=-1;
                 docBuilder = builderFactory.newDocumentBuilder();
-                mequedeaqui=-2;
 
                 if(istream.available()==0)
                 {
-                    Log.i("notfound","nimershhere");
-                    mequedeaqui=-2.5;
-                    istream = new ByteArrayInputStream( ws.xmlresult.getBytes());
-                    mequedeaqui=-2.6;
+                    istream = new ByteArrayInputStream(ws.xmlresult.getBytes());
                 }
 
                 if(istream.available()==0)
@@ -196,12 +199,8 @@ public class XMLObject  {
 
                 }
 
-                mequedeaqui=-2.7;
                 Document doc = docBuilder.parse(istream);
-
-                mequedeaqui=2;
                 Element root=doc.getDocumentElement();
-                mequedeaqui=3;
                 NodeList children=root.getChildNodes();
                 Node bodyroot=children.item(0);
                 NodeList body=bodyroot.getChildNodes();
@@ -211,12 +210,12 @@ public class XMLObject  {
                 if (responseroot!=null){
 
                     NodeList response=responseroot.getChildNodes();
-                    mequedeaqui=4;
+
                     ss="";
 
                     for(int i =0;i<response.getLength();i++)
                     {
-                        mequedeaqui=5;
+
                         ss+=response.item(i).getNodeName()+",\n";
 
                         if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
@@ -225,7 +224,6 @@ public class XMLObject  {
                             mequedeaqui=6;
                             if (cVals>0)
                             {
-                                mequedeaqui+=7;
                                 xmlnode=response.item(i);
                                 sxml=nodeToString(xmlnode);
                                 return sxml;
@@ -262,6 +260,7 @@ public class XMLObject  {
     }
 
     public String getXMLRegionSingle(String nodename) throws Exception {
+
         String st,ss,sv,en,sxml;
         Node xmlnode;
 
@@ -438,4 +437,5 @@ public class XMLObject  {
         }
         return null;
     }
+
 }

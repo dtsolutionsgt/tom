@@ -54,6 +54,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -63,7 +68,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -920,7 +927,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         try {
 
-            empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
+            //empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
+
+            String jsonArray = ws.xmlresult;
+            List<clsBeEmpresaBase> vempresas = getList(jsonArray, clsBeEmpresaBase.class);
 
             if(empresas != null){
 
@@ -942,6 +952,11 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    public <T> List<T> getList(String jsonArray, Class<T> clazz) {
+        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
+        return new Gson().fromJson(jsonArray, typeOfT);
     }
 
     private void processBodegas(){
@@ -1436,7 +1451,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             try  {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Android_Get_All_Empresas");
+                        //callMethod("Android_Get_All_Empresas");
+                        callMethodJson("Android_Get_All_Empresas_Json");
                         break;
                     case 2:
                         callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dts.tom.PBase;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -21,6 +22,8 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class WebService {
 
@@ -62,25 +65,97 @@ public class WebService {
         }
     }
 
+    public void callMethodJson(String methodName, Object... args) throws Exception {
+
+
+        mResult = "";xmlresult="";
+        error="";errorflag=false;
+        String line="";
+
+        try{
+
+            String vUrl = mUrl.toString() + "/" + methodName;
+            URL url = new URL(vUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(10000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("mArch", "Andr");
+
+            OutputStream ostream = null;
+
+            try {
+                ostream = conn.getOutputStream();
+            } catch (IOException e) {
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=e.getMessage();
+                throw new Exception("Error al conectar con el webservice:\n " + error);
+            }
+
+            conn.connect();
+
+            int responsecode = ((HttpURLConnection) conn).getResponseCode();
+            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
+
+            if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = rd.readLine()) != null) mResult += line;
+                rd.close();rd.close();
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                if(xmlresult.isEmpty()){
+                    Log.i("vacio","no creo");
+                }
+
+            } if (responsecode==299) {
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = rd.readLine()) != null) mResult += line;
+                rd.close();rd.close();
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=parseError();
+                throw new Exception("Error al procesar la solicitud :\n " + parseError());
+
+            } if (responsecode==404) {
+                errorflag=true;error="Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.";
+                throw new Exception(error);
+            }if (responsecode==500) {
+
+                errorflag=true;error=parseError();
+                throw new Exception("Error al procesar la solicitud :\n " + methodName + " Code: 500");
+
+            }
+
+        } catch (Exception e)  {
+            errorflag=true;error=e.getMessage();
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public void callMethod(String methodName, Object... args) throws Exception {
 
         URLConnection conn = mUrl.openConnection();
         String ss = "",line="";
-        int TIMEOUT = 45000;
+        int TIMEOUT = 6000;
         int READTIMEOUT = 0;
 
         mMethodName = methodName; mResult = "";xmlresult="";
-
         error="";errorflag=false;
 
         try{
-
-            //#EJC20220403:Short time out if is the first loading
-            //usefull if its wrong url of the WS.
-//            if(mMethodName =="Android_Get_All_Empresas"){
-//                READTIMEOUT=6000;
-//                TIMEOUT=6000;
-//            }
 
            conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
            conn.addRequestProperty("SOAPAction", "http://tempuri.org/" + methodName);
@@ -128,10 +203,8 @@ public class WebService {
            int responsecode = ((HttpURLConnection) conn).getResponseCode();
            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
 
-           //#EJC20200331: Es probable que falta incluir algunos otros códigos de respuesta válidos....
-           //#EJC20200514: Actualizado
-            //#EJC20220506: Actualizado agregué responsecode = 500
            if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
+
                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                while ((line = rd.readLine()) != null) mResult += line;
                rd.close();rd.close();

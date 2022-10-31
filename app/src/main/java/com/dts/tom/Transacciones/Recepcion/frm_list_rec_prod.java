@@ -1259,15 +1259,13 @@ public class frm_list_rec_prod extends PBase {
                                 "Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
-                        callMethod("Finalizar_Recepcion",
-                                            "pRecEnc",gl.gBeRecepcion,
+                        callMethod("Finalizar_Recepcion_S",
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                             "backOrder",backorder,
                                             "pIdOrdenCompraEnc",vIdOrdenCompra,
-                                            "pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                             "pIdEmpresa", gl.IdEmpresa,
                                             "pIdBodega",gl.IdBodega,
                                             "pIdUsuario",gl.IdOperador,
-                                            "pListObjDetR",pListTransRecDet.items,
                                             "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                     case 15:
@@ -1568,12 +1566,14 @@ public class frm_list_rec_prod extends PBase {
             //#EJC20210321_1223:Validar si no se obtuvo error en el procesamiento.
             if(!xobj.ws.xmlresult.contains("CustomError")){
 
-                Resultado = xobj.getresult(String.class,"Finalizar_Recepcion");
+                Resultado = xobj.getresult(String.class,"Finalizar_Recepcion_S");
 
                 if (Resultado!=null){
                     doExit();
                 }else{
                     progress.cancel();
+                    btnTareas.setVisibility(View.VISIBLE);
+                    relbot.setVisibility(View.VISIBLE);
                     mu.msgbox("No se pudo finalizar la recepción");
                 }
 
