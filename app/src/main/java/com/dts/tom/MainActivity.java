@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.dts.base.ExDialog;
@@ -50,15 +49,8 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodegaList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.Version.clsBeVersion_wms_hh_andList;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -68,14 +60,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNeededListener {
 
@@ -930,14 +918,11 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             //empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
 
             String jsonArray = ws.xmlresult;
-            List<clsBeEmpresaBase> vempresas = getList(jsonArray, clsBeEmpresaBase.class);
+            List<clsBeEmpresaBase> vempresas = gl.getList(jsonArray, clsBeEmpresaBase.class);
 
             if(vempresas != null){
-
                 empresas = new clsBeEmpresaAndList();
-                empresas.items = new ArrayList<>();
                 empresas.items = vempresas;
-
             }
 
             if(empresas != null){
@@ -961,11 +946,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
             Log.e("Error al listar empresas", e.getMessage());
         }
-    }
-
-    public <T> List<T> getList(String jsonArray, Class<T> clazz) {
-        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
-        return new Gson().fromJson(jsonArray, typeOfT);
     }
 
     private void processBodegas(){
@@ -1465,7 +1445,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 switch (ws.callback) {
                     case 1:
                         //callMethod("Android_Get_All_Empresas");
-                        callMethodJson("Android_Get_All_Empresas_Json");
+                        callMethodJsonPost("Android_Get_All_Empresas_Json");
                         break;
                     case 2:
                         callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);

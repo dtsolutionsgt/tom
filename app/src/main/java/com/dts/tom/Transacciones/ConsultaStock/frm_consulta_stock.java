@@ -27,6 +27,8 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
@@ -78,7 +80,7 @@ public class frm_consulta_stock extends PBase {
     private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
     private list_adapt_consulta_stock2 adapter_stock2;
-    private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<clsBeVW_stock_res_CI>();
+    private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<>();
     private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
     //clsBeVW_stock_res_CI  ItemSelected;
     private TextView lblTituloForma;
@@ -431,13 +433,20 @@ public class frm_consulta_stock extends PBase {
 
             ProgressDialog("Procesando lista de existencias");
 
-
             switch (ws.callback) {
                 case 2:
                     pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet_By_IdUbicacion_CI");
                     break;
                 case 4:
-                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+                    //pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+                    //pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI_Json");
+
+                    String jsonArray = ws.xmlresult;
+                    List<clsBeVW_stock_res_CI> vListStock2 = gl.getList(jsonArray, clsBeVW_stock_res_CI.class);
+                    if(vListStock2 != null){
+                        pListStock2 = new clsBeVW_stock_res_CI_List();
+                        pListStock2.items = vListStock2;
+                    }
                     break;
             }
 
@@ -451,21 +460,24 @@ public class frm_consulta_stock extends PBase {
                     idle = true;
                 } else {
 
-                    registros.setText("REGISTROS: "+ conteo);
-
                     if (pListStock2.items.size()>0) lpid=pListStock2.items.get(0).Codigo;else lpid=" ";
                     tuni=0;lcnt=0;tExistUmbas=0; tDispUmbas = 0; tResUmbas=0; tResPres = 0; tDisPres = 0;
+
+                    progress.show();
 
                     for (int i = 0; i < pListStock2.items.size(); i++) {
 
                         cod=pListStock2.items.get(i).Codigo;
+
+                        //ProgressDialog("Procesando: " + i);
+
+                        registros.setText("Procesando: "+ conteo);
 
                         if (!cod.equals(lpid)) {
 
                             if (lcnt>1) {
 
                                 item = new clsBeVW_stock_res_CI();
-
                                 item.Codigo = "Total:";
                                 item.Nombre = lname;
                                 item.UM = "";
@@ -490,7 +502,6 @@ public class frm_consulta_stock extends PBase {
                                 item.DispPres =  mu.frmdec(tDisPres);
                                 item.NombreArea =  "";
                                 item.Clasificacion =  "";
-
                                 items_stock.add(item);
 
                             }
@@ -572,7 +583,6 @@ public class frm_consulta_stock extends PBase {
                     if (lcnt>1) {
 
                         item = new clsBeVW_stock_res_CI();
-
                         item.Codigo = "Total:";
                         item.Nombre = lname;
                         item.UM = "";
@@ -597,7 +607,6 @@ public class frm_consulta_stock extends PBase {
                         item.DispPres =  mu.frmdec(tDisPres);
                         item.NombreArea =  "";
                         item.Clasificacion =  "";
-
                         items_stock.add(item);
 
                     }
@@ -644,6 +653,8 @@ public class frm_consulta_stock extends PBase {
                     listView.setAdapter(adapter_stock);
                 }
             }
+
+            registros.setText("Registros: "+ conteo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -946,7 +957,7 @@ public class frm_consulta_stock extends PBase {
                         break;
 
                     case 4:
-                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
+                        callMethodJsonPost("Get_Stock_Por_Producto_Ubicacion_CI_Json","" +
                                                "pidProducto",codProducto,
                                                "pIdUbicacion",idubic,
                                                "pIdBodega",gl.IdBodega,
