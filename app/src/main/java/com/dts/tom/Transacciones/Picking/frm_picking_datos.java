@@ -1656,8 +1656,6 @@ public class frm_picking_datos extends PBase {
         //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
         if (confirmar_codigo_en_picking){
 
-
-
             if (PressEnterLp){
 
                 if (PressEnterProducto){
