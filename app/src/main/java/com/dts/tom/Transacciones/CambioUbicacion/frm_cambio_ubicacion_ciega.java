@@ -2099,7 +2099,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             bodega_ubicacion_destino = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
 
             if (bodega_ubicacion_destino == null){
-                throw new Exception("Ubicación destino sugerida incorrecta");
+                //#EJC202211022130:Validar que no sea una ubicación vacía antes de decir que es incorrecta.
+                if (!txtUbicSug.getText().toString().isEmpty()){
+                    throw new Exception("Ubicación destino sugerida incorrecta");
+                }
             }else{
 
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
