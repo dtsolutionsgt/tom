@@ -770,7 +770,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         }
 
                         callMethod("Get_Picking_By_IdPickingEnc",
-                                         "pIdPickingEnc",gl.gIdPickingEnc, "pIdOperadorBodega", IdOperadorBodega);
+                                         "pIdPickingEnc",gl.gIdPickingEnc,
+                                               "pIdOperadorBodega", IdOperadorBodega);
                         break;
                     case 2:
                         //#EJC20220608: Cambio en método.

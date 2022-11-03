@@ -52,7 +52,6 @@ public class clsBeTrans_picking_det {
     @Element(required=false) public clsBeProducto_estado ProductoEstado=new clsBeProducto_estado();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
     @Element(required=false) public clsBeTrans_picking_det_parametrosList ListaDetalleParametro=new clsBeTrans_picking_det_parametrosList();
-    @Element(required=false) public clsBeTrans_picking_ubicList ListaDetalleUbicacion=new clsBeTrans_picking_ubicList();
     @Element(required=false) public String Lic_Plate="";
     @Element(required=false) public String Lote="";
 
@@ -114,7 +113,6 @@ public class clsBeTrans_picking_det {
         this.ProductoEstado=ProductoEstado;
         this.UnidadMedida=UnidadMedida;
         this.ListaDetalleParametro=ListaDetalleParametro;
-        this.ListaDetalleUbicacion=ListaDetalleUbicacion;
         this.Lic_Plate=Lic_Plate;
         this.Lote=Lote;
 
@@ -371,12 +369,6 @@ public class clsBeTrans_picking_det {
     }
     public void setListaDetalleParametro(clsBeTrans_picking_det_parametrosList value) {
         ListaDetalleParametro=value;
-    }
-    public clsBeTrans_picking_ubicList getListaDetalleUbicacion() {
-        return ListaDetalleUbicacion;
-    }
-    public void setListaDetalleUbicacion(clsBeTrans_picking_ubicList value) {
-        ListaDetalleUbicacion=value;
     }
     public String getLic_Plate() {
         return Lic_Plate;
