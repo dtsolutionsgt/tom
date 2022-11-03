@@ -7130,6 +7130,7 @@ public class frm_recepcion_datos extends PBase {
                         break;
 
                     case 16:
+
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
 
@@ -7169,9 +7170,12 @@ public class frm_recepcion_datos extends PBase {
                                        "pBeTransOcDet",gl.gselitem);
 
                         }else{
-                            callMethod("Guardar_Recepcion",
-                                    "pRecEnc", gl.gBeRecepcion,
-                                    "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
+                            callMethod("Guardar_Recepcion_S",
+                                    "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
+                                    "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
+                                    "pIdOrdenCompraEnc", pIdOrdenCompraEnc,
+                                    "BeRecDet", BeTransReDet,
+                                    "pListRecDetParam",plistBeReDetParametros.items,
                                     "pListStockRecSer", pListBeStockSeRec.items,
                                     "pListStockRec", pListBeStockRec.items,
                                     "pListProductoPallet", listaProdPalletsNuevos.items,
