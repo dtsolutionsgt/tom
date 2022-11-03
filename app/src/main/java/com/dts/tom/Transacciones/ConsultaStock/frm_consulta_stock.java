@@ -50,9 +50,6 @@ import static java.util.stream.Collectors.groupingBy;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 
 public class frm_consulta_stock extends PBase {
 
@@ -438,9 +435,6 @@ public class frm_consulta_stock extends PBase {
                     pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet_By_IdUbicacion_CI");
                     break;
                 case 4:
-                    //pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
-                    //pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI_Json");
-
                     String jsonArray = ws.xmlresult;
                     List<clsBeVW_stock_res_CI> vListStock2 = gl.getList(jsonArray, clsBeVW_stock_res_CI.class);
                     if(vListStock2 != null){

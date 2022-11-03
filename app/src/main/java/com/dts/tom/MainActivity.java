@@ -670,7 +670,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     iduser=0; execws(4); // Llama lista de usuarios
                     break;
                 case 4:
-                    progress_setMessage("Cargando usuarios");
+                    progress_setMessage("Cargando operadores");
                     processUsers();
                     //Llama al método del WS Get_cantidad_decimales_calculo
                     execws(5);
@@ -915,8 +915,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         try {
 
-            //empresas=xobj.getresult(clsBeEmpresaAndList.class,"Android_Get_All_Empresas");
-
             String jsonArray = ws.xmlresult;
             List<clsBeEmpresaBase> vempresas = gl.getList(jsonArray, clsBeEmpresaBase.class);
 
@@ -1017,6 +1015,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            Log.e("Error al listar empresas", e.getMessage());
         }
     }
 
@@ -1444,7 +1443,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             try  {
                 switch (ws.callback) {
                     case 1:
-                        //callMethod("Android_Get_All_Empresas");
                         callMethodJsonPost("Android_Get_All_Empresas_Json");
                         break;
                     case 2:

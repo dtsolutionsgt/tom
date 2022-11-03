@@ -421,7 +421,8 @@ public class frm_picking_datos extends PBase {
 
         try {
             txtCantidadPick.setEnabled(false);
-            if (!gBePickingUbic.Lic_plate.isEmpty() && !gBePickingUbic.Lic_plate.equals("0")) {
+            //&& !gBePickingUbic.Lic_plate.equals("0")
+            if (!gBePickingUbic.Lic_plate.isEmpty() ) {
                 lblLicPlate.setText(gBePickingUbic.Lic_plate);
                 txtLicencia.setVisibility(View.VISIBLE);
                 lblLicenciaPicking.setVisibility(View.VISIBLE);
@@ -1655,8 +1656,6 @@ public class frm_picking_datos extends PBase {
         //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
         if (confirmar_codigo_en_picking){
 
-
-
             if (PressEnterLp){
 
                 if (PressEnterProducto){
@@ -1833,6 +1832,8 @@ public class frm_picking_datos extends PBase {
                 gBePickingUbic.Fec_mod = du.getFechaActual();
 
                 BePickingDet.IdPickingDet = gBePickingUbic.IdPickingDet;
+                BePickingDet.IdPickingEnc = gBePickingUbic.IdPickingEnc;
+
                 execws(5);
 
             }else{
@@ -2109,10 +2110,17 @@ public class frm_picking_datos extends PBase {
                                                "IdBodega",gl.IdBodega);
                         break;
                     case 5:
-                        callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
+                        //#EJC202211022205: No enviar el objeto completo de pickingdet
+                        callMethod("Obtener_Picking_Det_By_IdPickingEnc_And_IdPickingDet",
+                                         "pIdPickingEnc",BePickingDet.IdPickingEnc,
+                                               "pIdPickingDet",BePickingDet.IdPickingDet);
+                        //callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
                         break;
                     case 6:
-                        callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
+                        callMethod("Get_Single_StockRes_By_IdBodega_And_IdStockRes",
+                                               "pIdBodega",gl.IdBodega,
+                                                     "pIdStockRes",BeStockRes.IdStockRes);
+                        //callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
                         callMethod("Actualizar_Picking",
@@ -2541,20 +2549,29 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            BePickingDet = xobj.getresultSingle(clsBeTrans_picking_det.class,"oBeTrans_picking_det");
-            BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
-            BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
-            BePickingDet.Fec_mod =  du.getFechaActual();
-            BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
+            BePickingDet = xobj.getresult(clsBeTrans_picking_det.class,"Obtener_Picking_Det_By_IdPickingEnc_And_IdPickingDet");
 
-            if (BePickingDet.Cantidad_recibida > BePickingDet.Cantidad) {
+            if(BePickingDet!=null){
+
+                BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
+                BePickingDet.Fec_mod =  du.getFechaActual();
+                BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
+
+                if (BePickingDet.Cantidad_recibida > BePickingDet.Cantidad) {
+                    progress.cancel();
+                    throw  new Exception(String.format("La cantidad recibida %1s no puede ser mayor a la solicitada %2s", BePickingDet.Cantidad_recibida, BePickingDet.Cantidad));
+                }
+
+                execws(6);
+
+            }else{
                 progress.cancel();
-                throw  new Exception(String.format("La cantidad recibida %1s no puede ser mayor a la solicitada %2s", BePickingDet.Cantidad_recibida, BePickingDet.Cantidad));
+                mu.msgbox("processBePickingDet: No se pudo obtener el BePickingDet");
             }
 
-            execws(6);
-
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processBePickingDet: "+e.getMessage());
         }
     }
@@ -2563,7 +2580,7 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"pBeStock_res");
+            BeStockRes = xobj.getresult(clsBeStock_res.class,"Get_Single_StockRes_By_IdBodega_And_IdStockRes");
             BeStockRes.Estado = "PICKEADO";
             BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
             BeStockRes.Fec_mod = du.getFechaActual();

@@ -499,6 +499,8 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
+            //gl.gReferencia = .Referencia;
+
             titulo = gl.gReferencia.isEmpty() ? "Picking #" + gl.gIdPickingEnc : "Picking #" + gl.gIdPickingEnc +" - "+gl.gReferencia;
             lblTituloForma.setText(titulo);
 
@@ -768,7 +770,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         }
 
                         callMethod("Get_Picking_By_IdPickingEnc",
-                                         "pIdPickingEnc",gl.gIdPickingEnc, "pIdOperadorBodega", IdOperadorBodega);
+                                         "pIdPickingEnc",gl.gIdPickingEnc,
+                                               "pIdOperadorBodega", IdOperadorBodega);
                         break;
                     case 2:
                         //#EJC20220608: Cambio en método.

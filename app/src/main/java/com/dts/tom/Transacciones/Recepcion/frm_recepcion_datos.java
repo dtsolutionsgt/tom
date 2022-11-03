@@ -286,7 +286,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
     private int tipoCaptura = 1;
-    private int CorelSiguiente;
+    private long CorelSiguiente;
     private int TmpMaxL;
     private int CantidadCopias;
 
@@ -7041,70 +7041,96 @@ public class frm_recepcion_datos extends PBase {
                 switch (ws.callback) {
 
                     case 1:
-                        callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",BeOcDet.IdProductoBodega);
+                        callMethod("Get_Producto_By_IdProductoBodega",
+                                                "IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
+
                     case 2:
                         callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
-                                "pIdPropietario",gl.IdPropietario,
-                                "pIdBodega",gl.IdBodega);
+                                        "pIdPropietario",gl.IdPropietario,
+                                              "pIdBodega",gl.IdBodega);
                         break;
+
                     case 3:
-                        callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",BeProducto.IdProducto,"pActivo",true);
+                        callMethod("Get_All_Presentaciones_By_IdProducto",
+                                               "pIdProducto",BeProducto.IdProducto,
+                                                "pActivo",true);
                         break;
+
                     case 4:
-                        callMethod("Get_All_Codigos_Barra_By_IdProducto","pIdProducto",BeProducto.IdProducto);
+                        callMethod("Get_All_Codigos_Barra_By_IdProducto",
+                                               "pIdProducto",BeProducto.IdProducto);
                         break;
+
                     case 5:
-                        callMethod("Get_All_ProductoParametros_By_IdProducto_HH","pIdProducto",BeProducto.IdProducto,
-                                "pActivo",true);
+                        callMethod("Get_All_ProductoParametros_By_IdProducto_HH",
+                                               "pIdProducto",BeProducto.IdProducto,
+                                               "pActivo",true);
                         break;
+
                     case 6:
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
-                                "pIdOperador",gl.IdOperador,
-                                "pIdBodega",gl.IdBodega);
+                                         "pIdOperador",gl.IdOperador,
+                                               "pIdBodega",gl.IdBodega);
                         //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
 //                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
 //                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
 //                                "pIdProducto",BeProducto.IdProducto);
                         break;
+
                     case 7:
-                        callMethod("Get_Licenses_Plates_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
+                        callMethod("Get_Licenses_Plates_By_IdRecepcionEnc",
+                                                "pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+
                     case 8:
                         callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
-                                "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "LicPlate",txtLicPlate.getText().toString(),
-                                "IdRecepcionDet",pIdRecepcionDet);
+                                        "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                              "LicPlate",txtLicPlate.getText().toString(),
+                                              "IdRecepcionDet",pIdRecepcionDet);
                         break;
+
                     case 9:
                         callMethod("MaxIDStockSeRec");
                         break;
+
                     case 10:
                         callMethod("Get_All_Params_By_IdRecepcionEnc_And_IdRecepcion_Det_For_HH",
                                 "pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdRecepcionDet",pIdRecepcionDet);
                         break;
+
                     case 11:
                         callMethod("MaxIDStockRec");
                         break;
+
                     case 12:
                         callMethod("Get_BeTransReEnc_By_IdREcepcionEnc_For_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+
                     case 13:
                         callMethod("Get_IdUbicMerma_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
+
                     case 14:
-                        callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet","IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "LicPlate",vBeStockRec.Lic_plate,"IdRecepcionDet",pIdRecepcionDet);
+                        callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
+                                        "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                              "LicPlate",vBeStockRec.Lic_plate,
+                                              "IdRecepcionDet",pIdRecepcionDet);
                         break;
+
                     case 15:
-                        callMethod("Get_Nuevo_Correlativo_LicensePlate_S","pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
-                                "pIdProducto",BeProducto.IdProducto,"UltimoPalletGenerado",vBeStockRec.Lic_plate);
+                        callMethod("Get_Nuevo_Correlativo_LicensePlate_S",
+                                "pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdPropietario",BeProducto.Propietario.IdPropietario,
+                                "pIdProducto",BeProducto.IdProducto,
+                                "UltimoPalletGenerado",vBeStockRec.Lic_plate);
                         break;
+
                     case 16:
+
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
-
 
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
                         if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
@@ -7142,19 +7168,6 @@ public class frm_recepcion_datos extends PBase {
                                        "pBeTransOcDet",gl.gselitem);
 
                         }else{
-//                            callMethod("Guardar_Recepcion",
-//                                    "pRecEnc", gl.gBeRecepcion,
-//                                    "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec,
-//                                    "pListStockRecSer", pListBeStockSeRec.items,
-//                                    "pListStockRec", pListBeStockRec.items,
-//                                    "pListProductoPallet", listaProdPalletsNuevos.items,
-//                                    "pLotesRec", BeDetalleLotes,
-//                                    "pIdEmpresa", gl.IdEmpresa,
-//                                    "pIdBodega", gl.IdBodega,
-//                                    "pIdUsuario", gl.IdOperador,
-//                                    "pIdResolucionLp", gl.IdResolucionLpOperador,
-//                                    "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
-
                             callMethod("Guardar_Recepcion_S",
                                     "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
                                     "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
@@ -7186,15 +7199,19 @@ public class frm_recepcion_datos extends PBase {
                                 "pIdBodega",gl.IdBodega,
                                 "pIdUsuario",gl.IdOperador);
                         break;
+
                     case 18:
                         callMethod("Get_Detalle_OC_By_IdOrdeCompraDet","oBeTrans_oc_det",beTransOCDet);
                         break;
+
                     case 19:
                         callMethod("Max_IdRecepcion_Det_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+
                     case 20:
                         callMethod("Get_IdUbicMerma_By_IdBodega","pIdBodega",gl.IdBodega);
                         break;
+
                     case 21:
                         callMethod("Finalizar_Recepcion_Parcial_Pallet_Proveedor","pRecEnc",gl.gBeRecepcion,
                                 "pIdOrdenCompraEnc",pIdOrdenCompraEnc,
@@ -7207,12 +7224,15 @@ public class frm_recepcion_datos extends PBase {
                                 "pBeBarraPallet",BeINavBarraPallet,
                                 "pEsTransferencia",EsTransferenciaInternaWMS);
                         break;
+
                     case 22:
                         callMethod("Get_All_BeTrasReDet_By_IdOrdenCompraEnc","pIdOrdenCompraEnc",pIdOrdenCompraEnc);
                         break;
+
                     case 23:
                         callMethod("Get_Stock_By_IdRecepcionEnc_And_IdRecpecionDet","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdRecepcionDet",pIdRecepcionDet);
                         break;
+
                     case 24:
                         callMethod("Existe_Lp","pLic_Plate",pLp,
                                                "pIdBodega",gl.IdBodega,
@@ -7222,6 +7242,7 @@ public class frm_recepcion_datos extends PBase {
                     case 25:
 
                         vTipoPush = "Push_Recepcion_Produccion_To_NAV_For_BYB";
+
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
                                    "DocumentoUbicacion", ubiDetLote,
                                    "CodigoProducto",BeProducto.Codigo,
@@ -7255,6 +7276,7 @@ public class frm_recepcion_datos extends PBase {
                                }
 
                                vTipoPush = "Push_Recepcion_Pedido_Compra_To_NAV_For_BYB";
+
                                callMethod("Push_Recepcion_Pedido_Compra_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -7272,6 +7294,7 @@ public class frm_recepcion_datos extends PBase {
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Devolucion_Venta){
 
                                vTipoPush = "Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB";
+
                                callMethod("Push_Recepcion_Devolucion_Venta_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -7289,6 +7312,7 @@ public class frm_recepcion_datos extends PBase {
                            }else if (gl.gBeOrdenCompra.getIdTipoIngresoOC()==dataContractDI.Transferencia_de_Ingreso){
 
                                vTipoPush = "Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB";
+
                                callMethod("Push_Recepcion_Transferencias_Ingreso_To_NAV_For_BYB",
                                        "DocumentoIngreso", gl.gBeOrdenCompra.Referencia,
                                        "DocumentoRecepcion",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
@@ -7312,21 +7336,27 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                         break;
+
                     case 27://Obtiene el Tipo de Etiqueta del producto
-                        callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
+                        callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta",
+                                               "pBeTipo_etiqueta",pBeTipo_etiqueta);
                         break;
 
                     case 28://Valida si la serie del producto ya existe
                         callMethod("Existe_Serie",
                                 "pSerie", pSerie,
-                                "pIdBodega",gl.IdBodega);
+                                      "pIdBodega",gl.IdBodega);
                         break;
+
                     case 29:
-                        callMethod("Guardar_Producto_Imagen","pBeProductoImagen",BeProductoImagen);
+                        callMethod("Guardar_Producto_Imagen",
+                                         "pBeProductoImagen",BeProductoImagen);
                         break;
+
                     case 30:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
                         break;
+
                     case 31:
                         callMethod("Guardar_Transaccion_Error",
                                 "pDocumentoUbicacion",ubiDetLote,
@@ -7343,13 +7373,18 @@ public class frm_recepcion_datos extends PBase {
                                 "pStock",pStock);
                         break;
                     case 33:
-                        callMethod("Guardar_Fotos_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"Foto",encoded);
+                        callMethod("Guardar_Fotos_Recepcion",
+                                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                                "Foto",encoded);
                         break;
                     case 34:
-                        callMethod("Get_All_Imagen_Recepcion","pIdRecepcion", gl.gIdRecepcionEnc);
+                        callMethod("Get_All_Imagen_Recepcion",
+                                               "pIdRecepcion", gl.gIdRecepcionEnc);
                         break;
+
                     case 35:
-                        callMethod("Get_Detalle_OC_By_IdOrdeCompraDet","oBeTrans_oc_det",beTransOCDet);
+                        callMethod("Get_Detalle_OC_By_IdOrdeCompraDet",
+                                               "oBeTrans_oc_det",beTransOCDet);
                         break;
 
                 }
@@ -7806,10 +7841,10 @@ public class frm_recepcion_datos extends PBase {
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                int intLPSig = (int) pLpSiguiente;
+                long intLPSig = (long) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
@@ -7863,10 +7898,10 @@ public class frm_recepcion_datos extends PBase {
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
-                float pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                int intLPSig = (int) pLpSiguiente;
+                long intLPSig = (long) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
                 //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo

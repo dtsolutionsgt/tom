@@ -11,9 +11,9 @@ public class clsBeResolucion_lp_operador {
     @Element(required=false) public int IdOperador=0;
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public String Serie="";
-    @Element(required=false) public float Correlativo_Inicial=0;
-    @Element(required=false) public float Correlativo_Final=0;
-    @Element(required=false) public float Correlativo_Actual=0;
+    @Element(required=false) public long Correlativo_Inicial=0;
+    @Element(required=false) public long Correlativo_Final=0;
+    @Element(required=false) public long Correlativo_Actual=0;
     @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
     @Element(required=false) public String User_mod="";
@@ -28,7 +28,7 @@ public class clsBeResolucion_lp_operador {
     }
 
     public clsBeResolucion_lp_operador(int IdResolucionlp, int IdOperador, int IdBodega, String Serie,
-                          float Correlativo_Inicial, float Correlativo_Final, int Correlativo_Actual,
+                          long Correlativo_Inicial, long Correlativo_Final, long Correlativo_Actual,
                           String User_agr, String Fec_agr,String User_mod,String Fec_mod, boolean Activo,
                           boolean IsNew) {
 
@@ -110,17 +110,17 @@ public class clsBeResolucion_lp_operador {
         Serie=value;
     }
 
-    public float getCorrelativo_Inicial() {
+    public long getCorrelativo_Inicial() {
         return Correlativo_Inicial;
     }
-    public void setCorrelativo_Inicial(float value) {
+    public void setCorrelativo_Inicial(long value) {
         Correlativo_Inicial=value;
     }
 
-    public float getCorrelativo_Final() {
+    public long getCorrelativo_Final() {
         return Correlativo_Final;
     }
-    public void setCorrelativo_Final(float value) {
+    public void setCorrelativo_Final(long value) {
         Correlativo_Final=value;
     }
 
