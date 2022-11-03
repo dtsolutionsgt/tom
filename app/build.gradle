@@ -70,11 +70,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     compileOnly 'com.google.android.wearable:wearable:2.8.1'
     implementation 'com.google.code.gson:gson:2.10'
-    //implementation files('libs\\ksoap2-android-assembly-3.6.3')
-    //implementation 'androidx.wear:wear:1.0.0'
-    //compileOnly 'com.google.android.wearable:wearable:2.6.0'
-    //implementation 'br.com.zbra:android-linq:1.1.0'
-    //implementation 'com.github.zbra-solutions:android-linq:1.1.0'
-    //compile 'br.com.zbra:android-linq:1.1.0'
 
 }
