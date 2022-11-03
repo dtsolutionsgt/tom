@@ -1437,7 +1437,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             try  {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Android_Get_All_Empresas");
+                        callMethodJsonPost("Android_Get_All_Empresas_Json");
                         break;
                     case 2:
                         callMethod("Android_Get_Bodegas_By_IdEmpresa","IdEmpresa",idemp);

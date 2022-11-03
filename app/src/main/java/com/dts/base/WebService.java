@@ -654,5 +654,128 @@ public class WebService {
         }
     }
 
+    private String buildArgValue3(Object... obj) throws IllegalArgumentException, IllegalAccessException{
+
+        String result = "";
+        String argName = "";
+        char vComilla = ((char) 34);
+
+        try{
+
+            for (int i = 0; i < obj.length; i++)
+            {
+                Class<?> cl = obj[i].getClass();
+                if (i % 2 == 0)
+                {
+                    argName = obj[i].toString();
+                } else
+                {
+                    if(cl.isPrimitive() || (cl.getName().contains("java.lang.")) || (cl.getName().contains("java.int")))
+                    {
+
+                        if (obj!=null)
+                        {
+                            result += argName;
+                            argstr = result;
+
+                            Object value_argument = obj[i].toString();
+
+                            if (value_argument.toString().isEmpty()){
+                                result +="="; //+ "" + vComilla + "" + vComilla;
+                            }else{
+                                result +="=" + value_argument;
+                            }
+
+                            argstr = result;
+
+                        }else
+                        {
+                            result += argName;
+                            result +=  argName;
+                            argstr = result;
+                        }
+
+                    }
+                    if(cl.getName().equals("java.util.Date"))
+                    {
+                        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+                        result += "<" + argName + ">";
+                        argstr = result;
+                        result += dfm.format((Date)obj[i]);
+                        argstr = result;
+                        result += "</" + argName + ">";
+                        argstr = result;
+                        //return argstr;
+                    }else
+                    {//Is a strong type class
+                        String vResultObjects =buildArgsJson(obj);
+                        return vResultObjects;
+                    }
+                }
+            }
+
+        }catch (Exception ex)
+        {
+            try
+            {
+                throw new Exception(" WebService callMethod : "+ ex.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+
+    private String buildArgsJson(Object... args) throws IllegalArgumentException, IllegalAccessException {
+
+        String result = "";
+        String argName = "";
+        char vComilla = ((char) 34);
+
+        try{
+
+            for (int i = 0; i < args.length; i++)
+            {
+                if (i % 2 == 0) {
+                    argName = args[i].toString();
+                } else
+                {
+                    result += argName + "=";
+                    argstr = result;
+
+                    Object value_argument = args[i].toString();
+
+                    if (value_argument.toString().isEmpty()){
+                        result +="";// + vComilla + "" + vComilla;
+                        if (i!=args.length -1){
+                            result += "&";
+                        }
+                    }else{
+
+                        result += value_argument;
+
+                        if (i!=args.length -1){
+                            result += "&";
+                        }
+                        //result +="=" + buildArgValue3(args[i],argName);
+                    }
+                    argstr = result;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                throw new Exception(" WebService callMethod : "+ ex.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
     //endregion
 }
