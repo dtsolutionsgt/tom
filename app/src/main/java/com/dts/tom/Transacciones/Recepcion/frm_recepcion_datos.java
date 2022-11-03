@@ -7072,8 +7072,8 @@ public class frm_recepcion_datos extends PBase {
 
                     case 6:
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
-                                "pIdOperador",gl.IdOperador,
-                                     "pIdBodega",gl.IdBodega);
+                                         "pIdOperador",gl.IdOperador,
+                                               "pIdBodega",gl.IdBodega);
                         //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
 //                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
 //                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
