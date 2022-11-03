@@ -425,7 +425,12 @@ public class frm_consulta_stock extends PBase {
                     pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Pallet_By_IdUbicacion_CI");
                     break;
                 case 4:
-                    pListStock2= xobj.getresult(clsBeVW_stock_res_CI_List.class,"Get_Stock_Por_Producto_Ubicacion_CI");
+                    String jsonArray = ws.xmlresult;
+                    List<clsBeVW_stock_res_CI> vListStock2 = gl.getList(jsonArray, clsBeVW_stock_res_CI.class);
+                    if(vListStock2 != null){
+                        pListStock2 = new clsBeVW_stock_res_CI_List();
+                        pListStock2.items = vListStock2;
+                    }
                     break;
             }
 
@@ -946,12 +951,12 @@ public class frm_consulta_stock extends PBase {
                         break;
 
                     case 4:
-                        callMethod("Get_Stock_Por_Producto_Ubicacion_CI","" +
-                                               "pidProducto",codProducto,
-                                               "pIdUbicacion",idubic,
-                                               "pIdBodega",gl.IdBodega,
-                                               "pNombre", nomProducto,
-                                               "pDetallado", chkDetalle.isChecked());
+                        callMethodJsonPost("Get_Stock_Por_Producto_Ubicacion_CI_Json","" +
+                                        "pidProducto",codProducto,
+                                "pIdUbicacion",idubic,
+                                "pIdBodega",gl.IdBodega,
+                                "pNombre", nomProducto,
+                                "pDetallado", chkDetalle.isChecked());
                         break;
                 }
 

@@ -33,7 +33,10 @@ import com.dts.tom.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -242,4 +245,9 @@ public class appGlobals extends Application {
                     }
                 });
         }
+
+    public <T> List<T> getList(String jsonArray, Class<T> clazz) {
+        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
+        return new Gson().fromJson(jsonArray, typeOfT);
+    }
 }
