@@ -171,6 +171,91 @@ public class WebService {
        }
     }
 
+    public void callMethodJsonPost(String methodName, Object... args) throws Exception {
+
+
+        mResult = "";xmlresult="";
+        error="";errorflag=false;
+        String line="";
+
+        try{
+
+            String vUrl = mUrl.toString() + "/" + methodName;
+            URL url = new URL(vUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(10000);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("mArch", "Andr");
+
+            OutputStream ostream = null;
+
+            String str =buildArgValue3(args);
+            byte[] outputInBytes = str.getBytes("UTF-8");
+            ostream = conn.getOutputStream();
+            ostream.write( outputInBytes );
+            ostream.close();
+
+            try {
+                ostream = conn.getOutputStream();
+            } catch (IOException e) {
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=e.getMessage();
+                throw new Exception("Error al conectar con el webservice:\n " + error);
+            }
+
+            conn.connect();
+
+            int responsecode = ((HttpURLConnection) conn).getResponseCode();
+            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
+
+            if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = rd.readLine()) != null) mResult += line;
+                rd.close();rd.close();
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                if(xmlresult.isEmpty()){
+                    Log.i("vacio","no creo");
+                }
+
+            } if (responsecode==299) {
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = rd.readLine()) != null) mResult += line;
+                rd.close();rd.close();
+
+                mResult=mResult.replace("ñ","n");
+                xmlresult=mResult;
+
+                errorflag=true;error=parseError();
+                throw new Exception("Error al procesar la solicitud :\n " + parseError());
+
+            } if (responsecode==404) {
+                errorflag=true;error="Error 404: No se obtuvo acceso a: \n" + mUrl.toURI() + "\n" + "Verifique que el WS Existe y es accesible desde el explorador.";
+                throw new Exception(error);
+            }if (responsecode==500) {
+
+                errorflag=true;error=parseError();
+                throw new Exception("Error al procesar la solicitud :\n " + methodName + " Code: 500");
+
+            }
+
+        } catch (Exception e)  {
+            errorflag=true;error=e.getMessage();
+            throw new Exception(e.getMessage());
+        }
+    }
+
     //endregion
 
     //region Arguments

@@ -1013,6 +1013,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            Log.e("Error al listar empresas", e.getMessage());
         }
     }
 
