@@ -2110,8 +2110,8 @@ public class frm_picking_datos extends PBase {
                     case 5:
                         //#EJC202211022205: No enviar el objeto completo de pickingdet
                         callMethod("Obtener_Picking_Det_By_IdPickingEnc_And_IdPickingDet",
-                                "pIdPickingEnc",BePickingDet.IdPickingEnc,
-                                "pIdPickingDet",BePickingDet.IdPickingDet);
+                                         "pIdPickingEnc",BePickingDet.IdPickingEnc,
+                                               "pIdPickingDet",BePickingDet.IdPickingDet);
                         //callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
                         break;
                     case 6:
