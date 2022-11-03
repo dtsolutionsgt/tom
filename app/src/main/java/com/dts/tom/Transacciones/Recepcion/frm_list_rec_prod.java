@@ -1259,16 +1259,14 @@ public class frm_list_rec_prod extends PBase {
                                 "Firma_piloto",gl.gBeRecepcion.Firma_piloto);
                         break;
                     case 14:
-                        callMethod("Finalizar_Recepcion",
-                                            "pRecEnc",gl.gBeRecepcion,
-                                            "backOrder",backorder,
-                                            "pIdOrdenCompraEnc",vIdOrdenCompra,
-                                            "pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                            "pIdEmpresa", gl.IdEmpresa,
-                                            "pIdBodega",gl.IdBodega,
-                                            "pIdUsuario",gl.IdOperador,
-                                            "pListObjDetR",pListTransRecDet.items,
-                                            "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
+                        callMethod("Finalizar_Recepcion_S",
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "backOrder",backorder,
+                                "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                "pIdEmpresa", gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,
+                                "pIdUsuario",gl.IdOperador,
+                                "pHabilitarStock",gl.gBeRecepcion.Habilitar_Stock);
                         break;
                     case 15:
                         //#CKFK20220524 Agregué esta funcion para obtener el detalle de la OC
