@@ -2115,7 +2115,10 @@ public class frm_picking_datos extends PBase {
                         //callMethod("ObtenerPickingDet","oBeTrans_picking_det",BePickingDet);
                         break;
                     case 6:
-                        callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
+                        callMethod("Get_Single_StockRes_By_IdBodega_And_IdStockRes",
+                                               "pIdBodega",gl.IdBodega,
+                                                     "pIdStockRes",BeStockRes.IdStockRes);
+                        //callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
                         callMethod("Actualizar_Picking",
@@ -2566,7 +2569,7 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"pBeStock_res");
+            BeStockRes = xobj.getresultSingle(clsBeStock_res.class,"Get_Single_StockRes_By_IdBodega_And_IdStockRes");
             BeStockRes.Estado = "PICKEADO";
             BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
             BeStockRes.Fec_mod = du.getFechaActual();
