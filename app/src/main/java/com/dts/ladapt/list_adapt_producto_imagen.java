@@ -61,7 +61,7 @@ public class list_adapt_producto_imagen extends BaseAdapter {
         }
 
 
-        holder.imgProducto.setRotation((float) 90.0);
+        //holder.imgProducto.setRotation((float) 90.0);
         holder.imgProducto.setImageBitmap(items.get(position).bmImg);
 
         return convertView;

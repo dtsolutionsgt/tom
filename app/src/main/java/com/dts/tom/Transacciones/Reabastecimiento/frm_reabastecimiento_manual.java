@@ -96,8 +96,6 @@ public class frm_reabastecimiento_manual extends PBase {
 
                     Object lvObj = listExist.getItemAtPosition(i);
                     selitem = (clsBeVW_stock_res) lvObj;
-
-                    browse = 1;
                     ProcesarRegistro();
                 }
             });
@@ -110,7 +108,7 @@ public class frm_reabastecimiento_manual extends PBase {
     private void ProcesarRegistro() {
         try {
             txtCodigoPrd.setText("");
-
+            browse = 1;
             startActivity(new Intent(this, frm_datos_reabastecimiento.class));
         } catch (Exception e) {
             mu.msgbox("ProcesarRegistro: "+e.getMessage());
