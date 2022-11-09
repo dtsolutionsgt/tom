@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -924,7 +925,9 @@ public class frm_list_rec_prod extends PBase {
             //#CKFK 20211116 Inicializo la variable de backorder de la OC
             backorder = false;
 
-            progress.setMessage("Validando estado de recepción");
+            //#GT08112022_1500: para mantener contuidad del msg, se omite aca
+            //progress.setMessage("Validando estado de recepción");
+            //progress.show();
 
             if (gBeOrdenCompra.DetalleOC.items!=null){
 
@@ -1595,7 +1598,10 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            progress.cancel();
+            //progress.cancel();
+            //#GT081120222_1500: para mantener continuidad de los msg, se quita el cancel
+            progress.setMessage("Validando estado de recepción");
+            progress.show();
 
             gl.gpListDetalleOC = xobj.getresult(clsBeTrans_oc_detList.class,"Get_Detalle_OC_By_IdOrdenCompraEnc_HH2");
 
@@ -1606,9 +1612,19 @@ public class frm_list_rec_prod extends PBase {
 
             ordenar();
 
-            if(Recepcion_Completa()){
-                msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
-            }
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(Recepcion_Completa()){
+                        msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                    }
+
+                }
+            }, 800);
+
+
 
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());

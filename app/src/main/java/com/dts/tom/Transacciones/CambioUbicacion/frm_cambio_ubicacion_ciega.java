@@ -1743,7 +1743,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
-                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo","pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
+                                "pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 18:
@@ -2493,10 +2494,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 gl.IdResolucionLpOperador = resolucionActivaLpByBodega.IdResolucionlp;
 
-                float pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
-                float largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
+                long pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
 
-                int intLPSig = (int) pLpSiguiente;
+                long intLPSig = (long) pLpSiguiente;
                 int MaxL = (int) largoMaximo;
 
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
