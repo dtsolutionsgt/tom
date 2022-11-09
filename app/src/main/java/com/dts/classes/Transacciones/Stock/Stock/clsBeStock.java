@@ -54,6 +54,10 @@ public class clsBeStock {
     @Element(required=false) public clsBeRevision Revision=new clsBeRevision();
     @Element(required=false) public boolean IsReportStockEnFecha = false;
     @Element(required=false) public boolean Pallet_No_Estandar= false;
+    @Element(required=false) public boolean UbicacionPicking= false;
+    @Element(required=false) public int UbicacionNivel= 0;
+    @Element(required=false) public boolean Pallet_Completo= false;
+
 
     public clsBeStock()
     {
@@ -419,4 +423,26 @@ public class clsBeStock {
     public void setPallet_No_Estandar(boolean value) {
         Pallet_No_Estandar=value;
     }
+
+    public boolean getPallet_Completo() {
+        return Pallet_Completo;
+    }
+    public void setPallet_Completo(boolean value) {
+        Pallet_Completo=value;
+    }
+
+    public boolean getUbicacionPicking() {
+        return UbicacionPicking;
+    }
+    public void setUbicacionPicking(boolean value) {
+        UbicacionPicking=value;
+    }
+
+    public int getUbicacionNivel() {
+        return UbicacionNivel;
+    }
+    public void setUbicacionNivel(int value) {
+        UbicacionNivel=value;
+    }
+
 }

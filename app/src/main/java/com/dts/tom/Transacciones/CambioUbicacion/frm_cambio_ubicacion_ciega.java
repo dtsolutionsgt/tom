@@ -1743,7 +1743,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 17://Obtiene el producto que coincide con el License Plate ingresado en una bodega
-                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo","pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
+                        callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
+                                "pLicensePlate",pLicensePlate,"pCodigo",txtCodigoPrd.getText().toString(),
                                 "pIdBodega", gl.IdBodega);
                         break;
                     case 18:
