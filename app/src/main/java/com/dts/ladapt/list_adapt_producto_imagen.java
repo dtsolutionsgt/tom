@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class list_adapt_producto_imagen extends BaseAdapter {
     private static ArrayList<clsBeImagen> items;
+    private Context cont;
 
     private int selectedIndex;
 
@@ -21,7 +22,8 @@ public class list_adapt_producto_imagen extends BaseAdapter {
 
     public list_adapt_producto_imagen(Context context, ArrayList<clsBeImagen> results) {
         items = results;
-        l_Inflater = LayoutInflater.from(context);
+        cont = context;
+        l_Inflater = LayoutInflater.from(cont);
         selectedIndex = -1;
     }
 
@@ -60,9 +62,12 @@ public class list_adapt_producto_imagen extends BaseAdapter {
             convertView.getTag();
         }
 
-
-        //holder.imgProducto.setRotation((float) 90.0);
+        /*Glide.with(cont)
+                .load(items.get(position).bmImg)
+                .thumbnail()
+                .into(holder.imgProducto);*/
         holder.imgProducto.setImageBitmap(items.get(position).bmImg);
+
 
         return convertView;
     }

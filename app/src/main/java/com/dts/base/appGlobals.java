@@ -184,7 +184,7 @@ public class appGlobals extends Application {
     public boolean inferir_origen_en_cambio_ubic =false;
 
     //Imagen
-    public Bitmap imagen;
+    public int imagen;
     public ArrayList<clsBeImagen> ListImagen = new ArrayList<clsBeImagen>();
 
     //Recepción

@@ -18,6 +18,7 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 
 public class frm_imagenes extends PBase {
+    public static ArrayList<Bitmap> Imgs = new ArrayList<>();
     private list_adapt_producto_imagen adapter;
     private ArrayList<clsBeImagen> ListImagen = new ArrayList<clsBeImagen>();
 
@@ -52,13 +53,7 @@ public class frm_imagenes extends PBase {
         gridFotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Object lvObj = gridFotos.getItemAtPosition(i);
-
-                BeImagen = new clsBeImagen();
-                BeImagen = (clsBeImagen) lvObj;
-                gl.imagen = BeImagen.bmImg;
-
+                gl.imagen = i;
                 startActivity(new Intent(frm_imagenes.this  , frm_imagen_completa.class));
             }
         });
@@ -67,6 +62,8 @@ public class frm_imagenes extends PBase {
     private void LoadImagen() {
 
         try {
+            Imgs.clear();
+
             runOnUiThread(() -> {
                 for (int i = 0; i < ListImagen.size(); i++) {
 
@@ -86,6 +83,7 @@ public class frm_imagenes extends PBase {
                     bmImagen.getByteCount();
 
                     ListImagen.get(i).bmImg = bmImagen;
+                    Imgs.add(bmImagen);
                 }
             });
 

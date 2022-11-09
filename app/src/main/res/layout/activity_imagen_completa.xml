@@ -7,9 +7,10 @@
     tools:context=".Transacciones.ProcesaImagen.frm_imagen_completa"
     android:background="#000">
 
-    <ImageView
-        android:id="@+id/imgCompleta"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vistaPag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@android:drawable/ic_menu_slideshow" />
+        android:nestedScrollingEnabled="true"/>
+
 </RelativeLayout>
