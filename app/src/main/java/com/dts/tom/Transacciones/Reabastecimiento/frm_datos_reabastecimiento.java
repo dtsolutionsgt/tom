@@ -638,7 +638,7 @@ public class frm_datos_reabastecimiento extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Aplica_Cambio_Estado_Ubic_HH",
-                                         "pMovimiento",gMovimientoDet,
+                                  "pMovimiento",gMovimientoDet,
                                          "pStockRes",vStockRes,
                                          "pIdStockNuevo",vIdStockNuevo,
                                          "pIdMovimientoNuevo",vIdMovimientoNuevo);
