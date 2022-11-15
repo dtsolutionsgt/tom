@@ -5249,7 +5249,7 @@ public class frm_recepcion_datos extends PBase {
                         progress.cancel();
 
                     }
-                }, 500);
+                }, 300);
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
                 //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
