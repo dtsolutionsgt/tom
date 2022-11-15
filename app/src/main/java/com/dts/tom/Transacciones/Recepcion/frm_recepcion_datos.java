@@ -681,20 +681,7 @@ public class frm_recepcion_datos extends PBase {
                     progress.setMessage("Guardando Recepción");
                     progress.show();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            guardar_recepcion();
-                        }
-                    }, 1000);
-
-                    //#CKFK20220525 Modifiqué esto para que en el enter se guarde la recepción
-                    /*if (tbLPeso.getVisibility()==View.VISIBLE){
-                        txtPeso.requestFocus();
-                    }else{
-                        ValidaCampos();
-                    }*/
+                    guardar_recepcion();
 
                 }
 
@@ -713,13 +700,8 @@ public class frm_recepcion_datos extends PBase {
 
                     progress.setMessage("Validando Campos");
                     progress.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ValidaCampos();
-                        }
-                    }, 1000);
+
+                    ValidaCampos();
 
                 }
 
@@ -1288,13 +1270,9 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Guardar_Recepcion_Nueva();
-                    }
-                }, 1000);
+
+                Guardar_Recepcion_Nueva();
+
             }
 
         }catch (Exception e){
@@ -2017,13 +1995,8 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Guardar_Recepcion_Nueva();
-                    }
-                }, 1000);
+
+                Guardar_Recepcion_Nueva();
 
             }else {
 
@@ -2107,27 +2080,16 @@ public class frm_recepcion_datos extends PBase {
 
                             progress.setMessage("Guardando Recepción Nueva");
                             progress.show();
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Guardar_Recepcion_Nueva();
-                                }
-                            }, 1000);
+
+                            Guardar_Recepcion_Nueva();
 
                         }
                     }else{
 
                         progress.setMessage("Guardando Recepción Nueva");
                         progress.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Guardar_Recepcion_Nueva();
-                            }
-                        }, 1000);
 
+                        Guardar_Recepcion_Nueva();
                     }
                 }
 
@@ -2562,13 +2524,8 @@ public class frm_recepcion_datos extends PBase {
 
                     progress.setMessage("Guardando Recepción Nueva");
                     progress.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Guardar_Recepcion_Nueva();
-                        }
-                    }, 1000);
+
+                    Guardar_Recepcion_Nueva();
 
                 }else{
 
@@ -2770,14 +2727,8 @@ public class frm_recepcion_datos extends PBase {
 
             progress.setMessage("Guardando Recepción Nueva");
             progress.show();
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Guardar_Recepcion_Nueva();
-                }
-            }, 1000);
 
+            Guardar_Recepcion_Nueva();
 
         }catch (Exception e){
             mu.msgbox("SigueValidandoParametros:"+e.getMessage());
@@ -2868,14 +2819,8 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Guardar_Recepcion_Nueva();
-                    }
-                }, 1000);
 
+                Guardar_Recepcion_Nueva();
 
             }
 
@@ -3825,15 +3770,8 @@ public class frm_recepcion_datos extends PBase {
                 if (Escaneo_Pallet){
 
                     progress.setMessage("Llenando detalle recepción...");
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            LlenaCamposEsPallet();
-                        }
-                    }, 1000);
 
-
+                    LlenaCamposEsPallet();
 
                 }else{
                     if (BeProducto.Genera_lp){
@@ -4714,13 +4652,7 @@ public class frm_recepcion_datos extends PBase {
         progress.setMessage("Guardando Recepción");
         progress.show();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                guardar_recepcion();
-            }
-        }, 1000);
+        guardar_recepcion();
 
     }
 
@@ -4792,13 +4724,7 @@ public class frm_recepcion_datos extends PBase {
                     progress.setMessage("Validando Campos");
                     progress.show();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ValidaCampos();
-                        }
-                    }, 1000);
+                    ValidaCampos();
 
                 }
 
@@ -4808,13 +4734,8 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Validando Campos");
                 progress.show();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ValidaCampos();
-                    }
-                }, 1000);
+                ValidaCampos();
+
             }
 
             //btnTareas.setEnabled(true);
@@ -4964,13 +4885,7 @@ public class frm_recepcion_datos extends PBase {
             progress.setMessage("Validando Cantidad");
             progress.show();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Valida_Cantidad_Recibida();
-                }
-            }, 1000);
+            Valida_Cantidad_Recibida();
 
         }catch (Exception e){
             mu.msgbox("ContinuaGuardandoRecepcion: "+e.getMessage());
@@ -5007,8 +4922,6 @@ public class frm_recepcion_datos extends PBase {
                         progress.setMessage("Llenando detalle de recepción");
                         progress.show();
 
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(() -> DespuesDeValidarCantidad(), 1000);
                         DespuesDeValidarCantidad();
                     }
                 }
@@ -5020,8 +4933,6 @@ public class frm_recepcion_datos extends PBase {
                 //#ejc20210611: Definir fecha vence por defecto null
                 BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
 
-//                Handler handler = new Handler();
-//                handler.postDelayed(() -> DespuesDeValidarCantidad(), 1000);
                 DespuesDeValidarCantidad();
 
             }
@@ -5052,10 +4963,7 @@ public class frm_recepcion_datos extends PBase {
 
                         progress.setMessage("LLenando Detalle Recepción");
                         progress.show();
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(() -> Llena_Detalle_Recepcion_Nueva(), 1000);
                         Llena_Detalle_Recepcion_Nueva();
-
 
                     }else{
                         Llena_Detalle_Recepcion_Existente();
@@ -5311,14 +5219,8 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Imprimiendo Código");
                 progress.show();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Imprimir_Codigo_Barra_Producto(CantCopias);
-                        progress.cancel();
-                    }
-                }, 2000);
+                Imprimir_Codigo_Barra_Producto(CantCopias);
+                progress.cancel();
 
             });
 
@@ -5328,15 +5230,8 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Imprimir_Licencia(CantCopias);
-                        progress.cancel();
-                    }
-                }, 2000);
-
+                Imprimir_Licencia(CantCopias);
+                progress.cancel();
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
                 //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
@@ -7615,13 +7510,7 @@ public class frm_recepcion_datos extends PBase {
                     progress.setMessage("Finalizando proceso de guardar recepción");
                     progress.show();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            processGuardarRecNueva();
-                        }
-                    }, 1000);
+                    processGuardarRecNueva();
 
                     break;
                 case 17:
@@ -7652,15 +7541,8 @@ public class frm_recepcion_datos extends PBase {
 
                     progress.setMessage("Comprobando si existe la licencia " + pNumeroLP);
                     progress.show();
-                    Handler handler2 = new Handler();
-                    handler2.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            processExisteLp();
-                        }
-                    }, 1000);
 
-                    //processExisteLp();
+                    processExisteLp();
 
                     break;
                 case 25:
@@ -7952,13 +7834,8 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Guardar_Recepcion_Nueva();
-                    }
-                }, 1000);
+
+                Guardar_Recepcion_Nueva();
 
             }
 
@@ -8361,13 +8238,7 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Validando imprimir barra");
                 progress.show();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Imprime_Barra_Despues_Guardar();
-                    }
-                }, 1000);
+                Imprime_Barra_Despues_Guardar();
 
             }
         }else{
@@ -8376,13 +8247,8 @@ public class frm_recepcion_datos extends PBase {
             progress.setMessage("Validando imprimir barra");
             progress.show();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Imprime_Barra_Despues_Guardar();
-                }
-            }, 2000);
+            Imprime_Barra_Despues_Guardar();
+
         }
 
     }
@@ -8450,15 +8316,6 @@ public class frm_recepcion_datos extends PBase {
             //#GT19102022_0800: Mostrar el aviso con el delay
             progress.setMessage("Finalizando proceso de guardar recepción");
             progress.show();
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Aqui no se hace nada, solo es la pausa par amostrar el progress.
-                }
-            }, 1000);
-
 
             Resultado = xobj.getresult(String.class,"GuardarRecepcionModif");
 
@@ -9024,13 +8881,8 @@ public class frm_recepcion_datos extends PBase {
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Guardar_Recepcion_Nueva();
-                    }
-                }, 1000);
+
+               Guardar_Recepcion_Nueva();
 
             }
 
