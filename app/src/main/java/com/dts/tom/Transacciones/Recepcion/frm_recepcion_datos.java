@@ -5219,19 +5219,37 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Imprimiendo Código");
                 progress.show();
 
-                Imprimir_Codigo_Barra_Producto(CantCopias);
-                progress.cancel();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Imprimir_Codigo_Barra_Producto(CantCopias);
+                        progress.cancel();
+
+                    }
+                }, 300);
 
             });
 
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
 
+
                 //#GT19102022_0800: Mostrar el aviso con el delay
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
 
-                Imprimir_Licencia(CantCopias);
-                progress.cancel();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Imprimir_Licencia(CantCopias);
+                        progress.cancel();
+
+                    }
+                }, 500);
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
                 //vamos a utilizar el mismo parámetro mostrar_area para imprimir licencia y sku de una vez
@@ -5576,6 +5594,8 @@ public class frm_recepcion_datos extends PBase {
                     } else if (BeProducto.IdTipoEtiqueta == 2) {
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
+                        //#GT15112022_1200: para reducir el ancho de LP en la etiqueta tipo 2 cealsa, se redujeron valores
+
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
@@ -5587,11 +5607,11 @@ public class frm_recepcion_datos extends PBase {
                                         "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
                                         "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
                                         "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                                        "^FT560,180^A0I,90,70^FH^FD%3$s^FS\n" +
                                         "^BY3,3,160^FT550,280^BCI,,N,N\n" +
                                         "^FD%3$s^FS\n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                                        "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
                                         "^FO2,520^GB670,14,14^FS\n" +
                                         "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
                                         "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
@@ -5776,6 +5796,7 @@ public class frm_recepcion_datos extends PBase {
                         } else if (BeProducto.IdTipoEtiqueta == 2) {
                             //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                             //Dado que la descripción salía muy pequeña
+                            //#GT15112022_1200: se reduce el valor del parametro para que LP no ocupe ancho total de la etiqueta fisica
                             zpl = String.format("^XA\n" +
                                             "^MMT\n" +
                                             "^PW600\n" +
@@ -5787,11 +5808,11 @@ public class frm_recepcion_datos extends PBase {
                                             "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
                                             "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
                                             "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                            "^FT560,180^A0I,90,100^FH^FD%3$s^FS\n" +
+                                            "^FT560,180^A0I,90,70^FH^FD%3$s^FS\n" +
                                             "^BY3,3,160^FT550,280^BCI,,N,N\n" +
                                             "^FD%3$s^FS\n" +
                                             "^PQ1,0,1,Y \n" +
-                                            "^FT560,480^A0I,35,40^FH^FD%4$s^FS\n" +
+                                            "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
                                             "^FO2,520^GB670,14,14^FS\n" +
                                             "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
                                             "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
