@@ -5235,7 +5235,7 @@ public class frm_recepcion_datos extends PBase {
             dialog.setNegativeButton("Licencia", (dialog12, which) -> {
 
 
-                //#GT19102022_0800: Mostrar el aviso con el delay
+                //#GT15112022_1500: Mostrar el aviso con el delay
                 progress.setMessage("Imprimiendo Licencia");
                 progress.show();
 
