@@ -873,7 +873,12 @@ public class frm_consulta_stock extends PBase {
                 if(txtUbic.getText().toString().isEmpty()){
                     idubic = 0;
                 }else{
-                    idubic = Integer.valueOf(txtUbic.getText().toString());
+                    if (isNumeric(txtUbic.getText().toString())) {
+                        idubic = Integer.valueOf(txtUbic.getText().toString());
+                    } else {
+                        toastlong("Ubicación no válida.");
+                        return;
+                    }
                 }
 
                 if (txtNombre.getText().toString().isEmpty()) {
@@ -1039,6 +1044,17 @@ public class frm_consulta_stock extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    public  boolean isNumeric(String cadena) {
+        boolean resultado;
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
     }
 
     @Override
