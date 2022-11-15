@@ -452,6 +452,10 @@ public class frm_consulta_stock extends PBase {
                     lblNombreUbicacion.setVisibility(View.VISIBLE);
                     lblNombreUbicacion.setText("U.S.P");
                     idle = true;
+
+                    //#AT20221115 Limpiar listview
+                    LimpiarLista();
+
                 } else {
 
                     if (pListStock2.items.size()>0) lpid=pListStock2.items.get(0).Codigo;else lpid=" ";
@@ -638,14 +642,8 @@ public class frm_consulta_stock extends PBase {
                     }
                 }
             } else {
-                //limpiar el grid.
-                if (gl.Mostrar_Area_En_HH) {
-                    adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock2);
-                } else {
-                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock);
-                }
+                //#AT20221115 Limpiar listview
+                LimpiarLista();
             }
 
             registros.setText("Registros: "+ conteo);
@@ -855,15 +853,8 @@ public class frm_consulta_stock extends PBase {
                     (txtUbic.getText().toString().isEmpty() && txtUbic.getText().toString().isEmpty()) &&
                     (txtNombre.getText().toString().isEmpty() && txtNombre.getText().toString().isEmpty())
             ) {
-                items_stock.clear();
 
-                if (gl.Mostrar_Area_En_HH) {
-                    adapter_stock2 = new list_adapt_consulta_stock2(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock2);
-                } else {
-                    adapter_stock = new list_adapt_consulta_stock(getApplicationContext(),items_stock);
-                    listView.setAdapter(adapter_stock);
-                }
+                LimpiarLista();
 
                 toast("Ingrese código de producto y/o ubicación");
             } else {
@@ -915,6 +906,23 @@ public class frm_consulta_stock extends PBase {
             }
         }catch (Exception ex){
             ex.printStackTrace();
+        }
+    }
+
+    //#AT20221115 Cree esta función para limpiar y actualizar el listview
+    public void LimpiarLista() {
+        try {
+
+            items_stock.clear();
+
+            if (gl.Mostrar_Area_En_HH) {
+                if (adapter_stock2 != null) adapter_stock2.notifyDataSetChanged();
+            } else {
+                if (adapter_stock != null) adapter_stock.notifyDataSetChanged();
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
     }
 
