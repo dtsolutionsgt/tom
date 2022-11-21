@@ -1476,7 +1476,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             fechaVenceU = app.strFechaXMLCombo(cvVence);
-            execws(15);
+
+            //#AT20221121 Si Calcular_Ubicacion_Sugerida_ML es verdadero genera ubicación sugerida
+            if (gl.Calcular_Ubicacion_Sugerida_ML) {
+                execws(15);
+            } else {
+                txtUbicDestino.requestFocus();
+            }
 
         }catch(Exception ex){
             msgbox("Llena cantidad " + ex.getMessage());

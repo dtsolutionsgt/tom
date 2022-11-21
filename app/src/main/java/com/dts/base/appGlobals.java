@@ -223,6 +223,7 @@ public class appGlobals extends Application {
     public int Dias_Maximo_Vencimiento_Reemplazo = 0;
     public boolean Permitir_Repeticiones_En_Ingreso = false;
     public boolean TieneResoluciones = false;
+    public boolean Calcular_Ubicacion_Sugerida_ML = false;
 
     @Override
     public void onCreate() {

@@ -528,6 +528,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.Permitir_Decimales = bodegas.items.get(position).Permitir_Decimales;
                     gl.Dias_Maximo_Vencimiento_Reemplazo = bodegas.items.get(position).Dias_Maximo_Vencimiento_Reemplazo;
                     gl.Permitir_Repeticiones_En_Ingreso = bodegas.items.get(position).Permitir_Repeticiones_En_Ingreso;
+                    gl.Calcular_Ubicacion_Sugerida_ML = bodegas.items.get(position).Calcular_Ubicacion_Sugerida_ML;
 
                     idimpres=0;
                     execws(3);
