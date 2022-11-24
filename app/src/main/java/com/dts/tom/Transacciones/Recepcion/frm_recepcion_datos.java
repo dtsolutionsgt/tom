@@ -5596,7 +5596,7 @@ public class frm_recepcion_datos extends PBase {
                         //Dado que la descripción salía muy pequeña
                         //#GT15112022_1200: para reducir el ancho de LP en la etiqueta tipo 2 cealsa, se redujeron valores
 
-                        zpl = String.format("^XA\n" +
+                      /*  zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
                                         "^LL0406\n" +
@@ -5618,7 +5618,34 @@ public class frm_recepcion_datos extends PBase {
                                 gl.gNomEmpresa,
                                 "$" + pNumeroLP,
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());*/
+
+
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,80^A0I,20,14^FH^FD%5$s^FS\\n" +
+                                        "^FO2,110^GB670,0,5^FS \n" +
+                                        "^FT440,130^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,130^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,165^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,165^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,220^A0I,70,70^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,300^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
+                                        "^FO2,520^GB670,14,14^FS\n" +
+                                        "^FT560,540^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$" + pNumeroLP,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+
 
                         zplSKU = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -5797,7 +5824,7 @@ public class frm_recepcion_datos extends PBase {
                             //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                             //Dado que la descripción salía muy pequeña
                             //#GT15112022_1200: se reduce el valor del parametro para que LP no ocupe ancho total de la etiqueta fisica
-                            zpl = String.format("^XA\n" +
+                           /* zpl = String.format("^XA\n" +
                                             "^MMT\n" +
                                             "^PW600\n" +
                                             "^LL0406\n" +
@@ -5815,6 +5842,31 @@ public class frm_recepcion_datos extends PBase {
                                             "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
                                             "^FO2,520^GB670,14,14^FS\n" +
                                             "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                            "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                    gl.gNomEmpresa,
+                                    "$" + pNumeroLP,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());*/
+
+
+                            zpl = String.format("^XA\n" +
+                                            "^MMT\n" +
+                                            "^PW600\n" +
+                                            "^LL0406\n" +
+                                            "^LS0\n" +
+                                            "^FT450,80^A0I,20,14^FH^FD%5$s^FS\\n" +
+                                            "^FO2,110^GB670,0,5^FS \n" +
+                                            "^FT440,130^A0I,28,30^FH^FD%1$s^FS\n" +
+                                            "^FT560,130^A0I,26,30^FH^FDBodega:^FS\n" +
+                                            "^FT440,165^A0I,28,30^FH^FD%2$s^FS\n" +
+                                            "^FT560,165^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                            "^FT560,220^A0I,70,70^FH^FD%3$s^FS\n" +
+                                            "^BY3,3,160^FT550,300^BCI,,N,N\n" +
+                                            "^FD%3$s^FS\n" +
+                                            "^PQ1,0,1,Y \n" +
+                                            "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
+                                            "^FO2,520^GB670,14,14^FS\n" +
+                                            "^FT560,540^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
                                             "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
                                     gl.gNomEmpresa,
                                     "$" + pNumeroLP,

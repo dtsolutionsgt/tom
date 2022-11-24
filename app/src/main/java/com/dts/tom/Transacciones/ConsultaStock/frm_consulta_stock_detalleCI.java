@@ -388,7 +388,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
 
-                        zpl = String.format("^XA\n" +
+                        /*zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
                                         "^LL0406\n" +
@@ -407,7 +407,30 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
                                 gl.gNomEmpresa,
                                 "$"+gl.existencia.getLicPlate(),
+                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);*/
+
+
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT440,120^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,120^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,150^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,150^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,200^A0I,90,70^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,150^FT550,280^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT560,450^A0I,35,35^FH^FD%4$s^FS\n" +
+                                        "^FO2,500^GB670,14,14^FS\n" +
+                                        "^FT560,520^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                "$"+gl.existencia.getLicPlate(),
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre);
+
 
                     }else if (gl.existencia.IdTipoEtiqueta==4){
 
