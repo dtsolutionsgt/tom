@@ -5217,7 +5217,7 @@ public class frm_recepcion_datos extends PBase {
 
                 //#GT19102022_0800: Mostrar el aviso con el delay
                 //#volvi a coloca el delay para impresión porque no se muestra nada.
-                //prueba de merge
+                //#prueba
                 progress.setMessage("Imprimiendo Código");
                 progress.show();
 
