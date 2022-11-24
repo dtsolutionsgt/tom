@@ -68,6 +68,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int Dias_Maximo_Vencimiento_Reemplazo = 0;
     @Element(required=false) public boolean Permitir_Repeticiones_En_Ingreso = false;
     @Element(required=false) public boolean Validar_Existencias_Inv_Ini = false;
+    @Element(required=false) public boolean Calcular_Ubicacion_Sugerida_ML = false;
+
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -91,7 +93,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
                        boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
                        boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales,
-                       boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini) {
+                       boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini, boolean Calcular_Ubicacion_Sugerida_ML) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;

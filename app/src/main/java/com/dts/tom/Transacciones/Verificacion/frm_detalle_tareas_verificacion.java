@@ -1217,7 +1217,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private void listSortedItems() {
 
         try {
-            if (gl.TipoPantallaVerificacion > 0) {
+            //#AT20221116 Se aplica la pantalla vertical unicamente cuando el TipoPantalla = 3
+            if (gl.TipoPantallaVerificacion == 3) {
                 adapter4 = new list_adapt_detalle_tareas_verificacion4(this, pListBeTareasVerificacionHH);
                 listDetVeri.setAdapter(adapter4);
             } else {
