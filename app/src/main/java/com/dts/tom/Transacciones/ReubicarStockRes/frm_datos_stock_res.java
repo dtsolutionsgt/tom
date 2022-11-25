@@ -234,6 +234,22 @@ public class frm_datos_stock_res extends PBase {
         }
     }
 
+    //#AT20221125 Si Mostrar_Area_En_HH = true se carga el codigo del producto
+    private void setCodigoProd() {
+        try {
+            if (!gl.Mostrar_Area_En_HH) {
+                txtCodigoPrd.setText(selitem.Codigo_Producto);
+                trProducto.setVisibility(View.VISIBLE);
+                txtDescProd.setText(selitem.Codigo_Producto+" - "+selitem.Nombre_Producto);
+                txtUbicDestino.requestFocus();
+            } else {
+                txtCodigoPrd.requestFocus();
+            }
+        } catch (Exception e) {
+            mu.msgbox(new Object() {} .getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
+    }
+
     private void ValidaLicencia() {
         String Lic = "";
         try {
@@ -249,7 +265,7 @@ public class frm_datos_stock_res extends PBase {
                     mu.msgbox("La licencia ingresada " + Lic + " no coincide con: " + selitem.Lic_plate);
                     Lic= "";
                 } else {
-                    //txtCodigoPrd.requestFocus();
+                    setCodigoProd();
                 }
             } else {
                 txtLicensePlate.requestFocus();
