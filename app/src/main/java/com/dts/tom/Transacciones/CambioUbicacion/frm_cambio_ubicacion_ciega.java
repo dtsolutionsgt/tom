@@ -2022,6 +2022,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (bodega_ubicacion_destino.Disponibilidad_Ubicacion ==1){
                         progress.cancel();
                         msgAskUbicacionOcupadaCompleta();
+                    }else if (bodega_ubicacion_destino.Disponibilidad_Ubicacion ==0){
+                        //#CKFK20221127 Agregué esta validación para cuando la ubicación está vacía
+                        execws(21);
                     }else if (bodega_ubicacion_destino.Disponibilidad_Ubicacion <1){
                         progress.cancel();
                         msgAskUbicacionParcialmenteCompleta(bodega_ubicacion_destino.Disponibilidad_Ubicacion);

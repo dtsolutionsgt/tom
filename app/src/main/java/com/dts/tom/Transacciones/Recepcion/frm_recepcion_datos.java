@@ -677,7 +677,6 @@ public class frm_recepcion_datos extends PBase {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
 
-                    //#GT19102022_0800: Mostrar el aviso con el delay
                     progress.setMessage("Guardando Recepción");
                     progress.show();
 
@@ -4648,7 +4647,6 @@ public class frm_recepcion_datos extends PBase {
 
     public void BotonGuardarRecepcion(View view) {
 
-        //#GT19102022_0800: Mostrar el aviso con el delay
         progress.setMessage("Guardando Recepción");
         progress.show();
 
@@ -4720,7 +4718,6 @@ public class frm_recepcion_datos extends PBase {
                     //Guardar_Recepcion_Pallet
                 }else{
 
-                    //#GT19102022_0800: Mostrar el aviso con el delay
                     progress.setMessage("Validando Campos");
                     progress.show();
 
@@ -4730,7 +4727,6 @@ public class frm_recepcion_datos extends PBase {
 
             }else{
 
-                //#GT19102022_0800: Mostrar el aviso con el delay
                 progress.setMessage("Validando Campos");
                 progress.show();
 
@@ -7581,7 +7577,6 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 16:
 
-                    //#GT19102022_0800: Mostrar el aviso con el delay
                     progress.setMessage("Finalizando proceso de guardar recepción");
                     progress.show();
 
@@ -8308,8 +8303,6 @@ public class frm_recepcion_datos extends PBase {
                 execws(26);
             }else{
 
-
-                //#GT19102022_0800: Mostrar el aviso con el delay
                 progress.setMessage("Validando imprimir barra");
                 progress.show();
 
@@ -8318,7 +8311,6 @@ public class frm_recepcion_datos extends PBase {
             }
         }else{
 
-            //#GT19102022_0800: Mostrar el aviso con el delay
             progress.setMessage("Validando imprimir barra");
             progress.show();
 
@@ -8388,7 +8380,6 @@ public class frm_recepcion_datos extends PBase {
 
             String Resultado;
 
-            //#GT19102022_0800: Mostrar el aviso con el delay
             progress.setMessage("Finalizando proceso de guardar recepción");
             progress.show();
 
