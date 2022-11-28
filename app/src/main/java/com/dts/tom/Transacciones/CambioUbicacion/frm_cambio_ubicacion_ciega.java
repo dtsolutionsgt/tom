@@ -3613,12 +3613,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
             }else{
-                if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
-                    Toast.makeText(frm_cambio_ubicacion_ciega.this, "La ubicación parcial de pallet requiere explosionar el material.", Toast.LENGTH_SHORT).show();
-                    Es_Explosion = true;
-                    inicializaTarea(true);
-                    msgAskImprimirEtiqueta("Imprimir etiqueta");
-                    //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
+
+                //#GT28112022_1100 si oculta mensajes, no aplicar explosion y NuevaResolucionLP
+                if (!ocultar_mensajes) {
+                    if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
+                        Toast.makeText(frm_cambio_ubicacion_ciega.this, "La ubicación parcial de pallet requiere explosionar el material.", Toast.LENGTH_SHORT).show();
+                        Es_Explosion = true;
+                        inicializaTarea(true);
+                        msgAskImprimirEtiqueta("Imprimir etiqueta");
+                    }else{
+                        Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
+                        inicializaTarea(true);
+                    }
                 }else{
                     Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
                     inicializaTarea(true);
