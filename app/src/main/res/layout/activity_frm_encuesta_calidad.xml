@@ -143,9 +143,37 @@
             android:background="@drawable/frame_rect">
 
             <RadioGroup
+                android:id="@+id/gpRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView3"
+                android:layout_alignStart="@+id/textView3"
+                android:layout_alignEnd="@+id/textView3"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="0dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/chkFrontal"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Frontal"
+                    android:textSize="17sp" />
+
+                <RadioButton
+                    android:id="@+id/chkTrasera"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="Trasera"
+                    android:textSize="17sp" />
+            </RadioGroup>
+
+            <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/chkFrontal"
+                android:layout_below="@+id/gpRb"
                 android:layout_alignStart="@+id/textView3"
                 android:layout_alignEnd="@+id/textView3"
                 android:layout_marginStart="0dp"
@@ -153,30 +181,34 @@
                 android:layout_marginEnd="0dp">
 
                 <CheckBox
-                    android:id="@+id/radioButton3"
+                    android:id="@+id/chk1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Profundidad del dibujo"
                     android:textSize="17sp" />
 
                 <CheckBox
-                    android:id="@+id/radioButton4"
+                    android:id="@+id/chk2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Asienta parejo"
                     android:textSize="17sp" />
 
                 <CheckBox
-                    android:id="@+id/radioButton5"
+                    android:id="@+id/chk3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Protuberancias"
                     android:textSize="17sp" />
 
                 <CheckBox
-                    android:id="@+id/radioButton6"
+                    android:id="@+id/chk4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:text="Objetos incrustados"
                     android:textSize="17sp" />
             </RadioGroup>
@@ -192,32 +224,14 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Condiciones"
+                android:text="Llanta - Condiciones"
                 android:textColor="#000000"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/chkFrontal"
+            <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView3"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="75dp"
-                android:layout_marginTop="30dp"
-                android:text="Frontal"
-                android:textSize="17sp" />
-
-            <RadioButton
-                android:id="@+id/chkTrasera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/chkFrontal"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="75dp"
-                android:text="Trasera"
-                android:textSize="17sp" />
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 

@@ -19,16 +19,17 @@
             android:layout_marginStart="3dp"
             android:layout_marginTop="3dp"
             android:padding="10dp"
+            android:visibility="visible"
             app:srcCompat="@drawable/clear" />
 
         <TextView
             android:id="@+id/lblTexto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
             android:layout_alignTop="@+id/imgEstado"
             android:layout_alignBottom="@+id/imgEstado"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"

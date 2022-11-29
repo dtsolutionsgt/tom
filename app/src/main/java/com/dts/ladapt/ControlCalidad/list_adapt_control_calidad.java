@@ -21,13 +21,15 @@ public class list_adapt_control_calidad extends BaseAdapter {
     private ArrayList<clsBeCalidad> ControlCalidad;
     private Context cCont;
     private int selectedIndex;
+    private boolean nuevo;
     private LayoutInflater l_Inflater;
 
-    public list_adapt_control_calidad(Context context, ArrayList<clsBeCalidad> results){
+    public list_adapt_control_calidad(Context context, ArrayList<clsBeCalidad> results, boolean val){
         ControlCalidad = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
         cCont = context;
+        nuevo = val;
     }
 
     public void setSelectedIndex(int ind) {
@@ -83,10 +85,14 @@ public class list_adapt_control_calidad extends BaseAdapter {
 
             holder.lblTexto.setText(ControlCalidad.get(position).Texto);
 
-            if (ControlCalidad.get(position).Estado) {
-                holder.imgEstado.setImageResource(R.drawable.accept);
+            if (nuevo) {
+                if (ControlCalidad.get(position).Estado) {
+                    holder.imgEstado.setImageResource(R.drawable.accept);
+                } else {
+                    holder.imgEstado.setImageResource(R.drawable.close);
+                }
             } else {
-                holder.imgEstado.setImageResource(R.drawable.close);
+                holder.imgEstado.setVisibility(View.GONE);
             }
 
         } catch (Exception ex){

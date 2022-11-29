@@ -45,36 +45,42 @@ public class ControlCalidad extends PBase {
         if (ListaCalidad != null) ListaCalidad.clear();
 
         item = new clsBeCalidad();
+        item.id = 1;
         item.Texto = "T-LLANTAS Y RUEDAS";
         item.Estado = true;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
+        item.id = 2;
         item.Texto = "C-CONTROLES";
         item.Estado = false;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
+        item.id = 3;
         item.Texto = "L-LUCES Y ESPEJOS";
         item.Estado = false;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
+        item.id = 4;
         item.Texto = "O-ACEITE Y OTROS FLUIDOS";
         item.Estado = false;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
+        item.id = 5;
         item.Texto = "C-CHASIS";
         item.Estado = false;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
+        item.id = 6;
         item.Texto = "S-SOPORTES DE PARO";
         item.Estado = false;
         ListaCalidad.add(item);
 
-        AdapterControlCalidad = new list_adapt_control_calidad(getApplicationContext(),ListaCalidad);
+        AdapterControlCalidad = new list_adapt_control_calidad(getApplicationContext(),ListaCalidad, true);
         listCalidad.setAdapter(AdapterControlCalidad);
     }
 
@@ -87,6 +93,11 @@ public class ControlCalidad extends PBase {
                 startActivity(new Intent(ControlCalidad.this, frm_encuesta_calidad.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 }

@@ -2,8 +2,17 @@ package com.dts.classes.Transacciones.ControlCalidad;
 
 public class clsBeCalidad {
 
+    public int id;
     public String Texto = "";
     public boolean Estado = false;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTexto() {
         return Texto;
