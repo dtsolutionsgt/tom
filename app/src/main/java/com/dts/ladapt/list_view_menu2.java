@@ -83,6 +83,7 @@ public class list_view_menu2 extends BaseAdapter {
         if (items.get(position).Icon==11) holder.imgEst.setImageResource(R.drawable.camion);
         if (items.get(position).Icon==12) holder.imgEst.setImageResource(R.drawable.reabastecimiento);
         if (items.get(position).Icon==13) holder.imgEst.setImageResource(R.drawable.paquete);
+        if (items.get(position).Icon==14) holder.imgEst.setImageResource(R.drawable.verifi);
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));

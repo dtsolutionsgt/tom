@@ -26,6 +26,7 @@ import com.dts.servicios.startCantTareas;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
+import com.dts.tom.Transacciones.ControlCalidad.ControlCalidad;
 import com.dts.tom.Transacciones.Inventario.frm_list_inventario;
 import com.dts.tom.Transacciones.Packing.frm_Packing;
 import com.dts.tom.Transacciones.Packing.frm_lista_packing;
@@ -305,6 +306,14 @@ public class Mainmenu extends PBase {
                 item.ID=10;item.Icon=10;item.Name="Utilerias";
                 item.cant=-1;
                 items.add(item);
+
+                item = clsCls.new clsMenu();
+                item.ID = 14;
+                item.Icon = 14;
+                item.Name = "Control Calidad";
+                item.cant = -1;
+                items.add(item);
+
 
                 item = clsCls.new clsMenu();
                 item.ID=9;item.Icon=9;
@@ -710,6 +719,9 @@ public class Mainmenu extends PBase {
                     break;
                 case 13:// Reubicar stock reservado
                     startActivity(new Intent(this, frm_lista_stock_res.class));
+                    break;
+                case 14:// Control Calidad
+                    startActivity(new Intent(this, ControlCalidad.class));
                     break;
             }
 
