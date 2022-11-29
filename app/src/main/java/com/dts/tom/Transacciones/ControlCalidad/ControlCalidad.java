@@ -2,9 +2,11 @@ package com.dts.tom.Transacciones.ControlCalidad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,13 +23,15 @@ import java.util.List;
 
 public class ControlCalidad extends PBase {
 
-    private TextView lblDescProd;
+    private TextView lblDescProd, lblEstadoDesc;
+    private EditText txtCodigo;
     private ListView listCalidad;
 
     private list_adapt_control_calidad AdapterControlCalidad;
     private clsBeCalidad item = new clsBeCalidad();
     private ArrayList<clsBeCalidad> ListaCalidad = new ArrayList<>() ;
     public static clsBeCalidad AuxItem = new clsBeCalidad();
+    private int browse = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +41,12 @@ public class ControlCalidad extends PBase {
         super.InitBase();
 
         lblDescProd = findViewById(R.id.lblDescProd);
+        lblEstadoDesc = findViewById(R.id.lblEstadoDesc);
         listCalidad = findViewById(R.id.listCalidad);
+        txtCodigo = findViewById(R.id.txtCodigo);
+
+        gl.actual = 0;
+        txtCodigo.requestFocus();
 
         setHandlers();
         CargaLista();
@@ -49,7 +58,7 @@ public class ControlCalidad extends PBase {
         item = new clsBeCalidad();
         item.id = 1;
         item.Texto = "T-LLANTAS Y RUEDAS";
-        item.Estado = true;
+        item.Estado = false;
         ListaCalidad.add(item);
 
         item = new clsBeCalidad();
@@ -82,25 +91,66 @@ public class ControlCalidad extends PBase {
         item.Estado = false;
         ListaCalidad.add(item);
 
-        AdapterControlCalidad = new list_adapt_control_calidad(getApplicationContext(),ListaCalidad, true);
-        listCalidad.setAdapter(AdapterControlCalidad);
+        SetLista();
     }
 
     private void setHandlers() {
+
+        txtCodigo.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (!txtCodigo.getText().toString().isEmpty()) {
+                        lblEstadoDesc.setText("Nuevo");
+                        lblDescProd.setText("Moto CC150 / Negra");
+                    }
+                }
+
+                return false;
+            }
+        });
 
         listCalidad.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                AuxItem = (clsBeCalidad) listCalidad.getItemAtPosition(position);
-                startActivity(new Intent(ControlCalidad.this, frm_encuesta_calidad.class));
+                if (!lblDescProd.getText().toString().isEmpty()) {
+                    AuxItem = (clsBeCalidad) listCalidad.getItemAtPosition(position);
+                    browse = 2;
+                    startActivity(new Intent(ControlCalidad.this, frm_encuesta_calidad.class));
+                } else {
+                    toast("Ingrese código");
+                }
             }
         });
+    }
+
+    private void SetLista() {
+
+        AdapterControlCalidad = new list_adapt_control_calidad(getApplicationContext(),ListaCalidad,  gl.actual);
+        listCalidad.setAdapter(AdapterControlCalidad);
+    }
+
+    public void Exit(View view) {
+        super.finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        if (browse == 2) {
+            if (gl.actual < 1) {
+                gl.actual +=1;
+            }
+
+            if (gl.Completo) {
+                ListaCalidad.get(0).Estado = true;
+
+            }
+
+            SetLista();
+        }
     }
 }

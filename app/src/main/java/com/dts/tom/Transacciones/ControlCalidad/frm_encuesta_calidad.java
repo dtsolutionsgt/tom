@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.RadioButton;
 
 import com.dts.classes.Transacciones.ControlCalidad.clsBeEncuesta;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,10 @@ public class frm_encuesta_calidad extends PBase {
     private boolean respuesta = false, cambio = false;
     private int TipoLlanta;
 
+    private FloatingActionButton btnCompletar;
     private CheckBox chk1, chk2, chk3, chk4;
     private RadioButton chkFrontal, chkTrasera;
+    private ImageView imgTrasera, imgFrontal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +44,20 @@ public class frm_encuesta_calidad extends PBase {
         chk4 = findViewById(R.id.chk4);
         chkFrontal = findViewById(R.id.chkFrontal);
         chkTrasera = findViewById(R.id.chkTrasera);
+        imgFrontal = findViewById(R.id.imgFrontal);
+        imgTrasera = findViewById(R.id.imgTrasera);
+        btnCompletar = findViewById(R.id.btnCompletar);
 
         setPreguntas();
         setHandlers();
+
+
+        chk1.setEnabled(false);
+        chk2.setEnabled(false);
+        chk3.setEnabled(false);
+        chk4.setEnabled(false);
+
+
     }
 
     private void setPreguntas(){
@@ -117,6 +132,7 @@ public class frm_encuesta_calidad extends PBase {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
                         TipoLlanta = 1;
+                        EnableChk();
                     }
                     if (ListPregunta.size() == 0) {
                         //cambio = true;
@@ -138,6 +154,7 @@ public class frm_encuesta_calidad extends PBase {
 
                     if (b) {
                         TipoLlanta = 2;
+                        EnableChk();
                     }
 
                     if (ListPregunta.size() == 0) {
@@ -299,9 +316,43 @@ public class frm_encuesta_calidad extends PBase {
                 ListPregunta.add(PreguntaRes);
             }
 
+            if (TipoLlanta == 1) {
+                if (chk1.isChecked() && chk2.isChecked() && chk3.isChecked() && chk4.isChecked()) {
+                    imgFrontal.setImageResource(R.drawable.accept);
+                } else {
+                    imgFrontal.setImageResource(R.drawable.close);
+                }
+            } else if (TipoLlanta == 2) {
+                if (chk1.isChecked() && chk2.isChecked() && chk3.isChecked() && chk4.isChecked()) {
+                    imgTrasera.setImageResource(R.drawable.accept);
+                } else {
+                    imgTrasera.setImageResource(R.drawable.close);
+                }
+            }
+
         } catch (Exception e) {
             mu.msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
+    }
+
+    private void EnableChk() {
+        chk1.setEnabled(true);
+        chk2.setEnabled(true);
+        chk3.setEnabled(true);
+        chk4.setEnabled(true);
+    }
+
+    public void Completar(View view) {
+        for (int k = 0; k < ListPregunta.size(); k ++) {
+            if (ListPregunta.get(k).Respuesta) {
+                gl.Completo = true;
+            } else {
+                gl.Completo = false;
+                break;
+            }
+        }
+
+        super.finish();
     }
 
     public void Exit(View view) {

@@ -20,16 +20,16 @@ public class list_adapt_control_calidad extends BaseAdapter {
 
     private ArrayList<clsBeCalidad> ControlCalidad;
     private Context cCont;
-    private int selectedIndex;
+    private int selectedIndex, actual;
     private boolean nuevo;
     private LayoutInflater l_Inflater;
 
-    public list_adapt_control_calidad(Context context, ArrayList<clsBeCalidad> results, boolean val){
+    public list_adapt_control_calidad(Context context, ArrayList<clsBeCalidad> results, int val){
         ControlCalidad = results;
         l_Inflater = LayoutInflater.from(context);
         selectedIndex = -1;
         cCont = context;
-        nuevo = val;
+        actual = val;
     }
 
     public void setSelectedIndex(int ind) {
@@ -79,21 +79,19 @@ public class list_adapt_control_calidad extends BaseAdapter {
 
             }
 
-            if (position == 0) {
+            if (position <= actual) {
                 convertView.setBackgroundColor(Color.parseColor("#E8F5E9"));
             }
 
             holder.lblTexto.setText(ControlCalidad.get(position).Texto);
 
-            if (nuevo) {
-                if (ControlCalidad.get(position).Estado) {
-                    holder.imgEstado.setImageResource(R.drawable.accept);
-                } else {
-                    holder.imgEstado.setImageResource(R.drawable.close);
-                }
+
+            if (ControlCalidad.get(position).Estado) {
+                holder.imgEstado.setImageResource(R.drawable.accept);
             } else {
-                holder.imgEstado.setVisibility(View.GONE);
+                holder.imgEstado.setImageResource(R.drawable.close);
             }
+
 
         } catch (Exception ex){
             toast(ex.getMessage());
