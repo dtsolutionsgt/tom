@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.dts.classes.Transacciones.ControlCalidad.clsBeCalidad;
 import com.dts.classes.Transacciones.ControlCalidad.clsBeCalidadList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
 import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock;
 import com.dts.ladapt.ControlCalidad.list_adapt_control_calidad;
 import com.dts.tom.PBase;
@@ -26,6 +27,7 @@ public class ControlCalidad extends PBase {
     private list_adapt_control_calidad AdapterControlCalidad;
     private clsBeCalidad item = new clsBeCalidad();
     private ArrayList<clsBeCalidad> ListaCalidad = new ArrayList<>() ;
+    public static clsBeCalidad AuxItem = new clsBeCalidad();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class ControlCalidad extends PBase {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
+                AuxItem = (clsBeCalidad) listCalidad.getItemAtPosition(position);
                 startActivity(new Intent(ControlCalidad.this, frm_encuesta_calidad.class));
             }
         });
