@@ -41,7 +41,72 @@ public class frm_encuesta_calidad extends PBase {
         chkFrontal = findViewById(R.id.chkFrontal);
         chkTrasera = findViewById(R.id.chkTrasera);
 
+        setPreguntas();
         setHandlers();
+    }
+
+    private void setPreguntas(){
+
+        ListPregunta = new ArrayList<clsBeEncuesta>();
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 1;
+        PreguntaRes.Pregunta = "Profundidad del dibujo";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 1;
+        ListPregunta.add(PreguntaRes);
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 2;
+        PreguntaRes.Pregunta = "Asienta parejo";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 1;
+        ListPregunta.add(PreguntaRes);
+
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 3;
+        PreguntaRes.Pregunta = "Protuberancias";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 1;
+        ListPregunta.add(PreguntaRes);
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 4;
+        PreguntaRes.Pregunta = "Objetos incrustados";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 1;
+        ListPregunta.add(PreguntaRes);
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 1;
+        PreguntaRes.Pregunta = "Profundidad del dibujo";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 2;
+        ListPregunta.add(PreguntaRes);
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 2;
+        PreguntaRes.Pregunta = "Asienta parejo";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 2;
+        ListPregunta.add(PreguntaRes);
+
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 3;
+        PreguntaRes.Pregunta = "Protuberancias";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 2;
+        ListPregunta.add(PreguntaRes);
+
+        PreguntaRes = new clsBeEncuesta();
+        PreguntaRes.IdPregunta = 4;
+        PreguntaRes.Pregunta = "Profundidad del dibujo";
+        PreguntaRes.Respuesta = false;
+        PreguntaRes.Tipo = 2;
+        ListPregunta.add(PreguntaRes);
+
     }
 
     private void setHandlers() {
