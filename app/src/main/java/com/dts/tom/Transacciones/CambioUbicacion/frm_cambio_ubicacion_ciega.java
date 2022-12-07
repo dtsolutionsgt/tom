@@ -3595,7 +3595,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
-    private void completaProceso() {
+    private void completaProceso () {
 
         if( escaneoPallet && productoList != null){
             //#CKFK20210610 agregué esta validación para que si no tiene presentación no explosione el material

@@ -54,7 +54,7 @@ import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selit
 
 import org.w3c.dom.Text;
 
-//import androidx.core.R;
+//import androidx.core.R;txtLicencia
 
 public class frm_picking_datos extends PBase {
 
@@ -422,14 +422,20 @@ public class frm_picking_datos extends PBase {
         try {
             txtCantidadPick.setEnabled(false);
             //&& !gBePickingUbic.Lic_plate.equals("0")
-            if (!gBePickingUbic.Lic_plate.isEmpty() ) {
-                lblLicPlate.setText(gBePickingUbic.Lic_plate);
-                txtLicencia.setVisibility(View.VISIBLE);
-                lblLicenciaPicking.setVisibility(View.VISIBLE);
-                trLP.setVisibility(View.VISIBLE);
-                txtCodigoProducto.setEnabled(false);
-                txtLicencia.requestFocus();
-                Log.d("focus: ", "20220502_4");
+            //#GT07122022: si no es vacio y el valor es distinto de 0
+            if (!gBePickingUbic.Lic_plate.isEmpty()) {
+
+                if (!gBePickingUbic.Lic_plate.equals("0")){
+
+                    lblLicPlate.setText(gBePickingUbic.Lic_plate);
+                    txtLicencia.setVisibility(View.VISIBLE);
+                    lblLicenciaPicking.setVisibility(View.VISIBLE);
+                    trLP.setVisibility(View.VISIBLE);
+                    txtCodigoProducto.setEnabled(false);
+                    txtLicencia.requestFocus();
+                    Log.d("focus: ", "20220502_4");
+                }
+
             } else {
                 lblLicPlate.setText("");
                 trLP.setVisibility(View.GONE);
