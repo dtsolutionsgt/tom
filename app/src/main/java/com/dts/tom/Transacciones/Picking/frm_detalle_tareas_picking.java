@@ -770,8 +770,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         }
 
                         callMethod("Get_Picking_By_IdPickingEnc",
-                                         "pIdPickingEnc",gl.gIdPickingEnc,
-                                               "pIdOperadorBodega", IdOperadorBodega);
+                                   "pIdPickingEnc",gl.gIdPickingEnc,
+                                   "pIdOperadorBodega", IdOperadorBodega);
                         break;
                     case 2:
                         //#EJC20220608: Cambio en método.
@@ -779,10 +779,10 @@ public class frm_detalle_tareas_picking extends PBase {
                         break;
                     case 3:
                         callMethod("Get_All_PickingUbic_By_IdPickingEnc_Tipo",
-                                "pIdPickingEnc",gBePicking.IdPickingEnc,
-                                "pDetalleOperador",gBePicking.Detalle_operador,
-                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,
-                                "Tipo",TipoLista);
+                                   "pIdPickingEnc",gBePicking.IdPickingEnc,
+                                   "pDetalleOperador",gBePicking.Detalle_operador,
+                                   "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,
+                                   "Tipo",TipoLista);
                         break;
                     case 4:
                         //#EJC20220608:Evitar enviar objetos completos.

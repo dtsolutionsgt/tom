@@ -1178,7 +1178,7 @@ public class frm_verificacion_datos extends PBase {
                     if (gl.VerificacionConsolidada) {
                         if (pSubListPickingU != null) {
                             if (pSubListPickingU.items != null) {
-                                if (pSubListPickingU.items.size() > 1) {
+                                if (pSubListPickingU.items.size() > 0) {
                                     startActivity(new Intent(frm_verificacion_datos.this, frm_verificacion_consolidada_detalle.class));
                                 }
                             }

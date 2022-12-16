@@ -119,7 +119,14 @@ public class frm_danado_verificacion extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     IdEstadoDanado=LProductoEstadoDanado.items.get(position).IdEstado;
-                    txtUbicDestVeri.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto+"");
+
+                    if(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto==0){
+                        txtUbicDestVeri.setText(gl.gUbicMerma + "");
+                        getNombreUbicacion(txtUbicDestVeri.getText().toString());
+                    }else {
+                        txtUbicDestVeri.setText(LProductoEstadoDanado.items.get(position).IdUbicacionBodegaDefecto + "");
+                        getNombreUbicacion(txtUbicDestVeri.getText().toString());
+                    }
 
                     aplicarReemplazo= false;
 
@@ -351,6 +358,8 @@ public class frm_danado_verificacion extends PBase {
                     existe = true;
                 }
             }
+
+            progress.cancel();
 
             if (!existe) {
                 msgProdEstado("No se ha encontrado estados disponibles para el producto: "+

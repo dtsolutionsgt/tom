@@ -491,6 +491,13 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     public void CambiarUbicacion(View view) {
         try {
+
+            if (gl.existencia.DisponibleUMBas.equals("0.00") && gl.existencia.DispPres.equals("0.00") &&
+                    (gl.existencia.LicPlate.equals("") || gl.existencia.LicPlate.equals("0"))){
+                msgbox("Todo el producto está reservado y no tiene una licencia asociada");
+                return;
+            }
+
             gl.modo_cambio = 1;
             CambioUbicExistencia = true;
 

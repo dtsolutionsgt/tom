@@ -548,7 +548,6 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/color_medium"
         android:gravity="center"
-        android:text="@string/_0en0405140000717"
         android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold" />

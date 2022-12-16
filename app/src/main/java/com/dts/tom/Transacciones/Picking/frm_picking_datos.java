@@ -172,6 +172,7 @@ public class frm_picking_datos extends PBase {
         ProgressDialog("Cargando datos de producto picking");
 
         lblEstiba.setText("");
+        lblLicPlate.setText("");
         tblEstiba.setVisibility(View.GONE);
 
         confirmar_codigo_en_picking = gl.confirmar_codigo_en_picking;
@@ -425,7 +426,7 @@ public class frm_picking_datos extends PBase {
             //#GT07122022: si no es vacio y el valor es distinto de 0
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
 
-                if (!gBePickingUbic.Lic_plate.equals("0")){
+                //if (!gBePickingUbic.Lic_plate.equals("0")){
 
                     lblLicPlate.setText(gBePickingUbic.Lic_plate);
                     txtLicencia.setVisibility(View.VISIBLE);
@@ -434,7 +435,7 @@ public class frm_picking_datos extends PBase {
                     txtCodigoProducto.setEnabled(false);
                     txtLicencia.requestFocus();
                     Log.d("focus: ", "20220502_4");
-                }
+              //  }
 
             } else {
                 lblLicPlate.setText("");
@@ -1754,6 +1755,10 @@ public class frm_picking_datos extends PBase {
 
                     vCantidadRec = gBePickingUbic.Cantidad_Recibida;
                     vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
+
+                   /* if (gBePickingUbic.IdPresentacion != pIdPresentacion){
+
+                    }*/
 
                     if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
                         mu.msgbox("La cantidad es mayor a la solicitada");

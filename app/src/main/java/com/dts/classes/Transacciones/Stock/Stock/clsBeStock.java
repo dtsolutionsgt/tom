@@ -57,7 +57,7 @@ public class clsBeStock {
     @Element(required=false) public boolean UbicacionPicking= false;
     @Element(required=false) public int UbicacionNivel= 0;
     @Element(required=false) public boolean Pallet_Completo= false;
-
+    @Element(required=false) public int Cantidad_Reservada= 0;
 
     public clsBeStock()
     {
@@ -104,6 +104,7 @@ public class clsBeStock {
         this.Revision=Revision;
         this.IsReportStockEnFecha=IsReportStockEnFecha;
         this.Pallet_No_Estandar=Pallet_No_Estandar;
+        this.Cantidad_Reservada=Cantidad_Reservada;
     }
 
     public clsBeStock(int IdBodega,int IdStock,int IdPropietarioBodega,int IdProductoBodega,
@@ -116,7 +117,8 @@ public class clsBeStock {
                       boolean Activo,double Peso,double Temperatura,String Atributo_Variante_1,
                       boolean IsNew,boolean ProductoValidado,String UbicacionAnterior,clsBeProducto_Presentacion Presentacion,
                       clsBeProducto_estado ProductoEstado,clsBeStock_parametroList Parametros,clsBeProducto Producto,
-                      int IdStockOrigen,clsBeRevision Revision,boolean IsReportStockEnFecha, boolean Pallet_No_Estandar
+                      int IdStockOrigen,clsBeRevision Revision,boolean IsReportStockEnFecha,
+                      boolean Pallet_No_Estandar, int Cantidad_Reservada
     ) {
 
         this.IdBodega=IdBodega;
@@ -162,6 +164,7 @@ public class clsBeStock {
         this.Revision=Revision;
         this.IsReportStockEnFecha=IsReportStockEnFecha;
         this.Pallet_No_Estandar=Pallet_No_Estandar;
+        this.Cantidad_Reservada=Cantidad_Reservada;
     }
 
 
@@ -445,4 +448,10 @@ public class clsBeStock {
         UbicacionNivel=value;
     }
 
+    public int getCantidad_Reservada() {
+        return Cantidad_Reservada;
+    }
+    public void setCantidad_Reservada(int value) {
+        Cantidad_Reservada=value;
+    }
 }

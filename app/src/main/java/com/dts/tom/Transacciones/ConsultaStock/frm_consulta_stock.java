@@ -288,6 +288,7 @@ public class frm_consulta_stock extends PBase {
 
                     try {
                         if (gl.existencia.IdProductoBodega!=-1) {
+                            browse = 1;
                             Intent intent = new Intent(getApplicationContext(), frm_consulta_stock_detalleCI.class);
                             startActivity(intent);
                         }
@@ -1074,5 +1075,21 @@ public class frm_consulta_stock extends PBase {
         msgAskExit("Está seguro de salir");
     }
 
+    protected void onResume() {
 
+        try{
+
+            super.onResume();
+
+            if (browse==1){
+                browse=0;
+                execws(1);
+            }
+
+
+        }catch (Exception e){
+            mu.msgbox("OnResume"+e.getMessage());
+        }
+
+    }
 }

@@ -1667,7 +1667,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Get_Motivos_Ubicacion_For_HH");
                         break;
                     case 3://Obtiene el producto
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigoPrd.getText().toString(),
+                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                "pCodigo",txtCodigoPrd.getText().toString(),
                                 "IdBodega",gl.IdBodega);
                         break;
                     case 4://Obtiene el estado del producto
@@ -1686,9 +1687,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         break;
                     case 7://Obtiene el stock de un producto en una ubicacion
-                        callMethod("Get_Productos_By_IdUbicacion",
-                                "pIdUbicacion", txtUbicOrigen.getText().toString(),
-                                "pIdProductoBodega",BeProductoUbicacion.IdProductoBodega);
+
+                        if (CambioUbicExistencia){
+                            callMethod("Get_Productos_By_IdUbicacion_Existencias",
+                                       "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                       "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
+                                       "pFechaVence", app.strFechaXMLCombo(gl.existencia.Vence),
+                                       "pLote", gl.existencia.Lote,
+                                       "pIdPresentacion", gl.existencia.IdPresentacion);
+                        }else {
+                            callMethod("Get_Productos_By_IdUbicacion",
+                                        "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                        "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega);
+                        }
                         break;
                     case 8://Obtiene el nuevo correlativo de un License Plate
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
@@ -2420,7 +2431,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.setMessage("Cargando producto en esta ubicación");
             progress.show();
 
-            stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
+            if (CambioUbicExistencia){
+                stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_Existencias");
+            }else{
+                stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion");
+            }
 
             if (stockResList != null){
                 //LlenaPresentaciones();
@@ -2672,6 +2687,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     }
                 }
             }else{
+                progress.cancel();
                 msgbox("No se pudo realizar el cambio de ubicación");
             }
 
