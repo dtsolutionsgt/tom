@@ -3770,7 +3770,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //vStockRes.Peso = cvStockItem.Peso;
             //#GT27072022_1655: envio el peso recalculado cuando se modificó la cantidad a reubicar.
-            vStockRes.Peso = Double.valueOf(txtPeso.getText().toString().replace(",",""));
+            //#GT2012022_1020: valido que tenga control peso para enviarlo, porque cealsa quita y pone el parametro
+            if(BeProductoUbicacion.Control_peso){
+                vStockRes.Peso = Double.valueOf(txtPeso.getText().toString().replace(",",""));
+            }else{
+                vStockRes.Peso = 0;
+            }
 
             vStockRes.IdPresentacion =cvPresID;
             vStockRes.IdProductoEstado = cvEstOrigen;
