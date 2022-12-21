@@ -2602,23 +2602,24 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
-    private void processCambio(){
+    private void processCambio() {
 
         try {
 
             progress.setMessage("Procesando cambio de ubicación");
             progress.show();
 
-            boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_DetResult",boolean.class);
+            boolean actualizar = (Boolean) xobj.getSingle("Actualizar_Trans_Ubic_HH_DetResult", boolean.class);
 
-            if (actualizar){
-                msgAskExit(String.format("Cambio de %s aplicado",(gl.modo_cambio==1?"ubicación":"estado")));
-            }else{
+            if (actualizar) {
+                msgAskExit(String.format("Cambio de %s aplicado", (gl.modo_cambio == 1 ? "ubicación" : "estado")));
+            } else {
                 msgbox("Ocurrió un error al procesar el cambio de ubicación");
             }
 
         } catch (Exception e) {
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
 
         progress.cancel();

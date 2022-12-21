@@ -7141,7 +7141,7 @@ public class frm_recepcion_datos extends PBase {
 
                     case 1:
                         callMethod("Get_Producto_By_IdProductoBodega",
-                                                "IdProductoBodega",BeOcDet.IdProductoBodega);
+                                             "IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
 
                     case 2:
@@ -7184,9 +7184,9 @@ public class frm_recepcion_datos extends PBase {
 
                     case 8:
                         callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
-                                        "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                              "LicPlate",txtLicPlate.getText().toString(),
-                                              "IdRecepcionDet",pIdRecepcionDet);
+                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                         "LicPlate",txtLicPlate.getText().toString(),
+                                         "IdRecepcionDet",pIdRecepcionDet);
                         break;
 
                     case 9:
