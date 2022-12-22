@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_danado_picking.IdEstadoDanadoSelect;
 import static com.dts.tom.Transacciones.Picking.frm_danado_picking.IdUbicacionDestino;
+import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePicking;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
@@ -110,6 +111,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         StockResReemplazo.IdPresentacion = gBePickingUbic.IdPresentacion;
         StockResReemplazo.IdUnidadMedida = gBePickingUbic.IdUnidadMedida;
         StockResReemplazo.IdProductoEstado = gBePickingUbic.IdProductoEstado;
+        //#GT21122022: se agrega el pickingEnc y el Pedido por si se necesitara
+        StockResReemplazo.IdPicking = gBePickingUbic.IdPickingEnc;
+        StockResReemplazo.IdPedido = gBePickingUbic.IdPedidoEnc;
+
+
         try {
             if (! gBePickingUbic.Fecha_Vence.contains("T")){
                 StockResReemplazo.Fecha_vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
