@@ -80,7 +80,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private List TipoOrden = new ArrayList();
 
     public static int TipoLista = 1;
-    public static int pOrden=1;
+    public static int pOrden=0;
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
@@ -495,7 +495,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
 
-            pOrden=1;
+            //#GT22122022: mostrar la lista por defecto a menos que se use el filtro personalizado
+            //pOrden=1;
+            pOrden=0;
             TipoLista = 2;
             btnRes_Det.setText("D.");
 
@@ -747,7 +749,8 @@ public class frm_detalle_tareas_picking extends PBase {
             } else if(pOrden==5) {
                 return left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
             }
-            return left.CodigoProducto.compareTo(rigth.CodigoProducto);
+
+            return left.IdPickingEnc-(rigth.IdPickingEnc);
         }
 
     }
