@@ -248,7 +248,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#AT20220722 Solo aplica si el cambio se hace desde la pantalla de Consulta de Existencias
                 if (CambioUbicExistencia) {
                     txtUbicOrigen.setText(gl.existencia.idUbic);
-                    cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
+
+                    if (!gl.existencia.idUbic.isEmpty()) {
+                        cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
+                    } else {
+                        throw new Exception("Campo idUbicacion vacío");
+                    }
 
                     lblUbicCompleta.setText(gl.existencia.Ubic);
                     txtCodigoPrd.setText(gl.existencia.Codigo);
@@ -388,6 +393,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                         fechaVence = stockResList.items.get(position).getFecha_Vence();
+
+                        //#AT20221222 Actualizar el valor de cvVence cuando se seleccione una fecha diferente
+                        cvVence = cmbVence.getSelectedItem().toString();
 
                         LlenaEstadoOrigen();
 
