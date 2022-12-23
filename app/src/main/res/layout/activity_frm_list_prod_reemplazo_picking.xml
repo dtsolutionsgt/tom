@@ -207,7 +207,7 @@
                         android:minHeight="50dp"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="Lic Plate"
+                        android:text="Licencia"
                         android:textColor="#FFFFFF"
                         android:textSize="17sp"
                         android:textStyle="bold" />
