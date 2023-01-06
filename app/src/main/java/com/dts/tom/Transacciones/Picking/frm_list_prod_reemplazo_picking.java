@@ -114,6 +114,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         //#GT21122022: se agrega el pickingEnc y el Pedido por si se necesitara
         StockResReemplazo.IdPicking = gBePickingUbic.IdPickingEnc;
         StockResReemplazo.IdPedido = gBePickingUbic.IdPedidoEnc;
+        //#AT20230106 Agregue la licencia para poder obtener todas las que sean distintas
+        if (!gBePickingUbic.Lic_plate.isEmpty()) {
+            StockResReemplazo.Lic_plate = gBePickingUbic.Lic_plate;
+        }
 
 
         try {
