@@ -67,9 +67,21 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/lblELicencia"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Licencia"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/lblEOrigen"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="Ubic Origen"
@@ -80,6 +92,7 @@
             android:id="@+id/lblEDestino"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="Ubic Destino"
@@ -183,6 +196,19 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="Caja24"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLicencia"
+            android:layout_width="110dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="010004252"
+            android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 

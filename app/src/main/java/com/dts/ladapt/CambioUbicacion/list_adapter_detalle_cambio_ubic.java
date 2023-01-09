@@ -74,6 +74,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
             holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
             holder.lblRecibido = (TextView) convertView.findViewById(R.id.lblRecibido);
             holder.lblOperador = (TextView) convertView.findViewById(R.id.lblOperador);
+            holder.lblLicencia = (TextView) convertView.findViewById(R.id.lblLicencia);
 
             convertView.setTag(holder);
 
@@ -91,6 +92,12 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
         holder.lblCantidad.setText(""+pBeTransUbicHhDetListArray.get(position).Cantidad);
         holder.lblRecibido.setText(""+pBeTransUbicHhDetListArray.get(position).Recibido);
         holder.lblOperador.setText(""+pBeTransUbicHhDetListArray.get(position).Operador.Nombres);
+
+        if (!pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate.isEmpty()){
+            holder.lblLicencia.setText(pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate);
+        } else {
+            holder.lblLicencia.setText("--");
+        }
 
         LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
 
@@ -110,7 +117,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblTareaDet,lblIdStock,lblCodigo,lblProducto,lblPresentacion,lblOrigen,lblDestino,lblCantidad,lblRecibido,lblOperador;
+        TextView lblTareaDet,lblIdStock,lblCodigo,lblProducto,lblPresentacion,lblOrigen,lblDestino,lblCantidad,lblRecibido,lblOperador, lblLicencia;
     }
 
 

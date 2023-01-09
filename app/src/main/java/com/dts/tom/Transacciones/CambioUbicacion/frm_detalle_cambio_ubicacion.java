@@ -21,6 +21,7 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_detList;
+import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.ladapt.CambioUbicacion.list_adapter_detalle_cambio_ubic;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -326,6 +327,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                         vItem.Recibido = pBeTransUbicHhDetList.items.get(i).getRecibido();
                         vItem.Operador.Nombres = pBeTransUbicHhDetList.items.get(i).Operador.getNombres();
                         vItem.IdTareaUbicacionEnc = pBeTransUbicHhDetList.items.get(i).getIdTareaUbicacionEnc();
+
+                        //#AT20230109 Agregar valor al campo licencia en el objeto de stock, para mostrarse en el grid de detalle.
+                        vItem.Stock = new clsBeStock();
+                        vItem.Stock.Lic_plate = pBeTransUbicHhDetList.items.get(i).Stock.Lic_plate;
 
                         pBeTransUbicHhDetListArray.add(vItem);
 
