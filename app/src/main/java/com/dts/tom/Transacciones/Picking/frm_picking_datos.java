@@ -2149,7 +2149,11 @@ public class frm_picking_datos extends PBase {
                                                "pBeStockPalletReemplazo",BeStockPallet.Stock);
                         break;
                     case 9:
-                        gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                        //#AT20230111 Se convierte la fecha para enviar al WS si no tiene el formato correcto
+                        if (!gBePickingUbic.Fecha_Vence.contains("T")) {
+                            gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                        }
+
                         callMethod("Actualiza_Picking_Consolidado","pBePickingUbic",gBePickingUbic,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);
