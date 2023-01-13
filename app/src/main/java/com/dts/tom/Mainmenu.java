@@ -451,6 +451,11 @@ public class Mainmenu extends PBase {
                                 "pIdBodega",gl.IdBodega,
                                 "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
+                    case 6:
+                        callMethod("Get_Recepcion_Genera_Historico",
+                                "pIdBodega",gl.IdBodega,
+                                "pIdEmpresa",gl.IdEmpresa);
+                        break;
 
                 }
 
@@ -478,6 +483,8 @@ public class Mainmenu extends PBase {
                     process_get_count_cambio_ubic();break;
                 case 5:
                     process_get_count_cambio_estado();break;
+                case 6:
+                    process_get_recepcion_genera_historico();break;
 
             }
 
@@ -485,6 +492,22 @@ public class Mainmenu extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             //msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
+    }
+
+    private void process_get_recepcion_genera_historico() {
+        try{
+            progress.setMessage("Obteniendo configuración de bodega...");
+
+            gl.recepcion_genera_historico =  xobj.getresult(Boolean.class,"Get_Recepcion_Genera_Historico");
+
+            finishLoad();
+
+        }catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     private void process_get_count_recepciones(){
@@ -567,7 +590,10 @@ public class Mainmenu extends PBase {
 
             cantCambioEst = (Integer) xobj.getSingle("Get_Count_Cambio_Est_Ubic_For_HHResult",Integer.class);
 
-            finishLoad();
+            //#GT12012023: se traslada al proceso de recepcion_genera_historico
+            //finishLoad();
+            execws(6);
+
 
         } catch (Exception e) {
             progress.cancel();

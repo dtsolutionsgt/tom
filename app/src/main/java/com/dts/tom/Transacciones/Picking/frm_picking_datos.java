@@ -91,6 +91,7 @@ public class frm_picking_datos extends PBase {
     private int gIdUbicacion=0;
     public static double CantReemplazar=0;
     public static boolean ReemplazoLP=false;
+    //#EJC202212230925: Indica si es reemplazo o no encontrado.
     public static int Tipo=0;
 
     public clsBeProducto_Presentacion gBePresentacion = new clsBeProducto_Presentacion();

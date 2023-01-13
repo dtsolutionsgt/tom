@@ -225,6 +225,9 @@ public class appGlobals extends Application {
     public boolean TieneResoluciones = false;
     public boolean Calcular_Ubicacion_Sugerida_ML = false;
 
+    //Valida si en la recepción se ejecutara el historico de stock jornada.
+    public boolean recepcion_genera_historico = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
