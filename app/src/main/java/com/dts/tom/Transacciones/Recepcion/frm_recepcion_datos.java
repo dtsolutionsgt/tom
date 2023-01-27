@@ -6378,7 +6378,8 @@ public class frm_recepcion_datos extends PBase {
 
                     }
 
-                    if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta){
+                    if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta ||
+                        gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Transferencia_de_Ingreso){
 
                         try {
                             BeDetalleLotes = stream(detalle_lotes.items)
@@ -6400,6 +6401,12 @@ public class frm_recepcion_datos extends PBase {
                             e.printStackTrace();
                         }
 
+                    }
+
+                    if (Double.parseDouble(txtCantidadRec.getText().toString())>BeDetalleLotes.Cantidad){
+                        //throw new Exception("La cantidad ("+txtCantidadRec.getText()+") es mayor a la esperada del lote ("+BeDetalleLotes.Cantidad+") , no se puede continuar");
+                        mu.msgbox("La cantidad ("+txtCantidadRec.getText()+") es mayor a la esperada del lote ("+BeDetalleLotes.Cantidad+") , no se puede continuar");
+                        return;
                     }
 
                     if (BeDetalleLotes != null){
@@ -7185,8 +7192,8 @@ public class frm_recepcion_datos extends PBase {
                     case 8:
                         callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
                                    "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                         "LicPlate",txtLicPlate.getText().toString(),
-                                         "IdRecepcionDet",pIdRecepcionDet);
+                                   "LicPlate",txtLicPlate.getText().toString(),
+                                   "IdRecepcionDet",pIdRecepcionDet);
                         break;
 
                     case 9:
@@ -7195,7 +7202,7 @@ public class frm_recepcion_datos extends PBase {
 
                     case 10:
                         callMethod("Get_All_Params_By_IdRecepcionEnc_And_IdRecepcion_Det_For_HH",
-                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdRecepcionDet",pIdRecepcionDet);
+                                   "pIdRecepcionEnc",gl.gIdRecepcionEnc,"pIdRecepcionDet",pIdRecepcionDet);
                         break;
 
                     case 11:
@@ -7212,18 +7219,18 @@ public class frm_recepcion_datos extends PBase {
 
                     case 14:
                         callMethod("Existe_LP_By_IdRecepcionEnc_And_IdRecepcionDet",
-                                        "IdRecepcionEnc",gl.gIdRecepcionEnc,
-                                              "LicPlate",vBeStockRec.Lic_plate,
-                                              "IdRecepcionDet",pIdRecepcionDet);
+                                   "IdRecepcionEnc",gl.gIdRecepcionEnc,
+                                   "LicPlate",vBeStockRec.Lic_plate,
+                                   "IdRecepcionDet",pIdRecepcionDet);
                         break;
 
                     case 15:
                         callMethod("Get_Nuevo_Correlativo_LicensePlate_S",
-                                "pIdEmpresa",gl.IdEmpresa,
-                                "pIdBodega",gl.IdBodega,
-                                "pIdPropietario",BeProducto.Propietario.IdPropietario,
-                                "pIdProducto",BeProducto.IdProducto,
-                                "UltimoPalletGenerado",vBeStockRec.Lic_plate);
+                                   "pIdEmpresa",gl.IdEmpresa,
+                                   "pIdBodega",gl.IdBodega,
+                                   "pIdPropietario",BeProducto.Propietario.IdPropietario,
+                                   "pIdProducto",BeProducto.IdProducto,
+                                   "UltimoPalletGenerado",vBeStockRec.Lic_plate);
                         break;
 
                     case 16:
@@ -7456,7 +7463,7 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
                         break;
 
-                    case 31:
+ /*                   case 31:
                         callMethod("Guardar_Transaccion_Error",
                                 "pDocumentoUbicacion",ubiDetLote,
                                 "pTipoPush",vTipoPush,
@@ -7466,7 +7473,7 @@ public class frm_recepcion_datos extends PBase {
                                 "pIdUsuario",gl.OperadorBodega.IdOperador,
                                 "pMensaje",vMensajeError);
                         break;
-
+*/
                     case 32:
                         callMethod("Tiene_Posiciones",
                                 "pStock",pStock);
@@ -7506,8 +7513,7 @@ public class frm_recepcion_datos extends PBase {
                     case 25:
                     case 26:
                         vMensajeError=e.getMessage();
-                        execws(31);
-                        msgboxErrorCallBack(e.getMessage(),false);
+                        msgboxErrorCallBack(vMensajeError,false);
                         break;
                     default:
                         msgboxErrorCallBack(e.getClass() + " WebServiceHandler: " + e.getMessage(),true);
@@ -9018,6 +9024,7 @@ public class frm_recepcion_datos extends PBase {
                 }else{
                     if (!respuesta.isEmpty() || !respuesta.equals("")){
                         msgboxErrorPush("No se puedo registrar la recepción " + respuesta);
+                        return;
                     }
                 }
 
