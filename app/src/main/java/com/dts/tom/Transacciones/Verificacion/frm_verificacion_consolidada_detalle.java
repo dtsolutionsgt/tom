@@ -14,14 +14,11 @@ import android.widget.ListView;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
-import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
-import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion2;
-import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion3;
-import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion4;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
 import static br.com.zbra.androidlinq.Linq.stream;
 
 import java.util.ArrayList;
@@ -62,7 +59,6 @@ public class frm_verificacion_consolidada_detalle extends PBase {
     private void Load() {
         try {
             Lista_Detalle_Pedido();
-
         } catch (Exception e) {
             mu.msgbox("Error Load: "+e.getMessage());
         }
@@ -102,6 +98,44 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     }
 
+    private void Procesa_Registro(){
+        clsBeDetallePedidoAVerificar vItem;
+        try{
+
+            vItem = new clsBeDetallePedidoAVerificar();
+
+            vItem.IdPedidoEnc = pSubListPickingU.items.get(0).getIdPedidoEnc();
+            vItem.IdPedidoDet = pSubListPickingU.items.get(0).getIdPedidoDet();
+            vItem.IdProductoBodega = pSubListPickingU.items.get(0).getIdProductoBodega();
+            vItem.Codigo = pSubListPickingU.items.get(0).getCodigoProducto();
+            vItem.Nombre_Producto = pSubListPickingU.items.get(0).NombreProducto;
+            vItem.Lote = pSubListPickingU.items.get(0).getLote();
+            vItem.Fecha_Vence = app.strFecha(pSubListPickingU.items.get(0).getFecha_Vence());
+            vItem.LicPlate = pSubListPickingU.items.get(0).getLic_plate();
+            vItem.Nom_Unid_Med = pSubListPickingU.items.get(0).ProductoUnidadMedida;
+            vItem.Nom_Presentacion = pSubListPickingU.items.get(0).ProductoPresentacion;
+            vItem.Cantidad_Solicitada = pSubListPickingU.items.get(0).getCantidad_Solicitada();
+            vItem.Cantidad_Recibida = pSubListPickingU.items.get(0).getCantidad_Recibida();
+            vItem.Cantidad_Verificada = pSubListPickingU.items.get(0).getCantidad_Verificada();
+            vItem.Nom_Estado = pSubListPickingU.items.get(0).ProductoEstado;
+            vItem.IdPresentacion = pSubListPickingU.items.get(0).getIdPresentacion();
+            vItem.IdUnidadMedidaBasica = pSubListPickingU.items.get(0).IdUnidadMedida;
+            vItem.NDias = 0;
+            vItem.IdProductoEstado = pSubListPickingU.items.get(0).getIdProductoEstado();
+            vItem.NombreArea = pSubListPickingU.items.get(0).getNombreArea();
+            vItem.NombreClasificacion = pSubListPickingU.items.get(0).getNombreClasificacion();
+
+            frm_verificacion_datos.BePedidoDetVerif = vItem;
+
+            startActivity(new Intent(this, frm_danado_verificacion.class));
+            super.finish();
+
+        } catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
+    }
+
     private void Lista_Detalle_Pedido(){
         try {
 
@@ -114,49 +148,59 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
                 progress.setMessage("Cargando tareas de verificación");
 
+                //#AT20230112 Se filtra la lista por idpresentacion
+                pSubListPickingU.items = stream(pSubListPickingU.items)
+                                        .where(c-> c.IdProductoBodega == BePedidoDetVerif.IdProductoBodega)
+                                        .where(c-> c.CodigoProducto.equals(BePedidoDetVerif.Codigo))
+                                        .where(c->c.IdPresentacion == BePedidoDetVerif.IdPresentacion).toList();
+
                 if (pSubListPickingU!= null) {
 
                     if (pSubListPickingU.items!=null ) {
 
-                        for (int i = 0; i <= pSubListPickingU.items.size() - 1; i++) {
+                        if (pSubListPickingU.items.size() > 1) {
+                            for (int i = 0; i <= pSubListPickingU.items.size() - 1; i++) {
 
-                            vItem = new clsBeDetallePedidoAVerificar();
+                                vItem = new clsBeDetallePedidoAVerificar();
 
-                            vItem.IdPedidoEnc = pSubListPickingU.items.get(i).getIdPedidoEnc();
-                            vItem.IdPedidoDet = pSubListPickingU.items.get(i).getIdPedidoDet();
-                            vItem.IdProductoBodega = pSubListPickingU.items.get(i).getIdProductoBodega();
-                            vItem.Codigo = pSubListPickingU.items.get(i).getCodigoProducto();
-                            vItem.Nombre_Producto = pSubListPickingU.items.get(i).NombreProducto;
-                            vItem.Lote = pSubListPickingU.items.get(i).getLote();
-                            vItem.Fecha_Vence = app.strFecha(pSubListPickingU.items.get(i).getFecha_Vence());
-                            vItem.LicPlate = pSubListPickingU.items.get(i).getLic_plate();
-                            vItem.Nom_Unid_Med = pSubListPickingU.items.get(i).ProductoUnidadMedida;
-                            vItem.Nom_Presentacion = pSubListPickingU.items.get(i).ProductoPresentacion;
-                            vItem.Cantidad_Solicitada = pSubListPickingU.items.get(i).getCantidad_Solicitada();
-                            vItem.Cantidad_Recibida = pSubListPickingU.items.get(i).getCantidad_Recibida();
-                            vItem.Cantidad_Verificada = pSubListPickingU.items.get(i).getCantidad_Verificada();
-                            vItem.Nom_Estado = pSubListPickingU.items.get(i).ProductoEstado;
-                            vItem.IdPresentacion = pSubListPickingU.items.get(i).getIdPresentacion();
-                            vItem.IdUnidadMedidaBasica = pSubListPickingU.items.get(i).IdUnidadMedida;
-                            vItem.NDias = 0;
-                            vItem.IdProductoEstado = pSubListPickingU.items.get(i).getIdProductoEstado();
-                            vItem.NombreArea = pSubListPickingU.items.get(i).getNombreArea();
-                            vItem.NombreClasificacion = pSubListPickingU.items.get(i).getNombreClasificacion();
+                                vItem.IdPedidoEnc = pSubListPickingU.items.get(i).getIdPedidoEnc();
+                                vItem.IdPedidoDet = pSubListPickingU.items.get(i).getIdPedidoDet();
+                                vItem.IdProductoBodega = pSubListPickingU.items.get(i).getIdProductoBodega();
+                                vItem.Codigo = pSubListPickingU.items.get(i).getCodigoProducto();
+                                vItem.Nombre_Producto = pSubListPickingU.items.get(i).NombreProducto;
+                                vItem.Lote = pSubListPickingU.items.get(i).getLote();
+                                vItem.Fecha_Vence = app.strFecha(pSubListPickingU.items.get(i).getFecha_Vence());
+                                vItem.LicPlate = pSubListPickingU.items.get(i).getLic_plate();
+                                vItem.Nom_Unid_Med = pSubListPickingU.items.get(i).ProductoUnidadMedida;
+                                vItem.Nom_Presentacion = pSubListPickingU.items.get(i).ProductoPresentacion;
+                                vItem.Cantidad_Solicitada = pSubListPickingU.items.get(i).getCantidad_Solicitada();
+                                vItem.Cantidad_Recibida = pSubListPickingU.items.get(i).getCantidad_Recibida();
+                                vItem.Cantidad_Verificada = pSubListPickingU.items.get(i).getCantidad_Verificada();
+                                vItem.Nom_Estado = pSubListPickingU.items.get(i).ProductoEstado;
+                                vItem.IdPresentacion = pSubListPickingU.items.get(i).getIdPresentacion();
+                                vItem.IdUnidadMedidaBasica = pSubListPickingU.items.get(i).IdUnidadMedida;
+                                vItem.NDias = 0;
+                                vItem.IdProductoEstado = pSubListPickingU.items.get(i).getIdProductoEstado();
+                                vItem.NombreArea = pSubListPickingU.items.get(i).getNombreArea();
+                                vItem.NombreClasificacion = pSubListPickingU.items.get(i).getNombreClasificacion();
 
-                            pListBeTareasVerificacionHH.add(vItem);
+                                pListBeTareasVerificacionHH.add(vItem);
 
-                            if (vItem.LicPlate.equalsIgnoreCase(gl.gLP)) {
-                                selitem = vItem;
-                                selidx = i;
+                                if (vItem.LicPlate.equalsIgnoreCase(gl.gLP)) {
+                                    selitem = vItem;
+                                    selidx = i;
+                                }
                             }
+
+                            btnRegs.setText("Registros: " + pSubListPickingU.items.size());
+
+                            adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                            ListVeri.setAdapter(adapter);
+
+                        } else {
+                            Procesa_Registro();
                         }
-
-                        btnRegs.setText("Registros: " + pSubListPickingU.items.size());
-
-                        adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
-                        ListVeri.setAdapter(adapter);
                     }
-
                 } else {
                     ListVeri.setAdapter(null);
                 }

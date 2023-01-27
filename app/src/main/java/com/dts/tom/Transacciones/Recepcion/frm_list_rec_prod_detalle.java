@@ -696,7 +696,10 @@ public class frm_list_rec_prod_detalle extends PBase {
     public void wsCallBack(Boolean throwing,String errmsg,int errlevel) {
 
         try {
-            if (throwing) throw new Exception(errmsg);
+            if (throwing) {
+                String[] msj = errmsg.split("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet", 2);
+                throw new Exception(msj[1]);
+            }
 
             switch (ws.callback) {
 
@@ -713,7 +716,8 @@ public class frm_list_rec_prod_detalle extends PBase {
 
         } catch (Exception e) {
             msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: " + e.getMessage());
+            }.getClass().getEnclosingMethod()).getName() + e.getMessage());
+            progress.cancel();
         }
 
     }
