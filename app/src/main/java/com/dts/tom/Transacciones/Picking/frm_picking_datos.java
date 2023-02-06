@@ -85,7 +85,7 @@ public class frm_picking_datos extends PBase {
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
     private RelativeLayout tblCajasUnidades;
 
-    private boolean Escaneo_Pallet = false;
+    private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false;
     private String pLP = "";
     private String pCodigo = "", vUnidadMedida="";
     private int gIdUbicacion=0;
@@ -346,7 +346,12 @@ public class frm_picking_datos extends PBase {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         btnGuardar = true;
                         Recalcula_Peso();
-                        Procesar_Registro();
+                        if (pEntre_Reemplazo){
+                            pEntre_Reemplazo = false;
+                            Reemplazar_Producto();
+                        }else{
+                            Procesar_Registro();
+                        }
                     }
 
                     return false;
@@ -1901,9 +1906,13 @@ public class frm_picking_datos extends PBase {
             } else {
 
                 if (trLP.getVisibility() == View.VISIBLE && txtLicencia.getText().toString().isEmpty()) {
-                    mu.msgbox("Ingrese licencia del producto");
+                    txtLicencia.setText(lblLicPlate.getText());
+                    Procesa_Barra();
+                    //txtCantidadPick.requestFocus();
+                    pEntre_Reemplazo = true;
+                   /* mu.msgbox("Ingrese licencia del producto");
                     txtLicencia.setSelectAllOnFocus(true);
-                    txtLicencia.requestFocus();
+                    txtLicencia.requestFocus();*/
                     Log.d("txtLicencia: ", "20220502_44");
                     return false;
                 }
@@ -1984,8 +1993,8 @@ public class frm_picking_datos extends PBase {
     }
 
     public void BotonReemplazo(View view){
-
-        try {
+       Reemplazar_Producto();
+      /*  try {
 
             Tipo=1;
             if (ValidaCampos()) {
@@ -1996,9 +2005,25 @@ public class frm_picking_datos extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("BotonReemplazo:"+e.getMessage());
-        }
+        }*/
     }
 
+    public void Reemplazar_Producto(){
+        try {
+
+            Tipo=1;
+            if (!pEntre_Reemplazo){
+                if (ValidaCampos()) {
+                    msgReemplazo("¿Marcar producto para reemplazo?");
+                } else {
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("BotonReemplazo:"+e.getMessage());
+        }
+    }
     public void BotonNoEn(View view){
 
         try {

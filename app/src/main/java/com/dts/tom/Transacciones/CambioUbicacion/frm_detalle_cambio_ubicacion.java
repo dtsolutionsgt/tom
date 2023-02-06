@@ -98,7 +98,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         ProgressDialog("Cargando forma");
 
-        Load();
+        //Load();
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -328,9 +328,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                         vItem.Operador.Nombres = pBeTransUbicHhDetList.items.get(i).Operador.getNombres();
                         vItem.IdTareaUbicacionEnc = pBeTransUbicHhDetList.items.get(i).getIdTareaUbicacionEnc();
 
-                        //#AT20230109 Agregar valor al campo licencia en el objeto de stock, para mostrarse en el grid de detalle.
                         vItem.Stock = new clsBeStock();
-                        vItem.Stock.Lic_plate = pBeTransUbicHhDetList.items.get(i).Stock.Lic_plate;
+
+                        if (pBeTransUbicHhDetList.items.get(i).Stock!=null){
+                            //#AT20230109 Agregar valor al campo licencia en el objeto de stock, para mostrarse en el grid de detalle.
+                            vItem.Stock.Lic_plate = pBeTransUbicHhDetList.items.get(i).Stock.Lic_plate;
+                        }
 
                         pBeTransUbicHhDetListArray.add(vItem);
 
@@ -358,13 +361,12 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                             adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);
                             listView.setAdapter(adapter);
+                            adapter.refreshItems();
 
                             if (pBeTransUbicHhDetList.items.size()==1){
 
                                 if (pBeTransUbicHhDetList.items.get(0).getCantidad()-pBeTransUbicHhDetList.items.get(0).getRecibido()==0){
-                                    /*msgAskContinuar("Ya solo le queda este registro pendiente ¿Quiere continuar ingresando lo pendiente?");
-                                }else{*/
-                                    if(txtCodigo.getText().toString().equals("")){
+                                   if(txtCodigo.getText().toString().equals("")){
                                         msgAskFinalizar(String.format("Ya no hay productos pendientes de %s. ¿Quiere finalizar la tarea?",
                                                 (gl.modo_cambio==1? "ubicar": "cambiar de estado")));
                                     }else{
@@ -387,9 +389,11 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 }
 
                             }
-                            adapter.refreshItems();
+
                             progress.cancel();
                         }
+                    }else{
+                        listView.setAdapter(null);
                     }
                 }
             }
@@ -434,7 +438,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                 }
             }
 
-            progress.cancel();
+            if (progress !=null )progress.cancel();
 
         } catch (Exception e) {
             progress.cancel();
@@ -687,8 +691,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     @Override
     protected void onResume(){
-        Llena_Tarea_Detalle_Ubicacion();
         super.onResume();
+        Load();
+       // Llena_Tarea_Detalle_Ubicacion();
     }
 
 }

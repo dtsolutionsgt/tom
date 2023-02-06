@@ -83,7 +83,7 @@ public class XMLObject  {
             }
 
         } catch (Exception e)  {
-            throw new Exception(" XMLObject Error: " + e.getMessage() + " GetResult:" +ws.xmlresult);
+            throw new Exception(" XMLObject Error 2: " + e.getMessage() + " GetResult:" +ws.xmlresult);
         }
         return null;
     }
@@ -105,7 +105,7 @@ public class XMLObject  {
 
         }catch (Exception e)
         {
-            throw new Exception(" XMLObject Error: " + e.getMessage() + " GetResult:" +ws.xmlresult);
+            throw new Exception(" XMLObject Error 1: " + e.getMessage() + " GetResult:" +ws.xmlresult);
         }
         return null;
     }
