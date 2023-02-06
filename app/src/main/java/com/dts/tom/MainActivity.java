@@ -80,16 +80,16 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     private clsBeEmpresaAndList empresas = new clsBeEmpresaAndList();
     private clsBeBodegaList bodegas = new clsBeBodegaList();
-    private ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
+    private final ArrayList<clsBeImpresora> impres = new ArrayList<clsBeImpresora>();
     private clsBeOperador_bodegaList users = new clsBeOperador_bodegaList();
-    private clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
+    private final clsBeVersion_wms_hh_andList versiones = new clsBeVersion_wms_hh_andList();
     private clsBeResolucion_lp_operador ResolucionLpByBodega = new clsBeResolucion_lp_operador();
     private clsBeOperador_bodega seloper=new clsBeOperador_bodega();
 
-    private ArrayList<String> emplist= new ArrayList<String>();
-    private ArrayList<String> bodlist= new ArrayList<String>();
-    private ArrayList<String> prnlist= new ArrayList<String>();
-    private ArrayList<String> userlist= new ArrayList<String>();
+    private final ArrayList<String> emplist= new ArrayList<String>();
+    private final ArrayList<String> bodlist= new ArrayList<String>();
+    private final ArrayList<String> prnlist= new ArrayList<String>();
+    private final ArrayList<String> userlist= new ArrayList<String>();
 
     private int idemp=0,idbodega=0,idimpres=0,iduser=-1,ii;
     private String NomOperador, NomBodega;
@@ -101,7 +101,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     NetWorkInfoUtility netWorkInfoUtility = new NetWorkInfoUtility();
 
-    private boolean IsNetWorkAvailable =false;
+    private final boolean IsNetWorkAvailable =false;
+
+    private String Modelo_Equipo ="";
+    private String Manufacturador_Equipo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +129,21 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
 
+            Boolean Equipo_Valido = false;
+
+            for (String element:gl.listValidDevices) {
+                if (element.contains(Modelo_Equipo)){
+                    Equipo_Valido=true;
+                }
+            }
+
+            if(!Equipo_Valido){
+                progress.cancel();
+                msgAskDispositivoValido("El equipo:" + Modelo_Equipo + " en el que está ejecutando el WMS, no es un equipo certificado para su uso.");
+            }else{
+                Log.d("Modelo Equipo: ", Modelo_Equipo + "es válido para ejecución de WMS.");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,17 +166,17 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             super.InitBase();
 
-            spinemp = (Spinner) findViewById(R.id.spinner);
-            spinbod = (Spinner) findViewById(R.id.spinner2);
-            spinprint = (Spinner) findViewById(R.id.spinner3);
-            spinuser = (Spinner) findViewById(R.id.spinner4);
-            txtpass = (EditText) findViewById(R.id.editText3);
-            lblver=(TextView)  findViewById(R.id.txtNoVersion);
-            lbldate=(TextView)  findViewById(R.id.txtFechaVersion);
-            lblurl=(TextView)  findViewById(R.id.txtURLWS);lblurl.setText("");
-            lblVersion = (TextView) findViewById(R.id.lblVersion);
-            imgIngresar = (ImageView) findViewById(R.id.imageView11);
-            imgEmpresaLogin = (ImageView) findViewById(R.id.imgEmpresaLogin);
+            spinemp = findViewById(R.id.spinner);
+            spinbod = findViewById(R.id.spinner2);
+            spinprint = findViewById(R.id.spinner3);
+            spinuser = findViewById(R.id.spinner4);
+            txtpass = findViewById(R.id.editText3);
+            lblver= findViewById(R.id.txtNoVersion);
+            lbldate= findViewById(R.id.txtFechaVersion);
+            lblurl= findViewById(R.id.txtURLWS);lblurl.setText("");
+            lblVersion = findViewById(R.id.lblVersion);
+            imgIngresar = findViewById(R.id.imageView11);
+            imgEmpresaLogin = findViewById(R.id.imgEmpresaLogin);
 
             lblver.setText("Versión: " +  gl.version);
             lblVersion.setText("V. "+ gl.version);
@@ -169,13 +187,11 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
                 xobj= new XMLObject(ws);
                 setHandlers();
-                gl.deviceId =androidid();
-                gl.devicename = getDeviceName();//getLocalBluetoothName();
-            } else {
-                //msgbox("No está definida la URL de conexión al WS, configúrelo por favor");
-                //#EJC20220118: Ya se llamó en getURL
-                //setURL();
             }
+
+            //'#EJC2023020610120: Buscar siempre el ID Marca y Modelo.
+            gl.deviceId =androidid();
+            gl.devicename = getDeviceName();//getLocalBluetoothName();
 
             try {
 
@@ -193,13 +209,13 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         }
     }
 
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
+    public String getDeviceName() {
+        Manufacturador_Equipo = Build.MANUFACTURER;
+        Modelo_Equipo= Build.MODEL;
+        if (Modelo_Equipo.startsWith(Manufacturador_Equipo)) {
+            //return capitalize(Modelo_Equipo);
         }
-        return capitalize(manufacturer) + " " + model;
+        return capitalize(Manufacturador_Equipo) + " " + Modelo_Equipo;
     }
 
     private static String capitalize(String str) {
@@ -292,19 +308,16 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
             });
 
-            alert.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
+            alert.setPositiveButton("Guardar", (dialog, whichButton) -> {
 
-                    gl.wsurl=input.getText().toString();
+                gl.wsurl=input.getText().toString();
 
-                    if(!gl.wsurl.isEmpty()){
-                        guardaDatosConexion();
-                    }else{
-                        toast("Debe ingresar la URL");
-                        setURL();
-                    }
+                if(!gl.wsurl.isEmpty()){
+                    guardaDatosConexion();
+                }else{
+                    toast("Debe ingresar la URL");
+                    setURL();
                 }
-
             });
 
             final AlertDialog dialog = alert.create();
@@ -395,7 +408,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         try
         {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
@@ -617,34 +630,26 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         });
 
-        txtpass.setOnKeyListener(new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event)
+        txtpass.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
             {
-                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-                {
 
-                    imgIngresar.setVisibility(View.INVISIBLE);
+                imgIngresar.setVisibility(View.INVISIBLE);
 
-                    Valida_Ingreso();
+                Valida_Ingreso();
 
-                    imgIngresar.setVisibility(View.VISIBLE);
+                imgIngresar.setVisibility(View.VISIBLE);
 
-                }
-
-                return false;
             }
+
+            return false;
         });
 
-        txtpass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    showkeyb();
-                }else{
-                    hidekeyb();
-                }
+        txtpass.setOnFocusChangeListener((v, hasFocus) -> {
+            if(!hasFocus) {
+                showkeyb();
+            }else{
+                hidekeyb();
             }
         });
 
@@ -828,31 +833,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setCancelable(false);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg);
-
             dialog.setIcon(R.drawable.printicon);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    //#CKFK20220422 Cambié el execws(7); por el execws(9);
-                    //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
-                    //execws(9);
-                    //ejecuta();
-                    //#CKFK20220506 Cambie el execws(9) por el execws(10)
-                    execws(10);
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                //#CKFK20220506 Cambie el execws(9) por el execws(10)
+                execws(10);
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    execws(10);
-                }
-            });
-
+            dialog.setNegativeButton("No", (dialog12, which) -> execws(10));
             dialog.show();
 
         }catch (Exception e){
@@ -866,26 +855,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setCancelable(false);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setIcon(R.drawable.printicon);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    execws(7);
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    execws(7);
-                }
-            });
-
+            dialog.setPositiveButton("Si", (dialog1, which) -> execws(7));
+            dialog.setNegativeButton("No", (dialog12, which) -> execws(7));
             dialog.show();
 
         }catch (Exception e){
@@ -1091,7 +1066,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             //#GT23052022: se valida nuevamente si busca o no update de la versión, según la empresa en BOF
             if (gl.buscar_actualizacion_hh){
                 validaVersion();
-
             }
 
             idle=true;
@@ -1351,7 +1325,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         }
     }
 
-    private Runnable mUpdate = new Runnable() {
+    private final Runnable mUpdate = new Runnable() {
 
         public void run() {
 
@@ -1525,7 +1499,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
             }
 
-
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -1535,7 +1508,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         ExDialog dialog = new ExDialog(this);
         dialog.setMessage(msg);
-
         dialog.setPositiveButton("Si", (dialog1, which) -> {
             try {
                 actualizaVersion();
@@ -1545,7 +1517,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         });
 
         dialog.setNegativeButton("No", (dialog12, which) -> {});
-
         dialog.show();
 
     }
@@ -1567,5 +1538,19 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     }
 
     //endregion
+
+    private void msgAskDispositivoValido(String msg) {
+
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+        dialog.setPositiveButton("Ok", (dialog1, which) -> {
+            try {
+                //actualizaVersion();
+            } catch (Exception e) {
+                msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            }
+        });
+        dialog.show();
+    }
 
 }

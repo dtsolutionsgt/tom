@@ -176,15 +176,12 @@ public class MiscUtils {
 			if (!emptystr(msg)){
 
 				AlertDialog.Builder dialog = new AlertDialog.Builder(cCont);
-
 				dialog.setTitle(R.string.app_name);
 				dialog.setMessage(msg);
 				dialog.setCancelable(false);
 
-				dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						//Toast.makeText(getApplicationContext(), "Yes button pressed",Toast.LENGTH_SHORT).show();
-					}
+				dialog.setNeutralButton("OK", (dialog1, which) -> {
+					//Toast.makeText(getApplicationContext(), "Yes button pressed",Toast.LENGTH_SHORT).show();
 				});
 				dialog.show();
 
@@ -201,16 +198,10 @@ public class MiscUtils {
 			if (!emptystr(msg)){
 
 				AlertDialog.Builder dialog = new AlertDialog.Builder(cCont);
-
 				dialog.setTitle(R.string.app_name);
 				dialog.setMessage(msg);
 				dialog.setCancelable(false);
-
-				dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						rec.finish();
-					}
-				});
+				dialog.setNeutralButton("OK", (dialog1, which) -> rec.finish());
 				dialog.show();
 
 			}
@@ -226,10 +217,7 @@ public class MiscUtils {
 
 			dialog.setTitle(R.string.app_name);
 			dialog.setMessage(String.valueOf(v));
-
-			dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-				}
+			dialog.setNeutralButton("OK", (dialog1, which) -> {
 			});
 			dialog.show();
 
@@ -247,10 +235,7 @@ public class MiscUtils {
 
 			dialog.setTitle(R.string.app_name);
 			dialog.setMessage(String.valueOf(v));
-
-			dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-				}
+			dialog.setNeutralButton("OK", (dialog1, which) -> {
 			});
 			dialog.show();
 
@@ -371,4 +356,3 @@ public class MiscUtils {
 	}
 	
 }
-

@@ -182,7 +182,6 @@ public class frm_list_prod_reemplazados extends PBase {
                     for (int i = 0; i<=pListaReemplazados.items.size()-1; i++) {
 
                         vItem = new clsBeDetallePedidoAVerificar();
-
                         vItem.IdPedidoEnc = pListaReemplazados.items.get(i).getIdPedidoEnc();
                         vItem.IdPedidoDet = pListaReemplazados.items.get(i).getIdPedidoDet();
                         vItem.IdProductoBodega = pListaReemplazados.items.get(i).getIdProductoBodega();

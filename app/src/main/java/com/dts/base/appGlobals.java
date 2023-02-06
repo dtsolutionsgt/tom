@@ -225,6 +225,8 @@ public class appGlobals extends Application {
     public boolean TieneResoluciones = false;
     public boolean Calcular_Ubicacion_Sugerida_ML = false;
 
+    public List<String> listValidDevices = new ArrayList<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -245,6 +247,11 @@ public class appGlobals extends Application {
                         firebaseRemoteConfig.activate();
                     }
                 });
+
+        listValidDevices.add("Zebra");
+        listValidDevices.add("Honeywell");
+        listValidDevices.add("AOSP on IA Emulator");
+
         }
 
     public <T> List<T> getList(String jsonArray, Class<T> clazz) {

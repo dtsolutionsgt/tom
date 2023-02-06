@@ -530,13 +530,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 if (plistPickingUbi.items!=null){
 
-                    //#AT20220611 Si asignar_operador_linea_picking = true : filtra por IdOperadorBodega
-                    //el listado de detalle de Picking
-                    /*if (asignar_operador_linea_picking) {
-                        plistPickingUbi.items = stream(plistPickingUbi.items)
-                                                .where(c->c.IdOperadorBodega_Asignado == gl.OperadorBodega.IdOperadorBodega).toList();
-                    }*/
-
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
                         if (obj.Cantidad_Recibida!=obj.Cantidad_Solicitada){
