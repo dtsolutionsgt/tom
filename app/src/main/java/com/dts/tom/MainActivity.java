@@ -69,7 +69,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog;
+    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog, lblManufacturadorEquipo, lblModeloEquipo;
     //private ProgressDialog progress;
     Dialog progress;
     private ImageView imgIngresar;
@@ -137,10 +137,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
             }
 
+            lblModeloEquipo.setText(Modelo_Equipo);
+            lblManufacturadorEquipo.setText(Manufacturador_Equipo);
+
             if(!Equipo_Valido){
                 progress.cancel();
                 msgAskDispositivoValido("El equipo:" + Modelo_Equipo + " en el que está ejecutando el WMS, no es un equipo certificado para su uso.");
             }else{
+                lblModeloEquipo.setTextColor(Color.parseColor("#1B5E20"));
+                lblManufacturadorEquipo.setTextColor(Color.parseColor("#1B5E20"));
                 Log.d("Modelo Equipo: ", Modelo_Equipo + "es válido para ejecución de WMS.");
             }
 
@@ -177,6 +182,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             lblVersion = findViewById(R.id.lblVersion);
             imgIngresar = findViewById(R.id.imageView11);
             imgEmpresaLogin = findViewById(R.id.imgEmpresaLogin);
+            lblModeloEquipo = findViewById(R.id.lblModeloEquipo);
+            lblManufacturadorEquipo = findViewById(R.id.lblManufacturadorEquipo);
+
 
             lblver.setText("Versión: " +  gl.version);
             lblVersion.setText("V. "+ gl.version);
