@@ -3717,7 +3717,8 @@ public class frm_recepcion_datos extends PBase {
             txtUmbasRec.setClickable(false);
 
             if (gl.mode==1 && !Escaneo_Pallet){
-                txtNoLP.setText(BeProducto.Codigo);
+                //#GT06022023: consulté a Erik y dice que se dejé limpiar
+                //txtNoLP.setText(BeProducto.Codigo);
                 txtNoLP.setText("");
             }
 
@@ -4651,8 +4652,16 @@ public class frm_recepcion_datos extends PBase {
         progress.setMessage("Guardando Recepción");
         progress.show();
 
-        guardar_recepcion();
-
+        //#GT06022023: si se genera la LP auto, validar que este seteada en el input
+        if (gl.bloquear_lp_hh) {
+            if (txtLicPlate.equals("")){
+                mu.msgbox("El proceso no ha asignado una LP para la recepción.");
+            }else{
+                guardar_recepcion();
+            }
+        }else{
+            guardar_recepcion();
+        }
     }
 
     private void guardar_recepcion(){
@@ -4677,20 +4686,6 @@ public class frm_recepcion_datos extends PBase {
             {
                 cmbVenceRec.setText(fecha_ajustada);
             }
-
-//            try{
-//
-//                if (!du.EsFecha(valor)){
-//                    msgbox("No es una fecha válida, se colocará la fecha actual");
-//                    cmbVenceRec.setText(du.getActDateStr());
-//                    return;
-//                };
-//
-//                // du.EsFecha(valor);
-//            }catch(Exception e){
-//                cmbVenceRec.setText(du.getActDateStr());
-//                return;
-//            }
 
             if (BeProducto.Presentaciones != null) {
 
@@ -7235,16 +7230,37 @@ public class frm_recepcion_datos extends PBase {
                         break;
 
                     case 16:
-
                         progress.setMessage("Procesando recepción");
                         //Guardar_Recepcion_Nueva
-
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
-                        if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
-                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
-                            if (!txtNoLP.getText().toString().isEmpty()){
-                                toast("#CKFK20220823: Por una causa desconocida la licencia está vacía");
-                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate=txtNoLP.getText().toString();
+//                        if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
+//                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
+//                            if (!txtNoLP.getText().toString().isEmpty()){
+//                                toast("#CKFK20220823: Por una causa desconocida la licencia está vacía");
+//                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate=txtNoLP.getText().toString();
+//                            }
+//                        }
+
+                        //#GT06022023: si se genera la LP auto, validar que no vaya vacio el objeto RecepcionDet y StockRec
+                        if(gl.bloquear_lp_hh){
+                            if (BeTransReDet.Lic_plate.equals("") || BeTransReDet.Lic_plate.isEmpty()){
+                                if (!txtNoLP.getText().toString().isEmpty()) {
+                                    BeTransReDet.Lic_plate = txtNoLP.getText().toString();
+                                    toast("#GT06032023_1: Por una causa desconocida la licencia estaba vacía");
+                                }else{
+                                    toast("#GT06032023_2: Por una causa desconocida la licencia está vacía");
+                                    addlog(getPackageName(),"#GT06032023_2: Por una causa desconocida la licencia está vacía","");
+                                }
+                            }
+
+                            if (pListBeStockRec.items.get(0).Lic_plate.equals("") || pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
+                                if (!txtNoLP.getText().toString().isEmpty()) {
+                                    pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString();
+                                    toast("#GT06032023_3: Por una causa desconocida la licencia estaba vacía");
+                                }else{
+                                    toast("#GT06032023_4: Por una causa desconocida la licencia está vacía");
+                                    addlog(getPackageName(),"#GT06032023_4: Por una causa desconocida la licencia está vacía","");
+                                }
                             }
                         }
 
@@ -7707,15 +7723,23 @@ public class frm_recepcion_datos extends PBase {
 
                     if ( pListBeStockRec!=null){
                         if (pListBeStockRec.items!=null){
-                            pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
-
+                            //#GT06022023: deberia usarse txtNoLP, pero esta pNumeroLP, asi que me aseguro que no este vacio
+                            if(pNumeroLP.equals("")){
+                                toastlong("Error_06022023: No se pudo recargar la linea con la LP.");
+                            }else{
+                                pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
+                            }
                         }
                     }
 
-                    //AQUI
                     if ( gl.gBeRecepcion.Detalle!=null){
                         if (gl.gBeRecepcion.Detalle.items!=null){
-                            gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+                            if(pNumeroLP.equals("")){
+                                toastlong("Error_06022023: No se pudo recargar la linea con la LP.");
+                            }else{
+                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate = pNumeroLP;
+                            }
+
                         }
                     }
 
@@ -8035,6 +8059,7 @@ public class frm_recepcion_datos extends PBase {
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
 
                 pNumeroLP= nBeResolucion.Serie + result;
+                txtNoLP.setText(pNumeroLP);
 
             }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
