@@ -1,6 +1,7 @@
 package com.dts.ladapt.CambioUbicacion;
 
 import android.graphics.Color;
+import android.os.Debug;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,60 +60,65 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        if (convertView == null) {
+        try{
+            if (convertView == null) {
 
-            convertView = l_Inflater.inflate(R.layout.activity_list_adapter_detalle_cambio_ubic, null);
-            holder = new ViewHolder();
+                convertView = l_Inflater.inflate(R.layout.activity_list_adapter_detalle_cambio_ubic, null);
+                holder = new ViewHolder();
 
-            holder.lblTareaDet  = (TextView) convertView.findViewById(R.id.lblTareaDet);
-            holder.lblIdStock = (TextView) convertView.findViewById(R.id.lblIdStock);
-            holder.lblCodigo  = (TextView) convertView.findViewById(R.id.lblCodigo);
-            holder.lblProducto = (TextView) convertView.findViewById(R.id.lblProducto);
-            holder.lblPresentacion = (TextView) convertView.findViewById(R.id.lblPresentacion);
-            holder.lblOrigen = (TextView) convertView.findViewById(R.id.lblOrigen);
-            holder.lblDestino = (TextView) convertView.findViewById(R.id.lblDestino);
-            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
-            holder.lblRecibido = (TextView) convertView.findViewById(R.id.lblRecibido);
-            holder.lblOperador = (TextView) convertView.findViewById(R.id.lblOperador);
-            holder.lblLicencia = (TextView) convertView.findViewById(R.id.lblLicencia);
+                holder.lblTareaDet  = (TextView) convertView.findViewById(R.id.lblTareaDet);
+                holder.lblIdStock = (TextView) convertView.findViewById(R.id.lblIdStock);
+                holder.lblCodigo  = (TextView) convertView.findViewById(R.id.lblCodigo);
+                holder.lblProducto = (TextView) convertView.findViewById(R.id.lblProducto);
+                holder.lblPresentacion = (TextView) convertView.findViewById(R.id.lblPresentacion);
+                holder.lblOrigen = (TextView) convertView.findViewById(R.id.lblOrigen);
+                holder.lblDestino = (TextView) convertView.findViewById(R.id.lblDestino);
+                holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
+                holder.lblRecibido = (TextView) convertView.findViewById(R.id.lblRecibido);
+                holder.lblOperador = (TextView) convertView.findViewById(R.id.lblOperador);
+                holder.lblLicencia = (TextView) convertView.findViewById(R.id.lblLicencia);
 
-            convertView.setTag(holder);
+                convertView.setTag(holder);
 
-        }else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+            }else {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-        holder.lblTareaDet.setText(""+pBeTransUbicHhDetListArray.get(position).IdTareaUbicacionDet);
-        holder.lblIdStock.setText(""+pBeTransUbicHhDetListArray.get(position).IdStock);
-        holder.lblCodigo.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Codigo);
-        holder.lblProducto.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Nombre);
-        holder.lblPresentacion.setText(""+pBeTransUbicHhDetListArray.get(position).ProductoPresentacion.Nombre);
-        holder.lblOrigen.setText(""+pBeTransUbicHhDetListArray.get(position).UbicacionOrigen.NombreCompleto);
-        holder.lblDestino.setText(""+pBeTransUbicHhDetListArray.get(position).UbicacionDestino.NombreCompleto);
-        holder.lblCantidad.setText(""+pBeTransUbicHhDetListArray.get(position).Cantidad);
-        holder.lblRecibido.setText(""+pBeTransUbicHhDetListArray.get(position).Recibido);
-        holder.lblOperador.setText(""+pBeTransUbicHhDetListArray.get(position).Operador.Nombres);
+            holder.lblTareaDet.setText(""+pBeTransUbicHhDetListArray.get(position).IdTareaUbicacionDet);
+            holder.lblIdStock.setText(""+pBeTransUbicHhDetListArray.get(position).IdStock);
+            holder.lblCodigo.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Codigo);
+            holder.lblProducto.setText(""+pBeTransUbicHhDetListArray.get(position).Producto.Nombre);
+            holder.lblPresentacion.setText(""+pBeTransUbicHhDetListArray.get(position).ProductoPresentacion.Nombre);
+            holder.lblOrigen.setText(""+pBeTransUbicHhDetListArray.get(position).UbicacionOrigen.NombreCompleto);
+            holder.lblDestino.setText(""+pBeTransUbicHhDetListArray.get(position).UbicacionDestino.NombreCompleto);
+            holder.lblCantidad.setText(""+pBeTransUbicHhDetListArray.get(position).Cantidad);
+            holder.lblRecibido.setText(""+pBeTransUbicHhDetListArray.get(position).Recibido);
+            holder.lblOperador.setText(""+pBeTransUbicHhDetListArray.get(position).Operador.Nombres);
 
-        if (!pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate.isEmpty()){
-            holder.lblLicencia.setText(pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate);
-        } else {
             holder.lblLicencia.setText("--");
+            if (pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate!=null){
+                if (!pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate.isEmpty()){
+                    holder.lblLicencia.setText(pBeTransUbicHhDetListArray.get(position).Stock.Lic_plate);
+                }
+            }
+
+            LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
+
+            if (position>0){
+                encabezado.setVisibility(View.GONE);
+            }else{
+                encabezado.setVisibility(View.VISIBLE);
+            }
+
+            if(selectedIndex!= -1 && position == selectedIndex) {
+                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+            }else{
+                convertView.setBackgroundColor(Color.TRANSPARENT);
+            }
+
+        }catch (Exception e){
+
         }
-
-        LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
-
-        if (position>0){
-            encabezado.setVisibility(View.GONE);
-        }else{
-            encabezado.setVisibility(View.VISIBLE);
-        }
-
-        if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
-        }else{
-            convertView.setBackgroundColor(Color.TRANSPARENT);
-        }
-
         return convertView;
     }
 

@@ -422,14 +422,16 @@ public class frm_datos_reabastecimiento extends PBase {
                 return false;
             }
 
-            if (txtLicPlate.getText().toString().isEmpty()) {
-                msgbox("Ingrese licencia.");
-                return false;
-            } else if (!txtLicPlate.getText().toString().replace("$","").equals(selitem.Lic_plate)) {
-                txtLicPlate.requestFocus();
-                txtLicPlate.selectAll();
-                msgbox("La licencia no coincide.");
-                return false;
+            if (trLicPlate.getVisibility()==View.VISIBLE){
+                if (txtLicPlate.getText().toString().isEmpty()) {
+                    msgbox("Ingrese licencia.");
+                    return false;
+                } else if (!txtLicPlate.getText().toString().replace("$","").equals(selitem.Lic_plate)) {
+                    txtLicPlate.requestFocus();
+                    txtLicPlate.selectAll();
+                    msgbox("La licencia no coincide.");
+                    return false;
+                }
             }
 
             if (txtCodigoPrd.getText().toString().isEmpty()) {

@@ -1053,6 +1053,7 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
             }else{
+                progress.cancel();
                throw new Exception("La cantidad no puede ser vacía");
             }
 
