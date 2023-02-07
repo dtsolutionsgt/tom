@@ -2279,7 +2279,7 @@ public class frm_recepcion_datos extends PBase {
                                    clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
                                    //#CKFK 20210322 Modifiqué que se envíe el IdPropietarioBodega de trans_re_det
                                    BeProdPallet.IdPropietarioBodega =  pIdPropietarioBodega;//gl.gBeRecepcion.PropietarioBodega.IdPropietarioBodega;
-                                   BeProdPallet  .IdProductoBodega = BeProducto.IdProductoBodega;
+                                   BeProdPallet.IdProductoBodega = BeProducto.IdProductoBodega;
                                    BeProdPallet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
                                    BeProdPallet.IdPresentacion = IdPreseSelect;
                                    BeProdPallet.IdRecepcionDet = pIdRecepcionDet;
@@ -2461,7 +2461,6 @@ public class frm_recepcion_datos extends PBase {
 
                                     ObjDP.IdRecepcionDet = pIdRecepcionDet;
                                     ObjDP.IdProductoParametro = obj.IdProductoParametro;
-
                                     ObjDP.IdParametroDet = 0;
                                     ObjDP.IdRecepcionEnc = gl.gIdRecepcionEnc;
                                     ObjDP.ProductoParametro = obj;
@@ -4654,10 +4653,12 @@ public class frm_recepcion_datos extends PBase {
 
         //#GT06022023: si se genera la LP auto, validar que este seteada en el input
         if (gl.bloquear_lp_hh) {
-            if (txtLicPlate.equals("")){
-                mu.msgbox("El proceso no ha asignado una LP para la recepción.");
-            }else{
-                guardar_recepcion();
+            if (txtNoLP!=null){
+                if (txtNoLP.getText().equals("")){
+                    mu.msgbox("El proceso no ha asignado una LP para la recepción.");
+                }else{
+                    guardar_recepcion();
+                }
             }
         }else{
             guardar_recepcion();
