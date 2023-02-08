@@ -315,32 +315,36 @@ public class frm_detalle_tareas_picking extends PBase {
     private void Filtro() {
         String termino  = gl.termino;
 
-        if (!termino.isEmpty()) {
-            btnLimpiar.setVisibility(View.VISIBLE);
-        }
-
-        AuxBePickingUbic.clear();
-        for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
-
-            if(obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())){
-                AuxBePickingUbic.add(obj);
+        try {
+            if (!termino.isEmpty()) {
+                btnLimpiar.setVisibility(View.VISIBLE);
             }
-        }
 
-        if (gl.TipoPantallaPicking == 3) {
-            adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-            listView.setAdapter(adapter3);
-        } else {
-            if (areaprimera) {
-                adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                listView.setAdapter(adapter2);
+            AuxBePickingUbic.clear();
+            for (clsBeTrans_picking_ubic obj : BeListPickingUbic) {
+
+                if (obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())) {
+                    AuxBePickingUbic.add(obj);
+                }
+            }
+
+            if (gl.TipoPantallaPicking == 3) {
+                adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                listView.setAdapter(adapter3);
             } else {
-                adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                listView.setAdapter(adapter);
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                    listView.setAdapter(adapter2);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                    listView.setAdapter(adapter);
+                }
             }
-        }
 
-        btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
+            btnPendientes.setText("Regs: " + AuxBePickingUbic.size());
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
     }
 
 //    public void ProgressDialog(String mensaje) {
