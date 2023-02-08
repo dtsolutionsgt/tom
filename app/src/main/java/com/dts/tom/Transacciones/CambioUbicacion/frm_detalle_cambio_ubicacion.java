@@ -98,7 +98,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
         ProgressDialog("Cargando forma");
 
-        //Load();
+        Load();
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -361,7 +361,6 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                             adapter=new list_adapter_detalle_cambio_ubic(this,pBeTransUbicHhDetListArray);
                             listView.setAdapter(adapter);
-                            adapter.refreshItems();
 
                             if (pBeTransUbicHhDetList.items.size()==1){
 
@@ -389,11 +388,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 }
 
                             }
-
+                            adapter.refreshItems();
                             progress.cancel();
                         }
-                    }else{
-                        listView.setAdapter(null);
                     }
                 }
             }
@@ -691,9 +688,8 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     @Override
     protected void onResume(){
+        Llena_Tarea_Detalle_Ubicacion();
         super.onResume();
-        Load();
-       // Llena_Tarea_Detalle_Ubicacion();
     }
 
 }

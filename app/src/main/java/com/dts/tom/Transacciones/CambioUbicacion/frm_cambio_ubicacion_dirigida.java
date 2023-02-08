@@ -103,6 +103,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         lblCambioEstado.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
         txtEstadoDestino.setVisibility((gl.modo_cambio==2?View.VISIBLE:View.INVISIBLE));
 
+        //#CKFK20230206 Si Permitir_Decimales = true  txtCantidad  cambia a decimal si no a entero
+        if (gl.Permitir_Decimales) {
+            txtCantidad.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        } else {
+            txtCantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+
         txtCodigoPrd.setEnabled(true);
 
         setHandlers();
