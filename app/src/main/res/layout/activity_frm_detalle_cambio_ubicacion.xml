@@ -80,8 +80,11 @@
     <RelativeLayout
         android:id="@+id/relInfo2"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_above="@id/relInfo1">
+        android:layout_height="wrap_content"
+        android:layout_above="@id/relbot"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toStartOf="@+id/btnTareas">
 
         <CheckBox
             android:id="@+id/chkTodos"
@@ -89,39 +92,29 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="0dp"
             android:text="Todos"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/relInfo1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_above="@id/relbot">
 
         <TextView
             android:id="@+id/lblTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="95dp"
+            android:layout_below="@+id/chkTodos"
+            android:layout_alignStart="@+id/chkTodos"
+            android:layout_alignEnd="@+id/chkTodos"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="5dp"
+            android:paddingStart="7dp"
             android:text="Regs: 0"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/lblRegs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="60dp"
-            android:text="Regs: 0"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp" />
-
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/relbot"
@@ -144,18 +137,35 @@
             android:onClick="Regresar" />
 
         <Button
-            android:id="@+id/btnFinalizarTarea"
+            android:id="@+id/btnRegs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_toEndOf="@+id/btnBack"
-            android:background="@drawable/color_medium"
-            android:onClick="validacion_finalizar_tarea"
-            android:text="Finalizar Tarea"
+            android:background="@color/medium"
+            android:text="Registros: 0"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
+
     </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnTareas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relbot"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/medium"
+        android:clickable="true"
+        android:onClick="validacion_finalizar_tarea"
+        android:src="@drawable/ok_btn"
+        app:maxImageSize="32dp" />
 
 </RelativeLayout>

@@ -39,7 +39,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
     private EditText txtCodigo;
     private ListView listView;
     private CheckBox chkTodos;
-    private Button btnBack;
+    private Button btnRegs;
 
     private frm_detalle_cambio_ubicacion.WebServiceHandler ws;
     private XMLObject xobj;
@@ -72,9 +72,9 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         listView = (ListView) findViewById(R.id.listDetalle);
         chkTodos = (CheckBox) findViewById(R.id.chkTodos);
         lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblRegs = (TextView) findViewById(R.id.lblRegs);
+        //lblRegs = (TextView) findViewById(R.id.lblRegs);
         lblTotal = (TextView) findViewById(R.id.lblTotal);
-        btnBack = (Button) findViewById(R.id.btnBack);
+        btnRegs = (Button) findViewById(R.id.btnRegs);
 
         Modo = (gl.modo_cambio==1?true:false);
 
@@ -353,7 +353,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                         listTot += 1;
                     }
 
-                    lblRegs.setText(""+listUser);
+                    btnRegs.setText("REGISTROS: "+listUser);
                     lblTotal.setText(listCompTot + "/" + listTot);
 
                     if (pBeTransUbicHhDetList!=null){
