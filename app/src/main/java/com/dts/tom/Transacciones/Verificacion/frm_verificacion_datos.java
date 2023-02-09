@@ -35,6 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.zbra.androidlinq.delegate.SelectorDouble;
 
@@ -761,18 +762,37 @@ public class frm_verificacion_datos extends PBase {
             //double valor =Double.valueOf(txt.getText().toString());
             double valor =Double.valueOf(txt.getText().toString().replace(",",""));
 
-            if (valor > 0) {
-                if (valor > peso_picking) {
-                    mu.msgbox("El peso ingresado es mayor al pickeado");
-                    result = false;
-                } else {
-                    result = true;
-                }
 
-            }else {
-                mu.msgbox("El valor es incorrecto, ingréselo nuevamente");
-                result = false;
+            if(Objects.equals(valor, peso_picking)){
+                result = true;
+            }else{
+
+                if (valor > 0) {
+                    if (valor > peso_picking) {
+                        mu.msgbox("El peso ingresado es mayor al pickeado");
+                        result = false;
+                    } else if(valor< peso_picking) {
+                        mu.msgbox("El peso ingresado es menor al pickeado");
+                        result = false;
+                    }
+                }
             }
+
+
+//                if (valor > 0) {
+//                    if (valor > peso_picking) {
+//                        mu.msgbox("El peso ingresado es mayor al pickeado");
+//                        result = false;
+//                    } else if(valor< peso_picking) {
+//                        mu.msgbox("El peso ingresado es menor al pickeado");
+//                        result = false;
+//                    }
+//
+//                }else {
+//                    mu.msgbox("El valor del peso es incorrecto, ingréselo nuevamente");
+//                    result = false;
+//                }
+
 
         }catch (Exception ex){
             result = false;
@@ -799,7 +819,7 @@ public class frm_verificacion_datos extends PBase {
                 return result;
             }
 
-            if (gBeProducto.getControl_peso()){
+            if (gBeProducto.Control_peso){
                 //#GT10062022: para validar el peso, no usar mismo metodo que valida cantidad
                 //if (!valida_Valor(txtPesoVeri)){
                 if (!valida_Valor_Peso(txtPesoVeri)){

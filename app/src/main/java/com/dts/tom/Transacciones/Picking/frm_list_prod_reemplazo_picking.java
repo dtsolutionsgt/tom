@@ -279,7 +279,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 tmpBeStock_Res.IdProductoEstado = selitem.IdEstado;
                 tmpBeStock_Res.IdUbicacion = selitem.IdUbicacion;
                 tmpBeStock_Res.Lic_plate = selitem.LicPlate;
-                tmpBeStock_Res.Lote = selitem.Lote;
+                tmpBeStock_Res.Lote = (selitem.Lote.equals("-")? "": selitem.Lote);
                 tmpBeStock_Res.Fecha_vence = du.convierteFecha(selitem.FechaVence);
                 tmpBeStock_Res.IdProductoBodega = selitem.IdProductoBodega;
                 tmpBeStock_Res.IdUnidadMedida = selitem.IdUnidadMedida;
