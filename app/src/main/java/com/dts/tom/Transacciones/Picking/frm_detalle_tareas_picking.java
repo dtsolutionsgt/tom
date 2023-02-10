@@ -37,6 +37,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.classes.extListChkDlg;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking3;
 import com.dts.tom.PBase;
@@ -72,6 +73,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+
+    private ArrayList<clsBeTrans_picking_ubic> AuxBeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
     private list_adapt_detalle_tareas_picking3 adapter3;
@@ -85,7 +88,9 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean Finalizar=true;
     private boolean areaprimera = true, filtros = false;
     private boolean asignar_operador_linea_picking = false;
-
+    private ArrayList<String> ListRack = new ArrayList<>();
+    private ArrayList<String> ListRackSel = new ArrayList<>();
+    private ArrayList<Integer> IdxFiltos = new ArrayList<>();
     public Activity myActivity;
 
     @Override
@@ -214,7 +219,23 @@ public class frm_detalle_tareas_picking extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     pOrden=position+1;
-                    Lista_Detalle_Picking();
+
+                    if (ListRackSel.size() == 0) {
+                        Lista_Detalle_Picking();
+                    } else {
+                        Collections.sort(BeListPickingUbic,new OrdenarItems());
+                        Collections.sort(plistPickingUbi.items,new OrdenarItems());
+
+                        if (gl.TipoPantallaPicking == 3) {
+                            adapter3.refreshItems();
+                        } else {
+                            if (areaprimera) {
+                                adapter2.refreshItems();
+                            } else {
+                                adapter.refreshItems();
+                            }
+                        }
+                    }
 
                 }
 
@@ -522,7 +543,8 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Lista_Detalle_Picking(){
-
+        String Rack ="";
+        int idx;
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
 
@@ -533,6 +555,9 @@ public class frm_detalle_tareas_picking extends PBase {
             if (plistPickingUbi!=null){
 
                 if (plistPickingUbi.items!=null){
+
+                    ListRack.clear();
+                    AuxBeListPickingUbic.clear();
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
@@ -551,10 +576,19 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             vItem = obj;
 
+                            //#AT20230208 Se obtiene lista de racks del picking
+                            Rack = obj.NombreUbicacion;
+                            idx = Rack.indexOf("-");
+                            Rack = Rack.substring(0, idx);
+
+                            if (!ListRack.contains(Rack.trim())) {
+                                ListRack.add(Rack.trim());
+                            }
+
                             BeListPickingUbic.add(vItem);
+                            AuxBeListPickingUbic.add(vItem);
 
                         }
-
                     }
 
                     //AT 20211222 Ya no se resta 1 para obtener el registro total
@@ -563,6 +597,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 }
             }
+
+            Collections.sort(ListRack, new ItemComparator());
 
             if (plistPickingUbi!=null){
                 if (plistPickingUbi.items!=null){
@@ -750,6 +786,13 @@ public class frm_detalle_tareas_picking extends PBase {
             return left.IdPickingEnc-(rigth.IdPickingEnc);
         }
 
+    }
+
+    public class ItemComparator implements Comparator<String> {
+        public int compare(String left, String right) {
+            return left.compareTo(right);
+
+        }
     }
 
     public class WebServiceHandler extends WebService {
@@ -1091,4 +1134,120 @@ public class frm_detalle_tareas_picking extends PBase {
 
         }
     };
+
+    //region FiltroRacks
+    public void Filtro(View view) {
+        String s = "";
+        boolean flag;
+        try {
+
+            extListChkDlg listdlg = new extListChkDlg();
+            listdlg.buildDialog(frm_detalle_tareas_picking.this,"Lista de Racks","SALIR","TODO","APLICAR");
+            listdlg.setWidth(350);listdlg.setLines(5);
+
+            for (int i = 0; i <ListRack.size(); i++) {
+                s = ListRack.get(i);
+                flag = ListRackSel.contains(s);
+
+                listdlg.add(ListRack.get(i),flag);
+            }
+
+            listdlg.setOnExitListener(v -> listdlg.dismiss());
+
+            listdlg.setOnAddListener(v -> {
+                ListRackSel.clear();
+
+                for (int i=0; i < listdlg.items.size(); i++) {
+                    if (listdlg.items.get(i).checked) {
+                        ListRackSel.add(listdlg.items.get(i).text);
+                    }
+                }
+
+                FiltroPorRacks();
+
+                listdlg.dismiss();
+            });
+
+            listdlg.setOnDelListener(v -> {
+                BeListPickingUbic.clear();
+                for (int i= 0; i < AuxBeListPickingUbic.size(); i++) {
+                    BeListPickingUbic.add(AuxBeListPickingUbic.get(i));
+                }
+
+                btnPendientes.setText("Regs: " + BeListPickingUbic.size());
+
+                if (gl.TipoPantallaPicking == 3) {
+                    adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
+                    listView.setAdapter(adapter3);
+                } else {
+                    if (areaprimera) {
+                        adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                        listView.setAdapter(adapter2);
+                    } else {
+                        adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                        listView.setAdapter(adapter);
+                    }
+                }
+
+                ListRackSel.clear();
+                listdlg.dismiss();
+            });
+
+            listdlg.show();
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void FiltroPorRacks() {
+        String Racks = "";
+        int idx, pos;
+        try {
+            //plistPickingUbi.items
+
+            //AuxBeListPickingUbic;
+            BeListPickingUbic.clear();
+            IdxFiltos.clear();
+            for (int i= 0; i < AuxBeListPickingUbic.size(); i++) {
+                BeListPickingUbic.add(AuxBeListPickingUbic.get(i));
+            }
+
+            for (int i = 0; i < BeListPickingUbic.size(); i ++) {
+
+                Racks = BeListPickingUbic.get(i).NombreUbicacion;
+                idx = Racks.indexOf("-");
+                Racks= Racks.substring(0, idx).trim();
+
+                if (!ListRackSel.contains(Racks)) {
+                    IdxFiltos.add(i);
+                }
+            }
+
+            for (int i = 0; i < IdxFiltos.size(); i++) {
+                pos = IdxFiltos.size() - i - 1;
+                idx = IdxFiltos.get(pos);
+                BeListPickingUbic.remove(idx);
+            }
+
+            btnPendientes.setText("Regs: " + BeListPickingUbic.size() + "/" + AuxBeListPickingUbic.size());
+
+            if (gl.TipoPantallaPicking == 3) {
+                adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
+                listView.setAdapter(adapter3);
+            } else {
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                    listView.setAdapter(adapter2);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                    listView.setAdapter(adapter);
+                }
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
+        }
+    }
+    //endregion
 }
