@@ -46,7 +46,6 @@ import java.util.Map;
 public class appGlobals extends Application {
 
     public String wsurl = "";
-    public clsBeOperador_bodega seloper = new clsBeOperador_bodega();
     public String PathDataDir = "";
 
     //Variable para mostrar cambio de estado o cambio de ubicación

@@ -22,7 +22,7 @@ public class list_adapt_verificados extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_verificados(Context context, ArrayList<clsBeTrans_inv_resumen_grid> results) {
         BeListContados = results;
@@ -59,11 +59,11 @@ public class list_adapt_verificados extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_verificados, null);
             holder = new ViewHolder();
 
-            holder.lblInvRes = (TextView) convertView.findViewById(R.id.lblInvRes);
-            holder.lblEstadoRes = (TextView) convertView.findViewById(R.id.lblEstadoRes);
-            holder.lblPresRes = (TextView) convertView.findViewById(R.id.lblPresRes);
-            holder.lblCantRes = (TextView) convertView.findViewById(R.id.lblCantRes);
-            holder.lblUbicacion = (TextView) convertView.findViewById(R.id.lblUbicacion);
+            holder.lblInvRes = convertView.findViewById(R.id.lblInvRes);
+            holder.lblEstadoRes = convertView.findViewById(R.id.lblEstadoRes);
+            holder.lblPresRes = convertView.findViewById(R.id.lblPresRes);
+            holder.lblCantRes = convertView.findViewById(R.id.lblCantRes);
+            holder.lblUbicacion = convertView.findViewById(R.id.lblUbicacion);
 
             convertView.setTag(holder);
         }else {

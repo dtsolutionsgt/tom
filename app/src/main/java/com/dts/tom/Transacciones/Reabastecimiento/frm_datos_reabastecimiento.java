@@ -36,7 +36,7 @@ public class frm_datos_reabastecimiento extends PBase {
     private CheckBox chkExplosionar;
 
     private clsBeTrans_movimientos gMovimientoDet = new clsBeTrans_movimientos();
-    private clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
+    private final clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
 
     private int vIdStockNuevo = 0;
     private int vIdMovimientoNuevo = 0;
@@ -198,11 +198,7 @@ public class frm_datos_reabastecimiento extends PBase {
             chkExplosionar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        explosionar = true;
-                    } else {
-                        explosionar = false;
-                    }
+                    explosionar = b;
                 }
             });
         } catch (Exception e) {

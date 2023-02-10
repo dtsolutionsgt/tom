@@ -50,12 +50,12 @@ public class Mainmenu extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private ArrayList<clsClasses.clsMenu> items= new ArrayList<clsClasses.clsMenu>();
+    private final ArrayList<clsClasses.clsMenu> items= new ArrayList<clsClasses.clsMenu>();
 
     private list_view_menu2 adaptergrid;
 
     private boolean started = false;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     private int selId,selIdx,menuid,iicon;
     private String sdoc;
@@ -63,10 +63,10 @@ public class Mainmenu extends PBase {
 
     private boolean listo=true;
 
-    private int tiempo_actualizacion=25 * 1000;
+    private final int tiempo_actualizacion=25 * 1000;
     private int cantRecep = 0,cantPicking = 0,cantVerif = 0,cantCambioEst = 0, cantCambioUbic = 0;
 
-    private clsBeMenu_rol_opList menu_rol_opList = new clsBeMenu_rol_opList();
+    private final clsBeMenu_rol_opList menu_rol_opList = new clsBeMenu_rol_opList();
 
     private static String PathDataDir = "";
 
@@ -81,10 +81,10 @@ public class Mainmenu extends PBase {
         ws = new Mainmenu.WebServiceHandler(Mainmenu.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        gridView = (GridView) findViewById(R.id.gridView1);
-        lblBodega = (TextView) findViewById(R.id.lblBodegaName);
-        lblUsuario = (TextView) findViewById(R.id.lblUsuarioName);
-        lblVersion= (TextView) findViewById(R.id.lblVersion);
+        gridView = findViewById(R.id.gridView1);
+        lblBodega = findViewById(R.id.lblBodegaName);
+        lblUsuario = findViewById(R.id.lblUsuarioName);
+        lblVersion= findViewById(R.id.lblVersion);
 
         try {
 
@@ -580,7 +580,7 @@ public class Mainmenu extends PBase {
 
     //region Timer
 
-    private Runnable timer = new Runnable() {
+    private final Runnable timer = new Runnable() {
         @Override
         public void run() {
             cargaDatosServicio();

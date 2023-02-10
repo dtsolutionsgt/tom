@@ -18,7 +18,7 @@ public class list_view_menu extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_view_menu(Context context, ArrayList<clsClasses.clsMenu> results) {
         items = results;
@@ -55,8 +55,8 @@ public class list_view_menu extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_view_menu, null);
             holder = new ViewHolder();
 
-            holder.imgEst = (ImageView) convertView.findViewById(R.id.imgNext);
-            holder.lblName = (TextView) convertView.findViewById(R.id.lblTrat);
+            holder.imgEst = convertView.findViewById(R.id.imgNext);
+            holder.lblName = convertView.findViewById(R.id.lblTrat);
 
             convertView.setTag(holder);
         } else {

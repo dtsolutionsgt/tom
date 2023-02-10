@@ -51,10 +51,10 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
     private list_adapter_detalle_cambio_ubic adapter;
 
-    private clsBeTrans_ubic_hh_det pBeTransUbicHhDet = new clsBeTrans_ubic_hh_det();
+    private final clsBeTrans_ubic_hh_det pBeTransUbicHhDet = new clsBeTrans_ubic_hh_det();
     private clsBeTrans_ubic_hh_detList pBeTransUbicHhDetList = new clsBeTrans_ubic_hh_detList();
 
-    private ArrayList<clsBeTrans_ubic_hh_det> pBeTransUbicHhDetListArray= new ArrayList<clsBeTrans_ubic_hh_det>();
+    private final ArrayList<clsBeTrans_ubic_hh_det> pBeTransUbicHhDetListArray= new ArrayList<clsBeTrans_ubic_hh_det>();
 
     private int index, listCompTot,listTot, listUser, listCompUser;
 
@@ -68,15 +68,15 @@ public class frm_detalle_cambio_ubicacion extends PBase {
         ws = new WebServiceHandler(frm_detalle_cambio_ubicacion.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtCodigo = (EditText) findViewById(R.id.txtCodigo);
-        listView = (ListView) findViewById(R.id.listDetalle);
-        chkTodos = (CheckBox) findViewById(R.id.chkTodos);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+        txtCodigo = findViewById(R.id.txtCodigo);
+        listView = findViewById(R.id.listDetalle);
+        chkTodos = findViewById(R.id.chkTodos);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
         //lblRegs = (TextView) findViewById(R.id.lblRegs);
-        lblTotal = (TextView) findViewById(R.id.lblTotal);
-        btnRegs = (Button) findViewById(R.id.btnRegs);
+        lblTotal = findViewById(R.id.lblTotal);
+        btnRegs = findViewById(R.id.btnRegs);
 
-        Modo = (gl.modo_cambio==1?true:false);
+        Modo = (gl.modo_cambio == 1);
 
         lblTituloForma.setText( String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
@@ -295,10 +295,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
 
                 if( pBeTransUbicHhDetList.items!=null ){
 
-                    if (chkTodos.isChecked()) {
-                        soperador = true;
-                    } else
-                    {soperador = false;}
+                    soperador = chkTodos.isChecked();
 
                     ubicados=false;
 

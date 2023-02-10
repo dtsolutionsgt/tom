@@ -61,11 +61,11 @@ public class list_adapt_tareas_inventario extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_tareas_inventario, null);
             holder = new ViewHolder();
 
-            holder.lblIdTarea = (TextView) convertView.findViewById(R.id.lblIdTarea);
-            holder.lblTipo = (TextView) convertView.findViewById(R.id.lblTipo);
-            holder.lblEstadoInv = (TextView) convertView.findViewById(R.id.lblEstadoInv);
-            holder.lblInicio = (TextView) convertView.findViewById(R.id.lblInicio);
-            holder.lblTranscurrido = (TextView) convertView.findViewById(R.id.lblTranscurrido);
+            holder.lblIdTarea = convertView.findViewById(R.id.lblIdTarea);
+            holder.lblTipo = convertView.findViewById(R.id.lblTipo);
+            holder.lblEstadoInv = convertView.findViewById(R.id.lblEstadoInv);
+            holder.lblInicio = convertView.findViewById(R.id.lblInicio);
+            holder.lblTranscurrido = convertView.findViewById(R.id.lblTranscurrido);
 
             convertView.setTag(holder);
 

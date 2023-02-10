@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 public class list_adapt_consulta_stock2 extends BaseAdapter {
 
-    private ArrayList<clsBeVW_stock_res_CI> BeListStock;
-    private Context cCont;
+    private final ArrayList<clsBeVW_stock_res_CI> BeListStock;
+    private final Context cCont;
     private int selectedIndex;
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_consulta_stock2(Context context, ArrayList<clsBeVW_stock_res_CI> results){
         BeListStock = results;

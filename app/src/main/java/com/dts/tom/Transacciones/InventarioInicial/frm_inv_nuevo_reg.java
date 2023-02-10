@@ -53,7 +53,7 @@ public class frm_inv_nuevo_reg extends PBase {
     private clsBeProducto_estadoList BeListEstado = new clsBeProducto_estadoList();
     private clsBeTrans_inv_detalle nitem = new clsBeTrans_inv_detalle();
 
-    private ArrayList<String> EstadoList = new ArrayList<String>();
+    private final ArrayList<String> EstadoList = new ArrayList<String>();
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -73,28 +73,28 @@ public class frm_inv_nuevo_reg extends PBase {
         ws = new WebServiceHandler(frm_inv_nuevo_reg.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtUbicInvN = (EditText) findViewById(R.id.txtUbicInvN);
-        txtCodBarraN = (EditText) findViewById(R.id.txtCodBarraN);
-        txtLoteInvIniN = (EditText) findViewById(R.id.txtLoteInvIniN);
-        txtVenceInvIniN = (EditText) findViewById(R.id.txtVenceInvIniN);
-        txtCantInvIniN = (EditText) findViewById(R.id.txtCantInvIniN);
-        txtPesoInvIniN = (EditText) findViewById(R.id.txtPesoInvIniN);
+        txtUbicInvN = findViewById(R.id.txtUbicInvN);
+        txtCodBarraN = findViewById(R.id.txtCodBarraN);
+        txtLoteInvIniN = findViewById(R.id.txtLoteInvIniN);
+        txtVenceInvIniN = findViewById(R.id.txtVenceInvIniN);
+        txtCantInvIniN = findViewById(R.id.txtCantInvIniN);
+        txtPesoInvIniN = findViewById(R.id.txtPesoInvIniN);
 
-        lblUbicDescN = (TextView) findViewById(R.id.lblUbicDescN);
-        lblDescProdN = (TextView) findViewById(R.id.lblDescProdN);
-        lblLoteN = (TextView) findViewById(R.id.lblLoteN);
-        lblPesoN = (TextView) findViewById(R.id.lblPesoN);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblVenceN = (TextView) findViewById(R.id.lblVenceN);
-        lblPresN = (TextView)findViewById(R.id.lblPresN);
+        lblUbicDescN = findViewById(R.id.lblUbicDescN);
+        lblDescProdN = findViewById(R.id.lblDescProdN);
+        lblLoteN = findViewById(R.id.lblLoteN);
+        lblPesoN = findViewById(R.id.lblPesoN);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblVenceN = findViewById(R.id.lblVenceN);
+        lblPresN = findViewById(R.id.lblPresN);
 
-        cmbPresInvIniN = (Spinner) findViewById(R.id.cmbPresInvIni);
-        cmbEstadoInvIniN = (Spinner) findViewById(R.id.cmbEstadoInvIni);
+        cmbPresInvIniN = findViewById(R.id.cmbPresInvIni);
+        cmbEstadoInvIniN = findViewById(R.id.cmbEstadoInvIni);
 
 
-        dpResultN = (DatePicker)findViewById(R.id.datePicker4);
+        dpResultN = findViewById(R.id.datePicker4);
 
-        imgDateN = (ImageView)findViewById(R.id.imgDateN);
+        imgDateN = findViewById(R.id.imgDateN);
 
         setCurrentDateOnView();
 
@@ -180,7 +180,7 @@ public class frm_inv_nuevo_reg extends PBase {
         showDialog(DATE_DIALOG_ID);
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,

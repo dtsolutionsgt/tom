@@ -40,7 +40,7 @@ public class frm_lista_stock_res extends PBase {
     private ListView listStockRes;
 
     private clsBeVW_stock_resList detStockRes = new clsBeVW_stock_resList();
-    private static ArrayList<clsBeVW_stock_res> BeListStockRes= new ArrayList<clsBeVW_stock_res>() ;
+    private static final ArrayList<clsBeVW_stock_res> BeListStockRes= new ArrayList<clsBeVW_stock_res>() ;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
     private list_adapt_stock_res adapter;
     private String ubicacion, codigo = "";

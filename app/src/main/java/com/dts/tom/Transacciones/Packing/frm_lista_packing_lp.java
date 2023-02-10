@@ -78,7 +78,6 @@ public class frm_lista_packing_lp extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        ;
                     }
                     return false;
                 }

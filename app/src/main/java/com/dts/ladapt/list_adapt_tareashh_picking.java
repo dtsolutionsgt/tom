@@ -22,7 +22,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_tareashh_picking(Context context, ArrayList<clsBeTrans_picking_enc> results) {
         BeListTareasHH = results;
@@ -60,12 +60,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_tareashh_picking, null);
             holder = new ViewHolder();
 
-            holder.lblIdPickingEnc = (TextView) convertView.findViewById(R.id.lblIdPickingEnc);
-            holder.lblBodegaPick = (TextView) convertView.findViewById(R.id.lblBodegaPick);
-            holder.lblPropietarioPick = (TextView) convertView.findViewById(R.id.lblPropietarioPick);
+            holder.lblIdPickingEnc = convertView.findViewById(R.id.lblIdPickingEnc);
+            holder.lblBodegaPick = convertView.findViewById(R.id.lblBodegaPick);
+            holder.lblPropietarioPick = convertView.findViewById(R.id.lblPropietarioPick);
 //            holder.lblUbicacionPick = (TextView) convertView.findViewById(R.id.lblUbicacionPick);
-            holder.lblEstadoPick = (TextView) convertView.findViewById(R.id.lblEstadoPick);
-            holder.lblFechaPick = (TextView) convertView.findViewById(R.id.lblFechaPick);
+            holder.lblEstadoPick = convertView.findViewById(R.id.lblEstadoPick);
+            holder.lblFechaPick = convertView.findViewById(R.id.lblFechaPick);
 //            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
 //            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
 //            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);

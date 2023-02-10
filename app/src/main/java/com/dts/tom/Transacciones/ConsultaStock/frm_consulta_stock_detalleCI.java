@@ -516,7 +516,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
             View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            cmbCantidad = vistaDialog.findViewById(R.id.cmbCantidad);
             setHandlersImpresion();
             dialog.setView(vistaDialog);
 

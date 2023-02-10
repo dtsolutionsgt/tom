@@ -59,12 +59,12 @@ public class frm_inv_cic_guardar extends PBase {
     private clsBeProducto_estadoList lista_estados = new clsBeProducto_estadoList();
     private clsBeBodega_ubicacion nubic = new clsBeBodega_ubicacion();
 
-    private clsBeTrans_inv_stock_prod InvTeoricoPorProducto = new clsBeTrans_inv_stock_prod();
+    private final clsBeTrans_inv_stock_prod InvTeoricoPorProducto = new clsBeTrans_inv_stock_prod();
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProductoList = new clsBeTrans_inv_stock_prodList();
 
-    private ArrayList<String> bodlist= new ArrayList<String>();
-    private ArrayList<String> Preslist= new ArrayList<String>();
-    private ArrayList<String> Lotelist= new ArrayList<String>();
+    private final ArrayList<String> bodlist= new ArrayList<String>();
+    private final ArrayList<String> Preslist= new ArrayList<String>();
+    private final ArrayList<String> Lotelist= new ArrayList<String>();
 
 
     @Override

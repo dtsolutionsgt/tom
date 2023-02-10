@@ -20,7 +20,7 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_view_tareas_cambio_ubic(Context context, ArrayList<clsBeTrans_ubic_hh_enc> results) {
         items = results;
@@ -61,10 +61,10 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_view_tareas_cambio_ubic, null);
             holder = new ViewHolder();
 
-            holder.lblTarea  = (TextView) convertView.findViewById(R.id.lblTarea);
-            holder.lblMotivo = (TextView) convertView.findViewById(R.id.lblMotivo);
-            holder.lblObserva  = (TextView) convertView.findViewById(R.id.lblObserva);
-            holder.lblEstado = (TextView) convertView.findViewById(R.id.lblEstado);
+            holder.lblTarea  = convertView.findViewById(R.id.lblTarea);
+            holder.lblMotivo = convertView.findViewById(R.id.lblMotivo);
+            holder.lblObserva  = convertView.findViewById(R.id.lblObserva);
+            holder.lblEstado = convertView.findViewById(R.id.lblEstado);
 
             convertView.setTag(holder);
 
@@ -77,7 +77,7 @@ public class list_view_tareas_cambio_ubic extends BaseAdapter {
         holder.lblObserva.setText(items.get(position).Observacion);
         holder.lblEstado.setText(items.get(position).Estado);
 
-        LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.encabezado);
+        LinearLayout encabezado = convertView.findViewById(R.id.encabezado);
 
         if (position>0){
             encabezado.setVisibility(View.GONE);

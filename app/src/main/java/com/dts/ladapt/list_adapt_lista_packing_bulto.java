@@ -20,7 +20,7 @@ public class list_adapt_lista_packing_bulto extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_lista_packing_bulto(Context context, ArrayList<clsBeTrans_packing_enc_bulto> results) {
         items = results;

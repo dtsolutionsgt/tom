@@ -49,8 +49,8 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private ListView listDispProd;
     private Button btnActualizaPickingDet,btnBack;
 
-    private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
-    private ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
+    private final ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
+    private final ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_verif adapter;
     private clsBeStockReemplazo selitem;
     private clsBeStock_res StockResReemplazo;
@@ -59,8 +59,11 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     //private clsBeStock_res lBeStockRes = new clsBeStock_res();
     //private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
-    private double vCant=0, CantidadPendiente=0, CantPendSel=0, pCantTotal= 0;
-    private boolean Distinto=false;
+    private final double vCant=0;
+    private double CantidadPendiente=0;
+    private double CantPendSel=0;
+    private double pCantTotal= 0;
+    private final boolean Distinto=false;
 
     public static boolean reemplazoCorrecto=false;
     private boolean ConExistencia = false;
@@ -78,16 +81,16 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         xobj = new XMLObject(ws);
         xobj = new XMLObject(ws);
 
-        lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
-        lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
-        lbldDetProducto = (TextView)findViewById(R.id.lbldDetProducto);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblCantRegs = findViewById(R.id.lblCantRegs);
+        lbldDetProducto = findViewById(R.id.lbldDetProducto);
 
-        listDispProd = (ListView)findViewById(R.id.listDispProd);
+        listDispProd = findViewById(R.id.listDispProd);
 
         txtFiltro = findViewById(R.id.txtFiltro);
 
-        btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
-        btnBack = (Button)findViewById(R.id.btnBack);
+        btnActualizaPickingDet = findViewById(R.id.btnActualizaPickingDet);
+        btnBack = findViewById(R.id.btnBack);
 
         pCantTotal = CantReemplazar;
         ConExistencia = false;
@@ -156,7 +159,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     int Ubicacion = selitem.IdUbicacion;
 
                     msgAskSeguroReemplazo(String.format("¿Desea reemplazar la cantidad: %s de la ubicación: %s?",
-                            String.valueOf(CantReemplazar), String.valueOf(Ubicacion)));
+                            CantReemplazar, Ubicacion));
 
                 }
 
@@ -707,7 +710,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

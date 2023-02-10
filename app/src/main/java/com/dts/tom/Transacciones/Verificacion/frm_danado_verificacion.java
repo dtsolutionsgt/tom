@@ -47,7 +47,7 @@ public class frm_danado_verificacion extends PBase {
     private clsBeProducto_estadoList LProductoEstadoDanado = new clsBeProducto_estadoList();
     private clsBeBodega_ubicacion BeUbicDestino = new clsBeBodega_ubicacion();
 
-    private ArrayList<String> EstadoList = new ArrayList<String>();
+    private final ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdUbicacionDestino=0;
     public static int IdEstadoDanado = 0;
@@ -61,14 +61,14 @@ public class frm_danado_verificacion extends PBase {
 
         super.InitBase();
 
-        cmbEstadoDanadoVeri = (Spinner)findViewById(R.id.cmbEstadoDanadoVeri);
-        lblProdDanadoVeri = (TextView)findViewById(R.id.lblProdDanadoVeri);
-        lblUbicDestVeri = (TextView)findViewById(R.id.lblUbicDestVeri);
-        lblNomUbicVeri = (TextView) findViewById(R.id.lblNomUbicVeri);
-        txtUbicDestVeri = (EditText) findViewById(R.id.txtUbicDestVeri);
-        btnGuardarDanadoVeri = (Button)findViewById(R.id.btnGuardarDanadoVeri);
-        btnBackVeri = (Button)findViewById(R.id.btnBackVeri);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+        cmbEstadoDanadoVeri = findViewById(R.id.cmbEstadoDanadoVeri);
+        lblProdDanadoVeri = findViewById(R.id.lblProdDanadoVeri);
+        lblUbicDestVeri = findViewById(R.id.lblUbicDestVeri);
+        lblNomUbicVeri = findViewById(R.id.lblNomUbicVeri);
+        txtUbicDestVeri = findViewById(R.id.txtUbicDestVeri);
+        btnGuardarDanadoVeri = findViewById(R.id.btnGuardarDanadoVeri);
+        btnBackVeri = findViewById(R.id.btnBackVeri);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
 
         ws = new WebServiceHandler(frm_danado_verificacion.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -487,7 +487,6 @@ public class frm_danado_verificacion extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

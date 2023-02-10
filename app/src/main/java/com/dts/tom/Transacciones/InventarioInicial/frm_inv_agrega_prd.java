@@ -47,17 +47,17 @@ public class frm_inv_agrega_prd extends PBase {
 
     private Cursor ctableFamilia,ctableClasi,ctableMarca,ctableTipo,ctableUMB;
 
-    private ArrayList<String> FamiliaList = new ArrayList<String>();
-    private ArrayList<String> ClasiList = new ArrayList<String>();
-    private ArrayList<String> MarcaList = new ArrayList<String>();
-    private ArrayList<String> TipoList = new ArrayList<String>();
-    private ArrayList<String> UMBasList = new ArrayList<String>();
+    private final ArrayList<String> FamiliaList = new ArrayList<String>();
+    private final ArrayList<String> ClasiList = new ArrayList<String>();
+    private final ArrayList<String> MarcaList = new ArrayList<String>();
+    private final ArrayList<String> TipoList = new ArrayList<String>();
+    private final ArrayList<String> UMBasList = new ArrayList<String>();
 
-    private ArrayList<clsBeProducto_familia> BeListFam = new ArrayList<clsBeProducto_familia>();
-    private ArrayList<clsBeProducto_clasificacion> BeListClasi = new ArrayList<clsBeProducto_clasificacion>();
-    private ArrayList<clsBeProducto_marca> BeListMarca = new ArrayList<clsBeProducto_marca>();
-    private ArrayList<clsBeProducto_tipo> BeListTipo = new ArrayList<clsBeProducto_tipo>();
-    private ArrayList<clsBeUnidad_medida> BeListUmBas = new ArrayList<clsBeUnidad_medida>();
+    private final ArrayList<clsBeProducto_familia> BeListFam = new ArrayList<clsBeProducto_familia>();
+    private final ArrayList<clsBeProducto_clasificacion> BeListClasi = new ArrayList<clsBeProducto_clasificacion>();
+    private final ArrayList<clsBeProducto_marca> BeListMarca = new ArrayList<clsBeProducto_marca>();
+    private final ArrayList<clsBeProducto_tipo> BeListTipo = new ArrayList<clsBeProducto_tipo>();
+    private final ArrayList<clsBeUnidad_medida> BeListUmBas = new ArrayList<clsBeUnidad_medida>();
     public static clsBeProducto pBeProductoNuevo = new clsBeProducto();
 
     private int IdFamilia=0;
@@ -76,19 +76,19 @@ public class frm_inv_agrega_prd extends PBase {
         ws = new WebServiceHandler(frm_inv_agrega_prd.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtCodPrdNuevo = (EditText)findViewById(R.id.txtCodPrdNuevo);
-        txtDesPrd = (EditText)findViewById(R.id.txtDesPrd);
+        txtCodPrdNuevo = findViewById(R.id.txtCodPrdNuevo);
+        txtDesPrd = findViewById(R.id.txtDesPrd);
 
-        cmbFamilia = (Spinner)findViewById(R.id.cmbFamilia);
-        cmbClasificacion = (Spinner)findViewById(R.id.cmbClasificacion);
-        cmbMarca = (Spinner)findViewById(R.id.cmbMarca);
-        cmbTipo = (Spinner)findViewById(R.id.cmbTipo);
-        cmbUmbas = (Spinner)findViewById(R.id.cmbUmbas);
+        cmbFamilia = findViewById(R.id.cmbFamilia);
+        cmbClasificacion = findViewById(R.id.cmbClasificacion);
+        cmbMarca = findViewById(R.id.cmbMarca);
+        cmbTipo = findViewById(R.id.cmbTipo);
+        cmbUmbas = findViewById(R.id.cmbUmbas);
 
-        chkCtrlVence = (CheckBox)findViewById(R.id.chkCtrlVence);
-        chkCtrlLote = (CheckBox)findViewById(R.id.chkCtrlLote);
+        chkCtrlVence = findViewById(R.id.chkCtrlVence);
+        chkCtrlLote = findViewById(R.id.chkCtrlLote);
 
-        btnGuardarPrd = (Button)findViewById(R.id.btnGuardarPrd);
+        btnGuardarPrd = findViewById(R.id.btnGuardarPrd);
 
         setHandles();
 
@@ -399,17 +399,9 @@ public class frm_inv_agrega_prd extends PBase {
             pBeProductoNuevo.Fec_agr = du.getFechaActual();
             pBeProductoNuevo.User_mod = BeInvEnc.User_agr;
             pBeProductoNuevo.Fec_mod = du.getFechaActual();
-            if (chkCtrlLote.isChecked()){
-                pBeProductoNuevo.Control_lote =true;
-            }else{
-                pBeProductoNuevo.Control_lote =false;
-            }
+            pBeProductoNuevo.Control_lote = chkCtrlLote.isChecked();
 
-            if (chkCtrlVence.isChecked()){
-                pBeProductoNuevo.Control_vencimiento =true;
-            }else{
-                pBeProductoNuevo.Control_vencimiento =false;
-            }
+            pBeProductoNuevo.Control_vencimiento = chkCtrlVence.isChecked();
 
             browse=1;
             startActivity(new Intent(this, frm_inv_nuevo_reg.class));

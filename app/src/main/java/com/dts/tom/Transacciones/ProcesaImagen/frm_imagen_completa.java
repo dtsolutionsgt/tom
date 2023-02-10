@@ -15,8 +15,8 @@ public class frm_imagen_completa extends PBase {
     private ScaleGestureDetector detector;
     public list_adapt_lista_imagen adapterImgs;
 
-    private float xBegin = 0;
-    private float yBegin = 0;
+    private final float xBegin = 0;
+    private final float yBegin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

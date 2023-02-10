@@ -87,15 +87,15 @@ public class frm_inv_ini_conteo extends PBase {
     private clsBeTrans_inv_stock_prodList InvTeorico = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_stock_prodList InvTeoricoPorProducto = new clsBeTrans_inv_stock_prodList();
     private clsBeTrans_inv_detalle  ditem = new clsBeTrans_inv_detalle();
-    private clsBeTrans_inv_stock_prod BeLotes = new clsBeTrans_inv_stock_prod();
+    private final clsBeTrans_inv_stock_prod BeLotes = new clsBeTrans_inv_stock_prod();
     private clsBeTrans_inv_detalleList listInvDet = new clsBeTrans_inv_detalleList();
     private clsBeTrans_inv_resumen BeInvResumen = new clsBeTrans_inv_resumen();
     private clsBeTrans_inv_resumenList listInvRes= new clsBeTrans_inv_resumenList();
 
     private ArrayList<String> EstadoList = new ArrayList<String>();
     private ArrayList<String> PresList = new ArrayList<String>();
-    private ArrayList<String> LoteList = new ArrayList<String>();
-    private ArrayList<String> FechasVenceList = new ArrayList<String>();
+    private final ArrayList<String> LoteList = new ArrayList<String>();
+    private final ArrayList<String> FechasVenceList = new ArrayList<String>();
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -110,29 +110,29 @@ public class frm_inv_ini_conteo extends PBase {
         ws = new WebServiceHandler(frm_inv_ini_conteo.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtUbicInv = (EditText) findViewById(R.id.txtUbicInv);
-        txtCodBarra = (EditText) findViewById(R.id.txtCodBarra);
-        txtLoteInvIni = (EditText) findViewById(R.id.txtLoteInvIni);
-        txtVenceInvIni = (EditText) findViewById(R.id.txtVenceInvIni);
-        txtCantInvIni = (EditText) findViewById(R.id.txtCantInvIni);
-        txtPesoInvIni = (EditText) findViewById(R.id.txtPesoInvIni);
+        txtUbicInv = findViewById(R.id.txtUbicInv);
+        txtCodBarra = findViewById(R.id.txtCodBarra);
+        txtLoteInvIni = findViewById(R.id.txtLoteInvIni);
+        txtVenceInvIni = findViewById(R.id.txtVenceInvIni);
+        txtCantInvIni = findViewById(R.id.txtCantInvIni);
+        txtPesoInvIni = findViewById(R.id.txtPesoInvIni);
         txtLote = findViewById(R.id.txtLote);
         txtFechaVen = findViewById(R.id.txtFechaVen);
 
-        lblUbicDesc = (TextView) findViewById(R.id.lblUbicDesc);
-        lblDescProd = (TextView) findViewById(R.id.lblDescProd);
-        lblUnidadInv = (TextView) findViewById(R.id.lblUnidadInv);
-        lblLote = (TextView) findViewById(R.id.textView35);
-        lblPeso = (TextView) findViewById(R.id.textView38);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblVence = (TextView) findViewById(R.id.textView36);
+        lblUbicDesc = findViewById(R.id.lblUbicDesc);
+        lblDescProd = findViewById(R.id.lblDescProd);
+        lblUnidadInv = findViewById(R.id.lblUnidadInv);
+        lblLote = findViewById(R.id.textView35);
+        lblPeso = findViewById(R.id.textView38);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblVence = findViewById(R.id.textView36);
 
-        cmbPresInvIni = (Spinner) findViewById(R.id.cmbPresInvIni);
-        cmbEstadoInvIni = (Spinner) findViewById(R.id.cmbEstadoInvIni);
+        cmbPresInvIni = findViewById(R.id.cmbPresInvIni);
+        cmbEstadoInvIni = findViewById(R.id.cmbEstadoInvIni);
 
-        btnGuardarConteo = (Button) findViewById(R.id.btnGuardarConteo);
+        btnGuardarConteo = findViewById(R.id.btnGuardarConteo);
         //btnCompletar = (Button) findViewById(R.id.btnCompletar);
-        btnBack = (Button) findViewById(R.id.btnBack);
+        btnBack = findViewById(R.id.btnBack);
         btnEditarLote = findViewById(R.id.btnEditarLote);
         btnLoteCancel = findViewById(R.id.btnLoteCancel);
         btnEditarFecha = findViewById(R.id.btnEditarFecha);
@@ -140,8 +140,8 @@ public class frm_inv_ini_conteo extends PBase {
 
         relFechaItems = findViewById(R.id.relFechaItems);
 
-        dpResult = (DatePicker) findViewById(R.id.datePicker3);
-        imgDate = (ImageView) findViewById(R.id.imgDate2);
+        dpResult = findViewById(R.id.datePicker3);
+        imgDate = findViewById(R.id.imgDate2);
 
         cmbLotes = findViewById(R.id.cmbLotes);
         lblLotes = findViewById(R.id.lblLotes);
@@ -390,7 +390,7 @@ public class frm_inv_ini_conteo extends PBase {
 
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
@@ -504,11 +504,7 @@ public class frm_inv_ini_conteo extends PBase {
         try {
             if (BeUbic != null) {
                 if (BeUbic.Tramo.IdTramo != 0) {
-                    if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
-                        esValida = false;
-                    } else {
-                        esValida = true;
-                    }
+                    esValida = BeInvTramo.Idtramo == BeUbic.Tramo.IdTramo;
                 }
             }
         } catch (Exception e) {

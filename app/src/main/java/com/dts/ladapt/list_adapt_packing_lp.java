@@ -19,7 +19,7 @@ public class list_adapt_packing_lp extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_packing_lp(Context context, ArrayList<clsBeTrans_packing_lotes> results) {
         items = results;
@@ -56,8 +56,8 @@ public class list_adapt_packing_lp extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_packing_lp, null);
             holder = new ViewHolder();
 
-            holder.lblProd = (TextView) convertView.findViewById(R.id.lblIdTramo);
-            holder.lblLP = (TextView) convertView.findViewById(R.id.textView102);
+            holder.lblProd = convertView.findViewById(R.id.lblIdTramo);
+            holder.lblLP = convertView.findViewById(R.id.textView102);
 
             convertView.setTag(holder);
 

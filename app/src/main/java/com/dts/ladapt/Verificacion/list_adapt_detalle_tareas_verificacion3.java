@@ -21,7 +21,7 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_detalle_tareas_verificacion3(Context context, ArrayList<clsBeDetallePedidoAVerificar> results) {
         pListBeTareasVerificacionHH = results;
@@ -60,31 +60,31 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
                 convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_tareas_verificacion3, null);
                 holder = new ViewHolder();
 
-                holder.lblPedidoEnc = (TextView) convertView.findViewById(R.id.lblPedEnc);
-                holder.lblPedidoDet = (TextView) convertView.findViewById(R.id.lblPedDet);
-                holder.lblCodigo = (TextView) convertView.findViewById(R.id.lblCodigo);
-                holder.lblProducto = (TextView) convertView.findViewById(R.id.lblProducto);
-                holder.lblLote = (TextView) convertView.findViewById(R.id.lblLote);
-                holder.lblVence = (TextView) convertView.findViewById(R.id.lblVence);
-                holder.lblLicPlate = (TextView) convertView.findViewById(R.id.lblLicPlate);
-                holder.lblUmBas = (TextView) convertView.findViewById(R.id.lblUmBas);
-                holder.lblPresentacion = (TextView) convertView.findViewById(R.id.lblPresentacion);
-                holder.lblSolicitado = (TextView) convertView.findViewById(R.id.lblSolicitado);
-                holder.lblPickeado = (TextView) convertView.findViewById(R.id.lblPickeado);
-                holder.lblVerificado = (TextView) convertView.findViewById(R.id.lblVerificado);
-                holder.lblEstado = (TextView) convertView.findViewById(R.id.lblEstado);
-                holder.lblIdPresentacion = (TextView) convertView.findViewById(R.id.lblIdPresentacion);
-                holder.lblIdProductoBodega = (TextView) convertView.findViewById(R.id.lblIdProductoBodega);
-                holder.lblNDias = (TextView) convertView.findViewById(R.id.lblNDias);
-                holder.lblArea = (TextView) convertView.findViewById(R.id.lblArea);
-                holder.lblClasificacion = (TextView) convertView.findViewById(R.id.lblClasificacion);
-                holder.lblEstadoVer = (TextView) convertView.findViewById(R.id.lblEstadoVer);
+                holder.lblPedidoEnc = convertView.findViewById(R.id.lblPedEnc);
+                holder.lblPedidoDet = convertView.findViewById(R.id.lblPedDet);
+                holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
+                holder.lblProducto = convertView.findViewById(R.id.lblProducto);
+                holder.lblLote = convertView.findViewById(R.id.lblLote);
+                holder.lblVence = convertView.findViewById(R.id.lblVence);
+                holder.lblLicPlate = convertView.findViewById(R.id.lblLicPlate);
+                holder.lblUmBas = convertView.findViewById(R.id.lblUmBas);
+                holder.lblPresentacion = convertView.findViewById(R.id.lblPresentacion);
+                holder.lblSolicitado = convertView.findViewById(R.id.lblSolicitado);
+                holder.lblPickeado = convertView.findViewById(R.id.lblPickeado);
+                holder.lblVerificado = convertView.findViewById(R.id.lblVerificado);
+                holder.lblEstado = convertView.findViewById(R.id.lblEstado);
+                holder.lblIdPresentacion = convertView.findViewById(R.id.lblIdPresentacion);
+                holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
+                holder.lblNDias = convertView.findViewById(R.id.lblNDias);
+                holder.lblArea = convertView.findViewById(R.id.lblArea);
+                holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
+                holder.lblEstadoVer = convertView.findViewById(R.id.lblEstadoVer);
 
-                holder.lblEPedidoEnc = (TextView) convertView.findViewById(R.id.lblEPedEnc);
-                holder.lblEPedidoDet = (TextView) convertView.findViewById(R.id.lblEPedDet);
-                holder.lblEIdPresentacion = (TextView) convertView.findViewById(R.id.lblEIdPresentacion);
-                holder.lblEIdProductoBodega = (TextView) convertView.findViewById(R.id.lblEIdProductoBodega);
-                holder.lblENDias = (TextView) convertView.findViewById(R.id.lblENDias);
+                holder.lblEPedidoEnc = convertView.findViewById(R.id.lblEPedEnc);
+                holder.lblEPedidoDet = convertView.findViewById(R.id.lblEPedDet);
+                holder.lblEIdPresentacion = convertView.findViewById(R.id.lblEIdPresentacion);
+                holder.lblEIdProductoBodega = convertView.findViewById(R.id.lblEIdProductoBodega);
+                holder.lblENDias = convertView.findViewById(R.id.lblENDias);
 
                 convertView.setTag(holder);
 

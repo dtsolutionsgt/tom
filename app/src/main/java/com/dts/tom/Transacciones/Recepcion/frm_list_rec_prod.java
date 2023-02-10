@@ -83,9 +83,9 @@ public class frm_list_rec_prod extends PBase {
     public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private static clsBeI_nav_barras_palletList lBeINavBarraPallet = new clsBeI_nav_barras_palletList();
     public static clsBeI_nav_barras_pallet BeINavBarraPallet= new clsBeI_nav_barras_pallet();
-    private clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
+    private final clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     public static clsBeStock_rec gBeStockRec = new clsBeStock_rec();
-    private static ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
+    private static final ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
     public  static clsBeProducto BeProducto = new clsBeProducto();
     public static clsBeProductoList lBeProducto = new clsBeProductoList();
     private int gotop;
@@ -141,22 +141,22 @@ public class frm_list_rec_prod extends PBase {
         ws = new WebServiceHandler(frm_list_rec_prod.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
 
-        btnRegs = (Button) findViewById(R.id.btnRegs);
-        btnCompletaRec = (Button)findViewById(R.id.btnCompletaRec);
-        listView = (ListView)findViewById(R.id.listRec);
-        chkRecepcionados =(CheckBox)findViewById(R.id.chkRecepcionados);
-        btnTareas = (FloatingActionButton) findViewById(R.id.btnTareas);
+        btnRegs = findViewById(R.id.btnRegs);
+        btnCompletaRec = findViewById(R.id.btnCompletaRec);
+        listView = findViewById(R.id.listRec);
+        chkRecepcionados = findViewById(R.id.chkRecepcionados);
+        btnTareas = findViewById(R.id.btnTareas);
         lblNombrePropietario = findViewById(R.id.lblNombrePropietario);
         lblIdPropietarioBodega = findViewById(R.id.lblIdPropietarioBodega);
         btnOrdenar = findViewById(R.id.btnOrdenar);
 
         gl.sortOrd = -1;
 
-        relbot = (RelativeLayout)findViewById(R.id.relbot);
+        relbot = findViewById(R.id.relbot);
 
-        txtCodigoProductoRecepcion = (EditText)findViewById(R.id.txtCodigoProductoRecepcion);
+        txtCodigoProductoRecepcion = findViewById(R.id.txtCodigoProductoRecepcion);
 
         browse = 0;
 
@@ -197,14 +197,9 @@ public class frm_list_rec_prod extends PBase {
 
                     int vLengthBarra  = txtCodigoProductoRecepcion.getText().toString().length();
 
-                     if(gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")
-                             || gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
-                             && vLengthBarra > 6){
-
-                         LongitudValida = true;
-                     }else{
-                         LongitudValida = false;
-                     }
+                    LongitudValida = gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")
+                            || gl.gBeRecepcion.IdTipoTransaccion.equals("HCOC00")
+                            && vLengthBarra > 6;
 
                      if (LongitudValida){
 
@@ -792,11 +787,7 @@ public class frm_list_rec_prod extends PBase {
                                 if (Idx>-1){
 
                                     if (gBeStockRec!=null){
-                                        if (gBeStockRec.IdStockRec>0){
-                                            gl.Carga_Producto_x_Pallet=true;
-                                        }else{
-                                            gl.Carga_Producto_x_Pallet=false;
-                                        }
+                                        gl.Carga_Producto_x_Pallet= gBeStockRec.IdStockRec > 0;
                                     }else{
                                         gl.Carga_Producto_x_Pallet= false;
                                     }
@@ -1965,14 +1956,14 @@ public class frm_list_rec_prod extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frmfirmadig);
 
-            txtFirma = (DrawingView)dialog.findViewById(R.id.drawV);
+            txtFirma = dialog.findViewById(R.id.drawV);
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             txtFirma.init(metrics);
 
-            btnGuardarFirma = (Button)dialog.findViewById(R.id.btnGuardarFirma);
-            btnLimpiar = (Button)dialog.findViewById(R.id.btnLimpiar);
-            btnSalirFirma = (Button)dialog.findViewById(R.id.btnSalirFirma);
+            btnGuardarFirma = dialog.findViewById(R.id.btnGuardarFirma);
+            btnLimpiar = dialog.findViewById(R.id.btnLimpiar);
+            btnSalirFirma = dialog.findViewById(R.id.btnSalirFirma);
 
             btnGuardarFirma.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2099,7 +2090,6 @@ public class frm_list_rec_prod extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

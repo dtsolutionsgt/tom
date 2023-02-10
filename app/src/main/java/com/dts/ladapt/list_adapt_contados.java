@@ -22,7 +22,7 @@ public class list_adapt_contados extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_contados(Context context, ArrayList<clsBeTrans_inv_detalle_grid> results) {
         BeListContados = results;
@@ -59,12 +59,12 @@ public class list_adapt_contados extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_contados, null);
             holder = new ViewHolder();
 
-            holder.lblIdInvDet = (TextView) convertView.findViewById(R.id.lblIdInvDet);
-            holder.lblUbicCont = (TextView) convertView.findViewById(R.id.lblUbicCont);
-            holder.lblEstadoCont = (TextView) convertView.findViewById(R.id.lblEstadoCont);
-            holder.lblPresCont = (TextView) convertView.findViewById(R.id.lblPresCont);
-            holder.lblCantCont = (TextView) convertView.findViewById(R.id.lblCantCont);
-            holder.lblPesoCont = (TextView) convertView.findViewById(R.id.lblPesoCont);
+            holder.lblIdInvDet = convertView.findViewById(R.id.lblIdInvDet);
+            holder.lblUbicCont = convertView.findViewById(R.id.lblUbicCont);
+            holder.lblEstadoCont = convertView.findViewById(R.id.lblEstadoCont);
+            holder.lblPresCont = convertView.findViewById(R.id.lblPresCont);
+            holder.lblCantCont = convertView.findViewById(R.id.lblCantCont);
+            holder.lblPesoCont = convertView.findViewById(R.id.lblPesoCont);
 
             convertView.setTag(holder);
         }else {

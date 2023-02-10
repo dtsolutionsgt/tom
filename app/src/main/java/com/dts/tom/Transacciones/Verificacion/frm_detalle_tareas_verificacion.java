@@ -57,7 +57,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private int indiceDetallePedido = -1;
+    private final int indiceDetallePedido = -1;
     private int index = 0;
 
     private list_adapt_detalle_tareas_verificacion adapter;
@@ -76,20 +76,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private clsBeTrans_picking_ubicList plistPickingUbic = new clsBeTrans_picking_ubicList();
     private clsBeDetallePedidoAVerificarList pListaPedidoDet = new clsBeDetallePedidoAVerificarList();
-    private clsBeDetallePedidoAVerificarList auxListaDetPed = new clsBeDetallePedidoAVerificarList();
+    private final clsBeDetallePedidoAVerificarList auxListaDetPed = new clsBeDetallePedidoAVerificarList();
     private clsBeTrans_picking_enc gBePickingEnc = new clsBeTrans_picking_enc();
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProductoList lBeProducto = new clsBeProductoList();
     private boolean buscarPres = false;
 
-    private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
+    private final ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
 
-    private clsBeProducto_estadoList lProductoEstadoDañado = new clsBeProducto_estadoList();
+    private final clsBeProducto_estadoList lProductoEstadoDañado = new clsBeProducto_estadoList();
 
     private clsBeTrans_pe_enc gBePedido = new clsBeTrans_pe_enc();
     private clsBeDetallePedidoAVerificar selitem;
 
-    private double cantReemplazar = 0;
+    private final double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false, mostrar_area, VerSinLoteFechaVen = false;
     private boolean finalizar = true;
     private int selidx = -1,sortord;
@@ -108,11 +108,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 setContentView(R.layout.activity_frm_detalle_tareas_verificacion);
             }
 
-            gl.VerificacionSinLoteFechaVen = false;
-
-            if (gl.VerificacionConsolidada) {
-                gl.VerificacionSinLoteFechaVen = true;
-            }
+            gl.VerificacionSinLoteFechaVen = gl.VerificacionConsolidada;
 
             mostrar_area = gl.Mostrar_Area_En_HH;
             VerSinLoteFechaVen = gl.VerificacionSinLoteFechaVen;
@@ -120,17 +116,17 @@ public class frm_detalle_tareas_verificacion extends PBase {
             ws = new frm_detalle_tareas_verificacion.WebServiceHandler(frm_detalle_tareas_verificacion.this, gl.wsurl);
             xobj = new XMLObject(ws);
 
-            listDetVeri = (ListView)findViewById(R.id.ListDetVeri);
-            txtCodProd = (EditText) findViewById(R.id.txtCodProd);
-            btnRegs = (Button) findViewById(R.id.btnRegs);
-            imgReemplazo = (ImageView) findViewById(R.id.imgReemplazo);
-            lblNoDocumento= (TextView) findViewById(R.id.lblNoDoumento);
-            encabezado1 = (LinearLayout) findViewById(R.id.encabezado_1);
-            encabezado2 = (LinearLayout) findViewById(R.id.encabezado_2);
+            listDetVeri = findViewById(R.id.ListDetVeri);
+            txtCodProd = findViewById(R.id.txtCodProd);
+            btnRegs = findViewById(R.id.btnRegs);
+            imgReemplazo = findViewById(R.id.imgReemplazo);
+            lblNoDocumento= findViewById(R.id.lblNoDoumento);
+            encabezado1 = findViewById(R.id.encabezado_1);
+            encabezado2 = findViewById(R.id.encabezado_2);
             encabezado3 = findViewById(R.id.encabezado_3);
-            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-            relbot = (RelativeLayout) findViewById(R.id.relbot);
-            chkPendientes = (CheckBox) findViewById(R.id.chkPendientes);
+            lblTituloForma = findViewById(R.id.lblTituloForma);
+            relbot = findViewById(R.id.relbot);
+            chkPendientes = findViewById(R.id.chkPendientes);
 
             if (gl.TipoPantallaVerificacion != 3) {
                 if (mostrar_area) {
@@ -603,7 +599,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
 
-            lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", String.valueOf(gl.pIdPedidoEnc),
+            lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", gl.pIdPedidoEnc,
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
 
             progress.setMessage("Cargando detalle del Picking Ubic");
@@ -1092,7 +1088,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 
@@ -1124,7 +1119,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

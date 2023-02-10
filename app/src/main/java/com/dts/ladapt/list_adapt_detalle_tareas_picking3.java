@@ -24,7 +24,7 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_detalle_tareas_picking3(Context context, ArrayList<clsBeTrans_picking_ubic> results) {
         BeListTareasHH = results;
@@ -61,23 +61,23 @@ public class list_adapt_detalle_tareas_picking3 extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_tareas_picking3, null);
             holder = new ViewHolder();
 
-            holder.txtArea = (TextView) convertView.findViewById(R.id.txtArea);
-            holder.txtUbicacion = (TextView) convertView.findViewById(R.id.txtUbic);
-            holder.txtLicencia = (TextView) convertView.findViewById(R.id.lblLicencia);
-            holder.txtProdDoc = (TextView) convertView.findViewById(R.id.txtProdDoc);
-            holder.txtClasificacion = (TextView) convertView.findViewById(R.id.txtClasificacion);
-            holder.txtLote = (TextView) convertView.findViewById(R.id.txtLote);
-            holder.txtVence = (TextView) convertView.findViewById(R.id.txtVence);
-            holder.txtUm =(TextView) convertView.findViewById(R.id.txtUm);
-            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
-            holder.relLicencia = (RelativeLayout) convertView.findViewById(R.id.relLicencia);
-            holder.relTarima = (RelativeLayout) convertView.findViewById(R.id.relTarima);
-            holder.txtTarima = (TextView) convertView.findViewById(R.id.txtTarima);
-            holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
-            holder.txtPeso = (TextView) convertView.findViewById(R.id.txtPeso);
-            holder.txtSolicitado = (TextView) convertView.findViewById(R.id.txtSolicitado);
-            holder.txtRecibido = (TextView) convertView.findViewById(R.id.txtRecibido);
-            holder.txtPendiente = (TextView) convertView.findViewById(R.id.txtPendiente);
+            holder.txtArea = convertView.findViewById(R.id.txtArea);
+            holder.txtUbicacion = convertView.findViewById(R.id.txtUbic);
+            holder.txtLicencia = convertView.findViewById(R.id.lblLicencia);
+            holder.txtProdDoc = convertView.findViewById(R.id.txtProdDoc);
+            holder.txtClasificacion = convertView.findViewById(R.id.txtClasificacion);
+            holder.txtLote = convertView.findViewById(R.id.txtLote);
+            holder.txtVence = convertView.findViewById(R.id.txtVence);
+            holder.txtUm = convertView.findViewById(R.id.txtUm);
+            holder.lblCantidad = convertView.findViewById(R.id.lblCantidad);
+            holder.relLicencia = convertView.findViewById(R.id.relLicencia);
+            holder.relTarima = convertView.findViewById(R.id.relTarima);
+            holder.txtTarima = convertView.findViewById(R.id.txtTarima);
+            holder.txtEstado = convertView.findViewById(R.id.txtEstado);
+            holder.txtPeso = convertView.findViewById(R.id.txtPeso);
+            holder.txtSolicitado = convertView.findViewById(R.id.txtSolicitado);
+            holder.txtRecibido = convertView.findViewById(R.id.txtRecibido);
+            holder.txtPendiente = convertView.findViewById(R.id.txtPendiente);
 
             convertView.setTag(holder);
 

@@ -19,9 +19,9 @@ import android.widget.Toast;
 public class list_adapt_consulta_ciclico extends BaseAdapter {
 
     ArrayList<clsBe_inv_reconteo_data> data_list;
-    private Context cCont;
+    private final Context cCont;
     private int selectedIndex;
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_consulta_ciclico(Context context,ArrayList<clsBe_inv_reconteo_data> results ){
         data_list = results;

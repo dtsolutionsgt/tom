@@ -34,7 +34,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
     private XMLObject xobj;
 
     private ProgressDialog progress;
-    private ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
+    private final ArrayList<clsBeDetallePedidoAVerificar> pListBeTareasVerificacionHH= new ArrayList<clsBeDetallePedidoAVerificar>();
 
     private clsBeDetallePedidoAVerificar selitem;
     private list_adapt_detalle_tareas_verificacion adapter;

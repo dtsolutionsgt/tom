@@ -46,7 +46,7 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
     private list_view_tareas_cambio_ubic adapter;
 
-    private ArrayList<clsBeTrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBeTrans_ubic_hh_enc>();
+    private final ArrayList<clsBeTrans_ubic_hh_enc> pListBeTareasCambioHH= new ArrayList<clsBeTrans_ubic_hh_enc>();
 
     private int index;
 
@@ -66,12 +66,12 @@ public class frm_tareas_cambio_ubicacion extends PBase {
             ws = new WebServiceHandler(frm_tareas_cambio_ubicacion.this, gl.wsurl);
             xobj = new XMLObject(ws);
 
-            txtTarea = (EditText) findViewById(R.id.txtTarea);
-            listView = (ListView) findViewById(R.id.listTareas);
-            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-            lblRegs = (TextView) findViewById(R.id.lblRegs);
+            txtTarea = findViewById(R.id.txtTarea);
+            listView = findViewById(R.id.listTareas);
+            lblTituloForma = findViewById(R.id.lblTituloForma);
+            lblRegs = findViewById(R.id.lblRegs);
 
-            Modo = (gl.modo_cambio==1?true:false);
+            Modo = (gl.modo_cambio == 1);
 
             lblTituloForma.setText(String.format("Lista de cambios de %s",(Modo==true?"ubicación":"estado")));
 
@@ -402,7 +402,6 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

@@ -9,7 +9,8 @@ import org.ksoap2.transport.HttpTransportSE;
 public class wsCantTareas extends wsBase {
 
     public String retval;
-    private int idbod, idoper;
+    private final int idbod;
+    private final int idoper;
 
     public wsCantTareas(String Url, int codigo_bodega, int codigo_operador) {
         super(Url);

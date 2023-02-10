@@ -92,17 +92,17 @@ public class frm_inv_ini_verificacion extends PBase {
         ws = new WebServiceHandler(frm_inv_ini_verificacion.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtUbicVer = (EditText)findViewById(R.id.txtUbicVer);
-        txtBarraVer = (AutoCompleteTextView) findViewById(R.id.txtBarraVer);
-        txtUmbasVeri = (EditText)findViewById(R.id.txtUmbasVeri);
-        txtCantVer = (EditText)findViewById(R.id.txtCantVer);
+        txtUbicVer = findViewById(R.id.txtUbicVer);
+        txtBarraVer = findViewById(R.id.txtBarraVer);
+        txtUmbasVeri = findViewById(R.id.txtUmbasVeri);
+        txtCantVer = findViewById(R.id.txtCantVer);
 
-        cmbPresVeri = (Spinner)findViewById(R.id.cmbPresVeri);
-        cmbEstadoVeri = (Spinner)findViewById(R.id.cmbEstadoVeri);
+        cmbPresVeri = findViewById(R.id.cmbPresVeri);
+        cmbEstadoVeri = findViewById(R.id.cmbEstadoVeri);
 
-        lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
-        lblDescVer = (TextView)findViewById(R.id.lblDescVer);
-        lblUbicDes = (TextView)findViewById(R.id.lblUbicDes);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblDescVer = findViewById(R.id.lblDescVer);
+        lblUbicDes = findViewById(R.id.lblUbicDes);
 
         emptyPres = false;
 
@@ -307,11 +307,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try {
             if (BeUbic.Tramo.IdTramo != 0) {
-                if (BeInvTramo.Idtramo != BeUbic.Tramo.IdTramo) {
-                    esValida =  false;
-                } else {
-                    esValida =  true;
-                }
+                esValida = BeInvTramo.Idtramo == BeUbic.Tramo.IdTramo;
             }
 
         } catch (Exception e) {
@@ -940,7 +936,7 @@ public class frm_inv_ini_verificacion extends PBase {
         ws.execute();
     }
 
-    private List<String> CodigosSugeridos = new ArrayList<>();
+    private final List<String> CodigosSugeridos = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void processCodigosSugeridos(){

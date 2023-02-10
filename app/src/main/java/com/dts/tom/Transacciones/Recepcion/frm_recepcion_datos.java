@@ -171,13 +171,13 @@ public class frm_recepcion_datos extends PBase {
 
     private boolean Mostro_Propiedades,Escaneo_Pallet;
     private boolean mostrar_parametros_producto;
-    private boolean Mostrar_Propiedades_Parametros = false;
+    private final boolean Mostrar_Propiedades_Parametros = false;
     private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
     private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
     private String pNumeroLP = "";
     private Integer CantCopias =1;
-    private Integer CantVeces=0;
+    private final Integer CantVeces=0;
 
     private boolean PallCorrecto= false;
     private int pIndexProdPallet=-1;
@@ -219,7 +219,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
     boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
 
-    private clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
+    private final clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
 
     /***** parametros personalizados *****************************************/
     Integer contar_parametros_p = 0;
@@ -238,7 +238,7 @@ public class frm_recepcion_datos extends PBase {
     private clsBeStock_parametro ObjStock_parametro;
     Integer IdProductoParametro;
     String tipo_parametro;
-    private String pRespuesta="";
+    private final String pRespuesta="";
 
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
@@ -256,7 +256,7 @@ public class frm_recepcion_datos extends PBase {
     private final ArrayList<String> VenceList= new ArrayList<>();
     private final ArrayList<String> LotesList = new ArrayList<>();
     private final ArrayList<String> UbicLotesList = new ArrayList<>();
-    private ArrayList<String> NuevasLicencias = new ArrayList<>();
+    private final ArrayList<String> NuevasLicencias = new ArrayList<>();
 
     // date
     private int year;
@@ -442,11 +442,7 @@ public class frm_recepcion_datos extends PBase {
 //                txtNoLP.setVisibility(View.VISIBLE);
 //            }
 
-            if (gl.bloquear_lp_hh) {
-                txtNoLP.setEnabled(false);
-            } else{
-                txtNoLP.setEnabled(true);
-            }
+            txtNoLP.setEnabled(!gl.bloquear_lp_hh);
 
             if(!gl.Escaneo_Pallet){
                 execws(1);
@@ -3437,7 +3433,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private boolean Call_From_B = false;
-    private boolean Call_From_C = false;
+    private final boolean Call_From_C = false;
     private boolean Call_From_D = false;
 
     private void mostrarEstiba()
@@ -3498,7 +3494,7 @@ public class frm_recepcion_datos extends PBase {
 
             progress.setMessage("Procesando valores int. ref. #20210601");
 
-            if (!pListTransRecDet.items.get(0).Lic_plate.toString().isEmpty()) {
+            if (!pListTransRecDet.items.get(0).Lic_plate.isEmpty()) {
                 txtNoLP.setText(pListTransRecDet.items.get(0).Lic_plate);
             }else{
                 if (Escaneo_Pallet){
@@ -5196,7 +5192,7 @@ public class frm_recepcion_datos extends PBase {
             View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-            cmbCantidad = (Spinner) vistaDialog.findViewById(R.id.cmbCantidad);
+            cmbCantidad = vistaDialog.findViewById(R.id.cmbCantidad);
             setHandlersImpresion();
             dialog.setView(vistaDialog);
 
@@ -5215,14 +5211,11 @@ public class frm_recepcion_datos extends PBase {
                 progress.show();
 
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                handler.postDelayed(() -> {
 
-                        Imprimir_Codigo_Barra_Producto(CantCopias);
-                        progress.cancel();
+                    Imprimir_Codigo_Barra_Producto(CantCopias);
+                    progress.cancel();
 
-                    }
                 }, 300);
 
             });
@@ -5236,14 +5229,11 @@ public class frm_recepcion_datos extends PBase {
 
 
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                handler.postDelayed(() -> {
 
-                        Imprimir_Licencia(CantCopias);
-                        progress.cancel();
+                    Imprimir_Licencia(CantCopias);
+                    progress.cancel();
 
-                    }
                 }, 300);
 
                 //#EJC20220504: Deverdad no me gusta hacer esto, pero CEALSA CHINGA MUCHO!
@@ -7981,8 +7971,8 @@ public class frm_recepcion_datos extends PBase {
                 long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
                 int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                long intLPSig = (long) pLpSiguiente;
-                int MaxL = (int) largoMaximo;
+                long intLPSig = pLpSiguiente;
+                int MaxL = largoMaximo;
 
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
@@ -8038,8 +8028,8 @@ public class frm_recepcion_datos extends PBase {
                 long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
                 int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
 
-                long intLPSig = (long) pLpSiguiente;
-                int MaxL = (int) largoMaximo;
+                long intLPSig = pLpSiguiente;
+                int MaxL = largoMaximo;
 
                 //#AT20220907 Agregue esta variables para poder utilizarlas para llevar el control del correlativo
                 // siguiente cuando CantidadCopias > 1
@@ -8075,12 +8065,10 @@ public class frm_recepcion_datos extends PBase {
                 if (!txtNoLP.getText().toString().isEmpty()){
                     if (txtLicPlate != null){
                         txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
-
                     }
                 }else{
                     if (txtLicPlate != null){
                         txtLicPlate.setText(pNumeroLP);
-
                     }else{
                         clsBeTrans_oc_det_loteList BeOCDetLoteList;
                         BeOCDetLoteList=gl.gBeOrdenCompra.DetalleLotes;
@@ -9400,28 +9388,16 @@ public class frm_recepcion_datos extends PBase {
                     case "Númerico":
 
                         double valor =  pListBEProductoParametro.items.get(i).Valor_numerico;
-                        if (txtvalor_n.getText().toString().equals(valor) || txtvalor_n.getText().toString().isEmpty()){
-                            parametro_personalizado_valido = false;
-                        }else{
-                            parametro_personalizado_valido = true;
-                        }
+                        parametro_personalizado_valido = !txtvalor_n.getText().toString().equals(valor) && !txtvalor_n.getText().toString().isEmpty();
                         break;
                     case "Texto":
 
-                        if (txtvalor_t.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_texto) || txtvalor_t.getText().toString().isEmpty()){
-                            parametro_personalizado_valido = false;
-                        }else{
-                            parametro_personalizado_valido = true;
-                        }
+                        parametro_personalizado_valido = !txtvalor_t.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_texto) && !txtvalor_t.getText().toString().isEmpty();
 
                         break;
                     case "Fecha":
 
-                        if (txtvalor_f.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_fecha) || txtvalor_f.getText().toString().isEmpty()){
-                            parametro_personalizado_valido = false;
-                        }else{
-                            parametro_personalizado_valido = true;
-                        }
+                        parametro_personalizado_valido = !txtvalor_f.getText().toString().equals(pListBEProductoParametro.items.get(i).Valor_fecha) && !txtvalor_f.getText().toString().isEmpty();
                         break;
                     case "Lógico":
 
@@ -9540,7 +9516,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     class DecimalFilter implements InputFilter {
-        private Pattern mPattern;
+        private final Pattern mPattern;
         DecimalFilter(int digitsBeforeZero, int digitsAfterZero) {
             mPattern = Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
         }

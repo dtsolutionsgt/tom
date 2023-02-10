@@ -32,7 +32,7 @@ public class frm_list_prod_reemplazados extends PBase {
     private clsBeDetallePedidoAVerificarList pListaReemplazados = new clsBeDetallePedidoAVerificarList();
     private list_adapt_detalle_tareas_verificacion adapter;
 
-    private ArrayList<clsBeDetallePedidoAVerificar> pListBeReemplazados= new ArrayList<clsBeDetallePedidoAVerificar>();
+    private final ArrayList<clsBeDetallePedidoAVerificar> pListBeReemplazados= new ArrayList<clsBeDetallePedidoAVerificar>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +44,13 @@ public class frm_list_prod_reemplazados extends PBase {
         ws = new frm_list_prod_reemplazados.WebServiceHandler(frm_list_prod_reemplazados.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
-        lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblCantRegs = findViewById(R.id.lblCantRegs);
 
-        listReemplazados = (ListView)findViewById(R.id.listReemplazados);
+        listReemplazados = findViewById(R.id.listReemplazados);
 
-        btnActReemplazados = (Button)findViewById(R.id.btnActReemplazados);
-        btnBack = (Button)findViewById(R.id.btnBack);
+        btnActReemplazados = findViewById(R.id.btnActReemplazados);
+        btnBack = findViewById(R.id.btnBack);
 
         setHandlers();
 

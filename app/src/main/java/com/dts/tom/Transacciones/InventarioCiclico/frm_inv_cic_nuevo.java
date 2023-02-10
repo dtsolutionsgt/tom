@@ -43,17 +43,17 @@ public class frm_inv_cic_nuevo extends PBase {
     //private clsBeProducto pBeProductoNuevo;
 
     private clsBe_inv_ciclico_spinner item_spinner;
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner = new ArrayList<clsBe_inv_ciclico_spinner>();
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner2 = new ArrayList<clsBe_inv_ciclico_spinner>();
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner3 = new ArrayList<clsBe_inv_ciclico_spinner>();
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner4 = new ArrayList<clsBe_inv_ciclico_spinner>();
-    private ArrayList<clsBe_inv_ciclico_spinner>  list_spinner5 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private final ArrayList<clsBe_inv_ciclico_spinner>  list_spinner = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private final ArrayList<clsBe_inv_ciclico_spinner>  list_spinner2 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private final ArrayList<clsBe_inv_ciclico_spinner>  list_spinner3 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private final ArrayList<clsBe_inv_ciclico_spinner>  list_spinner4 = new ArrayList<clsBe_inv_ciclico_spinner>();
+    private final ArrayList<clsBe_inv_ciclico_spinner>  list_spinner5 = new ArrayList<clsBe_inv_ciclico_spinner>();
 
-    private ArrayList<String> bodlist= new ArrayList<String>();
-    private ArrayList<String> bodlist2= new ArrayList<String>();
-    private ArrayList<String> bodlist3= new ArrayList<String>();
-    private ArrayList<String> bodlist4= new ArrayList<String>();
-    private ArrayList<String> bodlist5= new ArrayList<String>();
+    private final ArrayList<String> bodlist= new ArrayList<String>();
+    private final ArrayList<String> bodlist2= new ArrayList<String>();
+    private final ArrayList<String> bodlist3= new ArrayList<String>();
+    private final ArrayList<String> bodlist4= new ArrayList<String>();
+    private final ArrayList<String> bodlist5= new ArrayList<String>();
 
     private ProgressDialog progress;
 
@@ -203,31 +203,16 @@ public class frm_inv_cic_nuevo extends PBase {
             chkControlVence.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (isChecked) {
-
-                        chkcvence = true;
-                        //execws(1);
-
-                    } else {
-
-                        chkcvence = false;
-                        //execws(1);
-
-                    }
+                    //execws(1);
+                    //execws(1);
+                    chkcvence = isChecked;
                 }
             });
 
             chkControlLote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (isChecked) {
-
-                        chkclote = true;
-
-                    } else {
-
-                        chkclote = false;
-                    }
+                    chkclote = isChecked;
                 }
             });
 

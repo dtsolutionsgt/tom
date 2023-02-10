@@ -47,8 +47,8 @@ public class frm_preparacion_packing extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private ArrayList<clsBeTrans_packing_enc> items = new ArrayList<>();
-    private ArrayList<clsBeTrans_packing_enc> item_list = new ArrayList<>();
+    private final ArrayList<clsBeTrans_packing_enc> items = new ArrayList<>();
+    private final ArrayList<clsBeTrans_packing_enc> item_list = new ArrayList<>();
     private clsBeTrans_picking_ubicList pick = new clsBeTrans_picking_ubicList();
     private clsBeTrans_packing_encList itemList ;
     private clsBeTrans_packing_encList savedList = new clsBeTrans_packing_encList();
@@ -70,13 +70,13 @@ public class frm_preparacion_packing extends PBase {
         setContentView(R.layout.activity_frm_preparacion_packing);
         super.InitBase();
 
-        listView = (ListView) findViewById(R.id.listTareas);
+        listView = findViewById(R.id.listTareas);
         txtLP = findViewById(R.id.editText8);
         txtLinea = findViewById(R.id.editTextNumber);txtLinea.setText("1");
         lblProc = findViewById(R.id.btnRegsList);
         lblPend = findViewById(R.id.btnRegsList2);
 
-        pbar = (ProgressBar) findViewById(R.id.pgrtareas2);
+        pbar = findViewById(R.id.pgrtareas2);
 
         idPickingEnc=gl.gIdPickingEnc;
 
@@ -698,7 +698,6 @@ public class frm_preparacion_packing extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

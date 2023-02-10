@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -32,7 +33,7 @@ public class WebService {
     public int callback=-1;
     public Boolean errorflag;
 
-    private PBase parent;
+    private final PBase parent;
 
     private java.net.URL mUrl;
     private String mMethodName,mResult,argstr;
@@ -87,8 +88,8 @@ public class WebService {
             conn.setRequestProperty("mArch", "Andr");
             conn.connect();
 
-            int responsecode = ((HttpURLConnection) conn).getResponseCode();
-            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
+            int responsecode = conn.getResponseCode();
+            String responsemsg = conn.getResponseMessage();
 
             if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
 
@@ -652,7 +653,7 @@ public class WebService {
             OutputStream ostream = null;
 
             String str =buildArgValue3(args);
-            byte[] outputInBytes = str.getBytes("UTF-8");
+            byte[] outputInBytes = str.getBytes(StandardCharsets.UTF_8);
             ostream = conn.getOutputStream();
             ostream.write( outputInBytes );
             ostream.close();
@@ -670,8 +671,8 @@ public class WebService {
 
             conn.connect();
 
-            int responsecode = ((HttpURLConnection) conn).getResponseCode();
-            String responsemsg = ((HttpURLConnection) conn).getResponseMessage();
+            int responsecode = conn.getResponseCode();
+            String responsemsg = conn.getResponseMessage();
 
             if (responsecode!=299 && responsecode!=404 && responsecode!=500) {
 

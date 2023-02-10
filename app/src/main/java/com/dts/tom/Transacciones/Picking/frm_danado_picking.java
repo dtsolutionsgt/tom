@@ -48,7 +48,7 @@ public class frm_danado_picking extends PBase {
 
     public static int IdUbicacionDestino=0;
 
-    private ArrayList<String> EstadoList = new ArrayList<String>();
+    private final ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdEstadoDanadoSelect = 0;
     public static String vNomUbicDestino="";
@@ -60,12 +60,12 @@ public class frm_danado_picking extends PBase {
         setContentView(R.layout.activity_frm_danado_picking);
         super.InitBase();
 
-        cmbEstadoDanado = (Spinner)findViewById(R.id.cmbEstadoDanado);
-        lblProdDanado = (TextView)findViewById(R.id.lblProdDanado);
-        lblNomUbic = (TextView)findViewById(R.id.lblNomUbic);
-        txtUbicDest = (EditText)findViewById(R.id.txtUbicDest);
-        btnGuardarDanado = (Button)findViewById(R.id.btnGuardarDanado);
-        btnBack = (Button)findViewById(R.id.btnBack);
+        cmbEstadoDanado = findViewById(R.id.cmbEstadoDanado);
+        lblProdDanado = findViewById(R.id.lblProdDanado);
+        lblNomUbic = findViewById(R.id.lblNomUbic);
+        txtUbicDest = findViewById(R.id.txtUbicDest);
+        btnGuardarDanado = findViewById(R.id.btnGuardarDanado);
+        btnBack = findViewById(R.id.btnBack);
 
         ws = new WebServiceHandler(frm_danado_picking.this, gl.wsurl);
         xobj = new XMLObject(ws);

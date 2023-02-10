@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public class PrintReceiverActivity extends Activity implements BluetoothStateHolder.BluetoothStateListener, PrintTaskListener {
 
-    private static int REQUEST_PRINTER = 1;
+    private static final int REQUEST_PRINTER = 1;
 
-    private static String KEY_BUNDLE_LIST = "zebra:bundle_list";
-    private static String FRAGMENT_PRINT_JOB = "print_fragment";
+    private static final String KEY_BUNDLE_LIST = "zebra:bundle_list";
+    private static final String FRAGMENT_PRINT_JOB = "print_fragment";
 
     ArrayList<String> bundleKeyList;
     ZebraPrintTask.PrintJob[] jobs;
@@ -47,8 +47,8 @@ public class PrintReceiverActivity extends Activity implements BluetoothStateHol
 
         ensureFragmentConnected();
 
-        cancelPrint = (Button)findViewById(R.id.button_cancel_print);
-        updateSettings = (Button)findViewById(R.id.button_update_settings);
+        cancelPrint = findViewById(R.id.button_cancel_print);
+        updateSettings = findViewById(R.id.button_update_settings);
 
         cancelPrint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +77,11 @@ public class PrintReceiverActivity extends Activity implements BluetoothStateHol
                 calloutToSelectPrinter();
             }
         });
-        statusText = (TextView)findViewById(R.id.current_status_text);
+        statusText = findViewById(R.id.current_status_text);
 
         adapter = new PrintJobListAdapter(this, jobs);
 
-        listView = (ListView)this.findViewById(R.id.list_print_jobs);
+        listView = this.findViewById(R.id.list_print_jobs);
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

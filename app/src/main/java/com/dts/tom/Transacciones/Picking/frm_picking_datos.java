@@ -62,16 +62,16 @@ public class frm_picking_datos extends PBase {
     private XMLObject xobj;
 
     public static clsBeTrans_picking_ubic gBePickingUbic;
-    private clsBeTrans_picking_ubicList tmpListPickingUbi = new clsBeTrans_picking_ubicList();
+    private final clsBeTrans_picking_ubicList tmpListPickingUbi = new clsBeTrans_picking_ubicList();
     public static clsBeProducto tmpgBeProducto = new clsBeProducto();
     public static clsBeProducto gBeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstadoIngreso = new clsBeProducto_estadoList();
-    private clsBeProductoList ListBeStockPalletEscaneado = new clsBeProductoList();
+    private final clsBeProductoList ListBeStockPalletEscaneado = new clsBeProductoList();
     private clsBeProducto BeStockPallet = new clsBeProducto();
     private clsBeTrans_picking_det BePickingDet = new clsBeTrans_picking_det();
     private clsBeStock_res BeStockRes = new clsBeStock_res();
-    private ArrayList<String> EstadoList = new ArrayList<String>();
-    private ArrayList<String> PresList = new ArrayList<String>();
+    private final ArrayList<String> EstadoList = new ArrayList<String>();
+    private final ArrayList<String> PresList = new ArrayList<String>();
     private clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
 
@@ -88,7 +88,7 @@ public class frm_picking_datos extends PBase {
     private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false;
     private String pLP = "";
     private String pCodigo = "", vUnidadMedida="";
-    private int gIdUbicacion=0;
+    private final int gIdUbicacion=0;
     public static double CantReemplazar=0;
     public static boolean ReemplazoLP=false;
     public static int Tipo=0;
@@ -105,7 +105,7 @@ public class frm_picking_datos extends PBase {
     private boolean btnGuardar = false;
     //Imagen
     private clsBeImagen BeImagen;
-    private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
+    private final clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
     private boolean PressEnterLp, PressEnterProducto, escaneo_licencia_diferente = false;
     private boolean btnEnterLp = false, btnEnterCod = false;
@@ -130,16 +130,16 @@ public class frm_picking_datos extends PBase {
         ws = new WebServiceHandler(frm_picking_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtLicencia = (EditText) findViewById(R.id.txtLP);
-        lblLicenciaPicking = (TextView) findViewById(R.id.lblLicenciaPicking);
-        txtFechaCad = (EditText) findViewById(R.id.txtFechaCad);
-        txtLote = (EditText) findViewById(R.id.txtLote);
-        txtUniBas = (EditText) findViewById(R.id.txtUniBas);
-        txtCantidadPick = (EditText) findViewById(R.id.txtCantidadPick);
-        txtPesoPick = (EditText) findViewById(R.id.txtPesoPick);
-        txtCodigoProducto = (EditText) findViewById(R.id.txtCodigoProducto);
-        txtCajas = (EditText) findViewById(R.id.txtCajas);
-        txtUnidades = (EditText) findViewById(R.id.txtUnidades);
+        txtLicencia = findViewById(R.id.txtLP);
+        lblLicenciaPicking = findViewById(R.id.lblLicenciaPicking);
+        txtFechaCad = findViewById(R.id.txtFechaCad);
+        txtLote = findViewById(R.id.txtLote);
+        txtUniBas = findViewById(R.id.txtUniBas);
+        txtCantidadPick = findViewById(R.id.txtCantidadPick);
+        txtPesoPick = findViewById(R.id.txtPesoPick);
+        txtCodigoProducto = findViewById(R.id.txtCodigoProducto);
+        txtCajas = findViewById(R.id.txtCajas);
+        txtUnidades = findViewById(R.id.txtUnidades);
         txtPreSol = findViewById(R.id.txtPresSol);
         txtUnidadSol = findViewById(R.id.txtUnidadSol);
         txtUnidadRec = findViewById(R.id.txtUnidadRec);
@@ -149,22 +149,22 @@ public class frm_picking_datos extends PBase {
         lblUnidadSol = findViewById(R.id.lblUnidadSol);
         lblUnidadRec = findViewById(R.id.lblUnidadRec);
 
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblLicPlate = (TextView) findViewById(R.id.lblLicPlate);
-        lblEstiba = (TextView) findViewById(R.id.lblEstiba);
-        lblCantidad = (TextView) findViewById(R.id.lblCantidad);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblLicPlate = findViewById(R.id.lblLicPlate);
+        lblEstiba = findViewById(R.id.lblEstiba);
+        lblCantidad = findViewById(R.id.lblCantidad);
 
-        btnConfirmarPk = (FloatingActionButton) findViewById(R.id.btnConfirmarPk);
+        btnConfirmarPk = findViewById(R.id.btnConfirmarPk);
 
-        cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
+        cmbEstado = findViewById(R.id.cmbEstado);
 
-        trCaducidad = (TableRow) findViewById(R.id.trCaducidad);
-        trLP = (TableRow) findViewById(R.id.trLP);
-        trCodigo = (TableRow) findViewById(R.id.trCodigo);
-        trPeso = (TableRow) findViewById(R.id.trPeso);
-        trLote = (TableRow) findViewById(R.id.trLote);
-        trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
-        tblEstiba = (TableRow) findViewById(R.id.tblEstiba);
+        trCaducidad = findViewById(R.id.trCaducidad);
+        trLP = findViewById(R.id.trLP);
+        trCodigo = findViewById(R.id.trCodigo);
+        trPeso = findViewById(R.id.trPeso);
+        trLote = findViewById(R.id.trLote);
+        trPresentacion = findViewById(R.id.trPresentacion);
+        tblEstiba = findViewById(R.id.tblEstiba);
 
         tblCajasUnidades = findViewById(R.id.tblCajasUnidades);
         lblPresentacion = findViewById(R.id.lblPresentacion);
@@ -1389,7 +1389,7 @@ public class frm_picking_datos extends PBase {
 
     }
 
-    private boolean HicimosUnaFumada=false;
+    private final boolean HicimosUnaFumada=false;
 
     private void calculaUnidades(double CantidadUMBas) {
 
@@ -2863,7 +2863,7 @@ public class frm_picking_datos extends PBase {
 
     }
 
-    private Runnable mUpdate = new Runnable() {
+    private final Runnable mUpdate = new Runnable() {
 
         public void run() {
 

@@ -16,28 +16,28 @@ public class DateUtils {
 		long vy, vm, vd;
 		String s;
 
-		vy = (long) f / 100000000;
+		vy = f / 100000000;
 		f = f % 100000000;
-		vm = (long) f / 1000000;
+		vm = f / 1000000;
 		f = f % 1000000;
-		vd = (long) f / 10000;
+		vd = f / 10000;
 		f = f % 10000;
 
 		s = "";
 		if (vd > 9) {
-			s = s + String.valueOf(vd) + "/";
+			s = s + vd + "/";
 		} else {
-			s = s + "0" + String.valueOf(vd) + "/";
+			s = s + "0" + vd + "/";
 		}
 		if (vm > 9) {
-			s = s + String.valueOf(vm) + "/20";
+			s = s + vm + "/20";
 		} else {
-			s = s + "0" + String.valueOf(vm) + "/20";
+			s = s + "0" + vm + "/20";
 		}
 		if (vy > 9) {
-			s = s + String.valueOf(vy);
+			s = s + vy;
 		} else {
-			s = s + "0" + String.valueOf(vy);
+			s = s + "0" + vy;
 		}
 
 		return s;
@@ -56,14 +56,14 @@ public class DateUtils {
 
 		s = "";
 		if (vd > 9) {
-			s = s + String.valueOf(vd) + "/";
+			s = s + vd + "/";
 		} else {
-			s = s + "0" + String.valueOf(vd) + "/";
+			s = s + "0" + vd + "/";
 		}
 		if (vm > 9) {
-			s = s + String.valueOf(vm);
+			s = s + vm;
 		} else {
-			s = s + "0" + String.valueOf(vm);
+			s = s + "0" + vm;
 		}
 
 		return s;
@@ -78,13 +78,13 @@ public class DateUtils {
 		if (m > 9) {
 			sm = String.valueOf(m);
 		} else {
-			sm = "0" + String.valueOf(m);
+			sm = "0" + m;
 		}
 		h = (int) h / 100;
 		if (h > 9) {
 			sh = String.valueOf(h);
 		} else {
-			sh = "0" + String.valueOf(h);
+			sh = "0" + h;
 		}
 
 		return sh + ":" + sm;
@@ -229,7 +229,6 @@ public class DateUtils {
 	public String univfechaseg() {
 
 		long f, fecha, vy, vm, vd;
-		;
 		int cyear, cmonth, cday, ch, cm, cs;
 		String s;
 
@@ -271,11 +270,11 @@ public class DateUtils {
 
 		//yyyyMMdd hh:mm:ss
 
-		vy = (long) f / 10000;
+		vy = f / 10000;
 		f = f % 10000;
-		vm = (long) f / 100;
+		vm = f / 100;
 		f = f % 100;
-		vd = (long) f;
+		vd = f;
 
 		s = "" + vy;
 		if (vm > 9) s = s + vm;
@@ -293,11 +292,11 @@ public class DateUtils {
 
 		//yyyy-MM-dd
 
-		vy = (long) f / 100000000;
+		vy = f / 100000000;
 		f = f % 100000000;
-		vm = (long) f / 1000000;
+		vm = f / 1000000;
 		f = f % 1000000;
-		vd = (long) f / 10000;
+		vd = f / 10000;
 		f = f % 10000;
 
 		if (vy > 9) sy = "20" + vy;
@@ -316,11 +315,11 @@ public class DateUtils {
 
 		//yyyy-MM-dd
 
-		vy = (long) f / 100000000;
+		vy = f / 100000000;
 		f = f % 100000000;
-		vm = (long) f / 1000000;
+		vm = f / 1000000;
 		f = f % 1000000;
-		vd = (long) f / 10000;
+		vd = f / 10000;
 		f = f % 10000;
 
 		if (vy < 100) {
@@ -339,13 +338,13 @@ public class DateUtils {
 	}
 
 	public long ffecha00(long f) {
-		f = (long) f / 10000;
+		f = f / 10000;
 		f = f * 10000;
 		return f;
 	}
 
 	public long ffecha24(long f) {
-		f = (long) f / 10000;
+		f = f / 10000;
 		f = f * 10000 + 2359;
 		return f;
 	}
@@ -909,9 +908,9 @@ public class DateUtils {
 
 		if (f == 0) return "--/--/--";
 
-		vy = (long) f / 10000;
+		vy = f / 10000;
 		f = f % 10000;
-		vm = (long) f / 100;
+		vm = f / 100;
 		vd = f % 100;
 
 		sy = "" + vy;

@@ -20,7 +20,7 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_detalle_reemplazo_verif(Context context, ArrayList<clsBeStockReemplazo> results) {
         BeListTareasHH = results;
@@ -57,20 +57,20 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_reemplazo_verif, null);
             holder = new ViewHolder();
 
-            holder.lblCodigoRe = (TextView) convertView.findViewById(R.id.lblCodigoRe);
-            holder.lblProductoRe = (TextView) convertView.findViewById(R.id.lblProductoRe);
-            holder.lblPresRe = (TextView) convertView.findViewById(R.id.lblPresRe);
-            holder.lblUmbasRe = (TextView) convertView.findViewById(R.id.lblUmbasRe);
-            holder.lblCantRe = (TextView) convertView.findViewById(R.id.lblCantRe);
-            holder.lblUbicRe = (TextView) convertView.findViewById(R.id.lblUbicRe);
-            holder.lblVenceRe = (TextView) convertView.findViewById(R.id.lblVenceRe);
-            holder.lblLpRe = (TextView) convertView.findViewById(R.id.lblLpRe);
-            holder.lblLoteRe = (TextView) convertView.findViewById(R.id.lblLoteRe);
-            holder.lblCodPrRe = (TextView) convertView.findViewById(R.id.lblCodPrRe);
-            holder.lblPesoRe = (TextView) convertView.findViewById(R.id.lblPesoRe);
-            holder.lblEstadoRe = (TextView) convertView.findViewById(R.id.lblEstadoRe);
-            holder.lblStock = (TextView) convertView.findViewById(R.id.lblStock);
-            holder.lblDespachar = (TextView) convertView.findViewById(R.id.lblDespachar);
+            holder.lblCodigoRe = convertView.findViewById(R.id.lblCodigoRe);
+            holder.lblProductoRe = convertView.findViewById(R.id.lblProductoRe);
+            holder.lblPresRe = convertView.findViewById(R.id.lblPresRe);
+            holder.lblUmbasRe = convertView.findViewById(R.id.lblUmbasRe);
+            holder.lblCantRe = convertView.findViewById(R.id.lblCantRe);
+            holder.lblUbicRe = convertView.findViewById(R.id.lblUbicRe);
+            holder.lblVenceRe = convertView.findViewById(R.id.lblVenceRe);
+            holder.lblLpRe = convertView.findViewById(R.id.lblLpRe);
+            holder.lblLoteRe = convertView.findViewById(R.id.lblLoteRe);
+            holder.lblCodPrRe = convertView.findViewById(R.id.lblCodPrRe);
+            holder.lblPesoRe = convertView.findViewById(R.id.lblPesoRe);
+            holder.lblEstadoRe = convertView.findViewById(R.id.lblEstadoRe);
+            holder.lblStock = convertView.findViewById(R.id.lblStock);
+            holder.lblDespachar = convertView.findViewById(R.id.lblDespachar);
 
             convertView.setTag(holder);
 

@@ -51,10 +51,10 @@ public class frm_inv_cic_conteo extends PBase {
 
     //Existe_producto existeProducto = new Existe_producto();
     private clsBe_inv_reconteo_data data_rec = new clsBe_inv_reconteo_data();
-    private ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
-    private ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
+    private final ArrayList<clsBe_inv_reconteo_data> lista_filtro = new ArrayList<clsBe_inv_reconteo_data>();
+    private final ArrayList<clsBe_inv_reconteo_data> data_list = new ArrayList<clsBe_inv_reconteo_data>();
     private clsBeTrans_inv_enc_reconteoList reconteos = new clsBeTrans_inv_enc_reconteoList();
-    private clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
+    private final clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
     private Object item;
     private clsBeProducto BeProducto;
 
@@ -171,11 +171,7 @@ public class frm_inv_cic_conteo extends PBase {
                         gl.inv_ciclico.index = position;
                         gl.IndexCiclico = gl.inv_ciclico.index;
 
-                        if (gl.inv_ciclico.idinvreconteo> 0){
-                            gl.Es_Reconteo =true;
-                        }else{
-                            gl.Es_Reconteo =false;
-                        }
+                        gl.Es_Reconteo = gl.inv_ciclico.idinvreconteo > 0;
 
                         execws(4);
 
@@ -349,7 +345,7 @@ public class frm_inv_cic_conteo extends PBase {
             }
         }
 
-        esconteo = (idreconteo == 0?true:false);
+        esconteo = (idreconteo == 0);
 
         if(esconteo){
             lblConteo.setText("Conteo");
@@ -993,7 +989,6 @@ public class frm_inv_cic_conteo extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

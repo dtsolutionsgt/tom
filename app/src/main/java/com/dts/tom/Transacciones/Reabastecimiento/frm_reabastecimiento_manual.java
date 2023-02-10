@@ -38,16 +38,16 @@ public class frm_reabastecimiento_manual extends PBase {
     private ProgressDialog progress;
 
     private TextView txtMensajeDialog;
-    private String mensaje_progress ="";
+    private final String mensaje_progress ="";
 
     private TextView txtCodigoPrd, txtLicencia, txtUbicOrigen;
     private ListView listExist;
     private TextView lblNumReg;
 
-    private int IdUbicacion = 0;
+    private final int IdUbicacion = 0;
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeVW_stock_resList BeStockList = new clsBeVW_stock_resList();
-    private static ArrayList<clsBeVW_stock_res> ListStock = new ArrayList<clsBeVW_stock_res>() ;
+    private static final ArrayList<clsBeVW_stock_res> ListStock = new ArrayList<clsBeVW_stock_res>() ;
     private list_adapt_reabast_stock_res adapter_stock;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
 

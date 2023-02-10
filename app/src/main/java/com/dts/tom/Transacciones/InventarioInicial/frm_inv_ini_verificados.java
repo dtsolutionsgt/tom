@@ -53,7 +53,7 @@ public class frm_inv_ini_verificados extends PBase {
     private Spinner cmbPresRes,cmbEstadoRes;
 
     private clsBeTrans_inv_resumen_grid selItem = new clsBeTrans_inv_resumen_grid();
-    private ArrayList<clsBeTrans_inv_resumen_grid> BeListVerificados = new ArrayList<clsBeTrans_inv_resumen_grid>();
+    private final ArrayList<clsBeTrans_inv_resumen_grid> BeListVerificados = new ArrayList<clsBeTrans_inv_resumen_grid>();
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProducto BBeProducto = new clsBeProducto();
     private clsBeTrans_inv_resumen_gridList BeList = new clsBeTrans_inv_resumen_gridList();
@@ -63,8 +63,8 @@ public class frm_inv_ini_verificados extends PBase {
 
     private int IdPresSelect,IdEstadoSelect;
 
-    private ArrayList<String> EstadoList= new ArrayList<String>();
-    private ArrayList<String> PresList= new ArrayList<String>();
+    private final ArrayList<String> EstadoList= new ArrayList<String>();
+    private final ArrayList<String> PresList= new ArrayList<String>();
 
     private list_adapt_verificados adapter;
 
@@ -77,11 +77,11 @@ public class frm_inv_ini_verificados extends PBase {
         ws = new WebServiceHandler(frm_inv_ini_verificados.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtCodProdVeri = (EditText)findViewById(R.id.txtCodProdVeri);
-        lblPrdContVeri = (TextView)findViewById(R.id.lblPrdContVeri);
+        txtCodProdVeri = findViewById(R.id.txtCodProdVeri);
+        lblPrdContVeri = findViewById(R.id.lblPrdContVeri);
         txtUbic = findViewById(R.id.txtUbic);
-        ListView = (ListView)findViewById(R.id.listContVeri);
-        btnRegs = (Button)findViewById(R.id.btnRegs);
+        ListView = findViewById(R.id.listContVeri);
+        btnRegs = findViewById(R.id.btnRegs);
 
         setHandles();
 
@@ -207,15 +207,15 @@ public class frm_inv_ini_verificados extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_inv_edita_resumen);
 
-            cmbPresRes = (Spinner)dialog.findViewById(R.id.cmbPresRes);
-            cmbEstadoRes = (Spinner)dialog.findViewById(R.id.cmbEstadoRes);
+            cmbPresRes = dialog.findViewById(R.id.cmbPresRes);
+            cmbEstadoRes = dialog.findViewById(R.id.cmbEstadoRes);
 
-            txtCantRes = (EditText)dialog.findViewById(R.id.txtCantRes);
+            txtCantRes = dialog.findViewById(R.id.txtCantRes);
 
-            lblUniRes = (TextView)dialog.findViewById(R.id.lblUniRes);
+            lblUniRes = dialog.findViewById(R.id.lblUniRes);
 
-            btnGuardarRes = (Button)dialog.findViewById(R.id.btnGuardarRes);
-            btnBack = (Button)dialog.findViewById(R.id.btnBack);
+            btnGuardarRes = dialog.findViewById(R.id.btnGuardarRes);
+            btnBack = dialog.findViewById(R.id.btnBack);
 
             cmbPresRes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 

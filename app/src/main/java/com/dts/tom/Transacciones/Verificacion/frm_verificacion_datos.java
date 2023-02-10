@@ -70,7 +70,7 @@ public class frm_verificacion_datos extends PBase {
 
     public static double CantReemplazar=0;
 
-    private ArrayList<String> PresList = new ArrayList<String>();
+    private final ArrayList<String> PresList = new ArrayList<String>();
 
     //Datos del producto a verificar
     private String Codigo = "";
@@ -105,31 +105,31 @@ public class frm_verificacion_datos extends PBase {
         ws = new frm_verificacion_datos.WebServiceHandler(frm_verificacion_datos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtVenceVeri = (EditText) findViewById(R.id.txtVenceVeri);
-        txtCantVeri = (EditText) findViewById(R.id.txtCantVeri);
-        txtPesoVeri = (EditText) findViewById(R.id.txtPesoVeri);
-        txtUmbasVeri = (EditText) findViewById(R.id.txtUmbasVeri);
-        txtLoteVeri = (EditText) findViewById(R.id.txtLoteVeri);
-        lblVenceVeri = (TextView) findViewById(R.id.lblVenceVeri);
-        lblCantVeri = (TextView) findViewById(R.id.lblCantVeri);
-        lblPesoVeri = (TextView) findViewById(R.id.lblPesoVeri);
-        lblUmbasVeri = (TextView) findViewById(R.id.lblUmbasVeri);
-        lblLoteVeri = (TextView) findViewById(R.id.lblLoteVeri);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblLicPlate2 = (TextView) findViewById(R.id.lblLicPlate2);
-        btnBack = (Button) findViewById(R.id.btnBack);
-        cmbPresVeri = (Spinner) findViewById(R.id.cmbPresVeri);
-        llFechaVence = (LinearLayout) findViewById(R.id.llFechaVence);
-        llLote = (LinearLayout) findViewById(R.id.llLote);
-        llPresentacion = (LinearLayout) findViewById(R.id.llPresentacion);
-        llCantidad = (LinearLayout) findViewById(R.id.llCantidad);
-        llPeso = (LinearLayout) findViewById(R.id.llPeso);
-        llUMBas = (LinearLayout) findViewById(R.id.llUMBas);
-        dpResult = (DatePicker) findViewById(R.id.datePicker2);
-        imgDate = (ImageView)findViewById(R.id.imgDate3);
-        txtCajas = (EditText) findViewById(R.id.txtCajas);
-        txtUnidades = (EditText) findViewById(R.id.txtUnidades);
-        lblPresentacion = (TextView) findViewById(R.id.lblPresentacion);
+        txtVenceVeri = findViewById(R.id.txtVenceVeri);
+        txtCantVeri = findViewById(R.id.txtCantVeri);
+        txtPesoVeri = findViewById(R.id.txtPesoVeri);
+        txtUmbasVeri = findViewById(R.id.txtUmbasVeri);
+        txtLoteVeri = findViewById(R.id.txtLoteVeri);
+        lblVenceVeri = findViewById(R.id.lblVenceVeri);
+        lblCantVeri = findViewById(R.id.lblCantVeri);
+        lblPesoVeri = findViewById(R.id.lblPesoVeri);
+        lblUmbasVeri = findViewById(R.id.lblUmbasVeri);
+        lblLoteVeri = findViewById(R.id.lblLoteVeri);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblLicPlate2 = findViewById(R.id.lblLicPlate2);
+        btnBack = findViewById(R.id.btnBack);
+        cmbPresVeri = findViewById(R.id.cmbPresVeri);
+        llFechaVence = findViewById(R.id.llFechaVence);
+        llLote = findViewById(R.id.llLote);
+        llPresentacion = findViewById(R.id.llPresentacion);
+        llCantidad = findViewById(R.id.llCantidad);
+        llPeso = findViewById(R.id.llPeso);
+        llUMBas = findViewById(R.id.llUMBas);
+        dpResult = findViewById(R.id.datePicker2);
+        imgDate = findViewById(R.id.imgDate3);
+        txtCajas = findViewById(R.id.txtCajas);
+        txtUnidades = findViewById(R.id.txtUnidades);
+        lblPresentacion = findViewById(R.id.lblPresentacion);
         relDesglose = findViewById(R.id.relDesglose);
         txtPreSol = findViewById(R.id.txtPresSol);
         txtUnidadSol = findViewById(R.id.txtUnidadSol);
@@ -613,7 +613,6 @@ public class frm_verificacion_datos extends PBase {
                         llPeso.setVisibility(View.VISIBLE);
                     }
 
-
                 }
             }
 
@@ -644,7 +643,7 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
-    private boolean HicimosUnaFumada=false;
+    private final boolean HicimosUnaFumada=false;
 
     private void calculaUnidades(double CantidadUMBas) {
 
@@ -680,7 +679,7 @@ public class frm_verificacion_datos extends PBase {
                     for (int i = 0; i < gBeProducto.Presentaciones.items.size(); i++) {
 
                         valor = gBeProducto.Presentaciones.items.get(i).getIdPresentacion() + " - " +
-                                gBeProducto.Presentaciones.items.get(i).getNombre().toString();
+                                gBeProducto.Presentaciones.items.get(i).getNombre();
 
                         if (PresList.indexOf(valor)==-1){
                             PresList.add(valor);
@@ -1122,7 +1121,6 @@ public class frm_verificacion_datos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 
@@ -1254,7 +1252,7 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
@@ -1281,7 +1279,7 @@ public class frm_verificacion_datos extends PBase {
 
         else
 
-            return "0" + String.valueOf(c);
+            return "0" + c;
     }
 
     public void Actualizar(View view){

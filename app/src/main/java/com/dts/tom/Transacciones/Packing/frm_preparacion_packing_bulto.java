@@ -43,13 +43,13 @@ public class frm_preparacion_packing_bulto extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private ArrayList<clsBeTrans_packing_enc> items = new ArrayList<>();
-    private ArrayList<clsBeTrans_packing_enc_bulto> item_list = new ArrayList<>();
+    private final ArrayList<clsBeTrans_packing_enc> items = new ArrayList<>();
+    private final ArrayList<clsBeTrans_packing_enc_bulto> item_list = new ArrayList<>();
     private clsBeTrans_picking_ubicList pick = new clsBeTrans_picking_ubicList();
     private clsBeTrans_packing_encList itemList;
     private clsBeTrans_packing_encList savedList = new clsBeTrans_packing_encList();
-    private ArrayList<String> lcode = new ArrayList<String>();
-    private ArrayList<String> lname = new ArrayList<String>();
+    private final ArrayList<String> lcode = new ArrayList<String>();
+    private final ArrayList<String> lname = new ArrayList<String>();
 
     private list_adapt_lista_packing_bulto adapter;
     private clsBeTrans_packing_enc_bulto selitem;
@@ -860,7 +860,6 @@ public class frm_preparacion_packing_bulto extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

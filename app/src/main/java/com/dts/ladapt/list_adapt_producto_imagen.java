@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 public class list_adapt_producto_imagen extends BaseAdapter {
     private static ArrayList<clsBeImagen> items;
-    private Context cont;
+    private final Context cont;
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_producto_imagen(Context context, ArrayList<clsBeImagen> results) {
         items = results;
@@ -55,7 +55,7 @@ public class list_adapt_producto_imagen extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.imagen, null);
             holder = new ViewHolder();
 
-            holder.imgProducto = (ImageView) convertView.findViewById(R.id.imgProducto);
+            holder.imgProducto = convertView.findViewById(R.id.imgProducto);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)

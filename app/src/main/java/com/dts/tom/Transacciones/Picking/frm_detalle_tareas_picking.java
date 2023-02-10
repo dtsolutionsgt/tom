@@ -32,6 +32,8 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -68,22 +70,23 @@ public class frm_detalle_tareas_picking extends PBase {
     public static clsBeTrans_picking_enc gBePicking;
     public static clsBeTrans_picking_ubicList plistPickingUbi = new clsBeTrans_picking_ubicList();
     private clsBeTrans_picking_det gbePickingDet = new clsBeTrans_picking_det();
-    private clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc();
+    private final clsBeTrans_pe_enc gBePedidoEnc = new clsBeTrans_pe_enc();
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
-    private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+    private final ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
     private list_adapt_detalle_tareas_picking3 adapter3;
     public static clsBeTrans_picking_ubic selitem, tmpPickingUbic;
 
-    private List TipoOrden = new ArrayList();
+    private final List TipoOrden = new ArrayList();
 
     public static int TipoLista = 1;
     public static int pOrden=0;
     private boolean PreguntoPorDiferencia=false;
     private boolean Finalizar=true;
-    private boolean areaprimera = true, filtros = false;
+    private boolean areaprimera = true;
+    private final boolean filtros = false;
     private boolean asignar_operador_linea_picking = false;
 
     public Activity myActivity;
@@ -115,18 +118,18 @@ public class frm_detalle_tareas_picking extends PBase {
             ws = new WebServiceHandler(frm_detalle_tareas_picking.this, gl.wsurl);
             xobj = new XMLObject(ws);
 
-            listView = (ListView) findViewById(R.id.listTareasPicking);
-            cmbOrdenadorPor = (Spinner) findViewById(R.id.cmbOrdenadorPor);
-            btnPendientes = (Button) findViewById(R.id.btnPendientes);
-            btnRes_Det = (Button) findViewById(R.id.btnRes_Det);
-            txtUbicacionFiltro = (EditText) findViewById(R.id.txtUbicacionFiltro);
-            lblBodega = (TextView) findViewById(R.id.lblBodega);
-            lblOperador = (TextView) findViewById(R.id.lblOperador);
-            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-            txtFiltro = (EditText) findViewById(R.id.txtFiltro);
-            btnLimpiar = (ImageView) findViewById(R.id.btnLimpiar);
-            btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
-            relbot = (RelativeLayout) findViewById(R.id.relbot);
+            listView = findViewById(R.id.listTareasPicking);
+            cmbOrdenadorPor = findViewById(R.id.cmbOrdenadorPor);
+            btnPendientes = findViewById(R.id.btnPendientes);
+            btnRes_Det = findViewById(R.id.btnRes_Det);
+            txtUbicacionFiltro = findViewById(R.id.txtUbicacionFiltro);
+            lblBodega = findViewById(R.id.lblBodega);
+            lblOperador = findViewById(R.id.lblOperador);
+            lblTituloForma = findViewById(R.id.lblTituloForma);
+            txtFiltro = findViewById(R.id.txtFiltro);
+            btnLimpiar = findViewById(R.id.btnLimpiar);
+            btnFiltros = findViewById(R.id.btnFiltros);
+            relbot = findViewById(R.id.relbot);
             relFiltros = findViewById(R.id.relFiltros);
 
             lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
@@ -135,7 +138,7 @@ public class frm_detalle_tareas_picking extends PBase {
             gl.mostar_filtros = false;
             gl.termino = "";
 
-            ProgressDialog("Obteniendo Picking...");
+            ProgressDialog("Obteniendo Picking Fase 1...");
 
             setHandlers();
 
@@ -506,7 +509,7 @@ public class frm_detalle_tareas_picking extends PBase {
             titulo = gl.gReferencia.isEmpty() ? "Picking #" + gl.gIdPickingEnc : "Picking #" + gl.gIdPickingEnc +" - "+gl.gReferencia;
             lblTituloForma.setText(titulo);
 
-            progress_setMessage("Obteniendo picking");
+            progress_setMessage("Obteniendo picking Fase 2...");
 
             if (gl.gIdPickingEnc>0){
                 execws(1);
@@ -1078,7 +1081,7 @@ public class frm_detalle_tareas_picking extends PBase {
         }
     }
 
-    private Runnable mUpdate = new Runnable() {
+    private final Runnable mUpdate = new Runnable() {
 
         public void run() {
 

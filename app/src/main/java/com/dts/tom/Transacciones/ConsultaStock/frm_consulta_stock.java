@@ -61,7 +61,7 @@ public class frm_consulta_stock extends PBase {
     private ImageView btnFiltros;
     private Button btnBack, registros,btnBuscar;
     private RelativeLayout relFiltros;
-    private int pIdTarea=0;
+    private final int pIdTarea=0;
     private EditText txtCodigo, txtUbic, txtNombre;
     private CheckBox chkDetalle;
     private int idubic, idprod, conteo;
@@ -77,8 +77,8 @@ public class frm_consulta_stock extends PBase {
     private clsBeVW_stock_res_CI_List pListStock2;
     private list_adapt_consulta_stock adapter_stock;
     private list_adapt_consulta_stock2 adapter_stock2;
-    private ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<>();
-    private ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
+    private final ArrayList<clsBeVW_stock_res_CI> items_stock = new ArrayList<>();
+    private final ArrayList<clsBeVW_stock_res_CI> items_stock2 = new ArrayList<clsBeVW_stock_res_CI>();
     //clsBeVW_stock_res_CI  ItemSelected;
     private TextView lblTituloForma;
     private Spinner cmbEstadoExist, spOrdenar;
@@ -102,18 +102,18 @@ public class frm_consulta_stock extends PBase {
         idle = false;
         selest = 0;
 
-        listView = (ListView) findViewById(R.id.listExist);
-        btnBack = (Button) findViewById(R.id.btnBack);
+        listView = findViewById(R.id.listExist);
+        btnBack = findViewById(R.id.btnBack);
         //btnBuscar = (Button) findViewById(R.id.btnBuscar);
         registros = findViewById(R.id.btnRegs2);
-        txtCodigo = (EditText) findViewById(R.id.txtCodigo1);
-        txtUbic = (EditText) findViewById(R.id.txtUbic1);
-        txtNombre = (EditText) findViewById(R.id.txtNombre);
+        txtCodigo = findViewById(R.id.txtCodigo1);
+        txtUbic = findViewById(R.id.txtUbic1);
+        txtNombre = findViewById(R.id.txtNombre);
         lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
         lblNombreProducto = findViewById(R.id.lblNombreProducto);
         cmbEstadoExist = findViewById(R.id.cmbEstadoExist);
-        spOrdenar= (Spinner)findViewById(R.id.spOrdenar) ;
-        chkDetalle=(CheckBox)findViewById(R.id.chkDetalle);
+        spOrdenar= findViewById(R.id.spOrdenar);
+        chkDetalle= findViewById(R.id.chkDetalle);
         btnFiltros = findViewById(R.id.btnFiltros);
         relFiltros = findViewById(R.id.relFiltros);
         lblTituloForma = findViewById(R.id.lblTituloForma);
@@ -284,7 +284,7 @@ public class frm_consulta_stock extends PBase {
                     //if (position > 0) {
                     gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                    CambioUbicDetallado = chkDetalle.isChecked() ? true : false;
+                    CambioUbicDetallado = chkDetalle.isChecked();
 
                     try {
                         if (gl.existencia.IdProductoBodega!=-1) {
@@ -1035,7 +1035,6 @@ public class frm_consulta_stock extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

@@ -42,8 +42,8 @@ public class frm_lista_packing extends PBase {
     private XMLObject xobj;
 
     private clsBeTrans_picking_encList pListBeTareasPickingHH = new clsBeTrans_picking_encList();
-    private ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
-    private ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
+    private final ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
+    private final ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
     private list_adapt_tareashh_picking adapterPicking;
 
     private ObjectAnimator anim;
@@ -57,12 +57,12 @@ public class frm_lista_packing extends PBase {
         setContentView(R.layout.activity_frm_lista_packing);
         super.InitBase();
 
-        lblTitulo = (TextView) findViewById(R.id.lblTituloForma);
-        txtTarea = (EditText) findViewById(R.id.editText8);
-        listView = (ListView) findViewById(R.id.listTareas);
-        lblRegs = (Button) findViewById(R.id.btnRegsList);
-        btnNueva = (Button)findViewById(R.id.btnNuevaTarea);
-        pbar = (ProgressBar) findViewById(R.id.pgrtareas);
+        lblTitulo = findViewById(R.id.lblTituloForma);
+        txtTarea = findViewById(R.id.editText8);
+        listView = findViewById(R.id.listTareas);
+        lblRegs = findViewById(R.id.btnRegsList);
+        btnNueva = findViewById(R.id.btnNuevaTarea);
+        pbar = findViewById(R.id.pgrtareas);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
         ProgressDialog("Cargando forma");
@@ -374,7 +374,6 @@ public class frm_lista_packing extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

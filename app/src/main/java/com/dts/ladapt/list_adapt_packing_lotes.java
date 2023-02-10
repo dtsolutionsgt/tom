@@ -20,7 +20,7 @@ public class list_adapt_packing_lotes extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_packing_lotes(Context context, ArrayList<clsBeTrans_packing_lotes> results) {
         items = results;

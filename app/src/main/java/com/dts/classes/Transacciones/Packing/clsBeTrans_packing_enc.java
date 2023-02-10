@@ -8,7 +8,7 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public int Idpackingenc;
     @Element(required=false) public int Idbodega;
     @Element(required=false) public int Idpickingenc;
-    @Element(required=false) public int IdDespachoEnc;;
+    @Element(required=false) public int IdDespachoEnc;
     @Element(required=false) public int Idproductobodega;
     @Element(required=false) public int Idproductoestado;
     @Element(required=false) public int Idpresentacion;

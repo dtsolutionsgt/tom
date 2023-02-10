@@ -18,9 +18,9 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
     private static ArrayList<clsBeTrans_oc_det> BeDetalleOC;
     private int selectedIndex;
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
     private boolean Es_Poliza_Consolidada=false;
-    private int decimales_redondeo;
+    private final int decimales_redondeo;
 
 
     public list_adapt_detalle_recepcion(Context context, ArrayList<clsBeTrans_oc_det> results,
@@ -61,23 +61,23 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_recepcion, null);
             holder = new ViewHolder();
 
-            holder.lblNoLinea = (TextView) convertView.findViewById(R.id.lblNoLinea);
-            holder.lblCodigo = (TextView) convertView.findViewById(R.id.lblCodigo);
-            holder.lblProducto = (TextView) convertView.findViewById(R.id.lblProducto);
-            holder.lblPres = (TextView) convertView.findViewById(R.id.lblPres);
-            holder.lblUmbas = (TextView) convertView.findViewById(R.id.lblUmbas);
-            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
-            holder.lblCantRec = (TextView) convertView.findViewById(R.id.lblCantRec);
-            holder.lblDiferencia = (TextView) convertView.findViewById(R.id.lblDiferencia);
-            holder.lblCosto = (TextView) convertView.findViewById(R.id.lblCosto);
-            holder.lblFactor = (TextView) convertView.findViewById(R.id.lblFactor);
-            holder.lblIdOcDet = (TextView) convertView.findViewById(R.id.lblIdOcDet);
-            holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
-            holder.lblIdOcEnc = (TextView) convertView.findViewById(R.id.lblIdOcEnc);
-            holder.lblIdPropietarioBodega = (TextView) convertView.findViewById(R.id.lblIdPropietarioBodega);
-            holder.lblNombrePropietario =  (TextView) convertView.findViewById(R.id.lblNombrePropietario);
-            holder.lblShipper = (TextView) convertView.findViewById(R.id.lblShipper);
-            holder.lblClasificacion = (TextView) convertView.findViewById(R.id.lblClasificacion);
+            holder.lblNoLinea = convertView.findViewById(R.id.lblNoLinea);
+            holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
+            holder.lblProducto = convertView.findViewById(R.id.lblProducto);
+            holder.lblPres = convertView.findViewById(R.id.lblPres);
+            holder.lblUmbas = convertView.findViewById(R.id.lblUmbas);
+            holder.lblCantidad = convertView.findViewById(R.id.lblCantidad);
+            holder.lblCantRec = convertView.findViewById(R.id.lblCantRec);
+            holder.lblDiferencia = convertView.findViewById(R.id.lblDiferencia);
+            holder.lblCosto = convertView.findViewById(R.id.lblCosto);
+            holder.lblFactor = convertView.findViewById(R.id.lblFactor);
+            holder.lblIdOcDet = convertView.findViewById(R.id.lblIdOcDet);
+            holder.lblIdOcEnc = convertView.findViewById(R.id.lblIdOcEnc);
+            holder.lblIdOcEnc = convertView.findViewById(R.id.lblIdOcEnc);
+            holder.lblIdPropietarioBodega = convertView.findViewById(R.id.lblIdPropietarioBodega);
+            holder.lblNombrePropietario = convertView.findViewById(R.id.lblNombrePropietario);
+            holder.lblShipper = convertView.findViewById(R.id.lblShipper);
+            holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
 
             convertView.setTag(holder);
         } else {

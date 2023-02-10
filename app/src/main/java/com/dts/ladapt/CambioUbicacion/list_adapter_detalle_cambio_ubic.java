@@ -66,17 +66,17 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
                 convertView = l_Inflater.inflate(R.layout.activity_list_adapter_detalle_cambio_ubic, null);
                 holder = new ViewHolder();
 
-                holder.lblTareaDet  = (TextView) convertView.findViewById(R.id.lblTareaDet);
-                holder.lblIdStock = (TextView) convertView.findViewById(R.id.lblIdStock);
-                holder.lblCodigo  = (TextView) convertView.findViewById(R.id.lblCodigo);
-                holder.lblProducto = (TextView) convertView.findViewById(R.id.lblProducto);
-                holder.lblPresentacion = (TextView) convertView.findViewById(R.id.lblPresentacion);
-                holder.lblOrigen = (TextView) convertView.findViewById(R.id.lblOrigen);
-                holder.lblDestino = (TextView) convertView.findViewById(R.id.lblDestino);
-                holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
-                holder.lblRecibido = (TextView) convertView.findViewById(R.id.lblRecibido);
-                holder.lblOperador = (TextView) convertView.findViewById(R.id.lblOperador);
-                holder.lblLicencia = (TextView) convertView.findViewById(R.id.lblLicencia);
+                holder.lblTareaDet  = convertView.findViewById(R.id.lblTareaDet);
+                holder.lblIdStock = convertView.findViewById(R.id.lblIdStock);
+                holder.lblCodigo  = convertView.findViewById(R.id.lblCodigo);
+                holder.lblProducto = convertView.findViewById(R.id.lblProducto);
+                holder.lblPresentacion = convertView.findViewById(R.id.lblPresentacion);
+                holder.lblOrigen = convertView.findViewById(R.id.lblOrigen);
+                holder.lblDestino = convertView.findViewById(R.id.lblDestino);
+                holder.lblCantidad = convertView.findViewById(R.id.lblCantidad);
+                holder.lblRecibido = convertView.findViewById(R.id.lblRecibido);
+                holder.lblOperador = convertView.findViewById(R.id.lblOperador);
+                holder.lblLicencia = convertView.findViewById(R.id.lblLicencia);
 
                 convertView.setTag(holder);
 
@@ -102,7 +102,7 @@ public class list_adapter_detalle_cambio_ubic extends BaseAdapter {
                 }
             }
 
-            LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
+            LinearLayout encabezado = convertView.findViewById(R.id.linearEncCB);
 
             if (position>0){
                 encabezado.setVisibility(View.GONE);

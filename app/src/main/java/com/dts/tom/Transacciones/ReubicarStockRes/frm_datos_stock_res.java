@@ -34,7 +34,9 @@ public class frm_datos_stock_res extends PBase {
     private EditText txtUbicOrigen, txtLicensePlate, txtCodigoPrd, txtCantidad, txtUbicDestino;
     private TableRow trDestino, trPresentacion, trLote, trVence, trProducto;
 
-    private int IdUbicacion = 0, IdUbicacionDest = 0, CambioUbicRealizado = 0;
+    private int IdUbicacion = 0;
+    private final int IdUbicacionDest = 0;
+    private int CambioUbicRealizado = 0;
     private boolean UbicValida = false;
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();

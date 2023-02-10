@@ -19,7 +19,7 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_detalle_rec_prod(Context context, ArrayList<clsBeTrans_re_det> results) {
         BeDetalleRec = results;
@@ -56,15 +56,15 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_detalle_rec_prod, null);
             holder = new ViewHolder();
 
-            holder.lblCodigo = (TextView) convertView.findViewById(R.id.lblCodigo);
-            holder.lblPres = (TextView) convertView.findViewById(R.id.lblPres);
-            holder.lblUmbas = (TextView) convertView.findViewById(R.id.lblUmbas);
-            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
-            holder.lblProdBod = (TextView) convertView.findViewById(R.id.lblProdBod);
-            holder.lblEstado = (TextView) convertView.findViewById(R.id.lblEstado);
-            holder.lblVence = (TextView) convertView.findViewById(R.id.lblVence);
-            holder.lblLote = (TextView) convertView.findViewById(R.id.lblLote);
-            holder.lblLp = (TextView) convertView.findViewById(R.id.lblLp);
+            holder.lblCodigo = convertView.findViewById(R.id.lblCodigo);
+            holder.lblPres = convertView.findViewById(R.id.lblPres);
+            holder.lblUmbas = convertView.findViewById(R.id.lblUmbas);
+            holder.lblCantidad = convertView.findViewById(R.id.lblCantidad);
+            holder.lblProdBod = convertView.findViewById(R.id.lblProdBod);
+            holder.lblEstado = convertView.findViewById(R.id.lblEstado);
+            holder.lblVence = convertView.findViewById(R.id.lblVence);
+            holder.lblLote = convertView.findViewById(R.id.lblLote);
+            holder.lblLp = convertView.findViewById(R.id.lblLp);
 
             convertView.setTag(holder);
         } else {

@@ -28,9 +28,7 @@ public class PrintJobListAdapter extends ArrayAdapter<ZebraPrintTask.PrintJob> {
         if(convertView == null) {
             convertView = View.inflate(this.getContext(), R.layout.component_print_job, null);
             Integer tag = (Integer)convertView.getTag();
-            if(trackingTable.containsKey(tag)){
-                trackingTable.remove(tag);
-            }
+            trackingTable.remove(tag);
         }
         updateView(job, convertView);
         return convertView;
@@ -44,7 +42,7 @@ public class PrintJobListAdapter extends ArrayAdapter<ZebraPrintTask.PrintJob> {
             statusString = "CANCELLED";
         }
 
-        TextView errorView = ((TextView)convertView.findViewById(R.id.print_job_error));
+        TextView errorView = convertView.findViewById(R.id.print_job_error);
 
         if(job.getStatus() == ZebraPrintTask.PrintJob.Status.ERROR) {
             errorView.setVisibility(View.VISIBLE);

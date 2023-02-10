@@ -60,13 +60,13 @@ public class frm_inv_ini_tramos extends PBase {
         setContentView(R.layout.activity_frm_inv_ini_tramos);
         super.InitBase();
 
-        txtTramUbic = (EditText)findViewById(R.id.txtTramUbic);
+        txtTramUbic = findViewById(R.id.txtTramUbic);
 
-        listInvTramos = (ListView) findViewById(R.id.listInvTramos);
+        listInvTramos = findViewById(R.id.listInvTramos);
 
-        cmdTraDet = (Button) findViewById(R.id.cmdTraDet);
-        cmdTraVer = (Button) findViewById(R.id.cmdTraVer);
-        cmdTraRec = (Button) findViewById(R.id.cmdTraRec);
+        cmdTraDet = findViewById(R.id.cmdTraDet);
+        cmdTraVer = findViewById(R.id.cmdTraVer);
+        cmdTraRec = findViewById(R.id.cmdTraRec);
 
         ws = new WebServiceHandler(frm_inv_ini_tramos.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -214,9 +214,9 @@ public class frm_inv_ini_tramos extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_tipo_conteo);
 
-            btnConteo = (Button) dialog.findViewById(R.id.btnConteo);
-            btnVerificacion = (Button) dialog.findViewById(R.id.btnVerificacion);
-            btnBack = (Button) dialog.findViewById(R.id.btnBack);
+            btnConteo = dialog.findViewById(R.id.btnConteo);
+            btnVerificacion = dialog.findViewById(R.id.btnVerificacion);
+            btnBack = dialog.findViewById(R.id.btnBack);
 
             btnConteo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -427,7 +427,6 @@ public class frm_inv_ini_tramos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

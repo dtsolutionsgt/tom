@@ -29,7 +29,7 @@ public class BluetoothStateHolder {
 
     private String discoveryErrorMessage = null;
 
-    private Context context;
+    private final Context context;
 
     public BluetoothStateHolder(Context context) {
         this.context = context.getApplicationContext();

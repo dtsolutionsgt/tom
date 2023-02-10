@@ -33,9 +33,9 @@ public class frm_imagenes extends PBase {
 
         super.InitBase();
 
-        gridFotos = (GridView) findViewById(R.id.gridFotos);
-        lbldDetProducto = (TextView) findViewById(R.id.lbldDetProducto);
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
+        gridFotos = findViewById(R.id.gridFotos);
+        lbldDetProducto = findViewById(R.id.lbldDetProducto);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
 
         ListImagen.clear();
         ListImagen = gl.ListImagen;

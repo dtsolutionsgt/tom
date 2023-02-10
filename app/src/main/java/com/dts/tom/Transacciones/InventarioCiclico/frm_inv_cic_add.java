@@ -59,9 +59,9 @@ public class frm_inv_cic_add extends PBase {
     //private int adelante,atras;
     private String codigo_producto;
 
-    private ArrayList<String> bodlist= new ArrayList<String>();
-    private ArrayList<String> PresList= new ArrayList<String>();
-    private ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
+    private final ArrayList<String> bodlist= new ArrayList<String>();
+    private final ArrayList<String> PresList= new ArrayList<String>();
+    private final ArrayList<Integer> IndexPresList= new ArrayList<Integer>();
 
     private  clsBeTrans_inv_ciclico pitem;
     private clsBeTrans_inv_ciclico BeTrans_inv_ciclico;
@@ -75,7 +75,7 @@ public class frm_inv_cic_add extends PBase {
     //obtiene el id máximo de inventario ciclico
     private int IDInventarioCiclico;
 
-    private boolean noubicflag = false;
+    private final boolean noubicflag = false;
 
     //Nueva cantidad a enviar cuando el registro no es pendiente, sino ya contado
     private double Nueva_Cantidad;
@@ -102,7 +102,7 @@ public class frm_inv_cic_add extends PBase {
         cboEstado = findViewById(R.id.cboEstado);
         cboPres = findViewById(R.id.cboPres);
         txtLote1 = findViewById(R.id.txtLote1);
-        dtpVence = (EditText) findViewById(R.id.dtpVence);
+        dtpVence = findViewById(R.id.dtpVence);
 
         lblCantStock = findViewById(R.id.lblCantStock);
         txtCantContada = findViewById(R.id.txtCantContada);
@@ -527,7 +527,7 @@ public class frm_inv_cic_add extends PBase {
         boolean respuesta = false;
 
         //#CKFK20220218 Agregué este replace para cuando la barra tiene el símbolo de dólar
-        codigo_producto = codigo_producto.toString().replace("$","");
+        codigo_producto = codigo_producto.replace("$","");
 
         try{
                 if(gl.inv_ciclico.Licence_plate.equals(codigo_producto)){
@@ -960,8 +960,8 @@ public class frm_inv_cic_add extends PBase {
                     BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
                     BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
                 }else {
-                    BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
-                    BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                    BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha(), 10));
+                    BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha(), 10));
                 }
 
                // m_proxy.Inventario_Agregar_Conteo(BeTrans_inv_ciclico)
@@ -1159,8 +1159,8 @@ public class frm_inv_cic_add extends PBase {
                 BeTrans_inv_ciclico.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
                 BeTrans_inv_ciclico.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
             }else {
-                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
-                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha().toString(), 10));
+                BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(du.AddYearsToDate(du.getFecha(), 10));
+                BeTrans_inv_ciclico.Fecha_vence_stock =  du.convierteFecha(du.AddYearsToDate(du.getFecha(), 10));
             }
 
             BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtCantContada.getText().toString().trim());
@@ -1194,11 +1194,7 @@ public class frm_inv_cic_add extends PBase {
 
             int getrespuesta = xobj.getresult(Integer.class,"Inventario_Agregar_Conteo");
 
-            if(getrespuesta ==1){
-                nuevoRegistro = true;
-            }else{
-                nuevoRegistro = false;
-            }
+            nuevoRegistro = getrespuesta == 1;
 
         } catch (Exception e) {
             mu.msgbox("Inventario_Agregar_Conteo getResult: "+e.getMessage());

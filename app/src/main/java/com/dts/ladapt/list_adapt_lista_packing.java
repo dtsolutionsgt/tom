@@ -19,7 +19,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_lista_packing(Context context, ArrayList<clsBeTrans_packing_enc> results) {
         items = results;

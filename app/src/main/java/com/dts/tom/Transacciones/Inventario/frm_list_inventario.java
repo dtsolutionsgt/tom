@@ -50,9 +50,9 @@ public class frm_list_inventario extends PBase {
         ws = new WebServiceHandler(frm_list_inventario.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        listView = (ListView) findViewById(R.id.listInventario);
-        txtIdTareaInv = (EditText) findViewById(R.id.txtIdTareaInv);
-        btnRegs = (Button)findViewById(R.id.btnRegs);
+        listView = findViewById(R.id.listInventario);
+        txtIdTareaInv = findViewById(R.id.txtIdTareaInv);
+        btnRegs = findViewById(R.id.btnRegs);
 
         ProgressDialog("Cargando datos de inventario...");
 

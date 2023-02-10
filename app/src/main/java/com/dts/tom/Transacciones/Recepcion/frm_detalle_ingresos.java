@@ -81,10 +81,10 @@ public class frm_detalle_ingresos extends PBase {
 
     String encoded="";
 
-    private ArrayList<String> proplist= new ArrayList<String>();
-    private ArrayList<String> provlist= new ArrayList<String>();
-    private ArrayList<String> tipooclist= new ArrayList<String>();
-    private ArrayList<String> vencelist= new ArrayList<String>();
+    private final ArrayList<String> proplist= new ArrayList<String>();
+    private final ArrayList<String> provlist= new ArrayList<String>();
+    private final ArrayList<String> tipooclist= new ArrayList<String>();
+    private final ArrayList<String> vencelist= new ArrayList<String>();
 
     //Imagenes
     private clsBeImagen BeImagen;
@@ -101,29 +101,29 @@ public class frm_detalle_ingresos extends PBase {
         ws = new WebServiceHandler(frm_detalle_ingresos.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        txtOc = (EditText)findViewById(R.id.txtOc);
-        txtRef = (EditText)findViewById(R.id.txtRef);
-        txtMarch = (EditText)findViewById(R.id.txtMarch);
-        txtGuia = (EditText)findViewById(R.id.txtGuia);
-        txtEstadoRec = (EditText)findViewById(R.id.txtEstadoRec);
-        txtMuelleRec = (EditText)findViewById(R.id.txtMuelleRec);
-        txtNumOrden = (EditText)findViewById(R.id.txtNumOrden);
-        txtNumPoliza = (EditText)findViewById(R.id.txtNumPoliza);
-        txtUbicacion = (EditText) findViewById(R.id.txtUbicacion);
+        txtOc = findViewById(R.id.txtOc);
+        txtRef = findViewById(R.id.txtRef);
+        txtMarch = findViewById(R.id.txtMarch);
+        txtGuia = findViewById(R.id.txtGuia);
+        txtEstadoRec = findViewById(R.id.txtEstadoRec);
+        txtMuelleRec = findViewById(R.id.txtMuelleRec);
+        txtNumOrden = findViewById(R.id.txtNumOrden);
+        txtNumPoliza = findViewById(R.id.txtNumPoliza);
+        txtUbicacion = findViewById(R.id.txtUbicacion);
         lblNombreUbicacion = findViewById(R.id.lblNombreUbicacion);
 
-        tblNumOrden = (TableRow) findViewById(R.id.tblNumOrden);
-        tblNumPoliza = (TableRow) findViewById(R.id.tblNumPoliza);
-        tblImagen = (TableRow) findViewById(R.id.tblImagen);
+        tblNumOrden = findViewById(R.id.tblNumOrden);
+        tblNumPoliza = findViewById(R.id.tblNumPoliza);
+        tblImagen = findViewById(R.id.tblImagen);
 
-        cmbPropietario = (Spinner) findViewById(R.id.cmbPropietario);
-        cmbProveedor = (Spinner) findViewById(R.id.cmbProveedor);
-        cmbTipoDoc = (Spinner) findViewById(R.id.cmbTipoDoc);
-        cmbFechaRec = (Spinner) findViewById(R.id.cmbFechaRec);
+        cmbPropietario = findViewById(R.id.cmbPropietario);
+        cmbProveedor = findViewById(R.id.cmbProveedor);
+        cmbTipoDoc = findViewById(R.id.cmbTipoDoc);
+        cmbFechaRec = findViewById(R.id.cmbFechaRec);
 
         relUbicacion = findViewById(R.id.relUbicacion);
 
-        btnCamara = (ImageView)findViewById(R.id.imageView12);
+        btnCamara = findViewById(R.id.imageView12);
 
         ProgressDialog("Cargando forma");
 
@@ -902,7 +902,6 @@ public class frm_detalle_ingresos extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

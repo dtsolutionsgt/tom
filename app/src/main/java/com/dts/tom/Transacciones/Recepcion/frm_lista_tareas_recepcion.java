@@ -57,8 +57,8 @@ public class frm_lista_tareas_recepcion extends PBase {
     private clsBeTrans_pe_encList pListBeTransPeEnc = new clsBeTrans_pe_encList();
 
     private ArrayList<clsBeTareasIngresoHH> BeListTareas = new ArrayList<clsBeTareasIngresoHH>();
-    private ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
-    private ArrayList<clsBeTrans_pe_enc> BeListTareasPedido = new ArrayList<clsBeTrans_pe_enc>();
+    private final ArrayList<clsBeTrans_picking_enc> BeListTareasPicking = new ArrayList<clsBeTrans_picking_enc>();
+    private final ArrayList<clsBeTrans_pe_enc> BeListTareasPedido = new ArrayList<clsBeTrans_pe_enc>();
 
     private list_adapter_tareashh adapter;
     private list_adapt_tareashh_picking adapterPicking;
@@ -70,7 +70,7 @@ public class frm_lista_tareas_recepcion extends PBase {
     private ProgressBar pbar;
     private ObjectAnimator anim;
     private ProgressDialog progress;
-    private int IdOrdenCompra = 0, vIdTarea=0;;
+    private int IdOrdenCompra = 0, vIdTarea=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +79,17 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         super.InitBase();
 
-        lblTitulo = (TextView) findViewById(R.id.lblTituloForma);
-        lblBodega = (TextView) findViewById(R.id.lblBodega);
-        lblOperador = (TextView) findViewById(R.id.lblOperador);
-        txtTarea = (EditText) findViewById(R.id.editText8);
-        listView = (ListView) findViewById(R.id.listTareas);
-        lblRegs = (Button) findViewById(R.id.btnRegsList);
-        btnNueva = (Button)findViewById(R.id.btnNuevaTarea);
-        pbar = (ProgressBar) findViewById(R.id.pgrtareas);
-        hdVerificacion = (LinearLayout) findViewById(R.id.hdVerificacion);
-        hdRecepcion = (LinearLayout) findViewById(R.id.hdRecepcion);
-        hdPicking = (LinearLayout) findViewById(R.id.hdPicking);
+        lblTitulo = findViewById(R.id.lblTituloForma);
+        lblBodega = findViewById(R.id.lblBodega);
+        lblOperador = findViewById(R.id.lblOperador);
+        txtTarea = findViewById(R.id.editText8);
+        listView = findViewById(R.id.listTareas);
+        lblRegs = findViewById(R.id.btnRegsList);
+        btnNueva = findViewById(R.id.btnNuevaTarea);
+        pbar = findViewById(R.id.pgrtareas);
+        hdVerificacion = findViewById(R.id.hdVerificacion);
+        hdRecepcion = findViewById(R.id.hdRecepcion);
+        hdPicking = findViewById(R.id.hdPicking);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
 
@@ -456,7 +456,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.IdCliente = BePedEnc.getIdCliente();
                         vItem.Cliente.Nombre_comercial = BePedEnc.Cliente.Codigo+" - "+BePedEnc.Cliente.Nombre_comercial;
                         vItem.Estado = BePedEnc.Estado;
-                        vItem.IdPickingEnc = BePedEnc.IdPickingEnc;;
+                        vItem.IdPickingEnc = BePedEnc.IdPickingEnc;
                         vItem.Hora_ini = du.convierteHoraMostar(BePedEnc.Hora_ini);
                         vItem.Hora_fin = du.convierteHoraMostar(BePedEnc.Hora_fin);
 
@@ -954,7 +954,6 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

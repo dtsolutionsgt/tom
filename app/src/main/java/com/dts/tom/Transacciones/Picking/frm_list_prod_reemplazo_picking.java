@@ -48,28 +48,28 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
-    private clsBeStockList vListaStock = new clsBeStockList();
-    private clsBeStockList vStock = new clsBeStockList();
-    private clsBeStock_resList  BeListStockRes = new clsBeStock_resList();
-    private clsBeStock_res StockResC=new clsBeStock_res();
+    private final clsBeStockList vListaStock = new clsBeStockList();
+    private final clsBeStockList vStock = new clsBeStockList();
+    private final clsBeStock_resList  BeListStockRes = new clsBeStock_resList();
+    private final clsBeStock_res StockResC=new clsBeStock_res();
     private clsBeStock_res StockResReemplazo=new clsBeStock_res();
     private clsBeStock_res tmpBeStock_Res  = new clsBeStock_res();
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
-    private ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
+    private final ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
     private list_adapt_detalle_reemplazo_picking adapter;
     private clsBeStockReemplazo selitem;
 
-    private clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
+    private final clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
     private clsBeStock_res lBeStockRes = new clsBeStock_res();
     private clsBeStock_resList lBeStockResAux = new clsBeStock_resList();
 
-    private int CantRes=0, IdUbicDest = 0, IdEstDanadoSelect = 0;;
+    private int CantRes=0, IdUbicDest = 0, IdEstDanadoSelect = 0;
     private double vCant=0, CantidadTotal = 0;
     private boolean Completo=false;
     private boolean Distinto=false;
     private boolean ConExistencia = false;
-    private String resultado="";
+    private final String resultado="";
     private double CantidadPendiente=0, CantPendSel = 0;
 
     private Cursor DT;
@@ -83,16 +83,16 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         ws = new WebServiceHandler(frm_list_prod_reemplazo_picking.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblTituloForma = (TextView)findViewById(R.id.lblTituloForma);
-        lblCantRegs = (TextView)findViewById(R.id.lblCantRegs);
-        lbldDetProducto = (TextView) findViewById(R.id.lbldDetProducto);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblCantRegs = findViewById(R.id.lblCantRegs);
+        lbldDetProducto = findViewById(R.id.lbldDetProducto);
 
         txtFiltro = findViewById(R.id.txtFiltro);
 
-        listDispProd = (ListView)findViewById(R.id.listDispProd);
+        listDispProd = findViewById(R.id.listDispProd);
 
-        btnActualizaPickingDet = (Button)findViewById(R.id.btnActualizaPickingDet);
-        btnBack = (Button)findViewById(R.id.btnBack);
+        btnActualizaPickingDet = findViewById(R.id.btnActualizaPickingDet);
+        btnBack = findViewById(R.id.btnBack);
 
         ConExistencia = false;
 
@@ -231,7 +231,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    ;
                 }
             });
 

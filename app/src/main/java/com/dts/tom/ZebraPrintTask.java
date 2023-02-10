@@ -17,6 +17,7 @@ import com.zebra.sdk.printer.discovery.DiscoveredPrinterBluetooth;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,8 +32,8 @@ public class ZebraPrintTask extends AsyncTask<ZebraPrintTask.PrintJob, String, B
     private PrintJob[] jobs;
     private int currentJob;
 
-    private static String KEY_TEMPLATE_PATH = "zebra:template_file_path";
-    private static String KEY_JOB_TITLE = "zebra:print_job_title";
+    private static final String KEY_TEMPLATE_PATH = "zebra:template_file_path";
+    private static final String KEY_JOB_TITLE = "zebra:print_job_title";
 
     private boolean isWaitingForPrinter = false;
 
@@ -211,7 +212,7 @@ public class ZebraPrintTask extends AsyncTask<ZebraPrintTask.PrintJob, String, B
             throws UnsupportedEncodingException, ConnectionException {
 
         //First, ensure that the template is populated on the device
-        connection.write(zplFileData.getBytes("UTF-8"));
+        connection.write(zplFileData.getBytes(StandardCharsets.UTF_8));
 
         activePrinter.printStoredFormat(zplTemplateTitle, templateVariables);
     }
@@ -220,8 +221,7 @@ public class ZebraPrintTask extends AsyncTask<ZebraPrintTask.PrintJob, String, B
     private static RuntimeException wrap(String message, Exception e) {
         e.printStackTrace();
 
-        RuntimeException r = new RuntimeException(message + " | " + e.getMessage());
-        r.initCause(e);
+        RuntimeException r = new RuntimeException(message + " | " + e.getMessage(), e);
         return r;
     }
 
@@ -316,7 +316,7 @@ public class ZebraPrintTask extends AsyncTask<ZebraPrintTask.PrintJob, String, B
         int id;
 
         private Status status;
-        private Bundle parameters;
+        private final Bundle parameters;
 
         private String errorMessage;
 
@@ -389,7 +389,7 @@ public class ZebraPrintTask extends AsyncTask<ZebraPrintTask.PrintJob, String, B
     }
 
     public interface ZebraTaskPrintListener {
-        public void notifyConnectionFailure();
+        void notifyConnectionFailure();
 
     }
 }

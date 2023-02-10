@@ -54,7 +54,7 @@ public class PBase extends Activity {
         du=new DateUtils();
         app=new AppMethods(this,gl);
 
-        keyboard = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+        keyboard = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 
         browse=0;
     }

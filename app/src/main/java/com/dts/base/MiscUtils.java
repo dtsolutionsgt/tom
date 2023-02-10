@@ -21,9 +21,13 @@ import java.util.Calendar;
 
 public class MiscUtils {
 		
-	private Context cCont;
-	private DecimalFormat ffrmdec,ffrmint,ffrmint2,ffrmdec2,ffrmgps;
-	private String curr;
+	private final Context cCont;
+	private final DecimalFormat ffrmdec;
+	private final DecimalFormat ffrmint;
+	private final DecimalFormat ffrmint2;
+	private final DecimalFormat ffrmdec2;
+	private final DecimalFormat ffrmgps;
+	private final String curr;
 
 	private PBase pB;
 	
@@ -118,22 +122,18 @@ public class MiscUtils {
 	public double round2(double val){
 	int ival;
 		
-		val=(double) (100*val);
+		val= 100*val;
 		double rslt=Math.round(val);
 		rslt=Math.floor(rslt);
 		
 		ival=(int) rslt;
-		rslt=(double) ival;
+		rslt= ival;
 		
-		return (double) (rslt/100);
+		return rslt/100;
 	}
 	
 	public boolean emptystr(String s){
-		if (s==null || s.isEmpty()) {
-			return true;
-		} else{
-			return false;
-		}
+		return s == null || s.isEmpty();
 	}
 	
 	public int dayofweek() {
@@ -166,7 +166,7 @@ public class MiscUtils {
 	}
 	
 	public String frm2num(int n) {
-		if (n>9) { return String.valueOf(n);} else {return "0"+String.valueOf(n);}	
+		if (n>9) { return String.valueOf(n);} else {return "0"+ n;}
 	}
 	
 	public void msgbox(String msg) {

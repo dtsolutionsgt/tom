@@ -63,7 +63,8 @@ public class frm_Packing extends PBase {
     private int gIdProductoOrigen=0,cvPresID=0,gIdEstadoProductoOrigen=0,cvUbicDestID=0,cvEstEst=0;
     private int cvStockID;
     private int cvPropID=0,cvUMBID=0;
-    private boolean idle=false,BorrarUbicOrigen=false;
+    private boolean idle=false;
+    private final boolean BorrarUbicOrigen=false;
     private String gLoteOrigen="",cvVence="";
     private double cvCant=0,cvCantMax=0;
     private boolean Escaneo_Pallet=false;
@@ -94,20 +95,20 @@ public class frm_Packing extends PBase {
     private clsBeVW_stock_resList stockResList = new clsBeVW_stock_resList();
 
     private clsBeProducto_estadoList productoEstadoDestinoList = new clsBeProducto_estadoList();
-    private clsBeVW_stock_resList presentacionList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList lotesList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
+    private final clsBeVW_stock_resList presentacionList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList lotesList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
 
     private clsBeTrans_movimientos gMovimientoDet;
 
-    private ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
-    private ArrayList<String> cmbPresentacionList = new ArrayList<String>();
-    private ArrayList<String> cmbLoteList = new ArrayList<String>();
-    private ArrayList<String> cmbVenceList = new ArrayList<String>();
-    private ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
-    private ArrayList<String> ListPres = new ArrayList<String>();
+    private final ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
+    private final ArrayList<String> cmbPresentacionList = new ArrayList<String>();
+    private final ArrayList<String> cmbLoteList = new ArrayList<String>();
+    private final ArrayList<String> cmbVenceList = new ArrayList<String>();
+    private final ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
+    private final ArrayList<String> ListPres = new ArrayList<String>();
     private String cvLote;
     private int IdPresCmb = 0;
     private boolean inferir_origen_en_cambio_ubic;
@@ -122,30 +123,30 @@ public class frm_Packing extends PBase {
 
         try {
 
-            txtUbicOr = (EditText)findViewById(R.id.txtUbicOr);
-            txtPrd = (EditText)findViewById(R.id.txtPrd);
-            txtNuevoLp = (EditText)findViewById(R.id.txtNuevoLp);
-            txtCantidad = (EditText)findViewById(R.id.txtCantidad);
-            txtLpAnt = (EditText)findViewById(R.id.txtLpAnt);
+            txtUbicOr = findViewById(R.id.txtUbicOr);
+            txtPrd = findViewById(R.id.txtPrd);
+            txtNuevoLp = findViewById(R.id.txtNuevoLp);
+            txtCantidad = findViewById(R.id.txtCantidad);
+            txtLpAnt = findViewById(R.id.txtLpAnt);
             txtLic_Plate = findViewById(R.id.txtLic_Plate);
 
-            lblUbicOrigen = (TextView) findViewById(R.id.lblUbicOrigen);
-            lblDesProducto = (TextView) findViewById(R.id.lblDesProducto);
-            lblLpAnt = (TextView)findViewById(R.id.textView64);
-            lblIdStock = (TextView)findViewById(R.id.textView65);
-            lblCCant = (TextView)findViewById(R.id.textView66);
-            lblLote= (TextView)findViewById(R.id.textView59);
-            lblVence= (TextView)findViewById(R.id.textView60);
-            lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+            lblUbicOrigen = findViewById(R.id.lblUbicOrigen);
+            lblDesProducto = findViewById(R.id.lblDesProducto);
+            lblLpAnt = findViewById(R.id.textView64);
+            lblIdStock = findViewById(R.id.textView65);
+            lblCCant = findViewById(R.id.textView66);
+            lblLote= findViewById(R.id.textView59);
+            lblVence= findViewById(R.id.textView60);
+            lblNomDestino = findViewById(R.id.lblNomDestino);
             txtUbicDestino = findViewById(R.id.txtUbicDestino);
 
-            cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
-            cmbLote = (Spinner) findViewById(R.id.cmbLote);
-            cmbVence = (Spinner) findViewById(R.id.cmbVence);
-            cmbEstado = (Spinner) findViewById(R.id.cmbEstado);
+            cmbPresentacion = findViewById(R.id.cmbPresentacion);
+            cmbLote = findViewById(R.id.cmbLote);
+            cmbVence = findViewById(R.id.cmbVence);
+            cmbEstado = findViewById(R.id.cmbEstado);
 
-            btnGuardarDirigida = (Button)findViewById(R.id.btnGuardarDirigida);
-            cmdImprimir =(ImageView) findViewById(R.id.cmdImprimir2);
+            btnGuardarDirigida = findViewById(R.id.btnGuardarDirigida);
+            cmdImprimir = findViewById(R.id.cmdImprimir2);
 
             ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -206,9 +207,9 @@ public class frm_Packing extends PBase {
                                 spinlabel.setTextColor(Color.RED);
                                 Toast.makeText(frm_Packing.this, "Se le asignará la presentación '"+cmbPresentacion.getSelectedItem()+"' al producto '"+BeProductoUbicacionOrigen.getNombre()+"'", Toast.LENGTH_LONG).show();
 
-                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                                IdPresCmb = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
                             } else {
-                                IdPresCmb = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                                IdPresCmb = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
                             }
 
                             LlenaLotes();
@@ -681,7 +682,7 @@ public class frm_Packing extends PBase {
             for (int i = 0; i < presentacionList.items.size(); i++) {
 
                 valor = presentacionList.items.get(i).getIdPresentacion() + " - " +
-                        presentacionList.items.get(i).getNombre_Presentacion().toString();
+                        presentacionList.items.get(i).getNombre_Presentacion();
 
                 if (cmbPresentacionList.indexOf(valor)==-1){
                     cmbPresentacionList.add(valor);
@@ -702,14 +703,10 @@ public class frm_Packing extends PBase {
                     cmbPresentacion.setEnabled(false);
                 }else{
                     cmbPresentacion.setSelection(0);
-                    if (cmbPresentacionList.size() == 1){
-                        cmbPresentacion.setEnabled(false);
-                    }else{
-                        cmbPresentacion.setEnabled(true);
-                    }
+                    cmbPresentacion.setEnabled(cmbPresentacionList.size() != 1);
                 }
 
-                cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                cvPresID =Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
 
             }else{
                 LlenaLotes();
@@ -963,7 +960,7 @@ public class frm_Packing extends PBase {
                 if (cmbEstadoOrigenList.size() > 0) {
 
                     cmbEstado.setSelection(0);
-                    cvEstEst = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0].toString());
+                    cvEstEst = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0]);
                     muestraCantidad();
 
                 }
@@ -1362,12 +1359,12 @@ public class frm_Packing extends PBase {
             gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
 
             if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
-                gMovimientoDet.IdPresentacion = (Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()) == -1? 0: Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString()));
+                gMovimientoDet.IdPresentacion = (Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]) == -1? 0: Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]));
             }else{
                 gMovimientoDet.IdPresentacion = 0;
             }
             if(cmbEstado.getAdapter()!=null && cmbEstado.getAdapter().getCount()>0){
-                gMovimientoDet.IdEstadoOrigen = Integer.valueOf( cmbEstado.getSelectedItem().toString().split(" - ")[0].toString());
+                gMovimientoDet.IdEstadoOrigen = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0]);
             }else{
                 gMovimientoDet.IdEstadoOrigen = 0;
             }
@@ -1476,27 +1473,19 @@ public class frm_Packing extends PBase {
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.packing1);
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                    execws(11);
-                    //aplicarCambio(); Primero voy a buscar ubicación del LP
-                }
+                execws(11);
+                //aplicarCambio(); Primero voy a buscar ubicación del LP
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    btnGuardarDirigida.setVisibility(View.VISIBLE);
-                    progress.cancel();
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                btnGuardarDirigida.setVisibility(View.VISIBLE);
+                progress.cancel();
             });
-
             dialog.show();
 
         }catch (Exception e){
@@ -1514,24 +1503,13 @@ public class frm_Packing extends PBase {
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    doExit();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> doExit());
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                return;
             });
 
             dialog.show();
@@ -1725,9 +1703,11 @@ public class frm_Packing extends PBase {
     }
 
     private void setPresetaciones() {
+
         String valor="";
 
         try {
+
             if (gBeProducto.Presentaciones != null) {
 
                 progress.setMessage("Listando presentaciones de producto");
@@ -1766,10 +1746,11 @@ public class frm_Packing extends PBase {
         }
     }
 
-    private ArrayList<String> PresList = new ArrayList<String>();
+    private final ArrayList<String> PresList = new ArrayList<String>();
     private void Listar_Producto_Presentaciones() {
 
         try {
+
             if (gBeProducto.Presentaciones != null) {
 
                 progress.setMessage("Listando presentaciones de producto");
@@ -2130,7 +2111,7 @@ public class frm_Packing extends PBase {
                 }
 
                 if (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()>0){
-                    gl.gCPresAnterior = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                    gl.gCPresAnterior = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
                     if (cmbPresentacion.getSelectedItem().toString().split(" - ").length>1){
                         gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
                     }

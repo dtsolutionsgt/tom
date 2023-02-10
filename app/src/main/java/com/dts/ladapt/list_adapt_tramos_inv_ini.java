@@ -22,7 +22,7 @@ public class list_adapt_tramos_inv_ini extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_tramos_inv_ini(Context context, ArrayList<clsBeTrans_inv_tramo> results) {
         BeListTramos = results;
@@ -59,10 +59,10 @@ public class list_adapt_tramos_inv_ini extends BaseAdapter {
             convertView = l_Inflater.inflate(R.layout.activity_list_adapt_tramos_inv_ini, null);
             holder = new ViewHolder();
 
-            holder.lblIdTramo = (TextView) convertView.findViewById(R.id.lblIdTramo);
-            holder.lblNombreTramo = (TextView) convertView.findViewById(R.id.lblNombreTramo);
-            holder.lblEstadoDetalle = (TextView) convertView.findViewById(R.id.lblEstadoDetalle);
-            holder.lblEstadoVeri = (TextView) convertView.findViewById(R.id.lblEstadoVeri);
+            holder.lblIdTramo = convertView.findViewById(R.id.lblIdTramo);
+            holder.lblNombreTramo = convertView.findViewById(R.id.lblNombreTramo);
+            holder.lblEstadoDetalle = convertView.findViewById(R.id.lblEstadoDetalle);
+            holder.lblEstadoVeri = convertView.findViewById(R.id.lblEstadoVeri);
 
             convertView.setTag(holder);
 

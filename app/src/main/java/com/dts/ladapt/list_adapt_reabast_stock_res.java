@@ -22,7 +22,7 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapt_reabast_stock_res(Context context, ArrayList<clsBeVW_stock_res> results) {
         BeListStockRes = results;
@@ -60,20 +60,20 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
             holder = new ViewHolder();
 
 
-            holder.txtUbicacion = (TextView) convertView.findViewById(R.id.txtUbicacion);
-            holder.txtProducto = (TextView) convertView.findViewById(R.id.txtProducto);
-            holder.txtLicencia = (TextView) convertView.findViewById(R.id.txtLicencia);
-            holder.txtLote = (TextView) convertView.findViewById(R.id.txtLote);
-            holder.txtFechaVen = (TextView) convertView.findViewById(R.id.txtFechaVen);
-            holder.txtEstado = (TextView) convertView.findViewById(R.id.txtEstado);
-            holder.txtCantidad = (TextView) convertView.findViewById(R.id.txtCantidad);
-            holder.txtPresentacion = (TextView) convertView.findViewById(R.id.txtPresentacion);
+            holder.txtUbicacion = convertView.findViewById(R.id.txtUbicacion);
+            holder.txtProducto = convertView.findViewById(R.id.txtProducto);
+            holder.txtLicencia = convertView.findViewById(R.id.txtLicencia);
+            holder.txtLote = convertView.findViewById(R.id.txtLote);
+            holder.txtFechaVen = convertView.findViewById(R.id.txtFechaVen);
+            holder.txtEstado = convertView.findViewById(R.id.txtEstado);
+            holder.txtCantidad = convertView.findViewById(R.id.txtCantidad);
+            holder.txtPresentacion = convertView.findViewById(R.id.txtPresentacion);
 
-            holder.lblCantidad = (TextView) convertView.findViewById(R.id.lblCantidad);
+            holder.lblCantidad = convertView.findViewById(R.id.lblCantidad);
 
-            holder.trLicencia = (TableRow) convertView.findViewById(R.id.trLicencia);
-            holder.trLote = (TableRow) convertView.findViewById(R.id.trLote);
-            holder.trFechaVen = (TableRow) convertView.findViewById(R.id.trFechaVen);
+            holder.trLicencia = convertView.findViewById(R.id.trLicencia);
+            holder.trLote = convertView.findViewById(R.id.trLote);
+            holder.trFechaVen = convertView.findViewById(R.id.trFechaVen);
 
             convertView.setTag(holder);
 

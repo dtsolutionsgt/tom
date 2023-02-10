@@ -53,9 +53,9 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
     private boolean TienePosiciones=false;
 
     private int vPosiciones=0;
-    private int vIdReabastecimientoLog=0;
+    private final int vIdReabastecimientoLog=0;
 
-    private boolean listo=true;
+    private final boolean listo=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,36 +67,36 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
         ws = new WebServiceHandler(frm_cambio_ubicacion_dirigida.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-        lblCant = (TextView) findViewById(R.id.lbCant);
-        lblCambioEstado = (TextView) findViewById(R.id.lblCambioEstado);
-        txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
-        txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
-        txtPresentacion = (TextView) findViewById(R.id.txtPresentacion);
-        txtLote = (TextView) findViewById(R.id.txtLote);
-        txtVence = (TextView) findViewById(R.id.txtVence);
-        txtEstado = (TextView) findViewById(R.id.txtEstado);
-        txtCantidad = (EditText) findViewById(R.id.txtCantidad);
-        txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
-        txtEstadoDestino = (TextView) findViewById(R.id.txtEstadoDestino);
-        txtPropietario = (TextView) findViewById(R.id.txtPropietario);
-        txtLicPlate = (EditText) findViewById(R.id.txtLicensePlate);
-        txtPeso = (TextView) findViewById(R.id.txtPeso);
-        txtUnidadMedida = (TextView) findViewById(R.id.txtUnidadMedida);
+        lblTituloForma = findViewById(R.id.lblTituloForma);
+        lblCant = findViewById(R.id.lbCant);
+        lblCambioEstado = findViewById(R.id.lblCambioEstado);
+        txtUbicOrigen = findViewById(R.id.txtUbicOrigen);
+        txtCodigoPrd = findViewById(R.id.txtCodigoPrd);
+        txtPresentacion = findViewById(R.id.txtPresentacion);
+        txtLote = findViewById(R.id.txtLote);
+        txtVence = findViewById(R.id.txtVence);
+        txtEstado = findViewById(R.id.txtEstado);
+        txtCantidad = findViewById(R.id.txtCantidad);
+        txtUbicDestino = findViewById(R.id.txtUbicDestino);
+        txtEstadoDestino = findViewById(R.id.txtEstadoDestino);
+        txtPropietario = findViewById(R.id.txtPropietario);
+        txtLicPlate = findViewById(R.id.txtLicensePlate);
+        txtPeso = findViewById(R.id.txtPeso);
+        txtUnidadMedida = findViewById(R.id.txtUnidadMedida);
 
         txtPosiciones = new EditText(this,null);
         txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        lblUbicDestino = (TextView)findViewById(R.id.lblDestino);
+        lblUbicDestino = findViewById(R.id.lblDestino);
 
-        lblDescProd = (TextView)findViewById(R.id.txtDescProd);
-        lblNomDestino = (TextView)findViewById(R.id.lblNomDestino);
+        lblDescProd = findViewById(R.id.txtDescProd);
+        lblNomDestino = findViewById(R.id.lblNomDestino);
 
-        trLote = (TableRow) findViewById(R.id.trLote);
-        trVence = (TableRow) findViewById(R.id.trVence);
-        trPresentacion = (TableRow) findViewById(R.id.trPresentacion);
-        trPeso = (TableRow) findViewById(R.id.trPeso);
-        trLP = (TableRow) findViewById(R.id.trLP);
+        trLote = findViewById(R.id.trLote);
+        trVence = findViewById(R.id.trVence);
+        trPresentacion = findViewById(R.id.trPresentacion);
+        trPeso = findViewById(R.id.trPeso);
+        trLP = findViewById(R.id.trLP);
 
         lblTituloForma.setText( String.format("Cambio de %s dirigido",(gl.modo_cambio==1?"ubicación":"estado")));
 
@@ -656,7 +656,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 gl.tareadet.Realizado = true;
             }
 
-            gl.tareaenc.Cambio_estado = (gl.modo_cambio==2?true:false);
+            gl.tareaenc.Cambio_estado = (gl.modo_cambio == 2);
 
             if (compl) {
                 gl.tareaenc.Estado = "Finalizado";
@@ -712,7 +712,7 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
             gMovimientoDet.Serie = gl.tareadet.Stock.Serial;
             gMovimientoDet.Peso = gl.tareadet.ProductoPresentacion.Peso * vCantidadAUbicar;
             gMovimientoDet.Lote = gl.tareadet.Stock.Lote;
-            gMovimientoDet.Fecha_vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence.toString());
+            gMovimientoDet.Fecha_vence =app.strFechaXML(gl.tareadet.Stock.Fecha_vence);
             //gMovimientoDet.Fecha = gl.tareadet.HoraFin;
             //gMovimientoDet.Hora_fin = gl.tareadet.HoraFin;
             //gMovimientoDet.Fecha_agr = gl.tareadet.HoraFin;

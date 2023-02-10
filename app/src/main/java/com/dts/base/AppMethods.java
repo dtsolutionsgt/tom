@@ -16,8 +16,8 @@ import java.util.Date;
 
 public class AppMethods {
 
-	private Context cont;
-	private appGlobals gl;
+	private final Context cont;
+	private final appGlobals gl;
 
 
 	public AppMethods(Context context,appGlobals global) {
@@ -45,11 +45,7 @@ public class AppMethods {
 	}
 
 	private boolean emptystr(String s){
-		if (s==null || s.isEmpty()) {
-			return true;
-		} else{
-			return false;
-		}
+		return s == null || s.isEmpty();
 	}
 
     private void msgbox(String msg) {
@@ -99,7 +95,7 @@ public class AppMethods {
 
 	public Date dateFechaStr(String fecha){
 
-		Date rsltfecha= Calendar.getInstance().getTime();;
+		Date rsltfecha= Calendar.getInstance().getTime();
 
 		try{
 

@@ -20,9 +20,9 @@ public class list_adapt_detalle_recepcion3 extends BaseAdapter {
 
     private static ArrayList<clsBeTrans_oc_det> BeDetalleOC;
     private int selectedIndex;
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
     private boolean Es_Poliza_Consolidada=false;
-    private int decimales_redondeo;
+    private final int decimales_redondeo;
 
 
     public list_adapt_detalle_recepcion3(Context context, ArrayList<clsBeTrans_oc_det> results,

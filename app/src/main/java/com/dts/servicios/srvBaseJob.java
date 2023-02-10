@@ -29,10 +29,10 @@ public class srvBaseJob extends JobService {
 
     private NotificationManager notificationManager;
 
-    private boolean idle=false;
+    private final boolean idle=false;
 
-    private String appname="TomWMS Nueva tarea";
-    private int iconresource=R.drawable.tom_wms;
+    private final String appname="TomWMS Nueva tarea";
+    private final int iconresource=R.drawable.tom_wms;
 
 
     @Override

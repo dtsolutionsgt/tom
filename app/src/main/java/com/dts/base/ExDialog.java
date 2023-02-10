@@ -29,7 +29,7 @@ public class ExDialog extends  AlertDialog.Builder {
 
         AlertDialog adg=super.show();
 
-        TextView textView = (TextView) adg.getWindow().findViewById(android.R.id.message);
+        TextView textView = adg.getWindow().findViewById(android.R.id.message);
         textView.setTextColor(Color.BLACK);
         textView.setTextSize(24);
         textView.setTypeface(Typeface.DEFAULT,Typeface.NORMAL);

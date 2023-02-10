@@ -19,7 +19,7 @@ public class list_adapter_tareashh extends BaseAdapter {
 
     private int selectedIndex;
 
-    private LayoutInflater l_Inflater;
+    private final LayoutInflater l_Inflater;
 
     public list_adapter_tareashh(Context context, ArrayList<clsBeTareasIngresoHH> results) {
         BeListTareasHH = results;
@@ -58,20 +58,20 @@ public class list_adapter_tareashh extends BaseAdapter {
 
             holder = new ViewHolder();
 
-            holder.lblIdOrderCompraEnc = (TextView) convertView.findViewById(R.id.lblIdOC);
-            holder.lblIdRecepcionEnc = (TextView) convertView.findViewById(R.id.lblRecepcionEnc);
-            holder.lblNoReferenciaOC = (TextView) convertView.findViewById(R.id.lblNoRefOC);
-            holder.lblNoDocumentoOc = (TextView) convertView.findViewById(R.id.lblNDocOc);
-            holder.lblProveedor = (TextView) convertView.findViewById(R.id.lblProvee);
-            holder.lblTipoIngresoOC = (TextView) convertView.findViewById(R.id.lblTipoIng);
-            holder.lblTipoRecepcion = (TextView) convertView.findViewById(R.id.lblTipoRece);
-            holder.lblNombrePropietario = (TextView) convertView.findViewById(R.id.lblNombrePropietario);
-            holder.lblNumPoliza = (TextView) convertView.findViewById(R.id.lblNumPoliza);
-            holder.lblNumOrden = (TextView) convertView.findViewById(R.id.lblNumOrden);
-            holder.lblRutaDespacho = (TextView) convertView.findViewById(R.id.txtRutaDespacho);
-            holder.lblObservacion = (TextView) convertView.findViewById(R.id.txtObservacion);
-            holder.lblRequiereTarima = (TextView) convertView.findViewById(R.id.txtRequiereTarima);
-            holder.lblMuelle = (TextView) convertView.findViewById(R.id.lblMuelle);
+            holder.lblIdOrderCompraEnc = convertView.findViewById(R.id.lblIdOC);
+            holder.lblIdRecepcionEnc = convertView.findViewById(R.id.lblRecepcionEnc);
+            holder.lblNoReferenciaOC = convertView.findViewById(R.id.lblNoRefOC);
+            holder.lblNoDocumentoOc = convertView.findViewById(R.id.lblNDocOc);
+            holder.lblProveedor = convertView.findViewById(R.id.lblProvee);
+            holder.lblTipoIngresoOC = convertView.findViewById(R.id.lblTipoIng);
+            holder.lblTipoRecepcion = convertView.findViewById(R.id.lblTipoRece);
+            holder.lblNombrePropietario = convertView.findViewById(R.id.lblNombrePropietario);
+            holder.lblNumPoliza = convertView.findViewById(R.id.lblNumPoliza);
+            holder.lblNumOrden = convertView.findViewById(R.id.lblNumOrden);
+            holder.lblRutaDespacho = convertView.findViewById(R.id.txtRutaDespacho);
+            holder.lblObservacion = convertView.findViewById(R.id.txtObservacion);
+            holder.lblRequiereTarima = convertView.findViewById(R.id.txtRequiereTarima);
+            holder.lblMuelle = convertView.findViewById(R.id.lblMuelle);
 
             convertView.setTag(holder);
 

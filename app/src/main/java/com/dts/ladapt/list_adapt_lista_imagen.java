@@ -22,8 +22,8 @@ import java.util.Objects;
 
 public class list_adapt_lista_imagen extends RecyclerView.Adapter<list_adapt_lista_imagen.ViewHolder> {
 
-    private Context ctx;
-    private ArrayList<Bitmap> items;
+    private final Context ctx;
+    private final ArrayList<Bitmap> items;
 
     public list_adapt_lista_imagen(Context ctx, ArrayList<Bitmap> result) {
         this.items = result;

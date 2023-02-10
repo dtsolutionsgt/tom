@@ -80,20 +80,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private clsBeProducto cvProd = new clsBeProducto();
     private clsBeProductoList productoList = new clsBeProductoList();
 
-    private clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
+    private final clsBeVW_stock_res vStockRes = new clsBeVW_stock_res();
     private clsBeVW_stock_resList stockResList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList lotesList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList presentacionList = new clsBeVW_stock_resList();
-    private clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList lotesList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList venceList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList presentacionList = new clsBeVW_stock_resList();
+    private final clsBeVW_stock_resList productoEstadoOrigenList = new clsBeVW_stock_resList();
     private clsBeProducto_estadoList productoEstadoDestinoList = new clsBeProducto_estadoList();
     private USUbicStrucStage5List lUbicSug = new USUbicStrucStage5List();
 
-    private ArrayList<String> cmbPresentacionList = new ArrayList<String>();
-    private ArrayList<String> cmbLoteList = new ArrayList<String>();
-    private ArrayList<String> cmbVenceList = new ArrayList<String>();
-    private ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
-    private ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
+    private final ArrayList<String> cmbPresentacionList = new ArrayList<String>();
+    private final ArrayList<String> cmbLoteList = new ArrayList<String>();
+    private final ArrayList<String> cmbVenceList = new ArrayList<String>();
+    private final ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
+    private final ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
 
     private String lote = "", fechaVence = "";
 
@@ -169,42 +169,42 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             ws = new frm_cambio_ubicacion_ciega.WebServiceHandler(frm_cambio_ubicacion_ciega.this, gl.wsurl);
             xobj = new XMLObject(ws);
 
-            txtUbicOrigen = (EditText) findViewById(R.id.txtUbicOrigen);
-            txtCodigoPrd = (EditText) findViewById(R.id.txtCodigoPrd);
-            txtCantidad = (EditText) findViewById(R.id.txtCantidad);
-            txtUbicDestino = (EditText) findViewById(R.id.txtUbicDestino);
-            txtLicPlate = (EditText)findViewById(R.id.txtLipPlate);
-            txtPeso = (EditText) findViewById(R.id.txtPeso);
+            txtUbicOrigen = findViewById(R.id.txtUbicOrigen);
+            txtCodigoPrd = findViewById(R.id.txtCodigoPrd);
+            txtCantidad = findViewById(R.id.txtCantidad);
+            txtUbicDestino = findViewById(R.id.txtUbicDestino);
+            txtLicPlate = findViewById(R.id.txtLipPlate);
+            txtPeso = findViewById(R.id.txtPeso);
 
-            lblUbicCompleta = (TextView) findViewById(R.id.lblUbicCompleta);
-            lblDescProducto = (TextView) findViewById(R.id.lblDescProducto);
-            lblLote = (TextView) findViewById(R.id.lblLote);
-            lblVence = (TextView) findViewById(R.id.lblVence);
-            lblEstadoDestino = (TextView) findViewById(R.id.lblEstadoDestino);
-            lblCant = (TextView) findViewById(R.id.lblCant);
-            lblPesoEst = (TextView) findViewById(R.id.lblPesoEst);
-            lblPeso = (TextView) findViewById(R.id.lblPeso);
-            lblTituloForma = (TextView) findViewById(R.id.lblTituloForma);
-            lblUbicCompDestino = (TextView) findViewById(R.id.lblUbicCompDestino);
+            lblUbicCompleta = findViewById(R.id.lblUbicCompleta);
+            lblDescProducto = findViewById(R.id.lblDescProducto);
+            lblLote = findViewById(R.id.lblLote);
+            lblVence = findViewById(R.id.lblVence);
+            lblEstadoDestino = findViewById(R.id.lblEstadoDestino);
+            lblCant = findViewById(R.id.lblCant);
+            lblPesoEst = findViewById(R.id.lblPesoEst);
+            lblPeso = findViewById(R.id.lblPeso);
+            lblTituloForma = findViewById(R.id.lblTituloForma);
+            lblUbicCompDestino = findViewById(R.id.lblUbicCompDestino);
             lblCantidad = findViewById(R.id.lblCantidad);
-            txtUbicSug = (TextView) findViewById(R.id.txtUbicSug);
+            txtUbicSug = findViewById(R.id.txtUbicSug);
 
-            cmbPresentacion = (Spinner) findViewById(R.id.cmbPresentacion);
-            cmbLote = (Spinner) findViewById(R.id.cmbLote);
-            cmbVence = (Spinner) findViewById(R.id.cmbVence);
-            cmbEstadoOrigen = (Spinner) findViewById(R.id.cmbEstadoOrigen);
-            cmbEstadoDestino = (Spinner) findViewById(R.id.cmbEstadoDestino);
+            cmbPresentacion = findViewById(R.id.cmbPresentacion);
+            cmbLote = findViewById(R.id.cmbLote);
+            cmbVence = findViewById(R.id.cmbVence);
+            cmbEstadoOrigen = findViewById(R.id.cmbEstadoOrigen);
+            cmbEstadoDestino = findViewById(R.id.cmbEstadoDestino);
 
-            chkExplosionar = (CheckBox)  findViewById(R.id.chkExplosionar);
+            chkExplosionar = findViewById(R.id.chkExplosionar);
 
-            btnGuardarCiega = (Button) findViewById(R.id.btnGuardarCiega);
+            btnGuardarCiega = findViewById(R.id.btnGuardarCiega);
 
-            trPeso = (TableRow)findViewById(R.id.trPeso);
-            tblExplosionar = (TableRow)findViewById(R.id.tblExplosionar);
-            tblPresentacion = (TableRow)findViewById(R.id.tblPresentacion);
+            trPeso = findViewById(R.id.trPeso);
+            tblExplosionar = findViewById(R.id.tblExplosionar);
+            tblPresentacion = findViewById(R.id.tblPresentacion);
 
-            relbot = (RelativeLayout) findViewById(R.id.relbot);
-            reltop = (RelativeLayout) findViewById(R.id.reltop);
+            relbot = findViewById(R.id.relbot);
+            reltop = findViewById(R.id.reltop);
 
             tblPresentacion = findViewById(R.id.tblPresentacion);
 
@@ -319,7 +319,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         //#AT20220711 Se agrega valor a cvPresId segun lo selccionado en el combo
                         //tambien se actualizan los datos según vaya cambiando la presentación
-                        cvPresID = Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                        cvPresID = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
                         String NombrePres = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
 
                         if (cvPresID > 0) {
@@ -705,16 +705,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         chkExplosionar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) {
-
-                    Es_Explosion_Manual = true;
-                   // ProgressDialog("Explosionar mercancía.");
-
-                } else {
-
-                    Es_Explosion_Manual = false;
-
-                }
+                // ProgressDialog("Explosionar mercancía.");
+                Es_Explosion_Manual = isChecked;
             }
         });
 
@@ -741,7 +733,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             for (int i = 0; i < presentacionList.items.size(); i++) {
 
                 valor = presentacionList.items.get(i).getIdPresentacion() + " - " +
-                        presentacionList.items.get(i).getNombre_Presentacion().toString();
+                        presentacionList.items.get(i).getNombre_Presentacion();
 
                 if (cmbPresentacionList.indexOf(valor)==-1){
                     cmbPresentacionList.add(valor);
@@ -762,14 +754,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     cmbPresentacion.setEnabled(false);
                 }else{
                     cmbPresentacion.setSelection(0);
-                    if (cmbPresentacionList.size() == 1){
-                        cmbPresentacion.setEnabled(false);
-                    }else{
-                        cmbPresentacion.setEnabled(true);
-                    }
+                    cmbPresentacion.setEnabled(cmbPresentacionList.size() != 1);
                 }
 
-                cvPresID =Integer.valueOf( cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                cvPresID =Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
 
                 if (cvPresID ==0){
                     tblExplosionar.setVisibility(View.GONE);
@@ -1095,7 +1083,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (cmbEstadoOrigenList.size() > 0) {
 
                     cmbEstadoOrigen.setSelection(0);
-                    cvEstOrigen = Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0].toString());
+                    cvEstOrigen = Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
                     muestraCantidad();
 
                 }
@@ -2160,11 +2148,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                                     if (cadena_ubicacion.length==6){
 
-                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        rack = cadena_ubicacion[0].trim();
                                         columna = cadena_ubicacion[1].trim().substring(1);
                                         tramo = cadena_ubicacion[2].trim().substring(1);
                                         nivel = cadena_ubicacion[3].trim().substring(1);
-                                        pos = cadena_ubicacion[4].trim().substring(0);
+                                        pos = cadena_ubicacion[4].trim();
                                         ubicacion = cadena_ubicacion[5].trim().substring(1);
 
                                         textToSpeeach = "Lleve producto a " + rack + ". "
@@ -2176,10 +2164,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                                     }else if (cadena_ubicacion.length==5){
 
-                                        rack = cadena_ubicacion[0].trim().substring(0);
+                                        rack = cadena_ubicacion[0].trim();
                                         columna = cadena_ubicacion[1].trim().substring(1);
                                         nivel = cadena_ubicacion[2].trim().substring(1);
-                                        pos = cadena_ubicacion[3].trim().substring(0);
+                                        pos = cadena_ubicacion[3].trim();
                                         ubicacion = cadena_ubicacion[4].trim().substring(1);
 
                                         textToSpeeach = "Lleve producto a " + rack + ". "
@@ -2189,8 +2177,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                                 + " Y Escanee: " + ubicacion;
                                     }else if (cadena_ubicacion.length>0){
 
-                                        pos = cadena_ubicacion[0].trim().substring(0);
-                                        ubicacion = cadena_ubicacion[1].trim().substring(0);
+                                        pos = cadena_ubicacion[0].trim();
+                                        ubicacion = cadena_ubicacion[1].trim();
 
                                         textToSpeeach = "Lleve producto a "
                                                 + " Ubicación: " + pos + "."
@@ -2529,8 +2517,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 long pLpSiguiente = resolucionActivaLpByBodega.Correlativo_Actual +1;
                 int largoMaximo = String.valueOf(resolucionActivaLpByBodega.Correlativo_Final).length();
 
-                long intLPSig = (long) pLpSiguiente;
-                int MaxL = (int) largoMaximo;
+                long intLPSig = pLpSiguiente;
+                int MaxL = largoMaximo;
 
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
@@ -2677,7 +2665,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     }
 
                     if (cmbPresentacion.getAdapter() != null && cmbPresentacion.getAdapter().getCount() > 0) {
-                        gl.gCPresAnterior = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0].toString());
+                        gl.gCPresAnterior = Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]);
                         if (cmbPresentacion.getSelectedItem().toString().split(" - ").length > 1) {
                             gl.gCNomPresAnterior = cmbPresentacion.getSelectedItem().toString().split(" - ")[1];
                         }
@@ -3756,7 +3744,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.setMessage("Aplicando el cambio");
             progress.show();
 
-            if (!Crear_Movimiento_Ubicacion_ND(gl.modo_cambio == 1? false: true)){
+            if (!Crear_Movimiento_Ubicacion_ND(gl.modo_cambio != 1)){
                 return;
             }
 
@@ -4057,7 +4045,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
             if(cmbEstadoOrigen.getAdapter()!=null && cmbEstadoOrigen.getAdapter().getCount()>0){
-                gMovimientoDet.IdEstadoOrigen = Integer.valueOf( cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0].toString());
+                gMovimientoDet.IdEstadoOrigen = Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
             }else{
                 gMovimientoDet.IdEstadoOrigen = 0;
             }

@@ -63,15 +63,15 @@ public class frm_inv_ini_contados extends PBase {
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProducto BBeProducto = new clsBeProducto();
     private clsBeBodega_ubicacion BeUbica = new  clsBeBodega_ubicacion();
-    private ArrayList<clsBeTrans_inv_detalle_grid> BeListContados = new ArrayList<clsBeTrans_inv_detalle_grid>();
+    private final ArrayList<clsBeTrans_inv_detalle_grid> BeListContados = new ArrayList<clsBeTrans_inv_detalle_grid>();
     private list_adapt_contados adapter;
     private clsBeTrans_inv_detalle_grid selItem;
     private clsBeTrans_inv_detalle dditem = new clsBeTrans_inv_detalle();
     private clsBeProducto_PresentacionList BeListPres = new clsBeProducto_PresentacionList();
     private clsBeProducto_estadoList BeListEstado = new clsBeProducto_estadoList();
 
-    private ArrayList<String> EstadoList= new ArrayList<String>();
-    private ArrayList<String> PresList= new ArrayList<String>();
+    private final ArrayList<String> EstadoList= new ArrayList<String>();
+    private final ArrayList<String> PresList= new ArrayList<String>();
 
     // date
     private int year;
@@ -92,14 +92,14 @@ public class frm_inv_ini_contados extends PBase {
         ws = new WebServiceHandler(frm_inv_ini_contados.this, gl.wsurl);
         xobj = new XMLObject(ws);
 
-        listView = (ListView)findViewById(R.id.listConts);
+        listView = findViewById(R.id.listConts);
 
-        txtCodProd = (EditText)findViewById(R.id.txtCodProd);
-        txtUbicConts = (EditText)findViewById(R.id.txtUbicConts);
+        txtCodProd = findViewById(R.id.txtCodProd);
+        txtUbicConts = findViewById(R.id.txtUbicConts);
 
-        lblPrdCont = (TextView)findViewById(R.id.lblPrdCont);
+        lblPrdCont = findViewById(R.id.lblPrdCont);
 
-        btnRegs = (Button)findViewById(R.id.btnRegs);
+        btnRegs = findViewById(R.id.btnRegs);
 
         setHandles();
 
@@ -180,25 +180,25 @@ public class frm_inv_ini_contados extends PBase {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.frm_inv_edita_detalle);
 
-            lblPresDetalle = (TextView)dialog.findViewById(R.id.lblPresDetalle);
-            lblLoteDetalle = (TextView)dialog.findViewById(R.id.lblLoteDetalle);
-            lblVenceDetalle= (TextView)dialog.findViewById(R.id.lblVenceDetalle);
-            lblUniDetalle = (TextView)dialog.findViewById(R.id.lblUniDetalle);
-            lblPesoDetalle = (TextView)dialog.findViewById(R.id.textView106);
+            lblPresDetalle = dialog.findViewById(R.id.lblPresDetalle);
+            lblLoteDetalle = dialog.findViewById(R.id.lblLoteDetalle);
+            lblVenceDetalle= dialog.findViewById(R.id.lblVenceDetalle);
+            lblUniDetalle = dialog.findViewById(R.id.lblUniDetalle);
+            lblPesoDetalle = dialog.findViewById(R.id.textView106);
 
-            cmbPresDetalle = (Spinner)dialog.findViewById(R.id.cmbPresDetalle);
-            cmbEstadoDetalle = (Spinner)dialog.findViewById(R.id.cmbEstadoDetalle);
+            cmbPresDetalle = dialog.findViewById(R.id.cmbPresDetalle);
+            cmbEstadoDetalle = dialog.findViewById(R.id.cmbEstadoDetalle);
 
-            txtLoteDetalle = (EditText)dialog.findViewById(R.id.txtLoteDetalle);
-            txtVenceDetalle = (EditText)dialog.findViewById(R.id.txtVenceDetalle);
-            txtCantDetalle = (EditText)dialog.findViewById(R.id.txtCantDetalle);
-            txtPesoDetalle = (EditText)dialog.findViewById(R.id.txtPesoDetalle);
+            txtLoteDetalle = dialog.findViewById(R.id.txtLoteDetalle);
+            txtVenceDetalle = dialog.findViewById(R.id.txtVenceDetalle);
+            txtCantDetalle = dialog.findViewById(R.id.txtCantDetalle);
+            txtPesoDetalle = dialog.findViewById(R.id.txtPesoDetalle);
 
-            imgDate = (ImageView)dialog.findViewById(R.id.imgDate4);
-            dpResult = (DatePicker)dialog.findViewById(R.id.datePicker5);
+            imgDate = dialog.findViewById(R.id.imgDate4);
+            dpResult = dialog.findViewById(R.id.datePicker5);
 
-            btnGuardarDetalle = (Button)dialog.findViewById(R.id.btnGuardarDetalle);
-            btnBack = (Button)dialog.findViewById(R.id.btnBack);
+            btnGuardarDetalle = dialog.findViewById(R.id.btnGuardarDetalle);
+            btnBack = dialog.findViewById(R.id.btnBack);
 
             txtCantDetalle.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             txtPesoDetalle.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -299,7 +299,7 @@ public class frm_inv_ini_contados extends PBase {
 
     }
 
-    private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
