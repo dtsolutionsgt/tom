@@ -221,14 +221,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relFiltros"
-        android:layout_alignParentEnd="true"
         android:layout_marginStart="11dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toStartOf="@+id/imgOrdenar"
         android:layout_toEndOf="@+id/textView11"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
+
+    <ImageView
+        android:id="@+id/imgOrdenar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/textView11"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="11dp"
+        android:onClick="showItemMenu"
+        android:src="@drawable/transferir" />
 
     <TextView
         android:id="@+id/textView11"

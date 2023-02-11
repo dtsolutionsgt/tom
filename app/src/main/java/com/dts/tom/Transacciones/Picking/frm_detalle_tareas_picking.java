@@ -63,7 +63,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
     private TextView  lblBodega, lblOperador, lblTituloForma;
-    private ImageView btnLimpiar, btnFiltros;
+    private ImageView btnLimpiar, btnFiltros, imgOrdenar;
     private RelativeLayout relbot, relFiltros;
 
     public static clsBeTrans_picking_enc gBePicking;
@@ -91,6 +91,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private ArrayList<String> ListRack = new ArrayList<>();
     private ArrayList<String> ListRackSel = new ArrayList<>();
     private ArrayList<Integer> IdxFiltos = new ArrayList<>();
+    private int sortord;
     public Activity myActivity;
 
     @Override
@@ -133,6 +134,7 @@ public class frm_detalle_tareas_picking extends PBase {
             btnFiltros = (ImageView) findViewById(R.id.btnFiltros);
             relbot = (RelativeLayout) findViewById(R.id.relbot);
             relFiltros = findViewById(R.id.relFiltros);
+            imgOrdenar = findViewById(R.id.imgOrdenar);
 
             lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
             lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
@@ -278,13 +280,10 @@ public class frm_detalle_tareas_picking extends PBase {
             mu.msgbox("setHandles:" + e.getMessage());
         }
 
-        btnLimpiar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gl.termino = "";
-                txtFiltro.setText("");
-                txtFiltro.requestFocus();
-            }
+        btnLimpiar.setOnClickListener(view -> {
+            gl.termino = "";
+            txtFiltro.setText("");
+            txtFiltro.requestFocus();
         });
 
         txtFiltro.addTextChangedListener(new TextWatcher() {
@@ -776,48 +775,25 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
-    public class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
+     class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
 
         public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
             //return left.CodigoProducto-rigth.IdRecepcionDet;
             if (pOrden==1){
-               return left.IdUbicacion-rigth.IdUbicacion;
+               return Integer.compare(sortord * left.IdUbicacion, sortord * rigth.IdUbicacion);
             }else if(pOrden==2){
-                return left.CodigoProducto.compareTo(rigth.CodigoProducto);
+                return sortord*left.CodigoProducto.compareTo(rigth.CodigoProducto);
             }else if(pOrden==3){
-                return left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
+                return sortord*left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
             }else if(pOrden==4){
-                return left.ProductoEstado.compareTo(rigth.ProductoEstado);
+                return sortord*left.ProductoEstado.compareTo(rigth.ProductoEstado);
             } else if(pOrden==5) {
-                return left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
+                return sortord*left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
             } else if(pOrden==6) {
-                return left.NombreUbicacion.compareTo(rigth.NombreUbicacion);
+                return sortord*left.NombreUbicacion.compareTo(rigth.NombreUbicacion);
             }
 
-            return left.IdPickingEnc-(rigth.IdPickingEnc);
-        }
-
-    }
-
-    public class OrdenarItemsAsc implements Comparator<clsBeTrans_picking_ubic> {
-
-        public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
-            //return left.CodigoProducto-rigth.IdRecepcionDet;
-            if (pOrden==1){
-                return rigth.IdUbicacion-left.IdUbicacion;
-            }else if(pOrden==2){
-                return rigth.CodigoProducto.compareTo(left.CodigoProducto);
-            }else if(pOrden==3){
-                return rigth.Fecha_Vence.compareTo(left.Fecha_Vence);
-            }else if(pOrden==4){
-                return rigth.ProductoEstado.compareTo(left.ProductoEstado);
-            } else if(pOrden==5) {
-                return rigth.NombreClasificacion.compareTo(left.NombreClasificacion);
-            } else if(pOrden==6) {
-                return rigth.NombreUbicacion.compareTo(left.NombreUbicacion);
-            }
-
-            return rigth.IdPickingEnc-(left.IdPickingEnc);
+            return Integer.compare(sortord * left.IdPickingEnc, sortord * rigth.IdPickingEnc);
         }
 
     }
@@ -826,6 +802,62 @@ public class frm_detalle_tareas_picking extends PBase {
         public int compare(String left, String right) {
             return left.compareTo(right);
 
+        }
+    }
+
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {cmbOrdenadorPor.getSelectedItem()+" A - Z", cmbOrdenadorPor.getSelectedItem()+" Z - A"};
+        pOrden= cmbOrdenadorPor.getSelectedItemPosition()+1;
+
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                gl.sortOrd = item;
+                orderar();
+                if (gl.TipoPantallaPicking == 3) {
+                    adapter3 = new list_adapt_detalle_tareas_picking3( frm_detalle_tareas_picking.this, BeListPickingUbic);
+                    listView.setAdapter(adapter3);
+                } else {
+                    if (areaprimera) {
+                        adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                        listView.setAdapter(adapter2);
+                    } else {
+                        adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                        listView.setAdapter(adapter);
+                    }
+                }
+
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void orderar() {
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                Collections.sort(BeListPickingUbic,new OrdenarItems());
+                Collections.sort(plistPickingUbi.items,new OrdenarItems());
+                break;
+            case 1:
+                sortord=-1;
+                Collections.sort(BeListPickingUbic,new OrdenarItems());
+                Collections.sort(plistPickingUbi.items,new OrdenarItems());
+                break;
         }
     }
 
