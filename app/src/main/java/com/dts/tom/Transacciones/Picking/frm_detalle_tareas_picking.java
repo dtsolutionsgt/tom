@@ -236,7 +236,6 @@ public class frm_detalle_tareas_picking extends PBase {
                             }
                         }
                     }
-
                 }
 
                 @Override
@@ -508,11 +507,12 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try {
 
-            TipoOrden.add("Ubicacion");
+            TipoOrden.add("Ubicación");
             TipoOrden.add("Codigo");
             TipoOrden.add("Vence");
             TipoOrden.add("Estado");
             TipoOrden.add("Clasificación");
+            TipoOrden.add("Nombre Ubicación");
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, TipoOrden);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -544,6 +544,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private void Lista_Detalle_Picking(){
         String Rack ="";
+        String[] val;
         int idx;
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
@@ -577,9 +578,17 @@ public class frm_detalle_tareas_picking extends PBase {
                             vItem = obj;
 
                             //#AT20230208 Se obtiene lista de racks del picking
-                            Rack = obj.NombreUbicacion;
+                           /* Rack = obj.NombreUbicacion;
                             idx = Rack.indexOf("-");
-                            Rack = Rack.substring(0, idx);
+                            Rack = Rack.substring(0, idx);*/
+
+                            val =  obj.NombreUbicacion.split("-");
+
+                            if (val.length == 2) {
+                                Rack = val[0].trim();
+                            } else {
+                                Rack = val[0].trim() + val[2].replace("T","").trim();
+                            }
 
                             if (!ListRack.contains(Rack.trim())) {
                                 ListRack.add(Rack.trim());
@@ -781,9 +790,34 @@ public class frm_detalle_tareas_picking extends PBase {
                 return left.ProductoEstado.compareTo(rigth.ProductoEstado);
             } else if(pOrden==5) {
                 return left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
+            } else if(pOrden==6) {
+                return left.NombreUbicacion.compareTo(rigth.NombreUbicacion);
             }
 
             return left.IdPickingEnc-(rigth.IdPickingEnc);
+        }
+
+    }
+
+    public class OrdenarItemsAsc implements Comparator<clsBeTrans_picking_ubic> {
+
+        public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
+            //return left.CodigoProducto-rigth.IdRecepcionDet;
+            if (pOrden==1){
+                return rigth.IdUbicacion-left.IdUbicacion;
+            }else if(pOrden==2){
+                return rigth.CodigoProducto.compareTo(left.CodigoProducto);
+            }else if(pOrden==3){
+                return rigth.Fecha_Vence.compareTo(left.Fecha_Vence);
+            }else if(pOrden==4){
+                return rigth.ProductoEstado.compareTo(left.ProductoEstado);
+            } else if(pOrden==5) {
+                return rigth.NombreClasificacion.compareTo(left.NombreClasificacion);
+            } else if(pOrden==6) {
+                return rigth.NombreUbicacion.compareTo(left.NombreUbicacion);
+            }
+
+            return rigth.IdPickingEnc-(left.IdPickingEnc);
         }
 
     }
@@ -1202,6 +1236,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private void FiltroPorRacks() {
         String Racks = "";
+        String val[];
         int idx, pos;
         try {
             //plistPickingUbi.items
@@ -1215,9 +1250,17 @@ public class frm_detalle_tareas_picking extends PBase {
 
             for (int i = 0; i < BeListPickingUbic.size(); i ++) {
 
-                Racks = BeListPickingUbic.get(i).NombreUbicacion;
-                idx = Racks.indexOf("-");
-                Racks= Racks.substring(0, idx).trim();
+                //Racks = BeListPickingUbic.get(i).NombreUbicacion;
+                /*idx = Racks.indexOf("-");
+                Racks= Racks.substring(0, idx).trim();*/
+
+                val =  BeListPickingUbic.get(i).NombreUbicacion.split("-");
+
+                if (val.length == 2) {
+                    Racks = val[0].trim();
+                } else {
+                    Racks = val[0].trim() + val[2].replace("T","").trim();
+                }
 
                 if (!ListRackSel.contains(Racks)) {
                     IdxFiltos.add(i);
