@@ -116,7 +116,7 @@
 
         <Spinner
             android:id="@+id/cmbOrdenadorPor"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="12dp"
@@ -133,7 +133,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginBottom="0dp"
             android:onClick="Filtro"
             android:src="@drawable/checklist" />
@@ -236,7 +236,7 @@
         android:layout_height="35dp"
         android:layout_alignBottom="@+id/textView11"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="46dp"
         android:layout_marginBottom="11dp"
         android:onClick="showItemMenu"
         android:src="@drawable/transferir" />
