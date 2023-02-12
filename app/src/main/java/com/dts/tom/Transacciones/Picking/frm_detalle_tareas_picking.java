@@ -91,7 +91,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private ArrayList<String> ListRack = new ArrayList<>();
     private ArrayList<String> ListRackSel = new ArrayList<>();
     private ArrayList<Integer> IdxFiltos = new ArrayList<>();
-    private int sortord;
+    private int sortord, TipoOrdenDetalle = 0;
     public Activity myActivity;
 
     @Override
@@ -141,6 +141,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
             gl.mostar_filtros = false;
             gl.termino = "";
+            ListRackSel.clear();
+            ListRack.clear();
 
             ProgressDialog("Obteniendo Picking...");
 
@@ -608,10 +610,24 @@ public class frm_detalle_tareas_picking extends PBase {
 
             Collections.sort(ListRack, new ItemComparator());
 
+
             if (plistPickingUbi!=null){
                 if (plistPickingUbi.items!=null){
-                    Collections.sort(BeListPickingUbic,new OrdenarItems());
-                    Collections.sort(plistPickingUbi.items,new OrdenarItems());
+
+                    //#AT20230212 Para mantener orden ascendente y descendente
+                    if (TipoOrdenDetalle == 1) {
+                        sortord = 1;
+                    } else if (TipoOrdenDetalle == 2) {
+                        sortord = -1;
+                    }
+
+                    //#AT2022030212 Para mantener el filtro por racks
+                    if (ListRackSel.size() != 0) {
+                        FiltroPorRacks();
+                    }
+
+                    Collections.sort(BeListPickingUbic, new OrdenarItems());
+                    Collections.sort(plistPickingUbi.items, new OrdenarItems());
                 }
             }
 
@@ -831,6 +847,13 @@ public class frm_detalle_tareas_picking extends PBase {
                     }
                 }
 
+                //#AT20230212 Mostrar toast con el tipo de orden ascendente o descendente
+                if (TipoOrdenDetalle == 1) {
+                    toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
+                } else if (TipoOrdenDetalle == 2) {
+                    toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
+                }
+
                 dialog.cancel();
             }
         });
@@ -847,14 +870,17 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void orderar() {
+        //#AT20230212 TipoOrdenDetalle 1 = asc y 2 = desc
         switch (gl.sortOrd) {
             case 0:
                 sortord=1;
+                TipoOrdenDetalle =  1;
                 Collections.sort(BeListPickingUbic,new OrdenarItems());
                 Collections.sort(plistPickingUbi.items,new OrdenarItems());
                 break;
             case 1:
                 sortord=-1;
+                TipoOrdenDetalle = 2;
                 Collections.sort(BeListPickingUbic,new OrdenarItems());
                 Collections.sort(plistPickingUbi.items,new OrdenarItems());
                 break;
@@ -1087,7 +1113,7 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
-                TipoLista = TipoLista;
+
                 //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
                 if (TipoLista > 0) {
                     execws(3);
@@ -1271,9 +1297,7 @@ public class frm_detalle_tareas_picking extends PBase {
         String val[];
         int idx, pos;
         try {
-            //plistPickingUbi.items
 
-            //AuxBeListPickingUbic;
             BeListPickingUbic.clear();
             IdxFiltos.clear();
             for (int i= 0; i < AuxBeListPickingUbic.size(); i++) {
