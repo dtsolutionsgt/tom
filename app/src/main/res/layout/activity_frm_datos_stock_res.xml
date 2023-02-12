@@ -29,7 +29,7 @@
 
                 <TextView
                     android:id="@+id/lblOrigen"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -60,7 +60,7 @@
 
                 <TextView
                     android:id="@+id/lblLicensePlate"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -81,7 +81,7 @@
                     android:inputType="textPersonName"
                     android:paddingStart="5dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <TableRow
@@ -92,7 +92,7 @@
 
                 <TextView
                     android:id="@+id/lblCodigo"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -207,7 +207,7 @@
 
                 <TextView
                     android:id="@+id/lblPropietario"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -239,7 +239,7 @@
 
                 <TextView
                     android:id="@+id/lblLote"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -271,7 +271,7 @@
 
                 <TextView
                     android:id="@+id/lblVence"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -303,7 +303,7 @@
 
                 <TextView
                     android:id="@+id/lblEstado"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_vertical"
@@ -335,7 +335,7 @@
 
                 <TextView
                     android:id="@+id/lblDestino"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="0dp"
@@ -387,7 +387,7 @@
 
                 <TextView
                     android:id="@+id/lblCantidad"
-                    android:layout_width="150dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="4dp"

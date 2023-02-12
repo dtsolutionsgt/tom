@@ -88,14 +88,13 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private void asignarDatos() {
 
-
         if(gl.existencia !=null){
 
             lblcodigo.setText( gl.existencia.Codigo +"");
             lbldescripcion.setText(gl.existencia.Nombre + "");
             //lblexUnidad.setText(""+0);
 
-            if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
+            /*if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
 
                 Double existencia = Double.valueOf(gl.existencia.ExistUMBAs.replace(",",""));
                 String stringDecimal = String.format("%.2f", existencia);
@@ -104,12 +103,34 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
             }else {
                 lblexUnidad.setText("0.00");
+            }*/
+
+            if(gl.existencia.DisponibleUMBas !="0" || !gl.existencia.DisponibleUMBas.isEmpty()){
+
+                Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",",""));
+                String stringDecimal = String.format("%.2f", existencia);
+                lblUnidad.setText(gl.existencia.UM+":");
+                lblexUnidad.setText(stringDecimal);
+
+            }else {
+                lblexUnidad.setText("0.00");
             }
 
-
-            if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
+           /* if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
                 Double factor= Double.valueOf(gl.existencia.ExistUMBAs.replace(",",""))/Double.valueOf(gl.existencia.factor);
+                String stringDecimal = String.format("%.2f", factor);
+
+                lblPresentacion.setText(gl.existencia.Pres+":");
+                lblexPres.setText(stringDecimal);
+            }else {
+                trPresentacion.setVisibility(View.GONE);
+                lblexPres.setText(gl.existencia.Pres);
+            }*/
+
+            if(gl.existencia.DisponibleUMBas != "" && gl.existencia.factor !=0){
+
+                Double factor= Double.valueOf(gl.existencia.DisponibleUMBas.replace(",",""))/Double.valueOf(gl.existencia.factor);
                 String stringDecimal = String.format("%.2f", factor);
 
                 lblPresentacion.setText(gl.existencia.Pres+":");

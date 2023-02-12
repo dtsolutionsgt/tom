@@ -70,6 +70,9 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Validar_Existencias_Inv_Ini = false;
     @Element(required=false) public boolean Calcular_Ubicacion_Sugerida_ML = false;
 
+    @Element(required=false) public boolean Ordenar_Picking_Descendente = false;
+
+    @Element(required=false) public boolean Ordenar_Por_Nombre_Completo = false;
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -93,7 +96,9 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Permitir_Eliminar_Documento_Salida, boolean Eliminar_Documento_Salida,
                        boolean Operador_Picking_Realiza_Verificacion, boolean Permitir_Cambio_Ubic_Producto_Picking,
                        boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales,
-                       boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini, boolean Calcular_Ubicacion_Sugerida_ML) {
+                       boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini,
+                       boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
+                       boolean Ordenar_Por_Nombre_Completo) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -154,6 +159,9 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Permitir_Decimales = Permitir_Decimales;
         this.Permitir_Repeticiones_En_Ingreso = Permitir_Repeticiones_En_Ingreso;
         this.Validar_Existencias_Inv_Ini  = Validar_Existencias_Inv_Ini;
+        this.Ordenar_Picking_Descendente = Ordenar_Picking_Descendente;
+        this.Ordenar_Por_Nombre_Completo = Ordenar_Por_Nombre_Completo;
+
     }
 
     public int getIdPais() {
@@ -553,6 +561,20 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setValidar_Existencias_Inv_Ini(boolean value) {
         Validar_Existencias_Inv_Ini=value;
+    }
+
+    public boolean getOrdenar_Picking_Descendente() {
+        return Ordenar_Picking_Descendente;
+    }
+    public void setOrdenar_Picking_Descendente(boolean value) {
+        Ordenar_Picking_Descendente=value;
+    }
+
+    public boolean getOrdenar_Por_Nombre_Completo() {
+        return Ordenar_Por_Nombre_Completo;
+    }
+    public void setOrdenar_Por_Nombre_Completo(boolean value) {
+        Ordenar_Por_Nombre_Completo=value;
     }
 
 }

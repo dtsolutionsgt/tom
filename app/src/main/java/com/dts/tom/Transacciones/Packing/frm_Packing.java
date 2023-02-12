@@ -1202,6 +1202,21 @@ public class frm_Packing extends PBase {
                             datosCorrectos = false;
                         }
                     }
+                }else if (AuxList.size() > 1) {
+
+                    double resto=0;
+                    double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
+
+                    for (int i = 0; i < AuxList.size(); i++) {
+
+                        if (!gl.Permitir_Decimales){
+                            resto = vCantidadAUbicar % vFactor;
+                            if (resto!=0){
+                                msgbox("Existencia disponible("+ vCantidadAUbicar  +") del producto no es múltiplo del factor " + vFactor);
+                                datosCorrectos = false;
+                            }
+                        }
+                    }
                 }
             }
 

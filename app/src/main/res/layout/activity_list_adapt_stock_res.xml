@@ -137,7 +137,7 @@
 
             <TextView
                 android:id="@+id/lblCliente"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -167,7 +167,7 @@
 
             <TextView
                 android:id="@+id/lblUbicacion"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -197,7 +197,7 @@
 
             <TextView
                 android:id="@+id/lblProducto"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -221,11 +221,11 @@
         <TableRow
             android:id="@+id/trLicencia"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/lblLicencia"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -238,7 +238,7 @@
             <TextView
                 android:id="@+id/txtLicencia"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -253,7 +253,7 @@
 
             <TextView
                 android:id="@+id/lblLote"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -281,12 +281,12 @@
 
             <TextView
                 android:id="@+id/lblFechaVen"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Fecha Vencimiento:"
+                android:text="Fecha Vence:"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -309,7 +309,7 @@
 
             <TextView
                 android:id="@+id/lblCantidad"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -337,7 +337,7 @@
 
             <TextView
                 android:id="@+id/lblEstado"
-                android:layout_width="180dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"

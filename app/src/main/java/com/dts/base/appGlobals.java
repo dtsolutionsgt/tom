@@ -221,6 +221,10 @@ public class appGlobals extends Application {
     public  boolean Permitir_Decimales = false;
     public int Dias_Maximo_Vencimiento_Reemplazo = 0;
     public boolean Permitir_Repeticiones_En_Ingreso = false;
+
+    public boolean Ordenar_Picking_Descendente = false;
+
+    public boolean Ordenar_Por_Nombre_Completo = false;
     public boolean TieneResoluciones = false;
     public boolean Calcular_Ubicacion_Sugerida_ML = false;
 
