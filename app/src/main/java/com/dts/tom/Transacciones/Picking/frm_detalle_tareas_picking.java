@@ -1029,6 +1029,12 @@ public class frm_detalle_tareas_picking extends PBase {
             if (!gl.termino.isEmpty())
                 Filtro();
 
+            if (TipoOrdenDetalle == 1) {
+                toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
+            } else if (TipoOrdenDetalle == 2) {
+                toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
+            }
+
         }catch (Exception e){
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
         }
