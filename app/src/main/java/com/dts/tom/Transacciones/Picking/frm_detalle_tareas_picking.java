@@ -75,8 +75,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private final ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
-    private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
-
     private ArrayList<clsBeTrans_picking_ubic> AuxBeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
