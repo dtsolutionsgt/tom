@@ -519,12 +519,15 @@ public class frm_detalle_tareas_picking extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbOrdenadorPor.setAdapter(dataAdapter);
 
-            if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
+            if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(5);
 
             //#GT22122022: mostrar la lista por defecto a menos que se use el filtro personalizado
             //pOrden=1;
-            pOrden=0;
+            //#AT20230213 Se cambia el valor de 0 a 6, para que order por nombre ubicación por defecto
+            //pOrden=0;
+            pOrden = 6;
             TipoLista = 2;
+            TipoOrdenDetalle = 1;
             btnRes_Det.setText("D.");
 
             //gl.gReferencia = .Referencia;
@@ -608,7 +611,9 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
-            Collections.sort(ListRack, new ItemComparator());
+            if (ListRack.size() > 0) {
+                Collections.sort(ListRack, new ItemComparator());
+            }
 
 
             if (plistPickingUbi!=null){
@@ -630,6 +635,8 @@ public class frm_detalle_tareas_picking extends PBase {
                     Collections.sort(plistPickingUbi.items, new OrdenarItems());
                 }
             }
+
+            MostrarTipoOrden();
 
             if (gl.TipoPantallaPicking == 3) {
                 adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
@@ -848,11 +855,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
 
                 //#AT20230212 Mostrar toast con el tipo de orden ascendente o descendente
-                if (TipoOrdenDetalle == 1) {
-                    toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
-                } else if (TipoOrdenDetalle == 2) {
-                    toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
-                }
+                MostrarTipoOrden();
 
                 dialog.cancel();
             }
@@ -1028,12 +1031,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (!gl.termino.isEmpty())
                 Filtro();
-
-            if (TipoOrdenDetalle == 1) {
-                toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
-            } else if (TipoOrdenDetalle == 2) {
-                toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
-            }
 
         }catch (Exception e){
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
@@ -1232,6 +1229,14 @@ public class frm_detalle_tareas_picking extends PBase {
 
         }
     };
+
+    private void MostrarTipoOrden() {
+        if (TipoOrdenDetalle == 1) {
+            toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
+        } else if (TipoOrdenDetalle == 2) {
+            toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
+        }
+    }
 
     //region FiltroRacks
     public void Filtro(View view) {
