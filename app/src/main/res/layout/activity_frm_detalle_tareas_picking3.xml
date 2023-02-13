@@ -116,14 +116,27 @@
 
         <Spinner
             android:id="@+id/cmbOrdenadorPor"
-            android:layout_width="239dp"
+            android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toStartOf="@+id/imgCheckList"
+            android:layout_toEndOf="@+id/lblFiltro" />
+
+        <ImageView
+            android:id="@+id/imgCheckList"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/lblOrdenPr"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="142dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="0dp"
+            android:onClick="Filtro"
+            android:src="@drawable/checklist" />
 
         <TextView
             android:id="@+id/lblOrdenPr"
@@ -133,7 +146,7 @@
             android:layout_alignBottom="@+id/cmbOrdenadorPor"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="0dp"
             android:gravity="center_vertical"
             android:text="Ordernar por:"
             android:textColor="@android:color/black"
@@ -208,14 +221,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relFiltros"
-        android:layout_alignParentEnd="true"
         android:layout_marginStart="11dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toStartOf="@+id/imgOrdenar"
         android:layout_toEndOf="@+id/textView11"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
+
+    <ImageView
+        android:id="@+id/imgOrdenar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/textView11"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="11dp"
+        android:onClick="showItemMenu"
+        android:src="@drawable/transferir" />
 
     <TextView
         android:id="@+id/textView11"

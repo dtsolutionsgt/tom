@@ -39,6 +39,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.classes.extListChkDlg;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking3;
 import com.dts.tom.PBase;
@@ -64,7 +65,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
     private TextView  lblBodega, lblOperador, lblTituloForma;
-    private ImageView btnLimpiar, btnFiltros;
+    private ImageView btnLimpiar, btnFiltros, imgOrdenar;
     private RelativeLayout relbot, relFiltros;
 
     public static clsBeTrans_picking_enc gBePicking;
@@ -74,6 +75,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private ArrayList<clsBeTrans_picking_ubic> BeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private final ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+    private ArrayList<clsBeTrans_picking_ubic> AuxBePickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
+
+    private ArrayList<clsBeTrans_picking_ubic> AuxBeListPickingUbic = new ArrayList<clsBeTrans_picking_ubic>();
     private list_adapt_detalle_tareas_picking adapter;
     private list_adapt_detalle_tareas_picking2 adapter2;
     private list_adapt_detalle_tareas_picking3 adapter3;
@@ -88,7 +92,10 @@ public class frm_detalle_tareas_picking extends PBase {
     private boolean areaprimera = true;
     private final boolean filtros = false;
     private boolean asignar_operador_linea_picking = false;
-
+    private ArrayList<String> ListRack = new ArrayList<>();
+    private ArrayList<String> ListRackSel = new ArrayList<>();
+    private ArrayList<Integer> IdxFiltos = new ArrayList<>();
+    private int sortord, TipoOrdenDetalle = 0;
     public Activity myActivity;
 
     @Override
@@ -131,12 +138,15 @@ public class frm_detalle_tareas_picking extends PBase {
             btnFiltros = findViewById(R.id.btnFiltros);
             relbot = findViewById(R.id.relbot);
             relFiltros = findViewById(R.id.relFiltros);
+            imgOrdenar = findViewById(R.id.imgOrdenar);
 
             lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
             lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
             gl.mostar_filtros = false;
             gl.termino = "";
+            ListRackSel.clear();
+            ListRack.clear();
 
             ProgressDialog("Obteniendo Picking Fase 1...");
 
@@ -217,8 +227,23 @@ public class frm_detalle_tareas_picking extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     pOrden=position+1;
-                    Lista_Detalle_Picking();
 
+                    if (ListRackSel.size() == 0) {
+                        Lista_Detalle_Picking();
+                    } else {
+                        Collections.sort(BeListPickingUbic,new OrdenarItems());
+                        Collections.sort(plistPickingUbi.items,new OrdenarItems());
+
+                        if (gl.TipoPantallaPicking == 3) {
+                            adapter3.refreshItems();
+                        } else {
+                            if (areaprimera) {
+                                adapter2.refreshItems();
+                            } else {
+                                adapter.refreshItems();
+                            }
+                        }
+                    }
                 }
 
                 @Override
@@ -261,13 +286,10 @@ public class frm_detalle_tareas_picking extends PBase {
             mu.msgbox("setHandles:" + e.getMessage());
         }
 
-        btnLimpiar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gl.termino = "";
-                txtFiltro.setText("");
-                txtFiltro.requestFocus();
-            }
+        btnLimpiar.setOnClickListener(view -> {
+            gl.termino = "";
+            txtFiltro.setText("");
+            txtFiltro.requestFocus();
         });
 
         txtFiltro.addTextChangedListener(new TextWatcher() {
@@ -318,32 +340,36 @@ public class frm_detalle_tareas_picking extends PBase {
     private void Filtro() {
         String termino  = gl.termino;
 
-        if (!termino.isEmpty()) {
-            btnLimpiar.setVisibility(View.VISIBLE);
-        }
-
-        AuxBePickingUbic.clear();
-        for (clsBeTrans_picking_ubic obj:BeListPickingUbic){
-
-            if(obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())){
-                AuxBePickingUbic.add(obj);
+        try {
+            if (!termino.isEmpty()) {
+                btnLimpiar.setVisibility(View.VISIBLE);
             }
-        }
 
-        if (gl.TipoPantallaPicking == 3) {
-            adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-            listView.setAdapter(adapter3);
-        } else {
-            if (areaprimera) {
-                adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                listView.setAdapter(adapter2);
+            AuxBePickingUbic.clear();
+            for (clsBeTrans_picking_ubic obj : BeListPickingUbic) {
+
+                if (obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())) {
+                    AuxBePickingUbic.add(obj);
+                }
+            }
+
+            if (gl.TipoPantallaPicking == 3) {
+                adapter3 = new list_adapt_detalle_tareas_picking3(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                listView.setAdapter(adapter3);
             } else {
-                adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
-                listView.setAdapter(adapter);
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                    listView.setAdapter(adapter2);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, AuxBePickingUbic);
+                    listView.setAdapter(adapter);
+                }
             }
-        }
 
-        btnPendientes.setText("Regs: "+ AuxBePickingUbic.size());
+            btnPendientes.setText("Regs: " + AuxBePickingUbic.size());
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
     }
 
 //    public void ProgressDialog(String mensaje) {
@@ -486,22 +512,26 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try {
 
-            TipoOrden.add("Ubicacion");
+            TipoOrden.add("Ubicación");
             TipoOrden.add("Codigo");
             TipoOrden.add("Vence");
             TipoOrden.add("Estado");
             TipoOrden.add("Clasificación");
+            TipoOrden.add("Nombre Ubicación");
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, TipoOrden);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbOrdenadorPor.setAdapter(dataAdapter);
 
-            if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(0);
+            if (TipoOrden.size()>0) cmbOrdenadorPor.setSelection(5);
 
             //#GT22122022: mostrar la lista por defecto a menos que se use el filtro personalizado
             //pOrden=1;
-            pOrden=0;
+            //#AT20230213 Se cambia el valor de 0 a 6, para que order por nombre ubicación por defecto
+            //pOrden=0;
+            pOrden = 6;
             TipoLista = 2;
+            TipoOrdenDetalle = 1;
             btnRes_Det.setText("D.");
 
             //gl.gReferencia = .Referencia;
@@ -521,7 +551,9 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Lista_Detalle_Picking(){
-
+        String Rack ="";
+        String[] val;
+        int idx;
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
 
@@ -532,6 +564,9 @@ public class frm_detalle_tareas_picking extends PBase {
             if (plistPickingUbi!=null){
 
                 if (plistPickingUbi.items!=null){
+
+                    ListRack.clear();
+                    AuxBeListPickingUbic.clear();
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
@@ -550,10 +585,27 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             vItem = obj;
 
+                            //#AT20230208 Se obtiene lista de racks del picking
+                           /* Rack = obj.NombreUbicacion;
+                            idx = Rack.indexOf("-");
+                            Rack = Rack.substring(0, idx);*/
+
+                            val =  obj.NombreUbicacion.split("-");
+
+                            if (val.length == 2) {
+                                Rack = val[0].trim();
+                            } else {
+                                Rack = val[0].trim() + val[2].replace("T","").trim();
+                            }
+
+                            if (!ListRack.contains(Rack.trim())) {
+                                ListRack.add(Rack.trim());
+                            }
+
                             BeListPickingUbic.add(vItem);
+                            AuxBeListPickingUbic.add(vItem);
 
                         }
-
                     }
 
                     //AT 20211222 Ya no se resta 1 para obtener el registro total
@@ -563,12 +615,32 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             }
 
+            if (ListRack.size() > 0) {
+                Collections.sort(ListRack, new ItemComparator());
+            }
+
+
             if (plistPickingUbi!=null){
                 if (plistPickingUbi.items!=null){
-                    Collections.sort(BeListPickingUbic,new OrdenarItems());
-                    Collections.sort(plistPickingUbi.items,new OrdenarItems());
+
+                    //#AT20230212 Para mantener orden ascendente y descendente
+                    if (TipoOrdenDetalle == 1) {
+                        sortord = 1;
+                    } else if (TipoOrdenDetalle == 2) {
+                        sortord = -1;
+                    }
+
+                    //#AT2022030212 Para mantener el filtro por racks
+                    if (ListRackSel.size() != 0) {
+                        FiltroPorRacks();
+                    }
+
+                    Collections.sort(BeListPickingUbic, new OrdenarItems());
+                    Collections.sort(plistPickingUbi.items, new OrdenarItems());
                 }
             }
+
+            MostrarTipoOrden();
 
             if (gl.TipoPantallaPicking == 3) {
                 adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
@@ -730,25 +802,96 @@ public class frm_detalle_tareas_picking extends PBase {
 
     }
 
-    public class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
+     class OrdenarItems implements Comparator<clsBeTrans_picking_ubic> {
 
         public int compare(clsBeTrans_picking_ubic left,clsBeTrans_picking_ubic rigth){
             //return left.CodigoProducto-rigth.IdRecepcionDet;
             if (pOrden==1){
-               return left.IdUbicacion-rigth.IdUbicacion;
+               return Integer.compare(sortord * left.IdUbicacion, sortord * rigth.IdUbicacion);
             }else if(pOrden==2){
-                return left.CodigoProducto.compareTo(rigth.CodigoProducto);
+                return sortord*left.CodigoProducto.compareTo(rigth.CodigoProducto);
             }else if(pOrden==3){
-                return left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
+                return sortord*left.Fecha_Vence.compareTo(rigth.Fecha_Vence);
             }else if(pOrden==4){
-                return left.ProductoEstado.compareTo(rigth.ProductoEstado);
+                return sortord*left.ProductoEstado.compareTo(rigth.ProductoEstado);
             } else if(pOrden==5) {
-                return left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
+                return sortord*left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
+            } else if(pOrden==6) {
+                return sortord*left.NombreUbicacion.compareTo(rigth.NombreUbicacion);
             }
 
-            return left.IdPickingEnc-(rigth.IdPickingEnc);
+            return Integer.compare(sortord * left.IdPickingEnc, sortord * rigth.IdPickingEnc);
         }
 
+    }
+
+    public class ItemComparator implements Comparator<String> {
+        public int compare(String left, String right) {
+            return left.compareTo(right);
+
+        }
+    }
+
+    public void showItemMenu(View view) {
+        final AlertDialog Dialog;
+        final String[] selitems = {cmbOrdenadorPor.getSelectedItem()+" A - Z", cmbOrdenadorPor.getSelectedItem()+" Z - A"};
+        pOrden= cmbOrdenadorPor.getSelectedItemPosition()+1;
+
+
+        AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
+        menudlg.setTitle("Ordenar por:");
+
+        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                gl.sortOrd = item;
+                orderar();
+                if (gl.TipoPantallaPicking == 3) {
+                    adapter3 = new list_adapt_detalle_tareas_picking3( frm_detalle_tareas_picking.this, BeListPickingUbic);
+                    listView.setAdapter(adapter3);
+                } else {
+                    if (areaprimera) {
+                        adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                        listView.setAdapter(adapter2);
+                    } else {
+                        adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                        listView.setAdapter(adapter);
+                    }
+                }
+
+                //#AT20230212 Mostrar toast con el tipo de orden ascendente o descendente
+                MostrarTipoOrden();
+
+                dialog.cancel();
+            }
+        });
+
+        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Dialog = menudlg.create();
+        Dialog.show();
+    }
+
+    private void orderar() {
+        //#AT20230212 TipoOrdenDetalle 1 = asc y 2 = desc
+        switch (gl.sortOrd) {
+            case 0:
+                sortord=1;
+                TipoOrdenDetalle =  1;
+                Collections.sort(BeListPickingUbic,new OrdenarItems());
+                Collections.sort(plistPickingUbi.items,new OrdenarItems());
+                break;
+            case 1:
+                sortord=-1;
+                TipoOrdenDetalle = 2;
+                Collections.sort(BeListPickingUbic,new OrdenarItems());
+                Collections.sort(plistPickingUbi.items,new OrdenarItems());
+                break;
+        }
     }
 
     public class WebServiceHandler extends WebService {
@@ -977,7 +1120,7 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
-                TipoLista = TipoLista;
+
                 //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
                 if (TipoLista > 0) {
                     execws(3);
@@ -1090,4 +1233,135 @@ public class frm_detalle_tareas_picking extends PBase {
 
         }
     };
+
+    private void MostrarTipoOrden() {
+        if (TipoOrdenDetalle == 1) {
+            toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
+        } else if (TipoOrdenDetalle == 2) {
+            toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
+        }
+    }
+
+    //region FiltroRacks
+    public void Filtro(View view) {
+        String s = "";
+        boolean flag;
+        try {
+
+            extListChkDlg listdlg = new extListChkDlg();
+            listdlg.buildDialog(frm_detalle_tareas_picking.this,"Lista de Racks","SALIR","TODO","APLICAR");
+            listdlg.setWidth(350);listdlg.setLines(5);
+
+            for (int i = 0; i <ListRack.size(); i++) {
+                s = ListRack.get(i);
+                flag = ListRackSel.contains(s);
+
+                listdlg.add(ListRack.get(i),flag);
+            }
+
+            listdlg.setOnExitListener(v -> listdlg.dismiss());
+
+            listdlg.setOnAddListener(v -> {
+                ListRackSel.clear();
+
+                for (int i=0; i < listdlg.items.size(); i++) {
+                    if (listdlg.items.get(i).checked) {
+                        ListRackSel.add(listdlg.items.get(i).text);
+                    }
+                }
+
+                FiltroPorRacks();
+
+                listdlg.dismiss();
+            });
+
+            listdlg.setOnDelListener(v -> {
+                BeListPickingUbic.clear();
+                for (int i= 0; i < AuxBeListPickingUbic.size(); i++) {
+                    BeListPickingUbic.add(AuxBeListPickingUbic.get(i));
+                }
+
+                btnPendientes.setText("Regs: " + BeListPickingUbic.size());
+
+                if (gl.TipoPantallaPicking == 3) {
+                    adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
+                    listView.setAdapter(adapter3);
+                } else {
+                    if (areaprimera) {
+                        adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                        listView.setAdapter(adapter2);
+                    } else {
+                        adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                        listView.setAdapter(adapter);
+                    }
+                }
+
+                ListRackSel.clear();
+                listdlg.dismiss();
+            });
+
+            listdlg.show();
+
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void FiltroPorRacks() {
+        String Racks = "";
+        String val[];
+        int idx, pos;
+        try {
+
+            BeListPickingUbic.clear();
+            IdxFiltos.clear();
+            for (int i= 0; i < AuxBeListPickingUbic.size(); i++) {
+                BeListPickingUbic.add(AuxBeListPickingUbic.get(i));
+            }
+
+            for (int i = 0; i < BeListPickingUbic.size(); i ++) {
+
+                //Racks = BeListPickingUbic.get(i).NombreUbicacion;
+                /*idx = Racks.indexOf("-");
+                Racks= Racks.substring(0, idx).trim();*/
+
+                val =  BeListPickingUbic.get(i).NombreUbicacion.split("-");
+
+                if (val.length == 2) {
+                    Racks = val[0].trim();
+                } else {
+                    Racks = val[0].trim() + val[2].replace("T","").trim();
+                }
+
+                if (!ListRackSel.contains(Racks)) {
+                    IdxFiltos.add(i);
+                }
+            }
+
+            for (int i = 0; i < IdxFiltos.size(); i++) {
+                pos = IdxFiltos.size() - i - 1;
+                idx = IdxFiltos.get(pos);
+                BeListPickingUbic.remove(idx);
+            }
+
+            btnPendientes.setText("Regs: " + BeListPickingUbic.size() + "/" + AuxBeListPickingUbic.size());
+
+            if (gl.TipoPantallaPicking == 3) {
+                adapter3 = new list_adapt_detalle_tareas_picking3(this, BeListPickingUbic);
+                listView.setAdapter(adapter3);
+            } else {
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(this, BeListPickingUbic);
+                    listView.setAdapter(adapter2);
+                } else {
+                    adapter = new list_adapt_detalle_tareas_picking(this, BeListPickingUbic);
+                    listView.setAdapter(adapter);
+                }
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
+        }
+    }
+    //endregion
 }
