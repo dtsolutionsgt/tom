@@ -7222,6 +7222,7 @@ public class frm_recepcion_datos extends PBase {
 
                     case 16:
                         progress.setMessage("Procesando recepción");
+
                         //Guardar_Recepcion_Nueva
                         //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
 //                        if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
@@ -8036,22 +8037,18 @@ public class frm_recepcion_datos extends PBase {
                 CorelSiguiente = intLPSig;
                 TmpMaxL = MaxL;
 
-/*                   String str = String.valueOf(intLPSig);
-                   StringBuilder sb = new StringBuilder();
-
-                   for (int toPrepend= MaxL-str.length(); toPrepend>0; toPrepend--) {
-                       sb.append('0');
-                   }
-
-                   sb.append(str);
-                   String result = sb.toString();*/
-
-                //#CKFK20220410 Reemplacé el código de arriba por esta línea
+                //#CKFK20220410 Reemplacé el código anterior por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
 
                 pNumeroLP= nBeResolucion.Serie + result;
-                txtNoLP.setText(pNumeroLP);
 
+                //#CKFK20230213 Vamos a parametrizar que haga esto cuando no hayan lotes
+                if (!(gl.gBeOrdenCompra.Push_To_NAV &&
+                        (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC ||
+                                dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
+                                dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC))) {
+                    txtNoLP.setText(pNumeroLP);
+                }
             }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
                 //execws(6);

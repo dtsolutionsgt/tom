@@ -254,6 +254,7 @@ public class appGlobals extends Application {
         listValidDevices.add("Zebra");
         listValidDevices.add("Honeywell");
         listValidDevices.add("AOSP on IA Emulator");
+        listValidDevices.add("MC3300x");
 
         }
 
