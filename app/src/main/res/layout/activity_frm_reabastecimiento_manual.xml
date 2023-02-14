@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
         android:layout_marginTop="0dp"
-        android:background="@color/rosado"
+        android:background="@color/title_grid"
         android:orientation="vertical">
 
         <RelativeLayout

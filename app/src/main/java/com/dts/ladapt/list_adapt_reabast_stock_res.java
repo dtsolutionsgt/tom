@@ -1,6 +1,7 @@
 package com.dts.ladapt;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,6 +123,12 @@ public class list_adapt_reabast_stock_res extends BaseAdapter {
 
         if (!BeListStockRes.get(position).Nombre_Presentacion.isEmpty()) {
             holder.txtPresentacion.setText(BeListStockRes.get(position).Nombre_Presentacion);
+        }
+
+        if(position == selectedIndex) {
+            convertView.setBackgroundColor(Color.parseColor("#FFEBEE"));
+        } else {
+            convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         return convertView;

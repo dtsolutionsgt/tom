@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -50,6 +52,7 @@ public class frm_reabastecimiento_manual extends PBase {
     private static final ArrayList<clsBeVW_stock_res> ListStock = new ArrayList<clsBeVW_stock_res>() ;
     private list_adapt_reabast_stock_res adapter_stock;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
+    private int idx = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class frm_reabastecimiento_manual extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                    idx = i;
                     Object lvObj = listExist.getItemAtPosition(i);
                     selitem = (clsBeVW_stock_res) lvObj;
                     ProcesarRegistro();
@@ -192,6 +196,14 @@ public class frm_reabastecimiento_manual extends PBase {
             listExist.setAdapter(adapter_stock);
 
             lblNumReg.setText("Reg: " + ListStock.size());
+
+            //#AT20231402 Se mantiene scroll según idx
+            if (idx <= ListStock.stream().count() - 1) {
+                if (idx != -1) {
+                    listExist.setSelection(idx);
+                    adapter_stock.setSelectedIndex(idx);
+                }
+            }
 
             if (progress!=null) progress.cancel();
 
