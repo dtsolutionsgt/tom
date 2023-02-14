@@ -53,7 +53,7 @@ public class frm_verificacion_datos extends PBase {
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
-    private RelativeLayout relDesglose, relPick;
+    private RelativeLayout relDesglose, relPick, relReemplazo;
     private EditText txtPresPick, txtUnidadPick;
     private TextView lblPresPick, lblUnidadPick;
     private FloatingActionButton btnTareas;
@@ -145,6 +145,7 @@ public class frm_verificacion_datos extends PBase {
         lblUnidadPick = findViewById(R.id.lblUnidadPick);
         btnTareas = findViewById(R.id.btnTareas);
         relPick = findViewById(R.id.relPick);
+        relReemplazo = findViewById(R.id.relReemplazo);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -162,6 +163,10 @@ public class frm_verificacion_datos extends PBase {
     private void Load() {
 
         try {
+            //#AT20230214 Se muestra el boton si Permitir_Reemplazo_Verificacion = verdadero
+            if (gl.Permitir_Reemplazo_Verificacion) {
+                relReemplazo.setVisibility(View.VISIBLE);
+            }
 
             BePedidoDetVerif = gl.gBePedidoDetVerif;
             gl.gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();

@@ -227,6 +227,9 @@ public class appGlobals extends Application {
     public boolean Ordenar_Por_Nombre_Completo = false;
     public boolean TieneResoluciones = false;
     public boolean Calcular_Ubicacion_Sugerida_ML = false;
+    public boolean Permitir_Reemplazo_Picking = false;
+    public boolean Permitir_No_Encontrado_Picking = false;
+    public boolean Permitir_Reemplazo_Verificacion = false;
 
     public List<String> listValidDevices = new ArrayList<>();
 

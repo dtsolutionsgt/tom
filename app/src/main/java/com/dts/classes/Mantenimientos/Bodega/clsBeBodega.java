@@ -69,10 +69,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Repeticiones_En_Ingreso = false;
     @Element(required=false) public boolean Validar_Existencias_Inv_Ini = false;
     @Element(required=false) public boolean Calcular_Ubicacion_Sugerida_ML = false;
-
     @Element(required=false) public boolean Ordenar_Picking_Descendente = false;
-
     @Element(required=false) public boolean Ordenar_Por_Nombre_Completo = false;
+    @Element(required=false) public boolean Permitir_Reemplazo_Picking = false;
+    @Element(required=false) public boolean Permitir_No_Encontrado_Picking = false;
+    @Element(required=false) public boolean Permitir_Reemplazo_Verificacion = false;
+
 
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -98,7 +100,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean industria_motriz, int Top_Reabastecimiento_Manual, boolean Permitir_Decimales,
                        boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini,
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
-                       boolean Ordenar_Por_Nombre_Completo) {
+                       boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
+                       boolean Permitir_Reemplazo_Verificacion) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -161,6 +164,9 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Validar_Existencias_Inv_Ini  = Validar_Existencias_Inv_Ini;
         this.Ordenar_Picking_Descendente = Ordenar_Picking_Descendente;
         this.Ordenar_Por_Nombre_Completo = Ordenar_Por_Nombre_Completo;
+        this.Permitir_Reemplazo_Picking = Permitir_Reemplazo_Picking;
+        this.Permitir_No_Encontrado_Picking = Permitir_No_Encontrado_Picking;
+        this.Permitir_Reemplazo_Verificacion = Permitir_Reemplazo_Verificacion;
 
     }
 
@@ -577,4 +583,24 @@ public class clsBeBodega extends clsBeBodegaBase {
         Ordenar_Por_Nombre_Completo=value;
     }
 
+    public boolean getPermitir_Reemplazo_Picking() {
+        return Permitir_Reemplazo_Picking;
+    }
+    public void setPermitir_Reemplazo_Picking(boolean value) {
+        Permitir_Reemplazo_Picking=value;
+    }
+
+    public boolean getPermitir_No_Encontrado_Picking() {
+        return Permitir_No_Encontrado_Picking;
+    }
+    public void setPermitir_No_Encontrado_Picking(boolean value) {
+        Permitir_No_Encontrado_Picking=value;
+    }
+
+    public boolean getPermitir_Reemplazo_Verificacion() {
+        return Permitir_Reemplazo_Verificacion;
+    }
+    public void setPermitir_Reemplazo_Verificacion(boolean value) {
+        Permitir_Reemplazo_Verificacion=value;
+    }
 }

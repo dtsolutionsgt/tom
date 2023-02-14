@@ -83,7 +83,7 @@ public class frm_picking_datos extends PBase {
                      txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
-    private RelativeLayout tblCajasUnidades;
+    private RelativeLayout relNe, relReemplazo, tblCajasUnidades;
 
     private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false;
     private String pLP = "";
@@ -169,6 +169,9 @@ public class frm_picking_datos extends PBase {
         tblCajasUnidades = findViewById(R.id.tblCajasUnidades);
         lblPresentacion = findViewById(R.id.lblPresentacion);
 
+        relReemplazo = findViewById(R.id.relReemplazo);
+        relNe = findViewById(R.id.relNe);
+
         ProgressDialog("Cargando datos de producto picking");
 
         lblEstiba.setText("");
@@ -196,7 +199,8 @@ public class frm_picking_datos extends PBase {
         btnEnterCod = false;
 
         setHandlers();
-
+        //#AT20230214 Se muestra el boton si Permitir_Reemplazo_Picking = verdadero
+        MostarBotones();
         Load();
 
         //#EJC20210201: voice picking jajajaja :)
@@ -272,6 +276,16 @@ public class frm_picking_datos extends PBase {
             });
         }
 
+    }
+
+    private void MostarBotones() {
+        if (gl.Permitir_Reemplazo_Picking) {
+            relReemplazo.setVisibility(View.VISIBLE);
+        }
+
+        if (gl.Permitir_No_Encontrado_Picking) {
+            relNe.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setHandlers() {
