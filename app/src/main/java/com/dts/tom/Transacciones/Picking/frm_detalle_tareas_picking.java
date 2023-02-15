@@ -554,6 +554,7 @@ public class frm_detalle_tareas_picking extends PBase {
         int idx;
         clsBeTrans_picking_ubic vItem;
         BeListPickingUbic.clear();
+        AuxBeListPickingUbic.clear();
 
         try{
 
@@ -564,7 +565,6 @@ public class frm_detalle_tareas_picking extends PBase {
                 if (plistPickingUbi.items!=null){
 
                     ListRack.clear();
-                    AuxBeListPickingUbic.clear();
 
                     for (clsBeTrans_picking_ubic obj:plistPickingUbi.items){
 
@@ -666,8 +666,9 @@ public class frm_detalle_tareas_picking extends PBase {
     private void Lista_Detalle(){
 
         try{
-
-            if (BeListPickingUbic.size()==0 && !gBePicking.Detalle_operador){
+            //#AT20230215 Si AuxBeListPickingUbic no es 0, no procede a  finalizar el picking.
+            //AuxBeListPickingUbic es una copia del detalle de picking del ws
+            if (BeListPickingUbic.size()==0 && !gBePicking.Detalle_operador && AuxBeListPickingUbic.size() == 0){
 
                 btnPendientes.setText("Completa");
                 btnPendientes.setBackgroundColor(Color.parseColor("#C8E6C9"));
@@ -675,9 +676,15 @@ public class frm_detalle_tareas_picking extends PBase {
                 relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
 
                 Finalizar_Picking();
+            } else {
+                //#AT20230215 Si BeListPickingUbic filtrada queda en 0 y AuxBeListPickingUbic no esta vacía
+                //recarga la lista sin filtros.
+                if (BeListPickingUbic.size() == 0 && AuxBeListPickingUbic.size() != 0) {
+                    ListRackSel.clear();
+                    Lista_Detalle_Picking();
+                }
             }
-
-        }catch (Exception e){
+        } catch (Exception e){
             mu.msgbox("Lista_Detalle:"+e.getMessage());
         }
     }

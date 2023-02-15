@@ -32,7 +32,7 @@ public class frm_datos_reabastecimiento extends PBase {
     private EditText txtUbicOrigen, txtLicPlate, txtCodigoPrd, txtLote, txtVence,
                      txtEstado, txtCantidad, txtUbicDestino;
     private TextView lblUbicCompleta, lblDescProducto, lblUbicCompDestino, lblCantidad, lblCant;
-    private TableRow trLicPlate, tblExplosionar;
+    private TableRow trLicPlate, tblExplosionar, trUbicDestino;
     private CheckBox chkExplosionar;
 
     private clsBeTrans_movimientos gMovimientoDet = new clsBeTrans_movimientos();
@@ -78,6 +78,7 @@ public class frm_datos_reabastecimiento extends PBase {
 
         trLicPlate = findViewById(R.id.trLicPlate);
         tblExplosionar = findViewById(R.id.tblExplosionar);
+        trUbicDestino = findViewById(R.id.trUbicDestino);
 
         txtUbicOrigen.setEnabled(false);
 
@@ -87,7 +88,6 @@ public class frm_datos_reabastecimiento extends PBase {
 
         Load();
         setHandlers();
-
     }
 
     private void setHandlers() {
@@ -201,6 +201,9 @@ public class frm_datos_reabastecimiento extends PBase {
                     explosionar = b;
                 }
             });
+
+            txtUbicDestino.setOnClickListener(view -> {});
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -243,6 +246,8 @@ public class frm_datos_reabastecimiento extends PBase {
                 txtCodigoPrd.setCursorVisible(false);
             }
 
+            txtLicPlate.clearFocus();
+            trUbicDestino.requestFocus();
             txtUbicDestino.setFocusable(true);
             txtUbicDestino.setFocusableInTouchMode(true);
             txtUbicDestino.setCursorVisible(true);
