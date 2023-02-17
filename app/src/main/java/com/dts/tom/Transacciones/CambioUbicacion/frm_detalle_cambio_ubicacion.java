@@ -389,6 +389,13 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                             progress.cancel();
                         }
                     }
+
+                    if (index <= pBeTransUbicHhDetListArray.stream().count() - 1) {
+                        if (index != -1) {
+                            listView.setSelection(index);
+                            adapter.setSelectedIndex(index);
+                        }
+                    }
                 }
             }
 
