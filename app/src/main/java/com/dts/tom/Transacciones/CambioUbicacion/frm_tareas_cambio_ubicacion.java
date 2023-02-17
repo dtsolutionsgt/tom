@@ -270,8 +270,16 @@ public class frm_tareas_cambio_ubicacion extends PBase {
 
                     if (pListBeTransUbicHhEnc.items.size()>1){
 
-                        adapter.setSelectedIndex(-1);
+                       /* adapter.setSelectedIndex(-1);
                         index = -1;
+                    }*/
+
+                        if (index <= pListBeTareasCambioHH.stream().count() - 1) {
+                            if (index != -1) {
+                                listView.setSelection(index);
+                                adapter.setSelectedIndex(index);
+                            }
+                        }
                     }
 
                 }
