@@ -1700,13 +1700,13 @@ public class frm_picking_datos extends PBase {
                         }
                     }
 
-                    //Procesar_Registro();
-                    if (pEntre_Reemplazo){
+                    Procesar_Registro();
+                    /*if (pEntre_Reemplazo){
                         pEntre_Reemplazo = false;
                         Reemplazar_Producto();
                     }else{
                         Procesar_Registro();
-                    }
+                    }*/
                     //gl.termino = "";
                 }else{
                     msgCodigoProducto("Confirme código de producto y luego presione Enter.");

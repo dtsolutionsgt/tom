@@ -397,7 +397,7 @@ tools:context=".Transacciones.Reabastecimiento.frm_datos_reabastecimiento">
             <EditText
                 android:id="@+id/txtUbicDestino"
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:inputType="number" />
 
             <TextView
@@ -424,8 +424,10 @@ tools:context=".Transacciones.Reabastecimiento.frm_datos_reabastecimiento">
                 android:layout_height="45dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="7dp"
+                android:focusableInTouchMode="false"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
+                android:selectAllOnFocus="false"
                 android:text="-"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />

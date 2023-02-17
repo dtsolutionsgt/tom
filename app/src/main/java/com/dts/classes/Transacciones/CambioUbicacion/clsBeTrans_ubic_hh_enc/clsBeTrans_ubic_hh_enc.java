@@ -28,6 +28,7 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public String DescripcionMotivo;
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public int IdReabastecimientoLog=0;
+    @Element(required=false) public String Nombre_Operador = "";
 
     public clsBeTrans_ubic_hh_enc() {
     }
@@ -37,7 +38,7 @@ public class clsBeTrans_ubic_hh_enc {
                                   String Fec_agr,String User_mod,String Fec_mod,String Observacion,
                                   boolean Activo,boolean Operador_por_linea,boolean Ubicacion_con_hh,String Estado,
                                   boolean Cambio_estado,int IdPrioridad,int IdTipoTarea,int IdBodega,
-                                  String Asunto,String DescripcionMotivo,boolean IsNew) {
+                                  String Asunto,String DescripcionMotivo,boolean IsNew, String Nombre_Operador) {
 
         this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -61,10 +62,10 @@ public class clsBeTrans_ubic_hh_enc {
         this.IdBodega=IdBodega;
         this.Asunto=Asunto;
         this.DescripcionMotivo=DescripcionMotivo;
+        this.Nombre_Operador = Nombre_Operador;
         this.IsNew=IsNew;
 
     }
-
 
     public int getIdTareaUbicacionEnc() {
         return IdTareaUbicacionEnc;

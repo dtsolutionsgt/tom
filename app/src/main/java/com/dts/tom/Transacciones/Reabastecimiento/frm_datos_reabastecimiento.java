@@ -81,6 +81,7 @@ public class frm_datos_reabastecimiento extends PBase {
         trUbicDestino = findViewById(R.id.trUbicDestino);
 
         txtUbicOrigen.setEnabled(false);
+        lblUbicCompDestino.setEnabled(false);
 
         UbicValida = false;
 
@@ -153,6 +154,21 @@ public class frm_datos_reabastecimiento extends PBase {
                             execws(3);
                         } else {
                             mu.msgbox("Ubicación no válida.");
+                            txtUbicDestino.requestFocus();
+                        }
+                    }
+
+                    return false;
+                }
+            });
+
+            lblUbicCompDestino.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (txtUbicDestino.getText().toString().isEmpty()) {
+                            mu.msgbox("Ubicación no válida.");
+                            txtUbicDestino.requestFocus();
                         }
                     }
 
@@ -469,11 +485,13 @@ public class frm_datos_reabastecimiento extends PBase {
                     UbicValida = false;
                     lblUbicCompDestino.setText("");
                     toast("Ubicación no válida");
+                    txtUbicDestino.requestFocus();
                 }
             } else {
                 UbicValida = false;
                 lblUbicCompDestino.setText("");
                 toast("Ubicación no válida");
+                txtUbicDestino.requestFocus();
             }
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

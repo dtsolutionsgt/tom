@@ -1586,8 +1586,10 @@ public class frm_Packing extends PBase {
                     case 5:
                         callMethod("Get_Productos_By_IdUbicacion_And_LicPlate",
                                 "pIdUbicacion", txtUbicOr.getText().toString(),
+                                "pIdBodega", gl.IdBodega,
                                 "pIdProductoBodega",BeProductoUbicacionOrigen.IdProductoBodega,
-                                "pLicPlate",BeStockPallet.Lic_plate);
+                                "pLicPlate",BeStockPallet.Lic_plate,
+                                "pIdPresentacion",BeStockPallet.IdPresentacion);
 
                         break;
                     case 6:
