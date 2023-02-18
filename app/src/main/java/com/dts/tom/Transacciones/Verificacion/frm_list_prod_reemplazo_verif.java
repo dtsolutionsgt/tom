@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.Verificacion;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -825,6 +826,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
     public void salir () {
         super.finish();
+        startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
     }
 
     public void Regresar(View view){

@@ -63,7 +63,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:background="@drawable/color_medium"
-            android:onClick="Reemplazar"
+            android:onClick="ContinuaProceso"
             android:text="Guardar"
             android:textColor="@android:color/background_light"
             android:textSize="24sp"

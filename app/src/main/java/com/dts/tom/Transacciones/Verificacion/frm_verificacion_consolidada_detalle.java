@@ -2,7 +2,9 @@ package com.dts.tom.Transacciones.Verificacion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.CantReemplazar;
 import static br.com.zbra.androidlinq.Linq.stream;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     private clsBeDetallePedidoAVerificar selitem;
     private list_adapt_detalle_tareas_verificacion adapter;
+    private clsBeDetallePedidoAVerificar vItem = new clsBeDetallePedidoAVerificar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +102,19 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     }
 
+    private void ValidaCantidad(clsBeDetallePedidoAVerificar TareaDet) {
+        try {
+            if (CantReemplazar > TareaDet.Cantidad_Recibida) {
+                mgsConfirmarCantidad("La cantidad selecionada ("+TareaDet.Cantidad_Recibida+") es mayor a la cantidad a reemplazar ("+CantReemplazar+"). ¿Desea continuar?");
+                CantReemplazar = TareaDet.Cantidad_Recibida;
+            } else {
+                Procesa_Registro(TareaDet);
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
+        }
+    }
+
     private void Procesa_Registro(){
         clsBeDetallePedidoAVerificar vItem;
         try{
@@ -152,7 +169,8 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                 pSubListPickingU.items = stream(pSubListPickingU.items)
                                         .where(c-> c.IdProductoBodega == BePedidoDetVerif.IdProductoBodega)
                                         .where(c-> c.CodigoProducto.equals(BePedidoDetVerif.Codigo))
-                                        .where(c->c.IdPresentacion == BePedidoDetVerif.IdPresentacion).toList();
+                                        .where(c->c.IdPresentacion == BePedidoDetVerif.IdPresentacion)
+                                        .where(c->c.Cantidad_Recibida > 0).toList();
 
                 if (pSubListPickingU!= null) {
 
@@ -228,10 +246,11 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Object lvObj = ListVeri.getItemAtPosition(position);
-                    clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
+                    vItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     int index = position;
-                    Procesa_Registro(vItem);
+                    ValidaCantidad(vItem);
+                    //Procesa_Registro(vItem);
 
                 }
             });
@@ -296,6 +315,35 @@ public class frm_verificacion_consolidada_detalle extends PBase {
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void mgsConfirmarCantidad(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Procesa_Registro(vItem);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
 

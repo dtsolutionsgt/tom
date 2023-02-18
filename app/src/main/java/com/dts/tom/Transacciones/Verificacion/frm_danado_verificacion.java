@@ -146,7 +146,7 @@ public class frm_danado_verificacion extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                        aplicarReemplazo = true;
+                        /*aplicarReemplazo = true;
 
                         //getNombreUbicacion(txtUbicDestVeri.getText().toString());
 
@@ -167,7 +167,8 @@ public class frm_danado_verificacion extends PBase {
                                         + "\n ¿Mover?");
                             }
 
-                        }
+                        }*/
+                        ContinuaProceso();
 
                     }
 
@@ -187,6 +188,39 @@ public class frm_danado_verificacion extends PBase {
             mu.msgbox( e.getMessage());
         }
 
+    }
+
+    public void ContinuaProceso(View view) {
+        ContinuaProceso();
+    }
+
+    private void ContinuaProceso() {
+        try {
+            aplicarReemplazo = true;
+
+            //getNombreUbicacion(txtUbicDestVeri.getText().toString());
+
+            if (!txtUbicDestVeri.getText().toString().isEmpty()) {
+
+                validaUbicacion();
+
+                BeUbicDestino = new clsBeBodega_ubicacion();
+                BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDestVeri.getText().toString().trim());
+                IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+
+                if (existe) {
+                    execws(2);
+                } else {
+                    msgMover("Producto: " + gBeProducto.Nombre
+                            + "\n Destino: " + txtUbicDestVeri.getText().toString()
+                            + "\n Estado: " + stream(LProductoEstadoDanado.items).where(c -> c.IdEstado == IdEstadoDanado).select(c -> c.Nombre).first()
+                            + "\n ¿Mover?");
+                }
+
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
+        }
     }
 
     public void validaUbicacion() {

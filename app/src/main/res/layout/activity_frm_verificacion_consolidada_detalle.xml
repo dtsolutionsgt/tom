@@ -21,7 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Detalle"
+            android:text="Seleccione un registro"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
