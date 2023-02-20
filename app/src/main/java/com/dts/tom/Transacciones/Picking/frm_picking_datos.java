@@ -85,7 +85,7 @@ public class frm_picking_datos extends PBase {
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
     private RelativeLayout relNe, relReemplazo, tblCajasUnidades;
 
-    private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false;
+    private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false, pEntre_NoEnc = false;
     private String pLP = "";
     private String pCodigo = "", vUnidadMedida="";
     private final int gIdUbicacion=0;
@@ -363,6 +363,9 @@ public class frm_picking_datos extends PBase {
                         if (pEntre_Reemplazo){
                             pEntre_Reemplazo = false;
                             Reemplazar_Producto();
+                        }else if (pEntre_NoEnc){
+                            pEntre_NoEnc = false;
+                            Producto_No_Encontrado();
                         }else{
                             Procesar_Registro();
                         }
@@ -1679,6 +1682,13 @@ public class frm_picking_datos extends PBase {
     public void BotonGuardar(View view){
 
         btnGuardar = true;
+
+        if (pEntre_Reemplazo || pEntre_NoEnc){
+            msgbox("Entró en proceso de Reemplazo o de No encontrado, ingrese la cantidad y " +
+                    "presione enter para continuar con el proceso");
+            return;
+        }
+
         //#GT si requiere confirmar codigo valida el enter, aplica cealsa, para los demas no importa
         if (confirmar_codigo_en_picking){
 
@@ -1892,7 +1902,7 @@ public class frm_picking_datos extends PBase {
     }
 
     //#AT 20220126 Cree esta función para validar campos y que permita realizar el reemplazo y PordNoEnc
-    public boolean ValidaCampos() {
+    public boolean ValidaCampos(boolean reemplazo) {
 
         try {
 
@@ -1929,7 +1939,12 @@ public class frm_picking_datos extends PBase {
                     txtLicencia.setText(lblLicPlate.getText());
                     Procesa_Barra();
                     //txtCantidadPick.requestFocus();
-                    pEntre_Reemplazo = true;
+                    if (reemplazo){
+                        pEntre_Reemplazo = true;
+                    }else{
+                        pEntre_NoEnc = true;
+                    }
+
                    /* mu.msgbox("Ingrese licencia del producto");
                     txtLicencia.setSelectAllOnFocus(true);
                     txtLicencia.requestFocus();*/
@@ -2033,11 +2048,13 @@ public class frm_picking_datos extends PBase {
 
             Tipo=1;
             if (!pEntre_Reemplazo){
-                if (ValidaCampos()) {
+                if (ValidaCampos(true)) {
                     msgReemplazo("¿Marcar producto para reemplazo?");
                 } else {
-                    return;
+                   return;
                 }
+            }else{
+                toastlong("Presione Enter en la cantidad para continuar con el proceso de reemplazo");
             }
 
         } catch (Exception e) {
@@ -2045,16 +2062,35 @@ public class frm_picking_datos extends PBase {
         }
     }
     public void BotonNoEn(View view){
-
-        try {
+        Producto_No_Encontrado();
+        /*try {
 
             Tipo=2;
-            if (ValidaCampos()) {
+            if (ValidaCampos(false)) {
                 msgReemplazo("¿Marcar producto como No Encontrado?");
             } else {
                 return;
             }
 
+        } catch (Exception e) {
+            mu.msgbox("BotonReemplazo:"+e.getMessage());
+        }*/
+
+    }
+
+    public void Producto_No_Encontrado(){
+        try {
+
+            Tipo=2;
+            if (!pEntre_NoEnc){
+                if (ValidaCampos(false)) {
+                    msgReemplazo("¿Marcar producto como No Encontrado?");
+                } else {
+                    return;
+                }
+            }else {
+                toastlong("Presione Enter en la cantidad para continuar con el proceso de No Encontrado");
+            }
         } catch (Exception e) {
             mu.msgbox("BotonReemplazo:"+e.getMessage());
         }
@@ -2181,9 +2217,9 @@ public class frm_picking_datos extends PBase {
                     case 7:
                         callMethod("Actualizar_Picking",
                                          "oBeTrans_picking_ubic",gBePickingUbic,
-                                               "BeStockRes",BeStockRes,
-                                               "oBeTrans_picking_det",BePickingDet,
-                                               "IdBodega",gl.IdBodega);
+                                         "BeStockRes",BeStockRes,
+                                         "IdBodega",gl.IdBodega,
+                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")));
                         break;
                     case 8:
                         callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet",
@@ -2199,9 +2235,13 @@ public class frm_picking_datos extends PBase {
                             gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
                         }
 
-                        callMethod("Actualiza_Picking_Consolidado","pBePickingUbic",gBePickingUbic,
-                                "pIdOperador",gl.OperadorBodega.IdOperador,"ReemplazoLP",ReemplazoLP,"pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
-                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),"BeStockPallet",BeStockPallet);
+                        callMethod("Actualiza_Picking_Consolidado",
+                                "pBePickingUbic",gBePickingUbic,
+                                "pIdOperador",gl.OperadorBodega.IdOperador,
+                                "ReemplazoLP",ReemplazoLP,
+                                "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
+                                "BeStockPallet",BeStockPallet);
                         break;
                     case 10:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
@@ -2209,8 +2249,8 @@ public class frm_picking_datos extends PBase {
                     case 11:
                         callMethod("Get_All_Reservas_By_IdStock",
                                         "pIdStock", selitem.IdStock,
-                                              "pIdBodega", gl.IdBodega,
-                                              "pIdPedido", selitem.IdPedidoEnc);
+                                        "pIdBodega", gl.IdBodega,
+                                        "pIdPedido", selitem.IdPedidoEnc);
                         break;
 
                     case 12:

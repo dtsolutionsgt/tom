@@ -514,7 +514,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         try {
 
             if (gl.existencia.DisponibleUMBas.equals("0.00") && gl.existencia.DispPres.equals("0.00")){
-                msgbox("Todo el producto está reservado y no tiene una licencia asociada");
+                msgbox("Todo el producto está reservado, no se pueder realizar el cambio de ubicación");
                 return;
             }
 

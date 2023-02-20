@@ -1241,9 +1241,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private void MostrarTipoOrden() {
         if (TipoOrdenDetalle == 1) {
-            toastlong(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
+            toast(cmbOrdenadorPor.getSelectedItem() +" - ascendente");
         } else if (TipoOrdenDetalle == 2) {
-            toastlong(cmbOrdenadorPor.getSelectedItem() +" - descendente");
+            toast(cmbOrdenadorPor.getSelectedItem() +" - descendente");
         }
     }
 
