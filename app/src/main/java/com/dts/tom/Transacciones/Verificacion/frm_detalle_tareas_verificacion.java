@@ -568,7 +568,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             Intent intent = new Intent(this, frm_verificacion_datos.class);
             startActivity(intent);
-            super.finish();
 
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");

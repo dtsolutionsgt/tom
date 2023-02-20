@@ -41,7 +41,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     private clsBeDetallePedidoAVerificar selitem;
     private list_adapt_detalle_tareas_verificacion adapter;
-    private clsBeDetallePedidoAVerificar vItem = new clsBeDetallePedidoAVerificar();
+    private clsBeDetallePedidoAVerificar selItem = new clsBeDetallePedidoAVerificar();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +71,8 @@ public class frm_verificacion_consolidada_detalle extends PBase {
     private void Procesa_Registro(clsBeDetallePedidoAVerificar TareaDet){
         List AuxList;
         try{
-
-            gl.gBePedidoDetVerif=TareaDet;
-            frm_verificacion_datos.BePedidoDetVerif = gl.gBePedidoDetVerif;
+            gl.gBePedidoDetVerif = BePedidoDetVerif;
+            BePedidoDetVerif = TareaDet;
 
             if (TareaDet.LicPlate.equals("")) {
                 AuxList = stream(frm_verificacion_datos.pSubListPickingU.items)
@@ -93,7 +92,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
             pSubListPickingU.items = AuxList;
 
             startActivity(new Intent(this, frm_danado_verificacion.class));
-            super.finish();
+            browse = 1;
 
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -102,13 +101,12 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     }
 
-    private void ValidaCantidad(clsBeDetallePedidoAVerificar TareaDet) {
+    private void ValidaCantidad() {
         try {
-            if (CantReemplazar > TareaDet.Cantidad_Recibida) {
-                mgsConfirmarCantidad("La cantidad selecionada ("+TareaDet.Cantidad_Recibida+") es mayor a la cantidad a reemplazar ("+CantReemplazar+"). ¿Desea continuar?");
-                CantReemplazar = TareaDet.Cantidad_Recibida;
+            if (CantReemplazar > selItem.Cantidad_Recibida) {
+                mgsConfirmarCantidad("La cantidad selecionada ("+selItem.Cantidad_Recibida+") es menor a la cantidad a reemplazar ("+CantReemplazar+"). ¿Desea continuar?");
             } else {
-                Procesa_Registro(TareaDet);
+                Procesa_Registro(selItem);
             }
         } catch (Exception e) {
             msgbox(new Object() {} .getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
@@ -170,8 +168,8 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                                         .where(c-> c.IdProductoBodega == BePedidoDetVerif.IdProductoBodega)
                                         .where(c-> c.CodigoProducto.equals(BePedidoDetVerif.Codigo))
                                         .where(c->c.IdPresentacion == BePedidoDetVerif.IdPresentacion)
-                                        .where(c->c.Cantidad_Recibida > 0).toList();
-
+                                        .where(c->c.Cantidad_Recibida > 0)
+                                        .toList();
                 if (pSubListPickingU!= null) {
 
                     if (pSubListPickingU.items!=null ) {
@@ -246,10 +244,10 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Object lvObj = ListVeri.getItemAtPosition(position);
-                    vItem = (clsBeDetallePedidoAVerificar) lvObj;
+                    selItem = (clsBeDetallePedidoAVerificar) lvObj;
 
                     int index = position;
-                    ValidaCantidad(vItem);
+                    ValidaCantidad();
                     //Procesa_Registro(vItem);
 
                 }
@@ -330,7 +328,8 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Procesa_Registro(vItem);
+                    CantReemplazar = selItem.Cantidad_Recibida;
+                    Procesa_Registro(selItem);
                 }
             });
 
@@ -354,5 +353,19 @@ public class frm_verificacion_consolidada_detalle extends PBase {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+
+            if (browse == 1) {
+                browse = 0;
+                BePedidoDetVerif = gl.gBePedidoDetVerif;
+            }
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
     }
 }

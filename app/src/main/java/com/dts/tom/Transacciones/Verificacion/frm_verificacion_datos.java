@@ -1204,7 +1204,7 @@ public class frm_verificacion_datos extends PBase {
                             if (pSubListPickingU.items != null) {
                                 if (pSubListPickingU.items.size() > 0) {
                                     startActivity(new Intent(frm_verificacion_datos.this, frm_verificacion_consolidada_detalle.class));
-                                    finish();
+                                    browse = 1;
                                 }
                             }
                         }
@@ -1354,7 +1354,6 @@ public class frm_verificacion_datos extends PBase {
                 browse=0;
                 super.finish();
             }
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
