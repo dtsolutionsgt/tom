@@ -69,6 +69,7 @@ public class frm_verificacion_datos extends PBase {
     private String Lp;
 
     public static double CantReemplazar=0;
+    public static double AuxCantReemplazar=0;
 
     private final ArrayList<String> PresList = new ArrayList<String>();
 
@@ -169,7 +170,7 @@ public class frm_verificacion_datos extends PBase {
             }
 
             BePedidoDetVerif = gl.gBePedidoDetVerif;
-            gl.gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
+            //gl.gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
 
             IdProductoBodega = BePedidoDetVerif.getIdProductoBodega();
 
@@ -1324,6 +1325,7 @@ public class frm_verificacion_datos extends PBase {
             }
 
             CantReemplazar = valor;
+            AuxCantReemplazar = valor;
             msgAskReemplazar("¿Marcar producto para reemplazo?");
 
         }catch (Exception e){
@@ -1351,6 +1353,7 @@ public class frm_verificacion_datos extends PBase {
             super.onResume();
 
             if (browse==1 && reemplazoCorrecto){
+                reemplazoCorrecto = false;
                 browse=0;
                 super.finish();
             }

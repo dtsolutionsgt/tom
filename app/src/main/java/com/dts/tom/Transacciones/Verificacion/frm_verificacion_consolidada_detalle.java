@@ -19,6 +19,8 @@ import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDe
 import com.dts.ladapt.Verificacion.list_adapt_detalle_tareas_verificacion;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.AuxCantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.CantReemplazar;
@@ -42,6 +44,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
     private clsBeDetallePedidoAVerificar selitem;
     private list_adapt_detalle_tareas_verificacion adapter;
     private clsBeDetallePedidoAVerificar selItem = new clsBeDetallePedidoAVerificar();
+    public static boolean unico = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +94,9 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
             pSubListPickingU.items = AuxList;
 
-            startActivity(new Intent(this, frm_danado_verificacion.class));
             browse = 1;
+            startActivity(new Intent(this, frm_danado_verificacion.class));
+            super.finish();
 
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -140,8 +144,9 @@ public class frm_verificacion_consolidada_detalle extends PBase {
             vItem.NombreArea = pSubListPickingU.items.get(0).getNombreArea();
             vItem.NombreClasificacion = pSubListPickingU.items.get(0).getNombreClasificacion();
 
-            frm_verificacion_datos.BePedidoDetVerif = vItem;
+            BePedidoDetVerif = vItem;
 
+            browse = 1;
             startActivity(new Intent(this, frm_danado_verificacion.class));
             super.finish();
 
@@ -170,6 +175,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                                         .where(c->c.IdPresentacion == BePedidoDetVerif.IdPresentacion)
                                         .where(c->c.Cantidad_Recibida > 0)
                                         .toList();
+
                 if (pSubListPickingU!= null) {
 
                     if (pSubListPickingU.items!=null ) {
@@ -214,6 +220,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
                             ListVeri.setAdapter(adapter);
 
                         } else {
+                            unico = true;
                             Procesa_Registro();
                         }
                     }
@@ -352,20 +359,7 @@ public class frm_verificacion_consolidada_detalle extends PBase {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        super.finish();
     }
 
-    @Override
-    protected void onResume() {
-        try {
-            super.onResume();
-
-            if (browse == 1) {
-                browse = 0;
-                BePedidoDetVerif = gl.gBePedidoDetVerif;
-            }
-        } catch (Exception e) {
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
-        }
-    }
 }

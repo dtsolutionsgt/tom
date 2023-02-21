@@ -27,9 +27,11 @@ import com.dts.tom.Transacciones.Picking.frm_picking_datos;
 import java.util.ArrayList;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.AuxCantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.gBeProducto;
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_consolidada_detalle.unico;
 
 public class frm_danado_verificacion extends PBase {
 
@@ -236,10 +238,9 @@ public class frm_danado_verificacion extends PBase {
     private void reemplazaProducto(){
 
         try{
-
-            browse=1;
+            //browse=1;
             startActivity(new Intent(this, frm_list_prod_reemplazo_verif.class));
-
+            super.finish();
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
@@ -515,6 +516,15 @@ public class frm_danado_verificacion extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+
+                    if (gl.VerificacionSinLoteFechaVen) {
+                        BePedidoDetVerif = gl.gBePedidoDetVerif;
+                        CantReemplazar = AuxCantReemplazar;
+
+                        if (!unico) {
+                            startActivity(new Intent(frm_danado_verificacion.this, frm_verificacion_consolidada_detalle.class));
+                        }
+                    }
                     frm_danado_verificacion.super.finish();
                 }
             });

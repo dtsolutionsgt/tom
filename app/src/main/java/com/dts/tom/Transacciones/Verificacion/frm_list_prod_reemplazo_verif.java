@@ -33,6 +33,7 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdEstadoDanado;
 import static com.dts.tom.Transacciones.Verificacion.frm_danado_verificacion.IdUbicacionDestino;
+import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.AuxCantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.CantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.gBeProducto;
@@ -511,6 +512,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
             if (StockReservado) {
                 if (CantidadPendiente == 0) {
+                    reemplazoCorrecto = true;
                     msgAskReemplazado("Stock reemplazado correctamente");
                 } else {
                     CantReemplazar = CantidadPendiente;
@@ -705,6 +707,12 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+
+                    if (gl.VerificacionSinLoteFechaVen) {
+                        BePedidoDetVerif = gl.gBePedidoDetVerif;
+                        CantReemplazar = AuxCantReemplazar;
+                    }
+
                     frm_list_prod_reemplazo_verif.super.finish();
                 }
             });
@@ -826,7 +834,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
     public void salir () {
         super.finish();
-        startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
     }
 
     public void Regresar(View view){
@@ -836,11 +843,9 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     @Override
     public void onBackPressed() {
 
-        try{
-
+        try {
             msgAskExit("Está seguro de salir, no se guardará el producto para el reemplazo");
-
-        }catch (Exception e){
+        } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
