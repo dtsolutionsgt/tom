@@ -21,6 +21,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public int IdProductoEstado=0;
   @Element(required=false) public int IdPresentacion=0;
   @Element(required=false) public int IdRecepcionEnc=0;
+  @Element(required=false) public int IdRecepcionDet=0;
   @Element(required=false) public String Propietario="";
   @Element(required=false) public String UMBas="";
   @Element(required=false) public String Nombre_Presentacion="";

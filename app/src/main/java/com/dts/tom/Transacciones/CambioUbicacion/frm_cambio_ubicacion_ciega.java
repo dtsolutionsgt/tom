@@ -4072,6 +4072,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = cvStockItem.IdRecepcionEnc;
+            //#EJC202302211353
+            //gMovimientoDet.IdRecepcionDet = cvStockItem.IdRecepcionEnc;
             gMovimientoDet.Cantidad = vCantidadAUbicar;
             gMovimientoDet.Serie = cvStockItem.Serial;
 
