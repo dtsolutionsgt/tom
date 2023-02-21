@@ -92,7 +92,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private final double cantReemplazar = 0;
     private boolean preguntoPorDiferencia = false, mostrar_area, VerSinLoteFechaVen = false;
     private boolean finalizar = true;
-    private int selidx = -1,sortord;
+    private int selidx = -1,sortord, idx = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +193,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                     Object lvObj = listDetVeri.getItemAtPosition(position);
                     clsBeDetallePedidoAVerificar vItem = (clsBeDetallePedidoAVerificar) lvObj;
+                    idx = position;
 
                     if (gl.TipoPantallaVerificacion > 0) {
 
@@ -998,6 +999,22 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                     }
 
+                    if (idx <= pListBeTareasVerificacionHH.stream().count() - 1) {
+                        if (idx != -1) {
+                            listDetVeri.setSelection(idx);
+                            if (gl.TipoPantallaVerificacion == 3) {
+                                adapter4.setSelectedIndex(idx);
+                            } else {
+                                if (mostrar_area) {
+                                    adapter2.setSelectedIndex(idx);
+                                } else if (VerSinLoteFechaVen) {
+                                    adapter3.setSelectedIndex(idx);
+                                } else {
+                                    adapter.setSelectedIndex(idx);
+                                }
+                            }
+                        }
+                    }
                 } else {
                     listDetVeri.setAdapter(null);
                 }
