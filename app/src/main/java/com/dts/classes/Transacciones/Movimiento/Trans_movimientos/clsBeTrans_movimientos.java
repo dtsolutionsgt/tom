@@ -35,6 +35,12 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public int IdOperadorBodega;
 
+    @Element(required=false) public int IdRecepcionDet;
+    @Element(required=false) public int IdPedidoEnc;
+    @Element(required=false) public int IdPedidoDet;
+    @Element(required=false) public int IdDespachoEnc;
+    @Element(required=false) public int IdDespachoDet;
+
 
     public clsBeTrans_movimientos() {
     }
@@ -263,6 +269,33 @@ public class clsBeTrans_movimientos {
     public void setIdOperadorBodega(int value) {
         IdOperadorBodega=value;
     }
+    public int getIdRecepcionDet() {
+        return IdRecepcionDet;
+    }
+    public void setIdRecepcionDet(int value) {
+        IdRecepcionDet=value;
+    }
+    public int getIdPedidoEnc() {
+        return IdPedidoEnc;
+    }
+    public void setIdPedidoEnc(int value) {
+        IdPedidoEnc=value;
+    }
+    public int getIdPedidoDet() {
+        return IdPedidoDet;
+    }
+    public void setIdPedidoDet(int value) {IdPedidoDet=value;}
+    public int getIdDespachoEnc() {
+        return IdDespachoEnc;
+    }
+    public void setIdDespachoEnc(int value) {
+        IdDespachoEnc=value;
+    }
+    public int getIdDespachoDet() {
+        return IdDespachoDet;
+    }
+    public void setIdDespachoDet(int value) {
+        IdDespachoDet=value;
+    }
 
 }
-
