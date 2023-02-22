@@ -31,6 +31,8 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.google.android.material.button.MaterialButton;
 
+import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
+
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.AuxCantReemplazar;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.BePedidoDetVerif;

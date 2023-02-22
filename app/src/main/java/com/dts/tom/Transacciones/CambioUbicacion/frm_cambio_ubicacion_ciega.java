@@ -2305,9 +2305,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         }*/
                     }
 
-                    List AuxList = stream(productoList.items)
-                            .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
-                            .toList();
+                    List AuxList;
+
+                    if (CambioUbicExistencia){
+                        AuxList = stream(productoList.items)
+                                .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                                .where(c-> c.Stock.IdPresentacion == gl.existencia.IdPresentacion )
+                                .toList();
+                    }else{
+                        AuxList = stream(productoList.items)
+                                .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
+                                .toList();
+                    }
 
                     if (AuxList.size() == 0){
                         msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
