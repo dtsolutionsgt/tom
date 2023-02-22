@@ -81,7 +81,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         ws = new WebServiceHandler(frm_list_prod_reemplazo_verif.this, gl.wsurl);
         xobj = new XMLObject(ws);
-        xobj = new XMLObject(ws);
 
         lblTituloForma = findViewById(R.id.lblTituloForma);
         lblCantRegs = findViewById(R.id.lblCantRegs);

@@ -115,12 +115,8 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
             holder.lblIdProductoBodega.setVisibility(View.GONE);
             holder.lblIdPresentacion.setVisibility(View.GONE);
             holder.lblNDias.setVisibility(View.GONE);
-
-            /*if(selectedIndex!= -1 && position == selectedIndex) {
-                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }*/
+            holder.lblLicPlate.setVisibility(View.GONE);
+            holder.lblArea.setVisibility(View.GONE);
 
             //#AT20220531 Colores y estados según la cantidad solicitada, pickeada y verificada.
             double Pick  = pListBeTareasVerificacionHH.get(position).Cantidad_Recibida;
@@ -147,10 +143,6 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
                 //Verde - Verificación completa
                 convertView.setBackgroundColor(Color.parseColor("#00E676"));
                 holder.lblEstadoVer.setText("Verificación completa");
-            }
-
-            if (position == selectedIndex) {
-                convertView.setBackgroundColor(Color.parseColor("#FFEBEE"));
             }
 
         }catch (Exception ex){

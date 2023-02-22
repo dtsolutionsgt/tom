@@ -147,10 +147,6 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
                 convertView.setBackgroundColor(Color.parseColor("#00E676"));
             }
 
-            if (position == selectedIndex) {
-                convertView.setBackgroundColor(Color.parseColor("#FFEBEE"));
-            }
-
         }catch (Exception ex){
 
         }
