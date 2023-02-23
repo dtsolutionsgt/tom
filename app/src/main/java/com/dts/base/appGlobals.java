@@ -233,6 +233,9 @@ public class appGlobals extends Application {
 
     public List<String> listValidDevices = new ArrayList<>();
 
+    //bandera para saber que se cierra la recepción por concurrencia
+    public boolean recepcion_cerrada_concurrencia = false;
+
     @Override
     public void onCreate() {
         super.onCreate();

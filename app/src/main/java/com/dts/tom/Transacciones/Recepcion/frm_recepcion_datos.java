@@ -6672,6 +6672,7 @@ public class frm_recepcion_datos extends PBase {
                     if (Double.parseDouble(txtCantidadRec.getText().toString().replace(",",""))==1){
                         BeStockRec.Cantidad = Double.parseDouble(txtCantidadRec.getText().toString().replace(",",""))*Factor;
                     }else{
+                        if(e.getMessage().contains("ERROR_DE_PROCESO_202302221004")){
 
                         if (BeStockRec.Presentacion.Genera_lp_auto){
 
@@ -7681,8 +7682,15 @@ public class frm_recepcion_datos extends PBase {
                         mu.msgboxErrorOnWS(msj[1],  this);
 
                     } else {
-                        msgbox(Objects.requireNonNull(new Object() {
-                        }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                            //#Se indica que la recepcion se cierra por concurrencia desde otra HH
+                            gl.recepcion_cerrada_concurrencia = true;
+                            String Msg = "La recepción "+ gl.gIdRecepcionEnc + " ya fue finalizada, se re-direccionara a la lista principal.";
+                            msgAskRecepcionCerrada_By_Concurrencia(Msg);
+
+                        }else{
+                            msgbox(Objects.requireNonNull(new Object() {
+                            }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                        }
                     }
 
                     break;
@@ -8385,7 +8393,9 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
                     progress.cancel();
-                    mu.msgbox("No se pudo guardar la recepción el resultado fue nulo");
+                    //mu.msgbox("No se pudo guardar la recepción el resultado fue nulo");
+                    String msg = "No se pudo guardar la recepción el resultado fue nulo, se re-direccionara a la lista principal.";
+                    msgAskRecepcionCerrada_By_Concurrencia(msg);
                 }
 
             }else{
@@ -8636,6 +8646,33 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
+
+    private void msgAskRecepcionCerrada_By_Concurrencia(String msg) {
+
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Ok", (dialog12, which) -> {
+
+                doExit();
+
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
 
     private void msgAskAsignarNuevaLp(String msg) {
 
