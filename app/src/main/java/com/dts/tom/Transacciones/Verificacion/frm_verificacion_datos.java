@@ -1077,7 +1077,6 @@ public class frm_verificacion_datos extends PBase {
 
             progress.cancel();
 
-            startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
             frm_verificacion_datos.super.finish();
 
         }catch (Exception e){
