@@ -8383,7 +8383,11 @@ public class frm_recepcion_datos extends PBase {
 
                 }else{
                     progress.cancel();
-                    mu.msgbox("No se pudo guardar la recepción el resultado fue nulo");
+                    //#GT23022023: algo paso que no guardo la linea, devolvemos a la lista, que recargue
+                    //mu.msgbox("No se pudo guardar la recepción el resultado fue nulo");
+                    String Msg = "No se pudo guardar la recepción el resultado fue nulo, se redireccionará a la lista principal.";
+                    msgAskRecepcionCerrada_By_Concurrencia(Msg);
+
                 }
 
             }else{
