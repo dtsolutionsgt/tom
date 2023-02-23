@@ -51,6 +51,7 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import static com.dts.tom.Transacciones.Recepcion.frm_recepcion_datos.RecFinalizada;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -2020,36 +2021,42 @@ public class frm_list_rec_prod extends PBase {
 
                 browse=0;
 
-                if (Escaneo_Pallet){
-                    mu.toast("Licencia procesada correctamente");
-                    txtCodigoProductoRecepcion.setText("");
-                    txtCodigoProductoRecepcion.requestFocus();
-                }
-
-                if (!gl.gSinPresentacion){
-                    //#CKFK20220625 Al parecer esta asignación es innecesaria
-                    // pListDetalleOC.items= gl.gpListDetalleOC.items;
-
-                    //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS 16092022
-                    //Lista_Detalle_Documento_Ingreso();
-                    //ordenar();
-                    if(Recepcion_Completa()){
-                        msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                //#AT20230223 RecFinalizada = true cierra activity por completo
+                //de lo contrario continua con el proceso normal
+                if (RecFinalizada) {
+                    super.finish();
+                } else {
+                    if (Escaneo_Pallet) {
+                        mu.toast("Licencia procesada correctamente");
+                        txtCodigoProductoRecepcion.setText("");
+                        txtCodigoProductoRecepcion.requestFocus();
                     }
-                }else{
 
-                    gl.gSinPresentacion=false;
+                    if (!gl.gSinPresentacion) {
+                        //#CKFK20220625 Al parecer esta asignación es innecesaria
+                        // pListDetalleOC.items= gl.gpListDetalleOC.items;
 
-                    //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS, 16092022
+                        //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS 16092022
+                        //Lista_Detalle_Documento_Ingreso();
+                        //ordenar();
+                        if (Recepcion_Completa()) {
+                            msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                        }
+                    } else {
+
+                        gl.gSinPresentacion = false;
+
+                        //#GT SE DEJA EN COMENTARIO SOLO PARA PRUEBAS, 16092022
 //                    progress.setMessage("Actualizando OC");
 //                    progress.show();
 //
 //                    execws(15);
-                }
+                    }
 
-                progress.setMessage("Actualizando D.I.");
-                progress.show();
-                execws(15);
+                    progress.setMessage("Actualizando D.I.");
+                    progress.show();
+                    execws(15);
+                }
 
             }
 

@@ -294,7 +294,7 @@ public class frm_recepcion_datos extends PBase {
 
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
-
+    public static boolean RecFinalizada = false;
 
 
     @Override
@@ -464,6 +464,9 @@ public class frm_recepcion_datos extends PBase {
             //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
             CantidadCopias = 0;
             HabilitarCopias();
+
+            //#AT20230223 Variable auxiliar para regresar a la lista de tareas de recepción
+            RecFinalizada = false;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -7670,8 +7673,14 @@ public class frm_recepcion_datos extends PBase {
                         CorelSiguiente = 0;
                         TmpMaxL = 0;
                         msgAskAsignarNuevaLp_Reload("La licencia ya existe. Se asignará una nueva.");
-                    }else{
 
+                    } else if (e.getMessage().contains("ERROR_DE_PROCESO_202302221004")) {
+                        //#AT20230223 Si la recepcion esta finalizada RecFinalizada = true
+                        String[] msj = e.getMessage().split("ERROR_DE_PROCESO_202302221004:", 2);
+                        RecFinalizada = true;
+                        mu.msgboxErrorOnWS(msj[1],  this);
+
+                    } else {
                         msgbox(Objects.requireNonNull(new Object() {
                         }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
                     }
