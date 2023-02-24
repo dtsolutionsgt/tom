@@ -75,7 +75,9 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_No_Encontrado_Picking = false;
     @Element(required=false) public boolean Permitir_Reemplazo_Verificacion = false;
 
+    @Element(required=false) public boolean Permitir_Reemplazo_Picking_Misma_Licencia = false;
 
+//
 //#EJC2022071953: CAMPOS NUEVOS HH
 
     public clsBeBodega() {
@@ -596,11 +598,16 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setPermitir_No_Encontrado_Picking(boolean value) {
         Permitir_No_Encontrado_Picking=value;
     }
-
     public boolean getPermitir_Reemplazo_Verificacion() {
         return Permitir_Reemplazo_Verificacion;
     }
     public void setPermitir_Reemplazo_Verificacion(boolean value) {
         Permitir_Reemplazo_Verificacion=value;
+    }
+    public boolean getPermitir_Reemplazo_Picking_Misma_Licencia() {
+        return Permitir_Reemplazo_Picking_Misma_Licencia;
+    }
+    public void setPermitir_Reemplazo_Picking_Misma_Licencia(boolean value) {
+        Permitir_Reemplazo_Picking_Misma_Licencia=value;
     }
 }

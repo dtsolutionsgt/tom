@@ -346,11 +346,8 @@ public class frm_list_rec_prod extends PBase {
             dialog.setTitle("TOMWMS");
             dialog.setMessage( msg);
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", (dialog1, which) -> Guardar_Pallet());
-
             dialog.setNegativeButton("No", (dialog12, which) -> {
                 execws(8);
             });
@@ -555,108 +552,94 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
-                    BeProducto = null;
+                selid = 0;
+                BeProducto = null;
 
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    //selitem = pListDetalleOC.items.get(position);
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                //selitem = pListDetalleOC.items.get(position);
 
-                    selitem  = stream(pListDetalleOC.items)
-                            .where(c -> c.No_Linea == sitem.No_Linea)
-                            .first();
+                selitem  = stream(pListDetalleOC.items)
+                        .where(c -> c.No_Linea == sitem.No_Linea)
+                        .first();
 
-                    selid = sitem.No_Linea;
-                    selidx = position;
+                selid = sitem.No_Linea;
+                selidx = position;
 
-                    //#GT09032022: si tiene mostrar_area cealsa
-                    if (gl.TipoPantallaRecepcion == 3) {
-                        listdetadpater3.setSelectedIndex(position);
+                //#GT09032022: si tiene mostrar_area cealsa
+                if (gl.TipoPantallaRecepcion == 3) {
+                    listdetadpater3.setSelectedIndex(position);
+                } else {
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
                     } else {
-                        if (areaprimera) {
-                            listdetadapter2.setSelectedIndex(position);
-                        } else {
-                            listdetadapter.setSelectedIndex(position);
-                        }
+                        listdetadapter.setSelectedIndex(position);
                     }
-
-                    procesar_registro();
                 }
+
+                procesar_registro();
             });
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
 
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                selid = 0;
 
-                    selid = 0;
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
+                //selitem = pListDetalleOC.items.get(position);
 
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_oc_det sitem = (clsBeTrans_oc_det) lvObj;
-                    //selitem = pListDetalleOC.items.get(position);
+                selitem  = stream(pListDetalleOC.items)
+                        .where(c -> c.No_Linea == sitem.No_Linea)
+                        .first();
 
-                    selitem  = stream(pListDetalleOC.items)
-                            .where(c -> c.No_Linea == sitem.No_Linea)
-                            .first();
+                selid = sitem.No_Linea;
+                selidx = position;
 
-                    selid = sitem.No_Linea;
-                    selidx = position;
-
-                    //#GT09032022: si tiene mostrar_area cealsa
-                    if (gl.TipoPantallaRecepcion == 3) {
-                        listdetadpater3.setSelectedIndex(position);
+                //#GT09032022: si tiene mostrar_area cealsa
+                if (gl.TipoPantallaRecepcion == 3) {
+                    listdetadpater3.setSelectedIndex(position);
+                } else {
+                    if (areaprimera) {
+                        listdetadapter2.setSelectedIndex(position);
                     } else {
-                        if (areaprimera) {
-                            listdetadapter2.setSelectedIndex(position);
-                        } else {
-                            listdetadapter.setSelectedIndex(position);
-                        }
+                        listdetadapter.setSelectedIndex(position);
                     }
-
-                    msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
-
-                    return true;
                 }
 
+                msgIngresaDetalle("Quiere ver el detalle del código: " +selitem.Codigo_Producto);
+
+                return true;
             });
 
-            txtCodigoProductoRecepcion.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+            txtCodigoProductoRecepcion.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
-                        if (!txtCodigoProductoRecepcion.getText().toString().isEmpty()){
-                            Procesa_Barra_Producto();
-                        }else{
-                            //#CKFK20220625 Al parecer esta asignación es innecesaria
-                            // pListDetalleOC.items= gl.gpListDetalleOC.items;
-                            txtCodigoProductoRecepcion.setText("");
-                            txtCodigoProductoRecepcion.requestFocus();
-
-                            Lista_Detalle_Documento_Ingreso();
-                            ordenar();
-                        }
-
-                    }
-
-                    return false;
-                }
-            });
-
-            chkRecepcionados.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                    if (chkRecepcionados.isChecked()==true) {
-                        //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
-                        Lista_Detalle_Documento_Ingreso();
+                    if (!txtCodigoProductoRecepcion.getText().toString().isEmpty()){
+                        Procesa_Barra_Producto();
                     }else{
+                        //#CKFK20220625 Al parecer esta asignación es innecesaria
+                        // pListDetalleOC.items= gl.gpListDetalleOC.items;
+                        txtCodigoProductoRecepcion.setText("");
+                        txtCodigoProductoRecepcion.requestFocus();
+
                         Lista_Detalle_Documento_Ingreso();
+                        ordenar();
                     }
+
+                }
+
+                return false;
+            });
+
+            chkRecepcionados.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                if (chkRecepcionados.isChecked()==true) {
+                    //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
+                    Lista_Detalle_Documento_Ingreso();
+                }else{
+                    Lista_Detalle_Documento_Ingreso();
                 }
             });
 
@@ -667,6 +650,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void doExit(){
+
         try{
 
             //LimpiaValores();
@@ -679,6 +663,7 @@ public class frm_list_rec_prod extends PBase {
             relbot.setVisibility(View.VISIBLE);
             gl.recepcion_cerrada_concurrencia=false;
             super.finish();
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -850,25 +835,22 @@ public class frm_list_rec_prod extends PBase {
 
         try {
 
-
             if (Finalizada & Anulada){
                 doExit();
             }else{
 
                 gl.gEscaneo_Pallet = Escaneo_Pallet;
                 gl.gselitem = selitem;
-
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
                 //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
                 // lo que tengo en la global
                 // gl.gpListDetalleOC.items = pListDetalleOC.items;
-
                 gl.mode = 1;
-
                 browse=1;
-                startActivity(new Intent(this, frm_recepcion_datos.class));
 
+                startActivity(new Intent(this, frm_recepcion_datos.class));
             }
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+ e.getMessage());
         }
@@ -908,6 +890,7 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private boolean Recepcion_Completa(){
+
         boolean Completa=false;
         vTipoDiferencia=0;
         double Cantidad_recibida,Cantidad;
@@ -1110,23 +1093,14 @@ public class frm_list_rec_prod extends PBase {
     private void msgIngresaDetalle(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿"+msg+"?");
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    procesar_registro_detalle();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                   return;
-                }
+            dialog.setPositiveButton("Si", (dialog12, which) -> procesar_registro_detalle());
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+               return;
             });
 
             dialog.show();
@@ -1612,18 +1586,11 @@ public class frm_list_rec_prod extends PBase {
 
 
            /* Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    if(Recepcion_Completa()){
-                        msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
-                    }
-
+            handler.postDelayed(() -> {
+                if(Recepcion_Completa()){
+                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                 }
             }, 800);*/
-
-
 
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
@@ -1704,31 +1671,24 @@ public class frm_list_rec_prod extends PBase {
     private void msgValidaFaltantes(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    if  (gl.PreguntarEnBackOrder){
-                        msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
-                    }else{
-                         Finalizar = true;
-                         Termina_Finalizacion_Recepcion();
-                    }
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                if  (gl.PreguntarEnBackOrder){
+                    msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
+                }else{
+                     Finalizar = true;
+                     Termina_Finalizacion_Recepcion();
                 }
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = false;
-                    btnTareas.setVisibility(View.VISIBLE);
-                    relbot.setVisibility(View.VISIBLE);
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+                Finalizar = false;
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
+                return;
             });
 
             dialog.show();
@@ -1741,29 +1701,21 @@ public class frm_list_rec_prod extends PBase {
     private void msgValidaSobrantes(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                Finalizar = true;
+                Termina_Finalizacion_Recepcion();
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = false;
-                    btnTareas.setVisibility(View.VISIBLE);
-                    relbot.setVisibility(View.VISIBLE);
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                Finalizar = false;
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
+                return;
             });
-
             dialog.show();
 
         }catch (Exception e){
@@ -1774,27 +1726,20 @@ public class frm_list_rec_prod extends PBase {
     private void msgDocIngresoBackOrder(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    backorder = true;
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                backorder = true;
+                Finalizar = true;
+                Termina_Finalizacion_Recepcion();
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    backorder = false;
-                    Finalizar = true;
-                    Termina_Finalizacion_Recepcion();
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                backorder = false;
+                Finalizar = true;
+                Termina_Finalizacion_Recepcion();
             });
 
             dialog.show();
@@ -1807,25 +1752,20 @@ public class frm_list_rec_prod extends PBase {
     private void msgPreguntaFinalizar(String msg) {
 
         try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    btnTareas.setVisibility(View.INVISIBLE);
-                    relbot.setVisibility(View.INVISIBLE);
-                    execws(11);
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                btnTareas.setVisibility(View.INVISIBLE);
+                relbot.setVisibility(View.INVISIBLE);
+                execws(11);
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                   return;
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+               return;
             });
 
             dialog.show();
@@ -1842,13 +1782,10 @@ public class frm_list_rec_prod extends PBase {
             if (Finalizar){
 
                 if (gl.gBeRecepcion.Firma_piloto.equals("")){
-
                     MuestraPantallaFirma(this);
-
                 }else{
                     Finalizar_Recepcion();
                 }
-
             }
 
         }catch (Exception e){
@@ -1866,23 +1803,13 @@ public class frm_list_rec_prod extends PBase {
 
         AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
         menudlg.setTitle("Ordenar por:");
-
-        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                gl.sortOrd = item;
-                ordenar();
-                listSortedItems();
-                dialog.cancel();
-            }
+        menudlg.setItems(selitems , (dialog, item) -> {
+            gl.sortOrd = item;
+            ordenar();
+            listSortedItems();
+            dialog.cancel();
         });
-
-        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
+        menudlg.setNegativeButton("Salir", (dialog, which) -> dialog.cancel());
         Dialog = menudlg.create();
         Dialog.show();
     }
@@ -1977,33 +1904,22 @@ public class frm_list_rec_prod extends PBase {
             btnLimpiar = dialog.findViewById(R.id.btnLimpiar);
             btnSalirFirma = dialog.findViewById(R.id.btnSalirFirma);
 
-            btnGuardarFirma.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            btnGuardarFirma.setOnClickListener(v -> {
 
-                    FirmaPiloto = txtFirma.getBitmap();
-                    //CM_20201130: Se obtienen los bytes de la firma para convertirlos y guardarlos.
-                    firmByte = txtFirma.getBytes();
-                    encodedImage = Base64.encodeToString(firmByte, Base64.DEFAULT);
-                    dialog.cancel();
-                    Finalizar_Recepcion();
-                }
+                FirmaPiloto = txtFirma.getBitmap();
+                //CM_20201130: Se obtienen los bytes de la firma para convertirlos y guardarlos.
+                firmByte = txtFirma.getBytes();
+                encodedImage = Base64.encodeToString(firmByte, Base64.DEFAULT);
+                dialog.cancel();
+                Finalizar_Recepcion();
             });
 
-            btnLimpiar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    txtFirma.clear();
-                }
-            });
+            btnLimpiar.setOnClickListener(v -> txtFirma.clear());
 
-            btnSalirFirma.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    btnTareas.setVisibility(View.VISIBLE);
-                    relbot.setVisibility(View.VISIBLE);
-                    dialog.cancel();
-                }
+            btnSalirFirma.setOnClickListener(v -> {
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
+                dialog.cancel();
             });
 
             dialog.show();
@@ -2081,27 +1997,17 @@ public class frm_list_rec_prod extends PBase {
     }
 
     private void msgAskExit(String msg) {
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    doExit();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> doExit());
+            dialog.setNegativeButton("No", (dialog12, which) -> {
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
             dialog.show();
 
         }catch (Exception e){
@@ -2114,13 +2020,11 @@ public class frm_list_rec_prod extends PBase {
     public void onBackPressed() {
         try{
             if (btnTareas.getVisibility()==View.VISIBLE){
-                msgAskExit("Está seguro de salir");
+                msgAskExit("Regresar a lista de tareas");
             }
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
     }
-
-
 }

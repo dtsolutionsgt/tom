@@ -657,21 +657,16 @@ public class frm_recepcion_datos extends PBase {
                     Procesa_Barra_Producto();
 
                 }
-
                 return false;
             });
 
-            txtCantidadRec.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            txtCantidadRec.setOnClickListener(view -> {
 
-                }
             });
 
 
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-
 
                     progress.setMessage("Guardando Recepción");
                     progress.show();
@@ -1036,11 +1031,6 @@ public class frm_recepcion_datos extends PBase {
 
                 if (BeProducto!=null){
                     if (ValidaDatosIngresados()){
-                        //#CKFK20200816 Quité esta validacion porque no estó correcta
-                   /* if (Cant_Recibida_Anterior!=Cant_Recibida && Cant_Recibida_Anterior!=0){
-                        Mostro_Propiedades = false;
-                        return;
-                    }*/
                         Mostrar_Propiedades_Parametros();
                     }else{
                         //#GT12102022: habilitar boton porque no cumplio validaDatosIngresados
@@ -4647,25 +4637,28 @@ public class frm_recepcion_datos extends PBase {
         progress.setMessage("Guardando Recepción");
         progress.show();
 
-        //#GT06022023: si se genera la LP auto, validar que este seteada en el input
-        if (gl.bloquear_lp_hh) {
-            if (txtNoLP!=null){
-                if (txtNoLP.getText().equals("")){
-                    mu.msgbox("El proceso no ha asignado una LP para la recepción.");
-                }else{
-                    guardar_recepcion();
+        try {
+            //#GT06022023: si se genera la LP auto, validar que este seteada en el input
+            if (gl.bloquear_lp_hh) {
+                if (txtNoLP!=null){
+                    if (txtNoLP.getText().equals("")){
+                        mu.msgbox("El proceso no ha asignado una LP para la recepción.");
+                    }else{
+                        guardar_recepcion();
+                    }
                 }
+            }else{
+                guardar_recepcion();
             }
-        }else{
-            guardar_recepcion();
+
+        } catch (Exception e) {
+            mu.msgbox("BotonGuardarRecepcion: "+ e.getMessage());;
         }
     }
 
     private void guardar_recepcion(){
 
         try{
-
-
 
             /***********Deshabilitar boton guardar para evitar doble clic *****************/
             btnTareas.setEnabled(false);
@@ -8639,10 +8632,9 @@ public class frm_recepcion_datos extends PBase {
     private void msgAskAsignarNuevaLp_Reload(String msg) {
 
 
-        try{
+        try {
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg);
             dialog.setCancelable(false);
