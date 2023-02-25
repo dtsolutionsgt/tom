@@ -152,6 +152,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean inferir_origen_en_cambio_ubic = false;
     private boolean licencia_reservada_completamente = false;
     private boolean reservada_parcialmente = false;
+    private boolean stock_misma_licencia = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1117,7 +1118,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (escaneoPallet && productoList != null) {
                 //LLama este procedimiento del WS Get_Productos_By_IdUbicacion_And_LicPlate
-                execws(6);
+                //#AT20230224 si stock_misma_licencia = true direcctamente me llena las presentaciones
+                if (stock_misma_licencia) {
+                    setPresentacion();
+                }else {
+                    execws(6);
+                }
             } else {
 
                 if(!txtUbicOrigen.getText().toString().isEmpty()){
@@ -1178,6 +1184,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (!txtLicPlate.getText().toString().isEmpty() && !txtLicPlate.getText().toString().equals("0")) {
 
                escaneoPallet = true;
+                //#AT20230224 Cambio el valor a false cada vez que se ingresa una nueva licencia
+               stock_misma_licencia = false;
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
@@ -2369,6 +2377,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             BeProductoUbicacion = productoList.items.get(0);
                             BeStockPallet = productoList.items.get(0).Stock;
 
+                            //#AT20230224 Cree la stock_misma_licencia y darle valor true cuando exista varios idstock con la misma licencia
+                            stock_misma_licencia = true;
+                            stockResList.items = new ArrayList<>();
+
+                            //#AT20230224 Agrego a stockResList.items el stock que se obtiene, para evitar llamar al execws(6)
+                            for(clsBeProducto obj: productoList.items) {
+                                stockResList.items.add(obj.Stock);
+                            }
+
                             IdProductoUbicacion=BeProductoUbicacion.getIdProducto();
                             txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
 
@@ -2590,15 +2607,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (productoEstadoDestinoList != null){
                 LlenaEstadoDestino(cvPropID);
             }else{
-
                 if (escaneoPallet && productoList != null) {
                     //LLama este procedimiento del WS Get_Productos_By_IdUbicacion_And_LicPlate
                     execws(6);
-                }else{
+                } else {
                     //LLama este procedimiento del WS Get_Productos_By_IdUbicacion
                     execws(7);
                 }
-
             }
 
         } catch (Exception e) {

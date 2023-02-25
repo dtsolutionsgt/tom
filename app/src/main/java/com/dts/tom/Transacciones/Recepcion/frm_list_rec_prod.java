@@ -1945,6 +1945,10 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==1){
                 browse=0;
+                //#AT20230224 Cerrar forma si la tarea de recepcion esta finalizada
+                /*if (gl.recepcion_cerrada_concurrencia) {
+                    super.finish();
+                }*/
                 //#GT22022023: si esta cerrada no es necesario seguir validando el resto de código.
                 if(Recepcion_Completa()){
                     msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
