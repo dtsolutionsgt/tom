@@ -77,6 +77,8 @@ public class clsBeBodega extends clsBeBodegaBase {
 
     @Element(required=false) public boolean Permitir_Reemplazo_Picking_Misma_Licencia = false;
 
+    @Element(required=false) public int Dias_Limite_Retroactivo = 0;
+
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -103,7 +105,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini,
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
                        boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
-                       boolean Permitir_Reemplazo_Verificacion) {
+                       boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo ) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -169,6 +171,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Permitir_Reemplazo_Picking = Permitir_Reemplazo_Picking;
         this.Permitir_No_Encontrado_Picking = Permitir_No_Encontrado_Picking;
         this.Permitir_Reemplazo_Verificacion = Permitir_Reemplazo_Verificacion;
+        this.Dias_Limite_Retroactivo = Dias_Limite_Retroactivo;
 
     }
 
@@ -610,4 +613,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setPermitir_Reemplazo_Picking_Misma_Licencia(boolean value) {
         Permitir_Reemplazo_Picking_Misma_Licencia=value;
     }
+
+    public int getDias_Limite_Retroactivo () {
+        return Dias_Limite_Retroactivo;
+    }
+    public void setDias_Limite_Retroactivo(int value) {
+        Dias_Limite_Retroactivo=value;
+    }
+
 }
