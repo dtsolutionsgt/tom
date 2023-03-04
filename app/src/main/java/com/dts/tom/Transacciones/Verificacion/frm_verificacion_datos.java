@@ -824,7 +824,9 @@ public class frm_verificacion_datos extends PBase {
             if (BePickingUbicList!=null){
 
                 if (gl.VerificacionSinLoteFechaVen) {
+
                     if (Lote.equals("") && Expira.equals("01/01/1900")) {
+
                         int tmpPresentacion = BePedidoDetVerif.IdPresentacion > 0 ? BePedidoDetVerif.IdPresentacion: 0;
 
                         AuxList = stream(BePickingUbicList.items)
@@ -877,7 +879,7 @@ public class frm_verificacion_datos extends PBase {
                     throw new Exception("#ERR_20220612: No se obtuvo la lista de verificación.");
                 }
             }else{
-                throw new Exception("#ERR_20220612: No se obtuvo la lista de verificación.");
+                throw new Exception("#ERR_20220612A: No se obtuvo la lista de verificación.");
             }
 
 

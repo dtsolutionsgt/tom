@@ -123,7 +123,9 @@ public class Mainmenu extends PBase {
         setHandlers();
 
         String params=gl.wsurl+"#"+gl.IdBodega+"#"+gl.OperadorBodega.IdOperadorBodega;
-        startCantTareas.startService(this,params);
+
+        //#EJC202303031919: Refactorizar, porque genera timeouts en la base de datos.
+        //startCantTareas.startService(this,params);
 
         PathDataDir = gl.PathDataDir;
 

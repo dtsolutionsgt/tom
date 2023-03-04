@@ -171,10 +171,10 @@ public class frm_recepcion_datos extends PBase {
 
     private boolean Mostro_Propiedades,Escaneo_Pallet;
     private boolean mostrar_parametros_producto;
-    private boolean Mostrar_Propiedades_Parametros = false;
+    private final boolean Mostrar_Propiedades_Parametros = false;
     private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
     private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
-    private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;     
+    private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;
     private String pNumeroLP = "";
     private Integer CantCopias =1;
     private Integer CantVeces=0;
@@ -937,7 +937,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private boolean TienePosiciones=false;
-    
+
     private void processTienePosiciones(){
 
         try{
@@ -5353,7 +5353,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private void Imprimir_Codigo_Barra_Producto(int Copias){
-        
+
         try{
 
             //EJC20210112: Impresión de barras.
