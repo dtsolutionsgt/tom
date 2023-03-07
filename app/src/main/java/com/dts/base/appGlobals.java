@@ -205,7 +205,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="4.7.1.3";
+    public final String version="4.7.1.6";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
@@ -262,6 +262,7 @@ public class appGlobals extends Application {
         listValidDevices.add("AOSP on IA Emulator");
         listValidDevices.add("Android SDK built for x86");
         listValidDevices.add("MC3300x");
+        listValidDevices.add("EDA61K");
 
         }
 

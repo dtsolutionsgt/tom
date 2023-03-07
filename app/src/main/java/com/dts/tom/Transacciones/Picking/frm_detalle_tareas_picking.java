@@ -83,6 +83,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
     private final List TipoOrden = new ArrayList();
 
+    private boolean primeravez = false;
+
     public static int TipoLista = 1;
     public static int pOrden=0;
     private boolean PreguntoPorDiferencia=false;
@@ -690,7 +692,8 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     public void BotonFinalizar(View view){
-        Finalizar_Picking();
+        primeravez = true;
+        msgAskFinalizarPicking("Está seguro de finalizar el Picking?");
     }
 
     public void BotonR(View view){
@@ -788,6 +791,44 @@ public class frm_detalle_tareas_picking extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Continua_Finalizar_Picking();
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Finalizar=false;
+                    progress.cancel();
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskFinalizarPicking(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (primeravez){
+                        primeravez  = false;
+                        msgAskFinalizarPicking("Está completamente seguro?");
+                    }else{
+                        Finalizar_Picking();
+                    }
                 }
             });
 
