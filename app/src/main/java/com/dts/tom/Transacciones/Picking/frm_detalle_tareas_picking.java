@@ -693,7 +693,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
     public void BotonFinalizar(View view){
         primeravez = true;
-        msgAskFinalizarPicking("Está seguro de finalizar el Picking?");
+        msgAskFinalizarPicking("Está seguro de finalizar el Picking");
     }
 
     public void BotonR(View view){
@@ -825,7 +825,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     if (primeravez){
                         primeravez  = false;
-                        msgAskFinalizarPicking("Está completamente seguro?");
+                        msgAskFinalizarPicking("Está completamente seguro");
                     }else{
                         Finalizar_Picking();
                     }
