@@ -79,6 +79,8 @@ public class clsBeBodega extends clsBeBodegaBase {
 
     @Element(required=false) public int Dias_Limite_Retroactivo = 0;
 
+    @Element(required=false) public String Horario_Ejecucion_Historico = "";
+
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -105,7 +107,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Permitir_Repeticiones_En_Ingreso, boolean Validar_Existencias_Inv_Ini,
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
                        boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
-                       boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo ) {
+                       boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo,
+                       String Horario_Ejecucion_Historico) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -172,6 +175,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Permitir_No_Encontrado_Picking = Permitir_No_Encontrado_Picking;
         this.Permitir_Reemplazo_Verificacion = Permitir_Reemplazo_Verificacion;
         this.Dias_Limite_Retroactivo = Dias_Limite_Retroactivo;
+        this.Horario_Ejecucion_Historico = Horario_Ejecucion_Historico;
 
     }
 
@@ -619,6 +623,14 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setDias_Limite_Retroactivo(int value) {
         Dias_Limite_Retroactivo=value;
+    }
+
+
+    public void setHorario_Ejecucion_Historico(String value) {
+        Horario_Ejecucion_Historico=value;
+    }
+    public String getHorario_Ejecucion_Historico() {
+        return Horario_Ejecucion_Historico;
     }
 
 }
