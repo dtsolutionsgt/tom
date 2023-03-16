@@ -23,6 +23,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Marcar_Registros_Enviados_MI3=false;
     @Element(required=false) public boolean Exigir_Campo_Referencia=false;
     @Element(required=false) public boolean Preguntar_En_BackOrder=false;
+    @Element(required=false) public boolean Bloquear_Lotes = false;
 
 
     public clsBeTrans_oc_ti() {
@@ -41,7 +42,8 @@ public class clsBeTrans_oc_ti {
                             boolean requerir_documento_ref,
                             boolean Requerir_Proveedor_Es_Bodega_WMS,
                             boolean Requerir_Documento_Ref_WMS,
-                            boolean Requerir_Ubic_Rec_Ingreso
+                            boolean Requerir_Ubic_Rec_Ingreso,
+                            boolean Bloquear_Lotes
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -57,6 +59,7 @@ public class clsBeTrans_oc_ti {
         this.Requerir_Proveedor_Es_Bodega_WMS = Requerir_Proveedor_Es_Bodega_WMS;
         this.Requerir_Documento_Ref_WMS = Requerir_Documento_Ref_WMS;
         this.Requerir_Ubic_Rec_Ingreso = Requerir_Ubic_Rec_Ingreso;
+        this.Bloquear_Lotes = Bloquear_Lotes;
     }
 
 
