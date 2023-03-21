@@ -105,9 +105,10 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblexUnidad.setText("0.00");
             }*/
 
-            if(gl.existencia.DisponibleUMBas !="0" || !gl.existencia.DisponibleUMBas.isEmpty()){
+            if(!gl.existencia.DisponibleUMBas.equals("0") || !gl.existencia.DisponibleUMBas.isEmpty()){
 
-                Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",",""));
+                //String umbas = gl.existencia.DisponibleUMBas.replace(",",".");
+                Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",","."));
                 String stringDecimal = String.format("%.2f", existencia);
                 lblUnidad.setText(gl.existencia.UM+":");
                 lblexUnidad.setText(stringDecimal);
