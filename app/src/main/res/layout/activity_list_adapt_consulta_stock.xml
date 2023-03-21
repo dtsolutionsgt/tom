@@ -184,7 +184,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="3514"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblPedido"
@@ -195,7 +197,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="10"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblPick"
@@ -206,7 +210,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="10"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/lblLicPlate_ci"
@@ -228,7 +233,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="10"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblIngreso"
@@ -251,7 +258,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblNombreArea"

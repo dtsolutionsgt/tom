@@ -143,12 +143,6 @@ public class list_adapt_consulta_stock2 extends BaseAdapter {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
             } else {
 
-                //AT 20211221 se quitó la valicación para darle color al encabezado
-               /* if (position==0){
-                    convertView.setBackgroundResource(R.drawable.color_medium);
-               // }else{
-                    convertView.setBackgroundColor(Color.TRANSPARENT);
-                }*/
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 

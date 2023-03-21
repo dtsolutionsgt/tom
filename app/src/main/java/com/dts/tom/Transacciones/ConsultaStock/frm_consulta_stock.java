@@ -122,6 +122,7 @@ public class frm_consulta_stock extends PBase {
         setHandlers();
         lblTituloForma.setText(gl.CodigoBodega + "-" + gl.gNomBodega + "\n Consulta de Existencias ");
         txtUbic.requestFocus();
+        chkDetalle.setChecked(true);
     }
 
     private void setHandlers() {
