@@ -579,6 +579,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         case KeyEvent.KEYCODE_ENTER:
                             if (txtUbicDestino.getText().toString().length() > 0) {
                                 if (txtUbicSug.getText().toString().isEmpty()) {
+                                    Log.d("llamada_1", "onKey: valida_ubicacion");
                                     validaDestino();
                                 }else{
                                     AplicarCambioBoton();
@@ -630,6 +631,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                         !txtUbicDestino.getText().toString().isEmpty() &&
                                         txtUbicDestino.getText().toString()!=null){
                                     cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
+                                    Log.d("llamada_2", "onKey: valida_ubicacion2");
                                     validaDestino();
                                 }else{
                                     msgbox("Debe ingresar la ubicación destino");
@@ -2923,6 +2925,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (EsPalletNoEstandar){
                 execws(20);
             }else{
+                Log.d("llamada_3", "onKey: valida_ubicacion_PalletNoEstandar");
                 validaDestino();
             }
 
@@ -2940,6 +2943,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             vPosiciones = TienePosiciones;
 
+            Log.d("llamada_4", "onKey: valida_ubicacion_TienePosiciones");
             validaDestino();
 
             //#EJC20220427: No pedir posiciones en cambio de ubicación cuando Pallet No estandar.
@@ -2994,6 +2998,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         layout.removeAllViews();
                         msgAskIngresePosiciones();
                     }else{
+                        Log.d("llamada_5", "onKey: valida_ubicacion_AskTienePosiciones");
                         validaDestino();
                     }
 
