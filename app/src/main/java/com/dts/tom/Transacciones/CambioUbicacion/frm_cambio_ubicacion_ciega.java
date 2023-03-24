@@ -1119,9 +1119,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (escaneoPallet && productoList != null) {
                 //LLama este procedimiento del WS Get_Productos_By_IdUbicacion_And_LicPlate
                 //#AT20230224 si stock_misma_licencia = true direcctamente me llena las presentaciones
-                if (stock_misma_licencia) {
+                if (stock_misma_licencia && !CambioUbicExistencia) {
                     setPresentacion();
-                }else {
+                    //#AT20230322 Llamar a Get_Productos_By_StockResCI
+                }else if (CambioUbicExistencia && CambioUbicDetallado) {
+                    execws(23);
+                } else {
                     execws(6);
                 }
             } else {
@@ -1682,14 +1685,25 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         callMethod("Get_Stock_By_Lic_Plate","pLicensePlate",pLicensePlate,
                                 "pIdBodega", gl.IdBodega);
                         break;
-                    case 6://Obtiene el stock de un producto en una Ubicacion con un License Plate
-                        callMethod("Get_Productos_By_IdUbicacion_And_LicPlate",
-                                "pIdUbicacion", txtUbicOrigen.getText().toString(),
-                                "pIdBodega", gl.IdBodega,
-                                "pIdProductoBodega",BeProductoUbicacion.IdProductoBodega,
-                                "pLicPlate",BeStockPallet.Lic_plate,
-                                "pIdPresentacion",BeStockPallet.IdPresentacion);
+                    case 6://Obtiene el stock de un producto en una Ubicacion con un License Plat
+                        //#AT20230322 LLamar a esta funcion que devuelve consolidada el stock res
+                        if (CambioUbicExistencia) {
+                            callMethod("Get_Productos_By_IdUbicacion_Existencias",
+                                    "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                    "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
+                                    "pFechaVence", app.strFechaXMLCombo(gl.existencia.Vence),
+                                    "pLote", gl.existencia.Lote,
+                                    "pIdPresentacion", gl.existencia.IdPresentacion,
+                                    "pLicencia", gl.existencia.LicPlate);
 
+                        } else {
+                            callMethod("Get_Productos_By_IdUbicacion_And_LicPlate",
+                                    "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
+                                    "pLicPlate", BeStockPallet.Lic_plate,
+                                    "pIdPresentacion", BeStockPallet.IdPresentacion);
+                        }
                         break;
                     case 7://Obtiene el stock de un producto en una ubicacion
 
@@ -1699,7 +1713,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                        "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
                                        "pFechaVence", app.strFechaXMLCombo(gl.existencia.Vence),
                                        "pLote", gl.existencia.Lote,
-                                       "pIdPresentacion", gl.existencia.IdPresentacion);
+                                       "pIdPresentacion", gl.existencia.IdPresentacion,
+                                       "pLicencia", "");
                         }else {
                             callMethod("Get_Productos_By_IdUbicacion",
                                         "pIdUbicacion", txtUbicOrigen.getText().toString(),
@@ -2299,7 +2314,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 if (escaneoPallet && productoList != null){
-                    if (inferir_origen_en_cambio_ubic) {
+                    //#AT20230322 Para que no cambie la ubicacion que llega desde la consulta de existencia
+                    if (inferir_origen_en_cambio_ubic && !CambioUbicExistencia) {
                         //if (txtUbicOrigen.getText().toString().isEmpty()) {
                         int ubic = productoList.items.get(0).Stock.IdUbicacion;
                         String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
@@ -2379,11 +2395,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                             //#AT20230224 Cree la stock_misma_licencia y darle valor true cuando exista varios idstock con la misma licencia
                             stock_misma_licencia = true;
-                            stockResList.items = new ArrayList<>();
-
-                            //#AT20230224 Agrego a stockResList.items el stock que se obtiene, para evitar llamar al execws(6)
-                            for(clsBeProducto obj: productoList.items) {
-                                stockResList.items.add(obj.Stock);
+                            //#AT20230322 Unicamente pasa esto si no es el cambio desde consulta de existencia
+                            if (!CambioUbicExistencia) {
+                                stockResList.items = new ArrayList<>();
+                                //#AT20230224 Agrego a stockResList.items el stock que se obtiene, para evitar llamar al execws(6)
+                                for (clsBeProducto obj : productoList.items) {
+                                    stockResList.items.add(obj.Stock);
+                                }
                             }
 
                             IdProductoUbicacion=BeProductoUbicacion.getIdProducto();
@@ -2430,7 +2448,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.setMessage("Cargando stock con licencias");
             progress.show();
 
-            stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_IdUbicacion_And_LicPlate");
+            //#AT20230322 En dependencia si CambioUbicExistencia = true
+            if  (CambioUbicExistencia) {
+                stockResList = xobj.getresult(clsBeVW_stock_resList.class, "Get_Productos_By_IdUbicacion_Existencias");
+            } else {
+                stockResList = xobj.getresult(clsBeVW_stock_resList.class, "Get_Productos_By_IdUbicacion_And_LicPlate");
+            }
 
             if (stockResList != null){
                 //LlenaPresentaciones();
@@ -2479,13 +2502,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processProductoUbicDetallado(){
-
+        List AuxList;
         try {
 
             progress.setMessage("Cargando producto en esta ubicación");
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
+
+            //#AT20230322 Filtrar por cantidad la lista que devuelve
+            AuxList = stream(stockResList.items)
+                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", "")))
+                    .toList();
+
+            stockResList.items = AuxList;
 
             if (stockResList != null){
                 //LlenaPresentaciones();

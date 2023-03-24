@@ -87,12 +87,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
     }
 
     private void asignarDatos() {
+        try {
+            if (gl.existencia != null) {
 
-        if(gl.existencia !=null){
-
-            lblcodigo.setText( gl.existencia.Codigo +"");
-            lbldescripcion.setText(gl.existencia.Nombre + "");
-            //lblexUnidad.setText(""+0);
+                lblcodigo.setText(gl.existencia.Codigo + "");
+                lbldescripcion.setText(gl.existencia.Nombre + "");
+                //lblexUnidad.setText(""+0);
 
             /*if(gl.existencia.ExistUMBAs !="0" || !gl.existencia.ExistUMBAs.isEmpty()){
 
@@ -105,17 +105,17 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblexUnidad.setText("0.00");
             }*/
 
-            if(!gl.existencia.DisponibleUMBas.equals("0") || !gl.existencia.DisponibleUMBas.isEmpty()){
+                if (!gl.existencia.DisponibleUMBas.equals("0") || !gl.existencia.DisponibleUMBas.isEmpty()) {
 
-                //String umbas = gl.existencia.DisponibleUMBas.replace(",",".");
-                Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",","."));
-                String stringDecimal = String.format("%.2f", existencia);
-                lblUnidad.setText(gl.existencia.UM+":");
-                lblexUnidad.setText(stringDecimal);
+                    //String umbas = gl.existencia.DisponibleUMBas.replace(",",".");
+                    Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", ""));
+                    String stringDecimal = String.format("%.2f", existencia);
+                    lblUnidad.setText(gl.existencia.UM + ":");
+                    lblexUnidad.setText(stringDecimal);
 
-            }else {
-                lblexUnidad.setText("0.00");
-            }
+                } else {
+                    lblexUnidad.setText("0.00");
+                }
 
            /* if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
@@ -129,34 +129,36 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblexPres.setText(gl.existencia.Pres);
             }*/
 
-            if(gl.existencia.DisponibleUMBas != "" && gl.existencia.factor !=0){
+                if (!gl.existencia.DisponibleUMBas.isEmpty() && gl.existencia.factor != 0) {
 
-                Double factor= Double.valueOf(gl.existencia.DisponibleUMBas.replace(",",""))/Double.valueOf(gl.existencia.factor);
-                String stringDecimal = String.format("%.2f", factor);
+                    Double factor = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", "")) / Double.valueOf(gl.existencia.factor);
+                    String stringDecimal = String.format("%.2f", factor);
 
-                lblPresentacion.setText(gl.existencia.Pres+":");
-                lblexPres.setText(stringDecimal);
-            }else {
-                trPresentacion.setVisibility(View.GONE);
-                lblexPres.setText(gl.existencia.Pres);
+                    lblPresentacion.setText(gl.existencia.Pres + ":");
+                    lblexPres.setText(stringDecimal);
+                } else {
+                    trPresentacion.setVisibility(View.GONE);
+                    lblexPres.setText(gl.existencia.Pres);
+                }
+
+                lblestado.setText(gl.existencia.Estado + "");
+                lblpedido.setText(gl.existencia.Pedido + "");
+                lblpicking.setText(gl.existencia.Pick + "");
+                lblvence.setText(gl.existencia.Vence + "");
+                lbllote.setText(gl.existencia.Lote + "");
+                lblubic.setText(gl.existencia.idUbic + "");
+                lblnomUbic.setText(gl.existencia.Ubic + "");
+
+                if (gl.existencia.LicPlate.equals(0)) {
+                    lblLicPlate.setText("");
+                } else {
+                    lblLicPlate.setText(gl.existencia.LicPlate);
+                }
+
+
             }
-
-            lblestado.setText( gl.existencia.Estado+"");
-            lblpedido.setText( gl.existencia.Pedido+"");
-            lblpicking.setText( gl.existencia.Pick+"");
-            lblvence.setText( gl.existencia.Vence+"");
-            lbllote.setText( gl.existencia.Lote+"");
-            lblubic.setText( gl.existencia.idUbic+"");
-            lblnomUbic.setText( gl.existencia.Ubic+"");
-
-            if(gl.existencia.LicPlate.equals(0)){
-                lblLicPlate.setText("");
-            }else{
-                lblLicPlate.setText(gl.existencia.LicPlate);
-            }
-
-
-
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() +" - "+ e.getMessage());
         }
 
     }
