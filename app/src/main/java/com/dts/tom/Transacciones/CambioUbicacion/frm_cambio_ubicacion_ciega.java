@@ -1827,7 +1827,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         break;
                     case 23:
                         if (!gl.existencia.Vence.contains("T")) {
-                            gl.existencia.Vence = du.convierteFecha(gl.existencia.Vence);
+                            gl.existencia.Vence = du.convierteFechaZonaHoraria(gl.existencia.Vence);
                         }
 
                         callMethod("Get_Productos_By_StockResCI",

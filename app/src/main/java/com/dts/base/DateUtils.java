@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtils {
 
@@ -529,6 +530,40 @@ public class DateUtils {
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
+			vFecha = dateFormat.format(date);
+
+		} catch (Exception e) {
+			throw e;
+		}
+		return vFecha;
+	}
+
+	public String convierteFechaZonaHoraria(String Fecha) throws Exception {
+		String vFecha = "";
+		try {
+			SimpleDateFormat dateFormat;
+			String ZonaHoraria = Calendar.getInstance().getTimeZone().getID();
+
+			//throw new Exception("La fecha contiene el separadaor - mientras que el patrón de verificación es /")
+			//#EJC20210610
+			if (Fecha.contains("-")) {
+				if (ZonaHoraria.equals("America/Panama") || ZonaHoraria.equals("America/Honduras")) {
+					dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+				} else {
+					dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+				}
+			} else {
+				if (ZonaHoraria.equals("America/Panama") || ZonaHoraria.equals("America/Honduras")) {
+					dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+				} else {
+					dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				}
+			}
+
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+			dateFormat.setTimeZone(TimeZone.getTimeZone(ZonaHoraria));
 			vFecha = dateFormat.format(date);
 
 		} catch (Exception e) {
