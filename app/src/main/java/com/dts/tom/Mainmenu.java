@@ -451,7 +451,13 @@ public class Mainmenu extends PBase {
                                 "pIdBodega",gl.IdBodega,
                                 "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
-
+                    case 6:
+                        //En el paramétro pIdDispositivo debe enviarse el Id del dispositivo en base al gl.deviceId
+                        //EJC debe crear la tabla que contenga el Id correspondiente al gl.deviceId que actualmente no existe en el WMS
+                        callMethod("Agregar_Marcaje","pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,"pIdOperador",gl.IdOperador,"pIdDispositivo",1,"pEsSalida",true);
+                        //ejecuta();
+                        break;
                 }
 
             }catch (Exception e){
@@ -478,6 +484,8 @@ public class Mainmenu extends PBase {
                     process_get_count_cambio_ubic();break;
                 case 5:
                     process_get_count_cambio_estado();break;
+                case 6:
+                    process_cambio_operador();break;
 
             }
 
@@ -575,6 +583,20 @@ public class Mainmenu extends PBase {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
+
+    private void process_cambio_operador (){
+        try{
+
+            Mainmenu.super.finish();
+
+        } catch (Exception e) {
+            addlog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
 
     //endregion
 
@@ -698,7 +720,10 @@ public class Mainmenu extends PBase {
                     break;
 
                 case 9://Cambio de usuario
-                    Mainmenu.super.finish(); break;
+
+                    execws(6);
+                    //Mainmenu.super.finish(); break;
+                    //Mainmenu.super.finish();
 
                 case 10:// Utilerias
                     menuUtilerias(); break;
@@ -941,6 +966,7 @@ public class Mainmenu extends PBase {
         dialog.show();
 
     }
+
 
     //endregion
 

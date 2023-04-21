@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -775,6 +776,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         }
         catch (Exception e){
+            Log.d("llamada_1", "Existe_Producto:");
             mu.msgbox("Existe_Producto:"+e.getMessage());
         }
 
@@ -812,6 +814,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         }
         catch (Exception e){
+            Log.d("llamada_2", "Tarea_Conteo: ");
             mu.msgbox("Existe_Producto:"+e.getMessage());
         }
 
