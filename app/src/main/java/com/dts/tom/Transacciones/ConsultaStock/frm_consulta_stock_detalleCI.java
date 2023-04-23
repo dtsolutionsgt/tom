@@ -144,7 +144,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblestado.setText(gl.existencia.Estado + "");
                 lblpedido.setText(gl.existencia.Pedido + "");
                 lblpicking.setText(gl.existencia.Pick + "");
-                lblvence.setText(gl.existencia.Vence + "");
+                lblvence.setText(gl.existencia.Fecha_Vence + "");
                 lbllote.setText(gl.existencia.Lote + "");
                 lblubic.setText(gl.existencia.idUbic + "");
                 lblnomUbic.setText(gl.existencia.Ubic + "");

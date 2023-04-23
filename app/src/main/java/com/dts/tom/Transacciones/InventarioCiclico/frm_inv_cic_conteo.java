@@ -89,7 +89,6 @@ public class frm_inv_cic_conteo extends PBase {
         ws = new WebServiceHandler(frm_inv_cic_conteo.this,gl.wsurl);
         xobj = new XMLObject(ws);
 
-
         gl.pprod.IdProducto = 0;
         gl.pprod.Control_lote= false;
         gl.pprod.Control_vencimiento = false;

@@ -14,7 +14,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String ReservadoUMBAs="";
   @Element(required=false) public String DisponibleUMBas="";
   @Element(required=false) public String Lote="";
-  @Element(required=false) public String Vence="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
   @Element(required=false) public String Estado="";
   @Element(required=false) public String Ubic="";
   @Element(required=false) public String idUbic="";
@@ -55,7 +55,7 @@ public class clsBeVW_stock_res_CI {
 
   public clsBeVW_stock_res_CI(String Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
                               String ExistPres,String ReservadoUMBAs,String DisponibleUMBas,String Lote,
-                              String Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,
+                              String Fecha_Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,
                               String LicPlate,String IdProductoEstado,int IdProductoBodega, int factor,
                               String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea, String Clasificacion, int IdPresentacion) {
 
@@ -68,7 +68,7 @@ public class clsBeVW_stock_res_CI {
     this.ReservadoUMBAs=ReservadoUMBAs;
     this.DisponibleUMBas=DisponibleUMBas;
     this.Lote=Lote;
-    this.Vence=Vence;
+    this.Fecha_Vence=Fecha_Vence;
     this.Estado=Estado;
     this.Ubic=Ubic;
     this.idUbic=idUbic;
@@ -142,10 +142,10 @@ public class clsBeVW_stock_res_CI {
     Lote=value;
   }
   public String getVence() {
-    return Vence;
+    return Fecha_Vence;
   }
   public void setVence(String value) {
-    Vence=value;
+    Fecha_Vence=value;
   }
   public String getEstado() {
     return Estado;

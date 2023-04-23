@@ -1693,7 +1693,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             callMethod("Get_Productos_By_IdUbicacion_Existencias",
                                     "pIdUbicacion", txtUbicOrigen.getText().toString(),
                                     "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
-                                    "pFechaVence", app.strFechaXMLCombo(gl.existencia.Vence),
+                                    "pFechaVence", app.strFechaXMLCombo(gl.existencia.Fecha_Vence),
                                     "pLote", gl.existencia.Lote,
                                     "pIdPresentacion", gl.existencia.IdPresentacion,
                                     "pLicencia", gl.existencia.LicPlate);
@@ -1713,7 +1713,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             callMethod("Get_Productos_By_IdUbicacion_Existencias",
                                        "pIdUbicacion", txtUbicOrigen.getText().toString(),
                                        "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
-                                       "pFechaVence", app.strFechaXMLCombo(gl.existencia.Vence),
+                                       "pFechaVence", app.strFechaXMLCombo(gl.existencia.Fecha_Vence),
                                        "pLote", gl.existencia.Lote,
                                        "pIdPresentacion", gl.existencia.IdPresentacion,
                                        "pLicencia", "");
@@ -1826,8 +1826,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         break;
                     case 23:
-                        if (!gl.existencia.Vence.contains("T")) {
-                            gl.existencia.Vence = du.convierteFechaZonaHoraria(gl.existencia.Vence);
+                        if (!gl.existencia.Fecha_Vence.contains("T")) {
+                            gl.existencia.Fecha_Vence = du.convierteFecha(gl.existencia.Fecha_Vence);
                         }
 
                         callMethod("Get_Productos_By_StockResCI",

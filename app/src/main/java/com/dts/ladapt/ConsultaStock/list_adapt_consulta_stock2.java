@@ -105,7 +105,7 @@ public class list_adapt_consulta_stock2 extends BaseAdapter {
             holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
             holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
             holder.lblLote.setText(BeListStock.get(position).Lote  +"");
-            holder.lblVence.setText(BeListStock.get(position).Vence  +"");
+            holder.lblVence.setText(BeListStock.get(position).Fecha_Vence  +"");
             holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
             holder.lblUbic.setText(BeListStock.get(position).Ubic  +"");
             holder.lblidUbic.setText(BeListStock.get(position).idUbic  +"");

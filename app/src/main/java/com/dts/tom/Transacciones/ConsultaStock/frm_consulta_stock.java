@@ -350,7 +350,7 @@ public class frm_consulta_stock extends PBase {
     class FechaVencSort implements Comparator<clsBeVW_stock_res_CI>    {
         public int compare(clsBeVW_stock_res_CI left, clsBeVW_stock_res_CI right)
         {
-            return left.Vence.compareTo(right.Vence);
+            return left.Fecha_Vence.compareTo(right.Fecha_Vence);
         }
     }
 
@@ -487,7 +487,7 @@ public class frm_consulta_stock extends PBase {
                                 item.ReservadoUMBAs = mu.frmdec(tResUmbas);
                                 item.DisponibleUMBas = mu.frmdec(tDispUmbas);
                                 item.Lote = "";
-                                item.Vence = "";
+                                item.Fecha_Vence = "";
                                 item.Estado = "";
                                 item.Ubic = "";
                                 item.idUbic = "";
@@ -525,7 +525,7 @@ public class frm_consulta_stock extends PBase {
                         item.ReservadoUMBAs = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ReservadoUMBAs));
                         item.DisponibleUMBas = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DisponibleUMBas));
                         item.Lote = pListStock2.items.get(i).Lote;
-                        item.Vence = pListStock2.items.get(i).Vence;
+                        item.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
                         item.Estado = pListStock2.items.get(i).Estado;
                         item.Ubic = pListStock2.items.get(i).Ubic;
                         item.idUbic = pListStock2.items.get(i).idUbic;
@@ -592,7 +592,7 @@ public class frm_consulta_stock extends PBase {
                         item.ReservadoUMBAs = mu.frmdec(tResUmbas);
                         item.DisponibleUMBas = mu.frmdec(tDispUmbas);
                         item.Lote = "";
-                        item.Vence = "";
+                        item.Fecha_Vence = "";
                         item.Estado = "";
                         item.Ubic = "";
                         item.idUbic = "";
@@ -680,7 +680,7 @@ public class frm_consulta_stock extends PBase {
                 item.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                 item.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                 item.Lote = pListStock2.items.get(i).Lote;
-                item.Vence = pListStock2.items.get(i).Vence;
+                item.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
                 item.Estado = pListStock2.items.get(i).Estado;
                 item.Ubic = pListStock2.items.get(i).Ubic;
                 item.idUbic = pListStock2.items.get(i).idUbic;
@@ -738,7 +738,7 @@ public class frm_consulta_stock extends PBase {
                 items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                 items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                 items.Lote = pListStock2.items.get(i).Lote;
-                items.Vence = pListStock2.items.get(i).Vence;
+                items.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
                 items.Estado = pListStock2.items.get(i).Estado;
                 items.Ubic = pListStock2.items.get(i).Ubic;
                 items.idUbic = pListStock2.items.get(i).idUbic;
@@ -788,7 +788,7 @@ public class frm_consulta_stock extends PBase {
                     items.ReservadoUMBAs = pListStock2.items.get(i).ReservadoUMBAs;
                     items.DisponibleUMBas = pListStock2.items.get(i).DisponibleUMBas;
                     items.Lote = pListStock2.items.get(i).Lote;
-                    items.Vence = pListStock2.items.get(i).Vence;
+                    items.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
                     items.Estado = pListStock2.items.get(i).Estado;
                     items.Ubic = pListStock2.items.get(i).Ubic;
                     items.idUbic = pListStock2.items.get(i).idUbic;
@@ -961,8 +961,8 @@ public class frm_consulta_stock extends PBase {
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                        "pCodigo",txtCodigo.getText().toString(),
-                                              "IdBodega",gl.IdBodega);
+                                   "pCodigo",txtCodigo.getText().toString(),
+                                   "IdBodega",gl.IdBodega);
                         break;
 
                     case 4:

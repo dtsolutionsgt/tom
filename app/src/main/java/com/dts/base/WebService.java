@@ -427,7 +427,7 @@ public class WebService {
 
                 fieldname =fields[i].getName();
 
-                if(fieldname == "Tag" || fieldname == "Fec_agr" || fieldname.startsWith("Fecha") )
+                if(fieldname == "Tag" || fieldname == "Fec_agr" || fieldname.startsWith("Fecha"))
                 {
                     Log.d("tag",fieldname);
                 }
