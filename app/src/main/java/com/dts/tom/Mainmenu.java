@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -38,6 +39,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class Mainmenu extends PBase {
@@ -485,8 +488,14 @@ public class Mainmenu extends PBase {
                 case 5:
                     process_get_count_cambio_estado();break;
                 case 6:
-                    process_cambio_operador();break;
-
+                    //process_cambio_operador();break;
+                    //#GT24042023: si app en 2do plano, no cerrar la sesión
+                    if (!gl.marcaje_temporal){
+                        Mainmenu.super.finish();
+                    }else{
+                        gl.marcaje_temporal=false;
+                    }
+                    break;
             }
 
         } catch (Exception e) {
@@ -586,7 +595,6 @@ public class Mainmenu extends PBase {
 
     private void process_cambio_operador (){
         try{
-
             Mainmenu.super.finish();
 
         } catch (Exception e) {
@@ -983,10 +991,31 @@ public class Mainmenu extends PBase {
 
     @Override
     protected void onPause() {
-        super.onPause();
-        stoptimer();
+        try{
+            super.onPause();
+            stoptimer();
+            //#GT24042023: guardar marcaje temporal, al estar la app en 2do plano.
+            gl.marcaje_temporal = true;
+            execws(6);
+        }
+        catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("DESTROY IT");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("STOP IT");
+
+    }
     @Override
     public void onBackPressed() {
         stoptimer();

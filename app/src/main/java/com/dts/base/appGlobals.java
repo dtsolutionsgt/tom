@@ -236,6 +236,8 @@ public class appGlobals extends Application {
     //bandera para saber que se cierra la recepción por concurrencia
     public boolean recepcion_cerrada_concurrencia = false;
 
+    public boolean marcaje_temporal =false;
+
     @Override
     public void onCreate() {
         super.onCreate();
