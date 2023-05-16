@@ -176,9 +176,9 @@ public class MiscUtils {
 			if (!emptystr(msg)){
 
 				AlertDialog.Builder dialog = new AlertDialog.Builder(cCont);
+				dialog.setCancelable(false);
 				dialog.setTitle(R.string.app_name);
 				dialog.setMessage(msg);
-				dialog.setCancelable(false);
 
 				dialog.setNeutralButton("OK", (dialog1, which) -> {
 					//Toast.makeText(getApplicationContext(), "Yes button pressed",Toast.LENGTH_SHORT).show();

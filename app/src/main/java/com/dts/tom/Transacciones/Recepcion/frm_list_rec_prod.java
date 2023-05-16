@@ -37,6 +37,7 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
@@ -1239,7 +1240,14 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 15:
                         //#CKFK20220524 Agregué esta funcion para obtener el detalle de la OC
-                        callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH2","pIdOrdenCompraEnc",vIdOrdenCompra,"pIdBodega",gl.IdBodega);
+                        callMethod("Get_Detalle_OC_By_IdOrdenCompraEnc_HH2",
+                                   "pIdOrdenCompraEnc",vIdOrdenCompra,
+                                   "pIdBodega",gl.IdBodega);
+                        break;
+                    case 16:
+                        //#CKFK20230512 Agregué esta funcion para obtener el detalle de la OC
+                        callMethod("Get_Detalle_Lotes_OC_By_IdOrdenCompraEnc_HH",
+                                   "pIdOrdenCompraEnc",vIdOrdenCompra);
                         break;
                 }
 
@@ -1312,6 +1320,9 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 15:
                         process_actualizar_oc();
+                        break;
+                    case 16:
+                        process_actualizar_oc_lotes();
                         break;
                 }
 
@@ -1576,6 +1587,38 @@ public class frm_list_rec_prod extends PBase {
             //#AT20220708 Si esta linea ocasiona algún error por favor notificar, ya que es necesario cuando se recibe la presentación con unidades.
             pListDetalleOC.items = gl.gpListDetalleOC.items;
 
+            if (gl.gBeOrdenCompra.DetalleLotes.items == null){
+                Lista_Detalle_Documento_Ingreso();
+
+                ordenar();
+
+                if(Recepcion_Completa()){
+                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                }
+            }else{
+                execws(16);
+            }
+
+        }catch (Exception e){
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            progress.cancel();
+        }
+    }
+
+    private void process_actualizar_oc_lotes(){
+
+        try{
+
+            //progress.cancel();
+            //#GT081120222_1500: para mantener continuidad de los msg, se quita el cancel
+            progress.setMessage("Actualizando los lotes");
+            progress.show();
+
+            gl.gBeOrdenCompra.DetalleLotes = xobj.getresult(clsBeTrans_oc_det_loteList.class,"Get_Detalle_Lotes_OC_By_IdOrdenCompraEnc_HH");
+
+            //#AT20220708 Si esta linea ocasiona algún error por favor notificar, ya que es necesario cuando se recibe la presentación con unidades.
+            gBeOrdenCompra.DetalleLotes.items = gl.gBeOrdenCompra.DetalleLotes.items;
+
             Lista_Detalle_Documento_Ingreso();
 
             ordenar();
@@ -1584,13 +1627,6 @@ public class frm_list_rec_prod extends PBase {
                 msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
             }
 
-
-           /* Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                if(Recepcion_Completa()){
-                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
-                }
-            }, 800);*/
 
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
@@ -1827,7 +1863,6 @@ public class frm_list_rec_prod extends PBase {
                     lblNombrePropietario.setVisibility(View.GONE);
                 }
             }
-
 
             if (gl.TipoPantallaRecepcion == 3) {
                 listdetadpater3 = new list_adapt_detalle_recepcion3(this, BeListDetalleOC, es_poliza_consolidada, gl.gCantDecCalculo);

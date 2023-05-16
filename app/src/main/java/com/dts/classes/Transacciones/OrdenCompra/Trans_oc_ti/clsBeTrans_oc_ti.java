@@ -24,7 +24,7 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public boolean Exigir_Campo_Referencia=false;
     @Element(required=false) public boolean Preguntar_En_BackOrder=false;
     @Element(required=false) public boolean Bloquear_Lotes = false;
-
+    @Element(required=false) public boolean Permitir_Excedente_Lotes = false;
 
     public clsBeTrans_oc_ti() {
 
@@ -43,7 +43,8 @@ public class clsBeTrans_oc_ti {
                             boolean Requerir_Proveedor_Es_Bodega_WMS,
                             boolean Requerir_Documento_Ref_WMS,
                             boolean Requerir_Ubic_Rec_Ingreso,
-                            boolean Bloquear_Lotes
+                            boolean Bloquear_Lotes,
+                            boolean Permitir_Excedente_Lotes
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -60,8 +61,8 @@ public class clsBeTrans_oc_ti {
         this.Requerir_Documento_Ref_WMS = Requerir_Documento_Ref_WMS;
         this.Requerir_Ubic_Rec_Ingreso = Requerir_Ubic_Rec_Ingreso;
         this.Bloquear_Lotes = Bloquear_Lotes;
+        this.Permitir_Excedente_Lotes = Permitir_Excedente_Lotes;
     }
-
 
     public int getIdTipoIngresoOC() {
         return IdTipoIngresoOC;
@@ -180,6 +181,20 @@ public class clsBeTrans_oc_ti {
     }
     public void setPreguntar_En_BackOrder(boolean value) {
         Preguntar_En_BackOrder=value;
+    }
+
+    public boolean getBloquear_Lotes() {
+        return Bloquear_Lotes;
+    }
+    public void setBloquear_Lotes(boolean value) {
+        Bloquear_Lotes=value;
+    }
+
+    public boolean getPermitir_Excedente_Lotes() {
+        return Permitir_Excedente_Lotes;
+    }
+    public void setPermitir_Excedente_Lotes(boolean value) {
+        Permitir_Excedente_Lotes=value;
     }
 
 }

@@ -1237,9 +1237,12 @@ public class frm_Packing extends PBase {
             progress.setMessage("Aplicando el cambio");
             progress.show();
 
-            if (!ValidaDatos()){
-                progress.cancel();
-                return;
+            //#CKFK20230509
+            if (IdPresCmb!=0){
+                if (!ValidaDatos()){
+                    progress.cancel();
+                    return;
+                }
             }
 
             if(BeStockPallet == null){

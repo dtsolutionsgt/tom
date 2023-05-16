@@ -223,11 +223,11 @@ public class frm_recepcion_datos extends PBase {
 
     /***** parametros personalizados *****************************************/
     Integer contar_parametros_p = 0;
-    TextView lblDescripcion_parametro ;
-    TextView lbltipo_numerica         ;
-    TextView lbltipo_texto            ;
-    TextView lbltipo_logica           ;
-    TextView lbltipo_fecha            ;
+    TextView lblDescripcion_parametro;
+    TextView lbltipo_numerica;
+    TextView lbltipo_texto;
+    TextView lbltipo_logica;
+    TextView lbltipo_fecha;
 
     /******** tipos de valores del parametro personalizado *******************/
     EditText txtvalor_n ;
@@ -294,8 +294,6 @@ public class frm_recepcion_datos extends PBase {
 
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -3900,32 +3898,34 @@ public class frm_recepcion_datos extends PBase {
                 return;
             }
 
-            Llena_Detalle_Recepcion_Nueva();
+            if (Llena_Detalle_Recepcion_Nueva()){
 
-            Llena_Stock_Rec_Pallet_Proveedor();
+                Llena_Stock_Rec_Pallet_Proveedor();
 
-            double vCantidad  = BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
+                double vCantidad  = BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
 
-            String vMensaje1 ="";
+                String vMensaje1 ="";
 
-            if (indxPres !=-1){
-                vMensaje1= "Código: "+BeINavBarraPallet.Codigo+"\n "
-                        +"Cant: "+vCantidad +"\n "
-                        +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
-                        +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
-                        +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                        +"¿El producto está completo y en buen estado?";
-            }else{
-                vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
-                        +"Cant: "+vCantidad +"\n "
-                        +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
-                        +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
-                        +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                        +"¿El producto está completo y en buen estado?";
+                if (indxPres !=-1){
+                    vMensaje1= "Código: "+BeINavBarraPallet.Codigo+"\n "
+                            +"Cant: "+vCantidad +"\n "
+                            +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
+                            +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                            +"Lote: "+BeINavBarraPallet.Lote +"\n"
+                            +"¿El producto está completo y en buen estado?";
+                }else{
+                    vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
+                            +"Cant: "+vCantidad +"\n "
+                            +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
+                            +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                            +"Lote: "+BeINavBarraPallet.Lote +"\n"
+                            +"¿El producto está completo y en buen estado?";
+                }
+
+
+                msgValidaProductoPallet(vMensaje1);
+
             }
-
-
-            msgValidaProductoPallet(vMensaje1);
 
         }catch (Exception e){
             mu.msgbox("LlenaCamposEsPallet:"+e.getMessage());
@@ -4945,7 +4945,9 @@ public class frm_recepcion_datos extends PBase {
 
                         progress.setMessage("LLenando Detalle Recepción");
                         progress.show();
-                        Llena_Detalle_Recepcion_Nueva();
+                        if (!Llena_Detalle_Recepcion_Nueva()){
+                            return;
+                        }
 
                     }else{
                         Llena_Detalle_Recepcion_Existente();
@@ -5983,7 +5985,9 @@ public class frm_recepcion_datos extends PBase {
     double TotalLinea=0;
     double vCant =0;
 
-    private void Llena_Detalle_Recepcion_Nueva(){
+    private boolean Llena_Detalle_Recepcion_Nueva(){
+
+        boolean lResult = true;
 
         Factor=0;
         TotalLinea=0;
@@ -6034,7 +6038,7 @@ public class frm_recepcion_datos extends PBase {
                 //if (txtUmbasRec.getText().toString().isEmpty()){
                 if (BeProducto.UnidadMedida.Nombre.isEmpty()){
                     mu.msgbox("No existe Unidad de Medida en Producto "+BeProducto.Codigo);
-                    return;
+                    lResult = false;
                 }else{
                     BeTransReDet.UnidadMedida = new clsBeUnidad_medida();
                     BeTransReDet.UnidadMedida.IdUnidadMedida = BeProducto.UnidadMedida.IdUnidadMedida;
@@ -6058,11 +6062,11 @@ public class frm_recepcion_datos extends PBase {
                 if (txtCantidadRec.getText().toString().isEmpty()){
                     mu.msgbox("Ingrese la cantidad a Recibir");
                     txtCantidadRec.requestFocus();
-                    return;
+                    lResult = false;
                 }else if (Double.parseDouble(txtCantidadRec.getText().toString())==0){
                     mu.msgbox("La cantidad a Recibir debe ser mayor a 0");
                     txtCantidadRec.requestFocus();
-                    return;
+                    lResult = false;
                 }else{
                     BeTransReDet.cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
                 }
@@ -6092,14 +6096,14 @@ public class frm_recepcion_datos extends PBase {
                     BeTransReDet.ProductoEstado.IdEstado = IdEstadoSelect;
                 }else {
                     mu.msgbox("No existe Estado en Producto "+BeProducto.Codigo);
-                    return;
+                    lResult = false;
                 }
 
                 if (BeProducto.Control_lote){
 
                     if (txtLoteRec.getText().toString().isEmpty()){
                         mu.msgbox("Debe ingresar el lote del producto "+BeProducto.Codigo);
-                        return;
+                        lResult = false;
                     }else{
                         BeTransReDet.Lote = txtLoteRec.getText().toString();
                         gl.gLoteAnterior = txtLoteRec.getText().toString();
@@ -6120,7 +6124,10 @@ public class frm_recepcion_datos extends PBase {
                 }
 
                 //Llamado 1
-                Continua_Llenando_Detalle_Recepcion_Nueva();
+                if (!Continua_Llenando_Detalle_Recepcion_Nueva()){
+                    lResult = false;
+                    progress.cancel();
+                }
 
             }
 
@@ -6130,6 +6137,8 @@ public class frm_recepcion_datos extends PBase {
         }finally{
             //progress.hide();
         }
+
+        return lResult;
     }
 
     private void Llena_Detalle_Recepcion_Existente(){
@@ -6281,7 +6290,8 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
-    private void Continua_Llenando_Detalle_Recepcion_Nueva(){
+    private boolean Continua_Llenando_Detalle_Recepcion_Nueva(){
+        boolean lResult = true;
 
         try{
 
@@ -6299,7 +6309,9 @@ public class frm_recepcion_datos extends PBase {
             BeTransReDet.Observacion = "";
             BeTransReDet.Aniada = 0;
 
-            Valida_Costo();
+            if (!Valida_Costo()){
+                lResult = false;
+            }
 
             if (!txtCostoReal.getText().toString().isEmpty()) {
                 BeTransReDet.Costo = Double.parseDouble(txtCostoReal.getText().toString());
@@ -6334,7 +6346,6 @@ public class frm_recepcion_datos extends PBase {
 
                     if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion){
 
-
                         try {
                             BeDetalleLotes = stream(detalle_lotes.items)
                                     .where(c -> {
@@ -6359,7 +6370,7 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     if (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Devolucion_Venta ||
-                            gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Transferencia_de_Ingreso){
+                        gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Transferencia_de_Ingreso){
 
                         try {
                             BeDetalleLotes = stream(detalle_lotes.items)
@@ -6383,10 +6394,27 @@ public class frm_recepcion_datos extends PBase {
 
                     }
 
-                    if (Double.parseDouble(txtCantidadRec.getText().toString())>BeDetalleLotes.Cantidad){
-                        //throw new Exception("La cantidad ("+txtCantidadRec.getText()+") es mayor a la esperada del lote ("+BeDetalleLotes.Cantidad+") , no se puede continuar");
-                        mu.msgbox("La cantidad ("+txtCantidadRec.getText()+") es mayor a la esperada del lote ("+BeDetalleLotes.Cantidad+") , no se puede continuar");
-                        return;
+                    double cantLote=BeDetalleLotes.Cantidad;
+                    if (BeDetalleLotes.IdPresentacion!=0){
+                        cantLote =  BeDetalleLotes.Cantidad/BeDetalleLotes.Presentacion.Factor;
+                    }
+
+                    double cantLoteRec = BeDetalleLotes.Cantidad_recibida;
+                    double cantLoteIngresada = Double.parseDouble(txtCantidadRec.getText().toString());
+                    if (BeDetalleLotes.IdPresentacion!=0){
+                        cantLoteRec =  BeDetalleLotes.Cantidad_recibida/BeDetalleLotes.Presentacion.Factor;
+                        cantLoteRec += cantLoteIngresada;
+                    }
+
+                    if (!gl.gBeOrdenCompra.TipoIngreso.Permitir_Excedente_Lotes){
+
+                        if (cantLoteRec>cantLote){
+                            //throw new Exception("La cantidad ("+txtCantidadRec.getText()+") es mayor a la esperada del lote ("+BeDetalleLotes.Cantidad+") , no se puede continuar");
+                            mu.msgbox("La cantidad "+cantLoteRec+" es mayor a la esperada del lote "+cantLote+", no se puede continuar");
+                            txtCantidadRec.requestFocus();
+                            lResult =  false;
+                        }
+
                     }
 
                     if (BeDetalleLotes != null){
@@ -6450,7 +6478,7 @@ public class frm_recepcion_datos extends PBase {
                 if (stream(listaStock.items).count()==0){
                     mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
                     progress.cancel();
-                    return;
+                    lResult = false;
                 }
 
                 for( clsBeStock_rec BeStockRec : listaStock.items){
@@ -6519,7 +6547,7 @@ public class frm_recepcion_datos extends PBase {
 
                     }else{
                         msgbox("Debe seleccionar el estado del producto " + BeProducto.Codigo);
-                        return;
+                        lResult = false;
                     }
 
                     Continua_Guardando_Rec_Nueva(BeStockRec,Factor,vCant);
@@ -6561,9 +6589,11 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             progress.cancel();
             mu.msgbox("Continua:"+e.getMessage());
+            lResult = false;
         }finally{
             //progress.hide();
         }
+        return lResult;
     }
 
     private void Continua_Guardando_Rec_Nueva(clsBeStock_rec BeStockRec,double Factor,double vCant){
@@ -6814,7 +6844,8 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void Valida_Costo(){
+    private boolean Valida_Costo(){
+        boolean lResult = false;
 
         try{
 
@@ -6828,6 +6859,8 @@ public class frm_recepcion_datos extends PBase {
                     txtCostoReal.setText(txtCostoOC.getText().toString());
                 }
 
+                lResult = true;
+
             }else if(Double.parseDouble(txtCostoReal.getText().toString())<=0){
                 mu.msgbox("El costo debe ser mayor a 0");
             }
@@ -6835,6 +6868,8 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             mu.msgbox("Valida_Costo"+e.getMessage());
         }
+
+        return lResult;
     }
 
     private double Get_Costo_Presentacion(){
@@ -7352,13 +7387,13 @@ public class frm_recepcion_datos extends PBase {
                         vTipoPush = "Push_Recepcion_Produccion_To_NAV_For_BYB";
 
                         callMethod("Push_Recepcion_Produccion_To_NAV_For_BYB",
-                                "DocumentoUbicacion", ubiDetLote,
-                                "CodigoProducto",BeProducto.Codigo,
-                                "Cantidad", vCantidad,
-                                "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
-                                "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
-                                "pIdUsuario",gl.OperadorBodega.IdOperador,
-                                "pRespuesta", pRespuesta);
+                                   "DocumentoUbicacion", ubiDetLote,
+                                   "CodigoProducto",BeProducto.Codigo,
+                                   "Cantidad", vCantidad,
+                                   "IdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
+                                   "IdRecepcionDet",BeTransReDet.IdRecepcionDet,
+                                   "pIdUsuario",gl.OperadorBodega.IdOperador,
+                                   "pRespuesta", pRespuesta);
                         break;
 
                     case 26:
@@ -8356,7 +8391,6 @@ public class frm_recepcion_datos extends PBase {
                     //Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
                     Resultado = xobj.getresult(String.class, "Guardar_Recepcion_S");
                 }
-
 
                 if (Resultado!=null){
                     if (ubiDetLote!=null){
