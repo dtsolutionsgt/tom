@@ -916,6 +916,7 @@ public class frm_recepcion_datos extends PBase {
                     txtCantidadCopias.setText("0");
                     txtCantidadCopias.setEnabled(false);
                 } else {
+                    progress.cancel();
                     msgSinUbicaciones("El operador no tiene definida resolución de etiquetas para LP");
                 }
             }
@@ -2868,6 +2869,7 @@ public class frm_recepcion_datos extends PBase {
                                         dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
                                         dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC)){
                             if (gl.gBeOrdenCompra.DetalleLotes.items == null) {
+                                progress.cancel();
                                 msgSinUbicaciones("Este tipo de documentos deben tener definidos los lotes a recibir");
                                 return;
                             }
@@ -2892,6 +2894,7 @@ public class frm_recepcion_datos extends PBase {
                                     gl.gBeOrdenCompra.TipoIngreso.getRequerir_Documento_Ref() &&
                                     BeVence.size()==0){
 
+                                progress.cancel();
                                 msgSinUbicaciones("No es posible realizar la recepción del producto " + BeProducto.getCodigo() +
                                         " porque no hay ubicaciones definidas");
                                 return;
@@ -2939,6 +2942,7 @@ public class frm_recepcion_datos extends PBase {
                                     gl.gBeOrdenCompra.TipoIngreso.getRequerir_Documento_Ref() &&
                                     BeLote.size()==0){
 
+                                progress.cancel();
                                 msgSinUbicaciones("No es posible realizar la recepción de este producto porque no hay ubicaciones definidas");
                                 return;
 
@@ -4046,6 +4050,7 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 cmbLote.setVisibility(View.GONE);
                 txtLoteRec.setVisibility(View.VISIBLE);
+                progress.cancel();
                 msgSinUbicaciones("Este tipo de documentos deben tener definidos los lotes a recibir y ya todos se recibieron");
                 return;
             }
@@ -4200,6 +4205,7 @@ public class frm_recepcion_datos extends PBase {
                     if (!txtNoLP.getText().toString().isEmpty()){
                         toast("La licencia ingresada no es válida");
                         txtNoLP.setText("");
+                        return;
                     }
                     tblUbicacion.setVisibility(View.GONE);
                 }
@@ -4582,6 +4588,7 @@ public class frm_recepcion_datos extends PBase {
             if (gl.gBeOrdenCompra.Push_To_NAV &&
                     (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC
                             && txtNoLP.getText().toString().isEmpty())){
+                progress.cancel();
                 msgbox("Este tipo de documentos deben tener licencia para poder recibirse");
                 return;
             }
