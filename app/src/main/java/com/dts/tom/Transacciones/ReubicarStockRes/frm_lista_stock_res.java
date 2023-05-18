@@ -35,7 +35,7 @@ public class frm_lista_stock_res extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtCodigo, txtUbicacion;
+    private EditText txtCodigo, txtUbicacion, txtReferencia;
     private TextView lblRegs;
     private ListView listStockRes;
 
@@ -43,7 +43,7 @@ public class frm_lista_stock_res extends PBase {
     private static final ArrayList<clsBeVW_stock_res> BeListStockRes= new ArrayList<clsBeVW_stock_res>() ;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
     private list_adapt_stock_res adapter;
-    private String ubicacion, codigo = "";
+    private String ubicacion, codigo = "", referencia = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class frm_lista_stock_res extends PBase {
 
         txtCodigo = findViewById(R.id.txtCodigo);
         txtUbicacion = findViewById(R.id.txtUbicacion);
+        txtReferencia = findViewById(R.id.txtReferencia);
         lblRegs = findViewById(R.id.lblRegs);
         listStockRes = findViewById(R.id.listStockRes);
 
@@ -123,6 +124,31 @@ public class frm_lista_stock_res extends PBase {
                 }
             });
 
+            txtReferencia.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    try {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+
+                            switch (keyCode) {
+
+                                case KeyEvent.KEYCODE_ENTER:
+                                    if (ValidaCampos()) {
+                                        ProgressDialog("Listando detalle...");
+                                        execws(1);
+                                    } else {
+                                        mu.msgbox("Ingrese ubicación o código válidos.");
+                                    }
+
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+
             listStockRes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -161,11 +187,12 @@ public class frm_lista_stock_res extends PBase {
         try {
             ubicacion = txtUbicacion.getText().toString();
             codigo = txtCodigo.getText().toString();
+            referencia = txtReferencia.getText().toString();
 
-            if (!ubicacion.isEmpty() || !codigo.isEmpty()) {
+            if (!ubicacion.isEmpty() || !codigo.isEmpty() || !referencia.isEmpty()) {
                 permite = true;
             } else {
-                if (ubicacion.isEmpty() && codigo.isEmpty()) {
+                if (ubicacion.isEmpty() && codigo.isEmpty() && referencia.isEmpty()) {
                     txtCodigo.requestFocus();
                 }
             }
@@ -253,7 +280,8 @@ public class frm_lista_stock_res extends PBase {
                         callMethod("Get_Stock_Res_By_Codigo_And_IdUbicacion",
                                          "pIdUbicacion", IdUbic,
                                          "pCodigo", txtCodigo.getText().toString(),
-                                         "pIdBodega", gl.IdBodega);
+                                         "pIdBodega", gl.IdBodega,
+                                         "pReferencia", txtReferencia.getText().toString());
                         break;
                 }
 
