@@ -1711,13 +1711,7 @@ public class frm_picking_datos extends PBase {
                     }
 
                     Procesar_Registro();
-                    /*if (pEntre_Reemplazo){
-                        pEntre_Reemplazo = false;
-                        Reemplazar_Producto();
-                    }else{
-                        Procesar_Registro();
-                    }*/
-                    //gl.termino = "";
+
                 }else{
                     msgCodigoProducto("Confirme código de producto y luego presione Enter.");
                     txtLicencia.requestFocus();
@@ -1785,15 +1779,8 @@ public class frm_picking_datos extends PBase {
                     double vCantidadRec = 0;
                     double vCantidadSol = 0;
 
-                    /*vCantidadRec = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Recibida);
-                    vCantidadSol = stream(plistPickingUbi.items).sum(clsBeTrans_picking_ubic::getCantidad_Solicitada);*/
-
                     vCantidadRec = gBePickingUbic.Cantidad_Recibida;
                     vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
-
-                   /* if (gBePickingUbic.IdPresentacion != pIdPresentacion){
-
-                    }*/
 
                     if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1864,7 +1851,6 @@ public class frm_picking_datos extends PBase {
                     //mu.msgbox("Guardar_Picking:"+ "fecha vacia");
                     gBePickingUbic.Fecha_Vence = "1900-01-01T00:00:01";
                 }
-
 
                 if (gBeProducto.getControl_vencimiento()){
                     if (! gBePickingUbic.Fecha_Vence.contains("T")){
@@ -2211,7 +2197,7 @@ public class frm_picking_datos extends PBase {
                     case 6:
                         callMethod("Get_Single_StockRes_By_IdBodega_And_IdStockRes",
                                                "pIdBodega",gl.IdBodega,
-                                                     "pIdStockRes",BeStockRes.IdStockRes);
+                                               "pIdStockRes",BeStockRes.IdStockRes);
                         //callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
@@ -2681,17 +2667,23 @@ public class frm_picking_datos extends PBase {
         try{
 
             BeStockRes = xobj.getresult(clsBeStock_res.class,"Get_Single_StockRes_By_IdBodega_And_IdStockRes");
-            BeStockRes.Estado = "PICKEADO";
-            BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
-            BeStockRes.Fec_mod = du.getFechaActual();
 
-            if (!ReemplazoLP){
-                execws(7);
+            if (BeStockRes!=null){
+                BeStockRes.Estado = "PICKEADO";
+                BeStockRes.User_mod = gl.OperadorBodega.IdOperador+"";
+                BeStockRes.Fec_mod = du.getFechaActual();
+
+                if (!ReemplazoLP){
+                    execws(7);
+                }else{
+                    execws(8);
+                }
             }else{
-                execws(8);
+                throw new Exception("No fue posible obtener el stock reservado");
             }
 
         }catch (Exception e){
+            progress.cancel();
             mu.msgbox("processBeStockRes:"+e.getMessage());
         }
     }
