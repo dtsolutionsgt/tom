@@ -6852,7 +6852,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     private boolean Valida_Costo(){
-        boolean lResult = false;
+        boolean lResult = true;
 
         try{
 
