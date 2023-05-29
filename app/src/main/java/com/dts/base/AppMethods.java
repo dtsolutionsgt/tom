@@ -146,13 +146,17 @@ public class AppMethods {
 
 		try{
 
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Date date = new Date(sdf.parse(fecha).getTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:00'");
-			rsltfecha=dateFormat.format(date);
+			if (!fecha.contains("T")){
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = new Date(sdf.parse(fecha).getTime());
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:00'");
+				rsltfecha=dateFormat.format(date);
+			}else{
+				rsltfecha=fecha;
+			}
 
 		}catch (Exception ex){
-			toast(ex.getMessage());
+			///toast(ex.getMessage());
 		}
 
 		return rsltfecha;
