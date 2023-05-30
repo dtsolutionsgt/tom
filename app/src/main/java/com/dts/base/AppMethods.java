@@ -156,7 +156,7 @@ public class AppMethods {
 			}
 
 		}catch (Exception ex){
-			///toast(ex.getMessage());
+			//toast(ex.getMessage());
 		}
 
 		return rsltfecha;
