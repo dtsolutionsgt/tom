@@ -2201,11 +2201,18 @@ public class frm_picking_datos extends PBase {
                         //callMethod("Get_Single_StockRes","pBeStock_res",BeStockRes);
                         break;
                     case 7:
-                        callMethod("Actualizar_Picking",
+
+                        /*callMethod("Actualizar_Picking",
                                          "oBeTrans_picking_ubic",gBePickingUbic,
                                          "BeStockRes",BeStockRes,
                                          "IdBodega",gl.IdBodega,
                                          "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")));
+                        */
+                        callMethod("Actualizar_Picking_From_HH",
+                                "oBeTrans_picking_ubic",gBePickingUbic,
+                                "IdBodega",gl.IdBodega,
+                                "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")));
+
                         break;
                     case 8:
                         callMethod("Actualizar_Picking_Con_Reemplazo_De_Pallet",
