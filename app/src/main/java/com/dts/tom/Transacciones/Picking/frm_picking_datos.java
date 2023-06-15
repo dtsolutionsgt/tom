@@ -2228,7 +2228,14 @@ public class frm_picking_datos extends PBase {
                             gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
                         }
 
-                        callMethod("Actualiza_Picking_Consolidado",
+/*                        callMethod("Actualiza_Picking_Consolidado",
+                                "pBePickingUbic",gBePickingUbic,
+                                "pIdOperador",gl.OperadorBodega.IdOperador,
+                                "ReemplazoLP",ReemplazoLP,
+                                "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
+                                "BeStockPallet",BeStockPallet);*/
+                        callMethod("Actualiza_Picking_Consolidado_From_HH",
                                 "pBePickingUbic",gBePickingUbic,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,
                                 "ReemplazoLP",ReemplazoLP,
