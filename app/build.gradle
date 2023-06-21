@@ -3,15 +3,15 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 34
         defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 24
-        renderscriptTargetApi 28
+        targetSdkVersion 34
+        renderscriptTargetApi 33
         versionCode 1
-        versionName "4.7.2.6"
+        versionName "5.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,9 +34,9 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.android.support:appcompat-v7:+'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
     //implementation 'com.android.support:design:28.0.0'
@@ -57,7 +57,7 @@ dependencies {
     implementation files('libs/opencsv-2.2.jar')
     implementation files('libs/snmp6_1.jar')
     implementation files('libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
-    implementation 'com.google.android.material:material:1.5.0-alpha02'
+    implementation 'com.google.android.material:material:1.10.0-alpha04'
     implementation 'com.google.firebase:firebase-analytics:21.3.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.3.7'
     implementation 'com.google.firebase:firebase-perf:20.3.3'
@@ -71,5 +71,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     compileOnly 'com.google.android.wearable:wearable:2.9.0'
     implementation 'com.google.code.gson:gson:2.10'
-
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }

@@ -55,21 +55,18 @@ public class frm_editar_ubicacion_picking extends PBase {
     }
 
     private void setHandlers() {
-        txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    if (!txtUbicDestino.getText().toString().isEmpty()) {
-                        procesa_cambio();
-                    } else {
-                        toast("Debe ingresar una ubicación.");
-                        txtUbicDestino.requestFocus();
-                        txtUbicDestino.setSelectAllOnFocus(true);
-                    }
+        txtUbicDestino.setOnKeyListener((view, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (!txtUbicDestino.getText().toString().isEmpty()) {
+                    procesa_cambio();
+                } else {
+                    toast("Debe ingresar una ubicación.");
+                    txtUbicDestino.requestFocus();
+                    txtUbicDestino.setSelectAllOnFocus(true);
                 }
-
-                return false;
             }
+
+            return false;
         });
     }
 

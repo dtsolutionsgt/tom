@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -53,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class frm_detalle_tareas_picking extends PBase {
 
@@ -97,11 +100,12 @@ public class frm_detalle_tareas_picking extends PBase {
     private ArrayList<Integer> IdxFiltos = new ArrayList<>();
     private int sortord, TipoOrdenDetalle = 0;
     public Activity myActivity;
-
+    public SwipeRefreshLayout pullToRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+
             myActivity = this;
 
             super.InitBase();
@@ -182,40 +186,36 @@ public class frm_detalle_tareas_picking extends PBase {
     private void setHandlers() {
 
         try {
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //#EJC20220403: Force scan location...
-                    if (areaprimera) {
-                        listView.setClickable(false);
-                        toast("Por favor, escaneé la ubicación");
-                        txtUbicacionFiltro.requestFocus();
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                //#EJC20220403: Force scan location...
+                if (areaprimera) {
+                    listView.setClickable(false);
+                    toast("Por favor, escaneé la ubicación");
+                    txtUbicacionFiltro.requestFocus();
+                } else {
+                    selid = 0;
+                    //AT 20211222 No importa que la posición sea = a 0
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                    selitem = new clsBeTrans_picking_ubic();
+                    //selitem = BeListPickingUbic.get(position);
+                    selitem = sitem;
+
+                    selid = sitem.IdPickingUbic;
+                    selidx = position;
+
+                    if (gl.TipoPantallaPicking == 3) {
+                        adapter3.getItem(position);
                     } else {
-                        selid = 0;
-                        //AT 20211222 No importa que la posición sea = a 0
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
-                        selitem = new clsBeTrans_picking_ubic();
-                        //selitem = BeListPickingUbic.get(position);
-                        selitem = sitem;
-
-                        selid = sitem.IdPickingUbic;
-                        selidx = position;
-
-                        if (gl.TipoPantallaPicking == 3) {
-                            adapter3.getItem(position);
+                        if (areaprimera) {
+                            adapter2.getItem(position);
                         } else {
-                            if (areaprimera) {
-                                adapter2.getItem(position);
-                            } else {
-                                adapter.getItem(position);
-                            }
+                            adapter.getItem(position);
                         }
-
-                        procesar_registro();
                     }
-                }
 
+                    procesar_registro();
+                }
             });
 
             cmbOrdenadorPor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -253,7 +253,6 @@ public class frm_detalle_tareas_picking extends PBase {
 
             });
 
-
             txtUbicacionFiltro.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -261,25 +260,22 @@ public class frm_detalle_tareas_picking extends PBase {
                 }
             });
 
-            txtUbicacionFiltro.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            txtUbicacionFiltro.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                        //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
-                        String ubicacion=txtUbicacionFiltro.getText().toString();
+                    //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
+                    String ubicacion=txtUbicacionFiltro.getText().toString();
 
-                        if (!ubicacion.isEmpty()){
-                            if (isNumeric(ubicacion)){
-                                execws(5);
-                            }else{
-                                msgbox("La ubicación debe ser numérica " + ubicacion );
-                            }
+                    if (!ubicacion.isEmpty()){
+                        if (isNumeric(ubicacion)){
+                            execws(5);
+                        }else{
+                            msgbox("La ubicación debe ser numérica " + ubicacion );
                         }
                     }
-
-                    return false;
                 }
+
+                return false;
             });
 
         } catch (Exception e) {
@@ -316,11 +312,17 @@ public class frm_detalle_tareas_picking extends PBase {
         });
 
         //#GT07042022: faltó agregar el view de filtros en las 2 layout de detalle_tareas_picking
-        btnFiltros.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gl.mostar_filtros = !gl.mostar_filtros;
-                relFiltros.setVisibility(gl.mostar_filtros ? View.VISIBLE : View.GONE);
+        btnFiltros.setOnClickListener(view -> {
+            gl.mostar_filtros = !gl.mostar_filtros;
+            relFiltros.setVisibility(gl.mostar_filtros ? View.VISIBLE : View.GONE);
+        });
+
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(() -> {
+            if (gl.gIdPickingEnc>0){
+                ProgressDialog("Actualizando...");
+                pullToRefresh.animate();
+                execws(1);
             }
         });
 
@@ -780,26 +782,15 @@ public class frm_detalle_tareas_picking extends PBase {
     private void msgAskPicIncompleto(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Continua_Finalizar_Picking();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar=false;
-                    progress.cancel();
-                    return;
-                }
+            dialog.setPositiveButton("Si", (dialog12, which) -> Continua_Finalizar_Picking());
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+                Finalizar=false;
+                progress.cancel();
+                return;
             });
 
             dialog.show();
@@ -813,31 +804,22 @@ public class frm_detalle_tareas_picking extends PBase {
     private void msgAskFinalizarPicking(String msg) {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    if (primeravez){
-                        primeravez  = false;
-                        msgAskFinalizarPicking("Está completamente seguro");
-                    }else{
-                        Finalizar_Picking();
-                    }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                if (primeravez){
+                    primeravez  = false;
+                    msgAskFinalizarPicking("Confirme nuevamente");
+                }else{
+                    Finalizar_Picking();
                 }
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar=false;
-                    progress.cancel();
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+                Finalizar=false;
+                progress.cancel();
+                return;
             });
 
             dialog.show();
@@ -887,37 +869,28 @@ public class frm_detalle_tareas_picking extends PBase {
         AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
         menudlg.setTitle("Ordenar por:");
 
-        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                gl.sortOrd = item;
-                orderar();
-                if (gl.TipoPantallaPicking == 3) {
-                    adapter3 = new list_adapt_detalle_tareas_picking3( frm_detalle_tareas_picking.this, BeListPickingUbic);
-                    listView.setAdapter(adapter3);
+        menudlg.setItems(selitems , (dialog, item) -> {
+            gl.sortOrd = item;
+            orderar();
+            if (gl.TipoPantallaPicking == 3) {
+                adapter3 = new list_adapt_detalle_tareas_picking3( frm_detalle_tareas_picking.this, BeListPickingUbic);
+                listView.setAdapter(adapter3);
+            } else {
+                if (areaprimera) {
+                    adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                    listView.setAdapter(adapter2);
                 } else {
-                    if (areaprimera) {
-                        adapter2 = new list_adapt_detalle_tareas_picking2(frm_detalle_tareas_picking.this, BeListPickingUbic);
-                        listView.setAdapter(adapter2);
-                    } else {
-                        adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, BeListPickingUbic);
-                        listView.setAdapter(adapter);
-                    }
+                    adapter = new list_adapt_detalle_tareas_picking(frm_detalle_tareas_picking.this, BeListPickingUbic);
+                    listView.setAdapter(adapter);
                 }
-
-                //#AT20230212 Mostrar toast con el tipo de orden ascendente o descendente
-                MostrarTipoOrden();
-
-                dialog.cancel();
             }
-        });
 
-        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+            //#AT20230212 Mostrar toast con el tipo de orden ascendente o descendente
+            MostrarTipoOrden();
 
+            dialog.cancel();
+        });
+        menudlg.setNegativeButton("Salir", (dialog, which) -> dialog.cancel());
         Dialog = menudlg.create();
         Dialog.show();
     }
@@ -1049,6 +1022,7 @@ public class frm_detalle_tareas_picking extends PBase {
             mu.msgbox("processGetPicking:"+e.getMessage());
         }finally {
             progress.cancel();
+            pullToRefresh.setRefreshing(false);
         }
     }
 

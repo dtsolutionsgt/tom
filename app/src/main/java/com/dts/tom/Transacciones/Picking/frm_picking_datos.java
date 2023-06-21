@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.Picking;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
@@ -324,26 +326,23 @@ public class frm_picking_datos extends PBase {
             });
 
 
-            txtCodigoProducto.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (trLP.getVisibility() == View.GONE) {
-                            Procesa_Codigo();
-                        } else {
-                            if (!txtLicencia.getText().toString().isEmpty()) {
-                                confirmarPorCodigo();
+            txtCodigoProducto.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (trLP.getVisibility() == View.GONE) {
+                        Procesa_Codigo();
+                    } else {
+                        if (!txtLicencia.getText().toString().isEmpty()) {
+                            confirmarPorCodigo();
 
-                            } else {
-                                msgCodigoProducto("Debe ingresar la licencia del producto");
-                                txtLicencia.requestFocus();
-                                Log.d("focus: ", "20220502_1");
-                            }
+                        } else {
+                            msgCodigoProducto("Debe ingresar la licencia del producto");
+                            txtLicencia.requestFocus();
+                            Log.d("focus: ", "20220502_1");
                         }
                     }
-
-                    return false;
                 }
+
+                return false;
             });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
@@ -354,25 +353,35 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
-            txtCantidadPick.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        btnGuardar = true;
-                        Recalcula_Peso();
-                        if (pEntre_Reemplazo){
-                            pEntre_Reemplazo = false;
-                            Reemplazar_Producto();
-                        }else if (pEntre_NoEnc){
-                            pEntre_NoEnc = false;
-                            Producto_No_Encontrado();
-                        }else{
-                            Procesar_Registro();
-                        }
+            txtCantidadPick.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    btnGuardar = true;
+                    Recalcula_Peso();
+                    if (pEntre_Reemplazo){
+                        pEntre_Reemplazo = false;
+                        Reemplazar_Producto();
+                    }else if (pEntre_NoEnc){
+                        pEntre_NoEnc = false;
+                        Producto_No_Encontrado();
+                    }else{
+                        Procesar_Registro();
                     }
-
-                    return false;
                 }
+
+                return false;
+            });
+
+            lblLicPlate.setOnLongClickListener(v -> {
+
+                String vLicencia;
+                vLicencia = lblLicPlate.getText().toString();
+
+                Toast.makeText(getApplicationContext(), "Licencia copiada",
+                        Toast.LENGTH_SHORT).show();
+
+                txtLicencia.setText(vLicencia);
+
+                return true;
             });
 
         } catch (Exception e) {
