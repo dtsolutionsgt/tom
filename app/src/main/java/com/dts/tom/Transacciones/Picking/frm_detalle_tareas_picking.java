@@ -248,16 +248,11 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parentView) {
-                    return;
                 }
 
             });
 
-            txtUbicacionFiltro.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
+            txtUbicacionFiltro.setOnClickListener(view -> {
             });
 
             txtUbicacionFiltro.setOnKeyListener((v, keyCode, event) -> {
@@ -291,9 +286,7 @@ public class frm_detalle_tareas_picking extends PBase {
         txtFiltro.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                 if (!txtFiltro.getText().toString().isEmpty()) {
@@ -325,7 +318,6 @@ public class frm_detalle_tareas_picking extends PBase {
                 execws(1);
             }
         });
-
     }
 
     public  boolean isNumeric(String cadena) {
