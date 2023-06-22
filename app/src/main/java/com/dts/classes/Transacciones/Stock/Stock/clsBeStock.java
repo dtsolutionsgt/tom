@@ -59,6 +59,8 @@ public class clsBeStock {
     @Element(required=false) public boolean Pallet_Completo= false;
     @Element(required=false) public int Cantidad_Reservada= 0;
 
+    @Element(required=false) public int IdPedidoDet= 0;
+
     public clsBeStock()
     {
         this.IdBodega=IdBodega;
@@ -453,5 +455,12 @@ public class clsBeStock {
     }
     public void setCantidad_Reservada(int value) {
         Cantidad_Reservada=value;
+    }
+
+    public int getIdPedidoDet() {
+        return IdPedidoDet;
+    }
+    public void setIdPedidoDet(int value) {
+        IdPedidoDet=value;
     }
 }
