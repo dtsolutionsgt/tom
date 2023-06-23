@@ -805,6 +805,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //se muestra el combo con todas su presentaciones disponibles.
             if (presentacionList.items.size() > 0) {
                 if (presentacionList.items.size() == 1) {
+
                     cvPresID = presentacionList.items.get(0).IdPresentacion;
 
                     if (cvPresID == 0) {
