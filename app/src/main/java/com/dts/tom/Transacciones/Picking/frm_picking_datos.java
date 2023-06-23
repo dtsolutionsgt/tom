@@ -1764,49 +1764,52 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            if (!txtCantidadPick.getText().toString().isEmpty()||!txtCantidadPick.getText().equals("0")){
+            if (!txtCantidadPick.getText().toString().isEmpty()){
 
-                Recalcula_Peso();
+                if (!txtCantidadPick.getText().equals("0")){
 
-                if (TipoLista==2){
+                    Recalcula_Peso();
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+                    if (TipoLista==2){
 
-                    if (vDif<0){
-                        mu.msgbox("La cantidad es mayor a la solicitada");
-                        txtCantidadPick.selectAll();
-                        txtCantidadPick.setSelectAllOnFocus(true);
-                        txtCantidadPick.requestFocus();
-                        Log.d("focus: ", "20220502_46");
-                        return;
+                        Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+
+                        if (vDif<0){
+                            mu.msgbox("La cantidad es mayor a la solicitada");
+                            txtCantidadPick.selectAll();
+                            txtCantidadPick.setSelectAllOnFocus(true);
+                            txtCantidadPick.requestFocus();
+                            Log.d("focus: ", "20220502_46");
+                            return;
+                        }else{
+                            Guardar_Picking();
+                        }
+
                     }else{
-                        Guardar_Picking();
+
+                        double vCantidadRec = 0;
+                        double vCantidadSol = 0;
+
+                        vCantidadRec = gBePickingUbic.Cantidad_Recibida;
+                        vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
+
+                        if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
+                            mu.msgbox("La cantidad es mayor a la solicitada");
+                            txtCantidadPick.selectAll();
+                            txtCantidadPick.setSelectAllOnFocus(true);
+                            txtCantidadPick.requestFocus();
+                            Log.d("focus: ", "20220502_42");
+                            return;
+                        }else{
+                            Guardar_Picking();
+                        }
                     }
 
                 }else{
-
-                    double vCantidadRec = 0;
-                    double vCantidadSol = 0;
-
-                    vCantidadRec = gBePickingUbic.Cantidad_Recibida;
-                    vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
-
-                    if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
-                        mu.msgbox("La cantidad es mayor a la solicitada");
-                        txtCantidadPick.selectAll();
-                        txtCantidadPick.setSelectAllOnFocus(true);
-                        txtCantidadPick.requestFocus();
-                        Log.d("focus: ", "20220502_42");
-                        return;
-                    }else{
-                        Guardar_Picking();
-                    }
-
+                    mu.msgbox("La cantidad no puede ser 0");
                 }
-
             }else{
-                mu.msgbox("La cantidad no puede ser vacía o 0");
-                return;
+                mu.msgbox("Ingrese cantidad");
             }
 
         }catch (Exception e){
