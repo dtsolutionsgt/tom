@@ -696,13 +696,17 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 case 3:
                     progress_setMessage("Cargando impresoras");
                     processImpresoras();
-                    iduser=0; execws(4); // Llama lista de usuarios
+                    //#GT26062023: ya no se utiliza iduser, se obtiene directo del objeto
+                    //iduser=0;
+                    //execws(4); // Llama lista de usuarios
+                    //#GT26062023: se omite la carga de usuarios, y pasamos a Parametros A
+                    execws(5);
                     break;
                 case 4:
                     progress_setMessage("Cargando operadores");
-                    processUsers();
+                    //processUsers();
                     //Llama al método del WS Get_cantidad_decimales_calculo
-                    execws(5);
+                    //execws(5);
                     break;
                 case 5:
                     progress_setMessage("Obteniendo Parámetros A");
@@ -734,6 +738,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 case 11:
                     processServidor();
                     break;
+                case 12:
+                    processLoginOperador();
+                    break;
             }
 
         } catch (Exception e)  {
@@ -742,6 +749,91 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         }finally {
             //progress.cancel();
         }
+    }
+
+    private void processLoginOperador() {
+        try{
+
+            clsBeOperador_bodega operador_bodega = new clsBeOperador_bodega();
+
+            operador_bodega = xobj.getresult(clsBeOperador_bodega.class,"Login_Operador_By_Codigo_By_IdBodega");
+
+
+            List<clsBeBodega> BeBodega =
+                    stream(bodegas.items)
+                            .where(c -> c.IdBodega  == gl.IdBodega)
+                            .toList();
+
+            gl.CodigoBodega = BeBodega.get(0).Codigo;
+
+            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
+            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
+
+            //#GT26062023: se valida al operador por el usuario digitado, ya no por el combo
+                                     /*          List<clsBeOperador_bodega> BeOperadorBodega =
+                                            stream(users.items)
+                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
+                                                    c.IdBodega == gl.IdBodega)
+                                            .orderBy(c-> c.Operador.IdOperador)
+                                            .toList();*/
+
+/*
+            List<clsBeOperador_bodega> BeOperadorBodega =
+                    stream(users.items)
+                            .where(c -> c.Operador.Codigo.equals(txtUser.getText().toString())  & c.Operador.Clave.equals(txtpass.getText().toString()) &
+                                    c.IdBodega == gl.IdBodega)
+                            .orderBy(c-> c.Operador.IdOperador)
+                            .toList();
+*/
+
+
+            if (operador_bodega != null) {
+
+                //gl.gOperadorBodega = operador_bodega;
+                String nombre_completo =operador_bodega.Operador.Nombres +" "+ operador_bodega.Operador.Apellidos;
+                gl.OperadorBodega = operador_bodega;
+                gl.OperadorBodega.Nombre_Completo = nombre_completo;
+                //#GT26062023: estos campos se llenaban al tomar valor del combo
+                gl.beOperador = operador_bodega.Operador;
+                gl.IdOperador = operador_bodega.IdOperador;
+                gl.gNomOperador = nombre_completo;
+
+                List<clsBeImpresora> BeImpresora =
+                        stream(impres)
+                                .where(c-> c.IdBodega == gl.IdBodega).toList();
+
+                if (BeImpresora.size()>0) {
+                    gl.gImpresora = BeImpresora;
+                    if (gl.gImpresora.get(0).Direccion_Ip =="") {
+                        //progress.cancel();
+                        mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                    } else {
+                        //#CKFK 20201021 Agregué este else para agregar_marcaje
+                        //execws(7);
+                        //#EJC20210504> Validar resolucion LP antes de ingresar.
+                        execws(9);
+                        //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
+                        //se dejó en comentario por solicitud de EJC
+                        //execws(10);
+                    }
+                } else  {
+                    //progress.cancel();
+                    //CKFK 20201021 Cambié mensaje para que sea un si o no
+                    msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
+                }
+            } else {
+                progress.cancel();
+                mu.msgbox("Los datos ingresados para el operador no son válido, revise usuario, clave y bodega");
+            }
+
+
+
+        }
+        catch (Exception e){
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     private void Valida_Ingreso() {
@@ -771,78 +863,13 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         try{
 
-
             if (gl.IdEmpresa>0) {
                 if (gl.IdBodega>0) {
                     //if (gl.IdOperador>0) {
                     if (!TextUtils.isEmpty(txtUser.getText())   || txtUser.length() > 0) {
                         if (!txtpass.getText().toString().isEmpty())  {
-                            List<clsBeBodega> BeBodega =
-                                    stream(bodegas.items)
-                                            .where(c -> c.IdBodega  == gl.IdBodega)
-                                            .toList();
-
-                            gl.CodigoBodega = BeBodega.get(0).Codigo;
-
-                            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
-                            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
-
-                   //#GT26062023: se valida al operador por el usuario digitado, ya no por el combo
-                  /*          List<clsBeOperador_bodega> BeOperadorBodega =
-                                    stream(users.items)
-                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                                    c.IdBodega == gl.IdBodega)
-                                            .orderBy(c-> c.Operador.IdOperador)
-                                            .toList();*/
-
-
-                            List<clsBeOperador_bodega> BeOperadorBodega =
-                                    stream(users.items)
-                                            .where(c -> c.Operador.Codigo.equals(txtUser.getText().toString())  & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                                    c.IdBodega == gl.IdBodega)
-                                            .orderBy(c-> c.Operador.IdOperador)
-                                            .toList();
-
-
-                            if (BeOperadorBodega.size()>0) {
-
-                                gl.gOperadorBodega = BeOperadorBodega;
-                                gl.OperadorBodega = gl.gOperadorBodega.get(0);
-                                //#GT26062023: estos campos se llenaban al tomar valor del combo
-                                gl.beOperador = BeOperadorBodega.get(0).Operador;
-                                gl.IdOperador = BeOperadorBodega.get(0).IdOperador;
-                                gl.gNomOperador = BeOperadorBodega.get(0).Nombre_Completo;
-
-
-
-
-                                List<clsBeImpresora> BeImpresora =
-                                        stream(impres)
-                                                .where(c-> c.IdBodega == gl.IdBodega).toList();
-
-                            if (BeImpresora.size()>0) {
-                                gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
-                                    //progress.cancel();
-                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                } else {
-                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
-                                    //execws(7);
-                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
-                                    //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
-                                    //se dejó en comentario por solicitud de EJC
-                                    //execws(10);
-                                }
-                            } else  {
-                                //progress.cancel();
-                                //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
-                            }
-                            } else {
-                                progress.cancel();
-                                mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
-                            }
+                            //#GT26062023: toda la codificación de aqui, se paso al processLoginOperador
+                            execws(12);
 
                         } else {
                             progress.cancel();
@@ -1506,6 +1533,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         break;
                     case 11:
                         callMethod("nombreServidorLicencias");
+                        break;
+                    case 12:
+                        callMethod("Login_Operador_By_Codigo_By_IdBodega",
+                                "codigo",txtUser.getText().toString().trim(),
+                                "clave",txtpass.getText().toString().trim(),
+                                "IdBodega",idbodega);
                         break;
                 }
             } catch (Exception e)  {
