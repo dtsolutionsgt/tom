@@ -196,7 +196,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             relbot = findViewById(R.id.relbot);
 
             lblver.setText("Versión: " +  gl.version);
-            lblVersion.setText("V. "+ gl.version);
+            //lblVersion.setText("V. "+ gl.version);
 
             getURL();
 
