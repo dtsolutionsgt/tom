@@ -124,6 +124,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double Peso_referencia=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
   @Element(required=false) public int IdPickingUbic=0;
+  @Element(required=false) public double CantidadSolicitadaPicking=0;
 
   public clsBeVW_stock_res() {
   }
@@ -869,6 +870,13 @@ public class clsBeVW_stock_res {
   }
   public void setIdPickingUbic(int value) {
     IdPickingUbic=value;
+  }
+
+  public double getCantidadSolicitadaPicking() {
+    return CantidadSolicitadaPicking;
+  }
+  public void setCantidadSolicitadaPicking(double value) {
+    CantidadSolicitadaPicking=value;
   }
 
 }
