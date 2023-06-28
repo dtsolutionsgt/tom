@@ -1725,7 +1725,6 @@ public class frm_picking_datos extends PBase {
                     msgCodigoProducto("Confirme código de producto y luego presione Enter.");
                     txtLicencia.requestFocus();
                     Log.d("txtLicencia: ", "20220502_42");
-                    return;
                 }
 
             }else{
@@ -1813,7 +1812,7 @@ public class frm_picking_datos extends PBase {
             }
 
         }catch (Exception e){
-            mu.msgbox("Procesar_Registro:"+e.getMessage());
+            mu.msgbox("202306280820_Procesar_Registro:"+e.getMessage());
         }
     }
 
@@ -1826,6 +1825,7 @@ public class frm_picking_datos extends PBase {
         progress.show();
 
         try {
+
             if (btnGuardar) {
                 View view = this.getCurrentFocus();
                 if (view != null) {
@@ -1969,6 +1969,7 @@ public class frm_picking_datos extends PBase {
     private void processGetFotosProducto() {
 
         try {
+
             progress_setMessage("Cargando imágenes...");
             BeListProductoImagen = xobj.getresult(clsBeProducto_imagenList.class,"Get_All_Producto_Imagen");
 
@@ -1991,8 +1992,8 @@ public class frm_picking_datos extends PBase {
                 //toastlong("El producto no tiene imágenes");
                 progress.cancel();
                 return;
-
             }
+
             startActivity(new Intent(this, frm_imagenes.class));
             progress.cancel();
 

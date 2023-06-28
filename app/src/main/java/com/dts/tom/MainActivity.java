@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -111,6 +112,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     private String Modelo_Equipo ="";
     private String Manufacturador_Equipo = "";
 
+    private RelativeLayout relbot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -191,7 +193,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             imgEmpresaLogin = findViewById(R.id.imgEmpresaLogin);
             lblModeloEquipo = findViewById(R.id.lblModeloEquipo);
             lblManufacturadorEquipo = findViewById(R.id.lblManufacturadorEquipo);
-
+            relbot = findViewById(R.id.relbot);
 
             lblver.setText("Versión: " +  gl.version);
             lblVersion.setText("V. "+ gl.version);
@@ -477,6 +479,18 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         startActivity(new Intent(this,Mainmenu.class));
     }
 
+    public int contador=0;
+    public void HabilitarWSLabel(View view) {
+
+        if(contador<5){
+            toast("Está a "  + (5 -contador) + " pasos de habilitar la URL");
+            contador++;
+        } else if (contador==5) {
+            toast("URL habilitada");
+            lblurl.setVisibility(View.VISIBLE);
+            contador=0;
+        }
+    }
     private void setHandlers() {
 
         spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()         {
@@ -752,12 +766,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     }
 
     private void processLoginOperador() {
+
         try{
 
             clsBeOperador_bodega operador_bodega = new clsBeOperador_bodega();
 
             operador_bodega = xobj.getresult(clsBeOperador_bodega.class,"Login_Operador_By_Codigo_By_IdBodega");
-
 
             List<clsBeBodega> BeBodega =
                     stream(bodegas.items)
@@ -825,9 +839,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 progress.cancel();
                 mu.msgbox("Los datos ingresados para el operador no son válido, revise usuario, clave y bodega");
             }
-
-
-
         }
         catch (Exception e){
             progress.cancel();
