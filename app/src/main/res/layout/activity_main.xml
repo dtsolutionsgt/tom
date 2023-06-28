@@ -147,7 +147,7 @@
                     android:src="@drawable/login_user" />
 
                 <EditText
-                    android:hint="Usuario"
+                    android:hint="Código de Usuario"
                     android:id="@+id/userText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                     android:src="@drawable/login_pwd" />
 
                 <EditText
-                    android:hint="Password"
+                    android:hint="Clave"
                     android:id="@+id/editText3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -123,6 +123,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Nombre_UnidadMedida="";
   @Element(required=false) public double Peso_referencia=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
+  @Element(required=false) public int IdPickingUbic=0;
 
   public clsBeVW_stock_res() {
   }
@@ -862,6 +863,13 @@ public class clsBeVW_stock_res {
 
   public String getFecha_Pedido() {return Fecha_Pedido;}
   public void  setFecha_Pedido(String value) {Fecha_Pedido = value;}
+
+  public int getIdPickingUbic() {
+    return IdPickingUbic;
+  }
+  public void setIdPickingUbic(int value) {
+    IdPickingUbic=value;
+  }
 
 }
 
