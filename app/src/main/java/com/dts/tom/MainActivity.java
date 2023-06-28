@@ -479,15 +479,20 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         startActivity(new Intent(this,Mainmenu.class));
     }
 
-    public int contador=0;
+    public int contador=1;
     public void HabilitarWSLabel(View view) {
 
         if(contador<5){
             toast("Está a "  + (5 -contador) + " pasos de habilitar la URL");
             contador++;
         } else if (contador==5) {
-            toast("URL habilitada");
-            lblurl.setVisibility(View.VISIBLE);
+
+            if (!lblurl.isShown()){
+                toast("URL habilitada");
+                lblurl.setVisibility(View.VISIBLE);
+            }else{
+                lblurl.setVisibility(View.GONE);
+            }
             contador=0;
         }
     }
