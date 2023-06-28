@@ -621,6 +621,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.MacPrinter =  impres.get(position).mac_adress;
                     gl.IdImpresora = idimpres;
 
+                    txtUser.requestFocus();
+
                 } catch (Exception e) {
                     msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
@@ -842,7 +844,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
             } else {
                 progress.cancel();
-                mu.msgbox("Los datos ingresados para el operador no son válido, revise usuario, clave y bodega");
+                mu.msgbox("La configuración de códigos parece tener un problema en relación a las políticas de seguridad");
             }
         }
         catch (Exception e){
