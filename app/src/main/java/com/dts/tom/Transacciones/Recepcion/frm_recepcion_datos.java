@@ -1340,10 +1340,11 @@ public class frm_recepcion_datos extends PBase {
             /********* encabezado de la forma           ****************************/
             TextView lblPrducto = dialog.findViewById(R.id.lblTituloForma);
 
-            /********  labels e inputs de tipo Parametros A  ***********************/
 
+            /********  labels e inputs de tipo Parametros A  ***********************/
             lblParametrosA = dialog.findViewById(R.id.lblPropPrd2);
             lblParametrosA.setText("Parametros A");
+
 
             //parametro licence plate
             TextView lblLicPlate = dialog.findViewById(R.id.lblLPlate);
@@ -1485,6 +1486,20 @@ public class frm_recepcion_datos extends PBase {
                 lblTempReal.setVisibility(View.GONE);
                 txtTempEsta.setVisibility(View.GONE);
                 txtTempReal.setVisibility(View.GONE);
+            }
+
+
+            /********************** validar que mostrar de Parametros A/B  ****************************/
+            if(BeProducto.IdProductoParametroA > 0){
+
+            }else{
+                lblParametrosA.setVisibility((View.GONE));
+            }
+
+            if(BeProducto.IdProductoParametroB > 0){
+
+            }else{
+                lblParametrosA.setVisibility((View.GONE));
             }
 
 
@@ -1654,6 +1669,8 @@ public class frm_recepcion_datos extends PBase {
         }catch (Exception e){
             mu.msgbox("MuestraParametros1: "+ e.getMessage());
         }
+
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -1883,7 +1900,36 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            switch (BeProducto.IdPerfilSerializado){
+            //serie individual, no lleva titulo.
+
+            if(BeProducto.IdPerfilSerializado ==1){
+                lblSerieTit.setVisibility(View.GONE);
+                lblSerialIni.setVisibility(View.GONE);
+                txtSerieIni.setVisibility(View.GONE);
+                lblSerialFin.setVisibility(View.GONE);
+                txtSerieFin.setVisibility(View.GONE);
+                txtSerial.requestFocus();
+
+            }
+
+            if(BeProducto.IdPerfilSerializado ==2){
+                lblSerieTit.setText("Serie por rango");
+                txtSerial.setVisibility(View.GONE);
+            }
+
+            //serie única, se setea el valor desde el BOF
+            if(BeProducto.IdPerfilSerializado ==3){
+                lblSerieTit.setVisibility(View.GONE);
+                lblSerialIni.setVisibility(View.GONE);
+                txtSerieIni.setVisibility(View.GONE);
+                lblSerialFin.setVisibility(View.GONE);
+                txtSerieFin.setVisibility(View.GONE);
+
+                txtSerial.setText(BeProducto.Noserie);
+            }
+
+
+/*            switch (BeProducto.IdPerfilSerializado){
 
                 case 1:
                     lblSerialP.setVisibility(View.GONE);
@@ -1904,6 +1950,7 @@ public class frm_recepcion_datos extends PBase {
 
                     break;
                 case 3:
+                    txtSerial.setVisibility(View.VISIBLE);
                     txtSerial.setText(BeProducto.Noserie);
                 default:
                     lblSerieTit.setVisibility(View.GONE);
@@ -1914,11 +1961,12 @@ public class frm_recepcion_datos extends PBase {
                     lblSerialFin.setVisibility(View.GONE);
                     txtSerieFin.setVisibility(View.GONE);
                     break;
-            }
+            }*/
 
         }catch (Exception e){
             mu.msgbox("Valida_Perfil_Serializado"+e.getMessage());
         }
+
     }
 
 
