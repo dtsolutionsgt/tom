@@ -844,7 +844,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
             } else {
                 progress.cancel();
-                mu.msgbox("La configuración de códigos parece tener un problema en relación a las políticas de seguridad");
+                mu.msgbox("Código o contraseña incorrecta, verifique datos.");
             }
         }
         catch (Exception e){
