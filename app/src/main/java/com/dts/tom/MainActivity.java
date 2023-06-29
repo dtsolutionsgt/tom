@@ -790,24 +790,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
             gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
 
-            //#GT26062023: se valida al operador por el usuario digitado, ya no por el combo
-                                     /*          List<clsBeOperador_bodega> BeOperadorBodega =
-                                            stream(users.items)
-                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                                    c.IdBodega == gl.IdBodega)
-                                            .orderBy(c-> c.Operador.IdOperador)
-                                            .toList();*/
-
-/*
-            List<clsBeOperador_bodega> BeOperadorBodega =
-                    stream(users.items)
-                            .where(c -> c.Operador.Codigo.equals(txtUser.getText().toString())  & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                    c.IdBodega == gl.IdBodega)
-                            .orderBy(c-> c.Operador.IdOperador)
-                            .toList();
-*/
-
-
             if (operador_bodega != null) {
 
                 //gl.gOperadorBodega = operador_bodega;
