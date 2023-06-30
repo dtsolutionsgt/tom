@@ -238,6 +238,8 @@ public class appGlobals extends Application {
 
     public boolean marcaje_temporal =false;
 
+    public String Ip_Device ="";
+
     @Override
     public void onCreate() {
         super.onCreate();
