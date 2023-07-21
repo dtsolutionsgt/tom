@@ -1538,6 +1538,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         callMethod("Login_Operador_By_Codigo_By_IdBodega",
                                 "codigo",txtUser.getText().toString().trim(),
                                 "clave",txtpass.getText().toString().trim(),
+                                "host",gl.Ip_Device,
                                 "IdBodega",idbodega);
                         break;
                 }
