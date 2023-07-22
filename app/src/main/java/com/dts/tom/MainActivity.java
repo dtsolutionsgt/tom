@@ -1535,6 +1535,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         callMethod("nombreServidorLicencias");
                         break;
                     case 12:
+                        //#GT21072023: hago login y en el ws se inserta el intento de sesión
                         callMethod("Login_Operador_By_Codigo_By_IdBodega",
                                 "codigo",txtUser.getText().toString().trim(),
                                 "clave",txtpass.getText().toString().trim(),
