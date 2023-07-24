@@ -1,5 +1,7 @@
 package com.dts.tom.Transacciones.ConsultaStock;
 
+import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selitem;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -144,7 +146,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblestado.setText(gl.existencia.Estado + "");
                 lblpedido.setText(gl.existencia.Pedido + "");
                 lblpicking.setText(gl.existencia.Pick + "");
-                lblvence.setText(gl.existencia.Fecha_Vence + "");
+                if (gl.existencia.Fecha_Vence.contains("T")) {
+                    lblvence.setText(du.convierteFechaMostrar(gl.existencia.Fecha_Vence));
+                }
                 lbllote.setText(gl.existencia.Lote + "");
                 lblubic.setText(gl.existencia.idUbic + "");
                 lblnomUbic.setText(gl.existencia.Ubic + "");
