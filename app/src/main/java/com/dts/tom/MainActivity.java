@@ -219,12 +219,19 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             } catch (Exception e) {
 
             }
+
+            //#GT25072023: validamos el input de usuario y limitados los digitos
+            //txtUser.filters = arrayOf<InputFilter>(MinMaxFilter(1, 100))
+
             Load();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+
     }
+
+
 
     public String getDeviceName() {
         Manufacturador_Equipo = Build.MANUFACTURER;
@@ -1634,5 +1641,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         });
         dialog.show();
     }
+
 
 }
