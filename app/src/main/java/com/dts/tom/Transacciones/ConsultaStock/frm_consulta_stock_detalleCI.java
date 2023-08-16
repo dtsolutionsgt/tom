@@ -147,7 +147,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblpedido.setText(gl.existencia.Pedido + "");
                 lblpicking.setText(gl.existencia.Pick + "");
                 if (gl.existencia.Fecha_Vence.contains("T")) {
-                    lblvence.setText(du.convierteFechaMostrar(gl.existencia.Fecha_Vence));
+                    lblvence.setText(du.convierteFechaMostrarDiagonal(gl.existencia.Fecha_Vence));
+                }else{
+                    lblvence.setText(gl.existencia.Fecha_Vence);
                 }
                 lbllote.setText(gl.existencia.Lote + "");
                 lblubic.setText(gl.existencia.idUbic + "");

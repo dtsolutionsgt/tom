@@ -525,7 +525,11 @@ public class frm_consulta_stock extends PBase {
                         item.ReservadoUMBAs = mu.frmdec(Double.valueOf(pListStock2.items.get(i).ReservadoUMBAs));
                         item.DisponibleUMBas = mu.frmdec(Double.valueOf(pListStock2.items.get(i).DisponibleUMBas));
                         item.Lote = pListStock2.items.get(i).Lote;
-                        item.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
+                        if (pListStock2.items.get(i).Fecha_Vence.contains("T")) {
+                            item.Fecha_Vence = du.convierteFechaMostrarDiagonal(pListStock2.items.get(i).Fecha_Vence);
+                        }else{
+                            item.Fecha_Vence = pListStock2.items.get(i).Fecha_Vence;
+                        }
                         item.Estado = pListStock2.items.get(i).Estado;
                         item.Ubic = pListStock2.items.get(i).Ubic;
                         item.idUbic = pListStock2.items.get(i).idUbic;

@@ -2514,16 +2514,24 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#AT20230322 Filtrar por cantidad la lista que devuelve
             AuxList = stream(stockResList.items)
-                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", "")))
+                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.getExistUMBAs().replace(",", "")))
                     .toList();
 
-            stockResList.items = AuxList;
+            if (AuxList.size()>0){
 
-            if (stockResList != null){
-                //LlenaPresentaciones();
-                setPresentacion();
+                stockResList.items = AuxList;
+
+                if (stockResList != null){
+                    //LlenaPresentaciones();
+                    setPresentacion();
+                }else{
+                    msgbox("El producto no existe en la ubicación origen");
+                    txtCodigoPrd.requestFocus();
+                    txtCodigoPrd.selectAll();
+                    progress.cancel();
+                }
+
             }else{
-
                 msgbox("El producto no existe en la ubicación origen");
                 txtCodigoPrd.requestFocus();
                 txtCodigoPrd.selectAll();

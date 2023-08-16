@@ -45,14 +45,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.gBePicking;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.selitem;
-
-import org.w3c.dom.Text;
 
 //import androidx.core.R;txtLicencia
 
@@ -118,6 +117,8 @@ public class frm_picking_datos extends PBase {
     public static clsBeProductoList lBeProducto = new clsBeProductoList();
 
     private TextView lblLicenciaPicking;
+
+    public Scanner escanearBarra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -286,6 +287,17 @@ public class frm_picking_datos extends PBase {
         if (gl.Permitir_No_Encontrado_Picking) {
             relNe.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String barraEscaneada(){
+        String result="";
+        try{
+            escanearBarra = new Scanner(System.in);
+            result = escanearBarra.next();
+        }catch (Exception ex){
+
+        }
+        return  result;
     }
 
     private void setHandlers() {

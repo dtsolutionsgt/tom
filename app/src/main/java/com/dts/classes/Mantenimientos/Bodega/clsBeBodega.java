@@ -81,6 +81,10 @@ public class clsBeBodega extends clsBeBodegaBase {
 
     @Element(required=false) public String Horario_Ejecucion_Historico = "";
 
+    @Element(required=false) public boolean Filtrar_Pedidos_Usuario = false;
+
+    @Element(required=false) public boolean Liberar_Stock_Despachos_Parciales = false;
+
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -108,7 +112,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
                        boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
                        boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo,
-                       String Horario_Ejecucion_Historico) {
+                       String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
+                       boolean Liberar_Stock_Despachos_Parciales) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -176,6 +181,8 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Permitir_Reemplazo_Verificacion = Permitir_Reemplazo_Verificacion;
         this.Dias_Limite_Retroactivo = Dias_Limite_Retroactivo;
         this.Horario_Ejecucion_Historico = Horario_Ejecucion_Historico;
+        this.Filtrar_Pedidos_Usuario = Filtrar_Pedidos_Usuario;
+        this.Liberar_Stock_Despachos_Parciales = Liberar_Stock_Despachos_Parciales;
 
     }
 
@@ -625,12 +632,25 @@ public class clsBeBodega extends clsBeBodegaBase {
         Dias_Limite_Retroactivo=value;
     }
 
-
     public void setHorario_Ejecucion_Historico(String value) {
         Horario_Ejecucion_Historico=value;
     }
     public String getHorario_Ejecucion_Historico() {
         return Horario_Ejecucion_Historico;
+    }
+
+    public boolean getFiltrar_Pedidos_Usuario() {
+        return Filtrar_Pedidos_Usuario;
+    }
+    public void setFiltrar_Pedidos_Usuario(boolean value) {
+        Filtrar_Pedidos_Usuario=value;
+    }
+
+    public boolean getLiberar_Stock_Despachos_Parciales() {
+        return Liberar_Stock_Despachos_Parciales;
+    }
+    public void setLiberar_Stock_Despachos_Parciales(boolean value) {
+        Liberar_Stock_Despachos_Parciales=value;
     }
 
 }

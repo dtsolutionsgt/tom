@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -4231,6 +4232,15 @@ public class frm_recepcion_datos extends PBase {
                                 }
                             }
                         }
+                    }else{
+                        //#CKFK20220807 Coloqué este toast para cuando es una OP y se ingresa una licencia no válida
+                        if (guardando_recepcion){
+                            if (tblUbicacion.getVisibility()==View.GONE){
+                                toast("La licencia ingresada no es válida");
+                                txtNoLP.setText("");
+                                return;
+                            }
+                        }
                     }
                 }
 
@@ -4258,6 +4268,14 @@ public class frm_recepcion_datos extends PBase {
                     tblUbicacion.setVisibility(View.GONE);
                 }
 
+                //#CKFK20220807 Coloqué este toast para cuando es una OP y se ingresa una licencia no válida
+                if (guardando_recepcion){
+                    if (tblUbicacion.getVisibility()==View.GONE){
+                        toast("La licencia ingresada no es válida");
+                        txtNoLP.setText("");
+                        return;
+                    }
+                }
             }
 
             txtCantidadRec.requestFocus();
@@ -8737,7 +8755,6 @@ public class frm_recepcion_datos extends PBase {
                 txtNoLP.setText("");
                 execws(6);
 
-
             });
 
             dialog.show();
@@ -9003,6 +9020,11 @@ public class frm_recepcion_datos extends PBase {
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
                             fillUbicacion();
+                            if (txtNoLP.getText().toString().equals("")){
+                                progress.hide();
+                                msgbox("La licencia no puede ser vacía");
+                                return;
+                            }
                         }
                     }
 
@@ -9012,6 +9034,7 @@ public class frm_recepcion_datos extends PBase {
                         {
                             progress.hide();
                             msgbox("La ubicación de los lotes no puede ser vacía");
+                            return;
                         }
                     }
 
