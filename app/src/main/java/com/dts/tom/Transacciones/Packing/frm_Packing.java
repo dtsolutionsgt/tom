@@ -3,7 +3,6 @@ package com.dts.tom.Transacciones.Packing;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -1425,9 +1424,9 @@ public class frm_Packing extends PBase {
             gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
 
             if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
-                gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
+                gMovimientoDet.Licencia = BeStockPallet.Lic_plate;
             }else{
-                gMovimientoDet.Barra_pallet = "";
+                gMovimientoDet.Licencia = "";
             }
 
             gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());

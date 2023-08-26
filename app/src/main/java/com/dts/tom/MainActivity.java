@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,14 +62,19 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNeededListener {
 
-    private Spinner spinemp,spinbod,spinprint,spinuser;
+    private Spinner spinemp,spinbod,spinprint;
+    //#GT26062023: se debe digitar en lugar de seleccionar,spinuser;
     private EditText txtpass;
+    private EditText txtUser;
     private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog, lblManufacturadorEquipo, lblModeloEquipo;
     //private ProgressDialog progress;
     Dialog progress;
@@ -106,6 +112,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     private String Modelo_Equipo ="";
     private String Manufacturador_Equipo = "";
 
+    private RelativeLayout relbot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -174,8 +181,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             spinemp = findViewById(R.id.spinner);
             spinbod = findViewById(R.id.spinner2);
             spinprint = findViewById(R.id.spinner3);
-            spinuser = findViewById(R.id.spinner4);
+            // = findViewById(R.id.spinner4);
             txtpass = findViewById(R.id.editText3);
+            //#GT26062023: se obtiene el usuario digitado
+            txtUser = findViewById(R.id.userText);
             lblver= findViewById(R.id.txtNoVersion);
             lbldate= findViewById(R.id.txtFechaVersion);
             lblurl= findViewById(R.id.txtURLWS);lblurl.setText("");
@@ -184,10 +193,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             imgEmpresaLogin = findViewById(R.id.imgEmpresaLogin);
             lblModeloEquipo = findViewById(R.id.lblModeloEquipo);
             lblManufacturadorEquipo = findViewById(R.id.lblManufacturadorEquipo);
-
+            relbot = findViewById(R.id.relbot);
 
             lblver.setText("Versión: " +  gl.version);
-            lblVersion.setText("V. "+ gl.version);
+            //lblVersion.setText("V. "+ gl.version);
 
             getURL();
 
@@ -210,12 +219,19 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             } catch (Exception e) {
 
             }
+
+            //#GT25072023: validamos el input de usuario y limitados los digitos
+            //txtUser.filters = arrayOf<InputFilter>(MinMaxFilter(1, 100))
+
             Load();
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
+
     }
+
+
 
     public String getDeviceName() {
         Manufacturador_Equipo = Build.MANUFACTURER;
@@ -274,11 +290,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
     private void LimpiarControles()     {
 
         try{
+            txtUser.setText("");
             txtpass.setText("");
             spinemp.setAdapter(null);
             spinbod.setAdapter(null);
             spinprint.setAdapter(null);
-            spinuser.setAdapter(null);
+            //#GT26062023: ya no se llena visualmente el combo.
+            //spinuser.setAdapter(null);
+
+
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
         }
@@ -466,6 +486,23 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         startActivity(new Intent(this,Mainmenu.class));
     }
 
+    public int contador=1;
+    public void HabilitarWSLabel(View view) {
+
+        if(contador<5){
+            toast("Está a "  + (5 -contador) + " pasos de habilitar la URL");
+            contador++;
+        } else if (contador==5) {
+
+            if (!lblurl.isShown()){
+                toast("URL habilitada");
+                lblurl.setVisibility(View.VISIBLE);
+            }else{
+                lblurl.setVisibility(View.GONE);
+            }
+            contador=0;
+        }
+    }
     private void setHandlers() {
 
         spinemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()         {
@@ -591,6 +628,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.MacPrinter =  impres.get(position).mac_adress;
                     gl.IdImpresora = idimpres;
 
+                    txtUser.requestFocus();
+
                 } catch (Exception e) {
                     msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
                 }
@@ -604,7 +643,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         });
 
-        spinuser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    /*    spinuser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
@@ -639,7 +678,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 return;
             }
 
-        });
+        });*/
 
         txtpass.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
@@ -685,13 +724,17 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 case 3:
                     progress_setMessage("Cargando impresoras");
                     processImpresoras();
-                    iduser=0; execws(4); // Llama lista de usuarios
+                    //#GT26062023: ya no se utiliza iduser, se obtiene directo del objeto
+                    //iduser=0;
+                    //execws(4); // Llama lista de usuarios
+                    //#GT26062023: se omite la carga de usuarios, y pasamos a Parametros A
+                    execws(5);
                     break;
                 case 4:
                     progress_setMessage("Cargando operadores");
-                    processUsers();
+                    //processUsers();
                     //Llama al método del WS Get_cantidad_decimales_calculo
-                    execws(5);
+                    //execws(5);
                     break;
                 case 5:
                     progress_setMessage("Obteniendo Parámetros A");
@@ -723,6 +766,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 case 11:
                     processServidor();
                     break;
+                case 12:
+                    processLoginOperador();
+                    break;
             }
 
         } catch (Exception e)  {
@@ -731,6 +777,70 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         }finally {
             //progress.cancel();
         }
+    }
+
+    private void processLoginOperador() {
+
+        try{
+
+            clsBeOperador_bodega operador_bodega = new clsBeOperador_bodega();
+
+            operador_bodega = xobj.getresult(clsBeOperador_bodega.class,"Login_Operador_By_Codigo_By_IdBodega");
+
+            List<clsBeBodega> BeBodega =
+                    stream(bodegas.items)
+                            .where(c -> c.IdBodega  == gl.IdBodega)
+                            .toList();
+
+            gl.CodigoBodega = BeBodega.get(0).Codigo;
+
+            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
+            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
+
+            if (operador_bodega != null) {
+
+                //gl.gOperadorBodega = operador_bodega;
+                String nombre_completo =operador_bodega.Operador.Nombres +" "+ operador_bodega.Operador.Apellidos;
+                gl.OperadorBodega = operador_bodega;
+                gl.OperadorBodega.Nombre_Completo = nombre_completo;
+                //#GT26062023: estos campos se llenaban al tomar valor del combo
+                gl.beOperador = operador_bodega.Operador;
+                gl.IdOperador = operador_bodega.IdOperador;
+                gl.gNomOperador = nombre_completo;
+
+                List<clsBeImpresora> BeImpresora =
+                        stream(impres)
+                                .where(c-> c.IdBodega == gl.IdBodega).toList();
+
+                if (BeImpresora.size()>0) {
+                    gl.gImpresora = BeImpresora;
+                    if (gl.gImpresora.get(0).Direccion_Ip =="") {
+                        //progress.cancel();
+                        mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                    } else {
+                        //#CKFK 20201021 Agregué este else para agregar_marcaje
+                        //execws(7);
+                        //#EJC20210504> Validar resolucion LP antes de ingresar.
+                        execws(9);
+                        //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
+                        //se dejó en comentario por solicitud de EJC
+                        //execws(10);
+                    }
+                } else  {
+                    //progress.cancel();
+                    //CKFK 20201021 Cambié mensaje para que sea un si o no
+                    msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
+                }
+            } else {
+                progress.cancel();
+                mu.msgbox("Código o contraseña incorrecta, verifique datos.");
+            }
+        }
+        catch (Exception e){
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     private void Valida_Ingreso() {
@@ -762,57 +872,11 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             if (gl.IdEmpresa>0) {
                 if (gl.IdBodega>0) {
-                    if (gl.IdOperador>0) {
+                    //if (gl.IdOperador>0) {
+                    if (!TextUtils.isEmpty(txtUser.getText())   || txtUser.length() > 0) {
                         if (!txtpass.getText().toString().isEmpty())  {
-                            List<clsBeBodega> BeBodega =
-                                    stream(bodegas.items)
-                                            .where(c -> c.IdBodega  == gl.IdBodega)
-                                            .toList();
-
-                            gl.CodigoBodega = BeBodega.get(0).Codigo;
-
-                            //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
-                            gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
-
-                            List<clsBeOperador_bodega> BeOperadorBodega =
-                                    stream(users.items)
-                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
-                                                    c.IdBodega == gl.IdBodega)
-                                            .orderBy(c-> c.Operador.IdOperador)
-                                            .toList();
-
-                            if (BeOperadorBodega.size()>0) {
-
-                                gl.gOperadorBodega = BeOperadorBodega;
-                                gl.OperadorBodega = gl.gOperadorBodega.get(0);
-
-                                List<clsBeImpresora> BeImpresora =
-                                        stream(impres)
-                                                .where(c-> c.IdBodega == gl.IdBodega).toList();
-
-                            if (BeImpresora.size()>0) {
-                                gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
-                                    //progress.cancel();
-                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                } else {
-                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
-                                    //execws(7);
-                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
-                                    //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
-                                    //se dejó en comentario por solicitud de EJC
-                                    //execws(10);
-                                }
-                            } else  {
-                                //progress.cancel();
-                                //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
-                            }
-                            } else {
-                                progress.cancel();
-                                mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
-                            }
+                            //#GT26062023: toda la codificación de aqui, se paso al processLoginOperador
+                            execws(12);
 
                         } else {
                             progress.cancel();
@@ -820,7 +884,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         }
                     } else  {
                         progress.cancel();
-                        mu.msgbox("No se ha seleccionado un operador válido");
+                        //mu.msgbox("No se ha seleccionado un operador válido");
+                        mu.msgbox("No se ha ingresado un operador válido");
                     }
                 }else {
                     progress.cancel();
@@ -1037,7 +1102,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         }
                     }
 
-                    fillSpinUser();
+                    //fillSpinUser();
+                    txtUser.requestFocus();
                 }
             }
 
@@ -1282,15 +1348,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, userlist);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinuser.setAdapter(dataAdapter);
+            //spinuser.setAdapter(dataAdapter);
 
-            if (userlist.size()>0) {
+           /* if (userlist.size()>0) {
                 spinuser.setSelection(0);
                 seloper =users.items.get(0);
 
                 txtpass.requestFocus();
                 //showkeyb();
-            }
+            }*/
 
         } catch (Exception e)
         {
@@ -1398,6 +1464,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             if (browse==1){
                 Load();
             }
+
+            txtUser.setText("");
+            txtpass.setText("");
             super.onResume();
         } catch (Exception e) {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -1471,6 +1540,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         break;
                     case 11:
                         callMethod("nombreServidorLicencias");
+                        break;
+                    case 12:
+                        //#GT21072023: hago login y en el ws se inserta el intento de sesión
+                        //#GT21072023: intento de commit y push
+                        callMethod("Login_Operador_By_Codigo_By_IdBodega",
+                                "codigo",txtUser.getText().toString().trim(),
+                                "clave",txtpass.getText().toString().trim(),
+                                "host",gl.Ip_Device,
+                                "IdBodega",idbodega);
                         break;
                 }
             } catch (Exception e)  {
@@ -1563,5 +1641,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         });
         dialog.show();
     }
+
 
 }

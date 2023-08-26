@@ -205,7 +205,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="4.7.3.1";
+    public final String version="5.0.0";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
@@ -237,6 +237,8 @@ public class appGlobals extends Application {
     public boolean recepcion_cerrada_concurrencia = false;
 
     public boolean marcaje_temporal =false;
+
+    public String Ip_Device ="";
 
     @Override
     public void onCreate() {
