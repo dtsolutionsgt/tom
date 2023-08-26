@@ -73,6 +73,9 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdUbicacionTemporal=0;
     @Element(required=false) public String NombreUbicacionTemporal="";
     @Element(required=false) public int IdOperadorBodega_Asignado=0;
+    @Element (required = false) public boolean Procesado_BOF = false;
+    @Element (required = false) public int IdUsuario_BOF_Pickeo = 0;
+    @Element (required = false) public String Fecha_Procesado_BOF ="1900-01-01T00:00:01";
 
     public clsBeTrans_picking_ubic() {
     }
@@ -564,6 +567,24 @@ public class clsBeTrans_picking_ubic {
         IdOperadorBodega_Asignado=value;
     }
 
+    public int getIdUsuario_BOF_Pickeo() {
+        return IdUsuario_BOF_Pickeo;
+    }
+    public void setIdUsuario_BOF_Pickeo(int value) {
+        IdUsuario_BOF_Pickeo=value;
+    }
 
+    public String getFecha_Procesado_BOF() {
+        return Fecha_Procesado_BOF;
+    }
+    public void setFecha_Procesado_BOF(String value) {
+        Fecha_Procesado_BOF=value;
+    }
+
+    public boolean getProcesado_BOF() {
+        return Procesado_BOF;
+    }
+    public void setProcesado_BOF(boolean value) {
+        Procesado_BOF=value;
+    }
 }
-
