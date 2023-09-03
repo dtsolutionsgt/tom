@@ -3268,10 +3268,32 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                CambioUbicExistencia=false;
                 gl.existencia = null;
                 //startActivity(new Intent(frm_cambio_ubicacion_ciega.this, frm_consulta_stock.class));
-                finish();
+                if( escaneoPallet && productoList != null){
+                    //#CKFK20210610 agregué esta validación para que si no tiene presentación no chkExplosionarlosione el material
+                    if (BeStockPallet.getIdPresentacion()!=0) {
+
+                        if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
+                            msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
+                        } else {
+                            CambioUbicExistencia=false;
+                            finish();
+                        }
+
+                    }else{
+                        if( BeStockPallet.CantidadUmBas != vCantidadAUbicar){
+                            msgAskExplosionar("La ubicación parcial requiere explosión, ¿generar nueva licencia?");
+                        }else{
+                            CambioUbicExistencia=false;
+                            finish();
+                        }
+                    }
+
+                }else{
+                    CambioUbicExistencia=false;
+                    finish();
+                }
             }
         });
 
@@ -3296,7 +3318,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Es_Explosion = true;
-                    inicializaTarea(true);
+                    if (!CambioUbicExistencia){
+                        inicializaTarea(true);
+                    }
                     msgAskImprimirEtiqueta("Imprimir etiqueta");
                 }
             });
@@ -3305,7 +3329,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 public void onClick(DialogInterface dialog, int which)
                 {
                     Es_Explosion = false;
-                    inicializaTarea(true);
+                    if (!CambioUbicExistencia){
+                        inicializaTarea(true);
+                    }else{
+                        CambioUbicExistencia=false;
+                        finish();
+                    }
                 }
             });
 
@@ -3337,7 +3366,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             });
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which){}
+                public void onClick(DialogInterface dialog, int which){
+                    if (CambioUbicExistencia){
+                        finish();
+                    }
+                }
             });
 
             dialog.show();
@@ -3520,12 +3553,29 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     // Close the connection to release resources.
                     printerIns.close();
 
+                    if (CambioUbicExistencia){
+                        CambioUbicExistencia=false;
+                        finish();
+                    }
+
                 }else{
                     mu.msgbox("Información de producto no definida.");
+
+                    if (CambioUbicExistencia){
+                        CambioUbicExistencia=false;
+                        finish();
+                    }
+
                 }
 
             }else{
                 mu.msgbox("No se pudo obtener conexión con la impresora");
+
+                if (CambioUbicExistencia){
+                    CambioUbicExistencia=false;
+                    finish();
+                }
+
             }
 
         }catch (Exception e){
@@ -3536,6 +3586,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
                 mu.msgbox("Imprimir etiqueta cambio de ubicación: "+e.getMessage());
             }
+
+            if (CambioUbicExistencia){
+                CambioUbicExistencia=false;
+                finish();
+            }
+
         }finally {
             progress.cancel();
         }
