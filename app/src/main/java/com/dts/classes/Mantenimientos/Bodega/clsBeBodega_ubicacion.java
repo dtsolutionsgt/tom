@@ -45,6 +45,10 @@ public class clsBeBodega_ubicacion {
     @Element(required=false) public String NombreCompleto="";
     @Element(required=false) public double Disponibilidad_Ubicacion=0;
 
+    @Element(required=false) public int Posicion_X = 0;
+
+    @Element(required=false) public int Posicion_Y = 0;
+
     public clsBeBodega_ubicacion() {
     }
 
@@ -57,7 +61,7 @@ public class clsBeBodega_ubicacion {
                                  boolean Ubicacion_picking,boolean Ubicacion_recepcion,boolean Ubicacion_despacho,boolean Ubicacion_merma,
                                  boolean Ubicacion_Virtual,double Margen_izquierdo,double Margen_derecho,double Margen_superior,
                                  double Margen_inferior,String Orientacion_pos,boolean ubicacion_ne,clsBeBodega_tramo Tramo,
-                                 clsBeBodega_sector Sector,String NombreCompleto) {
+                                 clsBeBodega_sector Sector,String NombreCompleto, int Posicion_X, int Posicion_Y) {
 
         this.IdUbicacion=IdUbicacion;
         this.IdTramo=IdTramo;
@@ -97,6 +101,8 @@ public class clsBeBodega_ubicacion {
         this.Tramo=Tramo;
         this.Sector=Sector;
         this.NombreCompleto=NombreCompleto;
+        this.Posicion_X = Posicion_X;
+        this.Posicion_Y = Posicion_Y;
 
     }
 
@@ -335,6 +341,20 @@ public class clsBeBodega_ubicacion {
     }
     public void setDisponibilidad_Ubicacion(double value) {
         Disponibilidad_Ubicacion=value;
+    }
+
+    public int getPosicion_X() {
+        return Posicion_X;
+    }
+    public void setPosicion_X(int value) {
+        Posicion_X=value;
+    }
+
+    public int getPosicion_Y() {
+        return Posicion_Y;
+    }
+    public void setPosicion_Y(int value) {
+        Posicion_Y=value;
     }
 
 }
