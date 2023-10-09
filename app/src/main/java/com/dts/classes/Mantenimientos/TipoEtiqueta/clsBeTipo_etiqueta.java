@@ -20,13 +20,15 @@ public class clsBeTipo_etiqueta {
     @Element(required=false) public int dpi=0;
     @Element(required=false) public String codigo_zpl="";
 
+    @Element(required=false) public int Idclasificacion_etiqueta = 0;//#CKFK20231008 Campo faltante
+
     public clsBeTipo_etiqueta() {
     }
 
     public clsBeTipo_etiqueta(int IdTipoEtiqueta,String Nombre,double Alto,double Ancho,
                               double MargenIzq,double MagenDer,double MargenSup,double MargenInf,
                               String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                              boolean Activo,int dpi,String codigo_zpl) {
+                              boolean Activo,int dpi,String codigo_zpl, int Idclasificacion_etiqueta) {
 
         this.IdTipoEtiqueta=IdTipoEtiqueta;
         this.Nombre=Nombre;
@@ -43,6 +45,7 @@ public class clsBeTipo_etiqueta {
         this.Activo=Activo;
         this.dpi=dpi;
         this.codigo_zpl=codigo_zpl;
+        this.Idclasificacion_etiqueta = Idclasificacion_etiqueta;
     }
 
 
@@ -94,37 +97,41 @@ public class clsBeTipo_etiqueta {
     public void setMargenInf(double value) {
         MargenInf=value;
     }
+
     public String getUser_agr() {
         return User_agr;
     }
     public void setUser_agr(String value) {
         User_agr=value;
     }
+
     public String getFec_agr() {
         return Fec_agr;
     }
     public void setFec_agr(String value) {
         Fec_agr=value;
     }
+
     public String getUser_mod() {
         return User_mod;
     }
     public void setUser_mod(String value) {
         User_mod=value;
     }
+
     public String getFec_mod() {
         return Fec_mod;
     }
     public void setFec_mod(String value) {
         Fec_mod=value;
     }
+
     public boolean getActivo() {
         return Activo;
     }
     public void setActivo(boolean value) {
         Activo=value;
     }
-
     public int getDPI() {
         return dpi;
     }
@@ -136,6 +143,13 @@ public class clsBeTipo_etiqueta {
     }
     public void setCodigo_ZPL(String value) {
         codigo_zpl=value;
+    }
+
+    public int getIdclasificacion_etiqueta() {
+        return Idclasificacion_etiqueta;
+    }
+    public void setIdclasificacion_etiqueta(int value) {
+        Idclasificacion_etiqueta=value;
     }
 
 }

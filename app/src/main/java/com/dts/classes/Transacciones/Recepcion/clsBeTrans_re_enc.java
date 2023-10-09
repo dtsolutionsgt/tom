@@ -74,6 +74,8 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public clsBeTarea_hh TareaHH=new clsBeTarea_hh();
     @Element(required=false) public int IdBodega=0;
 
+    @Element(required=false) public String Carta_Cupo = "";//#CKFK20231008 Campo faltante
+
 
     public clsBeTrans_re_enc() {
     }
@@ -91,7 +93,7 @@ public class clsBeTrans_re_enc {
                              String NombrePropietario,String Bodega,String Usuario,clsBePropietario_bodega PropietarioBodega,
                              String PropietarioOC,String Proveedor,int NoOrdencompra,String NoDocumentoOC,
                              String TipoTrans,clsBeBodega_muelles Muelle,String MuelleRec,String NOFactura,
-                             clsBeTarea_hh TareaHH) {
+                             clsBeTarea_hh TareaHH, String Carta_Cupo) {
 
         this.IdRecepcionEnc=IdRecepcionEnc;
         this.IdMuelle=IdMuelle;
@@ -147,6 +149,7 @@ public class clsBeTrans_re_enc {
         this.MuelleRec=MuelleRec;
         this.NOFactura=NOFactura;
         this.TareaHH=TareaHH;
+        this.Carta_Cupo = Carta_Cupo;
 
     }
 
@@ -484,5 +487,12 @@ public class clsBeTrans_re_enc {
     }
     public void setIdBodega(int value) {
         IdBodega=value;
+    }
+
+    public String getCarta_Cupo() {
+        return Carta_Cupo;
+    }
+    public void setCarta_Cupo(String value) {
+        Carta_Cupo=value;
     }
 }

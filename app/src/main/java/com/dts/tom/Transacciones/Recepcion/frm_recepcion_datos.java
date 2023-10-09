@@ -7339,20 +7339,23 @@ public class frm_recepcion_datos extends PBase {
                             if (BeTransReDet.Lic_plate.equals("") || BeTransReDet.Lic_plate.isEmpty()){
                                 if (!txtNoLP.getText().toString().isEmpty()) {
                                     BeTransReDet.Lic_plate = txtNoLP.getText().toString();
-                                    toast("#GT06032023_1: Por una causa desconocida la licencia estaba vacía");
+                                    //#CKFK20231008 Puse esto en comentario
+                                    //toast("#GT06032023_1: Por una causa desconocida la licencia estaba vacía");
+                                    //addlog("WebServiceHandler case 16","#GT06032023_5: Por una causa desconocida la licencia está vacía","");
                                 }else{
-                                    toast("#GT06032023_2: Por una causa desconocida la licencia está vacía");
-                                    addlog(getPackageName(),"#GT06032023_2: Por una causa desconocida la licencia está vacía","");
+                                    //toast("#GT06032023_2: Por una causa desconocida la licencia está vacía");
+                                    //addlog("WebServiceHandler case 16","#GT06032023_2: Por una causa desconocida la licencia está vacía","");
                                 }
                             }
 
                             if (pListBeStockRec.items.get(0).Lic_plate.equals("") || pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
                                 if (!txtNoLP.getText().toString().isEmpty()) {
                                     pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString();
-                                    toast("#GT06032023_3: Por una causa desconocida la licencia estaba vacía");
+                                    //toast("#GT06032023_3: Por una causa desconocida la licencia estaba vacía");
+                                    //addlog("WebServiceHandler case 16","#GT06032023_6: Por una causa desconocida la licencia está vacía","");
                                 }else{
-                                    toast("#GT06032023_4: Por una causa desconocida la licencia está vacía");
-                                    addlog(getPackageName(),"#GT06032023_4: Por una causa desconocida la licencia está vacía","");
+                                    //toast("#GT06032023_4: Por una causa desconocida la licencia está vacía");
+                                    //addlog("WebServiceHandler case 16","#GT06032023_4: Por una causa desconocida la licencia está vacía","");
                                 }
                             }
                         }
@@ -7552,38 +7555,22 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                         break;
-
                     case 27://Obtiene el Tipo de Etiqueta del producto
                         callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta",
                                 "pBeTipo_etiqueta",pBeTipo_etiqueta);
                         break;
-
                     case 28://Valida si la serie del producto ya existe
                         callMethod("Existe_Serie",
                                 "pSerie", pSerie,
                                 "pIdBodega",gl.IdBodega);
                         break;
-
                     case 29:
                         callMethod("Guardar_Producto_Imagen",
                                 "pBeProductoImagen",BeProductoImagen);
                         break;
-
                     case 30:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",BeProducto.IdProducto);
                         break;
-
- /*                   case 31:
-                        callMethod("Guardar_Transaccion_Error",
-                                "pDocumentoUbicacion",ubiDetLote,
-                                "pTipoPush",vTipoPush,
-                                "pRecepcionAlmacen",gl.gBeOrdenCompra.No_Documento_Recepcion_ERP,
-                                "pIdRecepcionEnc",BeTransReDet.IdRecepcionEnc,
-                                "pIdRecepcionDet",BeTransReDet.IdRecepcionDet,
-                                "pIdUsuario",gl.OperadorBodega.IdOperador,
-                                "pMensaje",vMensajeError);
-                        break;
-*/
                     case 32:
                         callMethod("Tiene_Posiciones",
                                 "pStock",pStock);
