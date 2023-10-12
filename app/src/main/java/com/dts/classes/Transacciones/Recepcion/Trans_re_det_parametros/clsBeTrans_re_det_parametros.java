@@ -14,10 +14,10 @@ public class clsBeTrans_re_det_parametros {
     @Element(required=false) public int IdProductoParametro=0;
     @Element(required=false) public String Valor_texto="";
     @Element(required=false) public double Valor_numerico=0;
-    @Element(required=false) public String Valor_fecha="1900-01-01T00:00:01";
+    @Element(required=false) public String Valor_fecha="1900-01-01T00:00:00";
     @Element(required=false) public boolean Valor_logico=false;
-    @Element(required=false) public String User_agr= "1900-01-01T00:00:01";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String User_agr= "1900-01-01T00:00:00";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String Valor_Unico="";
     @Element(required=false) public clsBeP_parametro TipoParametro=new clsBeP_parametro();

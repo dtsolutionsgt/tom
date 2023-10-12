@@ -11,9 +11,9 @@ public class clsBeTrans_inv_enc_reconteo {
     @Element(required=false) public String Hora_ini ="00:00:01";
     @Element(required=false) public String Hora_fin="00:00:01";
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public String Ubicacion="";
     @Element(required=false) public String Codigo="";
     @Element(required=false) public String Producto="";
@@ -26,7 +26,7 @@ public class clsBeTrans_inv_enc_reconteo {
     @Element(required=false) public Double pesoAnterior=0.0;
     @Element(required=false) public Double Peso=0.0;
     @Element(required=false) public String Operador="";
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
     @Element(required=false) public int IdInvReconteo=0;
 
 

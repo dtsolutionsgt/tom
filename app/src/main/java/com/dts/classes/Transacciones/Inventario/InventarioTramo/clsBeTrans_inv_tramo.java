@@ -9,12 +9,12 @@ public class clsBeTrans_inv_tramo {
     @Element(required=false) public int Idtramo=0;
     @Element(required=false) public int Det_idoperador=0;
     @Element(required=false) public String Det_estado="";
-    @Element(required=false) public String Det_inicio="1900-01-01T00:00:01";
-    @Element(required=false) public String Det_fin="1900-01-01T00:00:01";
+    @Element(required=false) public String Det_inicio="1900-01-01T00:00:00";
+    @Element(required=false) public String Det_fin="1900-01-01T00:00:00";
     @Element(required=false) public int Res_idoperador=0;
     @Element(required=false) public String Res_estado="";
-    @Element(required=false) public String Res_inicio="1900-01-01T00:00:01";
-    @Element(required=false) public String Res_fin="1900-01-01T00:00:01";
+    @Element(required=false) public String Res_inicio="1900-01-01T00:00:00";
+    @Element(required=false) public String Res_fin="1900-01-01T00:00:00";
     @Element(required=false) public boolean Aplicado=false;
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public String Nombre_Tramo="";

@@ -12,9 +12,9 @@ public class clsBeProducto_rellenado {
     @Element(required=false) public double Minimo=0;
     @Element(required=false) public double Maximo=0;
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public int IdProductoBodega=0;
     @Element(required=false) public int IdBodega=0;

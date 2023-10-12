@@ -14,7 +14,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String ReservadoUMBAs="";
   @Element(required=false) public String DisponibleUMBas="";
   @Element(required=false) public String Lote="";
-  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
   @Element(required=false) public String Estado="";
   @Element(required=false) public String Ubic="";
   @Element(required=false) public String idUbic="";
@@ -24,7 +24,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String IdProductoEstado="";
   @Element(required=false) public int IdProductoBodega=0;
   @Element(required=false) public int factor=0;
-  @Element(required=false) public String ingreso="1900-01-01T00:00:01";
+  @Element(required=false) public String ingreso="1900-01-01T00:00:00";
   @Element(required=false) public int IdTipoEtiqueta=0;//#CKFK 20210716 1846 Agregué el campo IdTipoEtiqueta a la clase clsBeVW_stock_res_CI
   @Element(required=false) public String DispPres = "";
   @Element(required=false) public String ResPres = "";

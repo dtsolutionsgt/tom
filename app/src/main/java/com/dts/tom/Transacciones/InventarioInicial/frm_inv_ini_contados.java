@@ -511,7 +511,7 @@ public class frm_inv_ini_contados extends PBase {
             if (BBeProducto.Control_vencimiento){
                 dditem.Fecha_vence = du.convierteFecha(txtVenceDetalle.getText().toString());
             }else{
-                dditem.Fecha_vence = "1900-01-01T00:00:01";
+                dditem.Fecha_vence = "1900-01-01T00:00:00";
             }
 
             execws(8);

@@ -1036,7 +1036,7 @@ public class frm_inv_ini_conteo extends PBase {
                 }
 
             }else{
-                ditem.Fecha_vence="1900-01-01T00:00:01";
+                ditem.Fecha_vence="1900-01-01T00:00:00";
             }
 
             ditem.Serie="";

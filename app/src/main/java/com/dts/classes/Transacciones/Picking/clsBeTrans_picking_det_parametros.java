@@ -13,7 +13,7 @@ public class clsBeTrans_picking_det_parametros {
     @Element(required=false) public String Valor_fecha="";
     @Element(required=false) public boolean Valor_logico=false;
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public boolean IsNew=false;
 
 

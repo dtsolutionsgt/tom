@@ -17,8 +17,8 @@ public class clsBeTrans_inv_ciclico_vw {
     @Element(required=false) public boolean EsNuevo  = false;
     @Element(required=false) public String Lote_stock  = "";
     @Element(required=false) public String Lote  = "";
-    @Element(required=false) public String Fecha_vence_stock  = "1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_vence  = "1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence_stock  = "1900-01-01T00:00:00";
+    @Element(required=false) public String Fecha_vence  = "1900-01-01T00:00:00";
     @Element(required=false) public double Cant_stock  = 0.0;
     @Element(required=false) public double Cantidad  = 0.0;
     @Element(required=false) public double Cant_reconteo  = 0.0;
@@ -27,7 +27,7 @@ public class clsBeTrans_inv_ciclico_vw {
     @Element(required=false) public double Peso_reconteo  = 0.0;
     @Element(required=false) public int Idoperador  = 0;
     @Element(required=false) public String User_agr  = "";
-    @Element(required=false) public String Fec_agr  = "1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr  = "1900-01-01T00:00:00";
     @Element(required=false) public int IdTramo  = 0;
     @Element(required=false) public String Estado_nombre  = "";
     @Element(required=false) public String Producto_nombre  = "";

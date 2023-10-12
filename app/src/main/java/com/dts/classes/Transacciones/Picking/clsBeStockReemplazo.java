@@ -8,7 +8,7 @@ public class clsBeStockReemplazo {
     public String UMBas = "";
     public double Cant=0;
     public int IdUbicacion=0;
-    public String FechaVence="1900-01-01T00:00:01";
+    public String FechaVence="1900-01-01T00:00:00";
     public String LicPlate="";
     public String Lote="";
     public String CodigoProducto="";

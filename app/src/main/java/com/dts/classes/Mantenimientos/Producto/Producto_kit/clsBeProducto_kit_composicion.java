@@ -19,9 +19,9 @@ public class clsBeProducto_kit_composicion {
     @Element(required=false) public double CantidadRes =0;
     @Element(required=false) public int No_Linea =0;
     @Element(required=false) public int IdPedidoDetPadre =0;
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
     @Element(required=false) public int IdBodega =0;
     @Element(required=false) public clsBeProducto Propietario=new clsBeProducto();

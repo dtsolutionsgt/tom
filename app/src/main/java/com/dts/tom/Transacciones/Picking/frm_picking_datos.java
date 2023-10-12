@@ -1861,7 +1861,7 @@ public class frm_picking_datos extends PBase {
 
                 if (gBePickingUbic.Fecha_Vence.isEmpty()){
                     //mu.msgbox("Guardar_Picking:"+ "fecha vacia");
-                    gBePickingUbic.Fecha_Vence = "1900-01-01T00:00:01";
+                    gBePickingUbic.Fecha_Vence = "1900-01-01T00:00:00";
                 }
 
                 if (gBeProducto.getControl_vencimiento()){

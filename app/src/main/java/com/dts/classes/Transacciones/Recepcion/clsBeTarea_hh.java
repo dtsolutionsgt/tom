@@ -14,8 +14,8 @@ public class clsBeTarea_hh {
   @Element(required=false) public int IdTipoTarea=0;
   @Element(required=false) public int IdTransaccion=0;
   @Element(required=false) public int Tipo=0;
-  @Element(required=false) public String FechaInicio="1900-01-01T00:00:01";
-  @Element(required=false) public String FechaFin="1900-01-01T00:00:01";
+  @Element(required=false) public String FechaInicio="1900-01-01T00:00:00";
+  @Element(required=false) public String FechaFin="1900-01-01T00:00:00";
   @Element(required=false) public boolean DiaCompleto=false;
   @Element(required=false) public String Asunto="";
   @Element(required=false) public String Ubicacion="";

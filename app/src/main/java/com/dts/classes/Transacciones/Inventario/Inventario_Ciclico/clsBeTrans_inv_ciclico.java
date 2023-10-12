@@ -16,8 +16,8 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public boolean EsNuevo = false;
     @Element(required=false) public String Lote_stock ="";
     @Element(required=false) public String Lote= "";
-    @Element(required=false) public String Fecha_vence_stock="1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence_stock="1900-01-01T00:00:00";
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:00";
     @Element(required=false) public double Cant_stock = 0.00;
     @Element(required=false) public double Cantidad = 0.00;
     @Element(required=false) public double Cant_reconteo = 0.00;
@@ -26,14 +26,14 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public double Peso_reconteo = 0.00;
     @Element(required=false) public int Idoperador=0;
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public int IdProductoEst_nuevo=0;
     @Element(required=false) public int IdPresentacion_nuevo =0;
     @Element(required=false) public int IdUbicacion_nuevo =0;
     @Element(required=false) public boolean EsPallet= false;
     @Element(required=false) public String lic_plate="";
 
-    @Element(required=false) public String Fec_Mod ="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_Mod ="1900-01-01T00:00:00";
     @Element(required=false) public String Ubicacion ="";
     @Element(required=false) public  String Tramo ="";
     @Element(required=false) public String Estado ="";

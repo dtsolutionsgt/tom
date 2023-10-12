@@ -19,12 +19,12 @@ public class clsBeProducto_pallet {
     @Element(required=false) public String Lote="";
     @Element(required=false) public boolean Impreso=false;
     @Element(required=false) public int Reimpresiones=0;
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
+    @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:00";
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean IsNew=false;
 

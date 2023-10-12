@@ -14,7 +14,7 @@ public class clsBeTrans_inv_resumen {
     @Element(required=false) public int Idpresentacion=0;
     @Element(required=false) public int Idproductoestado=0;
     @Element(required=false) public double Cantidad=0;
-    @Element(required=false) public String Fecha_captura="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_captura="1900-01-01T00:00:00";
     @Element(required=false) public String Host="";
     @Element(required=false) public String Nom_producto="";
     @Element(required=false) public String Nom_operador="";

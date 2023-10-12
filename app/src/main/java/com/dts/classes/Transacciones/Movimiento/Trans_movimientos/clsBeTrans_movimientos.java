@@ -23,7 +23,7 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public String Serie;
     @Element(required=false) public double Peso;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:00";
     @Element(required=false) public String Fecha;
     @Element(required=false) public String Barra_pallet;
     @Element(required=false) public String Hora_ini;

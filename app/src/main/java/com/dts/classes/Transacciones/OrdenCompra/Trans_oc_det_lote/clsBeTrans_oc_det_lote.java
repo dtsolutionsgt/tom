@@ -18,7 +18,7 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public double Cantidad;
     @Element(required=false) public double Cantidad_recibida;
     @Element(required=false) public String Lote;
-    @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence ="1900-01-01T00:00:00";
     @Element(required=false) public String Lic_Plate;
     @Element(required=false) public String Ubicacion;
     @Element(required=false) public Boolean IsNew=false;
@@ -27,9 +27,9 @@ public class clsBeTrans_oc_det_lote {
     @Element(required=false) public int IdUnidadMedidaBasica = 0;
     //#CKFK20220131 Campos de bitácora agregados
     @Element(required=false) public String User_agr = "";
-    @Element(required=false) public String Fec_agr ="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr ="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod = "";
-    @Element(required=false) public String Fec_mod ="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod ="1900-01-01T00:00:00";
     @Element(required=false) public clsBeProducto_Presentacion Presentacion = new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida = new clsBeUnidad_medida();
     @Element(required=false) public Boolean Reclasificar=false;

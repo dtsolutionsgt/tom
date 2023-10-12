@@ -10,9 +10,9 @@ public class clsBeImpresora {
     @Element(required=false) public String Nombre="";
     @Element(required=false) public String Direccion_Ip="";
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String mac_adress="";
     @Element(required=false) public int IdBodega=0;

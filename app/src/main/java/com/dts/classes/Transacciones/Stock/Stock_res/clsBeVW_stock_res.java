@@ -28,13 +28,13 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Codigo_Producto="";
   @Element(required=false) public String Nombre_Producto="";
   @Element(required=false) public String Lote="";
-  @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_ingreso="1900-01-01T00:00:00";
   @Element(required=false) public String Serial="";
   @Element(required=false) public int Anada=0;
   @Element(required=false) public double CantidadUmBas=0;
   @Element(required=false) public double Factor=0;
   @Element(required=false) public double CantidadPresentacion=0;
-  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
   @Element(required=false) public String NomEstado="";
   @Element(required=false) public boolean EstadoUtilizable=false;
   @Element(required=false) public boolean Danado=false;
@@ -82,7 +82,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double Cantidad_Res=0;
   @Element(required=false) public String ValorTexto="";
   @Element(required=false) public double ValorNumerico=0.0;
-  @Element(required=false) public String ValorFecha="1900-01-01T00:00:01";
+  @Element(required=false) public String ValorFecha="1900-01-01T00:00:00";
   @Element(required=false) public boolean ValorLogico=false;
   @Element(required=false) public String No_Serie="";
   @Element(required=false) public String No_Serie_Inicial="";
@@ -100,8 +100,8 @@ public class clsBeVW_stock_res {
   @Element(required=false) public boolean ubicacion_picking=false;
   @Element(required=false) public String Host="";
   @Element(required=false) public int no_linea=0;
-  @Element(required=false) public String Fecha_Pedido="1900-01-01T00:00:01";
-  @Element(required=false) public String Fecha_Preparacion="1900-01-01T00:00:01";
+  @Element(required=false) public String Fecha_Pedido="1900-01-01T00:00:00";
+  @Element(required=false) public String Fecha_Preparacion="1900-01-01T00:00:00";
 
   //#EJC20220129:
   @Element(required=false) public double CamasPorTarima=0;

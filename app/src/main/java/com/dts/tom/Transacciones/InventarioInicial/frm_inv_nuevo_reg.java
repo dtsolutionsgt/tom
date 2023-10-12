@@ -340,7 +340,7 @@ public class frm_inv_nuevo_reg extends PBase {
             if (pBeProductoNuevo.Control_vencimiento){
                 nitem.Fecha_vence = du.convierteFecha(txtVenceInvIniN.getText().toString());
             }else{
-                nitem.Fecha_vence  ="1900-01-01T00:00:01";
+                nitem.Fecha_vence  ="1900-01-01T00:00:00";
             }
 
             if (pBeProductoNuevo.Control_peso){

@@ -14,7 +14,7 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public double Peso=0;
     @Element(required=false) public int IdUnidadMedida=0;
     @Element(required=false) public String Lote="";
-    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:00";
     @Element(required=false) public String Codigo="";
     @Element(required=false) public int IdBodega=0;
     @Element(required=false) public int IdUbicacion=0;

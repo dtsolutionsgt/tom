@@ -11,7 +11,7 @@ public class clsBeTrans_re_det_lote_num {
     @Element(required=false) public String Codigo="";
     @Element(required=false) public String Lote="";
     @Element(required=false) public int Lote_Numerico=0;
-    @Element(required=false) public String FechaIngreso="1900-01-01T00:00:01";
+    @Element(required=false) public String FechaIngreso="1900-01-01T00:00:00";
     @Element(required=false) public double Cantidad=0;
 
 

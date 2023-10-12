@@ -17,7 +17,7 @@ public class clsBeI_nav_barras_pallet {
     @Element(required=false) public int Lote_Numerico;
     @Element(required=false) public String Fecha_Agregado;
     @Element(required=false) public String Fecha_Ingreso;
-    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
     @Element(required=false) public String Fecha_Produccion;
     @Element(required=false) public boolean Activo;
     @Element(required=false) public boolean Recibido;

@@ -17,9 +17,9 @@ public class clsBeMontacarga {
     @Element(required=false) public Double Costo_Hora=0.0;
     @Element(required=false) public String Tipo_combustible="";
     @Element(required=false) public String Tipo_montacarga="";
-    @Element(required=false) public String Fecha_compra="1900-01-01T00:00:01";
-    @Element(required=false) public String Fecha_inicio_operaciones="1900-01-01T00:00:01";
-    @Element(required=false) public String Proximo_mantenimiento="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_compra="1900-01-01T00:00:00";
+    @Element(required=false) public String Fecha_inicio_operaciones="1900-01-01T00:00:00";
+    @Element(required=false) public String Proximo_mantenimiento="1900-01-01T00:00:00";
 
 
     public clsBeMontacarga() {

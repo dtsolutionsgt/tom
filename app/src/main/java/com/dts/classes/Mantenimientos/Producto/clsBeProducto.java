@@ -59,9 +59,9 @@ public class clsBeProducto {
   @Element(required=false) public int Tolerancia=0;
   @Element(required=false) public int Ciclo_vida=0;
   @Element(required=false) public String UseClienteRapidor_agr="";
-  @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+  @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
   @Element(required=false) public String User_mod="";
-  @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+  @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
   @Element(required=false) public String Imagen="";
   @Element(required=false) public String Noserie="";
   @Element(required=false) public String Noparte="";
@@ -93,7 +93,7 @@ public class clsBeProducto {
   @Element(required=false) public double Factor=0;
   @Element(required=false) public double ExistenciaUMBas;
   @Element(required=false) public String Lote="";
-  @Element(required=false) public String FechaVence="1900-01-01T00:00:01";
+  @Element(required=false) public String FechaVence="1900-01-01T00:00:00";
   @Element(required=false) public double Cantidad=0;
   @Element(required=false) public int IdUnidadMedidaCobro=0;
   @Element(required=false) public int IdTipoEtiqueta=0;

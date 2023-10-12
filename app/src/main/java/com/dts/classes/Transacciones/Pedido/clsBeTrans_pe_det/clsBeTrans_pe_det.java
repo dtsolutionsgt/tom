@@ -30,7 +30,7 @@ public class clsBeTrans_pe_det {
     @Element(required=false) public String Nom_unid_med="";
     @Element(required=false) public String Nom_estado="";
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public boolean Fecha_especifica=false;
     @Element(required=false) public double RoadDes=0;
     @Element(required=false) public double RoadDesMon=0;

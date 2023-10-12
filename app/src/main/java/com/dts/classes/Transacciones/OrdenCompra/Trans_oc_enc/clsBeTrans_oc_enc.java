@@ -25,9 +25,9 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String Hora_Creacion;
     @Element(required=false) public String No_Documento;
     @Element(required=false) public String User_Agr;
-    @Element(required=false) public String Fec_Agr ="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_Agr ="1900-01-01T00:00:00";
     @Element(required=false) public String User_Mod;
-    @Element(required=false) public String Fec_Mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_Mod="1900-01-01T00:00:00";
     @Element(required=false) public String Procedencia;
     @Element(required=false) public String No_Marchamo;
     @Element(required=false) public String Referencia;

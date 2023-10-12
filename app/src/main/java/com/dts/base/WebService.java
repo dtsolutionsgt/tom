@@ -387,13 +387,13 @@ public class WebService {
                         return obj.toString();
                     }else
                     {
-                        return "1900-01-01T00:00:01";
+                        return "1900-01-01T00:00:00";
                     }
 
                 } catch (ParseException e)
                 {
                     Log.e("#EJC_Invalid_Format","ParamName: " + pFieldName + " Se aplicó valor x Defecto REF#1");
-                    result += buildArgValue("1900-01-01T00:00:01",pFieldName);
+                    result += buildArgValue("1900-01-01T00:00:00",pFieldName);
                 }
             }
 
@@ -448,7 +448,7 @@ public class WebService {
                         {
 
                             Object oFecha =fields[i].get(obj);
-                            String vFecha="1900-01-01T00:00:01";
+                            String vFecha="1900-01-01T00:00:00";
 
                             if (oFecha!=null)
                             {
@@ -463,7 +463,7 @@ public class WebService {
                                 } catch (Exception e)
                                 {
                                     Log.e("#EJC_Invalid_Format","ParamName: " + fieldname + " Se aplicó valor x Defecto REF#2");
-                                    result += buildArgValue("1900-01-01T00:00:01",fieldname);
+                                    result += buildArgValue("1900-01-01T00:00:00",fieldname);
                                 }
                             }else
                             {
@@ -486,7 +486,7 @@ public class WebService {
                                         result += buildArgValue(false,fieldname);
                                     }else
                                     {
-                                        result += buildArgValue("1900-01-01T00:00:01",fieldname);
+                                        result += buildArgValue("1900-01-01T00:00:00",fieldname);
                                     }
                                 }
                             }

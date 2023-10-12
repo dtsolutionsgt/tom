@@ -16,9 +16,9 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public String Path_printer="";
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean ClienteRapido=false;
     @Element(required=false) public boolean Operador_logistico=false;
     @Element(required=false) public int Puerto_escaner=0;
@@ -32,7 +32,7 @@ public class clsBeEmpresa extends clsBeEmpresaBase {
     @Element(required=false) public boolean codigo_automatico=false;
     @Element(required=false) public boolean politica_contrasenas=false;
     @Element(required=false) public int IdMotivoAjusteInventario=0;
-    @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:01";
+    @Element(required=false) public String Hora_Corte_Jornada_Sistema ="1900-01-01T00:00:00";
     @Element(required=false) public boolean Generar_Stock_Jornada=false;
     @Element(required=false) public String Version_BD="";
     @Element(required=false) public String AWS_Token="";

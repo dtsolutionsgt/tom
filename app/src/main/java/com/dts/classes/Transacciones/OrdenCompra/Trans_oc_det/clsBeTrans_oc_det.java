@@ -31,9 +31,9 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public double Costo;
     @Element(required=false) public double Total_linea;
     @Element(required=false) public String User_agr;
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
     @Element(required=false) public String User_mod;
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:01";
+    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean Activo;
     @Element(required=false) public String Atributo_variante_1;
     @Element(required=false) public String Codigo_Producto;
@@ -44,7 +44,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public clsBeProducto Producto=new clsBeProducto();
     @Element(required=false) public clsBeProducto_Presentacion Presentacion=new clsBeProducto_Presentacion();
     @Element(required=false) public clsBeUnidad_medida UnidadMedida=new clsBeUnidad_medida();
-    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:01";
+    @Element(required=false) public String Fecha_vence="1900-01-01T00:00:00";
     @Element(required=false) public int RowIndex;
     @Element(required=false) public double valor_aduana=0;
     @Element(required=false) public double valor_fob=0;
