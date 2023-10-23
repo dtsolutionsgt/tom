@@ -767,6 +767,9 @@ public class frm_verificacion_datos extends PBase {
             //double valor =Double.valueOf(txt.getText().toString());
             double valor =Double.valueOf(txt.getText().toString().replace(",",""));
 
+            Double peso_conversion = Double.valueOf(mu.frmdecimal(peso_picking, gl.gCantDecDespliegue));
+
+            peso_picking = peso_conversion;
 
             if(Objects.equals(valor, peso_picking)){
                 result = true;

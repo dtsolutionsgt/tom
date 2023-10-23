@@ -112,8 +112,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
                        boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
                        boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo,
-                       String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
-                       boolean Liberar_Stock_Despachos_Parciales) {
+                       String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario, boolean Liberar_Stock_Despachos_Parciales ) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
