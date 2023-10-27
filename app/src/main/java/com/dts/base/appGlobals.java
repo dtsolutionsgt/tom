@@ -11,6 +11,9 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_bodega.clsBeProveedor_bodega;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiempos;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiemposList;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
@@ -18,6 +21,7 @@ import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_rec
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
+import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -91,6 +95,10 @@ public class appGlobals extends Application {
     public int IdPropietarioBodega;
     public int gIdRecepcionEnc;
     public int TipoOpcion;
+
+    //Objetos para controlar el ingreso (si acepta vencido, si maneja tiempos con el proveedor
+    public clsBeTrans_oc_ti pTipoIngreso;
+    public clsBeProveedor_tiemposList pProveedor_Tiempos;
     public clsBeTrans_oc_detList gListDetalleOC = new clsBeTrans_oc_detList();
     public clsBeTrans_re_enc gBeRecepcion = new clsBeTrans_re_enc();
     public boolean gEscaneo_Pallet;

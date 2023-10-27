@@ -28,6 +28,7 @@ public class clsBeTrans_oc_ti {
 
     @Element(required=false) public boolean Permitir_Vencido_Ingreso = true;
 
+    @Element(required=false) public boolean Es_Importacion = false;
 
 
     public clsBeTrans_oc_ti() {
@@ -49,7 +50,8 @@ public class clsBeTrans_oc_ti {
                             boolean Requerir_Ubic_Rec_Ingreso,
                             boolean Bloquear_Lotes,
                             boolean Permitir_Excedente_Lotes,
-                            boolean Permitir_Vencido_Ingreso
+                            boolean Permitir_Vencido_Ingreso,
+                            boolean Es_Importacion
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -68,6 +70,7 @@ public class clsBeTrans_oc_ti {
         this.Bloquear_Lotes = Bloquear_Lotes;
         this.Permitir_Excedente_Lotes = Permitir_Excedente_Lotes;
         this.Permitir_Vencido_Ingreso = Permitir_Vencido_Ingreso;
+        this.Es_Importacion = Es_Importacion;
     }
 
     public int getIdTipoIngresoOC() {
@@ -207,5 +210,13 @@ public class clsBeTrans_oc_ti {
     public void setPermitir_Vencido_Ingreso(boolean value) {
         Permitir_Vencido_Ingreso=value;
     }
+
+    public boolean getEs_Importacion() {
+        return Es_Importacion;
+    }
+    public void setEs_Importacion(boolean value) {
+        Es_Importacion=value;
+    }
+
 
 }

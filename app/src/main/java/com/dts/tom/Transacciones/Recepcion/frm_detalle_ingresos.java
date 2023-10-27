@@ -515,6 +515,14 @@ public class frm_detalle_ingresos extends PBase {
             gl.mode =1;
             if (gBeRecepcion!=null)
             {
+
+                //#GT24102023: se carga el tipo ingreso y los tiempos del proveedor
+                gl.pTipoIngreso = gBeRecepcion.OrdenCompraRec.OC.TipoIngreso;
+
+                if(gBeRecepcion.OrdenCompraRec.OC.ProveedorBodega.Proveedor.TiemposProveedor.items !=null){
+                    gl.pProveedor_Tiempos = gBeRecepcion.OrdenCompraRec.OC.ProveedorBodega.Proveedor.TiemposProveedor;
+                }
+
                 if (gBeRecepcion.Tomar_fotos) {
                     tblImagen.setVisibility(View.VISIBLE);
                 }

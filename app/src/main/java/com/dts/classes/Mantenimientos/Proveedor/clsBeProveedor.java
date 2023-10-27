@@ -3,6 +3,8 @@ package com.dts.classes.Mantenimientos.Proveedor;
 
 import com.dts.classes.Mantenimientos.Propietario.Propietario.clsBePropietarios;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiempos;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiemposList;
 
 import org.simpleframework.xml.Element;
 
@@ -35,6 +37,8 @@ public class clsBeProveedor {
     @Element(required=false) public int IdConfiguracionBarraPallet=0;
     @Element(required=false) public boolean Es_Proveedor_Servicio=false;
 
+    @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
+
 
     public clsBeProveedor() {
     }
@@ -45,7 +49,10 @@ public class clsBeProveedor {
                           boolean Activo,boolean Muestra_precio,String User_agr,String Fec_agr,
                           String User_mod,String Fec_mod,boolean Actualiza_costo_oc,int IdUbicacionVirtual,
                           boolean Es_Bodega_Recepcion,boolean Es_Bodega_Traslado,String Referencia,boolean Sistema,
-                          int IdConfiguracionBarraPallet) {
+                          int IdConfiguracionBarraPallet,
+                          clsBeProveedor_tiemposList TiemposProveedor
+
+    ) {
 
         this.IdEmpresa=IdEmpresa;
         this.Empresa=Empresa;
@@ -72,6 +79,7 @@ public class clsBeProveedor {
         this.Referencia=Referencia;
         this.Sistema=Sistema;
         this.IdConfiguracionBarraPallet=IdConfiguracionBarraPallet;
+        this.TiemposProveedor = TiemposProveedor;
 
     }
 
@@ -233,6 +241,13 @@ public class clsBeProveedor {
     }
     public void setEs_Proveedor_Servicio(boolean value) {
         Es_Proveedor_Servicio=value;
+    }
+
+    public clsBeProveedor_tiemposList getTiemposProveedor() {
+        return TiemposProveedor;
+    }
+    public void setTiemposProveedor(clsBeProveedor_tiemposList value) {
+        TiemposProveedor=value;
     }
 
 }

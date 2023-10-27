@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -62,6 +61,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_pallet.clsBeProducto_pal
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametros;
 import com.dts.classes.Mantenimientos.Producto.Producto_parametros.clsBeProducto_parametrosList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiempos;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
@@ -102,6 +102,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -292,6 +293,9 @@ public class frm_recepcion_datos extends PBase {
     private int CantidadCopias;
 
     private clsBeStock pStock;
+
+    int dias_aceptacion_exterior =0;
+    int dias_aceptacion_local=0;
 
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
@@ -714,7 +718,7 @@ public class frm_recepcion_datos extends PBase {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
-                        String valor= cmbVenceRec .getText().toString();
+                        String valor= cmbVenceRec.getText().toString();
                         //#AT 20211123 Se ajusta el formato a la fecha
                         String fecha_ajustada =  du.convierteFechaSinHora(valor);
 
@@ -725,7 +729,6 @@ public class frm_recepcion_datos extends PBase {
                                 cmbVenceRec.setText(du.getActDateStr());
                             }
 
-                            // du.EsFecha(valor);
                         }catch(Exception e){
                             cmbVenceRec.setText(du.getActDateStr());
                         }
@@ -4738,7 +4741,7 @@ public class frm_recepcion_datos extends PBase {
 
             imprimirDesdeBoton=false;
 
-            String valor= cmbVenceRec .getText().toString();
+            String valor= cmbVenceRec.getText().toString();
 
             String fecha_ajustada =  du.convierteFechaSinHora(valor);
 
@@ -4948,6 +4951,7 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    public clsBeProveedor_tiempos BeTiempoAceptacionProveedorSingle;
     public void valida_fecha_vencimiento(){
 
         try{
@@ -4965,10 +4969,62 @@ public class frm_recepcion_datos extends PBase {
                     String FechaActual=du.getFechaActual();
 
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date strDate = sdf.parse(FechaVence);
-                    Date strDateNow = sdf.parse(FechaActual);
+                    Date strFechaVence = sdf.parse(FechaVence);
+                    Date strFechaActual = sdf.parse(FechaActual);
 
-                    if (strDate.getTime()  <=  strDateNow.getTime() ) {
+                    //#GT25102023: valida si permite vencido
+                  /*  if (gl.pTipoIngreso.Permitir_Vencido_Ingreso){
+                        progress.setMessage("Llenando detalle de recepción");
+                        progress.show();
+                        DespuesDeValidarCantidad();
+                    }else{
+                        //#GT24102023: sino permite vencido, valida tiempos del proveedor (compra local o importación)
+                        if(gl.pProveedor_Tiempos.items.size()>0 ) {
+
+                            if (gl.pTipoIngreso.Es_Importacion) {
+
+                                Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
+                                        .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
+                                                c.IdFamilia == BeProducto.IdFamilia)
+                                        .findFirst();
+
+                                if (optionalTiempoAceptacion.isPresent()) {
+                                    BeTiempoAceptacionProveedorSingle = optionalTiempoAceptacion.get();
+                                    dias_aceptacion_exterior = BeTiempoAceptacionProveedorSingle.Dias_Exterior;
+                                }else{
+                                    progress.cancel();
+                                    toastlong("No se puede recibir producto vencido sin reglas de tiempos de aceptacion exterior.");
+                                }
+
+                            }
+                            else {
+
+                                Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
+                                        .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
+                                                c.IdFamilia == BeProducto.IdFamilia)
+                                        .findFirst();
+
+                                if (optionalTiempoAceptacion.isPresent()) {
+                                    BeTiempoAceptacionProveedorSingle = optionalTiempoAceptacion.get();
+                                    dias_aceptacion_local = BeTiempoAceptacionProveedorSingle.Dias_Local;
+                                }else{
+
+                                    progress.cancel();
+                                    toastlong("No se puede recibir producto vencido sin reglas de tiempos de aceptacion local.");
+                                }
+
+                            }
+                        }else{
+                            progress.cancel();
+                            toastlong("No se puede recibir producto vencido o sin reglas de tiempos de aceptacion.");
+                        }
+                    }*/
+
+
+
+                    if (strFechaVence.getTime()  <=  strFechaActual.getTime() ) {
+
+                        //***********************************************************************************//*
                         //#AT20221006 Nuevo diseño de alerta
                         msgAskFechaVencimiento();
                         //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
@@ -4976,7 +5032,6 @@ public class frm_recepcion_datos extends PBase {
 
                         progress.setMessage("Llenando detalle de recepción");
                         progress.show();
-
                         DespuesDeValidarCantidad();
                     }
                 }
