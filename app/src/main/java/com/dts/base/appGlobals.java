@@ -96,8 +96,10 @@ public class appGlobals extends Application {
     public int gIdRecepcionEnc;
     public int TipoOpcion;
 
-    //Objetos para controlar el ingreso (si acepta vencido, si maneja tiempos con el proveedor
+    //Objeto para controlar si el ingreso acepta producto ya vencido
     public clsBeTrans_oc_ti pTipoIngreso;
+
+    //Objeto para controlar si ingreso  maneja tiempos de aceptacíon con el proveedor
     public clsBeProveedor_tiemposList pProveedor_Tiempos;
     public clsBeTrans_oc_detList gListDetalleOC = new clsBeTrans_oc_detList();
     public clsBeTrans_re_enc gBeRecepcion = new clsBeTrans_re_enc();
