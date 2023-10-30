@@ -4974,116 +4974,99 @@ public class frm_recepcion_datos extends PBase {
                     Date strFechaVence = sdf.parse(FechaVence);
                     Date strFechaActual = sdf.parse(FechaActual);
 
-                    /*final String TAG_ = "fecha_actual_calendario";
-                    Log.i(TAG_, "fecha_actual_calendario " + strFechaActual);*/
-
-                    //Date es_hoy = sdf.parse(FechaActual);
                     Calendar pFechaCalendario = Calendar.getInstance();
                     pFechaCalendario.setTime(strFechaActual);
 
-                    //****************************************************************************************************//
-                    //*****GT27102023: Si es devolución validar si permite recibir vencido o aplicara tiempos del proveedor ******//
-                    if(gl.pTipoIngreso.Es_devolucion){
-                        //************GT27102023 si permite vencido, proceder con el flujo normal *******************//
+                    //************GT27102023 si permite vencido, proceder con el flujo normal *******************//
                         if (gl.pTipoIngreso.Permitir_Vencido_Ingreso){
-                        progress.setMessage("Llenando detalle de recepción");
-                        progress.show();
-                        DespuesDeValidarCantidad();
-                        }else{
-                        //#GT24102023: sino permite vencido, valida tiempos del proveedor (compra local o importación)
-                            if(gl.pProveedor_Tiempos.items.size()>0 ) {
-                                    if (gl.pTipoIngreso.Es_Importacion) {
-                                        Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
-                                        .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
-                                                c.IdFamilia == BeProducto.IdFamilia)
-                                        .findFirst();
 
-                                        if (optionalTiempoAceptacion.isPresent()) {
+                            if (strFechaVence.getTime()  <=  strFechaActual.getTime() ) {
+                                //***********************************************************************************//*
+                                //#AT20221006 Nuevo diseño de alerta
+                                msgAskFechaVencimiento();
+                                //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
+                            }else{
+                                progress.setMessage("Llenando detalle de recepción");
+                                progress.show();
+                                DespuesDeValidarCantidad();
+                            }
+
+                        }else {
+                            //#GT24102023: sino permite vencido, valida tiempos del proveedor (compra local o importación)
+                            if (gl.pProveedor_Tiempos.items.size() > 0) {
+                                if (gl.pTipoIngreso.Es_Importacion) {
+                                    Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
+                                            .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
+                                                    c.IdFamilia == BeProducto.IdFamilia)
+                                            .findFirst();
+
+                                    if (optionalTiempoAceptacion.isPresent()) {
                                         BeTiempoAceptacionProveedorSingle = optionalTiempoAceptacion.get();
                                         //#GT27102023: se agrega 1 para incluir hoy como parte de los dias aceptacion
-                                        dias_aceptacion_exterior = BeTiempoAceptacionProveedorSingle.Dias_Exterior -1;
-                                            //#GT27102023: valido si la fecha actual + los dias aceptación es igual o menor a la fecha vence
-                                            pFechaCalendario.add(Calendar.DATE, dias_aceptacion_exterior);
-                                            strFechaActual = pFechaCalendario.getTime();
+                                        dias_aceptacion_exterior = BeTiempoAceptacionProveedorSingle.Dias_Exterior - 1;
+                                        //#GT27102023: valido si la fecha actual + los dias aceptación es igual o menor a la fecha vence
+                                        pFechaCalendario.add(Calendar.DATE, dias_aceptacion_exterior);
+                                        strFechaActual = pFechaCalendario.getTime();
 
-                                            if (strFechaVence.equals(strFechaActual) || strFechaVence.after(strFechaActual)){
-                                                //progress.cancel();
-                                                //mu.msgbox("Se permite la fecha de vencimiento digitada");
-                                                progress.setMessage("Llenando detalle de recepción");
-                                                progress.show();
-                                                DespuesDeValidarCantidad();
-                                            }else{
-                                                progress.cancel();
-                                                btnTareas.setEnabled(true);
-                                                mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion exterior");
-                                                cmbVenceRec.requestFocus();
-                                            }
-                                        }else{
+                                        if (strFechaVence.equals(strFechaActual) || strFechaVence.after(strFechaActual)) {
+                                            progress.setMessage("Llenando detalle de recepción");
+                                            progress.show();
+                                            DespuesDeValidarCantidad();
+                                        } else {
                                             progress.cancel();
-                                            mu.msgbox("No se puede recibir producto vencido sin reglas de tiempos de aceptacion exterior.");
+                                            btnTareas.setEnabled(true);
+                                            mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion exterior");
+                                            cmbVenceRec.requestFocus();
                                         }
+                                    } else {
+                                        //#GT30102023: sino tiene tiempos de aceptación, se recibe
+                                        progress.setMessage("Llenando detalle de recepción");
+                                        progress.show();
+                                        DespuesDeValidarCantidad();
                                     }
-                                    else {
-                                        Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
-                                        .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
-                                                c.IdFamilia == BeProducto.IdFamilia)
-                                        .findFirst();
+                                } else {
+                                    Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
+                                            .filter(c -> c.IdClasificacion == BeProducto.IdClasificacion &&
+                                                    c.IdFamilia == BeProducto.IdFamilia)
+                                            .findFirst();
 
-                                        if (optionalTiempoAceptacion.isPresent()) {
-                                            BeTiempoAceptacionProveedorSingle = optionalTiempoAceptacion.get();
-                                            //#GT27102023: se agrega 1 para incluir hoy como parte de los dias aceptacion
-                                            dias_aceptacion_local = BeTiempoAceptacionProveedorSingle.Dias_Local-1;
-                                            //#GT27102023: valido si la fecha actual + los dias aceptación es igual o menor a la fecha vence
-                                            pFechaCalendario.add(Calendar.DATE, dias_aceptacion_local);
-                                            strFechaActual = pFechaCalendario.getTime();
+                                    if (optionalTiempoAceptacion.isPresent()) {
+                                        BeTiempoAceptacionProveedorSingle = optionalTiempoAceptacion.get();
+                                        //#GT27102023: se agrega 1 para incluir hoy como parte de los dias aceptacion
+                                        dias_aceptacion_local = BeTiempoAceptacionProveedorSingle.Dias_Local - 1;
+                                        //#GT27102023: valido si la fecha actual + los dias aceptación es igual o menor a la fecha vence
+                                        pFechaCalendario.add(Calendar.DATE, dias_aceptacion_local);
+                                        strFechaActual = pFechaCalendario.getTime();
 
-
-                                            /*final String TAG = "fecha_actual";
-                                            final String TAG2 = "fecha_vence";
-                                            Log.i(TAG, "fecha_actual_con_aceptacion " + strFechaActual);
-                                            Log.i(TAG2, "fecha_vence " + strFechaVence);*/
-
-
-                                            if (strFechaVence.equals(strFechaActual) || strFechaVence.after(strFechaActual)){
-                                                //progress.cancel();
-                                                //mu.msgbox("Se permite la fecha de vencimiento digitada");
-                                                progress.setMessage("Llenando detalle de recepción");
-                                                progress.show();
-                                                DespuesDeValidarCantidad();
-                                            }else{
-                                                progress.cancel();
-                                                btnTareas.setEnabled(true);
-                                                mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion local asociadas al proveedor");
-                                                cmbVenceRec.requestFocus();
-                                            }
-
-                                        }else{
+                                        if (strFechaVence.equals(strFechaActual) || strFechaVence.after(strFechaActual)) {
+                                            //progress.cancel();
+                                            //mu.msgbox("Se permite la fecha de vencimiento digitada");
+                                            progress.setMessage("Llenando detalle de recepción");
+                                            progress.show();
+                                            DespuesDeValidarCantidad();
+                                        } else {
                                             progress.cancel();
-                                            mu.msgbox("No se puede recibir producto vencido sin reglas de tiempos de aceptacion local asociadas al proveedor");
+                                            btnTareas.setEnabled(true);
+                                            mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion local asociada al proveedor");
+                                            cmbVenceRec.requestFocus();
                                         }
+
+                                    } else {
+                                        //#GT30102023: sino tiene tiempos de aceptación, se recibe
+                                        progress.setMessage("Llenando detalle de recepción");
+                                        progress.show();
+                                        DespuesDeValidarCantidad();
                                     }
-                            }else{
-                                progress.cancel();
-                                mu.msgbox("No se puede recibir producto vencido sin reglas de tiempos de aceptacion asociadas al proveedor.");
+                                }
+                            } else {
+                                //#GT30102023: sino tiene tiempos de aceptación, se recibe
+                                progress.setMessage("Llenando detalle de recepción");
+                                progress.show();
+                                DespuesDeValidarCantidad();
                             }
-                        }
-
-                    }else{
-                        //************GT27102023 sino es devolucion proceder con el flujo *******************//
-
-                        if (strFechaVence.getTime()  <=  strFechaActual.getTime() ) {
-                            //***********************************************************************************//*
-                            //#AT20221006 Nuevo diseño de alerta
-                            msgAskFechaVencimiento();
-                            //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
-                        }else{
-                            progress.setMessage("Llenando detalle de recepción");
-                            progress.show();
-                            DespuesDeValidarCantidad();
                         }
                     }
 
-                }
             }else{
 
                 progress.setMessage("Llenando detalle de recepción");
