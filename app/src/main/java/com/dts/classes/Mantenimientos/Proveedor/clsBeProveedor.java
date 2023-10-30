@@ -39,7 +39,6 @@ public class clsBeProveedor {
 
     @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
 
-
     public clsBeProveedor() {
     }
 
