@@ -549,6 +549,85 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relOpciones"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_above="@+id/relbot"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_vertical"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/relFotosVerificacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:gravity="center_horizontal"
+            android:onClick="verImagenesVerificacion">
+
+            <ImageView
+                android:id="@+id/imgGaleria"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/lblGaleria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgGaleria"
+                android:layout_alignEnd="@+id/imgGaleria"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Galería Verificación"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relVerificacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/relFotosVerificacion"
+            android:gravity="center_horizontal"
+            android:onClick="CapturarVerificacion">
+
+            <ImageView
+                android:id="@+id/imgCamaraVerificacion"
+                android:layout_width="55dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <TextView
+                android:id="@+id/lblCamaraVerificacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgCamaraVerificacion"
+                android:layout_alignEnd="@+id/imgCamaraVerificacion"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="Verificación"
+                android:textAlignment="center"
+                android:textSize="11sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
         android:layout_height="90dp"

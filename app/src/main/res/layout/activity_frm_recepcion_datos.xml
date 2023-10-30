@@ -633,7 +633,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relFotosRec"
+            android:id="@+id/relFotosVerificacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -641,7 +641,7 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/relVerFoto"
             android:gravity="center_horizontal"
-            android:onClick="verImagenesRec">
+            android:onClick="verImagenesVerificacion">
 
             <ImageView
                 android:id="@+id/imgGaleria"
@@ -674,7 +674,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@+id/relFotosRec"
+            android:layout_toEndOf="@+id/relFotosVerificacion"
             android:gravity="center_horizontal"
             android:onClick="Capturar">
 
@@ -710,7 +710,7 @@
             android:layout_marginBottom="0dp"
             android:layout_toEndOf="@+id/relTomarFoto"
             android:gravity="center_horizontal"
-            android:onClick="CapturarRec">
+            android:onClick="CapturarVerificacion">
 
             <ImageView
                 android:id="@+id/imgCamaraRec"
