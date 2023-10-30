@@ -25,6 +25,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Control_Cliente_En_Detalle=false;
     @Element(required=false) public boolean Permitir_Despacho_Parcial =true;
     @Element(required=false) public boolean Permitir_Despacho_Multiple=true;
+    @Element(required=false) public boolean Fotografia_Verificacion = false;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -44,7 +45,8 @@ public class clsBeTrans_pe_tipo {
                               boolean Requerir_Cliente_Es_Bodega_WMS,
                               boolean Control_Cliente_En_Detalle,
                               boolean Permitir_Despacho_Parcial,
-                              boolean Permitir_Despacho_Multiple
+                              boolean Permitir_Despacho_Multiple,
+                              boolean Fotografia_Verificacion
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -63,6 +65,7 @@ public class clsBeTrans_pe_tipo {
         this.Control_Cliente_En_Detalle=Control_Cliente_En_Detalle;
         this.Permitir_Despacho_Parcial = Permitir_Despacho_Parcial;
         this.Permitir_Despacho_Multiple = Permitir_Despacho_Multiple;
+        this.Fotografia_Verificacion = Fotografia_Verificacion;
 
     }
 
@@ -205,4 +208,13 @@ public class clsBeTrans_pe_tipo {
     public void setPermitir_Despacho_Multiple(boolean value) {
         Permitir_Despacho_Multiple=value;
     }
+
+    public boolean getFotografia_Verificacion() {
+        return Fotografia_Verificacion;
+    }
+    public void setFotografia_Verificacion(boolean value) {
+        Fotografia_Verificacion=value;
+    }
+
+
 }

@@ -6,8 +6,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,16 +30,25 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagen;
+import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
+import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +56,8 @@ import br.com.zbra.androidlinq.delegate.SelectorDouble;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Verificacion.frm_list_prod_reemplazo_verif.reemplazoCorrecto;
+
+import androidx.core.content.FileProvider;
 
 public class frm_verificacion_datos extends PBase {
 
@@ -95,6 +112,12 @@ public class frm_verificacion_datos extends PBase {
     static final int DATE_DIALOG_ID = 999;
     private DatePicker dpResult;
     private ImageView imgDate;
+
+    //Imagen
+    private String encoded="";
+    private clsBeImagen BeImagen;
+    private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
+    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -953,6 +976,17 @@ public class frm_verificacion_datos extends PBase {
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);
                         break;
+
+                    case 5:
+                        callMethod("Guardar_Fotos_Verificacion",
+                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "Foto",encoded);
+                        break;
+                    case 6:
+                        callMethod("Get_All_Imagen_Verificacion",
+                                "pIdRecepcion", gl.gIdRecepcionEnc);
+                        break;
+
                 }
 
             }catch (Exception e){
@@ -1334,6 +1368,79 @@ public class frm_verificacion_datos extends PBase {
             mu.msgbox("BotonReemplazo:"+e.getMessage());
         }
     }
+
+    //region
+
+    public void CapturarVerificacion(View view) {
+        abrirCamara();
+    }
+
+    public void verImagenesVerificacion(View view) {
+        progress.setMessage("Cargando imágenes verificación...");
+        progress.show();
+        execws(6);
+    }
+
+    private void abrirCamara() {
+        try{
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.dts.tom.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }catch (Exception ee){
+            mu.msgbox(ee.getMessage());
+        }
+
+    }
+
+    String currentPhotoPath;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private File  createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            //aquí la convierto a base 64
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            execws(5);
+        }
+    }
+
+    //end region
 
     @Override
     public void onBackPressed() {
