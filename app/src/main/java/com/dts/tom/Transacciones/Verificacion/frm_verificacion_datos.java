@@ -119,6 +119,8 @@ public class frm_verificacion_datos extends PBase {
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
     private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
 
+    private RelativeLayout relOpciones;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,6 +172,7 @@ public class frm_verificacion_datos extends PBase {
         btnTareas = findViewById(R.id.btnTareas);
         relPick = findViewById(R.id.relPick);
         relReemplazo = findViewById(R.id.relReemplazo);
+        relOpciones = findViewById(R.id.relOpciones);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -360,7 +363,6 @@ public class frm_verificacion_datos extends PBase {
                         Codigo, Nombre, Expira, Lote));
             }
 
-
             if (gBeProducto == null){
                 throw new Exception("El producto no está definido");
             }else{
@@ -394,6 +396,12 @@ public class frm_verificacion_datos extends PBase {
 
                 }
 
+            }
+
+            if (gl.gFotografiaVerificacion){
+                relOpciones.setVisibility(View.VISIBLE);
+            }else{
+                relOpciones.setVisibility(View.INVISIBLE);
             }
 
             if (BePedidoDetVerif.Fecha_Vence.equals("01/01/1900")) {

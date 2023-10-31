@@ -135,7 +135,7 @@ public class appGlobals extends Application {
     //Variables para verificación
     public int pIdPedidoEnc;
     public int pIdPedidoDet;
-    public int pIdPickingEnc;
+    public boolean gFotografiaVerificacion = false;
     public clsBeDetallePedidoAVerificar gBePedidoDetVerif = new clsBeDetallePedidoAVerificar();
     public clsBeTrans_picking_ubicList gBePickingUbicList = new clsBeTrans_picking_ubicList();
     //gBePedidoEnc = new clsBeTrans_pe_enc;
