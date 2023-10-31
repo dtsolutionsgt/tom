@@ -5,8 +5,6 @@ import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
 
 import org.simpleframework.xml.Element;
 
-import java.util.EmptyStackException;
-
 public class clsBeBodega extends clsBeBodegaBase {
 
     @Element(required=false) public String Codigo_barra="";
@@ -74,16 +72,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Reemplazo_Picking = false;
     @Element(required=false) public boolean Permitir_No_Encontrado_Picking = false;
     @Element(required=false) public boolean Permitir_Reemplazo_Verificacion = false;
-
     @Element(required=false) public boolean Permitir_Reemplazo_Picking_Misma_Licencia = false;
-
     @Element(required=false) public int Dias_Limite_Retroactivo = 0;
-
     @Element(required=false) public String Horario_Ejecucion_Historico = "";
-
     @Element(required=false) public boolean Filtrar_Pedidos_Usuario = false;
-
     @Element(required=false) public boolean Liberar_Stock_Despachos_Parciales = false;
+    @Element(required=false) public boolean Homologar_Lote_Vencimiento = false;
 
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
@@ -651,5 +645,10 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setLiberar_Stock_Despachos_Parciales(boolean value) {
         Liberar_Stock_Despachos_Parciales=value;
     }
-
+    public boolean getHomologar_Lote_Vencimiento() {
+        return Homologar_Lote_Vencimiento;
+    }
+    public void setHomologar_Lote_Vencimiento(boolean value) {
+        Homologar_Lote_Vencimiento=value;
+    }
 }
