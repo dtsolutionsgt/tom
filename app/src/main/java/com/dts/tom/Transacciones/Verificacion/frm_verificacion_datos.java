@@ -1325,7 +1325,7 @@ public class frm_verificacion_datos extends PBase {
 
             CantReemplazar = valor;
             AuxCantReemplazar = valor;
-            msgAskReemplazar("¿Marcar producto para reemplazo?");
+            msgAskReemplazar("¿Reemplazar producto?");
 
         }catch (Exception e){
             mu.msgbox("BotonReemplazo:"+e.getMessage());
@@ -1337,7 +1337,7 @@ public class frm_verificacion_datos extends PBase {
 
         try{
 
-            msgAskExit("Está seguro de salir de las tareas de verificación");
+            msgAskExit("Salir de verificación");
 
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
@@ -1360,5 +1360,4 @@ public class frm_verificacion_datos extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
-
 }

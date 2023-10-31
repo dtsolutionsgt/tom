@@ -129,10 +129,8 @@ public class frm_danado_picking extends PBase {
                                     + "\n Estado: "+ stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first()
                                     + "\n ¿Mover?");
                             }
-
                         }
                     }
-
                     return false;
                 }
             });
