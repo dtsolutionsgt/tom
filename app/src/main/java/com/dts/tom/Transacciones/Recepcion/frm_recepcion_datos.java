@@ -4973,6 +4973,7 @@ public class frm_recepcion_datos extends PBase {
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date strFechaVence = sdf.parse(FechaVence);
                     Date strFechaActual = sdf.parse(FechaActual);
+                    Date pFechaActual = sdf.parse(FechaActual);
 
                     Calendar pFechaCalendario = Calendar.getInstance();
                     pFechaCalendario.setTime(strFechaActual);
@@ -4980,7 +4981,7 @@ public class frm_recepcion_datos extends PBase {
                     //************GT27102023 si permite vencido, proceder con el flujo normal *******************//
                         if (gl.pTipoIngreso.Permitir_Vencido_Ingreso){
 
-                            if (strFechaVence.getTime()  <=  strFechaActual.getTime() ) {
+                            if (strFechaVence.getTime()  <=  pFechaActual.getTime() ) {
                                 //***********************************************************************************//*
                                 //#AT20221006 Nuevo diseño de alerta
                                 msgAskFechaVencimiento();
@@ -5023,9 +5024,16 @@ public class frm_recepcion_datos extends PBase {
                                                 }
                                             } else {
                                                 //#GT30102023: sino tiene tiempos de aceptación, se recibe
-                                                progress.setMessage("Llenando detalle de recepción");
-                                                progress.show();
-                                                DespuesDeValidarCantidad();
+                                                if (strFechaVence.getTime()  <=  pFechaActual.getTime() ) {
+                                                    //***********************************************************************************//*
+                                                    //#AT20221006 Nuevo diseño de alerta
+                                                    msgAskFechaVencimiento();
+                                                    //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
+                                                }else{
+                                                    progress.setMessage("Llenando detalle de recepción");
+                                                    progress.show();
+                                                    DespuesDeValidarCantidad();
+                                                }
                                             }
                                         } else {
                                             Optional<clsBeProveedor_tiempos> optionalTiempoAceptacion = gl.pProveedor_Tiempos.items.stream()
@@ -5056,18 +5064,32 @@ public class frm_recepcion_datos extends PBase {
 
                                             } else {
                                                 //#GT30102023: sino tiene tiempos de aceptación, se recibe
-                                                progress.setMessage("Llenando detalle de recepción");
-                                                progress.show();
-                                                DespuesDeValidarCantidad();
+                                                if (strFechaVence.getTime()  <=  pFechaActual.getTime() ) {
+                                                    //***********************************************************************************//*
+                                                    //#AT20221006 Nuevo diseño de alerta
+                                                    msgAskFechaVencimiento();
+                                                    //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
+                                                }else{
+                                                    progress.setMessage("Llenando detalle de recepción");
+                                                    progress.show();
+                                                    DespuesDeValidarCantidad();
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }else {
                                 //#GT30102023: sino tiene tiempos de aceptación, se recibe
-                                progress.setMessage("Llenando detalle de recepción");
-                                progress.show();
-                                DespuesDeValidarCantidad();
+                                if (strFechaVence.getTime()  <=  pFechaActual.getTime() ) {
+                                    //***********************************************************************************//*
+                                    //#AT20221006 Nuevo diseño de alerta
+                                    msgAskFechaVencimiento();
+                                    //msgValidaFechaVence("La fecha de vencimiento del producto "+BeProducto.Codigo+ " es igual o menor a la fecha de hoy. ¿Desea ingresar un producto ya vencido?");
+                                }else{
+                                    progress.setMessage("Llenando detalle de recepción");
+                                    progress.show();
+                                    DespuesDeValidarCantidad();
+                                }
                             }
 
                         }
