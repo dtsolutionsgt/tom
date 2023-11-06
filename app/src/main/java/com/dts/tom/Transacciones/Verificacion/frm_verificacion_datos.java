@@ -31,12 +31,11 @@ import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagen;
-import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
-import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
+import com.dts.classes.Transacciones.Picking.Trans_Picking_Img.clsBeTrans_picking_imgList;
 import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -116,8 +115,7 @@ public class frm_verificacion_datos extends PBase {
     //Imagen
     private String encoded="";
     private clsBeImagen BeImagen;
-    private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
-    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
+    private clsBeTrans_picking_imgList BeListTransPickingImagen =  new clsBeTrans_picking_imgList();
 
     private RelativeLayout relOpciones;
 
@@ -284,7 +282,8 @@ public class frm_verificacion_datos extends PBase {
                             case KeyEvent.KEYCODE_ENTER:
 
                                 if (gBeProducto.getControl_peso()){
-                                    //#GT10062022: porque usar un metodo que valida cantidad, para validar peso, dejando las mismas variables??
+                                    //#GT10062022: porque usar un metodo que valida cantidad, para validar peso,
+                                    // dejando las mismas variables??
                                     //valida_Valor(txtPesoVeri);
                                     valida_Valor_Peso(txtPesoVeri);
                                 }
@@ -806,6 +805,7 @@ public class frm_verificacion_datos extends PBase {
                 result = true;
             }else{
 
+                //#CKFK2023 Voy a poner esto en comentario para la demo de Avicola
                 if (valor > 0) {
                     if (valor > peso_picking) {
                         mu.msgbox("El peso ingresado es mayor al pickeado");
@@ -987,12 +987,12 @@ public class frm_verificacion_datos extends PBase {
 
                     case 5:
                         callMethod("Guardar_Fotos_Verificacion",
-                                "pIdRecepcionEnc",gl.gIdRecepcionEnc,
+                                "pIdPedidoDet",BePedidoDetVerif.IdPedidoDet,
                                 "Foto",encoded);
                         break;
                     case 6:
                         callMethod("Get_All_Imagen_Verificacion",
-                                "pIdRecepcion", gl.gIdRecepcionEnc);
+                                "pIdPedidoDet", BePedidoDetVerif.IdPedidoDet);
                         break;
 
                 }
@@ -1056,7 +1056,9 @@ public class frm_verificacion_datos extends PBase {
             app.readOnly(txtLoteVeri,true);
             app.readOnly(txtUmbasVeri,true);
             app.readOnly(txtCantVeri,false);
-            app.readOnly(txtPesoVeri,true);
+
+
+            app.readOnly(txtPesoVeri,false);
 
             progress.cancel();
 

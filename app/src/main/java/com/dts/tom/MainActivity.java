@@ -527,6 +527,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     idbodega=bodegas.items.get(position).IdBodega;
                     NomBodega = bodegas.items.get(position).Nombre;
                     gl.bloquear_lp_hh = bodegas.items.get(position).bloquear_lp_hh;
+                    gl.es_bodega_fiscal = bodegas.items.get(position).Es_Bodega_Fiscal;
                     gl.IdBodega = idbodega;
                     gl.gNomBodega = NomBodega;
                     gl.gCapturaEstibaIngreso = bodegas.items.get(position).captura_estiba_ingreso;
