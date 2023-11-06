@@ -804,9 +804,10 @@ public class frm_verificacion_datos extends PBase {
             if(Objects.equals(valor, peso_picking)){
                 result = true;
             }else{
-
-                //#CKFK2023 Voy a poner esto en comentario para la demo de Avicola
-                if (valor > 0) {
+                result = true;
+                //#CKFK2023 Puse esto en comentario porque cuando sea fiscal
+                // no se va a poder modificar el peso
+               /* if (valor > 0) {
                     if (valor > peso_picking) {
                         mu.msgbox("El peso ingresado es mayor al pickeado");
                         result = false;
@@ -814,7 +815,7 @@ public class frm_verificacion_datos extends PBase {
                         mu.msgbox("El peso ingresado es menor al pickeado");
                         result = false;
                     }
-                }
+                }*/
             }
 
 
@@ -1056,9 +1057,7 @@ public class frm_verificacion_datos extends PBase {
             app.readOnly(txtLoteVeri,true);
             app.readOnly(txtUmbasVeri,true);
             app.readOnly(txtCantVeri,false);
-
-
-            app.readOnly(txtPesoVeri,false);
+            app.readOnly(txtPesoVeri,gl.es_bodega_fiscal);
 
             progress.cancel();
 
