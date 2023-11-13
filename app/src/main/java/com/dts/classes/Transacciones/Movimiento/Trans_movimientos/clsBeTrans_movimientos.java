@@ -25,7 +25,7 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public String Lote;
     @Element(required=false) public String Fecha_vence="1900-01-01T00:00:00";
     @Element(required=false) public String Fecha;
-    @Element(required=false) public String Barra_pallet;
+    @Element(required=false) public String Licencia;
     @Element(required=false) public String Hora_ini;
     @Element(required=false) public String Hora_fin;
     @Element(required=false) public String Fecha_agr;
@@ -75,7 +75,7 @@ public class clsBeTrans_movimientos {
         this.Lote=Lote;
         this.Fecha_vence=Fecha_vence;
         this.Fecha=Fecha;
-        this.Barra_pallet=Barra_pallet;
+        this.Licencia =Barra_pallet;
         this.Hora_ini=Hora_ini;
         this.Hora_fin=Hora_fin;
         this.Fecha_agr=Fecha_agr;
@@ -214,11 +214,11 @@ public class clsBeTrans_movimientos {
     public void setFecha(String value) {
         Fecha=value;
     }
-    public String getBarra_pallet() {
-        return Barra_pallet;
+    public String getLicencia() {
+        return Licencia;
     }
-    public void setBarra_pallet(String value) {
-        Barra_pallet=value;
+    public void setLicencia(String value) {
+        Licencia =value;
     }
     public String getHora_ini() {
         return Hora_ini;

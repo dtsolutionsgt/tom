@@ -3,7 +3,6 @@ package com.dts.tom.Transacciones.CambioUbicacion;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -45,7 +44,6 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
@@ -108,7 +106,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private int cvEstDestino;
     private int cvUbicDestID=0;
     private int cvStockID;
-    private String cvAtrib;
+    private String cvAtrib="0";
     private int cvPropID;
     private int cvUMBID;
     private double vFactorPres;
@@ -248,6 +246,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 //#AT20220722 Solo aplica si el cambio se hace desde la pantalla de Consulta de Existencias
                 if (CambioUbicExistencia) {
+
                     txtUbicOrigen.setText(gl.existencia.idUbic);
 
                     if (!gl.existencia.idUbic.isEmpty()) {
@@ -805,6 +804,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //se muestra el combo con todas su presentaciones disponibles.
             if (presentacionList.items.size() > 0) {
                 if (presentacionList.items.size() == 1) {
+
                     cvPresID = presentacionList.items.get(0).IdPresentacion;
 
                     if (cvPresID == 0) {
@@ -1384,13 +1384,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         .where(c -> c.IdProducto == cvProdID)
                         .where(c -> c.IdPresentacion == cvPresID)
                         .where(c -> (BeProductoUbicacion.Control_lote?c.Lote.equals(cvLote):1==1))
-                        .where(c -> c.Atributo_variante_1.equals((cvAtrib == null ? "" : cvAtrib)))
                         .where(c -> (cvEstOrigen > 0 ? c.IdProductoEstado == cvEstOrigen : c.IdProductoEstado >= 0))
                         .where(c -> (BeProductoUbicacion.Control_vencimiento?app.strFecha(c.Fecha_Vence).equals(cvVence):1==1))
                         .toList();
             }
-
-
+            
             if (AuxList == null) {
                 return;
             }
@@ -2476,7 +2474,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         try {
 
-            progress.setMessage("Cargando producto en esta ubicación");
+            progress.setMessage("Cargando producto en esta ubicación (A)");
             progress.show();
 
             if (CambioUbicExistencia){
@@ -2504,10 +2502,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     }
 
     private void processProductoUbicDetallado(){
+
         List AuxList;
+
         try {
 
-            progress.setMessage("Cargando producto en esta ubicación");
+            progress.setMessage("Cargando producto en esta ubicación (B)");
             progress.show();
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
@@ -4230,9 +4230,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             gMovimientoDet.Fecha = du.Fecha_CompletaT();
 
             if(escaneoPallet && productoList != null ) {
-                gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
+                gMovimientoDet.Licencia = BeStockPallet.Lic_plate;
             }else{
-                gMovimientoDet.Barra_pallet = "";
+                gMovimientoDet.Licencia = "";
             }
 
             //#AT20220804 Se agrego fecha y hora, antes se mandaba unicamente la fecha

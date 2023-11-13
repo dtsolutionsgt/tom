@@ -352,7 +352,7 @@ public class frm_datos_reabastecimiento extends PBase {
             gMovimientoDet.Lote = selitem.Lote;
             gMovimientoDet.Fecha_vence = selitem.Fecha_Vence;
             gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Barra_pallet = "";
+            gMovimientoDet.Licencia = "";
             gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
             gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
             gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());

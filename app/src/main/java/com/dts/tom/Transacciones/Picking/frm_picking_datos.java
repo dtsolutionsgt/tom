@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.Picking;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
@@ -336,26 +338,23 @@ public class frm_picking_datos extends PBase {
             });
 
 
-            txtCodigoProducto.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (trLP.getVisibility() == View.GONE) {
-                            Procesa_Codigo();
-                        } else {
-                            if (!txtLicencia.getText().toString().isEmpty()) {
-                                confirmarPorCodigo();
+            txtCodigoProducto.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (trLP.getVisibility() == View.GONE) {
+                        Procesa_Codigo();
+                    } else {
+                        if (!txtLicencia.getText().toString().isEmpty()) {
+                            confirmarPorCodigo();
 
-                            } else {
-                                msgCodigoProducto("Debe ingresar la licencia del producto");
-                                txtLicencia.requestFocus();
-                                Log.d("focus: ", "20220502_1");
-                            }
+                        } else {
+                            msgCodigoProducto("Debe ingresar la licencia del producto");
+                            txtLicencia.requestFocus();
+                            Log.d("focus: ", "20220502_1");
                         }
                     }
-
-                    return false;
                 }
+
+                return false;
             });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
@@ -366,25 +365,35 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
-            txtCantidadPick.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        btnGuardar = true;
-                        Recalcula_Peso();
-                        if (pEntre_Reemplazo){
-                            pEntre_Reemplazo = false;
-                            Reemplazar_Producto();
-                        }else if (pEntre_NoEnc){
-                            pEntre_NoEnc = false;
-                            Producto_No_Encontrado();
-                        }else{
-                            Procesar_Registro();
-                        }
+            txtCantidadPick.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    btnGuardar = true;
+                    Recalcula_Peso();
+                    if (pEntre_Reemplazo){
+                        pEntre_Reemplazo = false;
+                        Reemplazar_Producto();
+                    }else if (pEntre_NoEnc){
+                        pEntre_NoEnc = false;
+                        Producto_No_Encontrado();
+                    }else{
+                        Procesar_Registro();
                     }
-
-                    return false;
                 }
+
+                return false;
+            });
+
+            lblLicPlate.setOnLongClickListener(v -> {
+
+                String vLicencia;
+                vLicencia = lblLicPlate.getText().toString();
+
+                Toast.makeText(getApplicationContext(), "Licencia copiada",
+                        Toast.LENGTH_SHORT).show();
+
+                txtLicencia.setText(vLicencia);
+
+                return true;
             });
 
         } catch (Exception e) {
@@ -1728,7 +1737,6 @@ public class frm_picking_datos extends PBase {
                     msgCodigoProducto("Confirme código de producto y luego presione Enter.");
                     txtLicencia.requestFocus();
                     Log.d("txtLicencia: ", "20220502_42");
-                    return;
                 }
 
             }else{
@@ -1767,53 +1775,56 @@ public class frm_picking_datos extends PBase {
 
         try{
 
-            if (!txtCantidadPick.getText().toString().isEmpty()||!txtCantidadPick.getText().equals("0")){
+            if (!txtCantidadPick.getText().toString().isEmpty()){
 
-                Recalcula_Peso();
+                if (!txtCantidadPick.getText().equals("0")){
 
-                if (TipoLista==2){
+                    Recalcula_Peso();
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+                    if (TipoLista==2){
 
-                    if (vDif<0){
-                        mu.msgbox("La cantidad es mayor a la solicitada");
-                        txtCantidadPick.selectAll();
-                        txtCantidadPick.setSelectAllOnFocus(true);
-                        txtCantidadPick.requestFocus();
-                        Log.d("focus: ", "20220502_46");
-                        return;
+                        Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+
+                        if (vDif<0){
+                            mu.msgbox("La cantidad es mayor a la solicitada");
+                            txtCantidadPick.selectAll();
+                            txtCantidadPick.setSelectAllOnFocus(true);
+                            txtCantidadPick.requestFocus();
+                            Log.d("focus: ", "20220502_46");
+                            return;
+                        }else{
+                            Guardar_Picking();
+                        }
+
                     }else{
-                        Guardar_Picking();
+
+                        double vCantidadRec = 0;
+                        double vCantidadSol = 0;
+
+                        vCantidadRec = gBePickingUbic.Cantidad_Recibida;
+                        vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
+
+                        if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
+                            mu.msgbox("La cantidad es mayor a la solicitada");
+                            txtCantidadPick.selectAll();
+                            txtCantidadPick.setSelectAllOnFocus(true);
+                            txtCantidadPick.requestFocus();
+                            Log.d("focus: ", "20220502_42");
+                            return;
+                        }else{
+                            Guardar_Picking();
+                        }
                     }
 
                 }else{
-
-                    double vCantidadRec = 0;
-                    double vCantidadSol = 0;
-
-                    vCantidadRec = gBePickingUbic.Cantidad_Recibida;
-                    vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
-
-                    if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
-                        mu.msgbox("La cantidad es mayor a la solicitada");
-                        txtCantidadPick.selectAll();
-                        txtCantidadPick.setSelectAllOnFocus(true);
-                        txtCantidadPick.requestFocus();
-                        Log.d("focus: ", "20220502_42");
-                        return;
-                    }else{
-                        Guardar_Picking();
-                    }
-
+                    mu.msgbox("La cantidad no puede ser 0");
                 }
-
             }else{
-                mu.msgbox("La cantidad no puede ser vacía o 0");
-                return;
+                mu.msgbox("Ingrese cantidad");
             }
 
         }catch (Exception e){
-            mu.msgbox("Procesar_Registro:"+e.getMessage());
+            mu.msgbox("202306280820_Procesar_Registro:"+e.getMessage());
         }
     }
 
@@ -1826,6 +1837,7 @@ public class frm_picking_datos extends PBase {
         progress.show();
 
         try {
+
             if (btnGuardar) {
                 View view = this.getCurrentFocus();
                 if (view != null) {
@@ -1969,6 +1981,7 @@ public class frm_picking_datos extends PBase {
     private void processGetFotosProducto() {
 
         try {
+
             progress_setMessage("Cargando imágenes...");
             BeListProductoImagen = xobj.getresult(clsBeProducto_imagenList.class,"Get_All_Producto_Imagen");
 
@@ -1991,8 +2004,8 @@ public class frm_picking_datos extends PBase {
                 //toastlong("El producto no tiene imágenes");
                 progress.cancel();
                 return;
-
             }
+
             startActivity(new Intent(this, frm_imagenes.class));
             progress.cancel();
 
@@ -2239,7 +2252,14 @@ public class frm_picking_datos extends PBase {
                             gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
                         }
 
-                        callMethod("Actualiza_Picking_Consolidado",
+/*                        callMethod("Actualiza_Picking_Consolidado",
+                                "pBePickingUbic",gBePickingUbic,
+                                "pIdOperador",gl.OperadorBodega.IdOperador,
+                                "ReemplazoLP",ReemplazoLP,
+                                "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
+                                "BeStockPallet",BeStockPallet);*/
+                        callMethod("Actualiza_Picking_Consolidado_From_HH",
                                 "pBePickingUbic",gBePickingUbic,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,
                                 "ReemplazoLP",ReemplazoLP,

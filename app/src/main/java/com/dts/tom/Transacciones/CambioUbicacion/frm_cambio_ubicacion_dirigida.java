@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
@@ -724,13 +723,13 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
 
             if (gl.Escaneo_Pallet){
                 if (gl.BeStockPallet!=null) {
-                    gMovimientoDet.Barra_pallet = gl.BeStockPallet.Codigo_Barra;
+                    gMovimientoDet.Licencia = gl.BeStockPallet.Codigo_Barra;
                 }else{
-                    gMovimientoDet.Barra_pallet = "";
+                    gMovimientoDet.Licencia = "";
                 }
 
             }else{
-                gMovimientoDet.Barra_pallet = "";
+                gMovimientoDet.Licencia = "";
             }
 
             gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperadorBodega);

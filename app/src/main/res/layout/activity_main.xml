@@ -139,7 +139,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView10"
+                    android:id="@+id/imageUser"
                     android:layout_width="56dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="0dp"
@@ -147,14 +147,22 @@
                     android:padding="10dp"
                     android:src="@drawable/login_user" />
 
-                <Spinner
-                    android:id="@+id/spinner4"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="0dp"
+                <EditText
+                    android:id="@+id/userText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="0dp"
+                    android:layout_marginEnd="5dp"
+                    android:ems="10"
+                    android:hint="Código de Usuario"
+                    android:maxLength="4"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     tools:ignore="SpeakableTextPresentCheck" />
+
             </TableRow>
 
             <TableRow
@@ -178,6 +186,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:ems="10"
+                    android:hint="Clave"
                     android:importantForAutofill="no"
                     android:inputType="textPassword"
                     android:minHeight="48dp"
@@ -202,44 +211,27 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="50dp">
 
-                <TextView
-                    android:id="@+id/txtURLWS"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="true"
-                    android:gravity="center_horizontal"
-                    android:onClick="setUrlOntxtURLWSClic"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@android:string/copyUrl"
-                    android:textColor="#616161"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
                 <RelativeLayout
                     android:id="@+id/relbot"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="100dp"
                     android:layout_marginBottom="1dp"
-                    android:background="@drawable/color_medium">
+                    android:background="@drawable/color_medium"
+                    android:onClick="HabilitarWSLabel">
 
                     <TextView
                         android:id="@+id/txtNoVersion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerVertical="false"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="false"
                         android:layout_marginStart="10dp"
-                        android:layout_marginBottom="22dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                         android:text="@string/no_version"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/imageView4"
@@ -267,26 +259,53 @@
 
                         <ImageView
                             android:id="@+id/imageView5"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginEnd="44dp"
+                            android:layout_marginStart="-10dp"
+                            android:layout_marginEnd="0dp"
+                            android:adjustViewBounds="true"
                             android:paddingTop="5dp"
-                            android:src="@drawable/logodts" />
+                            android:paddingEnd="20dp"
+                            android:src="@drawable/logodtsmedium" />
                     </RelativeLayout>
 
                     <TextView
                         android:id="@+id/txtFechaVersion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtNoVersion"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerVertical="false"
+                        android:layout_alignParentBottom="false"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginBottom="4dp"
                         android:text="@string/fecha_version"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
                 </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtURLWS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:onClick="setUrlOntxtURLWSClic"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@android:string/copyUrl"
+                    android:textColor="#616161"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </TableRow>
 
         </LinearLayout>
