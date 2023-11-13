@@ -176,6 +176,7 @@ public class appGlobals extends Application {
     public int mode = 0;
     public boolean bloquear_lp_hh = false;
     public int IdResolucionLpOperador = 0;
+    public boolean es_bodega_fiscal = false;
 
     //variable para diferenciar inv cealsa de cualquier otro
     public boolean multipropietario = false;
@@ -215,7 +216,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="4.7.3.5";
+    public final String version="4.7.4.2";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking

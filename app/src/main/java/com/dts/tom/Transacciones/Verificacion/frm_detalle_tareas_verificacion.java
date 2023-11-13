@@ -599,7 +599,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
 
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
-           gl.gFotografiaVerificacion= gBePickingEnc.Fotografia_Verificacion;
+           gl.gFotografiaVerificacion= gBePedido.Picking.Fotografia_Verificacion;
 
             lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", gl.pIdPedidoEnc,
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));

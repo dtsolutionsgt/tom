@@ -76,6 +76,8 @@ public class clsBeTrans_re_enc {
 
     @Element(required=false) public String Carta_Cupo="";
 
+    @Element(required=false) public String No_Contenedor="";
+
     public clsBeTrans_re_enc() {
     }
 
@@ -92,7 +94,7 @@ public class clsBeTrans_re_enc {
                              String NombrePropietario,String Bodega,String Usuario,clsBePropietario_bodega PropietarioBodega,
                              String PropietarioOC,String Proveedor,int NoOrdencompra,String NoDocumentoOC,
                              String TipoTrans,clsBeBodega_muelles Muelle,String MuelleRec,String NOFactura,
-                             clsBeTarea_hh TareaHH, String Carta_Cupo) {
+                             clsBeTarea_hh TareaHH, String Carta_Cupo, String No_Contenedor) {
 
         this.IdRecepcionEnc=IdRecepcionEnc;
         this.IdMuelle=IdMuelle;
@@ -149,6 +151,7 @@ public class clsBeTrans_re_enc {
         this.NOFactura=NOFactura;
         this.TareaHH=TareaHH;
         this.Carta_Cupo= Carta_Cupo;
+        this.No_Contenedor =No_Contenedor;
 
     }
 
@@ -495,4 +498,10 @@ public class clsBeTrans_re_enc {
         Carta_Cupo=value;
     }
 
+    public String getNo_Contenedor() {
+        return No_Contenedor;
+    }
+    public void setNo_Contenedor(String value) {
+        No_Contenedor=value;
+    }
 }
