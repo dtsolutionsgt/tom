@@ -30,9 +30,11 @@ import com.dts.tom.R;
 
 import org.simpleframework.xml.Element;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
@@ -364,7 +366,7 @@ public class frm_preparacion_packing extends PBase {
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
             item.Idempresaservicio=gl.IdEmpresa;
             item.Referencia="";
-            item.Fecha_packing=du.univfecha(du.getActDateTime());
+            item.Fecha_packing=app.strFechaXML(du.getFechaActual());
             item.nom_prod=p.NombreProducto;
             item.CodigoProducto=p.CodigoProducto;
             item.ProductoPresentacion=p.ProductoPresentacion;
@@ -685,20 +687,10 @@ public class frm_preparacion_packing extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> finish());
+            dialog.setNegativeButton("No", (dialog12, which) -> {
             });
 
             dialog.show();
@@ -714,21 +706,10 @@ public class frm_preparacion_packing extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    guardar();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
-            });
-
+            dialog.setPositiveButton("Si", (dialog12, which) -> guardar());
+            dialog.setNegativeButton("No", (dialog1, which) -> {});
             dialog.show();
 
         } catch (Exception e){
@@ -743,21 +724,10 @@ public class frm_preparacion_packing extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("¿" + msg + "?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                   delItem();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
-            });
-
+            dialog.setPositiveButton("Si", (dialog12, which) -> delItem());
+            dialog.setNegativeButton("No", (dialog1, which) -> {});
             dialog.show();
 
         } catch (Exception e){
@@ -776,18 +746,13 @@ public class frm_preparacion_packing extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    creaListaLotes("");
-                    browse=1;
-                    startActivity(new Intent(frm_preparacion_packing.this,frm_lista_packing_lp.class));
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                creaListaLotes("");
+                browse=1;
+                startActivity(new Intent(frm_preparacion_packing.this,frm_lista_packing_lp.class));
             });
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {}
-            });
-
+            dialog.setNegativeButton("No", (dialog12, which) -> {});
             dialog.show();
 
         } catch (Exception e){
@@ -826,7 +791,6 @@ public class frm_preparacion_packing extends PBase {
         }
 
     }
-
     //endregion
 
 }
