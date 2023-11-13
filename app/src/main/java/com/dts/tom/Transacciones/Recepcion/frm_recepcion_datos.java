@@ -1458,6 +1458,7 @@ public class frm_recepcion_datos extends PBase {
 
                 });
                 //GT 21092021 valida que, exista un peso real y estadistico unitario asignado desde el bof
+                //no calcula el minimo, maximo o tolerancia.
                 Valida_Peso();
 
             }else {
@@ -1984,6 +1985,7 @@ public class frm_recepcion_datos extends PBase {
 
             if (!txtPesoUnitario.getText().toString().isEmpty() && !txtPesoUnitario.getText().toString().equals("")){
                 txtPesoReal.setText(txtPesoUnitario.getText()+"");
+
             }else{
                 throw new Exception("Debe ingresar el peso del producto");
             }
@@ -2135,9 +2137,11 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#GT 18082021: no se si va aca, pero al ejecutarse, pide una nueva LP!
-//            if (BeProducto.getControl_peso()){
-//                Peso_Correcto();
-//            }
+            //#GT03112023: luego de validar peso, valida temperatura, ahi se omiten las recargas de LP
+            //if (BeProducto.getControl_Peso){
+            if (BeProducto.Control_peso){
+                Peso_Correcto();
+            }
 
 
         }catch (Exception e){
@@ -2204,21 +2208,32 @@ public class frm_recepcion_datos extends PBase {
                     msgContinuarTemp("La temperatura ingresada es menor a "+TemperaturaMin + " o mayor a "+TemperaturaMax + "(tolerancia permitida en base a la temperatura estadística). ¿Desea continuar?");
                     //Correcta =TCorrecta;
                 }else {
-                    if (BeProducto.Genera_lp){
+
+                    //#GT03112023: es redundante volver a generar lp
+                    /*if (BeProducto.Genera_lp){
                         execws(8);
                     }else{
                         PallCorrecto=true;
                         ContinuaValidandoParametros();
-                    }
+                    }*/
+
+                    PallCorrecto=true;
+                    ContinuaValidandoParametros();
                 }
 
             }else{
-                if (BeProducto.Genera_lp){
+
+                //#GT03112023: es redundante volver a generar lp
+                /*if (BeProducto.Genera_lp){
                     execws(8);
                 }else{
                     PallCorrecto=true;
                     ContinuaValidandoParametros();
-                }
+                }*/
+
+                PallCorrecto=true;
+                ContinuaValidandoParametros();
+
             }
 
         }catch (Exception e){
@@ -5058,7 +5073,7 @@ public class frm_recepcion_datos extends PBase {
                                                 } else {
                                                     progress.cancel();
                                                     btnTareas.setEnabled(true);
-                                                    mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion local asociada al proveedor");
+                                                    mu.msgbox("No se permite la fecha de vencimiento digitada, porque es menor a la fecha de aceptacion local.");
                                                     cmbVenceRec.requestFocus();
                                                 }
 
@@ -5184,7 +5199,6 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-            //AQUI
             if (gl.gBeRecepcion.DetalleParametros.items!=null){
                 gl.gBeRecepcion.DetalleParametros.items.addAll(plistBeReDetParametros.items);
             }
