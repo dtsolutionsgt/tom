@@ -23,7 +23,7 @@ public class clsBeProducto_estado {
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String Descripcion="";
-
+    @Element(required=false) public String Codigo_Bodega_ERP="";
 
     public clsBeProducto_estado() {
     }
@@ -31,7 +31,7 @@ public class clsBeProducto_estado {
     public clsBeProducto_estado(int IdEstado,int IdPropietario,clsBePropietarios Propietario,String Nombre,
                                 int IdUbicacionDefecto,int IdUbicacionBodegaDefecto,boolean Utilizable,boolean Activo,
                                 String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                                boolean Danado,boolean Sistema,boolean IsNew,String Descripcion
+                                boolean Danado,boolean Sistema,boolean IsNew,String Descripcion, String Codigo_Bodega_ERP
     ) {
 
         this.IdEstado=IdEstado;
@@ -50,6 +50,7 @@ public class clsBeProducto_estado {
         this.Sistema=Sistema;
         this.IsNew=IsNew;
         this.Descripcion=Descripcion;
+        this.Codigo_Bodega_ERP=Codigo_Bodega_ERP;
 
     }
 
@@ -149,6 +150,12 @@ public class clsBeProducto_estado {
     }
     public void setDescripcion(String value) {
         Descripcion=value;
+    }
+    public String getCodigo_Bodega_ERP() {
+        return Codigo_Bodega_ERP;
+    }
+    public void setCodigo_Bodega_ERP(String value) {
+        Codigo_Bodega_ERP=value;
     }
 
 }
