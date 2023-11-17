@@ -427,7 +427,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
             item.Idempresaservicio=gl.IdEmpresa;
             item.Referencia=gl.paBulto;
-            item.Fecha_packing=du.univfecha(du.getActDateTime());
+            item.Fecha_packing=app.strFechaXML(du.getFechaActual());
 
             item.nom_prod=p.NombreProducto;
             item.CodigoProducto=p.CodigoProducto;

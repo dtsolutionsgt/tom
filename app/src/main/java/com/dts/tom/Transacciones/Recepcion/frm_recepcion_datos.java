@@ -2127,10 +2127,41 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }else{
 
+                        double val=0;
+
+                        val = Double.parseDouble(txtPesoEsta.getText().toString());
+
+                        if (val>0){
+
+                            if (txtPesoReal.getText().toString().isEmpty()){
+                                MensajeParam +="Debe ingresar peso \n";
+                                return;
+                            }else if(Double.parseDouble(txtPesoReal.getText().toString())<=0){
+                                MensajeParam+="El peso debe ser mayor a 0 \n";
+                                return;
+                            }
+
+                        }
+
+                        double PorcentajeToleranciaPeso = (Double.parseDouble(txtPesoEsta.getText().toString()) * (BeProducto.Peso_tolerancia));
+                        double PesoMaximoReferencia = mu.round( Double.parseDouble(txtPesoEsta.getText().toString()) + PorcentajeToleranciaPeso,  gl.gCantDecCalculo);
+                        double PesoMinimoReferencia = mu.round(Double.parseDouble(txtPesoEsta.getText().toString()) - PorcentajeToleranciaPeso,  gl.gCantDecCalculo);
+                        double ValorPeso  = mu.round(Double.parseDouble(txtPesoReal.getText().toString()),  gl.gCantDecCalculo);
+
+                        if (!(ValorPeso >= PesoMinimoReferencia)&&(ValorPeso <= PesoMaximoReferencia)){
+                            msgContinuarPeso("El peso ingresado es menor que "+PesoMinimoReferencia +" o mayor que "+ PesoMaximoReferencia+" (tolerancia permitida en base al peso estadístico). ¿Desea continuar?");
+                        }else{
+
+                            progress.setMessage("Guardando Recepción Nueva");
+                            progress.show();
+
+                            Guardar_Recepcion_Nueva();
+                        }
+/*
                         progress.setMessage("Guardando Recepción Nueva");
                         progress.show();
 
-                        Guardar_Recepcion_Nueva();
+                        Guardar_Recepcion_Nueva();*/
                     }
                 }
 
@@ -2834,7 +2865,13 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", (dialog12, which) -> Temperatura_Correcta());
+            dialog.setPositiveButton("Si", (dialog12, which) ->{
+                //Temperatura_Correcta();
+                progress.setMessage("Guardando Recepción Nueva");
+                progress.show();
+
+                Guardar_Recepcion_Nueva();
+            });
 
             dialog.setNegativeButton("No", (dialog1, which) -> {
             });
