@@ -3747,6 +3747,11 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.mode==1){
                     if (!gl.gFechaVenceAnterior.isEmpty() && gl.gProductoAnterior.equals(BeProducto.getCodigo())){
                         cmbVenceRec.setText(gl.gFechaVenceAnterior);
+                        //#GT17112023: en recepciones parciales si hay fecha vence, setearla y bloquear por homologacion
+                        if(BeProducto.Control_lote && gl.pBeBodega.Homologar_Lote_Vencimiento){
+                            cmbVenceRec.setEnabled(false);
+                            imgDate.setEnabled(false);
+                        }
                     }
                 }
             }

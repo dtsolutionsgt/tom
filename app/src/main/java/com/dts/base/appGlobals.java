@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
@@ -81,6 +82,8 @@ public class appGlobals extends Application {
 
     //variable y listas publicas para mainActivity
     public int IdEstadoProductoNE;
+    //objeto de la bodega para acceder a sus propiedades
+    public clsBeBodega pBeBodega;
     public String CodigoBodega;
     public String MacPrinter = "";
     public List<clsBeOperador_bodega> gOperadorBodega;

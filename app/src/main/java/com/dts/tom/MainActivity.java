@@ -771,6 +771,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                                             .toList();
 
                             gl.CodigoBodega = BeBodega.get(0).Codigo;
+                            //#GT17112023: obtenemos la bodega seleccionada, en lugar de cada parametro por separado.
+                            gl.pBeBodega = BeBodega.get(0);
 
                             //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
                             gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
