@@ -24,14 +24,17 @@ public class clsBeProducto_estado {
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public String Descripcion="";
     @Element(required=false) public String Codigo_Bodega_ERP="";
-
+    @Element(required=false) public int Dias_Vencimiento_Clasificacion = 0;
+    @Element(required=false) public int Tolerancia_Dias_Vencimiento  = 0;
     public clsBeProducto_estado() {
     }
 
     public clsBeProducto_estado(int IdEstado,int IdPropietario,clsBePropietarios Propietario,String Nombre,
                                 int IdUbicacionDefecto,int IdUbicacionBodegaDefecto,boolean Utilizable,boolean Activo,
                                 String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                                boolean Danado,boolean Sistema,boolean IsNew,String Descripcion, String Codigo_Bodega_ERP
+                                boolean Danado,boolean Sistema,boolean IsNew,String Descripcion,
+                                String Codigo_Bodega_ERP, int Dias_Vencimiento_Clasificacion,
+                                int Tolerancia_Dias_Vencimiento
     ) {
 
         this.IdEstado=IdEstado;
@@ -51,6 +54,8 @@ public class clsBeProducto_estado {
         this.IsNew=IsNew;
         this.Descripcion=Descripcion;
         this.Codigo_Bodega_ERP=Codigo_Bodega_ERP;
+        this.Dias_Vencimiento_Clasificacion = Dias_Vencimiento_Clasificacion;
+        this.Tolerancia_Dias_Vencimiento = Tolerancia_Dias_Vencimiento;
 
     }
 
@@ -158,5 +163,17 @@ public class clsBeProducto_estado {
         Codigo_Bodega_ERP=value;
     }
 
+    public int getDias_Vencimiento_Clasificacion() {
+        return Dias_Vencimiento_Clasificacion;
+    }
+    public void setDias_Vencimiento_Clasificacion(int value) {
+        Dias_Vencimiento_Clasificacion=value;
+    }
+    public int getTolerancia_Dias_Vencimiento() {
+        return Tolerancia_Dias_Vencimiento;
+    }
+    public void setTolerancia_Dias_Vencimiento(int value) {
+        Tolerancia_Dias_Vencimiento=value;
+    }
 }
 

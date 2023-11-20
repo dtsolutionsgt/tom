@@ -12,6 +12,7 @@ public class clsBeTrans_picking_img {
     @Element(required=false) public String User_agr="";
     @Element(required=false) public String Fec_agr="";
     @Element(required=false) public String Observacion="";
+    @Element(required=false) public boolean IsNew=false;
 
 
     public clsBeTrans_picking_img() {
@@ -19,7 +20,7 @@ public class clsBeTrans_picking_img {
 
     public clsBeTrans_picking_img(int IdImagen,int IdPickingEnc,int IdPickingDet,int IdPedidoEnc,
                                   int IdPedidoDet,String Imagen,String User_agr,String Fec_agr,
-                                  String Observacion) {
+                                  String Observacion, boolean IsNew) {
 
         this.IdImagen=IdImagen;
         this.IdPickingEnc=IdPickingEnc;
@@ -30,6 +31,7 @@ public class clsBeTrans_picking_img {
         this.User_agr=User_agr;
         this.Fec_agr=Fec_agr;
         this.Observacion=Observacion;
+        this.IsNew = IsNew;
 
     }
 
@@ -88,7 +90,12 @@ public class clsBeTrans_picking_img {
     public void setObservacion(String value) {
         Observacion=value;
     }
-
+    public boolean getIsNew() {
+        return IsNew;
+    }
+    public void setIsNew(boolean value) {
+        IsNew=value;
+    }
 }
 
 

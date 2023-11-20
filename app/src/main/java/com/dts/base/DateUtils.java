@@ -959,15 +959,15 @@ public class DateUtils {
 
 	public String AddYearsToDate(String Fecha, int Years) {
 
-		String vFecha = "";
+		String vFecha = Fecha;
 
 		try {
 
 			int cyear, cmonth, cday;
 
 			cday = Integer.parseInt(vFecha.substring(0, 2));
-			cmonth = Integer.parseInt(vFecha.substring(4, 5));
-			cyear = Integer.parseInt(vFecha.substring(7, 10));
+			cmonth = Integer.parseInt(vFecha.substring(3, 5));
+			cyear = Integer.parseInt(vFecha.substring(6, 10));
 
 			cyear = cyear + Years;
 
@@ -982,6 +982,80 @@ public class DateUtils {
 
 	}
 
+	public String AddDaysToDate(String Fecha, int days) throws Exception {
+
+		String vFecha = Fecha;
+		final Calendar c = Calendar.getInstance();
+
+		try {
+
+			int cyear, cmonth, cday;
+
+			cday = Integer.parseInt(vFecha.substring(0, 2));
+			cmonth = Integer.parseInt(vFecha.substring(3, 5));
+			cyear = Integer.parseInt(vFecha.substring(6, 10));
+
+			c.set(cyear,cmonth,cday);
+			c.add(Calendar.DATE,days);
+
+			String fechaAValidar =  c.get(Calendar.DATE) + "/" + c.get(Calendar.MONTH) + "/" + c.get(Calendar.YEAR);
+			fechaAValidar = convierteFechaSinHora(fechaAValidar);
+
+			vFecha = fechaAValidar;
+
+		} catch (Exception e) {
+			throw new Exception("Ocurrió un error" + e.getMessage());
+		}
+		return vFecha;
+
+	}
+
+	public boolean DateInRange(String fechaInferior, String fechaSuperior) throws Exception {
+
+		int cyear1, cmonth1, cday1;
+		int cyear2, cmonth2, cday2;
+		int cyear3, cmonth3, cday3;
+
+		boolean mayorInferior = false;
+		boolean menorSuperior = false;
+
+		String vFechaActual = getActDateStr();
+        boolean vReturn = false;
+
+		try {
+
+			cday1 = Integer.parseInt(vFechaActual.substring(0, 2));
+			cmonth1 = Integer.parseInt(vFechaActual.substring(3, 5));
+			cyear1 = Integer.parseInt(vFechaActual.substring(6, 10));
+
+			cday2 = Integer.parseInt(fechaInferior.substring(0, 2));
+			cmonth2 = Integer.parseInt(fechaInferior.substring(3, 5));
+			cyear2 = Integer.parseInt(fechaInferior.substring(6, 10));
+
+			cday3 = Integer.parseInt(fechaSuperior.substring(0, 2));
+			cmonth3 = Integer.parseInt(fechaSuperior.substring(3, 5));
+			cyear3 = Integer.parseInt(fechaSuperior.substring(6, 10));
+
+			fechaInferior = cyear2 + "-" + cmonth2  + "-" + cday2;
+			vFechaActual = cyear1 + "-" + cmonth1 + "-" + cday1;
+			fechaSuperior = cyear3 + "-" + cmonth3  + "-" + cday3;
+
+			@SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date strFechaInferior = sdf.parse(fechaInferior);
+			Date strFechaActual = sdf.parse(vFechaActual);
+			Date strFechaSuperior = sdf.parse(fechaSuperior);
+
+			mayorInferior = strFechaActual.after(strFechaInferior);
+			menorSuperior = strFechaActual.before(strFechaSuperior);
+
+			vReturn = (mayorInferior && menorSuperior);
+
+		} catch (Exception e) {
+			throw new Exception("Ocurrió un error" + e.getMessage());
+		}
+		return vReturn;
+
+	}
 
 	public String getFullDate() throws ParseException {
 

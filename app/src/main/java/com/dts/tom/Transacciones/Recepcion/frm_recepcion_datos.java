@@ -648,17 +648,6 @@ public class frm_recepcion_datos extends PBase {
 
                     guardando_recepcion=false;
 
-                    //#CKFK20220520 Creo que estas validaciones ya no aplican
-                    /*if (BeProducto.Control_vencimiento){
-                        cmbVenceRec.setSelectAllOnFocus(true);
-                        cmbVenceRec.requestFocus();
-                    }else if (BeProducto.Control_lote){
-                        txtLoteRec.setSelectAllOnFocus(true);
-                        txtLoteRec.requestFocus();
-                    }else {
-                       txtCantidadRec.requestFocus();
-                    }*/
-
                     Procesa_Barra_Producto();
 
                 }
@@ -731,6 +720,67 @@ public class frm_recepcion_datos extends PBase {
                                 cmbVenceRec.setText(du.getActDateStr());
                             }
 
+                            //#CKFK20231118 Validación para determinar el estado del producto recepcionado
+                            //en base a la fecha
+                            if (LProductoEstado.items!=null){
+                                if (LProductoEstado.items.size()> 0){
+
+                                    int toleranciaDias = 0;
+                                    int diasVencimiento = 0;
+
+                                    String fechaLimiteInferior="";
+                                    String fechaLimiteSuperior="";
+
+                                    boolean encontro_estado = false;
+
+                                    List<clsBeProducto_estado> tmpLProductoEstado =  stream(LProductoEstado.items)
+                                            .where(c -> c.Dias_Vencimiento_Clasificacion  > 0)
+                                            .toList();
+
+                                    if (tmpLProductoEstado.size()>0){
+                                        for (int i = 0; i <tmpLProductoEstado.size(); i++)
+                                        {
+                                            if (tmpLProductoEstado.get(i).Tolerancia_Dias_Vencimiento>0){
+
+                                                toleranciaDias = tmpLProductoEstado.get(i).Tolerancia_Dias_Vencimiento;
+                                                diasVencimiento = tmpLProductoEstado.get(i).Dias_Vencimiento_Clasificacion;
+
+                                                fechaLimiteInferior = du.AddDaysToDate(fecha_ajustada,-toleranciaDias);
+                                                fechaLimiteSuperior = du.AddDaysToDate(fecha_ajustada,diasVencimiento + toleranciaDias);
+
+                                                if (du.DateInRange(fechaLimiteInferior,fechaLimiteSuperior)){
+
+                                                    List AuxLis1=stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+
+                                                    int indxEstado=AuxLis1.indexOf(tmpLProductoEstado.get(i).IdEstado);
+
+                                                    if(indxEstado>-1){
+                                                        cmbEstadoProductoRec.setSelection(indxEstado);
+                                                        encontro_estado = true;
+                                                        //break;
+                                                    }
+
+                                                }
+
+                                            }
+                                        }
+
+                                        if (!encontro_estado){
+
+                                            if (Escaneo_Pallet){
+                                                IdEstadoSelect = gl.gIdProductoBuenEstadoPorDefecto;
+                                                List AuxEst = stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+                                                int indx = AuxEst.indexOf(IdEstadoSelect);
+                                                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indx);
+                                            }else{
+                                                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(0);
+                                            }
+
+                                        }
+                                    }
+                                }
+
+                            }
                         }catch(Exception e){
                             cmbVenceRec.setText(du.getActDateStr());
                         }
@@ -4481,23 +4531,7 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                     }
-/*
-                    //#CKFK20220106 Agregué validación gPriorizar_UbicRec_Sobre_UbicEst
-                    if (gl.gPriorizar_UbicRec_Sobre_UbicEst){
-                        vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                    }else{
-                        if (LProductoEstado.items.size()>0){
 
-                            if (stream(LProductoEstado.items).where(c->c.IdEstado ==IdEstadoSelect).select(c->c.Danado).first()){
-                                execws(20);
-                                return;
-                            }else{
-
-                                vBeStockRecPallet.IdUbicacion = gl.gBeRecepcion.IdUbicacionRecepcion;
-                            }
-
-                        }
-                    }*/
                 }
 
                 Continua_Llenando_Stock_Pallet_Proveedor();

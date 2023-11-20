@@ -36,9 +36,11 @@ import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDe
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Picking.Trans_Picking_Img.clsBeTrans_picking_imgList;
+import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgList;
 import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;
@@ -1025,6 +1027,12 @@ public class frm_verificacion_datos extends PBase {
                 case 4:
                     processGetPresentacion();
                     break;
+                case 5:
+                    processEnviarFoto();
+                    break;
+                case 6:
+                    processGetFotosVerificacion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1433,6 +1441,63 @@ public class frm_verificacion_datos extends PBase {
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void processEnviarFoto() {
+        boolean exito;
+
+        try {
+            progress.setMessage("Guardando imagen...");
+            progress.show();
+
+            exito = xobj.getresult(Boolean.class,"Guardar_Fotos_Verificacion");
+
+            if (exito) {
+                progress.cancel();
+                toastlong("Foto guardada con éxito");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processEnviarFoto: " + e.getMessage());
+        }
+
+    }
+
+    private void processGetFotosVerificacion() {
+
+        try {
+
+            progress.setMessage("Cargando imágenes...");
+            BeListTransPickingImagen = xobj.getresult(clsBeTrans_picking_imgList.class,"Get_All_Imagen_Verificacion");
+
+            gl.ListImagen.clear();
+
+            if (BeListTransPickingImagen != null) {
+                if (BeListTransPickingImagen.items != null) {
+
+                    for (int i=0; i < BeListTransPickingImagen.items.size(); i++) {
+                        BeImagen = new clsBeImagen();
+                        BeImagen.Descripcion = "Imagen " + BeListTransPickingImagen.items.get(i).IdImagen;
+                        BeImagen.Imagen = BeListTransPickingImagen.items.get(i).Imagen;
+                        gl.ListImagen.add(BeImagen);
+                    }
+                } else {
+                    progress.cancel();
+                    return;
+
+                }
+            } else {
+                progress.cancel();
+                return;
+
+            }
+            startActivity(new Intent(this, frm_imagenes.class));
+            progress.cancel();
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosVerificacion: "+ e.getMessage());
+        }
     }
 
     @Override
