@@ -93,11 +93,9 @@ import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -298,6 +296,10 @@ public class frm_recepcion_datos extends PBase {
 
     int dias_aceptacion_exterior =0;
     int dias_aceptacion_local=0;
+
+    //#GT20112023:maneja la fecha vencimiento si aplicara la homologación de lote vencimiento
+    String pVencimiento_Homologado = "";
+
 
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
@@ -4846,46 +4848,55 @@ public class frm_recepcion_datos extends PBase {
                 cmbVenceRec.setText(fecha_ajustada);
             }
 
-            if (BeProducto.Presentaciones != null) {
+            //#GT20112023: se valida homologación lote y vencimiento
+            if (BeProducto.Control_lote && BeProducto.Control_vencimiento
+                    && gl.pBeBodega.Homologar_Lote_Vencimiento && gl.gFechaVenceAnterior.isEmpty()){
+                        //Llamar a método para buscar el lote en la BD y asegurar homologación de vencimiento
+                        execws(36);
+            }else{
 
-                if (BeProducto.Presentaciones.items != null){
+                //#GT21112023: sino existe homologacion, continuar con el proceso normal de validaciones
+                if (BeProducto.Presentaciones != null) {
 
-                    if (IdPreseSelect!=-1){
+                    if (BeProducto.Presentaciones.items != null){
 
-                        boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+                        if (IdPreseSelect!=-1){
 
-                        if (EsPallet){
-                            if (CajasPorCama==0 && CamasPorTarima==0){
-                                msgbox("Debe ingresar la definición de la estiba");
-                                return;
+                            boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+
+                            if (EsPallet){
+                                if (CajasPorCama==0 && CamasPorTarima==0){
+                                    msgbox("Debe ingresar la definición de la estiba");
+                                    return;
+                                }
                             }
                         }
+
+                    }
+                }
+
+                gl.gProductoAnterior = BeProducto.getCodigo();
+
+                if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
+
+                    if (Escaneo_Pallet){
+                        //Guardar_Recepcion_Pallet
+                    }else{
+
+                        progress.setMessage("Validando Campos");
+                        progress.show();
+
+                        ValidaCampos();
+
                     }
 
-                }
-            }
-
-            gl.gProductoAnterior = BeProducto.getCodigo();
-
-            if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
-
-                if (Escaneo_Pallet){
-                    //Guardar_Recepcion_Pallet
                 }else{
 
                     progress.setMessage("Validando Campos");
                     progress.show();
 
                     ValidaCampos();
-
                 }
-
-            }else{
-
-                progress.setMessage("Validando Campos");
-                progress.show();
-
-                ValidaCampos();
 
             }
 
@@ -7795,6 +7806,14 @@ public class frm_recepcion_datos extends PBase {
                                 "oBeTrans_oc_det",beTransOCDet);
                         break;
 
+                    case 36:
+
+                        String pNoLote = txtLoteRec.getText().toString();
+                        callMethod("Get_Vencimiento_By_IdBodega_And_Lote",
+                                "pIdBodega",gl.IdBodega,
+                                      "pNoLote",pNoLote);
+                        break;
+
                 }
 
             }catch (Exception e){
@@ -7950,6 +7969,9 @@ public class frm_recepcion_datos extends PBase {
                 case 35:
                     processActualizaCantidades();
                     break;
+                case 36:
+                    Get_Homologacion_Lote_Vencimiento();
+                    break;
             }
 
         } catch (Exception e) {
@@ -7986,6 +8008,84 @@ public class frm_recepcion_datos extends PBase {
 
         }
 
+    }
+
+    private void Get_Homologacion_Lote_Vencimiento() {
+        try{
+
+            progress.setMessage("Validando Homologacion Lote Vencimiento");
+            progress.show();
+
+            pVencimiento_Homologado =  (String) xobj.getSingle("Get_Vencimiento_By_IdBodega_And_LoteResult",String.class);
+
+            if (!pVencimiento_Homologado.equals("01/01/1900") && !cmbVenceRec.equals(pVencimiento_Homologado)){
+                    cmbVenceRec.setText(pVencimiento_Homologado);
+                    cmbVenceRec.setEnabled(false);
+                    imgDate.setEnabled(false);
+                //#GT21112023: si existe homologacion, continuar con el proceso normal de validaciones
+                    BtnGuardarRecepcion();
+            }else{
+
+                //#GT21112023: sino existe homologacion, continuar con el proceso normal de validaciones
+                BtnGuardarRecepcion();
+            }
+
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("Get_Homologacion_Lote_Vencimiento"+e.getMessage());
+        }
+    }
+
+
+    private void BtnGuardarRecepcion(){
+
+        try{
+
+            if (BeProducto.Presentaciones != null) {
+
+                if (BeProducto.Presentaciones.items != null){
+
+                    if (IdPreseSelect!=-1){
+
+                        boolean EsPallet = stream(BeProducto.Presentaciones.items).where(c->c.IdPresentacion==IdPreseSelect).select(c->c.EsPallet).first();
+
+                        if (EsPallet){
+                            if (CajasPorCama==0 && CamasPorTarima==0){
+                                msgbox("Debe ingresar la definición de la estiba");
+                                return;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            gl.gProductoAnterior = BeProducto.getCodigo();
+
+            if (gl.gBeRecepcion.IdTipoTransaccion.equals("PICH000")){
+
+                if (Escaneo_Pallet){
+                    //Guardar_Recepcion_Pallet
+                }else{
+
+                    progress.setMessage("Validando Campos");
+                    progress.show();
+
+                    ValidaCampos();
+
+                }
+
+            }else{
+
+                progress.setMessage("Validando Campos");
+                progress.show();
+
+                ValidaCampos();
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void processActualizaCantidades() {
