@@ -95,6 +95,7 @@ import com.zebra.sdk.printer.ZebraPrinterFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -3159,11 +3160,8 @@ public class frm_recepcion_datos extends PBase {
                         }else{
                             Carga_Datos_Producto_Existente();
                         }
-
                     }
-
                 }
-
             }
 
             //#GT04042022: focus en cantidad.
@@ -3983,6 +3981,18 @@ public class frm_recepcion_datos extends PBase {
                     txtCantidadRec.selectAll();
                 }else{
                     txtNoLP.requestFocus();
+                }
+            }
+
+            //#GT23112023: cargamos la etiqueta (y la simbologia) si tenemos impresora configurada
+            progress.setMessage("Validando etiqueta...");
+            progress.show();
+            //execws(27);
+            if (gl.gImpresora != null){
+                if (gl.gImpresora.get(0).Direccion_Ip ==""){
+                    mu.msgbox("La impresora no está configurada (Expec: MAC/IP)");
+                }else{
+                    execws(27);
                 }
             }
 
@@ -7771,9 +7781,10 @@ public class frm_recepcion_datos extends PBase {
                         }
 
                         break;
-                    case 27://Obtiene el Tipo de Etiqueta del producto
+                    case 27://Obtiene el Tipo de Etiqueta del producto según la simbologia
                         callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta",
-                                "pBeTipo_etiqueta",pBeTipo_etiqueta);
+                                "pBeTipo_etiqueta",pBeTipo_etiqueta,
+                                "IdSimbologia",BeProducto.IdSimbologia);
                         break;
                     case 28://Valida si la serie del producto ya existe
                         callMethod("Existe_Serie",
@@ -8160,6 +8171,9 @@ public class frm_recepcion_datos extends PBase {
             lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
+            //#GT23112023: Si tenemos el producto, ya podemos asignar idtipoEtiqueta
+            // y no hacerlo cuando se carga NuevaLPA
+            pBeTipo_etiqueta.IdTipoEtiqueta = BeProducto.IdTipoEtiqueta;
             Load();
 
         } catch (Exception e) {
@@ -9511,7 +9525,6 @@ public class frm_recepcion_datos extends PBase {
 
             if (etiqueta != null){
                 pBeTipo_etiqueta = etiqueta;
-                //toastlong("etiqueta "+ pBeTipo_etiqueta.Nombre);
             }
 
             //GT04042022: focus a cantidad
