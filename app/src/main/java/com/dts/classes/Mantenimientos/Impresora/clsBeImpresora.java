@@ -16,7 +16,10 @@ public class clsBeImpresora {
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public String mac_adress="";
     @Element(required=false) public int IdBodega=0;
-
+    @Element(required=false) public String Numero_Serie="";
+    @Element(required=false) public int IdImpresoraMarca=0;
+    @Element(required=false) public int IdLenguaje=0;
+    @Element(required=false) public int IdTipoConexion=0;
 
     public clsBeImpresora() {
     }
@@ -105,6 +108,30 @@ public class clsBeImpresora {
     }
     public void setIdBodega(int value) {
         IdBodega=value;
+    }
+    public String getNumero_Serie() {
+        return Numero_Serie;
+    }
+    public void setNumero_Serie(String value) {
+        Numero_Serie=value;
+    }
+    public int getIdImpresoraMarca() {
+        return IdImpresoraMarca;
+    }
+    public void setIdImpresoraMarca(int value) {
+        IdImpresoraMarca=value;
+    }
+    public int getIdLenguaje() {
+        return IdLenguaje;
+    }
+    public void setIdLenguaje(int value) {
+        IdLenguaje=value;
+    }
+    public int getIdTipoConexion() {
+        return IdTipoConexion;
+    }
+    public void setIdTipoConexion(int value) {
+        IdTipoConexion=value;
     }
 
 }
