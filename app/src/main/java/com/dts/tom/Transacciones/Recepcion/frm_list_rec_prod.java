@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -470,9 +471,20 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            progress.setMessage("Inicializando valores");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+            builder.setView(dialogView);
 
-            lblTituloForma.setText("");
+            TextView progressText = dialogView.findViewById(R.id.progressText);
+            progressText.setText("Inicializando Documento");
+
+            AlertDialog progressDialog = builder.create();
+            progressDialog.show();
+
+            progressText.setText("Inicializando valores");
+
+            lblTituloForma.setText("Ingreso de producto TOMWMS");
 
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -530,15 +542,14 @@ public class frm_list_rec_prod extends PBase {
 
                     }
 
-                    progress.setMessage("Inicializando Oc");
+                    //#EJC20231129
+                    //progress.setMessage("Inicializando Oc");
                     execws(1);
 
                 }
 
             }else{
-                //#EJC20220303:En algunas ocasiones, se pierde el IdtipoTarea...
-                //mu.msgbox("Falta programar");
-                progress.setMessage("Inicializando Oc");
+                progressText.setText("Consultando servicios...");
                 execws(1);
             }
 
