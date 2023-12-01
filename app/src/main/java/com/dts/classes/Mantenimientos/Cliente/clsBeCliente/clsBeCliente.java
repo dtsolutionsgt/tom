@@ -44,9 +44,8 @@ public class clsBeCliente {
 
     //#EJC20220314: BYB, Certificado_Calidad:
     @Element(required=false) public boolean Control_Calidad=false;
-
     @Element(required=false) public int IdUbicacionAbastecerCon = 0;
-
+    @Element(required=false) public int IdAreaDestino = 0;
     public clsBeCliente() {
     }
 
@@ -294,4 +293,11 @@ public class clsBeCliente {
     public void setIdUbicacionAbastecerCon(int value) {
         IdUbicacionAbastecerCon=value;
     }
+    public int getIdAreaDestino() {
+        return IdAreaDestino;
+    }
+    public void setIdAreaDestino(int value) {
+        IdAreaDestino=value;
+    }
+
 }
