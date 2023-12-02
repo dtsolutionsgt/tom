@@ -16,7 +16,7 @@ public class clsBeProveedor_bodega {
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public clsBeProveedor Proveedor=new clsBeProveedor();
-
+    @Element(required=false) public int IdAreaOrigen = 0;
 
     public clsBeProveedor_bodega() {
     }
@@ -92,6 +92,11 @@ public class clsBeProveedor_bodega {
     public void setProveedor(clsBeProveedor value) {
         Proveedor=value;
     }
-
+    public int getIdAreaOrigen() {
+        return IdAreaOrigen;
+    }
+    public void setIdAreaOrigen(int value) {
+        IdAreaOrigen =value;
+    }
 }
 

@@ -3,7 +3,6 @@ package com.dts.classes.Mantenimientos.Proveedor;
 
 import com.dts.classes.Mantenimientos.Propietario.Propietario.clsBePropietarios;
 import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresa;
-import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiempos;
 import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiemposList;
 
 import org.simpleframework.xml.Element;
@@ -36,9 +35,7 @@ public class clsBeProveedor {
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public int IdConfiguracionBarraPallet=0;
     @Element(required=false) public boolean Es_Proveedor_Servicio=false;
-
     @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
-
     public clsBeProveedor() {
     }
 
