@@ -64,6 +64,7 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public String Usuario="";
     @Element(required=false) public clsBePropietario_bodega PropietarioBodega=new clsBePropietario_bodega();
     @Element(required=false) public String PropietarioOC="";
+
     @Element(required=false) public String Proveedor="";
     @Element(required=false) public int NoOrdencompra=0;
     @Element(required=false) public String NoDocumentoOC="";
@@ -77,6 +78,8 @@ public class clsBeTrans_re_enc {
     @Element(required=false) public String Carta_Cupo="";
 
     @Element(required=false) public String No_Contenedor="";
+
+    @Element(required=false) public int IdEstado_Defecto_Recepcion=0;
 
     public clsBeTrans_re_enc() {
     }
@@ -94,7 +97,7 @@ public class clsBeTrans_re_enc {
                              String NombrePropietario,String Bodega,String Usuario,clsBePropietario_bodega PropietarioBodega,
                              String PropietarioOC,String Proveedor,int NoOrdencompra,String NoDocumentoOC,
                              String TipoTrans,clsBeBodega_muelles Muelle,String MuelleRec,String NOFactura,
-                             clsBeTarea_hh TareaHH, String Carta_Cupo, String No_Contenedor) {
+                             clsBeTarea_hh TareaHH, String Carta_Cupo, String No_Contenedor, int IdEstado_Defecto_Recepcion) {
 
         this.IdRecepcionEnc=IdRecepcionEnc;
         this.IdMuelle=IdMuelle;
@@ -152,7 +155,7 @@ public class clsBeTrans_re_enc {
         this.TareaHH=TareaHH;
         this.Carta_Cupo= Carta_Cupo;
         this.No_Contenedor =No_Contenedor;
-
+        this.IdEstado_Defecto_Recepcion = IdEstado_Defecto_Recepcion;
     }
 
 
@@ -503,5 +506,12 @@ public class clsBeTrans_re_enc {
     }
     public void setNo_Contenedor(String value) {
         No_Contenedor=value;
+    }
+
+    public int getIdEstado_Defecto_Recepcion() {
+        return IdEstado_Defecto_Recepcion;
+    }
+    public void setIdEstado_Defecto_Recepcion(int value) {
+        IdEstado_Defecto_Recepcion=value;
     }
 }

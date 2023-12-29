@@ -2294,12 +2294,12 @@ public class frm_recepcion_datos extends PBase {
                 }else {
 
                     //#GT03112023: es redundante volver a generar lp
-                    /*if (BeProducto.Genera_lp){
+                    if (BeProducto.Genera_lp){
                         execws(8);
                     }else{
                         PallCorrecto=true;
                         ContinuaValidandoParametros();
-                    }*/
+                    }
 
                     PallCorrecto=true;
                     ContinuaValidandoParametros();
@@ -2308,12 +2308,12 @@ public class frm_recepcion_datos extends PBase {
             }else{
 
                 //#GT03112023: es redundante volver a generar lp
-                /*if (BeProducto.Genera_lp){
+                if (BeProducto.Genera_lp){
                     execws(8);
                 }else{
                     PallCorrecto=true;
                     ContinuaValidandoParametros();
-                }*/
+                }
 
                 PallCorrecto=true;
                 ContinuaValidandoParametros();
@@ -3749,10 +3749,29 @@ public class frm_recepcion_datos extends PBase {
 
                 txtCostoReal.setText(pListTransRecDet.items.get(0).Costo+"");
 
-                List AxuLisEsta = stream(pListTransRecDet.items).select(c->c.IdProductoEstado).toList();
+                //#CKFK20231228 Puse esto en comentario para cambiar la funcionalidad
+               /* List AxuLisEsta = stream(pListTransRecDet.items).select(c->c.IdProductoEstado).toList();
+
                 Indx =AxuLisEsta.indexOf(pListTransRecDet.items.get(0).IdProductoEstado);
 
-                cmbPresRec.setSelection(Indx);
+                cmbPresRec.setSelection(Indx);*/
+
+                List AxuLisEsta = stream(pListTransRecDet.items).select(c->c.IdProductoEstado).toList();
+
+                if(gl.gBeRecepcion.IdEstado_Defecto_Recepcion!=0){
+                    Indx = AxuLisEsta.indexOf(gl.gBeRecepcion.IdEstado_Defecto_Recepcion);
+                }else{
+                    Indx = AxuLisEsta.indexOf(pListTransRecDet.items.get(0).IdProductoEstado);
+                }
+
+                if(Indx>-1){
+                    cmbEstadoProductoRec.setSelection(Indx);
+                }else{
+                    mu.msgbox("No existe un estado por defecto");
+                    return;
+                }
+
+                cmbEstadoProductoRec.setSelection(Indx);
 
                 FinalizaCargaProductos();
 
@@ -3992,7 +4011,7 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.gImpresora.get(0).Direccion_Ip ==""){
                     mu.msgbox("La impresora no está configurada (Expec: MAC/IP)");
                 }else{
-                    execws(27);
+                   // execws(27);
                 }
             }
 
@@ -4066,7 +4085,13 @@ public class frm_recepcion_datos extends PBase {
 
             List AuxLis1=stream(LProductoEstado.items).select(c->c.IdEstado).toList();
 
-            int indxEstado=AuxLis1.indexOf(gl.gIdProductoBuenEstadoPorDefecto);
+            int indxEstado=0;
+
+            if(gl.gBeRecepcion.IdEstado_Defecto_Recepcion!=0){
+                indxEstado =AuxLis1.indexOf(gl.gBeRecepcion.IdEstado_Defecto_Recepcion);
+            }else{
+                indxEstado=AuxLis1.indexOf(gl.gIdProductoBuenEstadoPorDefecto);
+            }
 
             if(indxEstado>-1){
                 cmbEstadoProductoRec.setSelection(indxEstado);
@@ -6718,9 +6743,9 @@ public class frm_recepcion_datos extends PBase {
 
                     if (BeDetalleLotes != null){
                         if (BeTransReDet.IdPresentacion!=0){
-                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString())*Factor;
+                            BeDetalleLotes.Cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString())*Factor;
                         }else{
-                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
+                            BeDetalleLotes.Cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
                         }
 
                         BeDetalleLotes.IsNew = true;
@@ -7492,10 +7517,10 @@ public class frm_recepcion_datos extends PBase {
                         callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
                                 "pIdOperador",gl.IdOperador,
                                 "pIdBodega",gl.IdBodega);
-                        //#EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
-//                        callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
-//                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
-//                                "pIdProducto",BeProducto.IdProducto);
+                       // #EJC20210504: Optimizado, buscar la resolución asociada por el operador y bodega.
+                        /*callMethod("Get_Nuevo_Correlativo_LicensePlate","pIdEmpresa",gl.IdEmpresa,
+                                "pIdBodega",gl.IdBodega,"pIdPropietario",BeProducto.Propietario.IdPropietario,
+                                "pIdProducto",BeProducto.IdProducto);*/
                         break;
 
                     case 7:
@@ -8173,7 +8198,7 @@ public class frm_recepcion_datos extends PBase {
 
             //#GT23112023: Si tenemos el producto, ya podemos asignar idtipoEtiqueta
             // y no hacerlo cuando se carga NuevaLPA
-            pBeTipo_etiqueta.IdTipoEtiqueta = BeProducto.IdTipoEtiqueta;
+            //pBeTipo_etiqueta.IdTipoEtiqueta = BeProducto.IdTipoEtiqueta;
             Load();
 
         } catch (Exception e) {
@@ -8545,7 +8570,8 @@ public class frm_recepcion_datos extends PBase {
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
-            execws(27);
+            //#GT202311
+           // execws(27);
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP_RE: "+e.getMessage());
