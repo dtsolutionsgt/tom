@@ -56,7 +56,7 @@ dependencies {
     implementation files('libs/opencsv-2.2.jar')
     implementation files('libs/snmp6_1.jar')
     implementation files('libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
-    implementation 'com.google.android.material:material:1.12.0-alpha01'
+    implementation 'com.google.android.material:material:1.12.0-alpha02'
     implementation 'com.google.firebase:firebase-analytics:21.5.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.6.0'
     implementation 'com.google.firebase:firebase-perf:20.5.1'

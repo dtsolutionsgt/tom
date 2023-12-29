@@ -42,8 +42,10 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.dts.base.ApiService;
 import com.dts.base.DecimalDigitsInputFilter;
 import com.dts.base.ExDialog;
+import com.dts.base.RetrofitClient;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
@@ -111,6 +113,11 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Recepcion.frm_list_rec_prod.EsTransferenciaInternaWMS;
 
 import androidx.core.content.FileProvider;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 //import com.dts.classes.Mantenimientos.Bodega.clsBeBodegaBase;
 
@@ -197,6 +204,8 @@ public class frm_recepcion_datos extends PBase {
     private boolean Existe_Serie=false;
     private String ubiDetLote="";
     private boolean guardando_recepcion = false, editarSinPresentacion = false;
+
+    private String pNoLote = "";
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
@@ -449,6 +458,7 @@ public class frm_recepcion_datos extends PBase {
 //                txtNoLP.setClickable(true);
 //                txtNoLP.setVisibility(View.VISIBLE);
 //            }
+
 
             txtNoLP.setEnabled(!gl.bloquear_lp_hh);
 
@@ -3984,15 +3994,38 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
-            //#GT23112023: cargamos la etiqueta (y la simbologia) si tenemos impresora configurada
-            progress.setMessage("Validando etiqueta...");
-            progress.show();
-            //execws(27);
+
+            //#GT23112023: cargamos configuración de etiqueta/simbologia si tenemos impresora configurada
             if (gl.gImpresora != null){
                 if (gl.gImpresora.get(0).Direccion_Ip ==""){
                     mu.msgbox("La impresora no está configurada (Expec: MAC/IP)");
                 }else{
-                    execws(27);
+
+                    progress.setMessage("Validando etiqueta...");
+                    progress.show();
+                    String URL = gl.wsurl;
+                    Retrofit retrofit = RetrofitClient.getClient(URL + "/");
+                    final clsBeTipo_etiqueta[] tipoEtiqueta = {new clsBeTipo_etiqueta()};
+                    ApiService apiService = retrofit.create(ApiService.class);
+
+                    Call<clsBeTipo_etiqueta> call = apiService.getTipoEtiqueta(BeProducto.IdTipoEtiqueta, BeProducto.IdSimbologia);
+
+                    call.enqueue(new Callback<clsBeTipo_etiqueta>() {
+                        @Override
+                        public void onResponse(Call<clsBeTipo_etiqueta> call, Response<clsBeTipo_etiqueta> response) {
+                            if (response.isSuccessful()) {
+
+                                tipoEtiqueta[0] = response.body();
+                                toastlong("Tipo de etiqueta cargado para impresión.");
+                                pBeTipo_etiqueta = tipoEtiqueta[0];
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<clsBeTipo_etiqueta> call, Throwable t) {
+                            mu.msgbox("FinalizaCargaProductos: Error al intentar obtener el tipo de etiqueta para impresión.");
+                        }
+                    });
                 }
             }
 
@@ -4862,6 +4895,7 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Control_lote && BeProducto.Control_vencimiento
                     && gl.pBeBodega.Homologar_Lote_Vencimiento && gl.gFechaVenceAnterior.isEmpty()){
                         //Llamar a método para buscar el lote en la BD y asegurar homologación de vencimiento
+                         pNoLote= txtLoteRec.getText().toString();
                         execws(36);
             }else{
 
@@ -7818,8 +7852,6 @@ public class frm_recepcion_datos extends PBase {
                         break;
 
                     case 36:
-
-                        String pNoLote = txtLoteRec.getText().toString();
                         callMethod("Get_Vencimiento_By_IdBodega_And_Lote",
                                 "pIdBodega",gl.IdBodega,
                                       "pNoLote",pNoLote);
@@ -8029,8 +8061,11 @@ public class frm_recepcion_datos extends PBase {
 
             pVencimiento_Homologado =  (String) xobj.getSingle("Get_Vencimiento_By_IdBodega_And_LoteResult",String.class);
 
-            if (!pVencimiento_Homologado.equals("01/01/1900") && !cmbVenceRec.equals(pVencimiento_Homologado)){
-                    cmbVenceRec.setText(pVencimiento_Homologado);
+            //Aplicar ConvierteFecha para setear correctamente el valor recibido del WS
+            String fecha_homologada = du.convierteFechaSinHora(pVencimiento_Homologado);
+
+            if (!fecha_homologada.equals("01/01/1900") && !cmbVenceRec.equals(fecha_homologada)){
+                    cmbVenceRec.setText(fecha_homologada);
                     cmbVenceRec.setEnabled(false);
                     imgDate.setEnabled(false);
                 //#GT21112023: si existe homologacion, continuar con el proceso normal de validaciones
@@ -8545,7 +8580,49 @@ public class frm_recepcion_datos extends PBase {
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
 
-            execws(27);
+            //execws(27);
+            //#GT28112023: se llama a retrofit sincronico en lugar del método xml, por mejora en tiempo de respuesta.
+
+            //#GT28112023: cargar el tipo etiqueta si no se ha llamado desde algun proceso previo.
+            if (pBeTipo_etiqueta.codigo_zpl.equals("")){
+
+                //#GT23112023: cargamos configuración de etiqueta/simbologia si tenemos impresora configurada
+                if (gl.gImpresora != null){
+                    if (gl.gImpresora.get(0).Direccion_Ip ==""){
+                        mu.msgbox("La impresora no está configurada (Expec: MAC/IP)");
+                    }else{
+
+                        progress.setMessage("Validando etiqueta...");
+                        progress.show();
+                        String URL = gl.wsurl;
+                        Retrofit retrofit = RetrofitClient.getClient(URL + "/");
+                        final clsBeTipo_etiqueta[] tipoEtiqueta = {new clsBeTipo_etiqueta()};
+                        ApiService apiService = retrofit.create(ApiService.class);
+
+                        Call<clsBeTipo_etiqueta> call = apiService.getTipoEtiqueta(BeProducto.IdTipoEtiqueta, BeProducto.IdSimbologia);
+
+                        call.enqueue(new Callback<clsBeTipo_etiqueta>() {
+                            @Override
+                            public void onResponse(Call<clsBeTipo_etiqueta> call, Response<clsBeTipo_etiqueta> response) {
+                                if (response.isSuccessful()) {
+
+                                    tipoEtiqueta[0] = response.body();
+                                    toastlong("Tipo de etiqueta cargado para impresión.");
+                                    pBeTipo_etiqueta = tipoEtiqueta[0];
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<clsBeTipo_etiqueta> call, Throwable t) {
+                                mu.msgbox("processNuevoLPA: Error al intentar obtener el tipo de etiqueta para impresión.");
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            progress.cancel();
 
         }catch (Exception e){
             mu.msgbox("processNuevoLP_RE: "+e.getMessage());
@@ -9932,6 +10009,7 @@ public class frm_recepcion_datos extends PBase {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
