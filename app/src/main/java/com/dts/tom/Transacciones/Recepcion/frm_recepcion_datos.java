@@ -3771,7 +3771,7 @@ public class frm_recepcion_datos extends PBase {
                     return;
                 }
 
-                cmbEstadoProductoRec.setSelection(Indx);
+                //cmbEstadoProductoRec.setSelection(Indx);
 
                 FinalizaCargaProductos();
 
@@ -3834,11 +3834,36 @@ public class frm_recepcion_datos extends PBase {
                     if (cmbVence.getVisibility()!=View.VISIBLE){
                         cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(du.getFechaActual()));
                     }
-
-                    cmbEstadoProductoRec.setSelection(0);
                 }
-            }
 
+                //#CKFK20240104 Puse esto en comentario
+                //cmbEstadoProductoRec.setSelection(0);
+
+                //#CKFK20240104 Agregué esta validación de estado aqui
+                if (EstadoList.size()>0){
+
+                    List AxuLisEsta = stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+                    int indx = 0;
+
+                    if(gl.gBeRecepcion.IdEstado_Defecto_Recepcion!=0){
+                        indx =AxuLisEsta.indexOf(gl.gBeRecepcion.IdEstado_Defecto_Recepcion);
+                    }else{
+                        if (gl.gIdProductoBuenEstadoPorDefecto!=0){
+                            indx=AxuLisEsta.indexOf(gl.gIdProductoBuenEstadoPorDefecto);
+                        }else{
+                            indx=0;
+                        }
+                    }
+
+                    if(indx>-1){
+                        cmbEstadoProductoRec.setSelection(indx);
+                    }else{
+                        mu.msgbox("No existe un estado por defecto");
+                        return;
+                    }
+                }
+
+            }
 
             if (!gl.gBeRecepcion.Muestra_precio){
                 txtCostoOC.setVisibility(View.GONE);
@@ -4758,10 +4783,12 @@ public class frm_recepcion_datos extends PBase {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbEstadoProductoRec.setAdapter(dataAdapter);
 
+            int indx = 0;
+
             if (Escaneo_Pallet){
                 IdEstadoSelect = gl.gIdProductoBuenEstadoPorDefecto;
                 List AuxEst = stream(LProductoEstado.items).select(c->c.IdEstado).toList();
-                int indx = AuxEst.indexOf(IdEstadoSelect);
+                indx = AuxEst.indexOf(IdEstadoSelect);
                 if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indx);
             }else{
                 if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(0);
