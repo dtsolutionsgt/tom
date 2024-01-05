@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,8 +17,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
@@ -37,6 +41,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detL
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
@@ -67,7 +72,6 @@ public class frm_list_rec_prod extends PBase {
     private EditText txtCodigoProductoRecepcion;
     private DrawingView txtFirma;
     private ProgressDialog progress;
-    private AlertDialog DialogoAlerta;
     private CheckBox chkRecepcionados;
     private RelativeLayout relbot;
     private FloatingActionButton btnTareas;
@@ -226,7 +230,7 @@ public class frm_list_rec_prod extends PBase {
                              }
 
                              pLP = txtCodigoProductoRecepcion.getText().toString().replace("$", "");
-
+                             //Quitar los +1  20210924
                              vCodigoBodegaBarraPallet = pLP.substring(0, vLongitudBodegaOrigen);
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
@@ -385,10 +389,9 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            //#CKFK20231129 Puse este if en comentario porque ya no es necesario que se haga esta validación
-            //if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) | BeINavBarraPallet.Bodega_Destino.trim().equals(gl.gCodigoBodega)){
+            if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) | BeINavBarraPallet.Bodega_Destino.trim().equals(gl.gCodigoBodega)){
 
-                List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+            List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
 
                 Idx = AuxList.indexOf(vCodigoProductoBarraPallet);
 
@@ -404,8 +407,16 @@ public class frm_list_rec_prod extends PBase {
                                 selitem = pListDetalleOC.items.get(Idx);
                                 gl.gselitem = selitem;
                                 gl.gEscaneo_Pallet = true;
+
                                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+
+                                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
+                                // lo que tengo en la global
+                               // gl.gpListDetalleOC.items = pListDetalleOC.items;
+
+                                //#CKFK20220830 cambié el browse = 1 porque necesitamos que sea 3
                                 browse=1;
+
                                 startActivity(new Intent(this, frm_recepcion_datos.class));
 
                             }else{
@@ -436,12 +447,12 @@ public class frm_list_rec_prod extends PBase {
                     return;
                 }
 
-           /* }else{
+            }else{
                 mu.msgbox("El almacén emisor: "+vCodigoBodegaBarraPallet+" no coincide con el proveedor del documento: "+gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo);
                 txtCodigoProductoRecepcion.setText("");
                 txtCodigoProductoRecepcion.requestFocus();
                 return;
-            }*/
+            }
 
         }catch (Exception e){
             mu.msgbox("Continua_Validando_Barra"+e.getMessage());
@@ -468,8 +479,8 @@ public class frm_list_rec_prod extends PBase {
             TextView progressText = dialogView.findViewById(R.id.progressText);
             progressText.setText("Inicializando Documento");
 
-            DialogoAlerta = builder.create();
-            DialogoAlerta.show();
+            AlertDialog progressDialog = builder.create();
+            progressDialog.show();
 
             progressText.setText("Inicializando valores");
 
@@ -542,10 +553,12 @@ public class frm_list_rec_prod extends PBase {
                 execws(1);
             }
 
+            //#GT05012023: hay que cerrar el dialogo, porque se queda abierto.
+            progressDialog.cancel();
+
         }catch (Exception e){
-            mu.msgbox(e.getClass()+e.getMessage());
-        }finally {
             progress.cancel();
+            mu.msgbox(e.getClass()+e.getMessage());
         }
 
     }
@@ -1362,13 +1375,11 @@ public class frm_list_rec_prod extends PBase {
                 super.finish();
             }
 
-            progress.cancel();
-            DialogoAlerta.cancel();
+
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
-
 
     }
 
