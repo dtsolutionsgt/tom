@@ -79,7 +79,8 @@ public class frm_picking_datos extends PBase {
     private Button btnDanado, btNE;
     private FloatingActionButton btnConfirmarPk;
     private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick,
-                     txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec;
+                     txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec,
+                     txtLicEscaneada;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
     private RelativeLayout relNe, relReemplazo, tblCajasUnidades;
@@ -132,6 +133,7 @@ public class frm_picking_datos extends PBase {
         xobj = new XMLObject(ws);
 
         txtLicencia = findViewById(R.id.txtLP);
+        txtLicEscaneada = findViewById((R.id.txtLicEscaneada));
         lblLicenciaPicking = findViewById(R.id.lblLicenciaPicking);
         txtFechaCad = findViewById(R.id.txtFechaCad);
         txtLote = findViewById(R.id.txtLote);
@@ -199,9 +201,11 @@ public class frm_picking_datos extends PBase {
         btnEnterLp = false;
         btnEnterCod = false;
 
+        txtLicencia.setEnabled(false);
+
         setHandlers();
         //#AT20230214 Se muestra el boton si Permitir_Reemplazo_Picking = verdadero
-        MostarBotones();
+        MostrarBotones();
         Load();
 
         //#EJC20210201: voice picking jajajaja :)
@@ -279,7 +283,7 @@ public class frm_picking_datos extends PBase {
 
     }
 
-    private void MostarBotones() {
+    private void MostrarBotones() {
         if (gl.Permitir_Reemplazo_Picking) {
             relReemplazo.setVisibility(View.VISIBLE);
         }
@@ -289,21 +293,9 @@ public class frm_picking_datos extends PBase {
         }
     }
 
-    private String barraEscaneada(){
-        String result="";
-        try{
-            escanearBarra = new Scanner(System.in);
-            result = escanearBarra.next();
-        }catch (Exception ex){
-
-        }
-        return  result;
-    }
-
     private void setHandlers() {
 
         try {
-
 
             if (txtLicencia !=null){
                 txtLicencia.setOnClickListener(view -> {
@@ -311,6 +303,21 @@ public class frm_picking_datos extends PBase {
                 });
                 txtLicencia.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        Procesa_Barra();
+                    }
+                    return false;
+                });
+
+            }
+
+            if (txtLicEscaneada !=null){
+                txtLicEscaneada.setOnClickListener(view -> {
+
+                });
+                txtLicEscaneada.setOnKeyListener((v, keyCode, event) -> {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        txtLicencia.setText(txtLicEscaneada.getText());
+                        txtLicEscaneada.setText("");
                         Procesa_Barra();
                     }
                     return false;
@@ -463,6 +470,13 @@ public class frm_picking_datos extends PBase {
                 //if (!gBePickingUbic.Lic_plate.equals("0")){
 
                     lblLicPlate.setText(gBePickingUbic.Lic_plate);
+
+                    if (gBePickingUbic.Lic_plate.equals("0")){
+                        txtLicencia.setEnabled(true);
+                    }else{
+                        txtLicencia.setEnabled(false);
+                    }
+
                     txtLicencia.setVisibility(View.VISIBLE);
                     lblLicenciaPicking.setVisibility(View.VISIBLE);
                     trLP.setVisibility(View.VISIBLE);
@@ -781,6 +795,7 @@ public class frm_picking_datos extends PBase {
                 mu.msgbox("El código ingresado no es el válido para la lista de picking");
                 txtLicencia.setSelectAllOnFocus(true);
                 txtLicencia.requestFocus();
+                txtLicencia.setText("");
                 Log.d("focus: ", "20220502_10");
                 return;
             }
