@@ -644,6 +644,7 @@ public class frm_verificacion_datos extends PBase {
                     suma = stream(pSubListPickingU.items)
                             .select(clsBeTrans_picking_ubic::getPeso_recibido)
                             .sum((SelectorDouble<Double>) z -> z);
+
                     txtPesoVeri.setText(mu.frmdecimal(suma, gl.gCantDecDespliegue));
 
                     if (suma>0){

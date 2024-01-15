@@ -118,6 +118,17 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
 
+            //GT15012024: se asignan los colores de acuerdo al estado del pickeo para facilitar la verificación
+            String estado = BeListTareasHH.get(position).Estado;
+
+            if (estado.equals("Pendiente") ) {
+                //Rojo - Pendiente
+                convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
+            } else if(estado.equals("Pickeado")) {
+                //Celeste - Faltante en verificación
+                convertView.setBackgroundColor(Color.parseColor("#00E676"));
+            }
+
         }catch (Exception ex){
             toast(ex.getMessage());
         }

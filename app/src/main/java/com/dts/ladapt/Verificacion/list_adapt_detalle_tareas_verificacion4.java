@@ -148,7 +148,7 @@ public class list_adapt_detalle_tareas_verificacion4 extends BaseAdapter {
             }
 
         }catch (Exception ex){
-
+            //toast(ex.getMessage());
         }
         return convertView;
     }

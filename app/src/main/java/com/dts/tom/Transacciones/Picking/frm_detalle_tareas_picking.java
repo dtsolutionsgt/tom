@@ -761,7 +761,11 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 progress_setMessage("Actualizando estado de picking...");
 
-                gBePicking.Estado = "Procesado";
+                //#GT10012023: nuevo estado para aplicar procesos manufactura ligera
+                //gBePicking.Estado = "Procesado";
+                //#GT11012023: para finalizar el picking no es necesario llenar este objeto, solo se esta enviando el idPicking
+                //y el ws le asigna un estado de Pickeado
+                gBePicking.Estado = "Pickeado";
                 gBePicking.Fec_mod = du.getFechaActual();
                 gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
                 gBePicking.Hora_fin = du.getFechaActual();
