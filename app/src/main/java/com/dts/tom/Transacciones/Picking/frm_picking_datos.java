@@ -201,7 +201,8 @@ public class frm_picking_datos extends PBase {
         btnEnterLp = false;
         btnEnterCod = false;
 
-        txtLicencia.setEnabled(false);
+        //#CKFK20240110 Lo puse en comentario para pruebas
+        //txtLicencia.setEnabled(false);
 
         setHandlers();
         //#AT20230214 Se muestra el boton si Permitir_Reemplazo_Picking = verdadero
@@ -471,11 +472,12 @@ public class frm_picking_datos extends PBase {
 
                     lblLicPlate.setText(gBePickingUbic.Lic_plate);
 
-                    if (gBePickingUbic.Lic_plate.equals("0")){
+                    //#CKFK20240110 lo puse en comentario para pruebas
+                   /* if (gBePickingUbic.Lic_plate.equals("0")){
                         txtLicencia.setEnabled(true);
                     }else{
                         txtLicencia.setEnabled(false);
-                    }
+                    }*/
 
                     txtLicencia.setVisibility(View.VISIBLE);
                     lblLicenciaPicking.setVisibility(View.VISIBLE);

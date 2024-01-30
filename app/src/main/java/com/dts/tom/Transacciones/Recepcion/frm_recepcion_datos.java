@@ -7613,21 +7613,37 @@ public class frm_recepcion_datos extends PBase {
                                     "pBeTransOcDet",gl.gselitem);
 
                         }else{
-                            callMethod("Guardar_Recepcion_S",
-                                    "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
-                                    "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
-                                    "pIdOrdenCompraEnc", pIdOrdenCompraEnc,
-                                    "BeRecDet", BeTransReDet,
-                                    "pListRecDetParam",plistBeReDetParametros.items,
-                                    "pListStockRecSer", pListBeStockSeRec.items,
-                                    "pListStockRec", pListBeStockRec.items,
-                                    "pListProductoPallet", listaProdPalletsNuevos.items,
-                                    "pLotesRec", BeDetalleLotes,
-                                    "pIdEmpresa", gl.IdEmpresa,
-                                    "pIdBodega", gl.IdBodega,
-                                    "pIdUsuario", gl.IdOperador,
-                                    "pIdResolucionLp", gl.IdResolucionLpOperador,
-                                    "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+                            if (gl.gBeRecepcion.Detalle.items.size()>1){
+                                callMethod("Guardar_Recepcion",
+                                        "pRecEnc", gl.gBeRecepcion,
+                                              "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec.OC,
+                                              "pListStockRecSer", pListBeStockSeRec.items,
+                                              "pListStockRec", pListBeStockRec.items,
+                                              "pListProductoPallet", listaProdPalletsNuevos.items,
+                                              "pLotesRec", BeDetalleLotes,
+                                              "pIdEmpresa", gl.IdEmpresa,
+                                              "pIdBodega", gl.IdBodega,
+                                              "pIdUsuario", gl.IdOperador,
+                                              "pIdResolucionLp", gl.IdResolucionLpOperador,
+                                              "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+                            }else{
+                                callMethod("Guardar_Recepcion_S",
+                                        "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
+                                        "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
+                                        "pIdOrdenCompraEnc", pIdOrdenCompraEnc,
+                                        "BeRecDet", BeTransReDet,
+                                        "pListRecDetParam",plistBeReDetParametros.items,
+                                        "pListStockRecSer", pListBeStockSeRec.items,
+                                        "pListStockRec", pListBeStockRec.items,
+                                        "pListProductoPallet", listaProdPalletsNuevos.items,
+                                        "pLotesRec", BeDetalleLotes,
+                                        "pIdEmpresa", gl.IdEmpresa,
+                                        "pIdBodega", gl.IdBodega,
+                                        "pIdUsuario", gl.IdOperador,
+                                        "pIdResolucionLp", gl.IdResolucionLpOperador,
+                                        "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+                            }
+
                         }
 
                         break;
@@ -8768,7 +8784,11 @@ public class frm_recepcion_datos extends PBase {
                 } else {
                     gl.gSinPresentacion = false;
                     //Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
-                    Resultado = xobj.getresult(String.class, "Guardar_Recepcion_S");
+                    if (gl.gBeRecepcion.Detalle.items.size()>1){
+                        Resultado = xobj.getresult(String.class, "Guardar_Recepcion");
+                    }else{
+                        Resultado = xobj.getresult(String.class, "Guardar_Recepcion_S");
+                    }
                 }
 
                 if (Resultado!=null){

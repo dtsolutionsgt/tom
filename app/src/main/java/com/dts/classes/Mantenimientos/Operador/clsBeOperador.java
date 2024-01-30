@@ -30,6 +30,7 @@ public class clsBeOperador {
     @Element(required=false) public boolean Pickea=false;
     @Element(required=false) public boolean Verifica=false;
     @Element(required=false) public boolean Montacarga=false;
+    @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public  String Foto;
     @Element(required=false) public clsBeRol_operador RolOperador=new clsBeRol_operador();
@@ -45,7 +46,7 @@ public class clsBeOperador {
                          boolean Usa_hh,boolean Recibe,boolean Ubica,
                          boolean Transporta,boolean Pickea,boolean Verifica,
                          boolean IsNew, clsBeRol_operador RolOperador,
-                         String Foto)
+                         String Foto, boolean Sistema)
     {
 
         this.IdOperador=IdOperador;
@@ -73,6 +74,7 @@ public class clsBeOperador {
         this.IsNew = IsNew;
         this.RolOperador=RolOperador;
         this.Foto = Foto;
+        this.Sistema = Sistema;
 
     }
 
@@ -233,6 +235,11 @@ public class clsBeOperador {
     public void setMontacarga(boolean value) {
         Montacarga =value;
     }
-
+    public boolean getSistema() {
+        return Sistema;
+    }
+    public void setSistema(boolean value) {
+        Sistema =value;
+    }
 }
 
