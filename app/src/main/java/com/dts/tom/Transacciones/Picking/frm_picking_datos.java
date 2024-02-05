@@ -201,8 +201,9 @@ public class frm_picking_datos extends PBase {
         btnEnterLp = false;
         btnEnterCod = false;
 
-        //#CKFK20240110 Lo puse en comentario para pruebas
-        //txtLicencia.setEnabled(false);
+        //#CKFK20240110 Cuando el parámetro Escanear_Licencia_Picking esté en true se deshabilita
+        // el poder digitar la licencia se debe escanear
+        txtLicencia.setEnabled(!gl.pBeBodega.Escanear_Licencia_Picking);
 
         setHandlers();
         //#AT20230214 Se muestra el boton si Permitir_Reemplazo_Picking = verdadero

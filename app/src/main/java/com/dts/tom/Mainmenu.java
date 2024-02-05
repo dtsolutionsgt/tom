@@ -438,9 +438,16 @@ public class Mainmenu extends PBase {
                                 "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
                         break;
                     case 3:
+
+                        int vIdOperadorBodega = 0;
+
+                         if (gl.operador_picking_realiza_verificacion){
+                             vIdOperadorBodega=gl.OperadorBodega.IdOperadorBodega;
+                         }
+
                         callMethod("Get_Count_Verificaciones_For_HH_By_IdBodega",
                                 "pIdBodega",gl.IdBodega,
-                                "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega);
+                                "pIdOperadorBodega",vIdOperadorBodega);
                         break;
                     case 4:
                         callMethod("Get_Count_Cambio_Est_Ubic_For_HH",

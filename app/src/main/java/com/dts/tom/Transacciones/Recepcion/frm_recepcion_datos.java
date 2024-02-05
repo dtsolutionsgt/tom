@@ -3776,7 +3776,9 @@ public class frm_recepcion_datos extends PBase {
 
             if (BeProducto.Control_lote){
                 if (gl.mode==1){
-                    if (!gl.gLoteAnterior.isEmpty() && gl.gProductoAnterior.equals(BeProducto.getCodigo())){
+                    if (!gl.gLoteAnterior.isEmpty() &&
+                            gl.gProductoAnterior.equals(BeProducto.getCodigo()) &&
+                            cmbLote.getVisibility()!=View.VISIBLE){
                         txtLoteRec.setText(gl.gLoteAnterior);
                     }
                 }

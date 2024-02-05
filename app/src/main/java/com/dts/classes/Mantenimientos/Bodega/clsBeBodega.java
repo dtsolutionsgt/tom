@@ -78,6 +78,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Filtrar_Pedidos_Usuario = false;
     @Element(required=false) public boolean Liberar_Stock_Despachos_Parciales = false;
     @Element(required=false) public boolean Homologar_Lote_Vencimiento = false;
+    @Element(required=false) public boolean Escanear_Licencia_Picking = false;
 
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
@@ -106,7 +107,9 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Calcular_Ubicacion_Sugerida_ML, boolean Ordenar_Picking_Descendente,
                        boolean Ordenar_Por_Nombre_Completo, boolean Permitir_Reemplazo_Picking, boolean Permitir_No_Encontrado_Picking,
                        boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo,
-                       String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario, boolean Liberar_Stock_Despachos_Parciales ) {
+                       String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
+                       boolean Liberar_Stock_Despachos_Parciales,
+                       boolean Escanear_Licencia_Picking) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -176,6 +179,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Horario_Ejecucion_Historico = Horario_Ejecucion_Historico;
         this.Filtrar_Pedidos_Usuario = Filtrar_Pedidos_Usuario;
         this.Liberar_Stock_Despachos_Parciales = Liberar_Stock_Despachos_Parciales;
+        this.Escanear_Licencia_Picking = Escanear_Licencia_Picking;
 
     }
 
@@ -651,4 +655,12 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setHomologar_Lote_Vencimiento(boolean value) {
         Homologar_Lote_Vencimiento=value;
     }
+
+    public boolean getEscanear_Licencia_Picking() {
+        return Escanear_Licencia_Picking;
+    }
+    public void setEscanear_Licencia_Picking(boolean value) {
+        Escanear_Licencia_Picking=value;
+    }
+
 }
