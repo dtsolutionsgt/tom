@@ -45,6 +45,8 @@ public class clsBeCliente {
     //#EJC20220314: BYB, Certificado_Calidad:
     @Element(required=false) public boolean Control_Calidad=false;
     @Element(required=false) public int IdUbicacionAbastecerCon = 0;
+    @Element(required=false) public int IdBodegaAreaSAP = 0;
+
     public clsBeCliente() {
     }
 
@@ -55,7 +57,8 @@ public class clsBeCliente {
                         String User_mod,String Fec_mod,boolean Despachar_lotes_completos,boolean Sistema,
                         boolean Es_bodega_recepcion,boolean Es_Bodega_Traslado,int IdUbicacionVirtual,boolean Control_Ultimo_Lote,
                         String Referencia,clsBeCliente_tipo Tipo,clsBeCliente_direccionList Drecciones,clsBeCliente_tiemposList Tiempos,
-                        clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo, int IdUbicacionAbastecerCon) {
+                        clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo,
+                        int IdUbicacionAbastecerConz, int IdBodegaAreaSAP) {
 
         this.IdCliente=IdCliente;
         this.IdEmpresa=IdEmpresa;
@@ -89,7 +92,7 @@ public class clsBeCliente {
         this.Propietario=Propietario;
         this.ClienteTipo=ClienteTipo;
         this.IdUbicacionAbastecerCon = IdUbicacionAbastecerCon;
-
+        this.IdBodegaAreaSAP = IdBodegaAreaSAP;
     }
 
 
@@ -293,12 +296,11 @@ public class clsBeCliente {
         IdUbicacionAbastecerCon=value;
     }
 
-//    @Element(required=false) public int IdAreaDestino = 0;
-//    public int getIdAreaDestino() {
-//        return IdAreaDestino;
-//    }
-//    public void setIdAreaDestino(int value) {
-//        IdAreaDestino=value;
-//    }
+    public int getIdBodegaAreaSAP() {
+        return IdBodegaAreaSAP;
+    }
+    public void setIdBodegaAreaSAP(int value) {
+        IdBodegaAreaSAP=value;
+    }
 
 }

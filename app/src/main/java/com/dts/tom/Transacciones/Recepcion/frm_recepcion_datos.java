@@ -3994,7 +3994,7 @@ public class frm_recepcion_datos extends PBase {
                 if (gl.gImpresora.get(0).Direccion_Ip ==""){
                     mu.msgbox("La impresora no está configurada (Expec: MAC/IP)");
                 }else{
-                    execws(27);
+                   // execws(27);
                 }
             }
 
@@ -6720,9 +6720,9 @@ public class frm_recepcion_datos extends PBase {
 
                     if (BeDetalleLotes != null){
                         if (BeTransReDet.IdPresentacion!=0){
-                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString())*Factor;
+                            BeDetalleLotes.Cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString())*Factor;
                         }else{
-                            BeDetalleLotes.Cantidad_recibida = Integer.parseInt(txtCantidadRec.getText().toString());
+                            BeDetalleLotes.Cantidad_recibida = Double.parseDouble(txtCantidadRec.getText().toString());
                         }
 
                         BeDetalleLotes.IsNew = true;

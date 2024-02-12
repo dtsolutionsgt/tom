@@ -35,7 +35,12 @@ public class clsBeProveedor {
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public int IdConfiguracionBarraPallet=0;
     @Element(required=false) public boolean Es_Proveedor_Servicio=false;
+
+    @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
+
+    @Element(required=false) public int IdBodegaAreaSAP = 0;
+
     public clsBeProveedor() {
     }
 
@@ -46,7 +51,7 @@ public class clsBeProveedor {
                           String User_mod,String Fec_mod,boolean Actualiza_costo_oc,int IdUbicacionVirtual,
                           boolean Es_Bodega_Recepcion,boolean Es_Bodega_Traslado,String Referencia,boolean Sistema,
                           int IdConfiguracionBarraPallet,
-                          clsBeProveedor_tiemposList TiemposProveedor
+                          clsBeProveedor_tiemposList TiemposProveedor, int IdBodegaAreaSAP
 
     ) {
 
@@ -76,6 +81,7 @@ public class clsBeProveedor {
         this.Sistema=Sistema;
         this.IdConfiguracionBarraPallet=IdConfiguracionBarraPallet;
         this.TiemposProveedor = TiemposProveedor;
+        this.IdBodegaAreaSAP = IdBodegaAreaSAP;
 
     }
 
@@ -244,6 +250,13 @@ public class clsBeProveedor {
     }
     public void setTiemposProveedor(clsBeProveedor_tiemposList value) {
         TiemposProveedor=value;
+    }
+
+    public int getIdBodegaAreaSAP() {
+        return IdBodegaAreaSAP;
+    }
+    public void setIdBodegaAreaSAP(int value) {
+        IdBodegaAreaSAP=value;
     }
 
 }
