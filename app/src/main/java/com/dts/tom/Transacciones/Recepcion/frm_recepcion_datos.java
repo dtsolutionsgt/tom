@@ -299,8 +299,7 @@ public class frm_recepcion_datos extends PBase {
     int dias_aceptacion_local=0;
 
     //#GT20112023:maneja la fecha vencimiento si aplicara la homologación de lote vencimiento
-    String pVencimiento_Homologado = "";
-
+    String pVencimiento_Homologado = "1900-01-01T00:00:00";
 
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
@@ -3800,10 +3799,11 @@ public class frm_recepcion_datos extends PBase {
                     if (!gl.gFechaVenceAnterior.isEmpty() && gl.gProductoAnterior.equals(BeProducto.getCodigo())){
                         cmbVenceRec.setText(gl.gFechaVenceAnterior);
                         //#GT17112023: en recepciones parciales si hay fecha vence, setearla y bloquear por homologacion
-                        if(BeProducto.Control_lote && gl.pBeBodega.Homologar_Lote_Vencimiento){
+                        //#CKFK20240215 Esto se debe validar al guardar
+                        /*if(BeProducto.Control_lote && gl.pBeBodega.Homologar_Lote_Vencimiento){
                             cmbVenceRec.setEnabled(false);
                             imgDate.setEnabled(false);
-                        }
+                        }*/
                     }
                 }
             }
@@ -4862,8 +4862,9 @@ public class frm_recepcion_datos extends PBase {
 
             //#GT20112023: se valida homologación lote y vencimiento
             if (BeProducto.Control_lote && BeProducto.Control_vencimiento
-                    && gl.pBeBodega.Homologar_Lote_Vencimiento && gl.gFechaVenceAnterior.isEmpty()){
+                    && gl.pBeBodega.Homologar_Lote_Vencimiento){
                         //Llamar a método para buscar el lote en la BD y asegurar homologación de vencimiento
+                       //#CKFK20240215 Le quité esta condición al if && gl.gFechaVenceAnterior.isEmpty()
                         execws(36);
             }else{
 
@@ -5214,7 +5215,7 @@ public class frm_recepcion_datos extends PBase {
                 progress.setMessage("Llenando detalle de recepción");
                 progress.show();
 
-                //#ejc20210611: Definir fecha vence por defecto null
+                //#EJC20210611: Definir fecha vence por defecto null
                 BeTransReDet.Fecha_vence =du.convierteFecha("01/01/1900");
 
                 DespuesDeValidarCantidad();
@@ -8047,12 +8048,20 @@ public class frm_recepcion_datos extends PBase {
 
             pVencimiento_Homologado =  (String) xobj.getSingle("Get_Vencimiento_By_IdBodega_And_LoteResult",String.class);
 
-            if (!pVencimiento_Homologado.equals("01/01/1900") && !cmbVenceRec.equals(pVencimiento_Homologado)){
-                    cmbVenceRec.setText(pVencimiento_Homologado);
-                    cmbVenceRec.setEnabled(false);
-                    imgDate.setEnabled(false);
+            String vVenceCombo=du.convierteFechaDiagonal(cmbVenceRec.getText().toString());
+
+            if (!pVencimiento_Homologado.equals("1900-01-01T00:00:00") &&
+                !vVenceCombo.equals(pVencimiento_Homologado)){
+
+                //#CKFK20240215 Erik indicó que no se debe modificar la fecha de vencimiento
+                //cmbVenceRec.setText(du.convierteFechaMostrar(pVencimiento_Homologado));
+                //cmbVenceRec.setEnabled(false);
+                //imgDate.setEnabled(false);
+
+                throw new Exception("Homologación de lote: El lote ya existe con un vencimiento diferente, debe corregirlo");
+
                 //#GT21112023: si existe homologacion, continuar con el proceso normal de validaciones
-                    BtnGuardarRecepcion();
+                //BtnGuardarRecepcion();
             }else{
 
                 //#GT21112023: sino existe homologacion, continuar con el proceso normal de validaciones

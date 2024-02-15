@@ -4193,6 +4193,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
             }
 
+            if (gMovimientoDet.IdTipoTarea==-1){
+                gMovimientoDet.IdTipoTarea = 2;
+            }
+
             gMovimientoDet.IdBodegaDestino = gl.IdBodega;
             gMovimientoDet.IdRecepcion = cvStockItem.IdRecepcionEnc;
             //#EJC202302211353

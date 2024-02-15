@@ -22,8 +22,9 @@ public class clsBeBodega_area {
     @Element(required=false) public double Margen_superior=0;
     @Element(required=false) public double Margen_inferior=0;
     @Element(required=false) public String Grupo="";
-    @Element(required=false) public boolean Is=false;
 
+    @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public int IdUbicacionRef=0;
 
     public clsBeBodega_area() {
     }
@@ -45,8 +46,9 @@ public class clsBeBodega_area {
                             double Margen_derecho,
                             double Margen_superior,
                             double Margen_inferior,
-                            boolean Is,
-                            String Grupo) {
+                            boolean IsNew,
+                            String Grupo,
+                            int IdUbicacionRef) {
 
         this.IdArea=IdArea;
         this.IdBodega=IdBodega;
@@ -65,11 +67,11 @@ public class clsBeBodega_area {
         this.Margen_derecho=Margen_derecho;
         this.Margen_superior=Margen_superior;
         this.Margen_inferior=Margen_inferior;
-        this.Is=Is;
+        this.IsNew=IsNew;
         this.Grupo = Grupo;
+        this.IdUbicacionRef = IdUbicacionRef;
 
     }
-
 
     public int getIdArea() {
         return IdArea;
@@ -174,10 +176,10 @@ public class clsBeBodega_area {
         Margen_inferior=value;
     }
     public boolean getIs() {
-        return Is;
+        return IsNew;
     }
     public void setIs(boolean value) {
-        Is=value;
+        IsNew=value;
     }
 
     public void setGrupo(String value) {
@@ -186,6 +188,14 @@ public class clsBeBodega_area {
 
     public String getGrupo() {
         return Grupo;
+    }
+
+    public void setIdUbicacionRef(int value) {
+        IdUbicacionRef=value;
+    }
+
+    public int getIdUbicacionRef() {
+        return IdUbicacionRef;
     }
 
 }

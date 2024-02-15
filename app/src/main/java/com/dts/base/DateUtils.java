@@ -610,6 +610,8 @@ public class DateUtils {
 
 			SimpleDateFormat dateFormat;
 
+			vFecha = Fecha;
+
 			if (vFecha.contains("-")) {
 				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			} else {
