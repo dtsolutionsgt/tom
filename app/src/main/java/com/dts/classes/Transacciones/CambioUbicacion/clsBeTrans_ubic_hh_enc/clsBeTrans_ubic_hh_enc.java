@@ -29,6 +29,8 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public boolean IsNew;
     @Element(required=false) public int IdReabastecimientoLog=0;
     @Element(required=false) public String Nombre_Operador = "";
+    @Element(required=false) public boolean Es_Traslado_SAP = false;
+    @Element(required=false) public String No_Documento = "";
 
     public clsBeTrans_ubic_hh_enc() {
     }

@@ -219,7 +219,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="4.8.2.2";
+    public final String version="5.0.1";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
@@ -279,7 +279,9 @@ public class appGlobals extends Application {
         listValidDevices.add("Android SDK built for x86");
         listValidDevices.add("MC3300x");
         listValidDevices.add("EDA61K");
-
+        listValidDevices.add("EDA52");
+        listValidDevices.add("EDA51");
+        listValidDevices.add("MC21");
         }
 
     public <T> List<T> getList(String jsonArray, Class<T> clazz) {

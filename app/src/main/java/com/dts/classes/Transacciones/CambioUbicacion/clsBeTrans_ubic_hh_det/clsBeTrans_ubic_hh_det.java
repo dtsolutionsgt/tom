@@ -41,7 +41,7 @@ public class clsBeTrans_ubic_hh_det {
     @Element(required=false) public clsBeProducto Producto=new clsBeProducto();
     @Element(required=false) public clsBeStock Stock=new clsBeStock();
     @Element(required=false) public clsBeOperador Operador=new clsBeOperador();
-
+    @Element(required=false) public int No_Linea=0;
 
     public clsBeTrans_ubic_hh_det() {
     }
@@ -53,7 +53,7 @@ public class clsBeTrans_ubic_hh_det {
                                   int IdBodega,int IdTramo,String Tramo,int Indice_x,
                                   int Nivel,clsBeProducto_Presentacion ProductoPresentacion,clsBeUnidad_medida UnidadMedida,clsBeProducto_estado ProductoEstado,
                                   clsBeBodega_ubicacion UbicacionOrigen,clsBeBodega_ubicacion UbicacionDestino,clsBeProducto Producto,clsBeStock Stock,
-                                  clsBeOperador Operador) {
+                                  clsBeOperador Operador, int No_Linea) {
 
         this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
         this.IdTareaUbicacionDet=IdTareaUbicacionDet;
@@ -84,6 +84,7 @@ public class clsBeTrans_ubic_hh_det {
         this.Producto=Producto;
         this.Stock=Stock;
         this.Operador=Operador;
+        this.No_Linea = No_Linea;
 
     }
 
@@ -262,5 +263,10 @@ public class clsBeTrans_ubic_hh_det {
     public void setOperador(clsBeOperador value) {
         Operador=value;
     }
-
+    public int getNo_Linea() {
+        return No_Linea;
+    }
+    public void setNo_Linea(int value) {
+        No_Linea=value;
+    }
 }

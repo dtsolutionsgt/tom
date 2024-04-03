@@ -79,6 +79,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Liberar_Stock_Despachos_Parciales = false;
     @Element(required=false) public boolean Homologar_Lote_Vencimiento = false;
     @Element(required=false) public boolean Escanear_Licencia_Picking = false;
+    @Element(required=false) public int IdTipoEtiquetaLicencia = 0;
+    @Element(required=false) public int IdSimbologiaLicencia = 0;
 
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
@@ -109,7 +111,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Permitir_Reemplazo_Verificacion, int Dias_Limite_Retroactivo,
                        String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
                        boolean Liberar_Stock_Despachos_Parciales,
-                       boolean Escanear_Licencia_Picking) {
+                       boolean Escanear_Licencia_Picking, int IdTipoEtiquetaLicencia, int IdSimbologiaLicencia) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -180,7 +182,8 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Filtrar_Pedidos_Usuario = Filtrar_Pedidos_Usuario;
         this.Liberar_Stock_Despachos_Parciales = Liberar_Stock_Despachos_Parciales;
         this.Escanear_Licencia_Picking = Escanear_Licencia_Picking;
-
+        this.IdTipoEtiquetaLicencia = IdTipoEtiquetaLicencia;
+        this.IdSimbologiaLicencia = IdSimbologiaLicencia;
     }
 
     public int getIdPais() {
@@ -661,6 +664,20 @@ public class clsBeBodega extends clsBeBodegaBase {
     }
     public void setEscanear_Licencia_Picking(boolean value) {
         Escanear_Licencia_Picking=value;
+    }
+
+    public int getIdTipoEtiquetaLicencia() {
+        return IdTipoEtiquetaLicencia;
+    }
+    public void setIdTipoEtiquetaLicencia(int value) {
+        IdTipoEtiquetaLicencia=value;
+    }
+
+    public int getIdSimbologiaLicencia() {
+        return IdSimbologiaLicencia;
+    }
+    public void setIdSimbologiaLicencia(int value) {
+        IdSimbologiaLicencia=value;
     }
 
 }

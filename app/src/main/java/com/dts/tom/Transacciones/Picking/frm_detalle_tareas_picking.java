@@ -770,8 +770,13 @@ public class frm_detalle_tareas_picking extends PBase {
                 gBePicking.User_mod = gl.OperadorBodega.IdOperador+"";
                 gBePicking.Hora_fin = du.getFechaActual();
 
-                //Llama al método Actualizar_PickingEnc_Procesado
-                execws(4);
+                //#CKFK20240229 Agregué esta validación para que no se actualicen los pedidos con picking 0
+                if (gBePicking.IdPickingEnc!=0){
+                    //Llama al método Actualizar_PickingEnc_Procesado
+                    execws(4);
+                }else{
+                    throw new Exception("No se puede finalizar el picking el IdPickingEnc es 0 ");
+                }
 
             }
 

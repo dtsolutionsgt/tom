@@ -22,6 +22,10 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public String Codigo_variante="";
     @Element(required=false) public clsBeProducto BeProducto=new clsBeProducto();
     @Element(required=false) public int IdPropietarioBodega=0;
+    @Element(required=false) public double Costo=0;
+    @Element(required=false) public double Precio=0;
+    @Element(required=false) public String Parametro_a="";
+    @Element(required=false) public String Parametro_b="";
 
     public clsBeTrans_inv_stock_prod() {
     }
