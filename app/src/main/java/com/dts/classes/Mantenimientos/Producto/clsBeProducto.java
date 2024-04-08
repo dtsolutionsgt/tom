@@ -104,6 +104,8 @@ public class clsBeProducto {
   @Element(required=false) public clsBeProducto_parametro_a ParametroA=new clsBeProducto_parametro_a();
   @Element(required=false) public clsBeProducto_parametro_b ParametroB=new clsBeProducto_parametro_b();
 
+  @Element(required=false) public int IdTipoManufactura =0;
+
 //EJC
 
   public clsBeProducto()
@@ -187,6 +189,7 @@ public class clsBeProducto {
     this.IdTipoEtiqueta = IdTipoEtiqueta;
     this.ParametroA=ParametroA;
     this.ParametroB=ParametroB;
+    this.IdTipoManufactura = IdTipoManufactura;
   }
 
   public clsBeProducto(int IdProducto,int IdPropietario,int IdClasificacion,int IdFamilia,
@@ -208,7 +211,7 @@ public class clsBeProducto {
                        clsBeProducto_parametrosList Parametros,clsBeVW_stock_res Stock,boolean IsNew,Object Tag,
                        int IdPresentacionOrigen,int IdPresentacionDestino,double Factor,double ExistenciaUMBas,
                        String Lote,String FechaVence,double Cantidad, int IdUnidadMedidaCobro, int IdTipoEtiqueta,
-                       clsBeProducto_parametro_a ParametroA,clsBeProducto_parametro_b ParametroB) {
+                       clsBeProducto_parametro_a ParametroA,clsBeProducto_parametro_b ParametroB, int IdTipoManufactura) {
 
     this.IdProducto=IdProducto;
     this.IdPropietario=IdPropietario;
@@ -289,6 +292,7 @@ public class clsBeProducto {
     this.IdTipoEtiqueta = IdTipoEtiqueta;
     this.ParametroA = ParametroA;
     this.ParametroB = ParametroB;
+    this.IdTipoManufactura=IdTipoManufactura;
   }
 
 
@@ -782,4 +786,12 @@ public class clsBeProducto {
   public void setParametroB(clsBeProducto_parametro_b value) {
     ParametroB=value;
   }
+
+  public int getIdTipoManufactura() {
+    return IdTipoManufactura;
+  }
+  public void setIdTipoManufactura(int value) {
+    IdTipoManufactura=value;
+  }
+
 }
