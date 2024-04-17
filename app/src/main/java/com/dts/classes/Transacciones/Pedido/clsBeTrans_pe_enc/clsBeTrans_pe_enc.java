@@ -67,6 +67,9 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Referencia_Documento_Ingreso_Bodega_Destino="";
     @Element(required=false) public boolean Sync_MI3=false;
     @Element(required=false) public boolean IsNew=false;
+
+    @Element(required=false) public int IdTipoManufactura=0;
+
     @Element(required=false) public clsBeTrans_pe_detList Detalle=new clsBeTrans_pe_detList();
     @Element(required=false) public clsBeTrans_picking_enc Picking=new clsBeTrans_picking_enc();
     @Element(required=false) public clsBePropietario_bodega PropietarioBodega=new clsBePropietario_bodega();

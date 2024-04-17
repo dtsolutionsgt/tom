@@ -555,6 +555,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.Permitir_Reemplazo_Picking = bodegas.items.get(position).Permitir_Reemplazo_Picking;
                     gl.Permitir_No_Encontrado_Picking = bodegas.items.get(position).Permitir_No_Encontrado_Picking;
                     gl.Permitir_Reemplazo_Verificacion = bodegas.items.get(position).Permitir_Reemplazo_Verificacion;
+                    gl.Interface_SAP = bodegas.items.get(position).Interface_SAP;
 
                     idimpres=0;
                     execws(3);

@@ -219,7 +219,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="5.0.1";
+    public final String version="5.0.3";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
@@ -244,7 +244,7 @@ public class appGlobals extends Application {
     public boolean Permitir_Reemplazo_Picking = false;
     public boolean Permitir_No_Encontrado_Picking = false;
     public boolean Permitir_Reemplazo_Verificacion = false;
-
+    public boolean Interface_SAP = false;
     public List<String> listValidDevices = new ArrayList<>();
 
     //bandera para saber que se cierra la recepción por concurrencia

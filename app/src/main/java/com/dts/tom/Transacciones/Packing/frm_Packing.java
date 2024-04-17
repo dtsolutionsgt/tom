@@ -388,6 +388,7 @@ public class frm_Packing extends PBase {
             progress.setMessage("Cargando datos del producto");
             progress.show();
 
+            String vStarWithParameter = "$";
             String pbarra;
 
             pbarra = txtPrd.getText().toString();
@@ -406,8 +407,8 @@ public class frm_Packing extends PBase {
 
             pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
 
-                //Llama al método del WS Existe_LP
-                execws(9);
+            //Llama al método del WS Existe_LP
+            execws(9);
 
             progress.cancel();
 
@@ -450,6 +451,9 @@ public class frm_Packing extends PBase {
                 //Get_BeProducto_By_Codigo_For_HH
                 if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
                     Escaneo_Pallet = true;
+
+                    pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
+
                     //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
                     execws(12);
                 }else{
@@ -1630,7 +1634,7 @@ public class frm_Packing extends PBase {
                         break;
                     case 12://#CKFK 20210729 Agregué este llamado Get_Stock_By_Lic_Plate_And_Codigo en el WS para buscar con LP y Producto
                         callMethod("Get_Stock_By_Lic_Plate_And_Codigo",
-                                "pLicensePlate",txtLic_Plate.getText().toString(),
+                                "pLicensePlate",pLicensePlate,
                                 "pCodigo",txtPrd.getText().toString(),
                                 "pIdBodega",gl.IdBodega);
                         break;
