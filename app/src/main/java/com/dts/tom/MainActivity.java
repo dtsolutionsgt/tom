@@ -1098,7 +1098,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             if (ResolucionLpByBodega !=null){
                 gl.TieneResoluciones = true;
                 //#EJC20210504: Registra ingreso y carga menú principal.
-                execws(7);
+                //execws(7);#CKFK20240417 puse esto en comentario porque lo voy a llamar después del licenciamiento
+                execws(10);
             }else{
                 msgAsk_continuar_sin_resolucionLp("El operador no tiene definida resolución de etiquetas para LP");
             }
@@ -1127,7 +1128,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             } else{
                 rslt= true;
                 //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
-                execws(9);
+                //execws(9);
+                //LLama el método Agregar_Marcaje
+                execws(7);
             }
 
         } catch (Exception e) {

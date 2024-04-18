@@ -1931,7 +1931,9 @@ public class frm_Packing extends PBase {
                         ListBeStockPallet = new clsBeProductoList();
                         ListBeStockPallet.items = AuxList;
 
-                        if (AuxList.size() == 1 && !txtPrd.getText().toString().isEmpty()){
+                        //#CKFK20240417 Por mejora al proceso se quita esta validacion
+                        // if (AuxList.size() >= 1 && !txtPrd.getText().toString().isEmpty()){
+                        if (AuxList.size() > 0){
 
                             txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
                             BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
