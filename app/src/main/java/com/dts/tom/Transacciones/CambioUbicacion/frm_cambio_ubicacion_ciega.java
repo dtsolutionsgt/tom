@@ -250,35 +250,26 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (CambioUbicExistencia) {
                     txtUbicOrigen.setText(gl.existencia.idUbic);
 
-                    if (bodega_ubicacion_origen==null){
-                        progress.setMessage("Validando ubicación origen");
-                        progress.show();
-
-                        //#CKFK20240410 Agregué esto para que se cargue el objeto ubicación origen
-                        validaOrigenExistencias();
-                    }else{
-
-                        if (!gl.existencia.idUbic.isEmpty()) {
-                            cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
-                        } else {
-                            throw new Exception("Campo idUbicacion vacío");
-                        }
-
-                        lblUbicCompleta.setText(gl.existencia.Ubic);
-                        txtCodigoPrd.setText(gl.existencia.Codigo);
-
-                        if (!gl.existencia.getLicPlate().isEmpty() && !gl.existencia.LicPlate.equals("0")) {
-                            escaneoPallet = true;
-                            txtLicPlate.setText(gl.existencia.LicPlate);
-                            pLicensePlate = gl.existencia.LicPlate;
-                            execws(18);
-                        } else {
-                            //Obtiene el producto
-                            pLicensePlate = "";
-                            execws(3);
-                        }
-
+                    if (!gl.existencia.idUbic.isEmpty()) {
+                        cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
+                    } else {
+                        throw new Exception("Campo idUbicacion vacío");
                     }
+
+                    lblUbicCompleta.setText(gl.existencia.Ubic);
+                    txtCodigoPrd.setText(gl.existencia.Codigo);
+
+                    if (!gl.existencia.getLicPlate().isEmpty() && !gl.existencia.LicPlate.equals("0")) {
+                        escaneoPallet = true;
+                        txtLicPlate.setText(gl.existencia.LicPlate);
+                        pLicensePlate = gl.existencia.LicPlate;
+                        execws(18);
+                    } else {
+                        //Obtiene el producto
+                        pLicensePlate = "";
+                        execws(3);
+                    }
+
 
                 } else {
 
@@ -1922,35 +1913,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtUbicOrigen.requestFocus();
                 throw new Exception("Ubicación no válida");
             }else{
-
-                //#CKFK20240410 Agregué esta validación para que se cargue el objeto ubicación origen
-                if (CambioUbicExistencia){
-
-                    if (!gl.existencia.idUbic.isEmpty()) {
-                        cvUbicOrigID = Integer.valueOf(gl.existencia.idUbic);
-                    } else {
-                        throw new Exception("Campo idUbicacion vacío");
-                    }
-
-                    lblUbicCompleta.setText(gl.existencia.Ubic);
-                    txtCodigoPrd.setText(gl.existencia.Codigo);
-
-                    if (!gl.existencia.getLicPlate().isEmpty() && !gl.existencia.LicPlate.equals("0")) {
-                        escaneoPallet = true;
-                        txtLicPlate.setText(gl.existencia.LicPlate);
-                        pLicensePlate = gl.existencia.LicPlate;
-                        execws(18);
-                    } else {
-                        //Obtiene el producto
-                        pLicensePlate = "";
-                        execws(3);
-                    }
-
-                }else{
-                    cvUbicOrigID=bodega_ubicacion_origen.getIdUbicacion();
-                    lblUbicCompleta.setText(bodega_ubicacion_origen.getDescripcion());
-                    txtLicPlate.requestFocus();
-                }
+                cvUbicOrigID=bodega_ubicacion_origen.getIdUbicacion();
+                lblUbicCompleta.setText(bodega_ubicacion_origen.getDescripcion());
+                txtLicPlate.requestFocus();
             }
 
             if (validarDatos){
@@ -2079,9 +2044,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (gl.Interface_SAP){
                     //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                     //sean iguales cuando la bodega tenga interface con SAP
-                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if (CambioUbicExistencia){
+                        if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
+                    }else{
+                        if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
+
                 }
 
                 if (gl.validar_disponibilidad_ubicaicon_destino){
@@ -2187,8 +2159,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
-                if (gl.Interface_SAP){
-                  if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
+                if (CambioUbicExistencia){
+                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    }
+                }else{
+                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }
@@ -2789,7 +2765,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     } else {
                         completaProceso();
                     }
-                }
+               }
             }else{
                 progress.cancel();
                 msgbox("No se pudo realizar el cambio de ubicación");

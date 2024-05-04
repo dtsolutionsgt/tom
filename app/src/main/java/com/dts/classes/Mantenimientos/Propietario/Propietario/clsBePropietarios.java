@@ -29,6 +29,7 @@ public class clsBePropietarios {
     @Element(required=false) public String codigo_acceso="";
     @Element(required=false) public String clave_acceso="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
+    @Element(required=false) public boolean Es_Consolidador = false;
 
 
     public clsBePropietarios() {
@@ -39,7 +40,7 @@ public class clsBePropietarios {
                              boolean Activo,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Email,boolean Actualiza_costo_oc,int Color,
                              String Codigo,boolean Sistema,String NIT,String codigo_acceso,
-                             String clave_acceso,clsBeEmpresa Empresa) {
+                             String clave_acceso,clsBeEmpresa Empresa, boolean Es_Consolidador) {
 
         this.IdPropietario=IdPropietario;
         this.IdEmpresa=IdEmpresa;
@@ -63,7 +64,7 @@ public class clsBePropietarios {
         this.Empresa=Empresa;
         this.codigo_acceso=codigo_acceso;
         this.clave_acceso=clave_acceso;
-
+        this.Es_Consolidador=Es_Consolidador;
     }
 
 
@@ -199,6 +200,11 @@ public class clsBePropietarios {
     public void setClave_acceso(String value) {
         clave_acceso=value;
     }
-
+    public boolean getEs_Consolidador() {
+        return Es_Consolidador;
+    }
+    public void setEs_Consolidador(boolean value) {
+        Es_Consolidador=value;
+    }
 }
 
