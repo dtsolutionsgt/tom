@@ -635,7 +635,6 @@ public class frm_recepcion_datos extends PBase {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
 
-
             });
 
             txtNoLP.setOnClickListener(new View.OnClickListener() {
@@ -5500,7 +5499,6 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setPositiveButton("Código", (dialog1, which) -> {
 
-
                 //#GT19102022_0800: Mostrar el aviso con el delay
                 //#volvi a coloca el delay para impresión porque no se muestra nada.
                 //#prueba
@@ -5849,7 +5847,6 @@ public class frm_recepcion_datos extends PBase {
                                 "$" + pNumeroLP,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
-
                         zplSKU = String.format("^XA \n" +
                                         "^MMT \n" +
                                         "^PW700 \n" +
@@ -5901,7 +5898,6 @@ public class frm_recepcion_datos extends PBase {
                                 "$" + pNumeroLP,
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());*/
-
 
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +

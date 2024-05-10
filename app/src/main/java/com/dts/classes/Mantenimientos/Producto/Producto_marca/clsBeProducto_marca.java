@@ -17,6 +17,7 @@ public class clsBeProducto_marca {
     @Element(required=false) public String User_mod="";
     @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
     @Element(required=false) public boolean IsNew=false;
+    @Element(required=false) public String Codigo="";
 
 
     public clsBeProducto_marca() {
@@ -24,7 +25,7 @@ public class clsBeProducto_marca {
 
     public clsBeProducto_marca(int IdMarca,int IdPropietario,clsBePropietarios Propietario,String Nombre,
                                boolean Activo,String User_agr,String Fec_agr,String User_mod,
-                               String Fec_mod,boolean IsNew) {
+                               String Fec_mod,boolean IsNew, String Codigo) {
 
         this.IdMarca=IdMarca;
         this.IdPropietario=IdPropietario;
@@ -36,6 +37,7 @@ public class clsBeProducto_marca {
         this.User_mod=User_mod;
         this.Fec_mod=Fec_mod;
         this.IsNew=IsNew;
+        this.Codigo=Codigo;
 
     }
 
@@ -99,6 +101,12 @@ public class clsBeProducto_marca {
     }
     public void setIsNew(boolean value) {
         IsNew=value;
+    }
+    public String getCodigo() {
+        return Codigo;
+    }
+    public void setCodigo(String value) {
+        Codigo=value;
     }
 
 }
