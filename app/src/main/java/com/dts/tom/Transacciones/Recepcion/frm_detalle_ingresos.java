@@ -565,8 +565,8 @@ public class frm_detalle_ingresos extends PBase {
 
             progress.setMessage("Llenando guía");
 
-            if (gBeRecepcion.NoGuia!=null){
-                txtGuia.setText(gBeRecepcion.NoGuia);
+            if (gBeRecepcion.No_Contenedor!=null){
+                txtGuia.setText(gBeRecepcion.No_Contenedor);
             }
 
             progress.setMessage("Llenando muelle");

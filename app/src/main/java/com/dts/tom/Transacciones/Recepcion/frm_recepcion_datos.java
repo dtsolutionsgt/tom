@@ -195,7 +195,7 @@ public class frm_recepcion_datos extends PBase {
     private String pSerie="";
     private boolean Existe_Lp=false;
     private boolean Existe_Serie=false;
-    private String ubiDetLote="";
+    private String ubiDetLote=null;
     private boolean guardando_recepcion = false, editarSinPresentacion = false;
 
     private clsBeTrans_oc_det BeOcDet;
@@ -2208,11 +2208,6 @@ public class frm_recepcion_datos extends PBase {
 
                             Guardar_Recepcion_Nueva();
                         }
-/*
-                        progress.setMessage("Guardando Recepción Nueva");
-                        progress.show();
-
-                        Guardar_Recepcion_Nueva();*/
                     }
                 }
 
@@ -2389,6 +2384,7 @@ public class frm_recepcion_datos extends PBase {
                     if(IdPreseSelect>0){
                         BeStock_rec.Presentacion = new clsBeProducto_Presentacion();
                     }
+
                     BeStock_rec.IsNew = gl.mode == 1;
 
                     pListBeStockRec.items.add(BeStock_rec);
@@ -2656,7 +2652,6 @@ public class frm_recepcion_datos extends PBase {
                     dialog.cancel();
                     Mostro_Propiedades = true;
 
-
                     progress.setMessage("Guardando Recepción Nueva");
                     progress.show();
 
@@ -2858,7 +2853,6 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.cancel();
             Mostro_Propiedades = true;
-
 
             progress.setMessage("Guardando Recepción Nueva");
             progress.show();
@@ -4768,7 +4762,7 @@ public class frm_recepcion_datos extends PBase {
                 return;
             }
 
-            if (!txtNoLP.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().isEmpty() && gl.mode == 1){
                 Procesa_Barra_Producto();
             }else{
 
@@ -4934,6 +4928,12 @@ public class frm_recepcion_datos extends PBase {
             if (pIndiceListaStock==-1){
 
                 clsBeStock_rec BeStock_rec = new clsBeStock_rec();
+
+                if (pListBeStockRec!=null){
+                    //#CKFK20240512 Agregué esta inicialización
+                    pListBeStockRec = new clsBeStock_recList();
+                }
+
                 pListBeStockRec.items = new ArrayList<>();
                 BeStock_rec.IdRecepcionDet = pIdRecepcionDet;
                 BeStock_rec.IdRecepcionEnc = gl.gIdRecepcionEnc;
@@ -8360,7 +8360,6 @@ public class frm_recepcion_datos extends PBase {
                 Muestra_Propiedades_Producto();
             }else{
                 Etapa ++;
-
 
                 progress.setMessage("Guardando Recepción Nueva");
                 progress.show();
