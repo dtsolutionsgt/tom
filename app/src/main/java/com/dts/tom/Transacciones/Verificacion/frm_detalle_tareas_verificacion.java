@@ -934,6 +934,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.IdProductoEstado =  pListaPedidoDet.items.get(i).getIdProductoEstado();
                             vItem.NombreArea = pListaPedidoDet.items.get(i).getNombreArea();
                             vItem.NombreClasificacion = pListaPedidoDet.items.get(i).getNombreClasificacion();
+                            vItem.Bono = pListaPedidoDet.items.get(i).getBono();
 
                             pListBeTareasVerificacionHH.add(vItem);
 

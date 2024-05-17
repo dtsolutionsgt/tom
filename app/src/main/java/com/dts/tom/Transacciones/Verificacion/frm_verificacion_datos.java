@@ -18,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -70,11 +71,12 @@ public class frm_verificacion_datos extends PBase {
     private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
-    private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo;
+    private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo,llBono;
     private RelativeLayout relDesglose, relPick, relReemplazo;
     private EditText txtPresPick, txtUnidadPick;
     private TextView lblPresPick, lblUnidadPick;
     private FloatingActionButton btnTareas;
+    private CheckBox chkBono;
     private clsBeTrans_picking_ubicList BePickingUbicList = new clsBeTrans_picking_ubicList();
 
     public static clsBeProducto gBeProducto = new clsBeProducto();
@@ -173,6 +175,8 @@ public class frm_verificacion_datos extends PBase {
         relPick = findViewById(R.id.relPick);
         relReemplazo = findViewById(R.id.relReemplazo);
         relOpciones = findViewById(R.id.relOpciones);
+        llBono = findViewById(R.id.llBono);
+        chkBono = findViewById(R.id.chkBono);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -417,6 +421,8 @@ public class frm_verificacion_datos extends PBase {
                 llLote.setVisibility(View.GONE);
             }
             txtLoteVeri.setText(BePedidoDetVerif.getLote());
+
+            chkBono.setChecked(BePedidoDetVerif.Bono.equals("Bono"));
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
                                        BePedidoDetVerif.getNom_Presentacion());

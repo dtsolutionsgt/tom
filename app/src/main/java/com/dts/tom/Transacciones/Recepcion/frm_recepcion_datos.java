@@ -4929,11 +4929,6 @@ public class frm_recepcion_datos extends PBase {
 
                 clsBeStock_rec BeStock_rec = new clsBeStock_rec();
 
-                if (pListBeStockRec!=null){
-                    //#CKFK20240512 Agregué esta inicialización
-                    pListBeStockRec = new clsBeStock_recList();
-                }
-
                 pListBeStockRec.items = new ArrayList<>();
                 BeStock_rec.IdRecepcionDet = pIdRecepcionDet;
                 BeStock_rec.IdRecepcionEnc = gl.gIdRecepcionEnc;

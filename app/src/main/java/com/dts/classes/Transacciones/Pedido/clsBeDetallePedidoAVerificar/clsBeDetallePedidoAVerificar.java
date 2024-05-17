@@ -24,8 +24,7 @@ public class clsBeDetallePedidoAVerificar {
     @Element(required=false) public int IdProductoEstado=0;
     @Element(required=false) public String NombreArea = "";
     @Element(required=false) public String NombreClasificacion = "";
-
-
+    @Element(required=false) public String Bono = "";
 
     public clsBeDetallePedidoAVerificar() {
     }
@@ -49,7 +48,8 @@ public class clsBeDetallePedidoAVerificar {
                                         int NDias,
                                         int IdProductoEstado,
                                         String NombreArea,
-                                        String NombreClasificacion) {
+                                        String NombreClasificacion,
+                                        String Bono) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdPedidoDet=IdPedidoDet;
@@ -71,7 +71,7 @@ public class clsBeDetallePedidoAVerificar {
         this.IdProductoEstado = IdProductoEstado;
         this.NombreArea = NombreArea;
         this.NombreClasificacion = NombreClasificacion;
-
+        this.Bono = Bono;
     }
 
 
@@ -195,6 +195,10 @@ public class clsBeDetallePedidoAVerificar {
         NombreClasificacion=value;
     }
 
+    public String getBono() { return Bono; }
+    public void setBono(String value) {
+        Bono=value;
+    }
 
 }
 

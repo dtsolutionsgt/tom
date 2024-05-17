@@ -54,6 +54,7 @@ public class clsBeTrans_picking_det {
     @Element(required=false) public clsBeTrans_picking_det_parametrosList ListaDetalleParametro=new clsBeTrans_picking_det_parametrosList();
     @Element(required=false) public String Lic_Plate="";
     @Element(required=false) public String Lote="";
+    @Element(required=false) public String Bono="";
 
     public clsBeTrans_picking_det() {
     }
@@ -69,7 +70,7 @@ public class clsBeTrans_picking_det {
                                   double Cantidad_Pickeada,double Cantidad_Verificada,double Cantidad_Stock,int IdUbicacion,
                                   String UMBas,clsBeProducto Producto,clsBeProducto_Presentacion Presentacion,clsBeProducto_estado ProductoEstado,
                                   clsBeUnidad_medida UnidadMedida,clsBeTrans_picking_det_parametrosList ListaDetalleParametro,clsBeTrans_picking_ubicList ListaDetalleUbicacion,
-                                  String Lic_Plate, String Lote) {
+                                  String Lic_Plate, String Lote, String Bono) {
 
         this.IdPickingDet=IdPickingDet;
         this.IdPickingEnc=IdPickingEnc;
@@ -115,7 +116,7 @@ public class clsBeTrans_picking_det {
         this.ListaDetalleParametro=ListaDetalleParametro;
         this.Lic_Plate=Lic_Plate;
         this.Lote=Lote;
-
+        this.Bono=Bono;
     }
 
     public int getIdPickingDet() {
@@ -381,6 +382,12 @@ public class clsBeTrans_picking_det {
     }
     public void setLote(String value) {
         Lote=value;
+    }
+    public String getBono() {
+        return Bono;
+    }
+    public void setBono(String value) {
+        Bono=value;
     }
 }
 

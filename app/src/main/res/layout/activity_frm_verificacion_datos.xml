@@ -193,10 +193,29 @@
 
                 <EditText
                     android:id="@+id/txtPesoVeri"
-                    android:layout_width="match_parent"
+                    android:layout_width="103dp"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llBono"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chkBono"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-black"
+                    android:text="C/Bono"
+                    android:textColor="#EEFF9800"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
