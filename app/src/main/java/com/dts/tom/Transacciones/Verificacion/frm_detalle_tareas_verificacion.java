@@ -768,8 +768,16 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             preguntoPorDiferencia = true;
                         }
                     }
-                    if (preguntoPorDiferencia)
-                        msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla");
+
+                    if (preguntoPorDiferencia) {
+                        if (gBePedido.getTipoPedido().getPermitir_Despacho_Parcial()){
+                            msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla");
+                        }else{
+                            progress.cancel();
+                            msgbox("No se permiten despachos parciales, debe terminar la verificación");
+                            return;
+                        }
+                    }
 
                     progress.cancel();
                     if (finalizar){
@@ -778,9 +786,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                         }
                     }
 
-                }else{
-                    progress.cancel();
-                }
+                    }else{
+                        progress.cancel();
+                    }
             }else{
                 progress.cancel();
                 if (finalizar){
