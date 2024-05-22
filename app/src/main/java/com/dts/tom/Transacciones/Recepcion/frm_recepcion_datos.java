@@ -325,6 +325,8 @@ public class frm_recepcion_datos extends PBase {
 
             txtNoLP = findViewById(R.id.txtLP);
             txtLoteRec = findViewById(R.id.txtLoteRec);
+            txtLoteRec.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+
             txtUmbasRec = findViewById(R.id.txtUmbasRec);
             txtCantidadRec = findViewById(R.id.txtCantidadRec);
             txtPeso= findViewById(R.id.txtPeso);
@@ -659,7 +661,6 @@ public class frm_recepcion_datos extends PBase {
 
             });
 
-
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
@@ -811,7 +812,6 @@ public class frm_recepcion_datos extends PBase {
                 Imprimir(v);
             });
 
-
             chkEstiba.setOnClickListener(view -> {
                 if(((CompoundButton) view).isChecked()){
                     setEstiba();
@@ -951,6 +951,27 @@ public class frm_recepcion_datos extends PBase {
                         TmpMaxL = 0;
                         CorelSiguiente = 0;
                         NuevasLicencias.clear();
+                    }
+                }
+            });
+
+            txtLoteRec.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // No hacer nada
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // No hacer nada
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String text = s.toString().toUpperCase();
+                    if (!text.equals(s.toString())) {
+                        txtLoteRec.setText(text);
+                        txtLoteRec.setSelection(text.length());
                     }
                 }
             });

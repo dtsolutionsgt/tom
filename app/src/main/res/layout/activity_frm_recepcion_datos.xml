@@ -174,7 +174,7 @@
                     android:id="@+id/txtLoteRec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapCharacters|textCapSentences|textCapWords"
                     android:maxLength="50" />
 
                 <Spinner
