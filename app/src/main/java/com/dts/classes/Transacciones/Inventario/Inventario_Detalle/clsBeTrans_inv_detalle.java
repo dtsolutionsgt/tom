@@ -29,7 +29,10 @@ public class clsBeTrans_inv_detalle {
     @Element(required=false) public int Carga=0;
     @Element(required=false) public double Peso=0;
     @Element(required=false) public int IdBodega=0;
-
+    @Element(required=false) public int costo=0;
+    @Element(required=false) public double precio = 0.0;
+    @Element(required=false) public int IdProductoParametroA = 0;
+    @Element(required=false) public int IdProductoParametroB  = 0;
 
     public clsBeTrans_inv_detalle() {
     }
@@ -40,7 +43,7 @@ public class clsBeTrans_inv_detalle {
                                   double Cantidad,String Fecha_captura,String Host,String Nom_producto,
                                   String Nom_operador,int Carga,double Peso, int IdPropietarioBodega,
                                   String nombre_propietario, String License_plate, String Codigo_variante,
-                                  int IdBodega) {
+                                  int IdBodega,int costo) {
 
         this.Idinventariodet=Idinventariodet;
         this.Idinventarioenc=Idinventarioenc;
@@ -66,7 +69,7 @@ public class clsBeTrans_inv_detalle {
         this.License_plate = License_plate;
         this.Codigo_variante = Codigo_variante;
         this.IdBodega = IdBodega;
-
+        this.costo = costo;
     }
 
 

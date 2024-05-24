@@ -1393,7 +1393,7 @@ public class frm_inv_ini_conteo extends PBase {
                     case 3:
                         callMethod("Get_Inventario_Teorico_By_Codigo_O_Licencia",
                                    "pIdInventario", BeInvEnc.Idinventarioenc,
-                                   "pCodigo", txtCodBarra.getText().toString(),
+                                   "pCodigo", txtCodBarra.getText().toString().replace("$",""),
                                    "pIdBodega", gl.IdBodega);
                         break;
 

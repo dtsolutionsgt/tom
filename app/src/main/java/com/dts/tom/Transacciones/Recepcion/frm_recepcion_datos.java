@@ -3955,49 +3955,50 @@ public class frm_recepcion_datos extends PBase {
                         }
                     }
                 }
-            }else{
-                Llena_beStock_Anterior();
-            }
 
-            if (BeProducto.Presentaciones.items!=null){
-                if (BeProducto.Presentaciones.items.get(0).Genera_lp_auto){
-                    generaLPPres = true;
+                if (BeProducto.Presentaciones.items!=null){
+                    if (BeProducto.Presentaciones.items.get(0).Genera_lp_auto){
+                        generaLPPres = true;
+                    }
                 }
-            }
 
-            if (BeProducto.Genera_lp || generaLPPres ) {
+                if (BeProducto.Genera_lp || generaLPPres ) {
 
-                //#EJC20220412:Check where Call_B its called
-                if (!Call_From_B){
+                    //#EJC20220412:Check where Call_B its called
+                    if (!Call_From_B){
 
-                    Log.e("Licencia","Call_From_D.");
-                    execws(6);
-                    if (nBeResolucion == null) {
-                        if (!txtNoLP.getText().toString().isEmpty()) {
-                            //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
-                            //  txtNoLP.requestFocus();
+                        Log.e("Licencia","Call_From_D.");
+                        execws(6);
+                        if (nBeResolucion == null) {
+                            if (!txtNoLP.getText().toString().isEmpty()) {
+                                //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
+                                //  txtNoLP.requestFocus();
+                                txtCantidadRec.requestFocus();
+                            }else{
+                                txtNoLP.requestFocus();
+                            }
+                        } else {
                             txtCantidadRec.requestFocus();
-                        }else{
-                            txtNoLP.requestFocus();
                         }
-                    } else {
-                        txtCantidadRec.requestFocus();
+
+                        Call_From_D=true;
+
+                    }else{
+                        Call_From_B =false;
                     }
 
-                    Call_From_D=true;
-
-                }else{
-                    Call_From_B =false;
+                }else {
+                    //GT04042022: focus a cantidad
+                    if (!txtNoLP.getText().toString().isEmpty()){
+                        txtCantidadRec.requestFocus();
+                        txtCantidadRec.selectAll();
+                    }else{
+                        txtNoLP.requestFocus();
+                    }
                 }
 
-            }else {
-                //GT04042022: focus a cantidad
-                if (!txtNoLP.getText().toString().isEmpty()){
-                    txtCantidadRec.requestFocus();
-                    txtCantidadRec.selectAll();
-                }else{
-                    txtNoLP.requestFocus();
-                }
+            }else{
+                Llena_beStock_Anterior();
             }
 
             //#GT23112023: cargamos la etiqueta (y la simbologia) si tenemos impresora configurada
