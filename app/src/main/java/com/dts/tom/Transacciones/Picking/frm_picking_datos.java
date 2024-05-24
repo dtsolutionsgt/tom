@@ -121,6 +121,10 @@ public class frm_picking_datos extends PBase {
 
     public Scanner escanearBarra;
 
+    public clsBeTrans_picking_ubic remPickingUbic = new clsBeTrans_picking_ubic();
+    public clsBeStock_res pStockRes = new clsBeStock_res();
+    public boolean RemAuto = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -298,14 +302,18 @@ public class frm_picking_datos extends PBase {
     private void setHandlers() {
 
         try {
-
             if (txtLicencia !=null){
-                txtLicencia.setOnClickListener(view -> {
+                txtLicencia.setOnClickListener(view -> {});
 
-                });
                 txtLicencia.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        Procesa_Barra();
+                        //#AT20240514 Incio del proceso para el remplazo automático
+                        if (!txtLicencia.getText().toString().equals(gBePickingUbic.Lic_plate)) {
+                            String lic = txtLicencia.getText().toString();
+                            msgReemplazoAuto("Desea reemplazar la licencia " +gBePickingUbic.Lic_plate+" por " + lic);
+                        } else {
+                            Procesa_Barra();
+                        }
                     }
                     return false;
                 });
@@ -329,12 +337,7 @@ public class frm_picking_datos extends PBase {
 
 
             //GT06042022: no remover, hacen de pivote para retener el focus
-            txtLicencia.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
+            txtLicencia.setOnClickListener(view -> { });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
             txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
@@ -401,6 +404,25 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void IniciaReemplazoAuto() {
+        try {
+            pStockRes = new clsBeStock_res();
+            pStockRes.Lote = gBePickingUbic.Lote;
+            pStockRes.IdProductoBodega = gBePickingUbic.IdProductoBodega;
+            pStockRes.Lic_plate = txtLicencia.getText().toString();
+            pStockRes.Fecha_vence = gBePickingUbic.Fecha_Vence;
+            pStockRes.IdPresentacion = gBePickingUbic.IdPresentacion;
+            pStockRes.IdUnidadMedida = gBePickingUbic.IdUnidadMedida;
+            pStockRes.IdProductoEstado = gBePickingUbic.IdProductoEstado;
+
+            remPickingUbic = gBePickingUbic;
+            execws(13);
+
+            toast("Remplazo automatico");
+        } catch (Exception e) {
+            mu.msgbox("IniciaReemplazoAuto "+e.getMessage());
+        }
+    }
 
     private void confirmarPorCodigo() {
         String CodigoProd = txtCodigoProducto.getText().toString();
@@ -1590,6 +1612,11 @@ public class frm_picking_datos extends PBase {
             txtCantidadPick.requestFocus();
             Log.d("txtCantidadPick_focus: ", "20220502_40");
 
+            //AT20240523 Si es reemplazo automatico pickea al completar el proceso
+            if (RemAuto) {
+                Procesar_Registro();
+            }
+
         }catch (Exception e){
             mu.msgbox("Cargar_Datos_Producto_Picking:"+e.getMessage());
         }
@@ -1703,6 +1730,11 @@ public class frm_picking_datos extends PBase {
             txtCantidadPick.requestFocus();
             Log.d("focus: ", "20220502_41");
             btnConfirmarPk.setEnabled(true);
+
+            //AT20240523 Si es reemplazo automatico pickea al completar el proceso
+            if (RemAuto) {
+                Procesar_Registro();
+            }
 
         }catch (Exception e){
             mu.msgbox("Cargar_Datos_Producto_Picking_Consolidado:"+e.getMessage());
@@ -2280,6 +2312,19 @@ public class frm_picking_datos extends PBase {
                                 "pCodigoBarra", txtCodigoProducto.getText().toString(),
                                 "pIdProductoBodega", gBeProducto.IdProductoBodega);
                         break;
+                    case 13:
+                        Double CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
+
+                        remPickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                        pStockRes.Fecha_vence = du.convierteFecha(pStockRes.Fecha_vence);
+
+                        callMethod("Reemplazo_Automatico",
+                                "pStockRes", pStockRes,
+                                "CantSol", CantARec,
+                                "pPickingUbic",remPickingUbic,
+                                "IdUsuarioHH",gl.OperadorBodega.IdOperador,
+                                "Tipo", TipoLista);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -2348,6 +2393,9 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 12:
                     processGetBarrasProducto();
+                    break;
+                case 13:
+                    processReemplazoAutomatico();
                     break;
             }
 
@@ -2575,6 +2623,12 @@ public class frm_picking_datos extends PBase {
                         Log.d("txtCodigoProducto: ", "20220524_1539");
                     }
 
+                    //AT20240523 Si es reemplazo automatico carga los datos del nuevo picking
+                    if (RemAuto) {
+                        txtLicencia.setText(gBePickingUbic.Lic_plate);
+
+                        Procesa_Barra();
+                    }
                 }else{
                     execws(3);
                 }
@@ -2755,6 +2809,38 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void processReemplazoAutomatico() {
+        clsBeTrans_picking_ubicList lpickingubic = null;
+        try{
+
+            progress_setMessage("Reemplazando licencia...");
+
+            lpickingubic = xobj.getresult(clsBeTrans_picking_ubicList.class,"Reemplazo_Automatico");
+
+            if (lpickingubic.items.size() > 0) {
+
+                RemAuto = true;
+                toast("Reemplazo realizado con éxito.");
+
+                if (lpickingubic.items.size() == 1) {
+                    gBePickingUbic = lpickingubic.items.get(0);
+                }
+
+                if (gBePickingUbic.Fecha_Vence.contains("T")) {
+                    gBePickingUbic.Fecha_Vence = du.convierteFechaMostrar(gBePickingUbic.Fecha_Vence);
+                }
+
+                gBePickingUbic.IdOperadorBodega_Pickeo = gl.OperadorBodega.IdOperadorBodega;
+
+                Load();
+                //Procesar_Registro();
+            }
+        }catch (Exception e){
+            progress.cancel();
+            mu.msgbox("processReemplazoAutomatico:"+e.getMessage());
+        }
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
@@ -2822,6 +2908,24 @@ public class frm_picking_datos extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
+    }
+
+    private void msgReemplazoAuto(String msg) {
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿"+msg+"?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> IniciaReemplazoAuto());
+
+            dialog.setNegativeButton("No", (dialog12, which) -> Procesa_Barra());
+            dialog.show();
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
     }
 
     private void msgCambioUbicacion(String msg) {
