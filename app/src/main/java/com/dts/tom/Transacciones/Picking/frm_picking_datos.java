@@ -2315,8 +2315,10 @@ public class frm_picking_datos extends PBase {
                     case 13:
                         Double CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
 
-                        remPickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
-                        pStockRes.Fecha_vence = du.convierteFecha(pStockRes.Fecha_vence);
+                        if (!gBePickingUbic.Fecha_Vence.contains("T")) {
+                            remPickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
+                            pStockRes.Fecha_vence = du.convierteFecha(pStockRes.Fecha_vence);
+                        }
 
                         callMethod("Reemplazo_Automatico",
                                 "pStockRes", pStockRes,
@@ -2662,6 +2664,13 @@ public class frm_picking_datos extends PBase {
             //Listar_Producto_Presentaciones();
             Set_dias_Vence();
 
+            //AT20240523 Si es reemplazo automatico carga los datos del nuevo picking
+            if (RemAuto) {
+                txtLicencia.setText(gBePickingUbic.Lic_plate);
+
+                Procesa_Barra();
+            }
+
             if (!gBePickingUbic.Lic_plate.isEmpty()) {
 
                 if (escaneo_licencia_diferente){
@@ -2820,10 +2829,13 @@ public class frm_picking_datos extends PBase {
             if (lpickingubic.items.size() > 0) {
 
                 RemAuto = true;
-                toast("Reemplazo realizado con éxito.");
 
                 if (lpickingubic.items.size() == 1) {
-                    gBePickingUbic = lpickingubic.items.get(0);
+                    if (!lpickingubic.items.get(0).Lic_plate.isEmpty()) {
+
+                        toast("Reemplazo realizado con éxito.");
+                        gBePickingUbic = lpickingubic.items.get(0);
+                    }
                 }
 
                 if (gBePickingUbic.Fecha_Vence.contains("T")) {
