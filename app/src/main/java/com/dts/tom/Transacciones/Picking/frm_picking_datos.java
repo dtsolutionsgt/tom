@@ -409,7 +409,7 @@ public class frm_picking_datos extends PBase {
             pStockRes = new clsBeStock_res();
             pStockRes.Lote = gBePickingUbic.Lote;
             pStockRes.IdProductoBodega = gBePickingUbic.IdProductoBodega;
-            pStockRes.Lic_plate = txtLicencia.getText().toString();
+            pStockRes.Lic_plate = txtLicencia.getText().toString().replace("$", "");
             pStockRes.Fecha_vence = gBePickingUbic.Fecha_Vence;
             pStockRes.IdPresentacion = gBePickingUbic.IdPresentacion;
             pStockRes.IdUnidadMedida = gBePickingUbic.IdUnidadMedida;
