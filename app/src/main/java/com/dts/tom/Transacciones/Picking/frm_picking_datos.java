@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,6 +48,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -307,12 +311,13 @@ public class frm_picking_datos extends PBase {
 
                 txtLicencia.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        //#AT20240514 Incio del proceso para el remplazo automático
-                        if (!txtLicencia.getText().toString().equals(gBePickingUbic.Lic_plate)) {
-                            String lic = txtLicencia.getText().toString();
-                            msgReemplazoAuto("Desea reemplazar la licencia " +gBePickingUbic.Lic_plate+" por " + lic);
-                        } else {
-                            Procesa_Barra();
+                        if (!txtLicencia.getText().toString().isEmpty()) {
+                            //#AT20240514 Incio del proceso para el remplazo automático
+                            if (!txtLicencia.getText().toString().equals(gBePickingUbic.Lic_plate)) {
+                                execws(14);
+                            } else {
+                                Procesa_Barra();
+                            }
                         }
                     }
                     return false;
@@ -417,8 +422,6 @@ public class frm_picking_datos extends PBase {
 
             remPickingUbic = gBePickingUbic;
             execws(13);
-
-            toast("Remplazo automatico");
         } catch (Exception e) {
             mu.msgbox("IniciaReemplazoAuto "+e.getMessage());
         }
@@ -2327,6 +2330,12 @@ public class frm_picking_datos extends PBase {
                                 "IdUsuarioHH",gl.OperadorBodega.IdOperador,
                                 "Tipo", TipoLista);
                         break;
+                    case 14:
+                        callMethod("Valida_Licencia_By_ProductoBodega",
+                                "pLicencia", txtLicencia.getText().toString().replace("$", ""),
+                                "pIdBodega", gl.IdBodega,
+                                "pIdProductoBodega", gBePickingUbic.IdProductoBodega);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -2398,6 +2407,9 @@ public class frm_picking_datos extends PBase {
                     break;
                 case 13:
                     processReemplazoAutomatico();
+                    break;
+                case 14:
+                    processValidaLicenciaRem();
                     break;
             }
 
@@ -2853,6 +2865,31 @@ public class frm_picking_datos extends PBase {
         }
     }
 
+    private void processValidaLicenciaRem() {
+        boolean esValida = false;
+        try  {
+            progress_setMessage("Validando licencia...");
+
+            esValida = xobj.getresult(Boolean.class,"Valida_Licencia_By_ProductoBodega");
+
+            if (esValida) {
+
+                String lic = txtLicencia.getText().toString().replace("$", "");
+                msgReemplazoAuto("Reemplazar la licencia " +gBePickingUbic.Lic_plate+" por " + lic);
+
+            } else {
+                msgValidaLicencia("Licencia no válida para este producto: \n\n" +
+                        gBePickingUbic.CodigoProducto + " - " +gBePickingUbic.NombreProducto+ "\n" +
+                        "Vence: "+gBePickingUbic.Fecha_Vence+ "\n" +
+                        "Lote: " +gBePickingUbic.Lote);
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            mu.msgbox("processValidaLicenciaRem:"+e.getMessage());
+        }
+    }
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
@@ -2979,6 +3016,45 @@ public class frm_picking_datos extends PBase {
         });
 
         dialog.show();
+
+    }
+
+    private void msgValidaLicencia(String msg){
+        try {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            //dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+
+            // Crear un SpannableStringBuilder
+            SpannableStringBuilder builder = new SpannableStringBuilder(msg);
+
+            // Definir las palabras que deben estar en negrita
+            String[] boldWords = {"Vence:","Lote:"};
+
+            // Aplicar negrita a las palabras deseadas
+            for (String boldWord : boldWords) {
+                int startIndex = TextUtils.indexOf(builder, boldWord);
+                if (startIndex != -1) {
+                    builder.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
+                            startIndex, startIndex + boldWord.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+
+            // Establecer el mensaje en el AlertDialog
+            dialog.setMessage(builder);
+
+            dialog.setPositiveButton("OK", (dialog12, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
 
     }
 
