@@ -41,7 +41,9 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
@@ -628,14 +630,19 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
-
     private void Llena_Lotes() {
 
         try {
 
             LoteList.clear();
 
-            for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+            //#AT20240527 Distinct por lote
+            List<clsBeTrans_inv_stock_prod> auxLista = InvTeorico.items
+                                                       .stream()
+                                                       .filter(mu.distinctByKey(clsBeTrans_inv_stock_prod::getLote))
+                                                       .collect(Collectors.toList());
+
+            for (clsBeTrans_inv_stock_prod BeLotes : auxLista) {
 
                 LoteList.add(BeLotes.Lote);
             }
@@ -676,7 +683,13 @@ public class frm_inv_ini_conteo extends PBase {
 
             FechasVenceList.clear();
 
-            for (clsBeTrans_inv_stock_prod BeLotes : InvTeorico.items) {
+            //#AT20240527 Distinct por fecha vencimiento
+            List<clsBeTrans_inv_stock_prod> auxLista = InvTeorico.items
+                                                       .stream()
+                                                       .filter(mu.distinctByKey(clsBeTrans_inv_stock_prod::getFecha_vence))
+                                                       .collect(Collectors.toList());
+
+            for (clsBeTrans_inv_stock_prod BeLotes : auxLista) {
 
                 //Date date = du.convierteFechaMostrar(BeLotes.Fecha_vence);
                 String date = du.convierteFechaMostrar(BeLotes.Fecha_vence);
@@ -715,7 +728,7 @@ public class frm_inv_ini_conteo extends PBase {
 
 
         } catch (Exception e) {
-            mu.msgbox("Llena_Lotes:" + e.getMessage());
+            mu.msgbox("Llena_FechasVence:" + e.getMessage());
         }
     }
 

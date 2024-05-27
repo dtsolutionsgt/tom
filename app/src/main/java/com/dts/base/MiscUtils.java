@@ -354,5 +354,9 @@ public class MiscUtils {
 		}
 
 	}
-	
+
+	public static <T> java.util.function.Predicate<T> distinctByKey(java.util.function.Function<? super T, ?> keyExtractor) {
+		java.util.Map<Object, Boolean> seen = new java.util.concurrent.ConcurrentHashMap<>();
+		return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+	}
 }
