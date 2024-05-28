@@ -57,7 +57,7 @@ public class frm_inv_ini_verificacion extends PBase {
     private XMLObject xobj;
 
     private ProgressDialog progress;
-    private EditText txtUbicVer, txtUmbasVeri, txtCantVer;
+    private EditText txtUbicVer, txtUmbasVeri, txtCantVer, txtLicencia;
     private AutoCompleteTextView txtBarraVer;
     private Spinner cmbPresVeri, cmbEstadoVeri;
     private TextView lblDescVer, lblTituloForma, lblUbicDes;
@@ -81,6 +81,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
     private int pIdTramo=0;
     private double CantidadVer = 0;
+    private clsBeTrans_inv_stock_prod InvItem = new clsBeTrans_inv_stock_prod();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class frm_inv_ini_verificacion extends PBase {
         txtBarraVer = findViewById(R.id.txtBarraVer);
         txtUmbasVeri = findViewById(R.id.txtUmbasVeri);
         txtCantVer = findViewById(R.id.txtCantVer);
+        txtLicencia = findViewById(R.id.txtLicencia);
 
         cmbPresVeri = findViewById(R.id.cmbPresVeri);
         cmbEstadoVeri = findViewById(R.id.cmbEstadoVeri);
@@ -265,6 +267,19 @@ public class frm_inv_ini_verificacion extends PBase {
 
             });
 
+            txtLicencia.setOnKeyListener((v, keyCode, event) -> {
+
+                if (!txtLicencia.getText().toString().isEmpty()) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                        execws(13);
+
+                    }
+                }
+
+                return false;
+            });
+
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }
@@ -361,8 +376,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
             Carga_Det_Producto();
 
-            txtCantVer.setText("");
-
+            //txtCantVer.setText("");
             txtUmbasVeri.setText(BeProducto.UnidadMedida.Nombre);
 
         }catch (Exception e){
@@ -741,6 +755,12 @@ public class frm_inv_ini_verificacion extends PBase {
                                       "pIdBodega", gl.IdBodega,
                                       "pIdProducto", BeProducto.IdProducto);
                         break;
+                    case 13:
+                        callMethod("Get_InventarioItem_By_Licencia",
+                                "pLicencia", txtLicencia.getText().toString().replace("$", ""),
+                                "pIdBodega", gl.IdBodega,
+                                "pUbicacion", Integer.valueOf(txtUbicVer.getText().toString()));
+                        break;
                 }
 
                 progress.cancel();
@@ -796,6 +816,9 @@ public class frm_inv_ini_verificacion extends PBase {
                     break;
                 case 12:
                     processExisteConteo();
+                    break;
+                case 13:
+                    processInventarioLicencia();
                     break;
 
             }
@@ -1005,6 +1028,20 @@ public class frm_inv_ini_verificacion extends PBase {
         }
     }
 
+    private void processInventarioLicencia() {
+
+        try {
+            InvItem = xobj.getresult(clsBeTrans_inv_stock_prod.class, "Get_InventarioItem_By_Licencia");
+
+            if (InvItem != null) {
+                txtBarraVer.setText(InvItem.Codigo);
+                txtCantVer.setText(""+InvItem.Cant);
+                execws(3);
+            }
+        } catch (Exception e) {
+            mu.msgbox("processInventarioLicencia: "+ e.getMessage());
+        }
+    }
     private void msgValidaCantidadConteo() {
 
         try{
