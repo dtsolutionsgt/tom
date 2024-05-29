@@ -71,62 +71,36 @@ public class list_adapt_contados extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position == 0) {
+        if (BeListContados.get(position).Idinventariodet > 0) {
+            holder.lblIdInvDet.setText("" + BeListContados.get(position).Idinventariodet);
+        }
 
-            holder.lblIdInvDet.setText("IdInventarioDet");
-            holder.lblIdInvDet.setTextColor(R.style.titlestyle);
-            holder.lblUbicCont.setText("Ubicación");
-            holder.lblUbicCont.setTextColor(R.style.titlestyle);
-            holder.lblEstadoCont.setText("Estado");
-            holder.lblEstadoCont.setTextColor(R.style.titlestyle);
-            holder.lblPresCont.setText("Presentación");
-            holder.lblPresCont.setTextColor(R.style.titlestyle);
-            holder.lblCantCont.setText("Cantidad");
-            holder.lblCantCont.setTextColor(R.style.titlestyle);
-            holder.lblPesoCont.setText("Peso");
-            holder.lblPesoCont.setTextColor(R.style.titlestyle);
+        if (!BeListContados.get(position).Ubic.isEmpty()) {
+            holder.lblUbicCont.setText(BeListContados.get(position).Ubic);
+        }
 
-        }else{
+        if (!BeListContados.get(position).productoestado.isEmpty()) {
+            holder.lblEstadoCont.setText(BeListContados.get(position).productoestado);
+        }
 
-            holder.lblIdInvDet.setText("0");
-            holder.lblUbicCont.setText("--");
-            holder.lblEstadoCont.setText("--");
-            holder.lblPresCont.setText("--");
-            holder.lblCantCont.setText("0");
-            holder.lblPesoCont.setText("0");
+        if (!BeListContados.get(position).presentacion.isEmpty()) {
+            holder.lblPresCont.setText(BeListContados.get(position).presentacion);
+        }
 
-            if (BeListContados.get(position).Idinventariodet > 0) {
-                holder.lblIdInvDet.setText("" + BeListContados.get(position).Idinventariodet);
-            }
+        if (BeListContados.get(position).Cantidad > 0) {
+            holder.lblCantCont.setText("" + BeListContados.get(position).Cantidad);
+        }
 
-            if (!BeListContados.get(position).Ubic.isEmpty()) {
-                holder.lblUbicCont.setText(BeListContados.get(position).Ubic);
-            }
-
-            if (!BeListContados.get(position).productoestado.isEmpty()) {
-                holder.lblEstadoCont.setText(BeListContados.get(position).productoestado);
-            }
-
-            if (!BeListContados.get(position).presentacion.isEmpty()) {
-                holder.lblPresCont.setText(BeListContados.get(position).presentacion);
-            }
-
-            if (BeListContados.get(position).Cantidad > 0) {
-                holder.lblCantCont.setText("" + BeListContados.get(position).Cantidad);
-            }
-
-            if (BeListContados.get(position).Peso > 0) {
-                holder.lblPesoCont.setText("" + BeListContados.get(position).Peso);
-            }
-
+        if (BeListContados.get(position).Peso > 0) {
+            holder.lblPesoCont.setText("" + BeListContados.get(position).Peso);
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
             if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblIdInvDet.setTextColor(R.style.titlestyle);
+                //convertView.setBackgroundResource(R.drawable.color_medium);
+                //holder.lblIdInvDet.setTextColor(R.style.titlestyle);
             }else{
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }

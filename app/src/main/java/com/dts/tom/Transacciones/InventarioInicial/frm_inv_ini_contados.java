@@ -103,6 +103,8 @@ public class frm_inv_ini_contados extends PBase {
 
         setHandles();
 
+        toast("Ingrese código de producto y ubicación");
+
     }
 
     private void setHandles(){
@@ -342,8 +344,6 @@ public class frm_inv_ini_contados extends PBase {
 
             vItem = new clsBeTrans_inv_detalle_grid();
 
-            BeListContados.add(vItem);
-
             if (BeListDet!=null){
                 if (BeListDet.items!=null){
 
@@ -357,7 +357,7 @@ public class frm_inv_ini_contados extends PBase {
 
                     }
 
-                    int Count = BeListContados.size()-1;
+                    int Count = BeListContados.size();
 
                     btnRegs.setText("Regs: "+Count);
 

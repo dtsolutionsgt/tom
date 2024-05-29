@@ -70,55 +70,35 @@ public class list_adapt_verificados extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position == 0) {
 
-            holder.lblInvRes.setText("IdInventarioRes");
-            holder.lblInvRes.setTextColor(R.style.titlestyle);
-            holder.lblUbicacion.setText("Ubicación");
-            holder.lblUbicacion.setTextColor(R.style.titlestyle);
-            holder.lblEstadoRes.setText("Estado");
-            holder.lblEstadoRes.setTextColor(R.style.titlestyle);
-            holder.lblPresRes.setText("Presentación");
-            holder.lblPresRes.setTextColor(R.style.titlestyle);
-            holder.lblCantRes.setText("Cantidad");
-            holder.lblCantRes.setTextColor(R.style.titlestyle);
-
-        }else{
-
-            holder.lblInvRes.setText("0");
-            holder.lblUbicacion.setText("0");
-            holder.lblEstadoRes.setText("--");
-            holder.lblPresRes.setText("--");
-            holder.lblCantRes.setText("0");
-
-            if (BeListContados.get(position).Idinventariores > 0) {
-                holder.lblInvRes.setText("" + BeListContados.get(position).Idinventariores);
-            }
-
-            if (!BeListContados.get(position).Nom_Ubicacion.isEmpty()) {
-                holder.lblUbicacion.setText("" + BeListContados.get(position).Nom_Ubicacion);
-            }
-
-            if (!BeListContados.get(position).productoestado.isEmpty()) {
-                holder.lblEstadoRes.setText(BeListContados.get(position).productoestado);
-            }
-
-            if (!BeListContados.get(position).presentacion.isEmpty()) {
-                holder.lblPresRes.setText(BeListContados.get(position).presentacion);
-            }
-
-            if (BeListContados.get(position).Cantidad > 0) {
-                holder.lblCantRes.setText("" + BeListContados.get(position).Cantidad);
-            }
-
+        if (BeListContados.get(position).Idinventariores > 0) {
+            holder.lblInvRes.setText("" + BeListContados.get(position).Idinventariores);
         }
+
+        if (!BeListContados.get(position).Nom_Ubicacion.isEmpty()) {
+            holder.lblUbicacion.setText("" + BeListContados.get(position).Nom_Ubicacion);
+        }
+
+        if (!BeListContados.get(position).productoestado.isEmpty()) {
+            holder.lblEstadoRes.setText(BeListContados.get(position).productoestado);
+        }
+
+        if (!BeListContados.get(position).presentacion.isEmpty()) {
+            holder.lblPresRes.setText(BeListContados.get(position).presentacion);
+        }
+
+        if (BeListContados.get(position).Cantidad > 0) {
+            holder.lblCantRes.setText("" + BeListContados.get(position).Cantidad);
+        }
+
+
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
             if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblInvRes.setTextColor(R.style.titlestyle);
+                //convertView.setBackgroundResource(R.drawable.color_medium);
+                //holder.lblInvRes.setTextColor(R.style.titlestyle);
             }else{
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }

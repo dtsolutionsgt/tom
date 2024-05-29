@@ -84,6 +84,7 @@ public class frm_inv_ini_verificados extends PBase {
         btnRegs = findViewById(R.id.btnRegs);
 
         setHandles();
+        toast("Ingrese código de producto y/o ubicación");
 
     }
 
@@ -97,23 +98,18 @@ public class frm_inv_ini_verificados extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    Object lvObj = ListView.getItemAtPosition(position);
+                    clsBeTrans_inv_resumen_grid sitem = (clsBeTrans_inv_resumen_grid) lvObj;
+                    selItem = new clsBeTrans_inv_resumen_grid();
+                    selItem = BeListVerificados.get(position);
 
-                        Object lvObj = ListView.getItemAtPosition(position);
-                        clsBeTrans_inv_resumen_grid sitem = (clsBeTrans_inv_resumen_grid) lvObj;
-                        selItem = new clsBeTrans_inv_resumen_grid();
-                        selItem = BeListVerificados.get(position);
+                    selid = sitem.Idinventariores;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        selid = sitem.Idinventariores;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-
-                        if (selItem.Idinventariores>0){
-                            Llamar_Editar();
-                        }
-
+                    if (selItem.Idinventariores>0){
+                        Llamar_Editar();
                     }
-
                 }
 
             });
@@ -162,8 +158,6 @@ public class frm_inv_ini_verificados extends PBase {
 
             vItem = new clsBeTrans_inv_resumen_grid();
 
-            BeListVerificados.add(vItem);
-
             if (BeList!=null){
                 if (BeList.items!=null){
 
@@ -176,7 +170,7 @@ public class frm_inv_ini_verificados extends PBase {
 
                     }
 
-                    int Count = BeListVerificados.size()-1;
+                    int Count = BeListVerificados.size();
 
                     btnRegs.setText("Regs: "+Count);
 
