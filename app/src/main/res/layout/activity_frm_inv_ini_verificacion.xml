@@ -251,6 +251,16 @@
             android:text="Det."
             android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/btnFinalizarVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:onClick="BotonCompletar"
+            android:text="Finalizar"
+            android:textSize="18sp" />
+
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -266,7 +276,9 @@
         android:clickable="true"
         android:onClick="BotonCompletar"
         android:src="@drawable/ok_btn"
+        android:visibility="gone"
         app:fabCustomSize="60dp"
-        app:maxImageSize="35dp" />
+        app:maxImageSize="35dp"
+        tools:visibility="gone" />
 
 </RelativeLayout>
