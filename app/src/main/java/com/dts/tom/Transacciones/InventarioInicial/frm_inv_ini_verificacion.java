@@ -590,6 +590,7 @@ public class frm_inv_ini_verificacion extends PBase {
             txtBarraVer.setText("");
             lblUbicDes.setText("");
             txtCantVer.setText("");
+            txtLicencia.setText("");
             //lblTituloForma.setText("");
             txtUmbasVeri.setText("");
 

@@ -574,8 +574,11 @@ public class frm_inv_ini_contados extends PBase {
                 switch (ws.callback) {
 
                     case 1:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodProd.getText().toString(),
-                                "IdBodega",gl.IdBodega);
+                        /*callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodProd.getText().toString(),
+                                "IdBodega",gl.IdBodega);*/
+                        callMethod("Get_BeProducto_By_Codigo_Or_Licencia",
+                                "pCodigo", txtCodProd.getText().toString().replace("$", ""),
+                                "IdBodega", gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicConts.getText().toString(),
@@ -656,7 +659,7 @@ public class frm_inv_ini_contados extends PBase {
 
         try{
 
-            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_Or_Licencia");
 
             if (BeProducto!=null){
                 lblPrdCont.setText(BeProducto.Nombre);

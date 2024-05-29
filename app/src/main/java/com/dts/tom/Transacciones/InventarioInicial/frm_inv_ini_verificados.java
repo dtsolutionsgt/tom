@@ -418,7 +418,7 @@ public class frm_inv_ini_verificados extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodProdVeri.getText().toString(),"IdBodega",gl.IdBodega);
+                        callMethod("Get_BeProducto_By_Codigo_Or_Licencia","pCodigo",txtCodProdVeri.getText().toString(),"IdBodega",gl.IdBodega);
                         break;
                     case 2:
                         int ubic = 0;
@@ -493,7 +493,7 @@ public class frm_inv_ini_verificados extends PBase {
 
         try{
 
-            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+            BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_Or_Licencia");
 
             if (BeProducto!=null){
                 lblPrdContVeri.setText(BeProducto.Nombre);
