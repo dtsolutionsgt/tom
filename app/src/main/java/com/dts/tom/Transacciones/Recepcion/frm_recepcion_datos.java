@@ -9010,17 +9010,8 @@ public class frm_recepcion_datos extends PBase {
             alertDialogBuilder
                     .setMessage("¿" + "Está seguro de salir" + "?")
                     .setCancelable(false)
-                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            doExit();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            dialog.cancel();
-                        }
-                    });
+                    .setPositiveButton("Si", (dialog, id) -> doExit())
+                    .setNegativeButton("No", (dialog, id) -> dialog.cancel());
 
             // create alert dialog
             AlertDialog alertDialog = alertDialogBuilder.create();

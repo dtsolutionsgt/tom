@@ -186,8 +186,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             lblManufacturadorEquipo = findViewById(R.id.lblManufacturadorEquipo);
 
 
-            lblver.setText("Versión: " +  gl.version);
-            lblVersion.setText("V. "+ gl.version);
+            lblver.setText(String.format("Versión: %s", gl.version));
+            lblVersion.setText(String.format("v. %s", gl.version));
 
             getURL();
 
@@ -853,7 +853,6 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             dialog.setMessage(msg);
             dialog.setIcon(R.drawable.printicon);
             dialog.setPositiveButton("Si", (dialog1, which) -> {
-                //#CKFK20220506 Cambie el execws(9) por el execws(10)
                 execws(10);
             });
             dialog.setNegativeButton("No", (dialog12, which) -> execws(10));
