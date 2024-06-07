@@ -1375,7 +1375,13 @@ public class frm_list_rec_prod extends PBase {
                 super.finish();
             }
 
-
+            if (gl.Codigo_Producto!=null){
+                if (!gl.Codigo_Producto.isEmpty()){
+                    txtCodigoProductoRecepcion.setText(gl.Codigo_Producto);
+                    Procesa_Barra_Producto();
+                    gl.Codigo_Producto = "";
+                }
+            }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());

@@ -5,10 +5,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_encList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -29,19 +30,21 @@ import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
-import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
-import com.dts.tom.Transacciones.CambioUbicacion.frm_tareas_cambio_ubicacion;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+
+import org.ksoap2.serialization.KvmSerializable;
+import org.ksoap2.serialization.SoapPrimitive;
 
 public class frm_lista_tareas_recepcion extends PBase {
 
@@ -210,7 +213,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                         if (!txtTarea.getText().toString().isEmpty()) {
                             if (gl.tipoTarea == 1) {
-                                execws(6);
+                                if (gl.Interface_SAP){
+                                    execws(8);
+                                }else{
+                                    execws(6);
+                                }
                             } else {
                                 GetFila();
                             }
@@ -269,6 +276,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                     case 7:
                         callMethod("GetSingleRec","pIdRecepcionEnc",gl.gIdRecepcionEnc);
                         break;
+                    case 8:
+                        callMethod("Get_ListOrdenCompraEnc_By_Codigo_Producto",
+                                         "pCodigo",txtTarea.getText().toString().replace("$",""),
+                                               "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
+                        break;
                 }
 
                 anim.cancel();
@@ -302,6 +314,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     break;
                 case 7:
                     processIdRecepcion();
+                    break;
+                case 8:
+                    processListaOrdenCompra();
                     break;
             }
 
@@ -408,7 +423,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     }
 
-                    count = BeListTareasPicking.size()-1;
+                    count = BeListTareasPicking.size();
                     lblRegs.setText("Regs: "+ count);
 
                 }
@@ -489,7 +504,7 @@ public class frm_lista_tareas_recepcion extends PBase {
         clsBeTareasIngresoHH vItem;
 
         BeListTareas.clear();
-
+        listView.setAdapter(null);
         int count;
 
         try{
@@ -524,7 +539,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
                     }
 
-                    count = BeListTareas.size()-1;
+                    count = BeListTareas.size();
                     lblRegs.setText("Regs: "+ count);
 
                 }else{
@@ -666,12 +681,66 @@ public class frm_lista_tareas_recepcion extends PBase {
         try {
 
             gl.gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class, "GetSingleRec");
+            gl.IdPropietario = gl.gBeRecepcion.PropietarioBodega.getIdPropietario();
+            gl.pTipoIngreso = gl.gBeRecepcion.OrdenCompraRec.OC.TipoIngreso;
 
             txtTarea.setText("");
             startActivity(new Intent(this, frm_list_rec_prod.class));
 
         } catch ( Exception e) {
             mu.msgbox("processIdRecepcion: "+e.getMessage());
+        }
+    }
+
+    //#CKFK20240605 Agregué la funcionalidad de filtrar la orden de compra por código de producto
+    private  void processListaOrdenCompra() {
+        Cursor dt;
+        List<Integer> ListaOC =  new ArrayList<>();;
+
+        try {
+
+            progress.setMessage("Obteniendo lista de orden de compra...");
+            progress.show();
+
+            dt=xobj.filldt();
+
+            if (dt.getCount()>0) {
+
+                dt.moveToFirst();
+
+                while (!dt.isAfterLast()) {
+
+                    ListaOC.add(dt.getInt(0));
+
+                    dt.moveToNext();
+                }
+            }
+
+            if (ListaOC.stream().count() > 0) {
+
+                if (ListaOC.stream().count() == 1) {
+                    IdOrdenCompra = ListaOC.get(0);
+                    gl.gIdRecepcionEnc = stream(pListBeTareasIngresoHH.items).where(c -> c.IdOrderCompraEnc == IdOrdenCompra).select(c -> c.IdRecepcionEnc).first();
+                    gl.Codigo_Producto = txtTarea.getText().toString().replace("$","");
+
+                    execws(7);
+                }else{
+
+                    pListBeTareasIngresoHH.items= (ArrayList<clsBeTareasIngresoHH>) pListBeTareasIngresoHH.items.stream()
+                            .filter(orden -> ListaOC.contains(orden.IdOrderCompraEnc))
+                            .collect(Collectors.toList());
+                    listItems();
+                }
+
+            } else {
+                progress.cancel();
+                Toast.makeText(this, "No se ha encontrado una orden de compra válida relacionada a la licencia "+txtTarea.getText().toString()+".", Toast.LENGTH_LONG).show();
+                msgLicPlate("Buscar por número de tarea");
+
+            }
+            progress.cancel();
+        } catch (Exception e) {
+            mu.msgbox("processIdOrdenCompra: "+e.getMessage());
         }
     }
 

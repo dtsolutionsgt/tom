@@ -8781,10 +8781,20 @@ public class frm_recepcion_datos extends PBase {
         //#EJC20210611:Cuando es recepción de compra en BYB
         //Se debe enviar a registrar la compra en el WS de NAV.
         //con el número de recepción.
-        if (gl.gBeOrdenCompra.No_Documento_Recepcion_ERP != null){
-            if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
-                progress.setMessage("Registrando ingreso de compra en ERP");
-                execws(26);
+        if (!gl.Interface_SAP){
+
+            if (gl.gBeOrdenCompra.No_Documento_Recepcion_ERP != null){
+                if (!gl.gBeOrdenCompra.No_Documento_Recepcion_ERP.isEmpty()){
+                    progress.setMessage("Registrando ingreso de compra en ERP");
+                    execws(26);
+                }else{
+
+                    progress.setMessage("Validando imprimir barra");
+                    progress.show();
+
+                    Imprime_Barra_Despues_Guardar();
+
+                }
             }else{
 
                 progress.setMessage("Validando imprimir barra");
@@ -8801,6 +8811,7 @@ public class frm_recepcion_datos extends PBase {
             Imprime_Barra_Despues_Guardar();
 
         }
+
 
     }
 

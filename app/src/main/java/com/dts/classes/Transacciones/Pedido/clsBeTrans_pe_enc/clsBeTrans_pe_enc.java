@@ -86,6 +86,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public boolean Requiere_Tarimas=false;
     @Element(required=false) public String Fecha_Preparacion="";
     @Element(required=false) public String Bodega_Origen="";
+    @Element(required=false) public String Bodega_Destino="";
 
     public clsBeTrans_pe_enc() {
     }
@@ -107,7 +108,7 @@ public class clsBeTrans_pe_enc {
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
                              int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
-                             boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen) {
+                             boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -180,7 +181,7 @@ public class clsBeTrans_pe_enc {
         this.Requiere_Tarimas = Requiere_Tarimas;
         this.Fecha_Preparacion = Fecha_Preparacion;
         this.Bodega_Origen = Bodega_Origen;
-
+        this.Bodega_Origen = Bodega_Destino;
     }
 
 
@@ -615,11 +616,16 @@ public class clsBeTrans_pe_enc {
     public void setFecha_Preparacion(String value) {
         Fecha_Preparacion=value;
     }
-
     public String getBodega_Origen() {
         return Bodega_Origen;
     }
     public void setBodega_Origen(String value) {
         Bodega_Origen=value;
+    }
+    public String getBodega_Destino() {
+        return Bodega_Destino;
+    }
+    public void setBodega_Destino(String value) {
+        Bodega_Destino=value;
     }
 }

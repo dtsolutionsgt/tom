@@ -98,6 +98,7 @@ public class appGlobals extends Application {
     public int IdPropietarioBodega;
     public int gIdRecepcionEnc;
     public int TipoOpcion;
+    public String Codigo_Producto;
 
     //Objeto para controlar si el ingreso acepta producto ya vencido
     public clsBeTrans_oc_ti pTipoIngreso;
@@ -219,7 +220,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="5.2.3";
+    public final String version="5.4.5";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking

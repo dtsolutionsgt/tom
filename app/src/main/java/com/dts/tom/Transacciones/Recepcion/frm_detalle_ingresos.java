@@ -481,8 +481,6 @@ public class frm_detalle_ingresos extends PBase {
                 execws(2);
             }
 
-
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
