@@ -313,7 +313,9 @@ public class frm_picking_datos extends PBase {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtLicencia.getText().toString().isEmpty()) {
                             //#AT20240514 Incio del proceso para el remplazo automático
-                            if (!txtLicencia.getText().toString().equals(gBePickingUbic.Lic_plate)) {
+                            String tmpLic = txtLicencia.getText().toString().replace("$", "");
+
+                            if (!tmpLic.equals(gBePickingUbic.Lic_plate)) {
                                 execws(14);
                             } else {
                                 Procesa_Barra();
