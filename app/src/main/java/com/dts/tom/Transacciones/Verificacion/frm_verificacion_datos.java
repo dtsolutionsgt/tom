@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
@@ -57,6 +58,7 @@ import java.util.Objects;
 import br.com.zbra.androidlinq.delegate.SelectorDouble;
 
 import static br.com.zbra.androidlinq.Linq.stream;
+import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.Verificacion.frm_list_prod_reemplazo_verif.reemplazoCorrecto;
 
 import androidx.core.content.FileProvider;
@@ -268,7 +270,15 @@ public class frm_verificacion_datos extends PBase {
                                         txtCantVeri.requestFocus();
                                         showkeyb();
                                     }else {
-                                        Guardar_Verificacion();
+
+                                        if (gl.VerificacionSinLoteFechaVen) {
+                                            msgConfirmaVerificacion(String.format("Producto: %s \nCantidad %s",
+                                                    Codigo, txtCantVeri.getText().toString()));
+                                        } else {
+                                            msgConfirmaVerificacion(String.format("Producto: %s \nVence: %s \nLote: %s \nCantidad %s",
+                                                    Codigo, Expira, Lote, txtCantVeri.getText().toString()));
+                                        }
+
                                     }
                                 }
 
@@ -1351,7 +1361,15 @@ public class frm_verificacion_datos extends PBase {
     }
 
     public void Actualizar(View view){
-        Guardar_Verificacion();
+
+        if (gl.VerificacionSinLoteFechaVen) {
+            msgConfirmaVerificacion(String.format("Producto: %s \nCantidad %s",
+                    Codigo, txtCantVeri.getText().toString()));
+        } else {
+            msgConfirmaVerificacion(String.format("Producto: %s \nVence: %s \nLote: %s \nCantidad %s",
+                    Codigo, Expira, Lote, txtCantVeri.getText().toString()));
+        }
+
     }
 
     public void Regresar(View view){
@@ -1505,6 +1523,26 @@ public class frm_verificacion_datos extends PBase {
             progress.cancel();
             msgbox("processGetFotosVerificacion: "+ e.getMessage());
         }
+    }
+
+
+    private void msgConfirmaVerificacion(String msg) {
+        ExDialog dialog = new ExDialog(this);
+        dialog.setMessage(msg);
+
+        dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Guardar_Verificacion();
+            }
+        });
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        dialog.show();
+
     }
 
     @Override

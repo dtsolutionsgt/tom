@@ -796,7 +796,7 @@ public class frm_recepcion_datos extends PBase {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
-                        String valor= txtNoLP.getText().toString();
+                        String valor= txtNoLP.getText().toString().trim().replace("$","");
                         try{
                             //Procesa_Barra_Producto();
                         }catch(Exception e){
@@ -914,8 +914,8 @@ public class frm_recepcion_datos extends PBase {
                     }
 
                     if(txtNoLP!=null){
-                        if(!txtNoLP.getText().toString().isEmpty()){
-                            pStock.Lic_plate = txtNoLP.getText().toString().trim();
+                        if(!txtNoLP.getText().toString().trim().isEmpty()){
+                            pStock.Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
                         }else{
                             pStock.Lic_plate = "";
                         }
@@ -1626,8 +1626,8 @@ public class frm_recepcion_datos extends PBase {
                             }else{
                                 pNumeroLP = pLp;
                                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                                if (!txtNoLP.getText().toString().isEmpty()){
-                                    txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                                if (!txtNoLP.getText().toString().trim().isEmpty()){
+                                    txtLicPlate.setText(txtNoLP.getText().toString().trim().replace("$",""));
                                 }else{
                                     txtLicPlate.setText(pNumeroLP);
                                 }
@@ -1651,8 +1651,8 @@ public class frm_recepcion_datos extends PBase {
                                     pNumeroLP = pLp;
 
                                     //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                                    if (!txtNoLP.getText().toString().isEmpty()){
-                                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                                    if (!txtNoLP.getText().toString().trim().isEmpty()){
+                                        txtLicPlate.setText(txtNoLP.getText().toString().trim().replace("$",""));
                                     }else{
                                         txtLicPlate.setText(pNumeroLP);
                                     }
@@ -2998,9 +2998,9 @@ public class frm_recepcion_datos extends PBase {
 
             pLp = "";
 
-            if (!txtNoLP.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
 
-                pLp = txtNoLP.getText().toString().replace("$", "");
+                pLp = txtNoLP.getText().toString().trim().replace("$", "");
 
                 //#EJC20210612: Este valor llegaba vacío a la impresión.
                 pNumeroLP = pLp;
@@ -3178,7 +3178,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#GT04042022: focus en cantidad.
-            if (!txtNoLP.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
                 txtCantidadRec.requestFocus();
                 txtCantidadRec.selectAll();
             }else{
@@ -3983,7 +3983,7 @@ public class frm_recepcion_datos extends PBase {
                         Log.e("Licencia","Call_From_D.");
                         execws(6);
                         if (nBeResolucion == null) {
-                            if (!txtNoLP.getText().toString().isEmpty()) {
+                            if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                 //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
                                 //  txtNoLP.requestFocus();
                                 txtCantidadRec.requestFocus();
@@ -4002,7 +4002,7 @@ public class frm_recepcion_datos extends PBase {
 
                 }else {
                     //GT04042022: focus a cantidad
-                    if (!txtNoLP.getText().toString().isEmpty()){
+                    if (!txtNoLP.getText().toString().trim().isEmpty()){
                         txtCantidadRec.requestFocus();
                         txtCantidadRec.selectAll();
                     }else{
@@ -4414,7 +4414,7 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }else{
                     //#CKFK20220307 Coloqué este toast para cuando es una OP y se ingresa una licencia no válida
-                    if (!txtNoLP.getText().toString().isEmpty()){
+                    if (!txtNoLP.getText().toString().trim().isEmpty()){
                         toast("La licencia ingresada no es válida");
                         txtNoLP.setText("");
                         return;
@@ -4791,13 +4791,13 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.gBeOrdenCompra.Push_To_NAV &&
                     (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC
-                            && txtNoLP.getText().toString().isEmpty())){
+                            && txtNoLP.getText().toString().trim().isEmpty())){
                 progress.cancel();
                 msgbox("Este tipo de documentos deben tener licencia para poder recibirse");
                 return;
             }
 
-            if (!txtNoLP.getText().toString().isEmpty() && gl.mode == 1){
+            if (!txtNoLP.getText().toString().trim().isEmpty() && gl.mode == 1){
                 Procesa_Barra_Producto();
             }else{
 
@@ -5821,8 +5821,8 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
-            if (!txtNoLP.getText().toString().isEmpty()){
-                pNumeroLP = txtNoLP.getText().toString();
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
+                pNumeroLP = txtNoLP.getText().toString().trim().replace("$","");
             }
 
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
@@ -6968,12 +6968,12 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 BeStockRec.Cantidad = vCant;
                 //#EJC20201217:Si es UMBA y el LicPlate no es vacío asignar.
-                if (!txtNoLP.getText().toString().isEmpty()){
-                    BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                if (!txtNoLP.getText().toString().trim().isEmpty()){
+                    BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                 }else{
                     if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
                         txtNoLP.setText(pNumeroLP);
-                        BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                        BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                     }
                 }
             }
@@ -6998,12 +6998,12 @@ public class frm_recepcion_datos extends PBase {
             }else{
                 if (BeTransReDet.Lic_plate!=null){
                     if(BeStockRec.Lic_plate.equals("")){
-                        if (!txtNoLP.getText().toString().isEmpty()){
-                            BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                        if (!txtNoLP.getText().toString().trim().isEmpty()){
+                            BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                         }else{
                             if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
                                 txtNoLP.setText(pNumeroLP);
-                                BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                                BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                             }
                         }
                     }
@@ -7075,12 +7075,12 @@ public class frm_recepcion_datos extends PBase {
                         BeProdPallet.Fecha_ingreso = String.valueOf(du.getFechaActual());
 
                         if(BeStockRec.Lic_plate.equals("")){
-                            if (!txtNoLP.getText().toString().isEmpty()){
-                                BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                            if (!txtNoLP.getText().toString().trim().isEmpty()){
+                                BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                             }else{
                                 if (!pNumeroLP.equals("") && !pNumeroLP.isEmpty()){
                                     txtNoLP.setText(pNumeroLP);
-                                    BeStockRec.Lic_plate= txtNoLP.getText().toString();
+                                    BeStockRec.Lic_plate= txtNoLP.getText().toString().trim().replace("$","");
                                 }
                             }
                         }
@@ -7592,8 +7592,8 @@ public class frm_recepcion_datos extends PBase {
                         //#GT06022023: si se genera la LP auto, validar que no vaya vacio el objeto RecepcionDet y StockRec
                         if(gl.bloquear_lp_hh){
                             if (BeTransReDet.Lic_plate.equals("") || BeTransReDet.Lic_plate.isEmpty()){
-                                if (!txtNoLP.getText().toString().isEmpty()) {
-                                    BeTransReDet.Lic_plate = txtNoLP.getText().toString();
+                                if (!txtNoLP.getText().toString().trim().isEmpty()) {
+                                    BeTransReDet.Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
                                     //#CKFK20231008 Puse esto en comentario
                                     //toast("#GT06032023_1: Por una causa desconocida la licencia estaba vacía");
                                     //addlog("WebServiceHandler case 16","#GT06032023_5: Por una causa desconocida la licencia está vacía","");
@@ -7604,8 +7604,8 @@ public class frm_recepcion_datos extends PBase {
                             }
 
                             if (pListBeStockRec.items.get(0).Lic_plate.equals("") || pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
-                                if (!txtNoLP.getText().toString().isEmpty()) {
-                                    pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString();
+                                if (!txtNoLP.getText().toString().trim().isEmpty()) {
+                                    pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
                                     //toast("#GT06032023_3: Por una causa desconocida la licencia estaba vacía");
                                     //addlog("WebServiceHandler case 16","#GT06032023_6: Por una causa desconocida la licencia está vacía","");
                                 }else{
@@ -8292,7 +8292,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //GT04042022: focus a cantidad
-            if (!txtNoLP.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
                 txtCantidadRec.requestFocus();
                 txtCantidadRec.selectAll();
             }else{
@@ -8525,9 +8525,9 @@ public class frm_recepcion_datos extends PBase {
 
             if (gl.mode==1){
                 //#CKFK 20201229 Agregué esta condición de que si la barra tiene información se coloca eso como LP
-                if (!txtNoLP.getText().toString().isEmpty()){
+                if (!txtNoLP.getText().toString().trim().isEmpty()){
                     if (txtLicPlate != null){
-                        txtLicPlate.setText(txtNoLP.getText().toString().replace("$",""));
+                        txtLicPlate.setText(txtNoLP.getText().toString().trim().replace("$",""));
                     }
                 }else{
                     if (txtLicPlate != null){
@@ -8762,8 +8762,8 @@ public class frm_recepcion_datos extends PBase {
 
         try {
 
-            if (!txtNoLP.getText().toString().isEmpty()){
-                vBeStockRec.Lic_plate = txtNoLP.getText().toString();
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
+                vBeStockRec.Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
             }else {
                 vBeStockRec.Lic_plate = xobj.getresult(String.class, "Get_Nuevo_Correlativo_LicensePlate_S");
             }
@@ -9384,7 +9384,7 @@ public class frm_recepcion_datos extends PBase {
                         if (lblUbicacion.getText().toString().isEmpty())
                         {
                             fillUbicacion();
-                            if (txtNoLP.getText().toString().equals("")){
+                            if (txtNoLP.getText().toString().trim().equals("")){
                                 progress.hide();
                                 msgbox("La licencia no puede ser vacía");
                                 return;
@@ -9586,7 +9586,7 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //GT04042022: focus a cantidad
-            if (!txtNoLP.getText().toString().isEmpty()){
+            if (!txtNoLP.getText().toString().trim().isEmpty()){
                 txtCantidadRec.requestFocus();
                 txtCantidadRec.selectAll();
             }else{
