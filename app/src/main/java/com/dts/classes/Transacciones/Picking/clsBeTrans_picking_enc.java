@@ -38,6 +38,7 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public String Fecha_Fin_Preparacion="";
     @Element(required=false) public String Referencia = "";
     @Element(required=false) public boolean Fotografia_Verificacion = false;
+    @Element(required=false) public int IdUbicacionMuelle = 0;
 
     public clsBeTrans_picking_enc() {
     }
@@ -49,7 +50,7 @@ public class clsBeTrans_picking_enc {
                                   boolean verifica_auto,boolean procesado_bof, boolean Requiere_Preparacion,String Tipo_Preparacion,
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
-                                  String Referencia, boolean Fotografia_Verificacion
+                                  String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -80,6 +81,7 @@ public class clsBeTrans_picking_enc {
         this.Tipo_Preparacion=Tipo_Preparacion;
         this.Referencia = Referencia;
         this.Fotografia_Verificacion = Fotografia_Verificacion;
+        this.IdUbicacionMuelle = IdUbicacionMuelle;
     }
 
 
@@ -270,6 +272,12 @@ public class clsBeTrans_picking_enc {
         Fotografia_Verificacion=value;
     }
 
+    public int getIdUbicacionMuelle() {
+        return IdUbicacionMuelle;
+    }
+    public void setIdUbicacionMuelle(int value) {
+        IdUbicacionMuelle=value;
+    }
 }
 
 

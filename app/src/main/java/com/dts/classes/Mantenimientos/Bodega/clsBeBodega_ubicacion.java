@@ -48,6 +48,7 @@ public class clsBeBodega_ubicacion {
     @Element(required=false) public double Posicion_X = 0;
 
     @Element(required=false) public double Posicion_Y = 0;
+    @Element(required=false) public boolean Ubicacion_muelle =false;
 
     public clsBeBodega_ubicacion() {
     }
@@ -61,7 +62,8 @@ public class clsBeBodega_ubicacion {
                                  boolean Ubicacion_picking,boolean Ubicacion_recepcion,boolean Ubicacion_despacho,boolean Ubicacion_merma,
                                  boolean Ubicacion_Virtual,double Margen_izquierdo,double Margen_derecho,double Margen_superior,
                                  double Margen_inferior,String Orientacion_pos,boolean ubicacion_ne,clsBeBodega_tramo Tramo,
-                                 clsBeBodega_sector Sector,String NombreCompleto, double Posicion_X, double Posicion_Y) {
+                                 clsBeBodega_sector Sector,String NombreCompleto, double Posicion_X, double Posicion_Y,
+                                 boolean Ubicacion_muelle) {
 
         this.IdUbicacion=IdUbicacion;
         this.IdTramo=IdTramo;
@@ -103,6 +105,7 @@ public class clsBeBodega_ubicacion {
         this.NombreCompleto=NombreCompleto;
         this.Posicion_X = Posicion_X;
         this.Posicion_Y = Posicion_Y;
+        this.Ubicacion_muelle = Ubicacion_muelle;
 
     }
 
@@ -356,5 +359,10 @@ public class clsBeBodega_ubicacion {
     public void setPosicion_Y(double value) {
         Posicion_Y=value;
     }
-
+    public boolean getUbicacion_muelle() {
+        return Ubicacion_muelle;
+    }
+    public void setUbicacion_muelle(boolean value) {
+        Ubicacion_picking=value;
+    }
 }

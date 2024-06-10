@@ -18,7 +18,7 @@ public class clsBeBodega_muelles {
     @Element(required=false) public boolean Activo=false;
     @Element(required=false) public boolean Entrada=false;
     @Element(required=false) public boolean Salida=false;
-
+    @Element(required=false) public int IdUbicacionDefecto=0;
 
     public clsBeBodega_muelles() {
     }
@@ -26,7 +26,7 @@ public class clsBeBodega_muelles {
     public clsBeBodega_muelles(int IdMuelle,int IdBodega,String Codigo_barra,String Nombre,
                                String User_agr,String Fec_agr,String User_mod,String Fec_mod,
                                int Color,String Imagen,boolean Activo,boolean Entrada,
-                               boolean Salida) {
+                               boolean Salida, int IdUbicacionDefecto) {
 
         this.IdMuelle=IdMuelle;
         this.IdBodega=IdBodega;
@@ -41,7 +41,7 @@ public class clsBeBodega_muelles {
         this.Activo=Activo;
         this.Entrada=Entrada;
         this.Salida=Salida;
-
+        this.IdUbicacionDefecto=IdUbicacionDefecto;
     }
 
 
@@ -123,6 +123,11 @@ public class clsBeBodega_muelles {
     public void setSalida(boolean value) {
         Salida=value;
     }
-
+    public int getIdUbicacionDefecto() {
+        return IdUbicacionDefecto;
+    }
+    public void setIdUbicacionDefecto(int value) {
+        IdUbicacionDefecto=value;
+    }
 }
 
