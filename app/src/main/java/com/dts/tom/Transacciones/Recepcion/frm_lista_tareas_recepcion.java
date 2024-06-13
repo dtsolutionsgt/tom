@@ -475,6 +475,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Hora_ini = du.convierteHoraMostar(BePedEnc.Hora_ini);
                         vItem.Hora_fin = du.convierteHoraMostar(BePedEnc.Hora_fin);
                         vItem.RoadDirEntrega = BePedEnc.RoadDirEntrega;
+                        vItem.IdPickingEnc = BePedEnc.IdPickingEnc;
 
                         BeListTareasPedido.add(vItem);
 

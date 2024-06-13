@@ -66,12 +66,12 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
                 holder = new ViewHolder();
 
                 holder.lblPedEnc = convertView.findViewById(R.id.lblPedEnc);
+                holder.lblIdPickingEnc = convertView.findViewById(R.id.lblIdPickingEnc);
                 holder.lblReferencia = convertView.findViewById(R.id.lblReferencia);
                 holder.lblMuelle = convertView.findViewById(R.id.lblMuelle);
                 holder.lblIdCliente = convertView.findViewById(R.id.lblIdCliente);
                 holder.lblCliente = convertView.findViewById(R.id.lblCliente);
                 holder.lblEstado = convertView.findViewById(R.id.lblEstado);
-                holder.lblIdPickingEnc = convertView.findViewById(R.id.lblIdPickingEnc);
                 holder.lblFechaPedido = convertView.findViewById(R.id.lblFechaPedido);
                 holder.lblRutaDespacho = convertView.findViewById(R.id.lblRutaDespacho);
                 holder.lblObservaciones = convertView.findViewById(R.id.lblObservaciones);
