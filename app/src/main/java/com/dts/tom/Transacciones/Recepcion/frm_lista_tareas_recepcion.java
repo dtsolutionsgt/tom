@@ -419,6 +419,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Hora_fin=du.convierteHoraMostar(BePicking.Hora_fin);
                         vItem.Referencia = BePicking.Referencia;
                         vItem.IdPrioridadPicking = BePicking.IdPrioridadPicking;
+                        vItem.NombrePrioridad = BePicking.NombrePrioridad;
 
                         BeListTareasPicking.add(vItem);
 

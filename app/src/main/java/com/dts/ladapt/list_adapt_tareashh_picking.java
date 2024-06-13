@@ -2,6 +2,7 @@ package com.dts.ladapt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
     private int selectedIndex;
 
     private final LayoutInflater l_Inflater;
+    private View convertView;
+    private ObjectAnimator animator = null;
 
     public list_adapt_tareashh_picking(Context context, ArrayList<clsBeTrans_picking_enc> results) {
         BeListTareasHH = results;
@@ -66,6 +69,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 //            holder.lblUbicacionPick = (TextView) convertView.findViewById(R.id.lblUbicacionPick);
             holder.lblEstadoPick = convertView.findViewById(R.id.lblEstadoPick);
             holder.lblFechaPick = convertView.findViewById(R.id.lblFechaPick);
+            holder.lblPrioridad = convertView.findViewById(R.id.lblPrioridad);
 //            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
 //            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
 //            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);
@@ -115,6 +119,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             if (!BeListTareasHH.get(position).Fecha_picking.isEmpty()){
                 holder.lblFechaPick.setText(""+BeListTareasHH.get(position).Fecha_picking);
             }
+
+        if (!BeListTareasHH.get(position).NombrePrioridad.isEmpty()  && BeListTareasHH.get(position).IdPrioridadPicking != 0){
+            holder.lblPrioridad.setText(""+BeListTareasHH.get(position).NombrePrioridad);
+        } else {
+            holder.lblPrioridad.setText("--");
+        }
 //
 //            if (!BeListTareasHH.get(position).Hora_ini.isEmpty()){
 //                holder.lblHoraInicial.setText(""+BeListTareasHH.get(position).Hora_ini);
@@ -124,34 +134,51 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 //                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
 //            }
 
-        if(selectedIndex!= -1 && position == selectedIndex) {
+        /*if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
-        }
+        }*/
 
         int IdPrioridadPicking = BeListTareasHH.get(position).IdPrioridadPicking;
+        String color1 = "";
+        String color2 = "";
 
-        if (IdPrioridadPicking != 0) {
-
-            switch (IdPrioridadPicking) {
-                case 1:
-                    convertView.setBackgroundColor(Color.parseColor("#EF5350"));
-                    break;
-                case 2:
-                    convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
-                    break;
-                default:
-                    convertView.setBackgroundColor(Color.TRANSPARENT);
-                    break;
-            }
+        switch (IdPrioridadPicking) {
+            case 1:
+                color1 = "#E57373";
+                color2 = "#E53935";
+                break;
+            case 2:
+                color1 = "#FFF9C4";
+                color2 = "#FFEE58";
+                break;
+            default:
+                color1 = "#00FFFFFF";color2 = "#00FFFFFF";
+                break;
         }
+
+        animator = ObjectAnimator.ofArgb(convertView, "backgroundColor",
+                Color.parseColor(color1), Color.parseColor(color2), Color.parseColor(color1));
+        animator.setDuration(1500);
+        animator.setRepeatCount(ObjectAnimator.INFINITE);
+        animator.start();
+
+        if (IdPrioridadPicking == 0) {
+            if (animator != null && animator.isRunning()) {
+                animator.cancel();
+            }
+
+            convertView.setBackgroundColor(Color.WHITE);
+        }
+
+        notifyDataSetChanged();
 
         return convertView;
     }
 
     static class ViewHolder {
-        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick;
+        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick, lblPrioridad;
     }
 
 }
