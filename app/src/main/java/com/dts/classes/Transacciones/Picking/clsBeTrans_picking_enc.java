@@ -39,6 +39,10 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public String Referencia = "";
     @Element(required=false) public boolean Fotografia_Verificacion = false;
     @Element(required=false) public int IdUbicacionMuelle = 0;
+    @Element(required=false) public int IdBodegaMuelle = 0;
+    @Element(required=false) public int IdPrioridadPicking = 0;
+    @Element(required=false) public String NombrePrioridad="";
+
 
     public clsBeTrans_picking_enc() {
     }
@@ -50,7 +54,7 @@ public class clsBeTrans_picking_enc {
                                   boolean verifica_auto,boolean procesado_bof, boolean Requiere_Preparacion,String Tipo_Preparacion,
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
-                                  String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle
+                                  String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle, int IdPrioridadPicking, int IdBodegaMuelle, String NombrePrioridad
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -82,6 +86,9 @@ public class clsBeTrans_picking_enc {
         this.Referencia = Referencia;
         this.Fotografia_Verificacion = Fotografia_Verificacion;
         this.IdUbicacionMuelle = IdUbicacionMuelle;
+        this.IdPrioridadPicking = IdPrioridadPicking;
+        this.IdBodegaMuelle = IdBodegaMuelle;
+        this.NombrePrioridad = NombrePrioridad;
     }
 
 

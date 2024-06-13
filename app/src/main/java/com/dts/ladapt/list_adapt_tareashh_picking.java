@@ -124,12 +124,27 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 //                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
 //            }
 
-
-
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+        int IdPrioridadPicking = BeListTareasHH.get(position).IdPrioridadPicking;
+
+        if (IdPrioridadPicking != 0) {
+
+            switch (IdPrioridadPicking) {
+                case 1:
+                    convertView.setBackgroundColor(Color.parseColor("#EF5350"));
+                    break;
+                case 2:
+                    convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
+                    break;
+                default:
+                    convertView.setBackgroundColor(Color.TRANSPARENT);
+                    break;
+            }
         }
 
         return convertView;
