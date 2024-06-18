@@ -10,7 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
@@ -39,10 +42,13 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeMotivo_ubicacion.clsBeMotivo_ubicacionList;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
+import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientosList;
 import com.dts.classes.Transacciones.Movimiento.USUbicStrucStage5.USUbicStrucStage5List;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
+import com.dts.ladapt.ConsultaStock.list_adapt_consulta_stock2;
+import com.dts.ladapt.list_adapt_lista_productos_cubic;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock;
@@ -56,10 +62,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
+
+import org.checkerframework.checker.units.qual.A;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
 
@@ -71,9 +80,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino,lblCantidad;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
-    private TableRow trPeso,tblExplosionar,tblPresentacion;
+    private TableRow trPeso,tblExplosionar,tblPresentacion, trCodigoProducto;
     private CheckBox chkExplosionar;
-    private RelativeLayout relbot, reltop;
+    private RelativeLayout relbot, reltop, relProductos, relForm;
+    private ListView listProductos;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -94,6 +104,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private final ArrayList<String> cmbVenceList = new ArrayList<String>();
     private final ArrayList<String> cmbEstadoOrigenList = new ArrayList<String>();
     private final ArrayList<String> cmbEstadoDestinoList = new ArrayList<String>();
+    private list_adapt_lista_productos_cubic adapter;
 
     private String lote = "", fechaVence = "";
 
@@ -153,6 +164,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean licencia_reservada_completamente = false;
     private boolean reservada_parcialmente = false;
     private boolean stock_misma_licencia = false;
+    private boolean LicenciasCompletas;
+    private clsBeTrans_movimientosList  movList = new clsBeTrans_movimientosList();
+    private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
+    private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,8 +221,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             relbot = findViewById(R.id.relbot);
             reltop = findViewById(R.id.reltop);
+            relForm = findViewById(R.id.relForm);
+            relProductos = findViewById(R.id.relProductos);
 
             tblPresentacion = findViewById(R.id.tblPresentacion);
+            trCodigoProducto = findViewById(R.id.trCodigoProducto);
+
+            listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
 
@@ -512,6 +532,28 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 return false;
             }
+        });
+
+        txtLicPlate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
+                if (LicenciasCompletas) {
+                    if (txtLicPlate.getText().toString().isEmpty()) {
+                        relProductos.setVisibility(View.GONE);
+                        relForm.setVisibility(View.VISIBLE);
+                        trCodigoProducto.setVisibility(View.VISIBLE);
+                        lblDescProducto.setText("-");
+
+                        LicenciasCompletas = false;
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
         });
 
         txtLicPlate.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
@@ -1642,6 +1684,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 case 23:
                     processProductoUbicDetallado();
                     break;
+                case 24:
+                    processCambioUbicacionLicCompleta();
+                    break;
 
             }
 
@@ -1823,6 +1868,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         callMethod("Get_Productos_By_StockResCI",
                                          "BeStockResCI", gl.existencia);
+                        break;
+
+                    case 24:
+                        callMethod("Aplica_Cambio_Estado_Ubic_HH_LicCompleta", "pStockResList", stockList);
                         break;
 
                 }
@@ -2040,6 +2089,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 msgbox("Ubicación destino incorrecta");
                 //throw new Exception("Ubicación destino incorrecta");
             } else{
+
+                if (LicenciasCompletas) {
+                    AplicaLicenciasCompletas();
+                    return;
+                }
 
                 if (gl.Interface_SAP){
                     //#CKFK20240410 Agregué validación para que las areas del destino y el origen
@@ -2333,124 +2387,172 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                if (escaneoPallet && productoList != null){
-                    //#AT20230322 Para que no cambie la ubicacion que llega desde la consulta de existencia
-                    if (inferir_origen_en_cambio_ubic && !CambioUbicExistencia) {
-                        //if (txtUbicOrigen.getText().toString().isEmpty()) {
-                        int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                        String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
+                LicenciasCompletas = productoList.items.stream()
+                        .map(clsBeProducto::getCodigo)
+                        .distinct()
+                        .count() > 1;
 
-                        txtUbicOrigen.setText(String.valueOf(ubic));
-                        lblUbicCompleta.setText(ubicompleta);
-                        cvUbicOrigID = ubic;
+                if (LicenciasCompletas) {
+
+                    ListaActualizada = productoList.items.stream()
+                            .peek(clsBeProducto -> {
+                                if (clsBeProducto.Stock.getFecha_Vence().contains("T")) {
+                                    clsBeProducto.Stock.setFecha_Vence(du.convierteFechaMostrar(clsBeProducto.Stock.getFecha_Vence()));
+                                }
+                            })
+                            .filter(clsBeProducto -> clsBeProducto.Stock.getIdUbicacion() == cvUbicOrigID)
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    if (ListaActualizada.size() > 0) {
+                        adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
+                        listProductos.setAdapter(adapter);
+
+                        stockResList.items = new ArrayList<>();
+
+                        for (clsBeProducto obj : ListaActualizada) {
+                            stockResList.items.add(obj.Stock);
+                        }
+
+                        relProductos.setVisibility(View.VISIBLE);
+                        relForm.setVisibility(View.GONE);
+                        trCodigoProducto.setVisibility(View.GONE);
+
+                        txtLicPlate.clearFocus();
+                        txtUbicDestino.requestFocus();
+                    } else {
+                        LicenciasCompletas = false;
+                        txtLicPlate.requestFocus();
+                        msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDescProducto.setTextColor(Color.RED);
+                        cvProdID = 0;
+                        lblDescProducto.setText("Licencia N.E.E.U");
+                    }
+                    progress.dismiss();
+                } else {
+
+                    relProductos.setVisibility(View.GONE);
+                    relForm.setVisibility(View.VISIBLE);
+                    trCodigoProducto.setVisibility(View.VISIBLE);
+
+                    if (escaneoPallet && productoList != null) {
+                        //#AT20230322 Para que no cambie la ubicacion que llega desde la consulta de existencia
+                        if (inferir_origen_en_cambio_ubic && !CambioUbicExistencia) {
+                            //if (txtUbicOrigen.getText().toString().isEmpty()) {
+                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
+                            String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
+
+                            txtUbicOrigen.setText(String.valueOf(ubic));
+                            lblUbicCompleta.setText(ubicompleta);
+                            cvUbicOrigID = ubic;
                         /*} else {
                             int tmpUbic = Integer.valueOf(txtUbicOrigen.getText().toString());
                             cvUbicOrigID = tmpUbic;
                         }*/
-                    }
+                        }
 
-                    List AuxList;
+                        List AuxList;
 
-                    if (CambioUbicExistencia){
-                        AuxList = stream(productoList.items)
-                                .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
-                                .where(c-> c.Stock.IdPresentacion == gl.existencia.IdPresentacion )
-                                .toList();
-                    }else{
-                        AuxList = stream(productoList.items)
-                                .where(c->c.Stock.IdUbicacion==cvUbicOrigID)
-                                .toList();
-                    }
-
-                    if (AuxList.size() == 0){
-                        msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
-                        lblDescProducto.setTextColor(Color.RED);
-                        cvProdID = 0;
-                        lblDescProducto.setText ("Licencia N.E.E.U");
-                        progress.cancel();
-                    }else{
-
-                        productoList = new clsBeProductoList();
-                        productoList.items = AuxList;
-
-                        if (AuxList.size() == 1){
-
-                            BeProductoUbicacion = productoList.items.get(0);
-                            BeStockPallet = productoList.items.get(0).Stock;
-
-                            txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
-
-                            lblDescProducto.setTextColor(Color.BLUE);
-                            lblDescProducto.setText(BeProductoUbicacion.getNombre());
-
-                            cvProd = BeProductoUbicacion;
-                            cvProdID = BeProductoUbicacion.getIdProducto();
-                            cvPropID = BeProductoUbicacion.getIdPropietario();
-                            cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
-
-                            if (BeProductoUbicacion.getControl_peso()){
-                                trPeso.setVisibility(View.VISIBLE);
-                            }else{
-                                trPeso.setVisibility(View.GONE);
-                            }
-
-                            cvLote = BeStockPallet.Lote;
-                            cvPresID = BeStockPallet.IdPresentacion;
-                            //#AT20220713 Asigne valor a la variable cvAtrib
-                            cvAtrib = BeStockPallet.Atributo_variante_1;
-                            cvEstOrigen = BeStockPallet.IdProductoEstado;
-                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
-
-                            //Llama al método del WS Get_Estados_By_IdPropietario
-                            execws(10);
-
+                        if (CambioUbicExistencia) {
+                            AuxList = stream(productoList.items)
+                                    .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
+                                    .where(c -> c.Stock.IdPresentacion == gl.existencia.IdPresentacion)
+                                    .toList();
                         } else {
-                            //#AT 20220421 Cuando la lista de productos es mayor a 1
-                            // es decir varios productos relacionados con la misma licencia
+                            AuxList = stream(productoList.items)
+                                    .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
+                                    .toList();
+                        }
+
+                        if (AuxList.size() == 0) {
+                            msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
+                            lblDescProducto.setTextColor(Color.RED);
+                            cvProdID = 0;
+                            lblDescProducto.setText("Licencia N.E.E.U");
+                            progress.cancel();
+                        } else {
+
                             productoList = new clsBeProductoList();
-                            productoList.items = stream(AuxList).distinct().toList();
+                            productoList.items = AuxList;
 
-                            BeProductoUbicacion = productoList.items.get(0);
-                            BeStockPallet = productoList.items.get(0).Stock;
+                            if (AuxList.size() == 1) {
 
-                            //#AT20230224 Cree la stock_misma_licencia y darle valor true cuando exista varios idstock con la misma licencia
-                            stock_misma_licencia = true;
-                            //#AT20230322 Unicamente pasa esto si no es el cambio desde consulta de existencia
-                            if (!CambioUbicExistencia) {
-                                stockResList.items = new ArrayList<>();
-                                //#AT20230224 Agrego a stockResList.items el stock que se obtiene, para evitar llamar al execws(6)
-                                for (clsBeProducto obj : productoList.items) {
-                                    stockResList.items.add(obj.Stock);
+                                BeProductoUbicacion = productoList.items.get(0);
+                                BeStockPallet = productoList.items.get(0).Stock;
+
+                                txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
+
+                                lblDescProducto.setTextColor(Color.BLUE);
+                                lblDescProducto.setText(BeProductoUbicacion.getNombre());
+
+                                cvProd = BeProductoUbicacion;
+                                cvProdID = BeProductoUbicacion.getIdProducto();
+                                cvPropID = BeProductoUbicacion.getIdPropietario();
+                                cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+
+                                if (BeProductoUbicacion.getControl_peso()) {
+                                    trPeso.setVisibility(View.VISIBLE);
+                                } else {
+                                    trPeso.setVisibility(View.GONE);
                                 }
-                            }
 
-                            IdProductoUbicacion=BeProductoUbicacion.getIdProducto();
-                            txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
+                                cvLote = BeStockPallet.Lote;
+                                cvPresID = BeStockPallet.IdPresentacion;
+                                //#AT20220713 Asigne valor a la variable cvAtrib
+                                cvAtrib = BeStockPallet.Atributo_variante_1;
+                                cvEstOrigen = BeStockPallet.IdProductoEstado;
+                                cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
 
-                            lblDescProducto.setTextColor(Color.BLUE);
-                            cvProd = BeProductoUbicacion;
-                            cvProdID = BeProductoUbicacion.IdProducto;
-                            lblDescProducto.setText (BeProductoUbicacion.Nombre);
-                            cvPropID = BeProductoUbicacion.IdPropietario;
-                            cvUMBID = BeProductoUbicacion.IdUnidadMedidaBasica;
+                                //Llama al método del WS Get_Estados_By_IdPropietario
+                                execws(10);
 
-                            if (BeProductoUbicacion.getControl_peso()){
-                                trPeso.setVisibility(View.VISIBLE);
-                            }else{
-                                trPeso.setVisibility(View.GONE);
-                            }
+                            } else {
+                                //#AT 20220421 Cuando la lista de productos es mayor a 1
+                                // es decir varios productos relacionados con la misma licencia
+                                productoList = new clsBeProductoList();
+                                productoList.items = stream(AuxList).distinct().toList();
 
-                            //Llama al método del WS Get_Estados_By_IdPropietario
-                            execws(10);
+                                BeProductoUbicacion = productoList.items.get(0);
+                                BeStockPallet = productoList.items.get(0).Stock;
+
+                                //#AT20230224 Cree la stock_misma_licencia y darle valor true cuando exista varios idstock con la misma licencia
+                                stock_misma_licencia = true;
+                                //#AT20230322 Unicamente pasa esto si no es el cambio desde consulta de existencia
+                                if (!CambioUbicExistencia) {
+                                    stockResList.items = new ArrayList<>();
+                                    //#AT20230224 Agrego a stockResList.items el stock que se obtiene, para evitar llamar al execws(6)
+                                    for (clsBeProducto obj : productoList.items) {
+                                        stockResList.items.add(obj.Stock);
+                                    }
+                                }
+
+                                IdProductoUbicacion = BeProductoUbicacion.getIdProducto();
+                                txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
+
+                                lblDescProducto.setTextColor(Color.BLUE);
+                                cvProd = BeProductoUbicacion;
+                                cvProdID = BeProductoUbicacion.IdProducto;
+                                lblDescProducto.setText(BeProductoUbicacion.Nombre);
+                                cvPropID = BeProductoUbicacion.IdPropietario;
+                                cvUMBID = BeProductoUbicacion.IdUnidadMedidaBasica;
+
+                                if (BeProductoUbicacion.getControl_peso()) {
+                                    trPeso.setVisibility(View.VISIBLE);
+                                } else {
+                                    trPeso.setVisibility(View.GONE);
+                                }
+
+                                //Llama al método del WS Get_Estados_By_IdPropietario
+                                execws(10);
 
                             /*progress.cancel();
                             msgbox("Escanee el producto que a ubicar");
                             txtCodigoPrd.requestFocus();*/
+                            }
                         }
+                    } else {
+                        //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                        execws(3);
                     }
-                }else{
-                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
-                    execws(3);
                 }
             }
 
@@ -2563,6 +2665,28 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    private void processCambioUbicacionLicCompleta() {
+        boolean resultado;
+        try {
+            resultado = (Boolean) xobj.getSingle("Aplica_Cambio_Estado_Ubic_HH_LicCompletaResult", boolean.class);
+
+            if (resultado) {
+                relProductos.setVisibility(View.GONE);
+                relForm.setVisibility(View.VISIBLE);
+                trCodigoProducto.setVisibility(View.VISIBLE);
+                lblDescProducto.setText("-");
+
+                LicenciasCompletas = false;
+
+                inicializaTarea(true);
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+
+        }
+    }
     private void processNuevoCorrelativoLP(){
 
         try {
@@ -4297,6 +4421,138 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             return false;
         }
 
+    }
+
+    private void AplicaLicenciasCompletas() {
+        try {
+
+            cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
+            stockList.items = new ArrayList<>();
+            stockList.items.clear();
+
+            for (clsBeProducto obj: ListaActualizada) {
+
+
+                clsBeVW_stock_res auxStockRes = new clsBeVW_stock_res();
+
+                auxStockRes.IdProductoBodega = obj.IdProductoBodega;
+                auxStockRes.IdUbicacion = obj.Stock.IdUbicacion;
+
+                if(obj.Control_lote){
+                    auxStockRes.Lote = obj.Stock.Lote;
+                }else{
+                    auxStockRes.Lote = "";
+                }
+
+                if(obj.Control_vencimiento){
+                    auxStockRes.Fecha_Vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
+                }else{
+                    auxStockRes.Fecha_Vence = "01/01/1900";
+                }
+
+                vCantidadAUbicar = obj.Stock.CantidadUmBas - obj.Stock.CantidadReservadaUMBas;
+                auxStockRes.CantidadUmBas = vCantidadAUbicar;
+
+                if(obj.Control_peso){
+                    vStockRes.Peso = obj.Stock.Peso;
+                }else{
+                    vStockRes.Peso = 0;
+                }
+
+                auxStockRes.IdPresentacion = obj.Stock.IdPresentacion;
+                auxStockRes.IdProductoEstado = obj.Stock.IdProductoEstado;
+                auxStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
+                auxStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
+                auxStockRes.Pallet_No_Estandar = EsPalletNoEstandar;
+
+                if(escaneoPallet && productoList != null){
+
+                    auxStockRes.Lic_plate = obj.Stock.Lic_plate;
+
+                    if( obj.Stock.Factor > 0 && cvPresID != 0) {
+                        auxStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
+                    }
+
+                }else if ( cvPresID != 0){
+                    auxStockRes.CantidadUmBas = vCantidadAUbicar * vFactorPres;
+                }
+
+                gMovimientoDet = new clsBeTrans_movimientos();
+
+                gMovimientoDet.IdMovimiento = 0;
+                gMovimientoDet.IdEmpresa = gl.IdEmpresa;
+                gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
+                gMovimientoDet.IdTransaccion = 1;
+                gMovimientoDet.IdPropietarioBodega = obj.Stock.IdPropietarioBodega;
+                gMovimientoDet.IdProductoBodega = obj.IdProductoBodega;
+                gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion;
+                gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
+
+                gMovimientoDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
+                gMovimientoDet.IdTipoTarea = -1;
+                gMovimientoDet.IdPresentacion = obj.Stock.IdPresentacion;
+                gMovimientoDet.IdEstadoOrigen = obj.Stock.IdProductoEstado;
+
+                if (gl.modo_cambio == 1) {
+                    gMovimientoDet.IdEstadoDestino = gMovimientoDet.IdEstadoOrigen;
+                }
+
+                gMovimientoDet.IdUnidadMedida = obj.Stock.IdUnidadMedida;
+
+                if (gl.modo_cambio == 2) {
+                    gMovimientoDet.IdTipoTarea = 3;
+                } else {
+                    gMovimientoDet.IdTipoTarea = 2;
+                }
+
+                if (gMovimientoDet.IdTipoTarea == -1) {
+                    gMovimientoDet.IdTipoTarea = 2;
+                }
+
+                gMovimientoDet.IdBodegaDestino = gl.IdBodega;
+                gMovimientoDet.IdRecepcion = obj.Stock.IdRecepcionEnc;
+                gMovimientoDet.Cantidad = vCantidadAUbicar;
+                gMovimientoDet.Serie = obj.Stock.Serial;
+
+                if (obj.Control_peso) {
+                    gMovimientoDet.Peso = Double.valueOf(txtPeso.getText().toString().replace(",", ""));
+                } else {
+                    gMovimientoDet.Peso = 0;
+                }
+
+                gMovimientoDet.Lote = obj.Stock.Lote;
+
+                if (obj.Control_vencimiento) {
+                    gMovimientoDet.Fecha_vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
+                }
+
+                gMovimientoDet.Fecha = du.Fecha_CompletaT();
+
+                if (escaneoPallet && productoList != null) {
+                    gMovimientoDet.Barra_pallet = obj.Stock.Lic_plate;
+                } else {
+                    gMovimientoDet.Barra_pallet = "";
+                }
+
+                gMovimientoDet.Hora_ini = du.Fecha_CompletaT();
+                gMovimientoDet.Hora_fin = du.Fecha_CompletaT();
+                gMovimientoDet.Fecha_agr = du.Fecha_CompletaT();
+                gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
+                gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
+                gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
+                gMovimientoDet.setIsNew(true);
+
+                auxStockRes.Movimiento = gMovimientoDet;
+
+                stockList.items.add(auxStockRes);
+            }
+
+            execws(24);
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+        }
     }
 
     public void RegresarCambioExistencia() {

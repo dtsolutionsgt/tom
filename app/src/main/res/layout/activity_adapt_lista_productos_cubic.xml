@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relListPicking"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dts.ladapt.list_adapt_tareashh_picking">
+
+    <LinearLayout
+        android:id="@+id/relView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:addStatesFromChildren="true"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:orientation="horizontal"
+        android:transitionGroup="true">
+
+        <TextView
+            android:id="@+id/lblCodigoProd"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="----"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblProducto"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="----"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblCantidad"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblLote"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text=""
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblFechaVence"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="01-01-2020"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</RelativeLayout>

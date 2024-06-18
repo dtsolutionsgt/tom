@@ -3,6 +3,7 @@ package com.dts.classes.Transacciones.Stock.Stock_res;
 
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
+import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
 
 import org.simpleframework.xml.Element;
 
@@ -124,6 +125,8 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double Peso_referencia=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
 
+  @Element(required=false) public clsBeTrans_movimientos Movimiento = new clsBeTrans_movimientos();
+
   public clsBeVW_stock_res() {
   }
 
@@ -150,7 +153,7 @@ public class clsBeVW_stock_res {
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
                            String Documento_Ingreso, String Nombre_clasificacion, String Nombre_Completo, int no_linea, int IdPresentacion_Anterior,
-                           int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion) {
+                           int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion, clsBeTrans_movimientos Movimiento) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -246,6 +249,7 @@ public class clsBeVW_stock_res {
     this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
     this.Fecha_Pedido = Fecha_Pedido;
     this.Fecha_Preparacion = Fecha_Preparacion;
+    this.Movimiento = Movimiento;
   }
 
 

@@ -140,6 +140,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trCodigoProducto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -180,189 +181,285 @@
                     android:textSize="18sp" />
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tblPresentacion"
+            <RelativeLayout
+                android:id="@+id/relProductos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="gone">
 
-                <TextView
-                    android:id="@+id/lblPresentacion"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="0dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Presentación:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/cmbPresentacion"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginEnd="0dp" />
-            </TableRow>
+                    android:layout_height="match_parent">
 
-            <TableRow
-                android:id="@+id/tblExplosionar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tblPresentacion"
-                android:paddingStart="100dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/chkExplosionar"
-                    android:layout_width="129dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Explosionar"
-                    android:textSize="18sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/color_medium"
+                            android:orientation="horizontal">
 
-            </TableRow>
+                            <TextView
+                                android:id="@+id/lblCodigoP"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Código"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
 
-            <TableRow
+                            <TextView
+                                android:id="@+id/lblProducto"
+                                android:layout_width="200dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Nombre"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/lblCantidadG"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="right|center_vertical"
+                                android:text="Cantidad"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/lblLote"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Lote"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/lblFechaVence"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Vence"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ListView
+                            android:id="@+id/listProductos"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:scrollbars="horizontal|vertical" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relForm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/lblLote"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Lote:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/cmbLote"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/lblVence"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Vence:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/cmbVence"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/lblEstadoOrigen"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Estado:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/cmbEstadoOrigen"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/lblCantidad"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Cantidad:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtCantidad"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/lblCant"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="0dp"
-                    android:gravity="right|center_vertical"
-                    android:numeric="decimal"
-                    android:paddingLeft="3dp"
-                    android:text="00.00"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="17sp" />
-            </TableRow>
---Peso
+                    android:orientation="vertical">
 
-            <TableRow
-                android:id="@+id/trPeso"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TableRow
+                        android:id="@+id/tblPresentacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/lblPeso"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:text="Peso:"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/lblPresentacion"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="0dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Presentación:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/txtPeso"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textColor="@android:color/black"
-                    android:textSize="24sp" />
+                        <Spinner
+                            android:id="@+id/cmbPresentacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginEnd="0dp" />
+                    </TableRow>
 
-                <TextView
-                    android:id="@+id/lblPesoEst"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="0dp"
-                    android:gravity="right|center_vertical"
-                    android:inputType="numberDecimal"
-                    android:paddingLeft="3dp"
-                    android:text="0.00"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="17sp" />
-            </TableRow>
+                    <TableRow
+                        android:id="@+id/tblExplosionar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tblPresentacion"
+                        android:paddingStart="100dp">
+
+                        <CheckBox
+                            android:id="@+id/chkExplosionar"
+                            android:layout_width="129dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Explosionar"
+                            android:textSize="18sp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lblLote"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="0dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginEnd="0dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Lote:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/cmbLote"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lblVence"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Vence:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/cmbVence"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lblEstadoOrigen"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Estado:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/cmbEstadoOrigen"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lblCantidad"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Cantidad:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/txtCantidad"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:textColor="@android:color/black"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:id="@+id/lblCant"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="0dp"
+                            android:gravity="right|center_vertical"
+                            android:numeric="decimal"
+                            android:paddingLeft="3dp"
+                            android:text="00.00"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="17sp" />
+                    </TableRow>
+                    --Peso
+
+                    <TableRow
+                        android:id="@+id/trPeso"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lblPeso"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Peso:"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/txtPeso"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:textColor="@android:color/black"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:id="@+id/lblPesoEst"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="0dp"
+                            android:gravity="right|center_vertical"
+                            android:inputType="numberDecimal"
+                            android:paddingLeft="3dp"
+                            android:text="0.00"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="17sp" />
+                    </TableRow>
+                </LinearLayout>
+            </RelativeLayout>
 
             <TableRow
                 android:layout_width="match_parent"
