@@ -1151,6 +1151,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (cmbEstadoDestinoList.size() > 0) cmbEstadoDestino.setSelection(0);
 
+            if  (LicenciasCompletas) {
+                progress.dismiss();
+                return;
+            }
+
             if (escaneoPallet && productoList != null) {
                 //LLama este procedimiento del WS Get_Productos_By_IdUbicacion_And_LicPlate
                 //#AT20230224 si stock_misma_licencia = true direcctamente me llena las presentaciones
@@ -2091,7 +2096,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             } else{
 
                 if (LicenciasCompletas) {
-                    AplicaLicenciasCompletas();
+                    lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+
+                    if (gl.modo_cambio == 2) {
+                        cmbEstadoDestino.requestFocus();
+                    } else {
+                        AplicaLicenciasCompletas();
+                    }
+
+                    progress.cancel();
                     return;
                 }
 
@@ -2417,6 +2430,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
 
+                        if (gl.modo_cambio == 2) {
+                            BeProductoUbicacion = ListaActualizada.get(0);
+                            cvPropID = BeProductoUbicacion.IdPropietario;
+                            execws(10);
+                        }
+
                         txtLicPlate.clearFocus();
                         txtUbicDestino.requestFocus();
                     } else {
@@ -2427,7 +2446,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         cvProdID = 0;
                         lblDescProducto.setText("Licencia N.E.E.U");
                     }
-                    progress.dismiss();
+                    progress.cancel();
                 } else {
 
                     relProductos.setVisibility(View.GONE);
@@ -2668,6 +2687,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void processCambioUbicacionLicCompleta() {
         boolean resultado;
         try {
+            progress.setMessage("Procesando cambio");
+            progress.show();
+
             resultado = (Boolean) xobj.getSingle("Aplica_Cambio_Estado_Ubic_HH_LicCompletaResult", boolean.class);
 
             if (resultado) {
@@ -2679,6 +2701,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 LicenciasCompletas = false;
 
                 inicializaTarea(true);
+
+                if (!ocultar_mensajes) {
+                    msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                }
+
+                progress.cancel();
             }
 
         } catch (Exception e) {
@@ -4128,7 +4156,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     public void AplicarCambio(View view){
 
-        AplicarCambioBoton();
+        if (LicenciasCompletas) {
+            AplicaLicenciasCompletas();
+        } else {
+            AplicarCambioBoton();
+        }
     }
 
     public  void AplicarCambioBoton(){
@@ -4426,6 +4458,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private void AplicaLicenciasCompletas() {
         try {
 
+            progress.setMessage("Aplicando cambio de ubicación");
+            progress.show();
+
+            btnGuardarCiega.setVisibility(View.INVISIBLE);
+
             cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
             stockList.items = new ArrayList<>();
             stockList.items.clear();
@@ -4495,6 +4532,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (gl.modo_cambio == 1) {
                     gMovimientoDet.IdEstadoDestino = gMovimientoDet.IdEstadoOrigen;
+                } else if (gl.modo_cambio == 2) {
+                    gMovimientoDet.IdEstadoDestino = cvEstDestino;
                 }
 
                 gMovimientoDet.IdUnidadMedida = obj.Stock.IdUnidadMedida;
