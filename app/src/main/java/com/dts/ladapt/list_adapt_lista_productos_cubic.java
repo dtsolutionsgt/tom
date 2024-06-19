@@ -71,7 +71,8 @@ public class list_adapt_lista_productos_cubic extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.lbl1.setText(items.get(position).Stock.IdUbicacion+"  -   "+items.get(position).Stock.getCodigo_Producto());
+        //holder.lbl1.setText(items.get(position).Stock.IdUbicacion+"  -   "+items.get(position).Stock.getCodigo_Producto());
+        holder.lbl1.setText(items.get(position).Stock.getCodigo_Producto());
         holder.lbl2.setText(items.get(position).Stock.getNombre_Producto());
 
         double vFactorPres = (items.get(position).Stock.getFactor() == 0 ? 1 : items.get(position).Stock.getFactor());
