@@ -3177,11 +3177,28 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
-            //#GT04042022: focus en cantidad.
+            //#GT19062024: Si no genera LP auto, validar focus en lote o vencimiento antes que en cantidad
             if (!txtNoLP.getText().toString().trim().isEmpty()){
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
+
+                //txtCantidadRec.requestFocus();
+                //txtCantidadRec.selectAll();
+
+                //#GT19062024: si hay lp, validar focus en lote o vencimiento antes que en cantidad.
+                if (BeProducto.Control_lote) {
+                    txtLoteRec.requestFocus();
+                    txtLoteRec.selectAll();
+                }
+                else{
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.requestFocus();
+                    }else{
+                        txtCantidadRec.requestFocus();
+                        txtCantidadRec.selectAll();
+                    }
+                }
+
             }else{
+
                 txtNoLP.requestFocus();
             }
 
@@ -3986,7 +4003,24 @@ public class frm_recepcion_datos extends PBase {
                             if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                 //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
                                 //  txtNoLP.requestFocus();
-                                txtCantidadRec.requestFocus();
+                                //txtCantidadRec.requestFocus();
+
+                                //#GT19062024: si tiene control vence, o lote poner el focus antes que en cantidad.
+
+                                if (BeProducto.Control_lote) {
+                                    txtLoteRec.requestFocus();
+                                    txtLoteRec.selectAll();
+                                }
+                                else{
+
+                                    if (BeProducto.Control_vencimiento){
+                                        cmbVenceRec.requestFocus();
+                                    }else{
+                                        txtCantidadRec.requestFocus();
+                                        txtCantidadRec.selectAll();
+                                    }
+                                }
+
                             }else{
                                 txtNoLP.requestFocus();
                             }
@@ -9584,8 +9618,24 @@ public class frm_recepcion_datos extends PBase {
 
             //GT04042022: focus a cantidad
             if (!txtNoLP.getText().toString().trim().isEmpty()){
-                txtCantidadRec.requestFocus();
-                txtCantidadRec.selectAll();
+
+                //txtCantidadRec.requestFocus();
+                //txtCantidadRec.selectAll();
+
+                //#GT19062024: si hay lp, validar focus en lote o vencimiento antes que en cantidad.
+                if (BeProducto.Control_lote) {
+                    txtLoteRec.requestFocus();
+                    txtLoteRec.selectAll();
+                }
+                else{
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.requestFocus();
+                    }else{
+                        txtCantidadRec.requestFocus();
+                        txtCantidadRec.selectAll();
+                    }
+                }
+
             }else{
                 txtNoLP.requestFocus();
             }
