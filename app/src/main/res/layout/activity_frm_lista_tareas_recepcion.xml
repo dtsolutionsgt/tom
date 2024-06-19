@@ -175,19 +175,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/lblFechaPedido"
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minHeight="50dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Fecha"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/lblReferencia"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
@@ -196,6 +183,19 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="Referencia"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lblFechaPedido"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="50dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Fecha"
                     android:textColor="#FFFFFF"
                     android:textSize="17sp"
                     android:textStyle="bold" />

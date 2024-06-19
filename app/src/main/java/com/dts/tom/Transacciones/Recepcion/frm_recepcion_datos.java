@@ -5697,7 +5697,7 @@ public class frm_recepcion_datos extends PBase {
                                     "^PQ1,0,1,Y " +
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            BeProducto.Codigo_barra,
+                            (BeProducto.Codigo_barra.equals("")?BeProducto.Codigo:BeProducto.Codigo_barra),
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.getFechaActual());
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     zpl = String.format("^XA\n" +
@@ -5743,8 +5743,8 @@ public class frm_recepcion_datos extends PBase {
                                     "^FT600,470^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS\n" +
                                     "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
                             gl.gNomEmpresa,
-                            BeProducto.Codigo_barra,
                             BeProducto.Codigo + " - " + BeProducto.Nombre,
+                            BeProducto.Codigo_barra,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
                 }else if (BeProducto.IdTipoEtiqueta==5) {
                     zpl = String.format("^XA\n" +
@@ -5953,8 +5953,6 @@ public class frm_recepcion_datos extends PBase {
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
-
-
                         zplSKU = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
@@ -6155,7 +6153,6 @@ public class frm_recepcion_datos extends PBase {
                                     "$" + pNumeroLP,
                                     BeProducto.Codigo + " - " + BeProducto.Nombre,
                                     gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());*/
-
 
                             zpl = String.format("^XA\n" +
                                             "^MMT\n" +

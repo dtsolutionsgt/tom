@@ -1,11 +1,8 @@
 package com.dts.ladapt;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,51 +122,53 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
         } else {
             holder.lblPrioridad.setText("--");
         }
-//
-//            if (!BeListTareasHH.get(position).Hora_ini.isEmpty()){
-//                holder.lblHoraInicial.setText(""+BeListTareasHH.get(position).Hora_ini);
-//            }
-//
-//            if (!BeListTareasHH.get(position).Hora_fin.isEmpty()){
-//                holder.lblHoraFinal.setText(""+BeListTareasHH.get(position).Hora_fin);
-//            }
-
-        /*if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
-        } else {
-            convertView.setBackgroundColor(Color.TRANSPARENT);
-        }*/
 
         int IdPrioridadPicking = BeListTareasHH.get(position).IdPrioridadPicking;
+        boolean Tiene_Manufactura = BeListTareasHH.get(position).Tiene_Manufactura;
+        int IdPicking = BeListTareasHH.get(position).IdPickingEnc;
         String color1 = "";
         String color2 = "";
 
         switch (IdPrioridadPicking) {
-            case 1:
-                color1 = "#E57373";
-                color2 = "#E53935";
-                break;
             case 2:
+                color1 = "#FF0399D5";
+                if(Tiene_Manufactura) {
+                    color2 = "#FF7F50";
+                }else{
+                    color2 = "#00FFFFFF";
+                }
+                break;
+            case 1:
                 color1 = "#FFF9C4";
-                color2 = "#FFEE58";
+                if(Tiene_Manufactura) {
+                    color2 = "#FF7F50";
+                }else{
+                    color2 = "#00FFFFFF";
+                }
                 break;
             default:
-                color1 = "#00FFFFFF";color2 = "#00FFFFFF";
+                color1 = "#00FFFFFF";
+                if(Tiene_Manufactura) {
+                    color2 = "#FF7F50";
+                }else{
+                    color2 = "#00FFFFFF";
+                }
                 break;
         }
 
-        animator = ObjectAnimator.ofArgb(convertView, "backgroundColor",
-                Color.parseColor(color1), Color.parseColor(color2), Color.parseColor(color1));
-        animator.setDuration(1500);
-        animator.setRepeatCount(ObjectAnimator.INFINITE);
-        animator.start();
+        convertView.setBackgroundColor(Color.WHITE);
 
-        if (IdPrioridadPicking == 0) {
+        if (IdPrioridadPicking == 0 && !Tiene_Manufactura) {
             if (animator != null && animator.isRunning()) {
                 animator.cancel();
             }
-
             convertView.setBackgroundColor(Color.WHITE);
+        }else{
+            animator = ObjectAnimator.ofArgb(convertView, "backgroundColor",
+                    Color.parseColor(color1), Color.parseColor(color2), Color.parseColor(color1));
+            animator.setDuration(1500);
+            animator.setRepeatCount(ObjectAnimator.INFINITE);
+            animator.start();
         }
 
         notifyDataSetChanged();

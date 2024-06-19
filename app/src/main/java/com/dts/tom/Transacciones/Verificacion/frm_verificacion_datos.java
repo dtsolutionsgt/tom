@@ -432,7 +432,12 @@ public class frm_verificacion_datos extends PBase {
             }
             txtLoteVeri.setText(BePedidoDetVerif.getLote());
 
-            chkBono.setChecked(BePedidoDetVerif.Bono.equals("Bono"));
+            chkBono.setChecked(!BePedidoDetVerif.Bono.equals(""));
+            if (!BePedidoDetVerif.Bono.equals("")){
+                chkBono.setText("C/"+BePedidoDetVerif.Bono);
+            }else{
+                chkBono.setText("S/MANUFACTURA");
+            }
 
             int sel = PresList.indexOf(BePedidoDetVerif.getIdPresentacion()+ " - " +
                                        BePedidoDetVerif.getNom_Presentacion());

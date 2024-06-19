@@ -42,7 +42,7 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public int IdBodegaMuelle = 0;
     @Element(required=false) public int IdPrioridadPicking = 0;
     @Element(required=false) public String NombrePrioridad="";
-
+    @Element(required=false) public boolean Tiene_Manufactura =false;
 
     public clsBeTrans_picking_enc() {
     }
@@ -54,7 +54,8 @@ public class clsBeTrans_picking_enc {
                                   boolean verifica_auto,boolean procesado_bof, boolean Requiere_Preparacion,String Tipo_Preparacion,
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
-                                  String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle, int IdPrioridadPicking, int IdBodegaMuelle, String NombrePrioridad
+                                  String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle, int IdPrioridadPicking,
+                                  int IdBodegaMuelle, String NombrePrioridad, boolean Tarea_Manufactura
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -89,6 +90,7 @@ public class clsBeTrans_picking_enc {
         this.IdPrioridadPicking = IdPrioridadPicking;
         this.IdBodegaMuelle = IdBodegaMuelle;
         this.NombrePrioridad = NombrePrioridad;
+        this.Tiene_Manufactura = Tarea_Manufactura;
     }
 
 
@@ -278,12 +280,17 @@ public class clsBeTrans_picking_enc {
     public void setFotografia_Verificacion(boolean value) {
         Fotografia_Verificacion=value;
     }
-
     public int getIdUbicacionMuelle() {
         return IdUbicacionMuelle;
     }
     public void setIdUbicacionMuelle(int value) {
         IdUbicacionMuelle=value;
+    }
+    public boolean getTiene_Manufactura() {
+        return Tiene_Manufactura;
+    }
+    public void setTiene_Manufactura(boolean value) {
+        Tiene_Manufactura =value;
     }
 }
 

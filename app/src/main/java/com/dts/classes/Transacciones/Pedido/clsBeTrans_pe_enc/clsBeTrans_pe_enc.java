@@ -87,6 +87,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Fecha_Preparacion="";
     @Element(required=false) public String Bodega_Origen="";
     @Element(required=false) public String Bodega_Destino="";
+    @Element(required=false) public int IdAcuerdoComercial = 0;
 
     public clsBeTrans_pe_enc() {
     }
@@ -108,7 +109,8 @@ public class clsBeTrans_pe_enc {
                              clsBeTrans_picking_enc Picking,clsBePropietario_bodega PropietarioBodega,clsBeCliente Cliente,clsBeTrans_pe_tipo TipoPedido,
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
                              int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
-                             boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino) {
+                             boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino,
+                             int IdAcuerdoComercial) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -182,6 +184,7 @@ public class clsBeTrans_pe_enc {
         this.Fecha_Preparacion = Fecha_Preparacion;
         this.Bodega_Origen = Bodega_Origen;
         this.Bodega_Origen = Bodega_Destino;
+        this.IdAcuerdoComercial = IdAcuerdoComercial;
     }
 
 
@@ -627,5 +630,11 @@ public class clsBeTrans_pe_enc {
     }
     public void setBodega_Destino(String value) {
         Bodega_Destino=value;
+    }
+    public int getIdAcuerdoComercial() {
+        return IdAcuerdoComercial;
+    }
+    public void setIdAcuerdoComercial(int value) {
+        IdAcuerdoComercial=value;
     }
 }

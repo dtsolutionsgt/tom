@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_encList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -42,9 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.SoapPrimitive;
 
 public class frm_lista_tareas_recepcion extends PBase {
 
@@ -420,6 +416,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Referencia = BePicking.Referencia;
                         vItem.IdPrioridadPicking = BePicking.IdPrioridadPicking;
                         vItem.NombrePrioridad = BePicking.NombrePrioridad;
+                        vItem.Tiene_Manufactura = BePicking.Tiene_Manufactura;
 
                         BeListTareasPicking.add(vItem);
 
@@ -478,6 +475,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Hora_fin = du.convierteHoraMostar(BePedEnc.Hora_fin);
                         vItem.RoadDirEntrega = BePedEnc.RoadDirEntrega;
                         vItem.IdPickingEnc = BePedEnc.IdPickingEnc;
+                        vItem.Picking.IdPrioridadPicking = BePedEnc.Picking.IdPrioridadPicking;
 
                         BeListTareasPedido.add(vItem);
 
@@ -708,40 +706,49 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             dt=xobj.filldt();
 
-            if (dt.getCount()>0) {
+            if (dt!=null){
 
-                dt.moveToFirst();
+                if (dt.getCount()>0) {
 
-                while (!dt.isAfterLast()) {
+                    dt.moveToFirst();
 
-                    ListaOC.add(dt.getInt(0));
+                    while (!dt.isAfterLast()) {
 
-                    dt.moveToNext();
-                }
-            }
+                        ListaOC.add(dt.getInt(0));
 
-            if (ListaOC.stream().count() > 0) {
-
-                if (ListaOC.stream().count() == 1) {
-                    IdOrdenCompra = ListaOC.get(0);
-                    gl.gIdRecepcionEnc = stream(pListBeTareasIngresoHH.items).where(c -> c.IdOrderCompraEnc == IdOrdenCompra).select(c -> c.IdRecepcionEnc).first();
-                    gl.Codigo_Producto = txtTarea.getText().toString().replace("$","");
-
-                    execws(7);
-                }else{
-
-                    pListBeTareasIngresoHH.items= (ArrayList<clsBeTareasIngresoHH>) pListBeTareasIngresoHH.items.stream()
-                            .filter(orden -> ListaOC.contains(orden.IdOrderCompraEnc))
-                            .collect(Collectors.toList());
-                    listItems();
+                        dt.moveToNext();
+                    }
                 }
 
-            } else {
+                if (ListaOC.stream().count() > 0) {
+
+                    if (ListaOC.stream().count() == 1) {
+                        IdOrdenCompra = ListaOC.get(0);
+                        gl.gIdRecepcionEnc = stream(pListBeTareasIngresoHH.items).where(c -> c.IdOrderCompraEnc == IdOrdenCompra).select(c -> c.IdRecepcionEnc).first();
+                        gl.Codigo_Producto = txtTarea.getText().toString().replace("$","");
+
+                        execws(7);
+                    }else{
+
+                        pListBeTareasIngresoHH.items= (ArrayList<clsBeTareasIngresoHH>) pListBeTareasIngresoHH.items.stream()
+                                .filter(orden -> ListaOC.contains(orden.IdOrderCompraEnc))
+                                .collect(Collectors.toList());
+                        listItems();
+                    }
+
+                } else {
+                    progress.cancel();
+                    Toast.makeText(this, "No se ha encontrado una orden de compra válida relacionada a la licencia "+txtTarea.getText().toString()+".", Toast.LENGTH_LONG).show();
+                    msgLicPlate("Buscar por número de tarea");
+
+                }
+
+            }else{
                 progress.cancel();
                 Toast.makeText(this, "No se ha encontrado una orden de compra válida relacionada a la licencia "+txtTarea.getText().toString()+".", Toast.LENGTH_LONG).show();
                 msgLicPlate("Buscar por número de tarea");
-
             }
+
             progress.cancel();
         } catch (Exception e) {
             mu.msgbox("processIdOrdenCompra: "+e.getMessage());

@@ -1,5 +1,7 @@
 package com.dts.ladapt.Verificacion;
 
+import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
     private int selectedIndex;
 
     private final LayoutInflater l_Inflater;
+    private ObjectAnimator animator = null;
 
     public list_adapt_tareas_verificacion(Context context, ArrayList<clsBeTrans_pe_enc> results) {
         BeListTareasHH = results;
@@ -118,21 +121,47 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
             holder.lblEstado.setText(""+BeListTareasHH.get(position).Estado);
             holder.lblIdPickingEnc.setText(""+BeListTareasHH.get(position).IdPickingEnc);
 
-            if(selectedIndex!= -1 && position == selectedIndex) {
-                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }
-
             //GT15012024: se asignan los colores de acuerdo al estado del pickeo para facilitar la verificación
             String estado = BeListTareasHH.get(position).Estado;
 
+            int IdPrioridadPicking = BeListTareasHH.get(position).Picking.IdPrioridadPicking;
+            convertView.setBackgroundColor(Color.WHITE);
+
+            int IdPicking = BeListTareasHH.get(position).IdPickingEnc;
+            String color1 = "";
+            String color2 = "";
+
             if (estado.equals("Pendiente") ) {
-                //Rojo - Pendiente
-                convertView.setBackgroundColor(Color.parseColor("#F5FFAE"));
+                //Amarillo - Pendiente
+                color2 = "#F5FFAE";
             } else if(estado.equals("Pickeado")) {
-                //Celeste - Faltante en verificación
-                convertView.setBackgroundColor(Color.parseColor("#00E676"));
+                //Verde - Pickeado
+                color2 = "#00E676";
+            }
+
+            switch (IdPrioridadPicking) {
+                case 2:
+                    color1 = "#FF0399D5";
+                    break;
+                case 1:
+                    color1 = "#FFE700";
+                    break;
+                default:
+                    color1 = "#00FFFFFF";
+                    break;
+            }
+
+            if (IdPrioridadPicking == 0) {
+                if (animator != null && animator.isRunning()) {
+                    animator.cancel();
+                }
+                convertView.setBackgroundColor(Color.parseColor(color2));
+            }else{
+                animator = ObjectAnimator.ofArgb(convertView, "backgroundColor",
+                        Color.parseColor(color1), Color.parseColor(color2), Color.parseColor(color1));
+                animator.setDuration(1500);
+                animator.setRepeatCount(ObjectAnimator.INFINITE);
+                animator.start();
             }
 
         }catch (Exception ex){
@@ -148,5 +177,26 @@ public class list_adapt_tareas_verificacion extends BaseAdapter {
     static class ViewHolder {
         TextView lblPedEnc,lblFechaPedido,lblReferencia,lblMuelle, lblRutaDespacho,lblIdCliente,
                 lblCliente,lblEstado,lblIdPickingEnc, lblObservaciones, lblRequiereTarima, lblRoadDirEntrega;
+    }
+    public void msgbox(String msg) {
+
+        try{
+
+            if (!msg.equals("")){
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(cCont);
+                dialog.setCancelable(false);
+                dialog.setTitle(R.string.app_name);
+                dialog.setMessage(msg);
+
+                dialog.setNeutralButton("OK", (dialog1, which) -> {
+                    //Toast.makeText(getApplicationContext(), "Yes button pressed",Toast.LENGTH_SHORT).show();
+                });
+                dialog.show();
+
+            }
+
+        } catch (Exception ex) {
+        }
     }
 }
