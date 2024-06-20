@@ -2108,7 +2108,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     return;
                 }
 
-                if (gl.Interface_SAP){
+                if (gl.Interface_SAP && gl.Restringir_Areas_SAP){
                     //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                     //sean iguales cuando la bodega tenga interface con SAP
                     if (CambioUbicExistencia){
