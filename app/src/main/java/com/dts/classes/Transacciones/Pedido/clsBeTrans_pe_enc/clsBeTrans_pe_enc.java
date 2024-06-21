@@ -88,6 +88,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Bodega_Origen="";
     @Element(required=false) public String Bodega_Destino="";
     @Element(required=false) public int IdAcuerdoComercial = 0;
+    @Element(required=false) public int IdMotivoDevolucion = 0;
 
     public clsBeTrans_pe_enc() {
     }
@@ -110,7 +111,7 @@ public class clsBeTrans_pe_enc {
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
                              int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
                              boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino,
-                             int IdAcuerdoComercial) {
+                             int IdAcuerdoComercial, int IdMotivoDevolucion) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -185,6 +186,7 @@ public class clsBeTrans_pe_enc {
         this.Bodega_Origen = Bodega_Origen;
         this.Bodega_Origen = Bodega_Destino;
         this.IdAcuerdoComercial = IdAcuerdoComercial;
+        this.IdMotivoDevolucion = IdMotivoDevolucion;
     }
 
 
@@ -636,5 +638,11 @@ public class clsBeTrans_pe_enc {
     }
     public void setIdAcuerdoComercial(int value) {
         IdAcuerdoComercial=value;
+    }
+    public int getIdMotivoDevolucion() {
+        return IdMotivoDevolucion;
+    }
+    public void setIdMotivoDevolucion(int value) {
+        IdMotivoDevolucion=value;
     }
 }

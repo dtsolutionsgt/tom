@@ -2112,7 +2112,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                     //sean iguales cuando la bodega tenga interface con SAP
                     if (CambioUbicExistencia){
-                        if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                        if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea ){
                             throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                         }
                     }else{
@@ -2227,11 +2227,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }else{
-                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
+                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea() && gl.Restringir_Areas_SAP){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }
@@ -4581,7 +4581,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
                 gMovimientoDet.setIsNew(true);
 
-                auxStockRes.Movimiento = gMovimientoDet;
+                //auxStockRes.Movimiento = gMovimientoDet;
 
                 stockList.items.add(auxStockRes);
             }

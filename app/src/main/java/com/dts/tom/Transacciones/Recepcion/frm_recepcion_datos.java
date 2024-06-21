@@ -433,24 +433,6 @@ public class frm_recepcion_datos extends PBase {
 
             pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
-            //#GT09092022: ON CREATE TIENE TODOS LOS OBJETOS VACIOS, SIEMPRE SERA FALSO GENERA_LP
-//            //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-//            if (!BeProducto.Genera_lp){
-//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-//                lblLicPlate.setVisibility(View.GONE);
-//                txtNoLP.setFocusable(false);
-//                txtNoLP.setFocusableInTouchMode(false);
-//                txtNoLP.setClickable(false);
-//                txtNoLP.setVisibility(View.GONE);
-//            }else{
-//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-//                lblLicPlate.setVisibility(View.VISIBLE);
-//                txtNoLP.setFocusable(true);
-//                txtNoLP.setFocusableInTouchMode(true);
-//                txtNoLP.setClickable(true);
-//                txtNoLP.setVisibility(View.VISIBLE);
-//            }
-
             txtNoLP.setEnabled(!gl.bloquear_lp_hh);
 
             if(!gl.Escaneo_Pallet){
@@ -1472,7 +1454,7 @@ public class frm_recepcion_datos extends PBase {
             /***************************************************************************************/
             /**************************** set de los inputs ****************************************/
 
-            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
 
             //Objeto para dialogo de parametros
             txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -3436,7 +3418,7 @@ public class frm_recepcion_datos extends PBase {
                 pIdProductoBodega = BeProducto.IdProductoBodega;
             }
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -3670,7 +3652,7 @@ public class frm_recepcion_datos extends PBase {
                 pIdProductoBodega = pListTransRecDet.items.get(0).IdProductoBodega;
             }
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -8218,7 +8200,7 @@ public class frm_recepcion_datos extends PBase {
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
             //#CKFK20220714 Agregué esto aquí también porque no siempre entra a la otra opción a actualizar estos label
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             //#GT23112023: Si tenemos el producto, ya podemos asignar idtipoEtiqueta

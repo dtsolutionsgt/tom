@@ -125,7 +125,7 @@ public class clsBeVW_stock_res {
   @Element(required=false) public double Peso_referencia=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
 
-  @Element(required=false) public clsBeTrans_movimientos Movimiento = new clsBeTrans_movimientos();
+  //@Element(required=false) public clsBeTrans_movimientos Movimiento = new clsBeTrans_movimientos();
 
   public clsBeVW_stock_res() {
   }
@@ -249,7 +249,7 @@ public class clsBeVW_stock_res {
     this.IdOperadorBodega_Asignado = IdOperadorBodega_Asignado;
     this.Fecha_Pedido = Fecha_Pedido;
     this.Fecha_Preparacion = Fecha_Preparacion;
-    this.Movimiento = Movimiento;
+    //this.Movimiento = Movimiento;
   }
 
 
