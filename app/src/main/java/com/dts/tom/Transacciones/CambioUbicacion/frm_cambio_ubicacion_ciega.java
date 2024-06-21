@@ -4581,7 +4581,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
                 gMovimientoDet.setIsNew(true);
 
-                //auxStockRes.Movimiento = gMovimientoDet;
+                auxStockRes.Movimiento = gMovimientoDet;
 
                 stockList.items.add(auxStockRes);
             }
