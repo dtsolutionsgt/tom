@@ -1822,7 +1822,9 @@ public class frm_list_rec_prod extends PBase {
                 execws(11);
             });
             dialog.setNegativeButton("No", (dialog12, which) -> {
-               return;
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
+                return;
             });
 
             dialog.show();

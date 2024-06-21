@@ -2698,12 +2698,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 trCodigoProducto.setVisibility(View.VISIBLE);
                 lblDescProducto.setText("-");
 
-                LicenciasCompletas = false;
-
-                inicializaTarea(true);
-
                 if (!ocultar_mensajes) {
                     msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                } else {
+                    inicializaTarea(true);
+                    LicenciasCompletas = false;
                 }
 
                 progress.cancel();
@@ -3891,6 +3890,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 public void onClick(DialogInterface dialog, int which) {
 
+                    if (LicenciasCompletas) {
+                        inicializaTarea(true);
+                        LicenciasCompletas = false;
+                        return;
+                    }
+
                     if( escaneoPallet && productoList != null){
                         //#CKFK20210610 agregué esta validación para que si no tiene presentación no chkExplosionarlosione el material
                         if (BeStockPallet.getIdPresentacion()!=0) {
@@ -4462,8 +4467,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.show();
 
             btnGuardarCiega.setVisibility(View.INVISIBLE);
-
             cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
+            cvUbicOrigID = Integer.valueOf(txtUbicOrigen.getText().toString());
+
+            if(cvUbicDestID == 0){
+                if(txtUbicDestino.getText().toString().isEmpty()){
+                    msgbox("La ubicación de destino no puede ser vacía");
+                }else{
+                    msgbox("Confirme la ubicación de destino.");
+                }
+                txtUbicDestino.requestFocus();
+                return;
+            }
+
+            if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio == 1)){
+                msgbox("La ubicación de destino coincide con la de origen");
+                cvUbicDestID = 0;
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                return;
+            }
+
             stockList.items = new ArrayList<>();
             stockList.items.clear();
 
