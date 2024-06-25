@@ -68,6 +68,7 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public String Transcurrido="";
 
     @Element(required=false) public boolean multi_propietario=false;
+    @Element(required=false) public String Licencia="";
 
 
 
@@ -87,7 +88,7 @@ public class clsBeTrans_inv_enc {
                               double Detalle,double Resumen,double Stock,double Peso,
                               boolean IsNew,String EstadoResumen,String EstadoDetalle,String OperadorConteo,
                               String OperadorVerifica,String FechaConteo,String FechaVence,String FechaVerifica,
-                              String Lote,String UMBas, boolean multi_propietario) {
+                              String Lote,String UMBas, boolean multi_propietario, String Licencia) {
 
         this.Idinventarioenc=Idinventarioenc;
         this.Idpropietario=Idpropietario;
@@ -144,6 +145,7 @@ public class clsBeTrans_inv_enc {
         this.Lote=Lote;
         this.UMBas=UMBas;
         this.multi_propietario = multi_propietario;
+        this.Licencia = Licencia;
 
 
     }
