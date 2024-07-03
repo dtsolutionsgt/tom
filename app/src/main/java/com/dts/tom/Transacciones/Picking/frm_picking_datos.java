@@ -318,6 +318,8 @@ public class frm_picking_datos extends PBase {
                             if(gl.pBeBodega.getPermitir_Reemplazo_Picking()){
                                 if (!tmpLic.equals(gBePickingUbic.Lic_plate)) {
                                     execws(14);
+                                }else{
+                                    Procesa_Barra();
                                 }
                             } else{
                                 Procesa_Barra();
