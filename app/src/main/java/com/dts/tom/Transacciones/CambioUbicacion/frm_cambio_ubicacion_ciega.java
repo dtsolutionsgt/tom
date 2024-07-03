@@ -2400,10 +2400,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                LicenciasCompletas = productoList.items.stream()
-                        .map(clsBeProducto::getCodigo)
-                        .distinct()
-                        .count() > 1;
+                if (!CambioUbicExistencia){
+                    LicenciasCompletas = productoList.items.stream()
+                            .map(clsBeProducto::getCodigo)
+                            .distinct()
+                            .count() > 1;
+                }else{
+                    LicenciasCompletas = false;
+                }
 
                 if (LicenciasCompletas) {
 

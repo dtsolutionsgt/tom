@@ -241,7 +241,7 @@ public class frm_detalle_cambio_ubicacion extends PBase {
                                 "pIdOperador",(chkTodos.isChecked()?0: gl.OperadorBodega.IdOperadorBodega));
                         break;
                     case 2:
-                        callMethod("Actualizar_Estado_Cambio","pIdTransUbicHHEnc", gl.tareaenc,"finalizar", true);
+                        callMethod("Actualizar_Estado_Cambio","pIdTransUbicHHEnc", gl.tareaenc,"finalizar", 1);
                          break;
                     case 3:
                         callMethod("Get_BeProducto_By_Codigo_For_HH","pCodigo",txtCodigo.getText().toString(),
