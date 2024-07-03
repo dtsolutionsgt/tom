@@ -164,7 +164,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean licencia_reservada_completamente = false;
     private boolean reservada_parcialmente = false;
     private boolean stock_misma_licencia = false;
-    private boolean LicenciasCompletas;
+    private boolean LicenciaMixta = false;
+    private boolean ProductosDiferentes = false;
     private clsBeTrans_movimientosList  movList = new clsBeTrans_movimientosList();
     private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
     private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
@@ -540,14 +541,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             @Override
             public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
-                if (LicenciasCompletas) {
+                if (LicenciaMixta) {
                     if (txtLicPlate.getText().toString().isEmpty()) {
                         relProductos.setVisibility(View.GONE);
                         relForm.setVisibility(View.VISIBLE);
                         trCodigoProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setText("-");
 
-                        LicenciasCompletas = false;
+                        LicenciaMixta = false;
                     }
                 }
             }
@@ -1151,7 +1152,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (cmbEstadoDestinoList.size() > 0) cmbEstadoDestino.setSelection(0);
 
-            if  (LicenciasCompletas) {
+            if  (LicenciaMixta) {
                 progress.dismiss();
                 return;
             }
@@ -2095,7 +2096,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //throw new Exception("Ubicación destino incorrecta");
             } else{
 
-                if (LicenciasCompletas) {
+                if (LicenciaMixta) {
                     lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
 
                     if (gl.modo_cambio == 2) {
@@ -2400,129 +2401,127 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                LicenciasCompletas = productoList.items.stream()
-                        .map(clsBeProducto::getCodigo)
-                        .distinct()
-                        .count() > 1;
+                if (escaneoPallet && productoList != null) {
+                    //#AT20230322 Para que no cambie la ubicacion que llega desde la consulta de existencia
+                    if (inferir_origen_en_cambio_ubic && !CambioUbicExistencia) {
+                        //if (txtUbicOrigen.getText().toString().isEmpty()) {
+                        int ubic = productoList.items.get(0).Stock.IdUbicacion;
+                        String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
 
-                if (LicenciasCompletas) {
+                        txtUbicOrigen.setText(String.valueOf(ubic));
+                        lblUbicCompleta.setText(ubicompleta);
+                        cvUbicOrigID = ubic;
+                    /*} else {
+                        int tmpUbic = Integer.valueOf(txtUbicOrigen.getText().toString());
+                        cvUbicOrigID = tmpUbic;
+                    }*/
+                    }
 
-                    ListaActualizada = productoList.items.stream()
-                            .peek(clsBeProducto -> {
-                                if (clsBeProducto.Stock.getFecha_Vence().contains("T")) {
-                                    clsBeProducto.Stock.setFecha_Vence(du.convierteFechaMostrar(clsBeProducto.Stock.getFecha_Vence()));
-                                }
-                            })
-                            .filter(clsBeProducto -> clsBeProducto.Stock.getIdUbicacion() == cvUbicOrigID)
-                            .collect(Collectors.toCollection(ArrayList::new));
+                    List AuxList;
 
-                    if (ListaActualizada.size() > 0) {
-                        adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
-                        listProductos.setAdapter(adapter);
-
-                        stockResList.items = new ArrayList<>();
-
-                        for (clsBeProducto obj : ListaActualizada) {
-                            stockResList.items.add(obj.Stock);
-                        }
-
-                        relProductos.setVisibility(View.VISIBLE);
-                        relForm.setVisibility(View.GONE);
-                        trCodigoProducto.setVisibility(View.GONE);
-
-                        if (gl.modo_cambio == 2) {
-                            BeProductoUbicacion = ListaActualizada.get(0);
-                            cvPropID = BeProductoUbicacion.IdPropietario;
-                            execws(10);
-                        }
-
-                        txtLicPlate.clearFocus();
-                        txtUbicDestino.requestFocus();
+                    if (CambioUbicExistencia) {
+                        AuxList = stream(productoList.items)
+                                .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
+                                .where(c -> c.Stock.IdPresentacion == gl.existencia.IdPresentacion)
+                                .toList();
                     } else {
-                        LicenciasCompletas = false;
-                        txtLicPlate.requestFocus();
+                        AuxList = stream(productoList.items)
+                                .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
+                                .toList();
+                    }
+
+                    if (AuxList.size() == 0) {
                         msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;
                         lblDescProducto.setText("Licencia N.E.E.U");
-                    }
-                    progress.cancel();
-                } else {
+                        progress.cancel();
+                    } else {
 
-                    relProductos.setVisibility(View.GONE);
-                    relForm.setVisibility(View.VISIBLE);
-                    trCodigoProducto.setVisibility(View.VISIBLE);
+                        productoList = new clsBeProductoList();
+                        productoList.items = AuxList;
 
-                    if (escaneoPallet && productoList != null) {
-                        //#AT20230322 Para que no cambie la ubicacion que llega desde la consulta de existencia
-                        if (inferir_origen_en_cambio_ubic && !CambioUbicExistencia) {
-                            //if (txtUbicOrigen.getText().toString().isEmpty()) {
-                            int ubic = productoList.items.get(0).Stock.IdUbicacion;
-                            String ubicompleta = productoList.items.get(0).Stock.Nombre_Completo;
+                        if (AuxList.size() == 1) {
 
-                            txtUbicOrigen.setText(String.valueOf(ubic));
-                            lblUbicCompleta.setText(ubicompleta);
-                            cvUbicOrigID = ubic;
-                        /*} else {
-                            int tmpUbic = Integer.valueOf(txtUbicOrigen.getText().toString());
-                            cvUbicOrigID = tmpUbic;
-                        }*/
-                        }
+                            BeProductoUbicacion = productoList.items.get(0);
+                            BeStockPallet = productoList.items.get(0).Stock;
 
-                        List AuxList;
+                            txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
 
-                        if (CambioUbicExistencia) {
-                            AuxList = stream(productoList.items)
-                                    .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
-                                    .where(c -> c.Stock.IdPresentacion == gl.existencia.IdPresentacion)
-                                    .toList();
-                        } else {
-                            AuxList = stream(productoList.items)
-                                    .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
-                                    .toList();
-                        }
+                            lblDescProducto.setTextColor(Color.BLUE);
+                            lblDescProducto.setText(BeProductoUbicacion.getNombre());
 
-                        if (AuxList.size() == 0) {
-                            msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
-                            lblDescProducto.setTextColor(Color.RED);
-                            cvProdID = 0;
-                            lblDescProducto.setText("Licencia N.E.E.U");
-                            progress.cancel();
+                            cvProd = BeProductoUbicacion;
+                            cvProdID = BeProductoUbicacion.getIdProducto();
+                            cvPropID = BeProductoUbicacion.getIdPropietario();
+                            cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+
+                            if (BeProductoUbicacion.getControl_peso()) {
+                                trPeso.setVisibility(View.VISIBLE);
+                            } else {
+                                trPeso.setVisibility(View.GONE);
+                            }
+
+                            cvLote = BeStockPallet.Lote;
+                            cvPresID = BeStockPallet.IdPresentacion;
+                            //#AT20220713 Asigne valor a la variable cvAtrib
+                            cvAtrib = BeStockPallet.Atributo_variante_1;
+                            cvEstOrigen = BeStockPallet.IdProductoEstado;
+                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                            //Llama al método del WS Get_Estados_By_IdPropietario
+                            execws(10);
+
                         } else {
 
-                            productoList = new clsBeProductoList();
-                            productoList.items = AuxList;
+                            //#AT20240703 Inicio de licencias Mixtas
+                            ProductosDiferentes = productoList.items.stream()
+                                    .map(clsBeProducto::getCodigo)
+                                    .distinct()
+                                    .count() > 1;
 
-                            if (AuxList.size() == 1) {
+                            if (gl.pBeBodega.Control_Pallet_Mixto && ProductosDiferentes) {
+                                LicenciaMixta = true;
 
-                                BeProductoUbicacion = productoList.items.get(0);
-                                BeStockPallet = productoList.items.get(0).Stock;
+                                if  (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                                    ListaActualizada = productoList.items.stream()
+                                            .peek(clsBeProducto -> {
+                                                if (clsBeProducto.Stock.getFecha_Vence().contains("T")) {
+                                                    clsBeProducto.Stock.setFecha_Vence(du.convierteFechaMostrar(clsBeProducto.Stock.getFecha_Vence()));
+                                                }
+                                            })
+                                            .filter(clsBeProducto -> clsBeProducto.Stock.getIdUbicacion() == cvUbicOrigID &
+                                                    (clsBeProducto.Stock.CantidadUmBas - clsBeProducto.Stock.CantidadReservadaUMBas) != 0)
+                                            .collect(Collectors.toCollection(ArrayList::new));
 
-                                txtCodigoPrd.setText(BeProductoUbicacion.getCodigo());
+                                    if (ListaActualizada.size() > 0) {
+                                        adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
+                                        listProductos.setAdapter(adapter);
 
-                                lblDescProducto.setTextColor(Color.BLUE);
-                                lblDescProducto.setText(BeProductoUbicacion.getNombre());
+                                        stockResList.items = new ArrayList<>();
 
-                                cvProd = BeProductoUbicacion;
-                                cvProdID = BeProductoUbicacion.getIdProducto();
-                                cvPropID = BeProductoUbicacion.getIdPropietario();
-                                cvUMBID = BeProductoUbicacion.getIdUnidadMedidaBasica();
+                                        for (clsBeProducto obj : ListaActualizada) {
+                                            stockResList.items.add(obj.Stock);
+                                        }
 
-                                if (BeProductoUbicacion.getControl_peso()) {
-                                    trPeso.setVisibility(View.VISIBLE);
+                                        relProductos.setVisibility(View.VISIBLE);
+                                        relForm.setVisibility(View.GONE);
+                                        trCodigoProducto.setVisibility(View.GONE);
+
+                                        if (gl.modo_cambio == 2) {
+                                            BeProductoUbicacion = ListaActualizada.get(0);
+                                            cvPropID = BeProductoUbicacion.IdPropietario;
+                                            execws(10);
+                                        }
+
+                                        txtLicPlate.clearFocus();
+                                        txtUbicDestino.requestFocus();
+                                    }
                                 } else {
-                                    trPeso.setVisibility(View.GONE);
+                                    msgbox("La licencia no es válida");
                                 }
 
-                                cvLote = BeStockPallet.Lote;
-                                cvPresID = BeStockPallet.IdPresentacion;
-                                //#AT20220713 Asigne valor a la variable cvAtrib
-                                cvAtrib = BeStockPallet.Atributo_variante_1;
-                                cvEstOrigen = BeStockPallet.IdProductoEstado;
-                                cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
-
-                                //Llama al método del WS Get_Estados_By_IdPropietario
-                                execws(10);
+                                progress.cancel();
 
                             } else {
                                 //#AT 20220421 Cuando la lista de productos es mayor a 1
@@ -2563,17 +2562,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 //Llama al método del WS Get_Estados_By_IdPropietario
                                 execws(10);
 
-                            /*progress.cancel();
-                            msgbox("Escanee el producto que a ubicar");
-                            txtCodigoPrd.requestFocus();*/
+                                /*progress.cancel();
+                                msgbox("Escanee el producto que a ubicar");
+                                txtCodigoPrd.requestFocus();*/
                             }
                         }
-                    } else {
-                        //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
-                        execws(3);
                     }
+                } else {
+                    //Llama a este método del WS Get_BeProducto_By_Codigo_For_HH
+                    execws(3);
                 }
             }
+
 
         } catch (Exception e) {
             progress.cancel();
@@ -2702,7 +2702,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
                 } else {
                     inicializaTarea(true);
-                    LicenciasCompletas = false;
+                    LicenciaMixta = false;
                 }
 
                 progress.cancel();
@@ -3890,9 +3890,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if (LicenciasCompletas) {
+                    if (LicenciaMixta) {
                         inicializaTarea(true);
-                        LicenciasCompletas = false;
+                        LicenciaMixta = false;
                         return;
                     }
 
@@ -4161,7 +4161,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     public void AplicarCambio(View view){
 
-        if (LicenciasCompletas) {
+        if (LicenciaMixta) {
             AplicaLicenciasCompletas();
         } else {
             AplicarCambioBoton();
