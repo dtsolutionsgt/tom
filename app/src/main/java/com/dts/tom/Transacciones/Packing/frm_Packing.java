@@ -2170,6 +2170,26 @@ public class frm_Packing extends PBase {
                                     } else {
                                         msgbox("La licencia no es válida");
                                     }
+                                } else {
+                                    txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                                    BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                                    BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+
+                                    lblDesProducto.setTextColor(Color.BLUE);
+                                    lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+
+                                    cvProd = BeProductoUbicacionOrigen;
+                                    gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                                    cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                                    cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                                    gLoteOrigen = BeStockPallet.Lote;
+                                    cvPresID = BeStockPallet.IdPresentacion;
+                                    gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                                    cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                                    //Llama al método del WS Get_Estados_By_IdPropietario
+                                    execws(4);
                                 }
                             }
 
