@@ -2400,11 +2400,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                if (!CambioUbicExistencia){
-                    LicenciasCompletas = productoList.items.stream()
-                            .map(clsBeProducto::getCodigo)
-                            .distinct()
-                            .count() > 1;
+                if (!CambioUbicExistencia && gl.pBeBodega.Control_Pallet_Mixto){
+
+                    if (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                        LicenciasCompletas = productoList.items.stream()
+                                .map(clsBeProducto::getCodigo)
+                                .distinct()
+                                .count() > 1;
+                    } else {
+                        msgbox("La licencia no es válida");
+                    }
                 }else{
                     LicenciasCompletas = false;
                 }
