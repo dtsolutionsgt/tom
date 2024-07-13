@@ -53,7 +53,7 @@ public class clsBeTrans_pe_pol {
     @Element(required=false) public boolean IsNew=false;
     @Element(required=false) public int IdRegimen=0;
     @Element(required=false) public double Total_bultos_Peso_Neto = 0;
-
+    @Element(required=false) public boolean activo = false;
 
     public clsBeTrans_pe_pol() {
     }

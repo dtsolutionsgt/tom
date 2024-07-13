@@ -220,7 +220,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="5.6.5";
+    public final String version="5.7.1";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
