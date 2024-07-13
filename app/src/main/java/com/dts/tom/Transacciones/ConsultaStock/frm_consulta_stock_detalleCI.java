@@ -418,28 +418,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
 
-                        /*zpl = String.format("^XA\n" +
-                                        "^MMT\n" +
-                                        "^PW600\n" +
-                                        "^LL0406\n" +
-                                        "^LS0\n" +
-                                        "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                        "^BY3,3,160^FT550,200^BCI,,N,N\n" +
-                                        "^FD%3$s^FS\n" +
-                                        "^PQ1,0,1,Y \n" +
-                                        "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                        "^FO2,440^GB670,14,14^FS\n" +
-                                        "^FT560,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                                        "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                gl.gNomEmpresa,
-                                "$"+gl.existencia.getLicPlate(),
-                                gl.existencia.Codigo+" - "+gl.existencia.Nombre);*/
-
-
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
@@ -483,6 +461,36 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 gl.existencia.Codigo+" - "+gl.existencia.Nombre,
                                 "$"+gl.existencia.LicPlate);
+                    }else if(gl.existencia.IdTipoEtiqueta==5){
+
+                        String valor= gl.existencia.Fecha_Vence.toString();
+                        //#AT 20211123 Se ajusta el formato a la fecha
+                        String fecha_ajustada =  du.convierteFechaSinHora(valor);
+
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW700\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB700,5,5^FS\n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS\n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS\n" +
+                                        "^FT700,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS\n" +
+                                        "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS\n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                        "^FO2,340^GB700,14,14^FS\n" +
+                                        "^BY3,3,160^FT700,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                               gl.existencia.Codigo + " - " + gl.existencia.Nombre,
+                                               "$" + gl.existencia.LicPlate,
+                                               gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                               gl.existencia.Lote, gl.existencia.Fecha_Vence);
                     }
 
                     if (!zpl.isEmpty()){

@@ -5801,10 +5801,21 @@ public class frm_recepcion_datos extends PBase {
 
     private void Imprimir_Licencia(int Copias){
 
+        String vFechaVence = "";
+        String vLote = "";
+
         try{
 
             if (!txtNoLP.getText().toString().trim().isEmpty()){
                 pNumeroLP = txtNoLP.getText().toString().trim().replace("$","");
+            }
+
+            if (BeTransReDet!=null){
+                vLote = BeTransReDet.Lote;
+                vFechaVence = du.convierteFechaMostrar(BeTransReDet.Fecha_vence.toString());
+            }else{
+                vLote = txtLoteRec.getText().toString();
+                vFechaVence = cmbVenceRec.getText().toString();
             }
 
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
@@ -5980,29 +5991,29 @@ public class frm_recepcion_datos extends PBase {
                     }else if (BeProducto.IdTipoEtiqueta == 5) {
 
                         zpl = String.format("^XA\n" +
-                                        "^MMT   \n" +
-                                        "^PW700   \n" +
-                                        "^LL0406   \n" +
-                                        "^LS0   \n" +
-                                        "^FT450,21^A0I,20,14^FH^FD%4$s^FS   \n" +
-                                        "^FO2,40^GB700,5,5^FS   \n" +
-                                        "^FT270,61^A0I,30,24^FH^FD%0$s^FS   \n" +
-                                        "^FT550,61^A0I,30,24^FH^FD%1$s^FS   \n" +
-                                        "^FT700,306^A0I,30,24^FH^FD%2$s^FS   \n" +
-                                        "^FT290,135^A0I,85,54^FH^FDV.%6$s^FS   \n" +
-                                        "^FT290,225^A0I,85,49^FH^FDL.%5$s^FS   \n" +
-                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS   \n" +
-                                        "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS   \n" +
-                                        "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS   \n" +
-                                        "^FO2,340^GB700,14,14^FS   \n" +
-                                        "^BY3,3,160^FT700,131^BCI,,Y,N   \n" +
-                                        "^FD%3$s^FS   \n" +
-                                        "^PQ1,0,1,Y   \n" +
+                                        "^MMT\n" +
+                                        "^PW700\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB700,5,5^FS\n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS\n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS\n" +
+                                        "^FT700,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS\n" +
+                                        "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS\n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                        "^FO2,340^GB700,14,14^FS\n" +
+                                        "^BY3,3,160^FT700,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
                                         "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 "$" + pNumeroLP,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                BeProducto.Lote, BeProducto.FechaVence);
+                                vLote, vFechaVence);
 
                         zplSKU = String.format("^XA \n" +
                                         "^MMT \n" +
@@ -6234,25 +6245,25 @@ public class frm_recepcion_datos extends PBase {
                                             "^PW700   \n" +
                                             "^LL0406   \n" +
                                             "^LS0   \n" +
-                                            "^FT450,21^A0I,20,14^FH^FD%4$s^FS   \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS   \n" +
                                             "^FO2,40^GB700,5,5^FS   \n" +
-                                            "^FT270,61^A0I,30,24^FH^FD%0$s^FS   \n" +
-                                            "^FT550,61^A0I,30,24^FH^FD%1$s^FS   \n" +
-                                            "^FT700,306^A0I,30,24^FH^FD%2$s^FS   \n" +
-                                            "^FT290,135^A0I,85,54^FH^FDV.%6$s^FS   \n" +
-                                            "^FT290,225^A0I,85,49^FH^FDL.%5$s^FS   \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS   \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS   \n" +
+                                            "^FT700,306^A0I,30,24^FH^FD%3$s^FS   \n" +
+                                            "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS   \n" +
+                                            "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS   \n" +
                                             "^FT360,61^A0I,30,24^FH^FDBodega:^FS   \n" +
                                             "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS   \n" +
                                             "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS   \n" +
                                             "^FO2,340^GB700,14,14^FS   \n" +
                                             "^BY3,3,160^FT700,131^BCI,,Y,N   \n" +
-                                            "^FD%3$s^FS   \n" +
+                                            "^FD%4$s^FS   \n" +
                                             "^PQ1,0,1,Y   \n" +
                                             "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                     BeProducto.Codigo + " - " + BeProducto.Nombre,
                                     "$" + pNumeroLP,
                                     gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                    BeProducto.Lote, BeProducto.FechaVence);
+                                    vLote, vFechaVence);
 
                             zplSKU = String.format("^XA \n" +
                                             "^MMT \n" +

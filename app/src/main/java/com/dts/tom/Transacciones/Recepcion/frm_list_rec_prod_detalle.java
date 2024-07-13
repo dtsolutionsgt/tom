@@ -116,13 +116,13 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                     selitem = pListTransRecDet.items.get(position-1);
 
-                        selid =selitem.IdRecepcionDet ;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-                        pNumeroLP = selitem.Lic_plate;
+                    selid =selitem.IdRecepcionDet ;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
+                    pNumeroLP = selitem.Lic_plate;
 
-                        imgImprimir.setVisibility(View.VISIBLE);
-                        cmdEliminar.setVisibility(View.VISIBLE);
+                    imgImprimir.setVisibility(View.VISIBLE);
+                    cmdEliminar.setVisibility(View.VISIBLE);
 
                 }else{
                     imgImprimir.setVisibility(View.INVISIBLE);
@@ -228,6 +228,7 @@ public class frm_list_rec_prod_detalle extends PBase {
             mu.msgbox("Lista_Detalle_Rec:"+e.getMessage());
         }
     }
+
     @SuppressLint("SetTextI18n")
     void valida_producto_completo(){
 
@@ -256,25 +257,6 @@ public class frm_list_rec_prod_detalle extends PBase {
             msgbox(ex.getMessage());
         }
     }
-
-
-    /*Private Sub Valida_Producto_Completo(ByVal CantRec As Double, ByVal CantOC As Double)
-
-    Try
-
-    If CantRec >= CantOC Then
-    cmdCompletaProd.Text = "COMPLETA"
-    cmdCompletaProd.BackColor = Color.Green
-            Else
-    cmdCompletaProd.Text = "INCOMPLETA"
-    cmdCompletaProd.BackColor = Color.Firebrick
-    End If
-
-    Catch ex As Exception
-    MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
-    End Try
-
-    End Sub*/
 
     public static class OrdenarItems implements Comparator<clsBeTrans_re_det> {
 
@@ -399,30 +381,6 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }else if (BeProducto.IdTipoEtiqueta==2){
                     //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                     //Dado que la descripción salía muy pequeña
-                   /* zpl = String.format("^XA\n" +
-                                    "^MMT\n" +
-                                    "^PW600\n" +
-                                    "^LL0406\n" +
-                                    "^LS0\n" +
-                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
-                                    "^FO2,40^GB670,0,5^FS \n" +
-                                    "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
-                                    "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
-                                    "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
-                                    "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                    "^FT560,180^A0I,90,70^FH^FD%3$s^FS\n" +
-                                    "^BY3,3,160^FT550,280^BCI,,N,N\n" +
-                                    "^FD%3$s^FS\n" +
-                                    "^PQ1,0,1,Y \n" +
-                                    "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
-                                    "^FO2,520^GB670,14,14^FS\n" +
-                                    "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                                    "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                            gl.gNomEmpresa,
-                            "$"+pNumeroLP,
-                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());*/
-
 
                     zpl = String.format("^XA\n" +
                                     "^MMT\n" +
@@ -471,27 +429,34 @@ public class frm_list_rec_prod_detalle extends PBase {
                             BeProducto.Codigo+" - "+BeProducto.Nombre,
                             "$"+pNumeroLP,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.Fecha_Completa());
-                }
+                }else if (BeProducto.IdTipoEtiqueta == 5) {
 
-                //#GT19082022: este formato no esta adecuado al tipo de etiqueta definido en el BOF
-//                String zpl = String.format("^XA \n" +
-//                                           "^MMT \n" +
-//                                           "^PW700 \n" +
-//                                           "^LL0406 \n" +
-//                                           "^LS0 \n" +
-//                                           "^FT171,61^A0I,25,14^FH^FD%1$s^FS \n" +
-//                                           "^FT550,61^A0I,25,14^FH^FD%2$s^FS \n" +
-//                                           "^FT670,306^A0I,25,14^FH^FD%3$s^FS \n" +
-//                                           "^FT292,61^A0I,25,24^FH^FDBodega:^FS \n" +
-//                                           "^FT670,61^A0I,25,24^FH^FDEmpresa:^FS \n" +
-//                                           "^FT670,367^A0I,25,24^FH^FDTOM, WMS.  Product Barcode^FS \n" +
-//                                           "^FO2,340^GB670,0,14^FS \n" +
-//                                           "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-//                                           "^FD%4$s^FS \n" +
-//                                           "^PQ1,0,1,Y " +
-//                                           "^XZ",gl.CodigoBodega, gl.gNomEmpresa,
-//                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-//                                            "$"+pNumeroLP);
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW700\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                    "^FO2,40^GB700,5,5^FS\n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS\n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS\n" +
+                                    "^FT700,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                    "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS\n" +
+                                    "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS\n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                    "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                    "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                    "^FO2,340^GB700,14,14^FS\n" +
+                                    "^BY3,3,160^FT700,131^BCI,,Y,N\n" +
+                                    "^FD%4$s^FS\n" +
+                                    "^PQ1,0,1,Y\n" +
+                                    "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo + " - " + BeProducto.Nombre,
+                            "$" + pNumeroLP,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                            selitem.Lote, selitem.Fecha_vence);
+
+                }
 
                 if (!zpl.isEmpty()){
                     zPrinterIns.sendCommand(zpl);
