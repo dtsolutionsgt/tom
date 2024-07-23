@@ -454,7 +454,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                             BeProducto.Codigo + " - " + BeProducto.Nombre,
                             "$" + pNumeroLP,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                            selitem.Lote, selitem.Fecha_vence);
+                            selitem.Lote, selitem.Fecha_vence.replace("-","/"));
 
                 }
 

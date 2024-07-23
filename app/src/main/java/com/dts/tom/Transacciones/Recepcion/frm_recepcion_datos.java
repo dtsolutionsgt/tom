@@ -6013,7 +6013,7 @@ public class frm_recepcion_datos extends PBase {
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 "$" + pNumeroLP,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                vLote, vFechaVence);
+                                vLote, vFechaVence.replace("-","/"));
 
                         zplSKU = String.format("^XA \n" +
                                         "^MMT \n" +
@@ -6263,7 +6263,7 @@ public class frm_recepcion_datos extends PBase {
                                     BeProducto.Codigo + " - " + BeProducto.Nombre,
                                     "$" + pNumeroLP,
                                     gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                    vLote, vFechaVence);
+                                    vLote, vFechaVence.replace("-","/"));
 
                             zplSKU = String.format("^XA \n" +
                                             "^MMT \n" +

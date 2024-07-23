@@ -490,7 +490,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                                gl.existencia.Codigo + " - " + gl.existencia.Nombre,
                                                "$" + gl.existencia.LicPlate,
                                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                               gl.existencia.Lote, gl.existencia.Fecha_Vence);
+                                               gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"));
                     }
 
                     if (!zpl.isEmpty()){

@@ -69,7 +69,7 @@ public class clsBeTrans_inv_enc {
 
     @Element(required=false) public boolean multi_propietario=false;
     @Element(required=false) public String Licencia="";
-
+    @Element(required=false) public int IdCentroCosto=0;
 
 
     public clsBeTrans_inv_enc() {
