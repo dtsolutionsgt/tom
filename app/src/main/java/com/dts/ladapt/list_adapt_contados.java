@@ -87,7 +87,7 @@ public class list_adapt_contados extends BaseAdapter {
             holder.lblPresCont.setText(BeListContados.get(position).presentacion);
         }
 
-        if (BeListContados.get(position).Cantidad > 0) {
+        if (BeListContados.get(position).Cantidad >= 0) {
             holder.lblCantCont.setText("" + BeListContados.get(position).Cantidad);
         }
 

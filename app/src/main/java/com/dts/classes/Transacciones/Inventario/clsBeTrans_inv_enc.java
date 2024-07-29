@@ -70,7 +70,7 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public boolean multi_propietario=false;
     @Element(required=false) public String Licencia="";
     @Element(required=false) public int IdCentroCosto=0;
-
+    @Element(required=false) public int Tipo_Asignacion=2;
 
     public clsBeTrans_inv_enc() {
     }
@@ -88,7 +88,7 @@ public class clsBeTrans_inv_enc {
                               double Detalle,double Resumen,double Stock,double Peso,
                               boolean IsNew,String EstadoResumen,String EstadoDetalle,String OperadorConteo,
                               String OperadorVerifica,String FechaConteo,String FechaVence,String FechaVerifica,
-                              String Lote,String UMBas, boolean multi_propietario, String Licencia) {
+                              String Lote,String UMBas, boolean multi_propietario, String Licencia, int Tipo_Asignacion, int IdCentroCosto) {
 
         this.Idinventarioenc=Idinventarioenc;
         this.Idpropietario=Idpropietario;
@@ -146,10 +146,10 @@ public class clsBeTrans_inv_enc {
         this.UMBas=UMBas;
         this.multi_propietario = multi_propietario;
         this.Licencia = Licencia;
-
+        this.IdCentroCosto = IdCentroCosto;
+        this.Tipo_Asignacion = Tipo_Asignacion;
 
     }
-
 
     public int getIdinventarioenc() {
         return Idinventarioenc;
@@ -483,7 +483,19 @@ public class clsBeTrans_inv_enc {
         multi_propietario=value;
     }
 
+    public int getTipo_Asignacion() {
+        return Tipo_Asignacion;
+    }
+    public void setTipo_Asignacion(int value) {
+        Tipo_Asignacion=value;
+    }
 
+    public int getIdCentroCosto() {
+        return IdCentroCosto;
+    }
+    public void setIdCentroCosto(int value) {
+        IdCentroCosto=value;
+    }
 
 }
 

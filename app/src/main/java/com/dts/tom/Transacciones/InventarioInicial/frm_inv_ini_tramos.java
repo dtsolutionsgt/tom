@@ -96,7 +96,6 @@ public class frm_inv_ini_tramos extends PBase {
                         BeInvTramo = new clsBeTrans_inv_tramo();
                         BeInvTramo = BeListTramos.get(position);
 
-
                         selid = sitem.Idtramo;
                         selidx = position;
                         adapter.setSelectedIndex(position);

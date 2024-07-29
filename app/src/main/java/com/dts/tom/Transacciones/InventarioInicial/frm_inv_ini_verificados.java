@@ -418,7 +418,8 @@ public class frm_inv_ini_verificados extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_BeProducto_By_Codigo_Or_Licencia","pCodigo",txtCodProdVeri.getText().toString(),"IdBodega",gl.IdBodega);
+                        callMethod("Get_BeProducto_By_Codigo_Or_Licencia","pCodigo",txtCodProdVeri.getText().toString().replace("$",""),
+                                                                                           "IdBodega",gl.IdBodega);
                         break;
                     case 2:
                         int ubic = 0;
