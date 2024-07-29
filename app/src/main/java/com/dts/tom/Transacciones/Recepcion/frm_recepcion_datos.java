@@ -3160,24 +3160,11 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //#GT19062024: Si no genera LP auto, validar focus en lote o vencimiento antes que en cantidad
+            //remuevo validación de focus, se regresa a cantidad sin importar lote
             if (!txtNoLP.getText().toString().trim().isEmpty()){
 
-                //txtCantidadRec.requestFocus();
-                //txtCantidadRec.selectAll();
-
-                //#GT19062024: si hay lp, validar focus en lote o vencimiento antes que en cantidad.
-                if (BeProducto.Control_lote) {
-                    txtLoteRec.requestFocus();
-                    txtLoteRec.selectAll();
-                }
-                else{
-                    if (BeProducto.Control_vencimiento){
-                        cmbVenceRec.requestFocus();
-                    }else{
-                        txtCantidadRec.requestFocus();
-                        txtCantidadRec.selectAll();
-                    }
-                }
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
 
             }else{
 
@@ -3985,23 +3972,8 @@ public class frm_recepcion_datos extends PBase {
                             if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                 //#CKFK20220520 Aquí si ya se ingresó la licencia debe irse a la cantidad
                                 //  txtNoLP.requestFocus();
-                                //txtCantidadRec.requestFocus();
-
-                                //#GT19062024: si tiene control vence, o lote poner el focus antes que en cantidad.
-
-                                if (BeProducto.Control_lote) {
-                                    txtLoteRec.requestFocus();
-                                    txtLoteRec.selectAll();
-                                }
-                                else{
-
-                                    if (BeProducto.Control_vencimiento){
-                                        cmbVenceRec.requestFocus();
-                                    }else{
-                                        txtCantidadRec.requestFocus();
-                                        txtCantidadRec.selectAll();
-                                    }
-                                }
+                                txtCantidadRec.requestFocus();
+                                txtCantidadRec.selectAll();
 
                             }else{
                                 txtNoLP.requestFocus();
@@ -7649,41 +7621,43 @@ public class frm_recepcion_datos extends PBase {
                     case 16:
                         progress.setMessage("Procesando recepción");
 
-                        //Guardar_Recepcion_Nueva
-                        //#CKFK20220823 Validando que la licencia no sea vacía, cuando si se está enviando
-//                        if (gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.isEmpty() ||
-//                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate.equals("")){
-//                            if (!txtNoLP.getText().toString().isEmpty()){
-//                                toast("#CKFK20220823: Por una causa desconocida la licencia está vacía");
-//                                gl.gBeRecepcion.Detalle.items.get(0).Lic_plate=txtNoLP.getText().toString();
-//                            }
-//                        }
-
                         //#GT06022023: si se genera la LP auto, validar que no vaya vacio el objeto RecepcionDet y StockRec
                         if(gl.bloquear_lp_hh){
                             if (BeTransReDet.Lic_plate.equals("") || BeTransReDet.Lic_plate.isEmpty()){
                                 if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                     BeTransReDet.Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
-                                    //#CKFK20231008 Puse esto en comentario
-                                    //toast("#GT06032023_1: Por una causa desconocida la licencia estaba vacía");
-                                    //addlog("WebServiceHandler case 16","#GT06032023_5: Por una causa desconocida la licencia está vacía","");
+
                                 }else{
-                                    //toast("#GT06032023_2: Por una causa desconocida la licencia está vacía");
-                                    //addlog("WebServiceHandler case 16","#GT06032023_2: Por una causa desconocida la licencia está vacía","");
+
                                 }
                             }
 
                             if (pListBeStockRec.items.get(0).Lic_plate.equals("") || pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
                                 if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                     pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
-                                    //toast("#GT06032023_3: Por una causa desconocida la licencia estaba vacía");
-                                    //addlog("WebServiceHandler case 16","#GT06032023_6: Por una causa desconocida la licencia está vacía","");
+
                                 }else{
-                                    //toast("#GT06032023_4: Por una causa desconocida la licencia está vacía");
-                                    //addlog("WebServiceHandler case 16","#GT06032023_4: Por una causa desconocida la licencia está vacía","");
+
                                 }
                             }
                         }
+
+                        //**********************************************************************************************//
+                        //#GT29072024: validamos si producto genera LP o su presentacion, y combinamos con la resolución
+                        if (BeProducto.Genera_lp || BeProducto.Presentacion.Genera_lp_auto ) {
+                            if(nBeResolucion !=null ){
+                                if(BeTransReDet.Lic_plate.equals("") || txtNoLP.equals("") ){
+                                    //aqui hay un problema
+                                    progress.cancel();
+                                    throw new Exception("GT_1: La configuracion del producto requiere una licencia.");
+                                }
+                            }else{
+                                //aqui hay un problema
+                                progress.cancel();
+                                throw new Exception("GT_2: La configuracion del producto requiere una licencia.");
+                            }
+                        }
+
 
                         //#AT 20220328 Si chkPresentacion no esta marcado, IdPresentación = 0
                         if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
@@ -7741,6 +7715,7 @@ public class frm_recepcion_datos extends PBase {
                                         "pIdUsuario", gl.IdOperador,
                                         "pIdResolucionLp", gl.IdResolucionLpOperador,
                                         "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+
                             }
 
                         }
@@ -9656,24 +9631,11 @@ public class frm_recepcion_datos extends PBase {
             }
 
             //GT04042022: focus a cantidad
+            //remuevo validación de focus, cealsa lo quiere en cantidad sin importar lote
             if (!txtNoLP.getText().toString().trim().isEmpty()){
 
-                //txtCantidadRec.requestFocus();
-                //txtCantidadRec.selectAll();
-
-                //#GT19062024: si hay lp, validar focus en lote o vencimiento antes que en cantidad.
-                if (BeProducto.Control_lote) {
-                    txtLoteRec.requestFocus();
-                    txtLoteRec.selectAll();
-                }
-                else{
-                    if (BeProducto.Control_vencimiento){
-                        cmbVenceRec.requestFocus();
-                    }else{
-                        txtCantidadRec.requestFocus();
-                        txtCantidadRec.selectAll();
-                    }
-                }
+                txtCantidadRec.requestFocus();
+                txtCantidadRec.selectAll();
 
             }else{
                 txtNoLP.requestFocus();
