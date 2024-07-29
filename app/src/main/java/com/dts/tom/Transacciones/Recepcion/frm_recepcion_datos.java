@@ -7649,12 +7649,12 @@ public class frm_recepcion_datos extends PBase {
                                 if(BeTransReDet.Lic_plate.equals("") || txtNoLP.equals("") ){
                                     //aqui hay un problema
                                     progress.cancel();
-                                    throw new Exception("GT_1: La configuracion del producto requiere una licencia.");
+                                    throw new Exception("GT29072024_1: La configuracion del producto requiere una licencia.");
                                 }
                             }else{
                                 //aqui hay un problema
                                 progress.cancel();
-                                throw new Exception("GT_2: La configuracion del producto requiere una licencia.");
+                                throw new Exception("GT29072024_2: La configuracion del producto requiere una licencia.");
                             }
                         }
 
