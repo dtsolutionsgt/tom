@@ -26,6 +26,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Permitir_Despacho_Parcial =true;
     @Element(required=false) public boolean Permitir_Despacho_Multiple=true;
     @Element(required=false) public boolean Fotografia_Verificacion = false;
+    @Element(required=false) public boolean Es_Devolucion = false;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -46,7 +47,8 @@ public class clsBeTrans_pe_tipo {
                               boolean Control_Cliente_En_Detalle,
                               boolean Permitir_Despacho_Parcial,
                               boolean Permitir_Despacho_Multiple,
-                              boolean Fotografia_Verificacion
+                              boolean Fotografia_Verificacion,
+                              boolean Es_Devolucion
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -66,6 +68,7 @@ public class clsBeTrans_pe_tipo {
         this.Permitir_Despacho_Parcial = Permitir_Despacho_Parcial;
         this.Permitir_Despacho_Multiple = Permitir_Despacho_Multiple;
         this.Fotografia_Verificacion = Fotografia_Verificacion;
+        this.Es_Devolucion = Es_Devolucion;
 
     }
 
@@ -216,5 +219,10 @@ public class clsBeTrans_pe_tipo {
         Fotografia_Verificacion=value;
     }
 
-
+    public boolean getEs_Devolucion() {
+        return Es_Devolucion;
+    }
+    public void setEs_Devolucion(boolean value) {
+        Es_Devolucion=value;
+    }
 }

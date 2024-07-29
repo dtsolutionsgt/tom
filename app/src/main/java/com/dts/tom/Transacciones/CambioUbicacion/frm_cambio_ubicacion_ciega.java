@@ -2108,11 +2108,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     return;
                 }
 
-                if (gl.Interface_SAP){
+                if (gl.Interface_SAP && gl.Restringir_Areas_SAP){
                     //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                     //sean iguales cuando la bodega tenga interface con SAP
                     if (CambioUbicExistencia){
-                        if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                        if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea ){
                             throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                         }
                     }else{
@@ -2227,11 +2227,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea){
+                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }else{
-                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea()){
+                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea() && gl.Restringir_Areas_SAP){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }
@@ -2400,10 +2400,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
             }else{
 
-                LicenciasCompletas = productoList.items.stream()
-                        .map(clsBeProducto::getCodigo)
-                        .distinct()
-                        .count() > 1;
+                if (!CambioUbicExistencia && gl.pBeBodega.Control_Pallet_Mixto){
+
+                    if (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                        LicenciasCompletas = productoList.items.stream()
+                                .map(clsBeProducto::getCodigo)
+                                .distinct()
+                                .count() > 1;
+                    } else {
+                        msgbox("La licencia no es válida");
+                    }
+                }else{
+                    LicenciasCompletas = false;
+                }
 
                 if (LicenciasCompletas) {
 
@@ -2698,12 +2707,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 trCodigoProducto.setVisibility(View.VISIBLE);
                 lblDescProducto.setText("-");
 
-                LicenciasCompletas = false;
-
-                inicializaTarea(true);
-
                 if (!ocultar_mensajes) {
                     msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
+                } else {
+                    inicializaTarea(true);
+                    LicenciasCompletas = false;
                 }
 
                 progress.cancel();
@@ -3891,6 +3899,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 public void onClick(DialogInterface dialog, int which) {
 
+                    if (LicenciasCompletas) {
+                        inicializaTarea(true);
+                        LicenciasCompletas = false;
+                        return;
+                    }
+
                     if( escaneoPallet && productoList != null){
                         //#CKFK20210610 agregué esta validación para que si no tiene presentación no chkExplosionarlosione el material
                         if (BeStockPallet.getIdPresentacion()!=0) {
@@ -4462,8 +4476,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.show();
 
             btnGuardarCiega.setVisibility(View.INVISIBLE);
-
             cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
+            cvUbicOrigID = Integer.valueOf(txtUbicOrigen.getText().toString());
+
+            if(cvUbicDestID == 0){
+                if(txtUbicDestino.getText().toString().isEmpty()){
+                    msgbox("La ubicación de destino no puede ser vacía");
+                }else{
+                    msgbox("Confirme la ubicación de destino.");
+                }
+                txtUbicDestino.requestFocus();
+                return;
+            }
+
+            if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio == 1)){
+                msgbox("La ubicación de destino coincide con la de origen");
+                cvUbicDestID = 0;
+                txtUbicDestino.selectAll();
+                txtUbicDestino.requestFocus();
+                return;
+            }
+
             stockList.items = new ArrayList<>();
             stockList.items.clear();
 

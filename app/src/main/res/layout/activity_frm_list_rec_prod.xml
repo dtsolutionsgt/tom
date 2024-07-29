@@ -408,7 +408,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/medium"
+        android:backgroundTint="#009688"
         android:clickable="true"
         android:onClick="BotonFinalizarRec"
         android:src="@drawable/ok_btn"

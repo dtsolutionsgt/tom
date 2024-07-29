@@ -14,7 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +30,10 @@ import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientos;
+import com.dts.classes.Transacciones.Movimiento.Trans_movimientos.clsBeTrans_movimientosList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
+import com.dts.ladapt.list_adapt_lista_productos_cubic;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.zebra.sdk.comm.BluetoothConnection;
@@ -40,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -57,6 +63,9 @@ public class frm_Packing extends PBase {
 
     private ProgressDialog progress;
     private Dialog dialog;
+    private ListView listProductos;
+    private RelativeLayout relForm, relProductos;
+    private TableRow trDescripcion, trCodigoProd;
 
     private int idUbicRecep = 0;
     private int cvUbicOrigID= 0;
@@ -114,6 +123,13 @@ public class frm_Packing extends PBase {
     private boolean inferir_origen_en_cambio_ubic;
     private String tmpLicencia = "";
 
+    private list_adapt_lista_productos_cubic adapter;
+    private boolean LicenciasMixtas = false;
+    private boolean ProductosDiferentes = false;
+    private clsBeTrans_movimientosList movList = new clsBeTrans_movimientosList();
+    private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
+    private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -147,6 +163,12 @@ public class frm_Packing extends PBase {
 
             btnGuardarDirigida = findViewById(R.id.btnGuardarDirigida);
             cmdImprimir = findViewById(R.id.cmdImprimir2);
+
+            listProductos = findViewById(R.id.listProductos);
+            relForm = findViewById(R.id.relForm);
+            relProductos = findViewById(R.id.relProductos);
+            trCodigoProd = findViewById(R.id.trCodigoProd);
+            trDescripcion = findViewById(R.id.trDescripcion);
 
             ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -1320,6 +1342,134 @@ public class frm_Packing extends PBase {
         }
     }
 
+    private void aplicarCambioMixto() {
+        try {
+            stockList.items = new ArrayList<>();
+            stockList.items.clear();
+
+            NuevoLp = txtNuevoLp.getText().toString();
+
+            for (clsBeProducto obj : ListaActualizada) {
+
+
+                clsBeVW_stock_res auxStockRes = new clsBeVW_stock_res();
+
+                auxStockRes.IdProductoBodega = obj.IdProductoBodega;
+                auxStockRes.IdUbicacion = cvUbicOrigID;
+
+                if (obj.Control_lote) {
+                    auxStockRes.Lote = obj.Stock.Lote;
+                } else {
+                    auxStockRes.Lote = "";
+                }
+
+                if (obj.Control_vencimiento) {
+                    auxStockRes.Fecha_Vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
+                } else {
+                    auxStockRes.Fecha_Vence = "01/01/1900";
+                }
+                double CantidadUbicar = 0;
+                CantidadUbicar = obj.Stock.CantidadUmBas - obj.Stock.CantidadReservadaUMBas;
+
+                auxStockRes.CantidadUmBas = CantidadUbicar;
+                auxStockRes.Peso = obj.Stock.Peso;
+                auxStockRes.IdPresentacion = obj.Stock.IdPresentacion;
+                auxStockRes.IdPresentacion_Anterior = obj.Stock.IdPresentacion_Anterior;
+                auxStockRes.IdProductoEstado = obj.Stock.IdProductoEstado;
+                auxStockRes.Fecha_ingreso = app.strFechaXML(du.getFechaActual());
+                auxStockRes.ValorFecha = app.strFechaXML(du.getFechaActual());
+                auxStockRes.Lic_plate = NuevoLp;
+                auxStockRes.Lic_plate_Anterior = obj.Stock.Lic_plate;
+
+                /*if (Escaneo_Pallet && ListBeStockPallet != null) {
+
+                    auxStockRes.Lic_plate = NuevoLp;//BeStockPallet.Lic_plate;
+
+                    if (BeStockPallet.Factor > 0) {
+                        auxStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
+                    }
+
+                } else if (cvPresID != 0) {
+                    auxStockRes.CantidadUmBas = vCantidadAUbicar * vFactorPres;
+                }*/
+
+                gMovimientoDet = new clsBeTrans_movimientos();
+
+                gMovimientoDet.IdMovimiento = 0;
+                gMovimientoDet.IdEmpresa = gl.IdEmpresa;
+                gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
+                gMovimientoDet.IdTransaccion = 1;
+                gMovimientoDet.IdPropietarioBodega = obj.Stock.IdPropietarioBodega;
+                gMovimientoDet.IdProductoBodega = obj.Stock.IdProductoBodega;
+                gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
+                gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
+
+                gMovimientoDet.IdPresentacion = obj.Stock.IdPresentacion;
+
+                /*if(cmbPresentacion.getAdapter()!=null  && cmbPresentacion.getAdapter().getCount()>0){
+                    gMovimientoDet.IdPresentacion = (Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]) == -1? 0: Integer.valueOf(cmbPresentacion.getSelectedItem().toString().split(" - ")[0]));
+                }else{
+                    gMovimientoDet.IdPresentacion = 0;
+                }*/
+
+                /*if(cmbEstado.getAdapter()!=null && cmbEstado.getAdapter().getCount()>0){
+                    gMovimientoDet.IdEstadoOrigen = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0]);
+                }else{
+                    gMovimientoDet.IdEstadoOrigen = 0;
+                }*/
+
+                gMovimientoDet.IdEstadoOrigen = obj.Stock.IdProductoEstado;
+                gMovimientoDet.IdEstadoDestino = obj.Stock.IdProductoEstado;
+
+                if(gl.modo_cambio == 1 ){
+                    gMovimientoDet.IdEstadoDestino = gMovimientoDet.IdEstadoOrigen;
+                }
+
+                gMovimientoDet.IdUnidadMedida = obj.Stock.IdUnidadMedida;
+                gMovimientoDet.IdTipoTarea = 12;
+                gMovimientoDet.IdBodegaDestino = gl.IdBodega;
+                gMovimientoDet.IdRecepcion = obj.Stock.IdRecepcionEnc;
+                gMovimientoDet.Cantidad = CantidadUbicar;
+                gMovimientoDet.Serie = obj.Stock.Serial;
+                gMovimientoDet.Peso = 0;
+                gMovimientoDet.Lote = obj.Stock.Lote;
+
+                if(obj.Control_vencimiento ){
+                    gMovimientoDet.Fecha_vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
+                } else {
+                    gMovimientoDet.Fecha_vence = app.strFechaXMLCombo("01/01/1900");
+                }
+
+                gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+
+                if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
+                    gMovimientoDet.Barra_pallet = obj.Stock.Lic_plate;
+                } else {
+                    gMovimientoDet.Barra_pallet = "";
+                }
+
+                gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
+                gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
+                gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+                gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
+                gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
+                gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
+                gMovimientoDet.setIsNew(true);
+
+                auxStockRes.Movimiento = gMovimientoDet;
+
+                stockList.items.add(auxStockRes);
+            }
+
+            execws(14);
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            mu.msgbox( e.getMessage());
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean Crear_Movimiento_Ubicacion_ND(boolean EsCambioEstado) {
 
         try{
@@ -1644,6 +1794,9 @@ public class frm_Packing extends PBase {
                                 "pIdProducto",gIdProductoOrigen,
                                 "pActivo",true);
                         break;
+                    case 14:
+                        callMethod("Set_LP_Stock_Mixto", "pStockResList",stockList, "pIdResolucionLp", gl.IdResolucionLpOperador);
+                        break;
                 }
 
                 progress.cancel();
@@ -1702,6 +1855,9 @@ public class frm_Packing extends PBase {
                 case 13:
                     processPresentacionesProducto();
                     break;
+                case 14:
+                    processSetLpMixto();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1723,6 +1879,30 @@ public class frm_Packing extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processPresentacionesProducto:"+e.getMessage());
+        }
+    }
+
+    private void processSetLpMixto() {
+        boolean resultado = false;
+        try {
+            resultado = (Boolean) xobj.getSingle("Set_LP_Stock_MixtoResult", boolean.class);
+
+            if (resultado) {
+                mu.msgbox("Cambio Aplicado");
+
+                relForm.setVisibility(View.VISIBLE);
+                relProductos.setVisibility(View.GONE);
+                trCodigoProd.setVisibility(View.VISIBLE);
+                trDescripcion.setVisibility(View.VISIBLE);
+                LicenciasMixtas = false;
+                txtLic_Plate.setText("");
+                btnGuardarDirigida.setVisibility(View.VISIBLE);
+
+                execws(1);
+            }
+        } catch (Exception e) {
+            mu.msgbox("processSetLpMixto:"+e.getMessage());
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1935,25 +2115,83 @@ public class frm_Packing extends PBase {
                         // if (AuxList.size() >= 1 && !txtPrd.getText().toString().isEmpty()){
                         if (AuxList.size() > 0){
 
-                            txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
-                            BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
-                            BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+                            //#AT20240628 Preguntar si es valido este cambio para las licencias mixtas
+                            if (AuxList.size() == 1) {
+                                txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                                BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                                BeStockPallet = ListBeStockPallet.items.get(0).Stock;
 
-                            lblDesProducto.setTextColor(Color.BLUE);
-                            lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+                                lblDesProducto.setTextColor(Color.BLUE);
+                                lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
 
-                            cvProd = BeProductoUbicacionOrigen;
-                            gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
-                            cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
-                            cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+                                cvProd = BeProductoUbicacionOrigen;
+                                gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                                cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                                cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
 
-                            gLoteOrigen = BeStockPallet.Lote;
-                            cvPresID = BeStockPallet.IdPresentacion;
-                            gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
-                            cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+                                gLoteOrigen = BeStockPallet.Lote;
+                                cvPresID = BeStockPallet.IdPresentacion;
+                                gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                                cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
 
-                            //Llama al método del WS Get_Estados_By_IdPropietario
-                            execws(4);
+                                //Llama al método del WS Get_Estados_By_IdPropietario
+                                execws(4);
+                            } else {
+
+                                //#AT20240625 Inicia proceso para licencias mixtas
+                                ProductosDiferentes = ListBeStockPallet.items.stream()
+                                        .map(clsBeProducto::getCodigo)
+                                        .distinct()
+                                        .count() > 1;
+
+                                if (gl.pBeBodega.Control_Pallet_Mixto && ProductosDiferentes) {
+                                    LicenciasMixtas = true;
+
+                                    relForm.setVisibility(View.GONE);
+                                    relProductos.setVisibility(View.VISIBLE);
+                                    trCodigoProd.setVisibility(View.GONE);
+                                    trDescripcion.setVisibility(View.GONE);
+
+                                    if  (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                                        ListaActualizada = ListBeStockPallet.items.stream()
+                                                .peek(clsBeProducto -> {
+                                                    if (clsBeProducto.Stock.getFecha_Vence().contains("T")) {
+                                                        clsBeProducto.Stock.setFecha_Vence(du.convierteFechaMostrar(clsBeProducto.Stock.getFecha_Vence()));
+                                                    }
+                                                })
+                                                .filter(clsBeProducto -> clsBeProducto.Stock.getIdUbicacion() == cvUbicOrigID &
+                                                        (clsBeProducto.Stock.CantidadUmBas - clsBeProducto.Stock.CantidadReservadaUMBas) != 0)
+                                                .collect(Collectors.toCollection(ArrayList::new));
+
+                                        if (ListaActualizada.size() > 0) {
+                                            adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
+                                            listProductos.setAdapter(adapter);
+                                        }
+                                    } else {
+                                        msgbox("La licencia no es válida");
+                                    }
+                                } else {
+                                    txtPrd.setText(ListBeStockPallet.items.get(0).Codigo);
+                                    BeProductoUbicacionOrigen = ListBeStockPallet.items.get(0);
+                                    BeStockPallet = ListBeStockPallet.items.get(0).Stock;
+
+                                    lblDesProducto.setTextColor(Color.BLUE);
+                                    lblDesProducto.setText(BeProductoUbicacionOrigen.getNombre());
+
+                                    cvProd = BeProductoUbicacionOrigen;
+                                    gIdProductoOrigen = BeProductoUbicacionOrigen.getIdProducto();
+                                    cvPropID = BeProductoUbicacionOrigen.getIdPropietario();
+                                    cvUMBID = BeProductoUbicacionOrigen.getIdUnidadMedidaBasica();
+
+                                    gLoteOrigen = BeStockPallet.Lote;
+                                    cvPresID = BeStockPallet.IdPresentacion;
+                                    gIdEstadoProductoOrigen = BeStockPallet.IdProductoEstado;
+                                    cvVence = app.strFecha(BeStockPallet.Fecha_Vence);
+
+                                    //Llama al método del WS Get_Estados_By_IdPropietario
+                                    execws(4);
+                                }
+                            }
 
                         }else{
                             progress.cancel();
@@ -2211,7 +2449,11 @@ public class frm_Packing extends PBase {
                 txtUbicDestino.setText(cUbicOrig.IdUbicacion+ "");
             }
 
-            aplicarCambio();
+            if (LicenciasMixtas) {
+                aplicarCambioMixto();
+            } else {
+                aplicarCambio();
+            }
 
         }catch (Exception e){
             mu.msgbox("processUbicacionLP:"+e.getMessage());

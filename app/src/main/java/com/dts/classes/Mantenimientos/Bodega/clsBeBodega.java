@@ -82,6 +82,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public int IdTipoEtiquetaLicencia = 0;
     @Element(required=false) public int IdSimbologiaLicencia = 0;
     @Element(required=false) public boolean Interface_SAP = false;
+    @Element(required=false) public boolean Restringir_Areas_SAP = false;
+    @Element(required=false) public boolean Control_Pallet_Mixto = false;
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -112,7 +114,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
                        boolean Liberar_Stock_Despachos_Parciales,
                        boolean Escanear_Licencia_Picking, int IdTipoEtiquetaLicencia, int IdSimbologiaLicencia,
-                       boolean Interface_SAP) {
+                       boolean Interface_SAP, boolean Restringir_Areas_SAP, boolean Control_Pallet_Mixto) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -186,6 +188,8 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.IdTipoEtiquetaLicencia = IdTipoEtiquetaLicencia;
         this.IdSimbologiaLicencia = IdSimbologiaLicencia;
         this.Interface_SAP = Interface_SAP;
+        this.Restringir_Areas_SAP = Restringir_Areas_SAP;
+        this.Control_Pallet_Mixto = Control_Pallet_Mixto;
     }
 
     public int getIdPais() {
@@ -681,12 +685,17 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setIdSimbologiaLicencia(int value) {
         IdSimbologiaLicencia=value;
     }
-
     public boolean getInterface_SAP() {
         return Interface_SAP;
     }
     public void setInterface_SAP(boolean value) {
         Interface_SAP=value;
+    }
+    public boolean getRestringir_Areas_SAP() {
+        return Restringir_Areas_SAP;
+    }
+    public void setRestringir_Areas_SAP(boolean value) {
+        Restringir_Areas_SAP=value;
     }
 
 }

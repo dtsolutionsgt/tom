@@ -46,6 +46,7 @@ public class clsBeCliente {
     @Element(required=false) public boolean Control_Calidad=false;
     @Element(required=false) public int IdUbicacionAbastecerCon = 0;
     @Element(required=false) public int IdBodegaAreaSAP = 0;
+    @Element(required=false) public boolean Es_Proveedor = false;
 
     public clsBeCliente() {
     }
@@ -58,7 +59,7 @@ public class clsBeCliente {
                         boolean Es_bodega_recepcion,boolean Es_Bodega_Traslado,int IdUbicacionVirtual,boolean Control_Ultimo_Lote,
                         String Referencia,clsBeCliente_tipo Tipo,clsBeCliente_direccionList Drecciones,clsBeCliente_tiemposList Tiempos,
                         clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo,
-                        int IdUbicacionAbastecerConz, int IdBodegaAreaSAP) {
+                        int IdUbicacionAbastecerConz, int IdBodegaAreaSAP, boolean Es_Proveedor) {
 
         this.IdCliente=IdCliente;
         this.IdEmpresa=IdEmpresa;
@@ -93,6 +94,7 @@ public class clsBeCliente {
         this.ClienteTipo=ClienteTipo;
         this.IdUbicacionAbastecerCon = IdUbicacionAbastecerCon;
         this.IdBodegaAreaSAP = IdBodegaAreaSAP;
+        this.Es_Proveedor = Es_Proveedor;
     }
 
 
@@ -301,6 +303,13 @@ public class clsBeCliente {
     }
     public void setIdBodegaAreaSAP(int value) {
         IdBodegaAreaSAP=value;
+    }
+
+    public boolean getEs_Proveedor() {
+        return Es_Proveedor;
+    }
+    public void setEs_Proveedor(boolean value) {
+        Es_Proveedor=value;
     }
 
 }

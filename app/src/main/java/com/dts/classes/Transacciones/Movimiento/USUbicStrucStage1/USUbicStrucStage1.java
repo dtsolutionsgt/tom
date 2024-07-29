@@ -13,7 +13,7 @@ public class USUbicStrucStage1 {
     @Element(required=false) public int Nivel=0;
     @Element(required=false) public USUbicSingleList lUbicacionesVacias=new USUbicSingleList();
     @Element(required=false) public USUbicSingleList lUbicacionesOcupadas = new USUbicSingleList();
-
+    @Element(required=false) public double PrediccionUbicacion  = 0;
 
     public USUbicStrucStage1() {
     }

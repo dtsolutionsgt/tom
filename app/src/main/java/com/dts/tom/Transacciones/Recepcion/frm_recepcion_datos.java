@@ -433,24 +433,6 @@ public class frm_recepcion_datos extends PBase {
 
             pBeTipo_etiqueta = new clsBeTipo_etiqueta();
 
-            //#GT09092022: ON CREATE TIENE TODOS LOS OBJETOS VACIOS, SIEMPRE SERA FALSO GENERA_LP
-//            //#EJC20220901:No mostrar campo de licencia,si no tiene presentación y no genera LP.
-//            if (!BeProducto.Genera_lp){
-//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-//                lblLicPlate.setVisibility(View.GONE);
-//                txtNoLP.setFocusable(false);
-//                txtNoLP.setFocusableInTouchMode(false);
-//                txtNoLP.setClickable(false);
-//                txtNoLP.setVisibility(View.GONE);
-//            }else{
-//                TextView lblLicPlate = findViewById(R.id.lblLicenciaRec);
-//                lblLicPlate.setVisibility(View.VISIBLE);
-//                txtNoLP.setFocusable(true);
-//                txtNoLP.setFocusableInTouchMode(true);
-//                txtNoLP.setClickable(true);
-//                txtNoLP.setVisibility(View.VISIBLE);
-//            }
-
             txtNoLP.setEnabled(!gl.bloquear_lp_hh);
 
             if(!gl.Escaneo_Pallet){
@@ -1472,7 +1454,7 @@ public class frm_recepcion_datos extends PBase {
             /***************************************************************************************/
             /**************************** set de los inputs ****************************************/
 
-            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre);
+            lblPrducto.setText(BeProducto.Codigo + " - " +BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
 
             //Objeto para dialogo de parametros
             txtTempReal.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -3453,7 +3435,7 @@ public class frm_recepcion_datos extends PBase {
                 pIdProductoBodega = BeProducto.IdProductoBodega;
             }
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -3687,7 +3669,7 @@ public class frm_recepcion_datos extends PBase {
                 pIdProductoBodega = pListTransRecDet.items.get(0).IdProductoBodega;
             }
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText(BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -5853,10 +5835,21 @@ public class frm_recepcion_datos extends PBase {
 
     private void Imprimir_Licencia(int Copias){
 
+        String vFechaVence = "";
+        String vLote = "";
+
         try{
 
             if (!txtNoLP.getText().toString().trim().isEmpty()){
                 pNumeroLP = txtNoLP.getText().toString().trim().replace("$","");
+            }
+
+            if (BeTransReDet!=null){
+                vLote = BeTransReDet.Lote;
+                vFechaVence = du.convierteFechaMostrar(BeTransReDet.Fecha_vence.toString());
+            }else{
+                vLote = txtLoteRec.getText().toString();
+                vFechaVence = cmbVenceRec.getText().toString();
             }
 
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
@@ -5933,36 +5926,10 @@ public class frm_recepcion_datos extends PBase {
                                 BeProducto.Codigo_barra,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
-
                     } else if (BeProducto.IdTipoEtiqueta == 2) {
                         //#CKFK 20210804 Modificación de la impresion del LP para el tipo de etiqueta 2,
                         //Dado que la descripción salía muy pequeña
                         //#GT15112022_1200: para reducir el ancho de LP en la etiqueta tipo 2 cealsa, se redujeron valores
-
-                      /*  zpl = String.format("^XA\n" +
-                                        "^MMT\n" +
-                                        "^PW600\n" +
-                                        "^LL0406\n" +
-                                        "^LS0\n" +
-                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
-                                        "^FO2,40^GB670,0,5^FS \n" +
-                                        "^FT440,100^A0I,28,30^FH^FD%1$s^FS\n" +
-                                        "^FT560,100^A0I,26,30^FH^FDBodega:^FS\n" +
-                                        "^FT440,135^A0I,28,30^FH^FD%2$s^FS\n" +
-                                        "^FT560,135^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                        "^FT560,180^A0I,90,70^FH^FD%3$s^FS\n" +
-                                        "^BY3,3,160^FT550,280^BCI,,N,N\n" +
-                                        "^FD%3$s^FS\n" +
-                                        "^PQ1,0,1,Y \n" +
-                                        "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
-                                        "^FO2,520^GB670,14,14^FS\n" +
-                                        "^FT560,550^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
-                                gl.gNomEmpresa,
-                                "$" + pNumeroLP,
-                                BeProducto.Codigo + " - " + BeProducto.Nombre,
-                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());*/
-
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW600\n" +
@@ -6009,31 +5976,6 @@ public class frm_recepcion_datos extends PBase {
                                 BeProducto.Codigo_barra,
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
-
-/*
-                        zpl = String.format("^XA\n" +
-                                            "^MMT\n" +
-                                            "^PW600\n" +
-                                            "^LL0406\n" +
-                                            "^LS0\n" +
-                                            "^FT440,20^A0I,28,30^FH^FD%1$s^FS\n" +
-                                            "^FT560,20^A0I,26,30^FH^FDBodega:^FS\n" +
-                                            "^FT440,55^A0I,28,30^FH^FD%2$s^FS\n" +
-                                            "^FT560,55^A0I,26,30^FH^FDEmpresa:^FS\n" +
-                                            "^FT560,100^A0I,90,100^FH^FD%3$s^FS\n" +
-                                            "^BY3,3,160^FT550,200^BCI,,N,N\n" +
-                                            "^FD%3$s^FS\n" +
-                                            "^PQ1,0,1,Y \n" +
-                                            "^FT560,400^A0I,35,40^FH^FD%4$s^FS\n" +
-                                            "^FO2,440^GB670,14,14^FS\n" +
-                                            "^FT560,470^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
-                                            "^XZ",gl.CodigoBodega + "-" + gl.gNomBodega,
-                                            gl.gNomEmpresa,
-                                            "$"+pNumeroLP,
-                                            BeProducto.Codigo+" - "+BeProducto.Nombre,
-                                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
-*/
-
                     } else if (BeProducto.IdTipoEtiqueta == 4) {
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
@@ -6080,10 +6022,58 @@ public class frm_recepcion_datos extends PBase {
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
+                    }else if (BeProducto.IdTipoEtiqueta == 5) {
+
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW700\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB700,5,5^FS\n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS\n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS\n" +
+                                        "^FT700,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS\n" +
+                                        "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS\n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                        "^FO2,340^GB700,14,14^FS\n" +
+                                        "^BY3,3,160^FT700,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                "$" + pNumeroLP,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                vLote, vFechaVence.replace("-","/"));
+
+                        zplSKU = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                BeProducto.Codigo_barra,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
                     }
 
-                    if (!zpl.isEmpty()) {
+                        if (!zpl.isEmpty()) {
                         if (Copias > 0) {
                             for (int i = 0; i < Copias; i++) {
                                 zPrinterIns.sendCommand(zpl);
@@ -6281,6 +6271,55 @@ public class frm_recepcion_datos extends PBase {
                                     BeProducto.Codigo + " - " + BeProducto.Nombre,
                                     gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
+
+                        }else if (BeProducto.IdTipoEtiqueta == 5) {
+
+                            zpl = String.format("^XA\n" +
+                                            "^MMT   \n" +
+                                            "^PW700   \n" +
+                                            "^LL0406   \n" +
+                                            "^LS0   \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS   \n" +
+                                            "^FO2,40^GB700,5,5^FS   \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS   \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS   \n" +
+                                            "^FT700,306^A0I,30,24^FH^FD%3$s^FS   \n" +
+                                            "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS   \n" +
+                                            "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS   \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS   \n" +
+                                            "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS   \n" +
+                                            "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS   \n" +
+                                            "^FO2,340^GB700,14,14^FS   \n" +
+                                            "^BY3,3,160^FT700,131^BCI,,Y,N   \n" +
+                                            "^FD%4$s^FS   \n" +
+                                            "^PQ1,0,1,Y   \n" +
+                                            "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    "$" + pNumeroLP,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                    vLote, vFechaVence.replace("-","/"));
+
+                            zplSKU = String.format("^XA \n" +
+                                            "^MMT \n" +
+                                            "^PW700 \n" +
+                                            "^LL0406 \n" +
+                                            "^LS0 \n" +
+                                            "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                            "^FO2,40^GB670,0,5^FS \n" +
+                                            "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                            "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                            "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                            "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                            "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                            "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                            "^FO2,340^GB670,0,14^FS \n" +
+                                            "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                            "^FD%4$s^FS \n" +
+                                            "^PQ1,0,1,Y " +
+                                            "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                    BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                    BeProducto.Codigo_barra,
+                                    gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
                         }
 
@@ -8252,7 +8291,7 @@ public class frm_recepcion_datos extends PBase {
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
             //#CKFK20220714 Agregué esto aquí también porque no siempre entra a la otra opción a actualizar estos label
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             //#GT23112023: Si tenemos el producto, ya podemos asignar idtipoEtiqueta

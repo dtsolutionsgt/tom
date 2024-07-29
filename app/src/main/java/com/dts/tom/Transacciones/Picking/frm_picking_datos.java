@@ -315,9 +315,13 @@ public class frm_picking_datos extends PBase {
                             //#AT20240514 Incio del proceso para el remplazo automático
                             String tmpLic = txtLicencia.getText().toString().replace("$", "");
 
-                            if (!tmpLic.equals(gBePickingUbic.Lic_plate)) {
-                                execws(14);
-                            } else {
+                            if(gl.pBeBodega.getPermitir_Reemplazo_Picking()){
+                                if (!tmpLic.equals(gBePickingUbic.Lic_plate)) {
+                                    execws(14);
+                                }else{
+                                    Procesa_Barra();
+                                }
+                            } else{
                                 Procesa_Barra();
                             }
                         }

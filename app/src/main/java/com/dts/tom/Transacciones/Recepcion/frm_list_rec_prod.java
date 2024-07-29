@@ -88,6 +88,7 @@ public class frm_list_rec_prod extends PBase {
     private final clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     public static clsBeStock_rec gBeStockRec = new clsBeStock_rec();
     private static final ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
+
     public  static clsBeProducto BeProducto = new clsBeProducto();
     public static clsBeProductoList lBeProducto = new clsBeProductoList();
     private int gotop;
@@ -1821,7 +1822,9 @@ public class frm_list_rec_prod extends PBase {
                 execws(11);
             });
             dialog.setNegativeButton("No", (dialog12, which) -> {
-               return;
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
+                return;
             });
 
             dialog.show();
