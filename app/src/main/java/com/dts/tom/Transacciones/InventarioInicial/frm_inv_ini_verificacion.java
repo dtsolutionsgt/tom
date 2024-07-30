@@ -994,12 +994,19 @@ public class frm_inv_ini_verificacion extends PBase {
             listInvDet = xobj.getresult(clsBeTrans_inv_detalleList.class, "Existe_Conteo");
 
             if (InvDetalle != null) {
-                CantidadVer = Double.valueOf(txtCantVer.getText().toString());
-                if (CantidadVer != InvDetalle.Cantidad) {
-                    //#CKFK20240723 Agregué esta validación por si hay otras verificaciones
-                    // del mismo producto en la misma ubicación
-                    execws(14);
-                    //msgValidaCantidadConteo();
+                //#AT20240729 Si la cantidad es 0 continua el proceso de guardar
+                //se agregó esta validacion porque cuando no encuentra resultados el metodo Get_CantidadInvConteo_By_Producto
+                //está devolviendo un objeto inicializado que no es igual a nulo
+                if (InvDetalle.Cantidad > 0) {
+                    CantidadVer = Double.valueOf(txtCantVer.getText().toString());
+                    if (CantidadVer != InvDetalle.Cantidad) {
+                        //#CKFK20240723 Agregué esta validación por si hay otras verificaciones
+                        // del mismo producto en la misma ubicación
+                        execws(14);
+                        //msgValidaCantidadConteo();
+                    } else {
+                        Guardar_Verificacion();
+                    }
                 } else {
                     Guardar_Verificacion();
                 }
@@ -1181,6 +1188,9 @@ public class frm_inv_ini_verificacion extends PBase {
                     double vVerificada = BeInvResumen.Cantidad;
 
                     msgExisteVerificacionAnterior(vVerificada);
+                } else {
+                    //#AT20240729 Cuando devuelve 0 es un objecto inicializado desde BOF del metodo Get_CantidadInvVer_By_Producto
+                    Guarda_Verificacion_Confirmada();
                 }
             }else{
                 Guarda_Verificacion_Confirmada();
