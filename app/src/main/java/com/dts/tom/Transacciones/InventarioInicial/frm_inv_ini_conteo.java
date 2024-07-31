@@ -100,6 +100,7 @@ public class frm_inv_ini_conteo extends PBase {
     private ArrayList<String> PresList = new ArrayList<String>();
     private final ArrayList<String> LoteList = new ArrayList<String>();
     private final ArrayList<String> FechasVenceList = new ArrayList<String>();
+    private ArrayAdapter<String> dataAdapterFecha;
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -302,7 +303,25 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     LoteSelect=cmbLotes.getSelectedItem().toString();
-                    cmbFechasVence.setSelection(position);
+                    //cmbFechasVence.setSelection(position);
+
+                    int posFecha = -1;
+                    Optional<clsBeTrans_inv_stock_prod> item = InvTeorico.items.stream()
+                            .filter(producto -> producto.getCodigo().equals(txtCodBarra.getText().toString()) &&
+                                    producto.getLote().equals(LoteSelect))
+                            .findFirst();
+
+                    if (item.isPresent()) {
+                        clsBeTrans_inv_stock_prod tmpProd = item.get();
+                        String date = du.convierteFechaMostrar(tmpProd.Fecha_vence);
+
+                        posFecha = dataAdapterFecha.getPosition(date);
+                    }
+
+                    if (posFecha > -1) {
+                        cmbFechasVence.setSelection(posFecha);
+                    }
+
                     FechaSelect = cmbFechasVence.getSelectedItem().toString();
                     buscaLicencia();
                 }
@@ -323,7 +342,7 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                     FechaSelect=cmbFechasVence.getSelectedItem().toString();
-                    cmbLotes.setSelection(position);
+                    //cmbLotes.setSelection(position);
                     LoteSelect=cmbLotes.getSelectedItem().toString();
                     //InvTeorico.items.get(position).Fecha_vence;
                     buscaLicencia();
@@ -724,9 +743,9 @@ public class frm_inv_ini_conteo extends PBase {
                 FechasVenceList.add(date);
             }
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FechasVenceList);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbFechasVence.setAdapter(dataAdapter);
+            dataAdapterFecha = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FechasVenceList);
+            dataAdapterFecha.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbFechasVence.setAdapter(dataAdapterFecha);
 
             if (FechasVenceList.size() > 0) {
 
