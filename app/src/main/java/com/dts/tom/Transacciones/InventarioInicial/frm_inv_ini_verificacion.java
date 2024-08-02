@@ -142,29 +142,23 @@ public class frm_inv_ini_verificacion extends PBase {
                 }
             });
 
-            txtBarraVer.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        if (!txtBarraVer.getText().toString().isEmpty()) {
-                            txtLicencia.setText(txtBarraVer.getText());
-                            execws(13);
-                        }
+            txtBarraVer.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (!txtBarraVer.getText().toString().isEmpty()) {
+                        txtLicencia.setText(txtBarraVer.getText());
+                        execws(13);
                     }
-
-                    return false;
                 }
+
+                return false;
             });
 
-            txtCantVer.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        ProcesaRegistro();
-                    }
-
-                    return false;
+            txtCantVer.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    ProcesaRegistro();
                 }
+
+                return false;
             });
 
             cmbEstadoVeri.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -497,7 +491,7 @@ public class frm_inv_ini_verificacion extends PBase {
             execws(6);
 
         }catch (Exception e){
-
+            mu.msgbox("Guarda_Verificacion_Confirmada:"+e.getMessage());
         }
     }
 
@@ -549,6 +543,8 @@ public class frm_inv_ini_verificacion extends PBase {
             vitem.Nom_producto = BeProducto.Nombre;
             vitem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
             vitem.IdUbicacion = Integer.valueOf(txtUbicVer.getText().toString());
+            vitem.IdBodega = gl.IdBodega;
+            vitem.Lic_plate = txtLicencia.getText().toString();
 
         }catch (Exception e){
             mu.msgbox("creaVerifItem:"+e.getMessage());
@@ -730,10 +726,15 @@ public class frm_inv_ini_verificacion extends PBase {
                                       "pIdProducto", BeProducto.IdProducto);
                         break;
                     case 13:
-                        callMethod("Get_InventarioItem_By_Licencia",
+                        callMethod("Get_Inventario_Teorico_By_Codigo_O_Licencia",
+                                "pIdInventario", BeInvEnc.Idinventarioenc,
+                                "pCodigo", txtBarraVer.getText().toString().replace("$",""),
+                                "pIdBodega", gl.IdBodega);
+
+                        /*callMethod("Get_InventarioItem_By_Licencia",
                                 "pLicencia", txtLicencia.getText().toString().replace("$", ""),
                                 "pIdBodega", gl.IdBodega,
-                                "pUbicacion", Integer.valueOf(txtUbicVer.getText().toString()));
+                                "pUbicacion", Integer.valueOf(txtUbicVer.getText().toString()));*/
                         break;
                     case 14:
                     case 15:
@@ -1035,13 +1036,32 @@ public class frm_inv_ini_verificacion extends PBase {
     private void processInventarioLicencia() {
 
         try {
-            InvItem = xobj.getresult(clsBeTrans_inv_stock_prod.class, "Get_InventarioItem_By_Licencia");
+
+            InvTeorico = xobj.getresult(clsBeTrans_inv_stock_prodList.class,"Get_Inventario_Teorico_By_Codigo_O_Licencia");
+
+            if(InvTeorico!=null){
+
+                BeProducto= InvTeorico.items.get(0).BeProducto;
+                txtLicencia.setText(InvTeorico.items.get(0).getLicense_plate());
+                txtBarraVer.setText(BeProducto.Codigo);
+
+
+                PresList.clear();
+                PresList.add("Sin Presentación");
+
+                Carga_Datos_Producto();
+
+            } else {
+                mu.msgbox("No se puede agregar productos nuevos");
+            }
+
+            /*InvItem = xobj.getresult(clsBeTrans_inv_stock_prod.class, "Get_InventarioItem_By_Licencia");
 
             if (InvItem != null) {
                 txtBarraVer.setText(InvItem.Codigo);
                 //txtCantVer.setText(""+InvItem.Cant);
                 execws(3);
-            }
+            }*/
         } catch (Exception e) {
             mu.msgbox("processInventarioLicencia: "+ e.getMessage());
         }
