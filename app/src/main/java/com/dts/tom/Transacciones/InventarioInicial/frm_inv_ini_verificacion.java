@@ -490,7 +490,7 @@ public class frm_inv_ini_verificacion extends PBase {
             execws(6);
 
         }catch (Exception e){
-
+            mu.msgbox("Guarda_Verificacion_Confirmada:"+e.getMessage());
         }
     }
 
@@ -542,6 +542,8 @@ public class frm_inv_ini_verificacion extends PBase {
             vitem.Nom_producto = BeProducto.Nombre;
             vitem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
             vitem.IdUbicacion = Integer.valueOf(txtUbicVer.getText().toString());
+            vitem.IdBodega = gl.IdBodega;
+            vitem.Lic_plate = txtLicencia.getText().toString();
 
         }catch (Exception e){
             mu.msgbox("creaVerifItem:"+e.getMessage());
