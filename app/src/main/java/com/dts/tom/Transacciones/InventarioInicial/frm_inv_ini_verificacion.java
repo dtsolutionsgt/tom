@@ -257,7 +257,6 @@ public class frm_inv_ini_verificacion extends PBase {
 
         try{
 
-
             txtUbicVer.setText("");
             lblDescVer.setText("");
             lblUbicDes.setText("");
@@ -266,15 +265,17 @@ public class frm_inv_ini_verificacion extends PBase {
 
             pIdTramo=0;
 
-            //#CKFK20240724 Es mejor no conservar la ubicación anterior
-            // porque pueden generarse inconsistencias
-            /*if (BeUbic.IdUbicacion!=0){
+            if (BeUbic.IdUbicacion!=0){
                 txtUbicVer.setText(BeUbic.IdUbicacion+"");
                 lblUbicDes.setText(BeUbic.Descripcion);
-            }*/
+            }
 
             if (!IngUbic){
-                pIdTramo=BeInvTramo.Idtramo;
+                if (BeInvTramo!=null){
+                    pIdTramo=BeInvTramo.Idtramo;
+                }else{
+                    pIdTramo=BeUbic.IdTramo;
+                }
             }else{
                 pIdTramo=BeUbic.IdTramo;
             }
@@ -311,7 +312,7 @@ public class frm_inv_ini_verificacion extends PBase {
                 txtBarraVer.setText("");
                 txtBarraVer.setEnabled(false);
 
-                mu.msgbox("La ubicación no partenece al tramo: " + BeInvTramo.Nombre_Tramo);
+                mu.msgbox("La ubicación no pertenece al tramo: " + BeInvTramo.Nombre_Tramo);
             } else {
                 txtBarraVer.setEnabled(true);
                 txtBarraVer.requestFocus();
@@ -587,14 +588,12 @@ public class frm_inv_ini_verificacion extends PBase {
             IdPresSelect = 0;
             IdEstadoSelect = 0;
 
-            IngUbic = false;
-
-            if(BeInvTramo.Nombre_Tramo!=null){
-                //#REFRESH TITULO FORMA
-                lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+            if(BeInvTramo!=null){
+                if(BeInvTramo.Nombre_Tramo!=null){
+                    //#REFRESH TITULO FORMA
+                    lblTituloForma.setText("TRAMO :" + BeInvTramo.Nombre_Tramo);
+                }
                 pIdTramo=BeUbic.IdTramo;
-            }else{
-                mu.msgbox("El tramo se ha perdido.");
             }
 
         }catch (Exception e){
@@ -620,6 +619,7 @@ public class frm_inv_ini_verificacion extends PBase {
 
     public void BotonExit(View view){
         Limpia_Valores();
+        BeUbic = null;
         super.finish();
     }
 
@@ -971,6 +971,9 @@ public class frm_inv_ini_verificacion extends PBase {
                     txtBarraVer.setAdapter(arrayAdapter);
                     txtBarraVer.setThreshold(1);
                 }
+            }else{
+                txtBarraVer.requestFocus();
+                txtBarraVer.setSelectAllOnFocus(true);
             }
 
         }catch (Exception e){
@@ -1164,10 +1167,16 @@ public class frm_inv_ini_verificacion extends PBase {
                     double vVerificada = BeInvResumen.Cantidad;
 
                     msgExisteVerificacionYConteo(vContada, vVerificada);
+                }else{
+                    Guardar_Verificacion();
                 }
             } else {
-                progress.cancel();
-                msgValidaCantidadConteo();
+                if(InvDetalle.Cantidad>0){
+                    progress.cancel();
+                    msgValidaCantidadConteo();
+                }else{
+                    Guardar_Verificacion();
+                }
             }
 
         } catch (Exception e) {

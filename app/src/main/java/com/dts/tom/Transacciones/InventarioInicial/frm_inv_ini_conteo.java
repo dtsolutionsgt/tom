@@ -1905,7 +1905,11 @@ public class frm_inv_ini_conteo extends PBase {
                     msgExisteConteoYVerificacion(vContada, vVerificada);
                 }
             } else {
-                msgValidaCantidadVer();
+                if (BeInvResumen.Cantidad>0){
+                    msgValidaCantidadVer();
+                }else{
+                    Guardar_Inventario_Conteo();
+                }
             }
 
         } catch (Exception e) {
