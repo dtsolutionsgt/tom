@@ -259,10 +259,12 @@ public class frm_inv_ini_verificacion extends PBase {
 
             pIdTramo=0;
 
-            if (BeUbic.IdUbicacion!=0){
-                txtUbicVer.setText(BeUbic.IdUbicacion+"");
-                lblUbicDes.setText(BeUbic.Descripcion);
-            }
+            /*if (BeUbic!=null){
+                if (BeUbic.IdUbicacion!=0){
+                    txtUbicVer.setText(BeUbic.IdUbicacion+"");
+                    lblUbicDes.setText(BeUbic.Descripcion);
+                }
+            }*/
 
             if (!IngUbic){
                 if (BeInvTramo!=null){
@@ -271,7 +273,9 @@ public class frm_inv_ini_verificacion extends PBase {
                     pIdTramo=BeUbic.IdTramo;
                 }
             }else{
-                pIdTramo=BeUbic.IdTramo;
+                if (BeUbic!=null){
+                    pIdTramo=BeUbic.IdTramo;
+                }
             }
 
             execws(1);
@@ -308,9 +312,11 @@ public class frm_inv_ini_verificacion extends PBase {
 
                 mu.msgbox("La ubicación no pertenece al tramo: " + BeInvTramo.Nombre_Tramo);
             } else {
-                txtBarraVer.setEnabled(true);
-                txtBarraVer.requestFocus();
-                txtBarraVer.setSelectAllOnFocus(true);
+                if (!txtUbicVer.getText().toString().isEmpty()){
+                    txtBarraVer.setEnabled(true);
+                    txtBarraVer.requestFocus();
+                    txtBarraVer.setSelectAllOnFocus(true);
+                }
             }
 
             lblUbicDes.setText("" + BeUbic.Descripcion);
@@ -615,7 +621,6 @@ public class frm_inv_ini_verificacion extends PBase {
 
     public void BotonExit(View view){
         Limpia_Valores();
-        BeUbic = null;
         super.finish();
     }
 
@@ -973,8 +978,10 @@ public class frm_inv_ini_verificacion extends PBase {
                     txtBarraVer.setThreshold(1);
                 }
             }else{
-                txtBarraVer.requestFocus();
-                txtBarraVer.setSelectAllOnFocus(true);
+                if (!txtUbicVer.getText().toString().isEmpty()){
+                    txtBarraVer.requestFocus();
+                    txtBarraVer.setSelectAllOnFocus(true);
+                }
             }
 
         }catch (Exception e){
