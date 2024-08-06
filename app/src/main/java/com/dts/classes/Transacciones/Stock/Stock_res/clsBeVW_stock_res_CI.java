@@ -32,6 +32,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Clasificacion = "";
   @Element(required=false) public int IdPresentacion=0;
   @Element(required=false) public int IdArea=0;
+  @Element(required=false) public int IdStock=0;
   public
 
 
@@ -58,7 +59,7 @@ public class clsBeVW_stock_res_CI {
                               String Fecha_Vence,String Estado,String Ubic,String idUbic,String Pedido,String Pick,
                               String LicPlate,String IdProductoEstado,int IdProductoBodega, int factor,
                               String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea,
-                              String Clasificacion, int IdPresentacion) {
+                              String Clasificacion, int IdPresentacion, int IdStock) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -86,6 +87,7 @@ public class clsBeVW_stock_res_CI {
     this.NombreArea = NombreArea;
     this.Clasificacion = Clasificacion;
     this.IdPresentacion = IdPresentacion;
+    this.IdStock = IdStock;
   }
 
   public String getCodigo() {

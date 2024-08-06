@@ -172,6 +172,17 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/lblIdStock"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="IdStock"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/lblLote"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"

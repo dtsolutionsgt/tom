@@ -629,9 +629,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
-                   if (txtUbicDestino.getText().toString().equals("") ||
-                       txtUbicDestino.getText().toString().isEmpty() ||
-                       txtUbicDestino.getText().toString()==null){
+                    if (txtUbicDestino.getText().toString().equals("") ||
+                            txtUbicDestino.getText().toString().isEmpty() ||
+                            txtUbicDestino.getText().toString()==null){
 
                         if (validarDatos){
                             mu.msgbox("Debe ingresar la ubicación destino");
@@ -785,7 +785,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (escaneoPallet && productoList !=null ){
                     int sel = cmbPresentacionList.indexOf(BeStockPallet.getIdPresentacion() + " - " +
-                                                          BeStockPallet.getNombre_Presentacion());
+                            BeStockPallet.getNombre_Presentacion());
                     cmbPresentacion.setSelection(sel);
                     cmbPresentacion.setEnabled(false);
                 }else{
@@ -827,7 +827,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         .where(c -> c.IdProducto == cvProdID && c.IdPresentacion == gl.existencia.IdPresentacion)
                         .toList();
             } else {
-                 AuxList = stream(stockResList.items)
+                AuxList = stream(stockResList.items)
                         .where(c -> c.IdProducto == cvProdID)
                         .toList();
             }
@@ -891,60 +891,60 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             cmbLoteList.clear();
 
-                cvLote = "";
+            cvLote = "";
 
-                cmbLote.setVisibility(BeProductoUbicacion.Control_lote ? View.VISIBLE : View.GONE);
-                lblLote.setVisibility(BeProductoUbicacion.Control_lote ? View.VISIBLE : View.GONE);
+            cmbLote.setVisibility(BeProductoUbicacion.Control_lote ? View.VISIBLE : View.GONE);
+            lblLote.setVisibility(BeProductoUbicacion.Control_lote ? View.VISIBLE : View.GONE);
 
-                if (BeProductoUbicacion.Control_lote) {
+            if (BeProductoUbicacion.Control_lote) {
 
-                    try {
+                try {
 
-                        List AuxList;
+                    List AuxList;
 
-                        //if (escaneoPallet && productoList != null) {
-                        //Quité esta validación porque en stockResList ya está filtrado por LicensePlate
+                    //if (escaneoPallet && productoList != null) {
+                    //Quité esta validación porque en stockResList ya está filtrado por LicensePlate
 
-                        AuxList = stream(stockResList.items)
-                                .where(c -> c.IdProducto == cvProdID)
-                                .where(c -> c.getIdPresentacion() == cvPresID)
-                                .toList();
+                    AuxList = stream(stockResList.items)
+                            .where(c -> c.IdProducto == cvProdID)
+                            .where(c -> c.getIdPresentacion() == cvPresID)
+                            .toList();
 
-                        if (AuxList == null) {
-                            cvLote = "";
-                            LlenaFechaVence();
-                        } else {
+                    if (AuxList == null) {
+                        cvLote = "";
+                        LlenaFechaVence();
+                    } else {
 
-                            lotesList.items = AuxList;
+                        lotesList.items = AuxList;
 
-                            for (int i = 0; i < lotesList.items.size(); i++) {
+                        for (int i = 0; i < lotesList.items.size(); i++) {
 
-                                valor = lotesList.items.get(i).Lote;
+                            valor = lotesList.items.get(i).Lote;
 
-                                if (cmbLoteList.indexOf(valor)==-1){
-                                    cmbLoteList.add(valor);
-                                }
-                            }
-
-                            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbLoteList);
-                            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            cmbLote.setAdapter(dataAdapter);
-
-                            if (cmbLoteList.size() > 0) {
-                                cmbLote.setSelection(0);
-
-                                cvLote = cmbLote.getSelectedItem().toString();
+                            if (cmbLoteList.indexOf(valor)==-1){
+                                cmbLoteList.add(valor);
                             }
                         }
-                    } catch (Exception ex) {
-                        cvLote = "";
-                        msgbox("Llena lote : " + ex.getMessage());
-                        LlenaFechaVence();
-                    }
 
-                } else {
+                        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbLoteList);
+                        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cmbLote.setAdapter(dataAdapter);
+
+                        if (cmbLoteList.size() > 0) {
+                            cmbLote.setSelection(0);
+
+                            cvLote = cmbLote.getSelectedItem().toString();
+                        }
+                    }
+                } catch (Exception ex) {
+                    cvLote = "";
+                    msgbox("Llena lote : " + ex.getMessage());
                     LlenaFechaVence();
                 }
+
+            } else {
+                LlenaFechaVence();
+            }
 
         } catch (Exception ex) {
             addlog(new Object() {
@@ -1034,7 +1034,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
 
             } else {
-               LlenaEstadoOrigen();
+                LlenaEstadoOrigen();
             }
 
         } catch (Exception ex) {
@@ -1226,9 +1226,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (!txtLicPlate.getText().toString().isEmpty() && !txtLicPlate.getText().toString().equals("0")) {
 
-               escaneoPallet = true;
+                escaneoPallet = true;
                 //#AT20230224 Cambio el valor a false cada vez que se ingresa una nueva licencia
-               stock_misma_licencia = false;
+                stock_misma_licencia = false;
 
                 pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
@@ -1277,15 +1277,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //Es una barra de pallet válida por tamaño
                 int vLengthBarra = txtLicPlate.getText().toString().length();
 
-               // if (vLengthBarra >= 16) {
+                // if (vLengthBarra >= 16) {
 
-                    escaneoPallet = true;
+                escaneoPallet = true;
 
-                    pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
+                pLicensePlate = txtLicPlate.getText().toString().replace("$", "");
 
-                    //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
+                //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
 
-                    execws(17);
+                execws(17);
 
                 //}
 
@@ -1752,16 +1752,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                         if (CambioUbicExistencia){
                             callMethod("Get_Productos_By_IdUbicacion_Existencias",
-                                       "pIdUbicacion", txtUbicOrigen.getText().toString(),
-                                       "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
-                                       "pFechaVence", app.strFechaXMLCombo(gl.existencia.Fecha_Vence),
-                                       "pLote", gl.existencia.Lote,
-                                       "pIdPresentacion", gl.existencia.IdPresentacion,
-                                       "pLicencia", "");
+                                    "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                    "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega,
+                                    "pFechaVence", app.strFechaXMLCombo(gl.existencia.Fecha_Vence),
+                                    "pLote", gl.existencia.Lote,
+                                    "pIdPresentacion", gl.existencia.IdPresentacion,
+                                    "pLicencia", "");
                         }else {
                             callMethod("Get_Productos_By_IdUbicacion",
-                                        "pIdUbicacion", txtUbicOrigen.getText().toString(),
-                                        "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega);
+                                    "pIdUbicacion", txtUbicOrigen.getText().toString(),
+                                    "pIdProductoBodega", BeProductoUbicacion.IdProductoBodega);
                         }
                         break;
                     case 8://Obtiene el nuevo correlativo de un License Plate
@@ -1849,19 +1849,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                             //#AT20220917 Se llama cuando el idstock es diferente a 0
                             callMethod("Actualizar_Ubicaciones_Reservadas_By_IdStock",
-                                       "pIdStock", cvStockID,
-                                       "pIdBodega", gl.IdBodega,
-                                       "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
-                                       "pIdOperador", gl.IdOperador);
+                                    "pIdStock", cvStockID,
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                    "pIdOperador", gl.IdOperador);
 
                         } else {
 
                             //#AT20220917 Se llama cuando el idstock es igual a 0
                             callMethod("Actualizar_Ubicaciones_Reservadas_By_StockRes",
-                                            "pBeStockRes", vStockRes,
-                                                  "pIdBodega", gl.IdBodega,
-                                                  "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
-                                                  "pIdOperador", gl.IdOperador);
+                                    "pBeStockRes", vStockRes,
+                                    "pIdBodega", gl.IdBodega,
+                                    "pIdUbicacion", Integer.valueOf(txtUbicDestino.getText().toString()),
+                                    "pIdOperador", gl.IdOperador);
 
                         }
 
@@ -1872,7 +1872,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         }
 
                         callMethod("Get_Productos_By_StockResCI",
-                                         "BeStockResCI", gl.existencia);
+                                "BeStockResCI", gl.existencia);
                         break;
 
                     case 24:
@@ -2302,7 +2302,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                     mTTS.setSpeechRate(speed);
 
                                     if (cadena_ubicacion.length==0){
-                                     textToSpeeach = "Enséñame por favor, donde ubicar el producto";
+                                        textToSpeeach = "Enséñame por favor, donde ubicar el producto";
                                     }
 
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -2661,8 +2661,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
 
             //#AT20230322 Filtrar por cantidad la lista que devuelve
+            //#AT20240805 Se agregó filtro por IdStock para el cambio de ubicacion detalledo desde existencias
             AuxList = stream(stockResList.items)
-                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.getExistUMBAs().replace(",", "")))
+                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.getExistUMBAs().replace(",", ""))
+                            && (c.IdStock > 0 && c.IdStock == gl.existencia.IdStock))
                     .toList();
 
             if (AuxList.size()>0){
@@ -2768,7 +2770,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20220410 Reemplacé el código de arriba por esta línea
                 String result = String.format("%0"+ MaxL + "d",intLPSig);
 
-                 vNuevoPalletId= resolucionActivaLpByBodega.Serie + result;
+                vNuevoPalletId= resolucionActivaLpByBodega.Serie + result;
 
             }else{
                 gl.IdResolucionLpOperador =0;
@@ -2925,7 +2927,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     } else {
                         completaProceso();
                     }
-               }
+                }
             }else{
                 progress.cancel();
                 msgbox("No se pudo realizar el cambio de ubicación");
@@ -3537,7 +3539,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //Get_Nuevo_Correlativo_LicensePlate
-                     execws(8);
+                    execws(8);
                 }
             });
 
@@ -3985,7 +3987,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#GT10032022: set en el boton Si para facilitar el ENTER del teclado
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                   this);
+                    this);
 
             // set title
             alertDialogBuilder.setTitle(R.string.app_name);
@@ -4077,6 +4079,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 return;
             }
 
+            //#AT20240805 Si el Cambio Ubic. es desde existencias y es detallado
+            //agrego el idstock para realizar el cambio de ubicacion sobre un idstock especifico
+            if (CambioUbicExistencia && CambioUbicDetallado) {
+                vStockRes.IdStock = gl.existencia.IdStock;
+            }
+
             vStockRes.IdProductoBodega = cvProd.IdProductoBodega;
             vStockRes.IdUbicacion = cvUbicOrigID;
 
@@ -4119,9 +4127,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if(escaneoPallet && productoList != null){
 
-               vStockRes.Lic_plate = BeStockPallet.Lic_plate;
+                vStockRes.Lic_plate = BeStockPallet.Lic_plate;
 
-               //#AT20220725 Agregue la validación para que el IdPresentacion  sea diferente a 0
+                //#AT20220725 Agregue la validación para que el IdPresentacion  sea diferente a 0
                 if( BeStockPallet.Factor > 0 && cvPresID != 0) {
                     vStockRes.CantidadUmBas = vCantidadAUbicar * BeStockPallet.Factor;
                 }
@@ -4397,7 +4405,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     gMovimientoDet.IdTipoTarea = 2;
                 }else{
                     if (Es_Explosion_Manual){
-                       gMovimientoDet.IdTipoTarea = 20;
+                        gMovimientoDet.IdTipoTarea = 20;
                     }
                 }
             }
