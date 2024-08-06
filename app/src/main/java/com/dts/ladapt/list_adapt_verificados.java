@@ -87,7 +87,7 @@ public class list_adapt_verificados extends BaseAdapter {
             holder.lblPresRes.setText(BeListContados.get(position).presentacion);
         }
 
-        if (BeListContados.get(position).Cantidad > 0) {
+        if (BeListContados.get(position).Cantidad >= 0) {
             holder.lblCantRes.setText("" + BeListContados.get(position).Cantidad);
         }
 

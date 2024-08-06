@@ -19,7 +19,8 @@ public class clsBeTrans_inv_resumen {
     @Element(required=false) public String Nom_producto="";
     @Element(required=false) public String Nom_operador="";
     @Element(required=false) public int IdUbicacion=0;
-
+    @Element(required=false) public int IdBodega=0;
+    @Element(required=false) public String Lic_plate="";
 
     public clsBeTrans_inv_resumen() {
     }

@@ -26,6 +26,8 @@ public class clsBeTrans_inv_stock_prod {
     @Element(required=false) public double Precio=0;
     @Element(required=false) public String Parametro_a="";
     @Element(required=false) public String Parametro_b="";
+    @Element(required=false) public int TipoTeoricoImportacion=0;
+    @Element(required=false) public String Codigo_Area="";
 
     public clsBeTrans_inv_stock_prod() {
     }

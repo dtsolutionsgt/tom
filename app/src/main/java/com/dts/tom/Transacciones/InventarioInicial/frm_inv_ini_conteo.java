@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.InventarioInicial;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import com.dts.tom.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -54,7 +56,7 @@ import static com.dts.tom.Transacciones.InventarioInicial.frm_inv_ini_tramos.Ing
 
 public class frm_inv_ini_conteo extends PBase {
 
-    private EditText txtUbicInv, txtCodBarra, txtLoteInvIni, txtVenceInvIni, txtCantInvIni, txtPesoInvIni;
+    private EditText txtUbicInv, txtCodBarra, txtLoteInvIni, txtVenceInvIni, txtCantInvIni, txtPesoInvIni,txtLicencia;
     private TextView lblUbicDesc, lblDescProd, lblUnidadInv, lblLote,lblLotes, lblPeso, lblTituloForma, lblVence, lblVenceList,
             txtLote, txtFechaVen;
     private Button btnGuardarConteo, btnCompletar, btnBack;
@@ -98,6 +100,7 @@ public class frm_inv_ini_conteo extends PBase {
     private ArrayList<String> PresList = new ArrayList<String>();
     private final ArrayList<String> LoteList = new ArrayList<String>();
     private final ArrayList<String> FechasVenceList = new ArrayList<String>();
+    private ArrayAdapter<String> dataAdapterFecha;
 
     static final int DATE_DIALOG_ID = 999;
 
@@ -114,6 +117,7 @@ public class frm_inv_ini_conteo extends PBase {
 
         txtUbicInv = findViewById(R.id.txtUbicInv);
         txtCodBarra = findViewById(R.id.txtCodBarra);
+        txtLicencia = findViewById(R.id.txtLicencia);
         txtLoteInvIni = findViewById(R.id.txtLoteInvIni);
         txtVenceInvIni = findViewById(R.id.txtVenceInvIni);
         txtCantInvIni = findViewById(R.id.txtCantInvIni);
@@ -207,6 +211,25 @@ public class frm_inv_ini_conteo extends PBase {
                 }
             });
 
+            txtLicencia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) { }
+            });
+
+            txtLicencia.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        if (!txtLicencia.getText().toString().isEmpty()) {
+                            emptyPres = false;
+                            execws(3);
+                        }
+                    }
+
+                    return false;
+                }
+            });
+
             txtCantInvIni.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -279,9 +302,28 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    LoteSelect=InvTeorico.items.get(position).Lote;
-                    cmbFechasVence.setSelection(position);
+                    LoteSelect=cmbLotes.getSelectedItem().toString();
+                    //cmbFechasVence.setSelection(position);
 
+                    int posFecha = -1;
+                    Optional<clsBeTrans_inv_stock_prod> item = InvTeorico.items.stream()
+                            .filter(producto -> producto.getCodigo().equals(txtCodBarra.getText().toString()) &&
+                                    producto.getLote().equals(LoteSelect))
+                            .findFirst();
+
+                    if (item.isPresent()) {
+                        clsBeTrans_inv_stock_prod tmpProd = item.get();
+                        String date = du.convierteFechaMostrar(tmpProd.Fecha_vence);
+
+                        posFecha = dataAdapterFecha.getPosition(date);
+                    }
+
+                    if (posFecha > -1) {
+                        cmbFechasVence.setSelection(posFecha);
+                    }
+
+                    FechaSelect = cmbFechasVence.getSelectedItem().toString();
+                    buscaLicencia();
                 }
 
                 @Override
@@ -299,7 +341,11 @@ public class frm_inv_ini_conteo extends PBase {
                     spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                     spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                    FechaSelect=InvTeorico.items.get(position).Fecha_vence;
+                    FechaSelect=cmbFechasVence.getSelectedItem().toString();
+                    //cmbLotes.setSelection(position);
+                    LoteSelect=cmbLotes.getSelectedItem().toString();
+                    //InvTeorico.items.get(position).Fecha_vence;
+                    buscaLicencia();
 
                 }
 
@@ -697,9 +743,9 @@ public class frm_inv_ini_conteo extends PBase {
                 FechasVenceList.add(date);
             }
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FechasVenceList);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cmbFechasVence.setAdapter(dataAdapter);
+            dataAdapterFecha = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FechasVenceList);
+            dataAdapterFecha.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            cmbFechasVence.setAdapter(dataAdapterFecha);
 
             if (FechasVenceList.size() > 0) {
 
@@ -1014,6 +1060,7 @@ public class frm_inv_ini_conteo extends PBase {
             ditem.Idproducto = BeProducto.IdProducto;
             ditem.IdPresentacion = IdPresSelect;
             ditem.Idunidadmedida = BeProducto.IdUnidadMedidaBasica;
+            ditem.License_plate = txtLicencia.getText().toString();
             if (ditem.Idunidadmedida==0){
                 ditem.Idunidadmedida = -1;
             }
@@ -1042,7 +1089,7 @@ public class frm_inv_ini_conteo extends PBase {
                     if (editarFecha) {
                         ditem.Fecha_vence = du.convierteFecha(txtFechaVen.getText().toString());
                     } else {
-                        ditem.Fecha_vence = FechaSelect;
+                        ditem.Fecha_vence = du.convierteFechaDiagonal(FechaSelect);
                     }
                 }else{
                     ditem.Fecha_vence = du.convierteFecha(txtVenceInvIni.getText().toString());
@@ -1060,7 +1107,9 @@ public class frm_inv_ini_conteo extends PBase {
             ditem.Nom_producto = BeProducto.Nombre;
             ditem.Nom_operador = gl.OperadorBodega.Operador.Nombres;
             ditem.Carga = 0;
-            ditem.Peso = Double.parseDouble(txtPesoInvIni.getText().toString());
+            String vPeso=txtPesoInvIni.getText().toString();
+            vPeso = (vPeso.isEmpty()?"0":vPeso);
+            ditem.Peso = Double.parseDouble(vPeso);
             //#AT20220504 Se agrega IdPropietarioBodega e IdBodega para ser guardados
             ditem.IdPropietarioBodega = InvTeorico.items.get(0).IdPropietarioBodega;
             ditem.IdBodega = gl.IdBodega;
@@ -1148,6 +1197,7 @@ public class frm_inv_ini_conteo extends PBase {
             txtUbicInv.setText("");
             lblUbicDesc.setText("");
             txtCodBarra.setText("");
+            txtLicencia.setText("");
             lblDescProd.setText("");
             txtCantInvIni.setText("");
             lblUbicDesc.setText("");
@@ -1440,6 +1490,7 @@ public class frm_inv_ini_conteo extends PBase {
                         callMethod("Actualizar_Inventario_Inicial_By_BeTransInvTramo","pTramo",utramo);
                         break;
                     case 13:
+                    case 16:
                         callMethod("Existe_Conteo",
                                         "pIdUbicacion",BeUbic.IdUbicacion,
                                               "pIdBodega", gl.IdBodega,
@@ -1509,6 +1560,7 @@ public class frm_inv_ini_conteo extends PBase {
                     processAgInventario();
                     break;
                 case 11:
+                    msgbox("Conteo guardado correctamente");
                     Limpiar_Campos();
                     txtUbicInv.requestFocus();
                     txtUbicInv.selectAll();
@@ -1526,6 +1578,8 @@ public class frm_inv_ini_conteo extends PBase {
                 case 15:
                     processExisteVerificacion();
                     break;
+                case 16:
+                    processExisteConteoYVerificacion();
             }
 
         } catch (Exception e) {
@@ -1664,6 +1718,8 @@ public class frm_inv_ini_conteo extends PBase {
                 BeProducto= InvTeorico.items.get(0).BeProducto;
                 lblDescProd.setText(BeProducto.Codigo+" - "+BeProducto.Nombre);
                 lblUnidadInv.setText(BeProducto.UnidadMedida.Nombre);
+                txtLicencia.setText(InvTeorico.items.get(0).getLicense_plate());
+                txtCodBarra.setText(BeProducto.Codigo);
 
                 //#AT20220505 Si control_peso = true se muestran lblPeso y txtPeso
                 muestra_peso(BeProducto.Control_peso);
@@ -1791,8 +1847,6 @@ public class frm_inv_ini_conteo extends PBase {
 
             execws(15);
 
-
-
         } catch (Exception e) {
             mu.msgbox("processValidaCantidadVerificacion: "+e.getMessage());
         }
@@ -1807,7 +1861,10 @@ public class frm_inv_ini_conteo extends PBase {
                 CantidadConteo = Double.valueOf(txtCantInvIni.getText().toString());
 
                 if (CantidadConteo != BeInvResumen.Cantidad) {
-                    msgValidaCantidadVer();
+                    //#CKFK20240723 Agregué esta validación por si hay otros conteos
+                    // del mismo producto en la misma ubicación
+                    execws(16);
+                    //msgValidaCantidadVer();
                 } else {
                     Guardar_Inventario_Conteo();
                 }
@@ -1826,6 +1883,37 @@ public class frm_inv_ini_conteo extends PBase {
             }
         } catch (Exception e) {
             mu.msgbox("processExisteVerificacion: "+ e.getMessage());
+        }
+    }
+
+    private void processExisteConteoYVerificacion() {
+        try {
+
+            listInvDet = xobj.getresult(clsBeTrans_inv_detalleList.class, "Existe_Conteo");
+
+            if (listInvDet != null) {
+                if (listInvDet.items.size() > 0) {
+
+                    double vContada = listInvDet.items.stream()
+                            .collect(Collectors.summingDouble(item -> item.Cantidad));
+                    double vVerificada = BeInvResumen.Cantidad;
+
+                    CantidadConteo += vContada;
+
+                    Crea_Item();
+
+                    msgExisteConteoYVerificacion(vContada, vVerificada);
+                }
+            } else {
+                if (BeInvResumen.Cantidad>0){
+                    msgValidaCantidadVer();
+                }else{
+                    Guardar_Inventario_Conteo();
+                }
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processExisteConteo: "+e.getMessage());
         }
     }
 
@@ -1925,6 +2013,37 @@ public class frm_inv_ini_conteo extends PBase {
         }
     }
 
+    private void msgExisteConteoYVerificacion(double pContada, double pVerificada) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("La ubicación ya reporta un conteo de " + pContada + " y una verificación de " + pVerificada + ", ¿Quiere contar producto nuevamente en esta ubicación?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog12, which) -> {
+                //Contar de nuevo
+                if (ditem.IdPresentacion>0){
+                    execws(9);
+                }else{
+                    Continua_Guardando_Item();
+                }
+
+            });
+
+            dialog.setNegativeButton("No", (dialog1, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            mu.msgbox("msgExcedeCantidad"+e.getMessage());
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -1947,6 +2066,52 @@ public class frm_inv_ini_conteo extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void buscaLicencia(){
+        List<clsBeTrans_inv_stock_prod> auxLista = null;
+        String sFecha = "";
+
+        try{
+
+            if (!FechaSelect.isEmpty()){
+                sFecha = du.convierteFechaDiagonal(FechaSelect);
+            }
+
+            final String vFecha = sFecha;
+
+            if (!LoteSelect.isEmpty() && !FechaSelect.isEmpty()){
+                auxLista = InvTeorico.items
+                        .stream()
+                        .filter(mu.distinctByKey(clsBeTrans_inv_stock_prod::getLicense_plate))
+                        .filter(item -> item.getLote().equals(LoteSelect) &&
+                                item.getFecha_vence().equals(vFecha))
+                        .collect(Collectors.toList());
+            }else if(!LoteSelect.isEmpty()){
+                auxLista = InvTeorico.items
+                        .stream()
+                        .filter(mu.distinctByKey(clsBeTrans_inv_stock_prod::getLicense_plate))
+                        .filter(item -> item.getLote().equals(LoteSelect))
+                        .collect(Collectors.toList());
+            }else if(!FechaSelect.isEmpty()){
+                auxLista = InvTeorico.items
+                        .stream()
+                        .filter(mu.distinctByKey(clsBeTrans_inv_stock_prod::getLicense_plate))
+                        .filter(item -> item.getFecha_vence().equals(vFecha))
+                        .collect(Collectors.toList());
+            }
+
+            Optional<clsBeTrans_inv_stock_prod> firstItem = auxLista.stream().findFirst();
+
+            if (firstItem.isPresent()) {
+                txtLicencia.setText(firstItem.get().getLicense_plate());
+            } else {
+                txtLicencia.setText("");
+            }
+
+        }catch (Exception e){
+            mu.msgbox("buscaLicencia " + e.getMessage());
+        }
     }
 
 }

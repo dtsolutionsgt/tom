@@ -310,11 +310,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             alert.setView(input);
             input.requestFocus();
 
-            alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    msgbox("");
-                }
-            });
+            alert.setNegativeButton("Cancelar", (dialog, whichButton) -> msgbox(""));
 
             alert.setPositiveButton("Guardar", (dialog, whichButton) -> {
 
@@ -1500,7 +1496,18 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
             String VersionRemoteConfigFireBase = remoteConfig.getString("KEY_CURRENT_VERSION");
             String Nueva_Version_FireBaseConPuntos = VersionRemoteConfigFireBase;
-            String Nueva_Version_FireBase = Nueva_Version_FireBaseConPuntos.replace(".","");
+            String Nueva_Version_FireBase="";
+            String[] partes = Nueva_Version_FireBaseConPuntos.split("\\.");
+
+            if (partes.length >= 3) {
+                Nueva_Version_FireBase = partes[0] + "." + partes[1] + "." + partes[2];
+                Nueva_Version_FireBase = Nueva_Version_FireBase.replace(".","");
+                Log.d("Resultado", Nueva_Version_FireBase); // Esto imprimirá "5.2.2" en el logcat
+            } else {
+                Log.d("Error", "La cadena no tiene suficientes partes.");
+            }
+
+            //Nueva_Version_FireBaseConPuntos.replace(".","");
             String versionActual = gl.version.replace(".","");
 
             Log.d("version_firebase",VersionRemoteConfigFireBase);

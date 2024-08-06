@@ -516,6 +516,10 @@ public class frm_list_rec_prod extends PBase {
 
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
                     //GT17062021 Se reordena la lista por num_linea
+                    if (pListDetalleOC.items==null){
+                        throw new Exception("El documento de ingreso no tiene detalles");
+                    }
+
                     Collections.sort(pListDetalleOC.items,new OrdenarItems());
 
                     gl.gpListDetalleOC = pListDetalleOC;

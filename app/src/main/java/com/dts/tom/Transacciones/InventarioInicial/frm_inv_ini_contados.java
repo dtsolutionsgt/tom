@@ -117,7 +117,7 @@ public class frm_inv_ini_contados extends PBase {
 
                     selid = 0;
 
-                    if (position > 0) {
+                    if (position >= 0) {
 
                         Object lvObj = listView.getItemAtPosition(position);
                         clsBeTrans_inv_detalle_grid sitem = (clsBeTrans_inv_detalle_grid) lvObj;
