@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -105,6 +106,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     private String Modelo_Equipo ="";
     private String Manufacturador_Equipo = "";
+    private List<String> listaUrls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,35 +299,83 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             alert.setIcon(R.drawable.ic_quest);
 
+            //#AT20240806 Obtengo datos del archivo lista_ws
+            getListaUrls();
+
             final EditText input = new EditText(this);
-            input.setText(url);
-            input.setInputType(InputType.TYPE_CLASS_TEXT |
-                    InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            if (!lblurl.getText().toString().isEmpty()){
-                input.setText(lblurl.getText());
-            }else{
-                //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
-                input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+            final Spinner cmbUrls = new Spinner(this);
+
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.addView(input);
+            layout.addView(cmbUrls);
+
+            if (listaUrls.size() > 0 && listaUrls.size() != 1) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaUrls);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cmbUrls.setAdapter(adapter);
+                input.setVisibility(View.GONE);
+
+                String tmpUrl = lblurl.getText().toString();
+
+                if (!tmpUrl.isEmpty() && listaUrls.contains(tmpUrl)) {
+                    int position = listaUrls.indexOf(tmpUrl);
+                    cmbUrls.setSelection(position);
+                }
+
+                alert.setNeutralButton("Nueva", (dialog, whichButton) -> {
+
+                });
+            } else {
+                input.setText(url);
+                input.setInputType(InputType.TYPE_CLASS_TEXT |
+                        InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                if (!lblurl.getText().toString().isEmpty()){
+                    input.setText(lblurl.getText());
+                }else{
+                    //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+                    input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+                }
+                cmbUrls.setVisibility(View.GONE);
+                input.requestFocus();
             }
-            alert.setView(input);
-            input.requestFocus();
+
+            alert.setView(layout);
 
             alert.setNegativeButton("Cancelar", (dialog, whichButton) -> msgbox(""));
 
             alert.setPositiveButton("Guardar", (dialog, whichButton) -> {
 
-                gl.wsurl=input.getText().toString();
-
-                if(!gl.wsurl.isEmpty()){
+                if (listaUrls.size() > 0 && listaUrls.size() != 1) {
+                    gl.wsurl = cmbUrls.getSelectedItem().toString();
                     guardaDatosConexion();
-                }else{
-                    toast("Debe ingresar la URL");
-                    setURL();
+                } else {
+                    gl.wsurl = input.getText().toString();
+
+                    if (!gl.wsurl.isEmpty()) {
+                        guardaDatosConexion();
+                    } else {
+                        toast("Debe ingresar la URL");
+                        setURL();
+                    }
                 }
             });
 
             final AlertDialog dialog = alert.create();
             dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> {
+                cmbUrls.setVisibility(View.GONE);
+                input.setVisibility(View.VISIBLE);
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.GONE);
+
+                if (!lblurl.getText().toString().isEmpty()){
+                    input.setText(lblurl.getText());
+                }else{
+                    //input.setText("http://192.168.0.13/WCFTOM4/TOMHHWS.asmx");
+                    input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+                }
+            });
 
             showkeyb();
         }catch (Exception e){
@@ -336,13 +386,28 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     protected void guardaDatosConexion() {
 
-        BufferedWriter writer = null;
-        FileWriter wfile;
+        BufferedWriter writer = null, writer2;
+        FileWriter wfile, wfile2;
 
         try {
 
             String fname = gl.PathDataDir+"/tomws.txt";
             File archivo= new File(fname);
+
+            //#AT20240806 Creo un nuevo archivo para guardar varias urls
+            String fname2 = gl.PathDataDir+"/lista_ws.txt";
+            //File archivo2= new File(fname2);
+
+            wfile2=new FileWriter(fname2,true);
+            writer2 = new BufferedWriter(wfile2);
+
+            //#AT20240806 Si no existe la url en el archivo
+            //guardo la url
+            if (!listaUrls.contains(gl.wsurl)) {
+                writer2.write(gl.wsurl + "\n");
+            }
+
+            writer2.close();
 
             if (archivo.exists()){
                 archivo.delete();
@@ -350,9 +415,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             wfile=new FileWriter(fname,true);
             writer = new BufferedWriter(wfile);
-
             writer.write(gl.wsurl + "\n");
-
             writer.close();
 
             getURL();
@@ -1576,6 +1639,34 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             }
         });
         dialog.show();
+    }
+
+    private void getListaUrls() {
+        try {
+            listaUrls.clear();
+
+            if (gl.PathDataDir.isEmpty()){
+                gl.PathDataDir = this.getApplicationContext().getDataDir().getPath();
+            }
+
+            String pathText = gl.PathDataDir + "/lista_ws.txt";
+            File file1 = new File(pathText);
+
+            if (file1.exists())
+            {
+                FileInputStream fIn = new FileInputStream(file1);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fIn));
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    listaUrls.add(line.trim());
+                }
+
+                reader.close();
+            }
+        }catch (Exception e) {
+
+        }
     }
 
 }
