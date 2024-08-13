@@ -32,6 +32,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Clasificacion = "";
   @Element(required=false) public int IdPresentacion=0;
   @Element(required=false) public int IdArea=0;
+  @Element(required=false) public int IdStock=0;
   public
 
 

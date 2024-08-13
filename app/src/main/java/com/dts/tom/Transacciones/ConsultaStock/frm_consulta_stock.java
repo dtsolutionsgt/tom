@@ -876,7 +876,7 @@ public class frm_consulta_stock extends PBase {
                     codProducto = "";
                 }else{
                     try {
-                        codProducto = txtCodigo.getText().toString();
+                        codProducto = txtCodigo.getText().toString().replace("$", "");
                         idprod = Integer.valueOf(txtCodigo.getText().toString());
                     }catch (Exception e){
                         idprod = -1;
@@ -971,7 +971,7 @@ public class frm_consulta_stock extends PBase {
                     case 3:
                         //ByVal pCodigo As String, ByVal IdBodega As Integer
                         callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                   "pCodigo",txtCodigo.getText().toString(),
+                                   "pCodigo",txtCodigo.getText().toString().replace("$", ""),
                                    "IdBodega",gl.IdBodega);
                         break;
 

@@ -207,7 +207,6 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
-
                     if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Picking")) {
                         item = clsCls.new clsMenu();
                         item.ID=5;item.Icon=5;
@@ -264,45 +263,6 @@ public class Mainmenu extends PBase {
                     }
 
                 }
-
-
-               /* item = clsCls.new clsMenu();
-                item.ID=1;item.Icon=1;item.Name="Recepción\n";item.cant=-1;
-                items.add(item);*/
-
-               /* item = clsCls.new clsMenu();
-                item.ID=2;item.Icon=2;item.Name="Cambio de ubicación";item.cant=-1;
-                items.add(item);*/
-
-               /* item = clsCls.new clsMenu();
-                item.ID=3;item.Icon=3;item.Name="Cambio de estado";item.cant=-1;
-                items.add(item);*/
-
-              /*  item = clsCls.new clsMenu();
-                item.ID=4;item.Icon=4;item.Name="Implosión";
-                item.cant=-1;
-                items.add(item);*/
-
-              /*  item = clsCls.new clsMenu();
-                item.ID=5;item.Icon=5;item.Name="Picking\n";item.cant=-1;
-                items.add(item);*/
-
-              /*  item = clsCls.new clsMenu();
-                item.ID=6;item.Icon=6;item.Name="Verificación\n";item.cant=-1;
-                items.add(item);*/
-
-               /* item = clsCls.new clsMenu();
-                item.ID=11;item.Icon=11;item.Name="Lista Empaque";
-                item.cant=-1;
-                items.add(item);*/
-
-               /* item = clsCls.new clsMenu();
-                item.ID=7;item.Icon=7;item.Name="Inventario";item.cant=-1;
-                items.add(item);*/
-
-              /*  item = clsCls.new clsMenu();
-                item.ID=8;item.Icon=8;item.Name="Existencias";item.cant=-1;
-                items.add(item);*/
 
                 item = clsCls.new clsMenu();
                 item.ID=10;item.Icon=10;item.Name="Utilerias";
