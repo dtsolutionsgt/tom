@@ -310,7 +310,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             layout.addView(input);
             layout.addView(cmbUrls);
 
-            if (listaUrls.size() > 0 && listaUrls.size() != 1) {
+            if (listaUrls.size() > 1) {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaUrls);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 cmbUrls.setAdapter(adapter);
@@ -346,8 +346,14 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             alert.setPositiveButton("Guardar", (dialog, whichButton) -> {
 
-                if (listaUrls.size() > 0 && listaUrls.size() != 1) {
+                if (listaUrls.size() > 1) {
                     gl.wsurl = cmbUrls.getSelectedItem().toString();
+                    String urlTmp = input.getText().toString();
+
+                    if (!gl.wsurl.equals(urlTmp) && !urlTmp.isEmpty()) {
+                        gl.wsurl = urlTmp;
+                    }
+
                     guardaDatosConexion();
                 } else {
                     gl.wsurl = input.getText().toString();
@@ -403,8 +409,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
             //#AT20240806 Si no existe la url en el archivo
             //guardo la url
-            if (!listaUrls.contains(gl.wsurl)) {
-                writer2.write(gl.wsurl + "\n");
+            if (!gl.wsurl.isEmpty()) {
+                if (!listaUrls.contains(gl.wsurl)) {
+                    writer2.write(gl.wsurl + "\n");
+                }
             }
 
             writer2.close();
