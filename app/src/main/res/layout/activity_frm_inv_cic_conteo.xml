@@ -6,6 +6,374 @@
     android:layout_height="match_parent"
     tools:context=".Transacciones.InventarioCiclico.frm_inv_cic_conteo">
 
+    <LinearLayout
+        android:id="@+id/lyFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltope"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/lblubicacion"
+            style="@style/StyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ubic #"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtBuscFiltro"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:inputType="textPersonName"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:onClick="limpiar"
+            android:padding="3dp"
+            android:src="@drawable/close" />
+
+        <ImageView
+            android:id="@+id/imageView23"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:src="@drawable/agregar" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relbuton"
+        android:layout_below="@+id/lyFiltros"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp">
+
+
+        <HorizontalScrollView
+            android:id="@+id/scrollCiclico"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/color_medium"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lblUbicacion"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Ubicación"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCodigo"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Código"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblProducto"
+                        android:layout_width="275dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Producto"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblUmbas"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="UMBas"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblPres"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Pres"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCant_Conteo"
+                        android:layout_width="105dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Cant. Conteo"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblPeso_Conteo"
+                        android:layout_width="105dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Peso Conteo"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCant_Stock"
+                        android:layout_width="105dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Cant. Stock"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblPeso_Stock"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Peso Stock"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblLote"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Lote"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblFechaVence"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Fecha Vence"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCantidad"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Cantidad"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblUbicNombre"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Ubic. Nombre"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblEstado"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Estado"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblProductoBodega"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Prod. Bodega"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblTramo"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Tramo"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblIndexX"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Index X"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblNivel"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Nivel"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblPos"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Pos"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblFactor"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Factor"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblReconteo"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="IdReconteo"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblLicencia"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Licencia"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listCiclico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/reltope"
         android:layout_width="match_parent"
@@ -28,64 +396,14 @@
 
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/txtBuscFiltro"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reltope"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentEnd="false"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingBottom="10dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="54dp"
-        android:layout_height="38dp"
-        android:layout_below="@id/reltope"
-        android:layout_marginStart="330dp"
-        android:layout_marginTop="20dp"
-        android:onClick="limpiar"
-        android:text="X" />
-
-    <TextView
-        android:id="@+id/lblubicacion"
-        style="@style/StyleText"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reltope"
-        android:layout_alignTop="@+id/txtBuscFiltro"
-        android:layout_alignBottom="@+id/txtBuscFiltro"
-        android:text="Ubic #" />
-
-    <HorizontalScrollView
-        android:id="@+id/scrollCiclico"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/relbuton"
-        android:layout_below="@+id/lblubicacion"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp">
-
-        <ListView
-            android:id="@+id/listCiclico"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </HorizontalScrollView>
-
     <RelativeLayout
         android:id="@+id/relbuton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="-3dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
         android:background="@drawable/color_medium">
 
         <Button
@@ -109,6 +427,7 @@
 
             android:paddingStart="10dp"
             android:text="CheckBox"
+            android:textColor="@color/title_grid"
             android:textSize="24sp" />
 
         <TextView
@@ -119,6 +438,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@id/chkPendientes"
             android:background="@drawable/color_medium"
+            android:gravity="center_vertical"
             android:text="0/0"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"

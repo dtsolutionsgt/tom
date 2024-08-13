@@ -66,55 +66,40 @@ public class frm_list_inventario extends PBase {
         try{
 
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
+                /************ falta capturar tipo de inventario, para validar en frm_inv_ini_conteo ******/
+                /***************************************************************************************************/
 
-                    if (position > 0) {
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_inv_enc sitem = (clsBeTrans_inv_enc) lvObj;
+                BeInvEnc = new clsBeTrans_inv_enc();
+                BeInvEnc = BeListInv.get(position);
 
+                selid = sitem.Idinventarioenc;
+                selidx = position;
+                adapter.setSelectedIndex(position);
 
-
-                        /************ falta capturar tipo de inventario, para validar en frm_inv_ini_conteo ******/
-                        /***************************************************************************************************/
-
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_inv_enc sitem = (clsBeTrans_inv_enc) lvObj;
-                        BeInvEnc = new clsBeTrans_inv_enc();
-                        BeInvEnc = BeListInv.get(position);
-
-                        selid = sitem.Idinventarioenc;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
-
-                       procesar_registro();
-
-                    }
-
-                }
-
+               procesar_registro();
             });
 
-            txtIdTareaInv.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
+            txtIdTareaInv.setOnKeyListener((v, keyCode, event) -> {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
 
-                                if (txtIdTareaInv.getText().toString().isEmpty()){
+                            if (txtIdTareaInv.getText().toString().isEmpty()){
 
-                                    toast("Id tarea no ingresada!");
+                                toast("Id tarea no ingresada!");
 
-                                } else{
-                                    String IdTarea = String.valueOf(txtIdTareaInv.getText());
-                                    filtrarTarea(IdTarea);
-                                }
-                        }
+                            } else{
+                                String IdTarea = String.valueOf(txtIdTareaInv.getText());
+                                filtrarTarea(IdTarea);
+                            }
                     }
-                    return false;
                 }
+                return false;
             });
 
         }catch (Exception e){
@@ -128,9 +113,6 @@ public class frm_list_inventario extends PBase {
         clsBeTrans_inv_enc vItem;
 
         try{
-            vItem = new clsBeTrans_inv_enc();
-            BeListInv.add(vItem);
-
             for (clsBeTrans_inv_enc BeInv: pListTareas.items){
 
                 vItem = new clsBeTrans_inv_enc();
@@ -199,8 +181,6 @@ public class frm_list_inventario extends PBase {
         try{
 
             BeListInv.clear();
-            vItem = new clsBeTrans_inv_enc();
-            BeListInv.add(vItem);
 
             for (clsBeTrans_inv_enc BeInv: pListTareas.items){
 
@@ -212,7 +192,7 @@ public class frm_list_inventario extends PBase {
 
             }
 
-            int count = BeListInv.size()-1;
+            int count = BeListInv.size();
             btnRegs.setText("Regs:"+count);
 
             adapter=new list_adapt_tareas_inventario(this,BeListInv);

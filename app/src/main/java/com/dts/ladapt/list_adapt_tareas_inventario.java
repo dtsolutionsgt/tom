@@ -73,68 +73,43 @@ public class list_adapt_tareas_inventario extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position==0){
+        holder.lblIdTarea.setText("0");
+        holder.lblTipo.setText("--");
+        holder.lblEstadoInv.setText("--");
+        holder.lblInicio.setText("--");
+        holder.lblTranscurrido.setText("--");
 
-            holder.lblIdTarea.setText("IdTarea");
-            holder.lblIdTarea.setTextColor(R.style.titlestyle);
-            holder.lblTipo.setText("Tipo");
-            holder.lblTipo.setTextColor(R.style.titlestyle);
-            holder.lblEstadoInv.setText("Estado");
-            holder.lblEstadoInv.setTextColor(R.style.titlestyle);
-            holder.lblInicio.setText("Inicio");
-            holder.lblInicio.setTextColor(R.style.titlestyle);
-            holder.lblTranscurrido.setText("Transcurrido");
-            holder.lblTranscurrido.setTextColor(R.style.titlestyle);
+        if (pListInv.get(position).Idinventarioenc > 0) {
+            holder.lblIdTarea.setText("" + pListInv.get(position).Idinventarioenc);
+        }
 
-        }else {
+        if (pListInv.get(position).Inicial) {
+            holder.lblTipo.setText("Inicial");
+        } else {
+            holder.lblTipo.setText("Ciclico");
+        }
 
-            holder.lblIdTarea.setText("0");
-            holder.lblTipo.setText("--");
-            holder.lblEstadoInv.setText("--");
-            holder.lblInicio.setText("--");
-            holder.lblTranscurrido.setText("--");
+        if (!pListInv.get(position).Estado.isEmpty()) {
+            holder.lblEstadoInv.setText(pListInv.get(position).Estado);
+        }
 
-            if (pListInv.get(position).Idinventarioenc > 0) {
-                holder.lblIdTarea.setText("" + pListInv.get(position).Idinventarioenc);
-            }
+        if (!pListInv.get(position).Hora_ini.isEmpty()) {
 
-            if (pListInv.get(position).Inicial) {
-                holder.lblTipo.setText("Inicial");
-            } else {
-                holder.lblTipo.setText("Ciclico");
-            }
+            holder.lblInicio.setText(pListInv.get(position).Hora_ini);
 
-            if (!pListInv.get(position).Estado.isEmpty()) {
-                holder.lblEstadoInv.setText(pListInv.get(position).Estado);
-            }
+        } else {
 
-            if (!pListInv.get(position).Hora_ini.isEmpty()) {
+            holder.lblInicio.setText("");
+        }
 
-                holder.lblInicio.setText(pListInv.get(position).Hora_ini);
-
-            } else {
-
-                holder.lblInicio.setText("");
-            }
-
-            if (!pListInv.get(position).Transcurrido.isEmpty()){
-                holder.lblTranscurrido.setText(pListInv.get(position).Transcurrido);
-            }
-
-
-
+        if (!pListInv.get(position).Transcurrido.isEmpty()){
+            holder.lblTranscurrido.setText(pListInv.get(position).Transcurrido);
         }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
         } else {
-            if (position==0){
-                convertView.setBackgroundResource(R.drawable.color_medium);
-                holder.lblIdTarea.setTextColor(R.style.titlestyle);
-            }else{
-                convertView.setBackgroundColor(Color.TRANSPARENT);
-            }
-
+            convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
         return convertView;

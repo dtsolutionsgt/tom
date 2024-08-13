@@ -219,8 +219,8 @@ public class frm_inv_cic_conteo extends PBase {
                 if(DT !=null){
                     if(DT.getCount()>0){
 
-                        rec = new clsBe_inv_reconteo_data();
-                        data_list.add(rec);
+                        //rec = new clsBe_inv_reconteo_data();
+                        //data_list.add(rec);
 
                         DT.moveToFirst();
 
@@ -487,8 +487,8 @@ public class frm_inv_cic_conteo extends PBase {
 
         lista_filtro.clear();
 
-        rec = new clsBe_inv_reconteo_data();
-        lista_filtro.add(rec);
+        /*rec = new clsBe_inv_reconteo_data();
+        lista_filtro.add(rec);*/
 
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
 
@@ -528,7 +528,7 @@ public class frm_inv_cic_conteo extends PBase {
         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
-        int count =data_list.size()-1;
+        int count =data_list.size();
         cmdList.setText( count+ "/" + count);
 
     }
@@ -582,7 +582,7 @@ public class frm_inv_cic_conteo extends PBase {
         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
-        int count =data_list.size()-1;
+        int count =data_list.size();
         cmdList.setText( count+ "/" + count);
     }
 
@@ -592,8 +592,8 @@ public class frm_inv_cic_conteo extends PBase {
 
         lista_filtro.clear();
 
-        rec = new clsBe_inv_reconteo_data();
-        lista_filtro.add(rec);
+        //rec = new clsBe_inv_reconteo_data();
+        //lista_filtro.add(rec);
 
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
 
@@ -635,7 +635,7 @@ public class frm_inv_cic_conteo extends PBase {
         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
-        int count =data_list.size()-1;
+        int count =data_list.size();
         cmdList.setText( count+ "/" + count);
     }
 
