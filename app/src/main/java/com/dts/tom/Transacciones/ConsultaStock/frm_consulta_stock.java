@@ -503,6 +503,7 @@ public class frm_consulta_stock extends PBase {
                                 item.NombreArea =  "";
                                 item.Clasificacion =  "";
                                 item.IdArea = 0;
+                                item.IdStock = 0;
                                 items_stock.add(item);
 
                             }
@@ -547,6 +548,7 @@ public class frm_consulta_stock extends PBase {
                         item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                         item.IdPresentacion = pListStock2.items.get(i).IdPresentacion;
                         item.IdArea = pListStock2.items.get(i).IdArea;
+                        item.IdStock = pListStock2.items.get(i).IdStock;
 
                         items_stock.add(item);
 
@@ -614,6 +616,7 @@ public class frm_consulta_stock extends PBase {
                         item.NombreArea =  "";
                         item.Clasificacion =  "";
                         item.IdArea =  0;
+                        item.IdStock = 0;
                         items_stock.add(item);
 
                     }
@@ -704,6 +707,7 @@ public class frm_consulta_stock extends PBase {
                 item.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 item.IdPresentacion = pListStock2.items.get(i).IdPresentacion;
                 item.IdArea = pListStock2.items.get(i).IdArea;
+                item.IdStock = pListStock2.items.get(i).IdStock;
                 items_stock.add(item);
             }
 
@@ -762,6 +766,7 @@ public class frm_consulta_stock extends PBase {
                 items.NombreArea = pListStock2.items.get(i).NombreArea;
                 items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                 items.IdArea = pListStock2.items.get(i).IdArea;
+                items.IdStock = pListStock2.items.get(i).IdStock;
                 items_stock2.add(items);
 
             }
@@ -811,6 +816,7 @@ public class frm_consulta_stock extends PBase {
                     items.NombreArea = pListStock2.items.get(i).NombreArea;
                     items.Clasificacion = pListStock2.items.get(i).Clasificacion;
                     items.IdArea = pListStock2.items.get(i).IdArea;
+                    items.IdStock = pListStock2.items.get(i).IdStock;
                     items_stock2.add(items);
                 }
             }

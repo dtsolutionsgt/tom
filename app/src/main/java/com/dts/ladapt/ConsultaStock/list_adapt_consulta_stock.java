@@ -85,6 +85,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblDispPres = convertView.findViewById(R.id.lblDispPres);
                         holder.lblNombreArea = convertView.findViewById(R.id.lblNombreArea);
                         holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
+                        holder.lblIdStock = convertView.findViewById(R.id.lblIdStock);
                 convertView.setTag(holder);
 
             }else {
@@ -104,6 +105,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");
             holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
             holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
+            holder.lblIdStock.setText(""+BeListStock.get(position).IdStock);
             holder.lblLote.setText(BeListStock.get(position).Lote  +"");
             holder.lblVence.setText(BeListStock.get(position).Fecha_Vence  +"");
             holder.lblEstado.setText(BeListStock.get(position).Estado  +"");
@@ -176,6 +178,6 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 lblPres,lblExistPres,lblReservadoUMBAs,lblDisponibleUMBas,
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
                 lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
-                lblResPres, lblDispPres,lblNombreArea,lblClasificacion;
+                lblResPres, lblDispPres,lblNombreArea,lblClasificacion, lblIdStock;
     }
 }

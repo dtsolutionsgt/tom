@@ -2661,8 +2661,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
 
             //#AT20230322 Filtrar por cantidad la lista que devuelve
+            //#AT20240813 Se agregó filtro por IdStock para el cambio de ubicacion detalledo desde existencias
             AuxList = stream(stockResList.items)
-                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.getExistUMBAs().replace(",", "")))
+                    .where(c -> c.CantidadUmBas == Double.valueOf(gl.existencia.getExistUMBAs().replace(",", ""))
+                            && (c.IdStock > 0 && c.IdStock == gl.existencia.IdStock))
                     .toList();
 
             if (AuxList.size()>0){
@@ -4075,6 +4077,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (!Crear_Movimiento_Ubicacion_ND(gl.modo_cambio != 1)){
                 return;
+            }
+
+            //#AT20240813 Si el Cambio Ubic. es desde existencias y es detallado
+            //agrego el idstock para realizar el cambio de ubicacion sobre un idstock especifico
+            if (CambioUbicExistencia && CambioUbicDetallado) {
+                vStockRes.IdStock = gl.existencia.IdStock;
             }
 
             vStockRes.IdProductoBodega = cvProd.IdProductoBodega;
