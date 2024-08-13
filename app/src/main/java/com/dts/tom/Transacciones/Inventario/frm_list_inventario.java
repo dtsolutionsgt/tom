@@ -127,7 +127,7 @@ public class frm_list_inventario extends PBase {
                 }
             }
 
-            int count = BeListInv.size()-1;
+            int count = BeListInv.size();
             btnRegs.setText("Regs:"+count);
 
             adapter=new list_adapt_tareas_inventario(this,BeListInv);
