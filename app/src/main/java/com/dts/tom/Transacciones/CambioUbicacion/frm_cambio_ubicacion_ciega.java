@@ -35,6 +35,8 @@ import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaAndList;
+import com.dts.classes.Mantenimientos.Empresa.clsBeEmpresaBase;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
@@ -62,6 +64,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -1428,7 +1432,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         .toList();
             }
 
-
             if (AuxList == null) {
                 return;
             }
@@ -1443,24 +1446,30 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             clsBeVW_stock_resList tmpStockResList = new clsBeVW_stock_resList();
 
             tmpStockResList.items = AuxList;
+
             if (tmpStockResList.items.size() >0){
-                cvStockID = tmpStockResList.items.get(0).getIdStock();
+
+                clsBeVW_stock_res item = tmpStockResList.items.get(0);
+
+                cvStockID = item.getIdStock();
+
                 if (!gl.Permitir_Cambio_Ubic_Producto_Picking){
-                    vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
+                    vCantidadAUbicar =item.getCantidadUmBas() - item.CantidadReservadaUMBas;
                 } else {
 
-                    vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas();
+                    vCantidadAUbicar =item.getCantidadUmBas();
 
-                    if (tmpStockResList.items.get(0).IdPedido != 0) {
+                    if (item.IdPedido != 0) {
                         licencia_reservada_completamente = ((tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas) == 0);
                         reservada_parcialmente = tmpStockResList.items.get(0).CantidadReservadaUMBas > 0;
                     } else {
-                        vCantidadAUbicar =tmpStockResList.items.get(0).getCantidadUmBas() - tmpStockResList.items.get(0).CantidadReservadaUMBas;
+                        vCantidadAUbicar =item.getCantidadUmBas() - item.CantidadReservadaUMBas;
                     }
-
                 }
-                vFactorPres = (tmpStockResList.items.get(0).getFactor()==0?1:tmpStockResList.items.get(0).getFactor());
-                vPesoAUbicar = tmpStockResList.items.get(0).getPeso();
+
+                vFactorPres = (item.getFactor()==0?1:item.getFactor());
+                vPesoAUbicar = item.getPeso();
+
             }else{
                 vCantidadAUbicar = 0;
                 cvStockID =0;
@@ -1486,7 +1495,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             vCantidadDisponible =vCantidadAUbicar;
 
-            if (vCantidadDisponible==0){
+            //#CKFK20240818 Agregué esta validación por si hay una presentación, un lote,
+            // una fecha con cantidad disponible para mover
+            if (vCantidadDisponible==0 &&
+                    cmbPresentacion.getAdapter().getCount()==1 &&
+                    cmbLote.getAdapter().getCount()==1 &&
+                    cmbVence.getAdapter().getCount()==1){
                 msgbox("No hay existencias disponibles de este producto en esta ubicación o las existentes están reservadas");
                 inicializaTarea(false);
                 return;
@@ -1526,7 +1540,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             //#AT20221121 Si Calcular_Ubicacion_Sugerida_ML es verdadero genera ubicación sugerida
             if (gl.Calcular_Ubicacion_Sugerida_ML) {
-                execws(15);
+                if (!txtLicPlate.getText().toString().isEmpty() && !txtLicPlate.getText().equals("0")){
+                    execws(25);
+                }else{
+                    execws(15);
+                }
             } else {
                 txtUbicDestino.requestFocus();
             }
@@ -1691,6 +1709,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     break;
                 case 24:
                     processCambioUbicacionLicCompleta();
+                    break;
+                case 25:
+                    processUbicacionDestSug();
                     break;
 
             }
@@ -1877,6 +1898,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     case 24:
                         callMethod("Aplica_Cambio_Estado_Ubic_HH_LicCompleta", "pStockResList", stockList);
+                        break;
+
+                    case 25:
+                        callMethod("Get_Ubicacion_Sugerida", "Licencia", txtLicPlate.getText().toString().replace("$",""));
                         break;
 
                 }
@@ -2328,7 +2353,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
                     txtUbicDestino.requestFocus();
                 }else{
-                    txtCantidad.requestFocus();
+                    if (LicenciasCompletas){
+                        txtUbicDestino.requestFocus();
+                    }else{
+                        txtCantidad.requestFocus();
+                    }
                 }
             }
 
@@ -2439,14 +2468,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
 
-                        if (gl.modo_cambio == 2) {
+                       if (gl.modo_cambio == 2) {
                             BeProductoUbicacion = ListaActualizada.get(0);
                             cvPropID = BeProductoUbicacion.IdPropietario;
                             execws(10);
-                        }
+                       }else{
+                           BeProductoUbicacion = ListaActualizada.get(0);
+                           cvPropID = BeProductoUbicacion.IdPropietario;
+                           execws(25);
+                       }
 
                         txtLicPlate.clearFocus();
-                        txtUbicDestino.requestFocus();
                     } else {
                         LicenciasCompletas = false;
                         txtLicPlate.requestFocus();
@@ -2957,6 +2989,49 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     validaDestinoSug();
                 }
 
+            }else{
+
+                cvUbicDestID = 0;
+                toast("No existen ubicaciones sugeridas");
+                progress.cancel();
+
+                if (inferir_origen_en_cambio_ubic) {
+                    txtUbicDestino.requestFocus();
+                } else {
+                    if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                        txtUbicDestino.requestFocus();
+                    }else{
+                        txtCantidad.requestFocus();
+                    }
+                }
+
+            }
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+    }
+
+    private void processUbicacionDestSug(){
+        String jsUbic="";
+        try{
+
+            progress.setMessage("Procesando ubicación destino sugerida");
+            progress.show();
+
+            Pattern pattern = Pattern.compile("^\\d+"); // Busca uno o más dígitos al inicio
+            Matcher matcher = pattern.matcher(ws.xmlresult);
+
+            if (matcher.find()) {
+                jsUbic = matcher.group();
+            }
+
+            if (jsUbic != null){
+                txtUbicSug.setText(jsUbic);
+                txtUbicDestino.setHint("Escanee " + jsUbic);
+                validaDestinoSug();
             }else{
 
                 cvUbicDestID = 0;

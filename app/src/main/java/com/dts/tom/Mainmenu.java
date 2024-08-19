@@ -697,8 +697,7 @@ public class Mainmenu extends PBase {
                 case 9://Cambio de usuario
 
                     execws(6);
-                    //Mainmenu.super.finish(); break;
-                    //Mainmenu.super.finish();
+                    break;
 
                 case 10:// Utilerias
                     menuUtilerias(); break;
