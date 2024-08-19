@@ -2692,6 +2692,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             stockResList = xobj.getresult(clsBeVW_stock_resList.class,"Get_Productos_By_StockResCI");
 
+            //#GT19082024: validar antes de operar el objeto.
+            if (stockResList == null){
+                progress.cancel();
+                throw new Exception("No se cargo ningún registro.");
+            }
+
             //#AT20230322 Filtrar por cantidad la lista que devuelve
             //#AT20240813 Se agregó filtro por IdStock para el cambio de ubicacion detalledo desde existencias
             AuxList = stream(stockResList.items)
