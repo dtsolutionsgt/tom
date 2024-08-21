@@ -175,5 +175,10 @@ public class clsBeProducto_estado {
     public void setTolerancia_Dias_Vencimiento(int value) {
         Tolerancia_Dias_Vencimiento=value;
     }
+
+    @Override
+    public String toString() {
+        return Nombre;
+    }
 }
 

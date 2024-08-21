@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class frm_inv_cic_conteo extends PBase {
     private XMLObject xobj;
     private list_adapt_consulta_ciclico adapter_ciclico;
 
+    private ImageView btnAgregar;
     private EditText txtBuscFiltro;
     private ListView listCiclico;
     private ProgressDialog progress;
@@ -58,6 +60,7 @@ public class frm_inv_cic_conteo extends PBase {
     private final clsBeTrans_inv_enc_reconteoList registro_ciclico = new clsBeTrans_inv_enc_reconteoList();
     private Object item;
     private clsBeProducto BeProducto;
+    public static boolean NuevoConteo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,8 @@ public class frm_inv_cic_conteo extends PBase {
         listCiclico = findViewById(R.id.listCiclico);
         checkbox = findViewById(R.id.chkPendientes);
         cmdList = findViewById(R.id.cmdList);
+        btnAgregar = findViewById(R.id.btnAgregar);
+
         idreconteo =0;
         tareapos= 0;
         esconteo = true;
@@ -94,6 +99,10 @@ public class frm_inv_cic_conteo extends PBase {
         gl.pprod.Control_vencimiento = false;
 
         ProgressDialog("Cargando conteo ciclico.");
+
+        if  (BeInvEnc.Capturar_No_Asignados) {
+            btnAgregar.setVisibility(View.VISIBLE);
+        }
 
         Lista_Tareas();
 
@@ -165,17 +174,14 @@ public class frm_inv_cic_conteo extends PBase {
 
                     gl.IndexCiclico = 0;
 
-                    if (position > 0) {
+                    gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                    gl.inv_ciclico.index = position;
+                    gl.IndexCiclico = gl.inv_ciclico.index;
 
-                        gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
-                        gl.inv_ciclico.index = position;
-                        gl.IndexCiclico = gl.inv_ciclico.index;
+                    gl.Es_Reconteo = gl.inv_ciclico.idinvreconteo > 0;
+                    NuevoConteo = false;
 
-                        gl.Es_Reconteo = gl.inv_ciclico.idinvreconteo > 0;
-
-                        execws(4);
-
-                    }
+                    execws(4);
                 }
 
             });
@@ -842,6 +848,15 @@ public class frm_inv_cic_conteo extends PBase {
     public void limpiar(View view) {
         txtBuscFiltro.setText("");
         txtBuscFiltro.requestFocus();
+    }
+
+    public void agregarNuevoConteo(View view) {
+        try {
+            NuevoConteo = true;
+            startActivity(new Intent(this, frm_inv_cic_add.class));
+        } catch (Exception e) {
+            mu.msgbox("agregarNuevoConteo:"+e.getMessage());
+        }
     }
 
     public class WebServiceHandler extends WebService {

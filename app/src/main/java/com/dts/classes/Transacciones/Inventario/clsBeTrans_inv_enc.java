@@ -71,6 +71,7 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public String Licencia="";
     @Element(required=false) public int IdCentroCosto=0;
     @Element(required=false) public int Tipo_Asignacion=2;
+    @Element(required=false) public boolean Capturar_No_Asignados = false;
 
     public clsBeTrans_inv_enc() {
     }
@@ -88,7 +89,7 @@ public class clsBeTrans_inv_enc {
                               double Detalle,double Resumen,double Stock,double Peso,
                               boolean IsNew,String EstadoResumen,String EstadoDetalle,String OperadorConteo,
                               String OperadorVerifica,String FechaConteo,String FechaVence,String FechaVerifica,
-                              String Lote,String UMBas, boolean multi_propietario, String Licencia, int Tipo_Asignacion, int IdCentroCosto) {
+                              String Lote,String UMBas, boolean multi_propietario, String Licencia, int Tipo_Asignacion, int IdCentroCosto, boolean Capturar_No_Asignados) {
 
         this.Idinventarioenc=Idinventarioenc;
         this.Idpropietario=Idpropietario;
@@ -148,6 +149,7 @@ public class clsBeTrans_inv_enc {
         this.Licencia = Licencia;
         this.IdCentroCosto = IdCentroCosto;
         this.Tipo_Asignacion = Tipo_Asignacion;
+        this.Capturar_No_Asignados = Capturar_No_Asignados;
 
     }
 

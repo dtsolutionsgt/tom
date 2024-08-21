@@ -53,6 +53,7 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public double EntradasSalidas =0.00;
     @Element(required=false) public String TipoProducto ="";
     @Element(required=false) public double Factor =0.00;
+    @Element(required=false) public int IdBodega = 0;
 
     public clsBeTrans_inv_ciclico(){}
 
@@ -63,7 +64,7 @@ public class clsBeTrans_inv_ciclico {
                                   String Fec_Mod, String Ubicacion, String Tramo, String Estado, String Codigo, String Presentacion,
                                   String UnidadMedida, String Producto, String Operador, int IdPropietario, int IdClasificacion, int IdFamilia,
                                   int IdUnidadMedida, int IdTramo, double Recepciones, double Despachos, int IdProducto, double EntradasSalidas,
-                                  String TipoProducto, double Factor
+                                  String TipoProducto, double Factor, int IdBodega
         ){
 
         this.IdInvCiclico=IdInvCiclico;
@@ -113,7 +114,7 @@ public class clsBeTrans_inv_ciclico {
         this.EntradasSalidas = EntradasSalidas;
         this.TipoProducto = TipoProducto;
         this.Factor = Factor;
-
+        this.IdBodega = IdBodega;
 
     }
 

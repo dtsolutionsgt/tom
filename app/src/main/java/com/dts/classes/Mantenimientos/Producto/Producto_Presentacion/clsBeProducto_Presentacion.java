@@ -293,5 +293,10 @@ public class clsBeProducto_Presentacion {
     public String getCodigo() {
         return Codigo;
     }
+
+    @Override
+    public String toString() {
+        return Nombre;
+    }
 }
 

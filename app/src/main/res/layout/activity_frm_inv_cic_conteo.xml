@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/txtBuscFiltro"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:inputType="textPersonName"
@@ -33,7 +33,7 @@
 
         <ImageView
             android:id="@+id/button"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:onClick="limpiar"
@@ -41,12 +41,15 @@
             android:src="@drawable/close" />
 
         <ImageView
-            android:id="@+id/imageView23"
-            android:layout_width="40dp"
+            android:id="@+id/btnAgregar"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
+            android:onClick="agregarNuevoConteo"
             android:padding="3dp"
-            android:src="@drawable/agregar" />
+            android:src="@drawable/agregar"
+            android:visibility="gone"
+            tools:visibility="gone" />
     </LinearLayout>
 
     <RelativeLayout

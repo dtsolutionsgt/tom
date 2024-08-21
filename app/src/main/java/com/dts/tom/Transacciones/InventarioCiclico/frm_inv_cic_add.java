@@ -15,12 +15,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
@@ -28,15 +32,19 @@ import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_in
 import com.dts.tom.Mainmenu;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.common.collect.Table;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Inventario.frm_list_inventario.BeInvEnc;
+import static com.dts.tom.Transacciones.InventarioCiclico.frm_inv_cic_conteo.NuevoConteo;
 
 public class frm_inv_cic_add extends PBase {
 
@@ -45,9 +53,10 @@ public class frm_inv_cic_add extends PBase {
 
     private Button btnBack_cic,btAdelante,btAtras, btGuardar;
     private ImageView imgDate;
-    private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence;
+    private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence, txtLicencia;
     private Spinner cboEstado,cboPres;
     private TextView txtlote_cic,lblCantStock,lblUM,lblUbic1,lblProd,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
+    private TableRow tblote_cic, tblVence;
     private int idPresentacion;
     private int year;
     private int month;
@@ -82,7 +91,11 @@ public class frm_inv_cic_add extends PBase {
 
     //respuesta de validación
     boolean respuesta_producto;
+    private boolean existeConteo = false;
 
+    private clsBeBodega_ubicacion ubicacion = new clsBeBodega_ubicacion();
+    private clsBeProducto BeProductoUbicacion = new clsBeProducto();
+    private clsBeProducto_estadoList listaEstados = new clsBeProducto_estadoList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +128,10 @@ public class frm_inv_cic_add extends PBase {
         txtpeso_cic = findViewById(R.id.txtpeso_cic);
         lbltitulo_cic = findViewById(R.id.lbltitulo_cic);
 
+        tblote_cic = findViewById(R.id.tblote_cic);
+        tblVence = findViewById(R.id.tblVence);
+        txtLicencia = findViewById(R.id.txtLicencia);
+
         idPresentacion =0;
         vFactor = 0.00;
         IdProductoBodega = 0;
@@ -133,7 +150,16 @@ public class frm_inv_cic_add extends PBase {
 
         ValidaBotones();
 
-        Load();
+        if (!NuevoConteo) {
+            Load();
+        } else {
+            lblProd.setText("");
+            lblUbic1.setText("");
+            txtUbic.requestFocus();
+
+            btAdelante.setVisibility(View.GONE);
+            btAtras.setVisibility(View.GONE);
+        }
 
         setHandlers();
     }
@@ -143,30 +169,31 @@ public class frm_inv_cic_add extends PBase {
     private void setHandlers() {
         try{
 
-            txtProd.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event)
-                {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-                    {
-
+            txtProd.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (NuevoConteo) {
+                        if (!txtProd.getText().toString().isEmpty()) {
+                            execws(7);
+                        } else {
+                            toast("Ingrese código de producto.");
+                        }
+                    } else {
                         codigo_producto = txtProd.getText().toString().trim();
 
                         //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
-                       if(Scan_Codigo_Producto()){
+                        if (Scan_Codigo_Producto()) {
 
-                           btGuardar.setEnabled(true);
-                           respuesta_producto = false;
+                            btGuardar.setEnabled(true);
+                            respuesta_producto = false;
 
-                       }
-                       else{
+                        } else {
 
-                           respuesta_producto = false;
-                       }
+                            respuesta_producto = false;
+                        }
                     }
-
-                    return respuesta_producto;
                 }
+
+                return respuesta_producto;
             });
 
             cboEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -177,18 +204,24 @@ public class frm_inv_cic_add extends PBase {
                     {
                         TextView spinlabel = (TextView) parentView.getChildAt(0);
 
-                        if(spinlabel != null){
+                        if (spinlabel != null){
                             spinlabel.setTextColor(Color.BLACK);
                             spinlabel.setPadding(5,0,0,0);spinlabel.setTextSize(18);
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                        IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
-                        gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
+                        if (!NuevoConteo) {
+                            IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
+                            gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
+                        } else {
+                            if (NuevoConteo || existeConteo) {
+                                clsBeProducto_estado aux = (clsBeProducto_estado) parentView.getItemAtPosition(position);
+                                IdEstadoselected = aux.IdEstado;
+                            }
+                        }
 
-                    } catch (Exception e)
-                    {
-                        msgbox(e.getMessage());
+                    } catch (Exception e) {
+                        msgbox("setOnItemSelectedListener - " + e.getMessage());
                     }
 
                 }
@@ -214,7 +247,15 @@ public class frm_inv_cic_add extends PBase {
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                        IdPresentacionselected = IndexPresList.get(position);
+                        if (!NuevoConteo) {
+                            IdPresentacionselected = IndexPresList.get(position);
+                        } else {
+                            if (NuevoConteo || existeConteo) {
+                                clsBeProducto_Presentacion aux = (clsBeProducto_Presentacion) parentView.getItemAtPosition(position);
+                                IdPresentacionselected = aux.IdPresentacion;
+                                vFactor = aux.Factor;
+                            }
+                        }
 
                     } catch (Exception e)
                     {
@@ -230,29 +271,39 @@ public class frm_inv_cic_add extends PBase {
 
             });
 
-            txtLote1.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
+            txtLote1.setOnKeyListener((v, keyCode, event) -> {
 
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-                    {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                           if(txtLote1.getText().toString().trim().isEmpty()){
+                       if(txtLote1.getText().toString().trim().isEmpty()){
 
-                               mu.msgbox("Lote no puede estar vacio!");
+                           mu.msgbox("Lote no puede estar vacio!");
 
-                           }else {
+                       }else {
 
-                               btGuardar.setEnabled(true);
-                               imgDate.requestFocus();
+                           btGuardar.setEnabled(true);
+                           imgDate.requestFocus();
 
-                           }
-                    }
-
-                    return false;
+                       }
                 }
+
+                return false;
             });
 
+            txtUbic.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (!txtUbic.getText().toString().isEmpty()) {
+                        execws(6);
+                    } else {
+                        toast("Ingrese ubicación");
+                        lblUbic1.setText("");
+                        lbltitulo_cic.setText("");
+                        txtUbic.requestFocus();
+                    }
+                }
+
+                return false;
+            });
 
         }
         catch (Exception e){
@@ -415,11 +466,135 @@ public class frm_inv_cic_add extends PBase {
                 }
             }
 
+            txtLicencia.setText(gl.inv_ciclico.getLicence_plate());
+
             txtProd.requestFocus();
 
         }else{
 
             mu.msgbox( "El registro seleccionado no es válido.");
+        }
+    }
+
+    private void LoadExisteConteo() {
+        try {
+            if (gl.inv_ciclico != null) {
+                idPresentacion = gl.inv_ciclico.IdPresentacion;
+
+                if (gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor == 0) {
+                    vFactor = 0;
+                } else {
+                    vFactor = gl.inv_ciclico.Factor;
+                }
+
+                txtUbic.setText(gl.inv_ciclico.NoUbic + "");
+                idubic = gl.inv_ciclico.NoUbic;
+                lblUbic1.setTypeface(null, Typeface.BOLD);
+                lblUbic1.setText(gl.inv_ciclico.Ubic_nombre + "");
+                lblProd.setTypeface(null, Typeface.BOLD);
+                lblProd.setText(gl.inv_ciclico.Codigo + " - " + gl.inv_ciclico.Producto_nombre);
+                txtLote1.setText(gl.inv_ciclico.Lote + "");
+                dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
+                txtLicencia.setText(gl.inv_ciclico.getLicence_plate());
+
+                if (gl.inv_ciclico.IdPresentacion == 0) {
+                    lblUM.setText(gl.inv_ciclico.UMBas);
+                } else {
+
+                    String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
+                    lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
+                }
+
+                if (gl.pprod.Control_lote) {
+                    txtlote_cic.setVisibility(TextView.VISIBLE);
+                    txtLote1.setVisibility(TextView.VISIBLE);
+                    //txtLote1.setEnabled(false);
+                } else {
+                    txtlote_cic.setVisibility(TextView.INVISIBLE);
+                    txtLote1.setVisibility(TextView.INVISIBLE);
+                }
+
+                if (gl.pprod.Control_vencimiento) {
+                    txtFecha_cic.setVisibility(TextView.VISIBLE);
+                    imgDate.setVisibility(TextView.VISIBLE);
+                    dtpVence.setVisibility(TextView.VISIBLE);
+                } else {
+                    txtFecha_cic.setVisibility(TextView.INVISIBLE);
+                    imgDate.setVisibility(TextView.INVISIBLE);
+                    dtpVence.setVisibility(TextView.INVISIBLE);
+                }
+
+                if (gl.pprod.Control_peso) {
+
+                    txtpeso_cic.setVisibility(TextView.VISIBLE);
+
+                    txtPesoContado.setVisibility(TextView.VISIBLE);
+
+                } else {
+                    txtpeso_cic.setVisibility(TextView.INVISIBLE);
+
+                    txtPesoContado.setVisibility(TextView.INVISIBLE);
+                }
+
+
+                if (BeInvEnc.Mostrar_Cantidad_Teorica_hh) {
+
+                    if (!gl.inv_ciclico.cantidad.equals(0.00)) {
+
+                        if (idPresentacion == 0) {
+
+                            lblCantStock.setVisibility(TextView.VISIBLE);
+                            lblCantStock.setText(gl.inv_ciclico.Cant_Stock + "");
+
+                        } else {
+
+                            double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                            String stringDecimal = String.format("%.6f", resultado_);
+                            lblCantStock.setText(stringDecimal);
+                        }
+                    } else {
+
+                        if (idPresentacion == 0) {
+
+                            lblCantStock.setVisibility(TextView.VISIBLE);
+                            lblCantStock.setText(gl.inv_ciclico.Cant_Stock + "");
+
+                        } else {
+
+                            double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                            String stringDecimal = String.format("%.6f", resultado_);
+                            lblCantStock.setText(stringDecimal);
+                        }
+                    }
+
+                } else {
+
+                    lblCantStock.setVisibility(TextView.INVISIBLE);
+                }
+
+                lbltitulo_cic.setText("Ubic # " + gl.inv_ciclico.NoUbic);
+
+                if (!gl.inv_ciclico.cantidad.equals(0.00)) {
+
+                    if (idPresentacion == 0) {
+
+                        String stringDecimal = String.format("%.6f", gl.inv_ciclico.cantidad);
+                        txtCantContada.setText(stringDecimal);
+
+                    } else {
+
+                        double resultado_ = gl.inv_ciclico.cantidad / vFactor;
+                        String stringDecimal = String.format("%.6f", resultado_);
+                        txtCantContada.setText(stringDecimal);
+                    }
+                }
+
+                txtCantContada.requestFocus();
+            } else {
+                mu.msgbox("El registro seleccionado no es válido.");
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
@@ -749,12 +924,67 @@ public class frm_inv_cic_add extends PBase {
         }else{
 
             btGuardar.setEnabled(true);
-            Guardar();
+
+            if (NuevoConteo && !existeConteo) {
+                pitem= new clsBeTrans_inv_ciclico();
+
+                pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
+                pitem.IdStock = 0;
+                pitem.IdProductoBodega = BeProductoUbicacion.IdProductoBodega;
+                pitem.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
+                pitem.IdPresentacion = 0;
+                pitem.IdPresentacion_nuevo = IdPresentacionselected;
+                pitem.IdProductoEstado = 0;
+                pitem.IdProductoEst_nuevo = IdEstadoselected;
+                pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
+                pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbic.getText().toString());
+
+                pitem.Lote_stock = "";
+                pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
+
+                if (BeProductoUbicacion.Control_lote) {
+                    String lote = txtLote1.getText().toString();
+
+                    pitem.Lote = lote;
+                } else {
+                    pitem.Lote = "";
+                }
+
+                if (BeProductoUbicacion.Control_vencimiento) {
+                    String fecha = dtpVence.getText().toString();
+
+                    pitem.Fecha_vence = app.strFechaXML2(fecha);
+                } else {
+                    pitem.Fecha_vence = "1900-01-01T00:00:00";
+                }
+
+                if (BeProductoUbicacion.Control_peso) {
+                    pitem.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
+                } else {
+                    pitem.Peso = 0;
+                }
+
+                pitem.Cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
+
+                if (pitem.IdPresentacion > 0) {
+                    pitem.Cantidad = pitem.Cantidad *vFactor;
+                }
+
+                pitem.lic_plate = txtLicencia.getText().toString();
+                pitem.Fec_agr = du.Fecha_CompletaT();
+                pitem.Idoperador = gl.OperadorBodega.IdOperadorBodega;
+                pitem.User_agr = "";
+                pitem.IdBodega = gl.IdBodega;
+
+                execws(9);
+            } else {
+                Guardar();
+            }
 
         }
     }
 
-    private void Guardar(){
+    private void  Guardar(){
 
         if( gl.pprod.Control_lote){
 
@@ -1005,9 +1235,23 @@ public class frm_inv_cic_add extends PBase {
                     case 5:
                         callMethod("Inventario_Ciclico_Actualiza_Reconteo", "idinvreconteo", gl.inv_ciclico.idinvreconteo, "pCantidad_Reconteo", Nueva_Cantidad );
                         break;
-                    }
-
-
+                    case 6:
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
+                                "pBarra",txtUbic.getText().toString(),
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 7:
+                        callMethod("Get_BeProducto_By_Codigo_For_HH",
+                                "pCodigo",txtProd.getText().toString(),
+                                "IdBodega",gl.IdBodega);
+                        break;
+                    case 8:
+                        callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
+                        break;
+                    case 9:
+                        callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", pitem);
+                        break;
+                }
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
@@ -1034,6 +1278,18 @@ public class frm_inv_cic_add extends PBase {
                     break;
                 case 5:
                     Inventario_Ciclico_Actualiza_Reconteo();
+                    break;
+                case 6:
+                    processUbic();
+                    break;
+                case 7:
+                    processProducto();
+                    break;
+                case 8:
+                    processEstados();
+                    break;
+                case 9:
+                    processAgregarConteo();
                     break;
             }
 
@@ -1219,6 +1475,185 @@ public class frm_inv_cic_add extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("actualiza_ciclico_reconteo_: "+e.getMessage());
+        }
+    }
+
+    private void processUbic() {
+        try {
+            ubicacion = xobj.getresult(clsBeBodega_ubicacion.class,"Get_Ubicacion_By_Codigo_Barra_And_IdBodega");
+
+            if (ubicacion == null) {
+                txtUbic.selectAll();
+                txtUbic.requestFocus();
+                lblUbic1.setText("");
+                lbltitulo_cic.setText("Ubic");
+                throw new Exception("Ubicación no válida");
+            } else {
+                lblUbic1.setText(ubicacion.getDescripcion());
+                lbltitulo_cic.setText("Ubic # "+ ubicacion.IdUbicacion);
+                txtProd.requestFocus();
+            }
+        } catch (Exception e) {
+            mu.msgbox("processUbic: "+e.getMessage());
+        }
+    }
+
+    private void processProducto(){
+        try {
+            existeConteo = false;
+            BeProductoUbicacion = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
+
+            if (BeProductoUbicacion != null){
+                lblProd.setText(BeProductoUbicacion.Nombre);
+                lblUM.setText(BeProductoUbicacion.UnidadMedida.Nombre);
+
+                if (!BeProductoUbicacion.Control_lote) {
+                    tblote_cic.setVisibility(View.GONE);
+                } else {
+                    tblote_cic.setVisibility(View.VISIBLE);
+                }
+
+                if (!BeProductoUbicacion.Control_vencimiento) {
+                    tblVence.setVisibility(View.GONE);
+                } else {
+                    tblVence.setVisibility(View.VISIBLE);
+                }
+
+                if (!BeProductoUbicacion.Control_peso) {
+                    txtpeso_cic.setVisibility(View.INVISIBLE);
+                    txtPesoContado.setVisibility(View.INVISIBLE);
+                } else {
+                    txtpeso_cic.setVisibility(View.VISIBLE);
+                    txtPesoContado.setVisibility(View.VISIBLE);
+                }
+
+                codigo_producto = txtProd.getText().toString().trim();
+
+                Optional<clsBe_inv_reconteo_data> existe = gl.reconteo_list.stream()
+                        .filter(obj -> obj.Codigo.equals(txtProd.getText().toString())
+                                && obj.getNoUbic() == Integer.valueOf(txtUbic.getText().toString()))
+                        .findFirst();
+
+                if (existe.isPresent()) {
+                    existeConteo = true;
+
+                    gl.inv_ciclico = existe.get();
+                    gl.inv_ciclico.index = gl.reconteo_list.indexOf(gl.inv_ciclico);
+                    gl.IndexCiclico = gl.inv_ciclico.index;
+
+                    gl.pprod.IdProducto = BeProductoUbicacion.IdProducto;
+                    gl.pprod.Control_vencimiento = BeProductoUbicacion.Control_vencimiento;
+                    gl.pprod.Control_lote = BeProductoUbicacion.Control_lote;
+                    gl.pprod.Control_peso = BeProductoUbicacion.Control_peso;
+
+                    LoadExisteConteo();
+                    toastlong("Ya existe un conteo del producto en inventario en la ubicación " + txtUbic.getText().toString());
+                }
+
+                execws(8);
+
+                btGuardar.setEnabled(true);
+            } else {
+                lblProd.setText ("Código no válido");
+                txtProd.requestFocus();
+                txtProd.selectAll();
+                throw new Exception("Producto no existe");
+            }
+
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . processProducto " + e.getMessage());
+        }
+    }
+
+    private void processEstados() {
+        try {
+            bodlist.clear();
+            listaEstados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
+
+            if (listaEstados != null){
+
+                ArrayAdapter<clsBeProducto_estado> EstadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaEstados.items);
+                EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cboEstado.setAdapter(EstadosAdapter);
+
+                if (existeConteo) {
+                    int indice = listaEstados.items.stream()
+                            .filter(obj -> obj.getIdEstado() == gl.inv_ciclico.IdProductoEstado)
+                            .map(listaEstados.items::indexOf)
+                            .findFirst()
+                            .orElse(-1);
+
+                    if (indice != -1) {
+                        cboEstado.setSelection(indice);
+                    }
+                } else {
+                    cboEstado.setSelection(0);
+                }
+
+                LLenaPresentacion();
+            }else{
+                msgbox("No hay estados para asignar al producto");
+            }
+
+
+        } catch (Exception e) {
+            mu.msgbox("processEstados " + e.getMessage());
+        }
+    }
+
+    private void processAgregarConteo() {
+        try {
+            int getrespuesta = xobj.getresult(Integer.class, "Inventario_Agregar_Conteo");
+
+            if (getrespuesta > 0) {
+                toastlong("Conteo agregado con éxito.");
+
+                finish();
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processAgregarConteo: " + e.getMessage());
+        }
+    }
+
+    private void LLenaPresentacion() {
+        try {
+            PresList.clear();
+
+            if (BeProductoUbicacion != null){
+
+                if (!existeConteo) {
+                    clsBeProducto_Presentacion pres = new clsBeProducto_Presentacion();
+                    pres.IdPresentacion = 0;
+                    pres.Nombre = "Sin Presentación";
+
+                    BeProductoUbicacion.Presentaciones.items.add(0, pres);
+                }
+
+                if (BeProductoUbicacion.Presentaciones.items != null) {
+                    ArrayAdapter<clsBeProducto_Presentacion> dataAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, BeProductoUbicacion.Presentaciones.items);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cboPres.setAdapter(dataAdapter);
+
+                    if (existeConteo) {
+                        int indice = BeProductoUbicacion.Presentaciones.items.stream()
+                                .filter(obj -> obj.getIdPresentacion() == gl.inv_ciclico.IdPresentacion)
+                                .map(BeProductoUbicacion.Presentaciones.items::indexOf)
+                                .findFirst()
+                                .orElse(-1);
+
+                        if (indice != -1) {
+                            cboPres.setSelection(indice);
+                        } else {
+                            cboPres.setSelection(0);
+                        }
+                    } else {
+                        cboPres.setSelection(0);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("LLenaPresentacion " + e.getMessage());
         }
     }
 
