@@ -1621,16 +1621,16 @@ public class frm_inv_cic_add extends PBase {
             PresList.clear();
 
             if (BeProductoUbicacion != null){
-
-                if (!existeConteo) {
-                    clsBeProducto_Presentacion pres = new clsBeProducto_Presentacion();
-                    pres.IdPresentacion = 0;
-                    pres.Nombre = "Sin Presentación";
-
-                    BeProductoUbicacion.Presentaciones.items.add(0, pres);
-                }
-
                 if (BeProductoUbicacion.Presentaciones.items != null) {
+
+                    if (!existeConteo) {
+                        clsBeProducto_Presentacion pres = new clsBeProducto_Presentacion();
+                        pres.IdPresentacion = 0;
+                        pres.Nombre = "Sin Presentación";
+
+                        BeProductoUbicacion.Presentaciones.items.add(0, pres);
+                    }
+
                     ArrayAdapter<clsBeProducto_Presentacion> dataAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, BeProductoUbicacion.Presentaciones.items);
                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     cboPres.setAdapter(dataAdapter);
