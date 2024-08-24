@@ -475,14 +475,12 @@ public class frm_inv_cic_conteo extends PBase {
 
 
                 //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
-                /*if(BeInvEnc.Capturar_no_existente){
-
+                //AT 20240823 Preguntar si se debe aplicar de esta forma o no
+                if(BeInvEnc.Capturar_no_existente){
                     execws(2);
-
-                }else{
-
-                    Toast.makeText(getApplicationContext(),"Código de ubicación no existe en ubicaciones asignadas de inventario",Toast.LENGTH_SHORT);
-                }*/
+                } else {
+                    toastlong("Código de ubicación no existe en ubicaciones asignadas de inventario");
+                }
             }
         }
     }

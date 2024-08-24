@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -27,6 +28,7 @@ import com.dts.classes.Transacciones.Inventario.Inv_Stock_Prod.clsBeTrans_inv_st
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.google.common.collect.Table;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class frm_inv_cic_guardar extends PBase {
     private WebServiceHandler ws;
     private XMLObject xobj;
 
+    private TableRow tblote_cic, tblVence;
     private ImageView imgDate;
     private int year;
     private int month;
@@ -92,6 +95,9 @@ public class frm_inv_cic_guardar extends PBase {
         dtpNVence= findViewById(R.id.dtpVence);
         txtNCantContada = findViewById(R.id.txtCantContada);
         txtNPesoContado = findViewById(R.id.txtPesoContado);
+
+        tblote_cic = findViewById(R.id.tblote_cic);
+        tblVence = findViewById(R.id.tblVence);
 
         ws = new WebServiceHandler(frm_inv_cic_guardar.this,gl.wsurl);
         xobj = new XMLObject(ws);
@@ -169,20 +175,24 @@ public class frm_inv_cic_guardar extends PBase {
         }
 
         if(gl.pBeProductoNuevo.Control_lote){
+            tblote_cic.setVisibility(View.VISIBLE);
             lblNLote.setVisibility(View.VISIBLE);
             txtNLote.setVisibility(View.VISIBLE);
 
         }else{
+            tblote_cic.setVisibility(View.GONE);
             lblNLote.setVisibility(View.INVISIBLE);
             txtNLote.setVisibility(View.INVISIBLE);
             //cmbLoteN.setVisibility(View.INVISIBLE);
         }
 
         if(gl.pBeProductoNuevo.Control_vencimiento){
+            tblVence.setVisibility(View.VISIBLE);
             lblNVence.setVisibility(View.VISIBLE);
             dtpNVence.setVisibility(View.VISIBLE);
             imgDate.setVisibility(ImageView.VISIBLE);
         }else{
+            tblVence.setVisibility(View.GONE);
             lblNVence.setVisibility(View.INVISIBLE);
             dtpNVence.setVisibility(View.INVISIBLE);
             imgDate.setVisibility(ImageView.INVISIBLE);
@@ -342,8 +352,17 @@ public class frm_inv_cic_guardar extends PBase {
             if(nubic != null){
                 vIdUbic = nubic.IdUbicacion;
                 nidubic = nubic.IdUbicacion;
-                lblNUbic.setText(nubic.NombreCompleto);
-                txtNProd.requestFocus();
+                lblNUbic.setText(nubic.Descripcion);
+                //txtNProd.requestFocus();
+
+                if (gl.pBeProductoNuevo.Control_lote) {
+                    txtNLote.requestFocus();
+                } else if (gl.pBeProductoNuevo.Control_vencimiento) {
+                    dtpNVence.requestFocus();
+                } else {
+                    txtNCantContada.requestFocus();
+                }
+
             }else{
                 toast("¡Ubicacion no existe!");
             }

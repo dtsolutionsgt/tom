@@ -76,8 +76,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
-                    android:text="ubicacion"
-                    android:textSize="14sp" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
             </TableRow>
 
@@ -112,8 +112,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:layout_marginTop="5dp"
-                    android:text="producto"
-                    android:textSize="14sp" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -139,7 +139,9 @@
                 android:id="@+id/tblCantidad"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/txtpresent_cic"
