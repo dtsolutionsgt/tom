@@ -303,7 +303,7 @@ public class frm_inv_cic_conteo extends PBase {
                         }
 
                         //Se resta un registro, porque el primero es un registro para los encabezados del grid
-                        int count =data_list.size()-1;
+                        int count =data_list.size();
                         cmdList.setText( count+ "/" + count);
 
                         if (DT!=null) DT.close();
@@ -312,13 +312,6 @@ public class frm_inv_cic_conteo extends PBase {
                         listCiclico.setAdapter(adapter_ciclico);
 
 
-                    }else{
-                        rec = new clsBe_inv_reconteo_data();
-                        data_list.add(rec);
-
-                        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
-                        listCiclico.setAdapter(adapter_ciclico);
-                        cmdList.setText( "0/0");
                     }
                 }
             }

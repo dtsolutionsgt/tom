@@ -161,6 +161,7 @@ public class frm_inv_cic_add extends PBase {
 
             btAdelante.setVisibility(View.GONE);
             btAtras.setVisibility(View.GONE);
+            lblCantidadContada.setVisibility(View.GONE);
         }
 
         setHandlers();
@@ -942,30 +943,31 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdStock = 0;
                 pitem.IdProductoBodega = BeProductoUbicacion.IdProductoBodega;
                 pitem.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
-                pitem.IdPresentacion = 0;
+                pitem.IdPresentacion = IdPresentacionselected;
                 pitem.IdPresentacion_nuevo = IdPresentacionselected;
-                pitem.IdProductoEstado = 0;
+                pitem.IdProductoEstado = IdEstadoselected;
                 pitem.IdProductoEst_nuevo = IdEstadoselected;
                 pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
                 pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbic.getText().toString());
-
-                pitem.Lote_stock = "";
-                pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
 
                 if (BeProductoUbicacion.Control_lote) {
                     String lote = txtLote1.getText().toString();
 
                     pitem.Lote = lote;
+                    pitem.Lote_stock = lote;
                 } else {
                     pitem.Lote = "";
+                    pitem.Lote_stock = "";
                 }
 
                 if (BeProductoUbicacion.Control_vencimiento) {
-                    String fecha = dtpVence.getText().toString();
+                    String fecha = app.strFechaXML2(dtpVence.getText().toString());
 
-                    pitem.Fecha_vence = app.strFechaXML2(fecha);
+                    pitem.Fecha_vence = fecha;
+                    pitem.Fecha_vence_stock = fecha;
                 } else {
                     pitem.Fecha_vence = "1900-01-01T00:00:00";
+                    pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
                 }
 
                 if (BeProductoUbicacion.Control_peso) {

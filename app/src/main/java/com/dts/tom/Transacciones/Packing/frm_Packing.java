@@ -569,7 +569,8 @@ public class frm_Packing extends PBase {
             lblCCant.setText("");
 
             txtNuevoLp.setText("");
-            txtNuevoLp.setEnabled(false);
+            //#AT20240828 A petición de Erik
+            //txtNuevoLp.setEnabled(false);
 
             txtLpAnt.setText("");
             txtLpAnt.setVisibility(View.INVISIBLE);
@@ -617,7 +618,8 @@ public class frm_Packing extends PBase {
             lblCCant.setText("");
 
             txtNuevoLp.setText("");
-            txtNuevoLp.setEnabled(false);
+            //#AT20240828 A petición de Erik
+            //txtNuevoLp.setEnabled(false);
 
             txtLpAnt.setText("");
             txtLpAnt.setVisibility(View.INVISIBLE);
