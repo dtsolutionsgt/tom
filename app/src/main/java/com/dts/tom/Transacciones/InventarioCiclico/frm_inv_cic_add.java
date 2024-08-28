@@ -55,7 +55,7 @@ public class frm_inv_cic_add extends PBase {
     private ImageView imgDate;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence, txtLicencia;
     private Spinner cboEstado,cboPres;
-    private TextView txtlote_cic,lblCantStock,lblUM,lblUbic1,lblProd,txtFecha_cic,txtpeso_cic,lbltitulo_cic;
+    private TextView txtlote_cic,lblCantStock,lblUM,lblUbic1,lblProd,txtFecha_cic,txtpeso_cic,lbltitulo_cic, lblCantidadContada;
     private TableRow tblote_cic, tblVence;
     private int idPresentacion;
     private int year;
@@ -96,6 +96,7 @@ public class frm_inv_cic_add extends PBase {
     private clsBeBodega_ubicacion ubicacion = new clsBeBodega_ubicacion();
     private clsBeProducto BeProductoUbicacion = new clsBeProducto();
     private clsBeProducto_estadoList listaEstados = new clsBeProducto_estadoList();
+    private double CantidadContada = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,7 @@ public class frm_inv_cic_add extends PBase {
         tblote_cic = findViewById(R.id.tblote_cic);
         tblVence = findViewById(R.id.tblVence);
         txtLicencia = findViewById(R.id.txtLicencia);
+        lblCantidadContada = findViewById(R.id.lblCantidadContada);
 
         idPresentacion =0;
         vFactor = 0.00;
@@ -195,6 +197,14 @@ public class frm_inv_cic_add extends PBase {
 
                 return respuesta_producto;
             });
+
+            txtCantContada.setOnKeyListener(((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    btnGuardar(v);
+                }
+
+                return false;
+            }));
 
             cboEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -1039,6 +1049,7 @@ public class frm_inv_cic_add extends PBase {
             pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
             pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
             pitem.lic_plate = gl.inv_ciclico.Licence_plate;
+            pitem.Idoperador = gl.IdOperador;
 
             if(pitem.IdPresentacion > 0){
 
@@ -1251,6 +1262,17 @@ public class frm_inv_cic_add extends PBase {
                     case 9:
                         callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", pitem);
                         break;
+                    case 10:
+                        clsBeTrans_inv_ciclico item = new clsBeTrans_inv_ciclico();
+                        item.Lote = gl.inv_ciclico.Lote;
+                        item.Fecha_vence = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence);
+                        item.IdUbicacion = gl.inv_ciclico.NoUbic;
+                        item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+                        item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                        item.Idinventarioenc = BeInvEnc.Idinventarioenc;
+
+                        callMethod("Get_Conteo_Inv_Ciclico", "pInvCiclico", item);
+                        break;
                 }
             } catch (Exception e) {
                 error=e.getMessage();errorflag =true;msgbox(error);
@@ -1291,6 +1313,9 @@ public class frm_inv_cic_add extends PBase {
                 case 9:
                     processAgregarConteo();
                     break;
+                case 10:
+                    processGetCantidadContada();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1311,6 +1336,7 @@ public class frm_inv_cic_add extends PBase {
                 }
             }
 
+            execws(10);
         } catch (Exception e) {
             mu.msgbox("processPresentacion:"+e.getMessage());
         }
@@ -1609,6 +1635,23 @@ public class frm_inv_cic_add extends PBase {
                 toastlong("Conteo agregado con éxito.");
 
                 finish();
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processAgregarConteo: " + e.getMessage());
+        }
+    }
+
+    private void processGetCantidadContada() {
+        try {
+            CantidadContada = xobj.getresultSingle(Double.class, "Get_Conteo_Inv_CiclicoResult");
+
+            if (CantidadContada > 0) {
+                lblCantidadContada.setVisibility(View.VISIBLE);
+                lblCantidadContada.setText("Conteo total: "+CantidadContada);
+            } else {
+                lblCantidadContada.setVisibility(View.GONE);
+                lblCantidadContada.setText("");
             }
 
         } catch (Exception e) {
