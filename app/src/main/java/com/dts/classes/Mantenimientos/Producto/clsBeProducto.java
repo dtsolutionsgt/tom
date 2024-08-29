@@ -2,6 +2,8 @@ package com.dts.classes.Mantenimientos.Producto;
 
 
 import com.dts.classes.Mantenimientos.Arancel.clsBeArancel;
+import com.dts.classes.Mantenimientos.Producto.Indice_Rotacion.clsBeIndice_rotacion;
+import com.dts.classes.Mantenimientos.Producto.Indice_Rotacion.clsBeIndice_rotacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
 import com.dts.classes.Mantenimientos.Producto.Producto_clasificacion.clsBeProducto_clasificacion;
@@ -103,6 +105,7 @@ public class clsBeProducto {
   @Element(required=false) public int IdProductoParametroB =0;
   @Element(required=false) public clsBeProducto_parametro_a ParametroA=new clsBeProducto_parametro_a();
   @Element(required=false) public clsBeProducto_parametro_b ParametroB=new clsBeProducto_parametro_b();
+  @Element(required=false) public clsBeIndice_rotacion Indice_Rotacion=new clsBeIndice_rotacion();
 
   @Element(required=false) public int IdTipoManufactura =0;
 
@@ -190,6 +193,7 @@ public class clsBeProducto {
     this.ParametroA=ParametroA;
     this.ParametroB=ParametroB;
     this.IdTipoManufactura = IdTipoManufactura;
+    this.Indice_Rotacion = Indice_Rotacion;
   }
 
   public clsBeProducto(int IdProducto,int IdPropietario,int IdClasificacion,int IdFamilia,

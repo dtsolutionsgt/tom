@@ -661,7 +661,7 @@ public class Mainmenu extends PBase {
 
                     break;
 
-                case 4://ImplosiónImplosión   //antes tenia packing
+                case 4://Implosión   //antes tenia packing
                     gl.tipoTarea = idmenu;
                     startActivity(new Intent(this, frm_Packing.class));
 

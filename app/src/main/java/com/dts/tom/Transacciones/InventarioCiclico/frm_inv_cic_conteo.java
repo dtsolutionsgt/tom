@@ -220,6 +220,8 @@ public class frm_inv_cic_conteo extends PBase {
             gl.reconteo_list.clear();
             int index = 0;
 
+            listCiclico.setAdapter(null);
+
             if(!txtBuscFiltro.equals("")){
 
                 if(DT !=null){
@@ -233,7 +235,6 @@ public class frm_inv_cic_conteo extends PBase {
                         while (!DT.isAfterLast()) {
 
                             data_rec = new clsBe_inv_reconteo_data();
-
 
                             data_rec.index = index;
                             data_rec.idinventarioenc = Integer.parseInt(DT.getString(0));

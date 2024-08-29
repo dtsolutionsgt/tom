@@ -220,7 +220,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="5.9.6";
+    public final String version="6.0.2";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
@@ -285,6 +285,7 @@ public class appGlobals extends Application {
         listValidDevices.add("EDA52");
         listValidDevices.add("EDA51");
         listValidDevices.add("MC21");
+        listValidDevices.add("h31");
         }
 
     public <T> List<T> getList(String jsonArray, Class<T> clazz) {
