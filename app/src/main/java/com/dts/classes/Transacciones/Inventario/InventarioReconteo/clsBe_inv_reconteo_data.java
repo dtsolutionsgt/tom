@@ -24,6 +24,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public String Lote="";
     @Element(required=false) public String Lote_stock="";
     @Element(required=false) public String Fecha_Vence="1900-01-01T00:00:00";
+    @Element(required=false) public String Fecha_Vence_Stock="1900-01-01T00:00:00";
     @Element(required=false) public Boolean control_peso=false;
     @Element(required=false) public int Conteo=0;
     @Element(required=false) public String Ubic_nombre="";
