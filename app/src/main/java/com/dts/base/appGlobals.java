@@ -254,6 +254,7 @@ public class appGlobals extends Application {
     public boolean recepcion_cerrada_concurrencia = false;
 
     public boolean marcaje_temporal =false;
+    public int ubicacionInv = 0;
 
     @Override
     public void onCreate() {

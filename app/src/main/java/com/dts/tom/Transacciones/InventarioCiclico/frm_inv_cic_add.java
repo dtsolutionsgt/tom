@@ -167,6 +167,11 @@ public class frm_inv_cic_add extends PBase {
             btAdelante.setVisibility(View.GONE);
             btAtras.setVisibility(View.GONE);
             lblCantidadContada.setVisibility(View.GONE);
+
+            if (gl.ubicacionInv != 0) {
+                txtUbic.setText(gl.ubicacionInv+"");
+                execws(6);
+            }
         }
 
         setHandlers();

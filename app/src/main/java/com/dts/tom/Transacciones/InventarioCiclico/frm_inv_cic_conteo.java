@@ -127,6 +127,8 @@ public class frm_inv_cic_conteo extends PBase {
                                     toast("No ingreso una Ubicación!");
 
                                 }else{
+                                    adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                                    listCiclico.setAdapter(adapter_ciclico);
 
                                     if(chkPendientes){
 
@@ -404,12 +406,52 @@ public class frm_inv_cic_conteo extends PBase {
             //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
 
         } else if(registros == 0){
+            msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+        }
+    }
 
+    public void FiltroValores() {
+        int registros = 0;
+        String evaluar = txtBuscFiltro.getText().toString().trim();
+
+        for (int i = 0; i < data_list.size(); i++) {
+
+            String codigo_producto = data_list.get(i).Codigo;
+
+            if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+
+                registros = registros+1;
+
+                if (registros==1){
+                    gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                }
+            }
+        }
+        if(registros > 1){
+
+
+            //carga la lista con el Filtro Código
+            FiltroxCodigo(evaluar);
+
+            gl.inv_ciclico = new clsBe_inv_reconteo_data();
+            msgbox("El código contiene varias ubicaciones, seleccione ahora el código de producto.");
+            txtBuscFiltro.setText("");
+            Busqueda= false;
+
+        } else if (registros ==1){
+
+            Busqueda = true;
+            execws(4);
+
+        }
+        else if(registros ==0){
+
+            //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
             for (int i = 0; i < data_list.size(); i++) {
 
-                String codigo_producto = data_list.get(i).Codigo;
+                String lote_stock = data_list.get(i).Lote_stock;
 
-                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
+                if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
 
                     registros = registros+1;
 
@@ -420,12 +462,11 @@ public class frm_inv_cic_conteo extends PBase {
             }
             if(registros > 1){
 
-
-                //carga la lista con el Filtro Código
-                FiltroxCodigo(evaluar);
+                //GT 18012020 carga la lista con el Filtro Lote
+                FiltroxLote(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                msgbox("El código contiene varias ubicaciones, seleccione ahora el código de producto.");
+                msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
 
@@ -433,48 +474,15 @@ public class frm_inv_cic_conteo extends PBase {
 
                 Busqueda = true;
                 execws(4);
-
             }
-            else if(registros ==0){
-
-                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
-                for (int i = 0; i < data_list.size(); i++) {
-
-                    String lote_stock = data_list.get(i).Lote_stock;
-
-                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
-
-                        registros = registros+1;
-
-                        if (registros==1){
-                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
-                        }
-                    }
-                }
-                if(registros > 1){
-
-                    //GT 18012020 carga la lista con el Filtro Lote
-                    FiltroxLote(evaluar);
-
-                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
-                    txtBuscFiltro.setText("");
-                    Busqueda= false;
-
-                } else if (registros ==1){
-
-                    Busqueda = true;
-                    execws(4);
-                }
 
 
-                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
-                //AT 20240823 Preguntar si se debe aplicar de esta forma o no
-                if(BeInvEnc.Capturar_no_existente){
-                    execws(2);
-                } else {
-                    toastlong("Código de ubicación no existe en ubicaciones asignadas de inventario");
-                }
+            //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+            //AT 20240823 Preguntar si se debe aplicar de esta forma o no
+            if(BeInvEnc.Capturar_no_existente){
+                execws(2);
+            } else {
+                toastlong("Código de ubicación no existe en ubicaciones asignadas de inventario");
             }
         }
     }
@@ -638,17 +646,60 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void ListaFiltrada2() {
+        try {
+            Integer registros = 0;
 
+            String evaluar = txtBuscFiltro.getText().toString().trim();
+
+            //GT 01122020 inicia busqueda en lista por Ubicación
+            for (int i = 0; i < data_list.size(); i++) {
+
+                String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+
+                if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0) {
+
+                    registros = registros + 1;
+
+                    if (registros == 1) {
+                        gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                    }
+                }
+            }
+
+            if (registros > 1) {
+
+                //carga la lista con el Filtro Ubicación
+                FiltroxUbicacion(evaluar);
+
+                gl.inv_ciclico = new clsBe_inv_reconteo_data();
+                msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
+                txtBuscFiltro.setText("");
+                Busqueda = false;
+
+            } else if (registros == 1) {
+
+                Busqueda = true;
+
+                execws(4);
+
+            } else if (registros == 0) {
+                msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
+            }
+        } catch (Exception e) {
+            mu.msgbox("ListaFiltrada2: "+e.getMessage());
+        }
+    }
+
+    private void FiltroValoresContados() {
         Integer registros = 0;
 
         String evaluar = txtBuscFiltro.getText().toString().trim();
 
-        //GT 01122020 inicia busqueda en lista por Ubicación
         for (int i = 0; i < data_list.size(); i++) {
 
-            String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+            String codigo_producto = data_list.get(i).Codigo;
 
-            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0 ){
+            if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad > 0){
 
                 registros = registros+1;
 
@@ -657,30 +708,32 @@ public class frm_inv_cic_conteo extends PBase {
                 }
             }
         }
+        if(registros > 1){
 
-        if(registros>1){
-
-            //carga la lista con el Filtro Ubicación
-            FiltroxUbicacion(evaluar);
+            //carga la lista con el Filtro Código
+            FiltroxCodigo(evaluar);
 
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
             msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
             txtBuscFiltro.setText("");
-            Busqueda = false;
+            Busqueda= false;
 
-        }else if(registros==1){
+        } else if (registros ==1){
 
+            //Se encontró una coincidencia en la busqueda y la clase global se ha llenado, solo se carga el activity con la data
             Busqueda = true;
 
             execws(4);
 
-        } else if(registros == 0){
+        }
+        else if(registros ==0){
 
+            //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
             for (int i = 0; i < data_list.size(); i++) {
 
-                String codigo_producto = data_list.get(i).Codigo;
+                String lote_stock = data_list.get(i).Lote_stock;
 
-                if (codigo_producto.equals(evaluar) && data_list.get(i).cantidad > 0){
+                if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
 
                     registros = registros+1;
 
@@ -691,56 +744,22 @@ public class frm_inv_cic_conteo extends PBase {
             }
             if(registros > 1){
 
-                //carga la lista con el Filtro Código
-                FiltroxCodigo(evaluar);
+                //GT 18012020 carga la lista con el Filtro Lote
+                FiltroxLote(evaluar);
 
                 gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                msgbox("La úbicación contiene más codigos de producto, escanee ahora el código de producto.");
+                msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
                 txtBuscFiltro.setText("");
                 Busqueda= false;
 
             } else if (registros ==1){
 
-                //Se encontró una coincidencia en la busqueda y la clase global se ha llenado, solo se carga el activity con la data
                 Busqueda = true;
-
                 execws(4);
-
             }
-            else if(registros ==0){
-
-                //GT 18012020 Busqueda no resulta por ubicación/producto, se inicia por lote
-                for (int i = 0; i < data_list.size(); i++) {
-
-                    String lote_stock = data_list.get(i).Lote_stock;
-
-                    if (lote_stock.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
-
-                        registros = registros+1;
-
-                        if (registros==1){
-                            gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
-                        }
-                    }
-                }
-                if(registros > 1){
-
-                    //GT 18012020 carga la lista con el Filtro Lote
-                    FiltroxLote(evaluar);
-
-                    gl.inv_ciclico = new clsBe_inv_reconteo_data();
-                    msgbox("La busqueda contiene varios productos, seleccione ahora el código de producto.");
-                    txtBuscFiltro.setText("");
-                    Busqueda= false;
-
-                } else if (registros ==1){
-
-                    Busqueda = true;
-                    execws(4);
-                }
 
 
-                //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
+            //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
            /*     if(BeInvEnc.Capturar_no_existente){
 
                     execws(2);
@@ -749,9 +768,7 @@ public class frm_inv_cic_conteo extends PBase {
 
                     msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
                 }*/
-            }
         }
-
     }
 
     private void Existe_Producto() {
@@ -845,6 +862,7 @@ public class frm_inv_cic_conteo extends PBase {
     public void agregarNuevoConteo(View view) {
         try {
             NuevoConteo = true;
+            gl.ubicacionInv = 0;
             startActivity(new Intent(this, frm_inv_cic_add.class));
         } catch (Exception e) {
             mu.msgbox("agregarNuevoConteo:"+e.getMessage());
@@ -1051,10 +1069,60 @@ public class frm_inv_cic_conteo extends PBase {
         }
     }
 
+    private void msgNuevoConteo(String msg) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+
+                NuevoConteo = true;
+                String u = txtBuscFiltro.getText().toString();
+
+                if  (isNumeric(u)) {
+                    gl.ubicacionInv = Integer.valueOf(u);
+                }
+
+                startActivity(new Intent(getApplicationContext(), frm_inv_cic_add.class));
+            });
+
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+
+                if (chkPendientes) {
+                    FiltroValores();
+                } else {
+                    FiltroValoresContados();
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    public  boolean isNumeric(String cadena) {
+        boolean resultado;
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
+    }
+
     @Override
     public void onRestart()
     {
         super.onRestart();
+        gl.ubicacionInv = 0;
         Lista_Tareas();
 
     }
