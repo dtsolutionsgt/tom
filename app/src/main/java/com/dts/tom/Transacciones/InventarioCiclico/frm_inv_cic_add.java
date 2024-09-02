@@ -38,8 +38,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -191,10 +194,10 @@ public class frm_inv_cic_add extends PBase {
                         } else {
                             msgbox("La ubicación deber ser diferente a la de origen.");
                         }
+                    } else {
+                        lblUbicNueva.setText("");
+                        tblNuevaUbic.setVisibility(View.GONE);
                     }
-                } else {
-                    lblUbicNueva.setText("");
-                    tblNuevaUbic.setVisibility(View.GONE);
                 }
                 return false;
             });
@@ -248,15 +251,19 @@ public class frm_inv_cic_add extends PBase {
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                        if (!NuevoConteo) {
+                        /*if (!NuevoConteo) {
                             IdEstadoselected = gl.lista_estados.items.get(position).IdEstado;
-                            gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
+
                         } else {
                             if (NuevoConteo || existeConteo) {
                                 clsBeProducto_estado aux = (clsBeProducto_estado) parentView.getItemAtPosition(position);
                                 IdEstadoselected = aux.IdEstado;
                             }
-                        }
+                        }*/
+
+                        clsBeProducto_estado aux = (clsBeProducto_estado) parentView.getItemAtPosition(position);
+                        IdEstadoselected = aux.IdEstado;
+                        gl.inv_ciclico.IdProductoEst_nuevo = IdEstadoselected;
 
                     } catch (Exception e) {
                         msgbox("setOnItemSelectedListener - " + e.getMessage());
@@ -285,15 +292,17 @@ public class frm_inv_cic_add extends PBase {
                             spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
                         }
 
-                        if (!NuevoConteo) {
+                        clsBeProducto_Presentacion aux = (clsBeProducto_Presentacion) parentView.getItemAtPosition(position);
+                        IdPresentacionselected = aux.IdPresentacion;
+                        vFactor = aux.Factor;
+
+                        /*if (!NuevoConteo) {
                             IdPresentacionselected = IndexPresList.get(position);
                         } else {
                             if (NuevoConteo || existeConteo) {
-                                clsBeProducto_Presentacion aux = (clsBeProducto_Presentacion) parentView.getItemAtPosition(position);
-                                IdPresentacionselected = aux.IdPresentacion;
-                                vFactor = aux.Factor;
+
                             }
-                        }
+                        }*/
 
                     } catch (Exception e)
                     {
@@ -374,30 +383,22 @@ public class frm_inv_cic_add extends PBase {
 
                 if (gl.lista_estados.items != null) {
 
-                    bodlist.clear();
-                    for (int i = 0; i < gl.lista_estados.items.size(); i++) {
-                        bodlist.add(gl.lista_estados.items.get(i).IdEstado + " - " + gl.lista_estados.items.get(i).Nombre);
-                    }
+                    ArrayAdapter<clsBeProducto_estado> EstadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, gl.lista_estados.items);
+                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cboEstado.setAdapter(EstadosAdapter);
 
-                    //se busca el IdEstado según el estado del registro, para setear el spinner
-                    for (int j = 0; j < gl.lista_estados.items.size(); j++) {
-                        if (gl.lista_estados.items.get(j).Nombre.equals(gl.inv_ciclico.Estado))
-                            // #AT 20220211 Ya no se esta asignando el id del estado a index
-                            //index = gl.lista_estados.items.get(j).IdEstado;
-                            index = j+1;
-                        //index= 2;
+                    int indice = gl.lista_estados.items.stream()
+                            .filter(obj -> obj.getIdEstado() == gl.inv_ciclico.IdProductoEstado)
+                            .map(gl.lista_estados.items::indexOf)
+                            .findFirst()
+                            .orElse(-1);
+
+                    if (indice != -1) {
+                        cboEstado.setSelection(indice);
+                    } else {
+                        cboEstado.setSelection(0);
                     }
                 }
-            }
-
-            ArrayAdapter<String> EstadosAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, bodlist);
-            EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            cboEstado.setAdapter(EstadosAdapter);
-            //el IdEstado de la bd no funciona para multipropietario, porque cada propietario tiene su propio estado y el index cambia
-            if (bodlist.size() > 0 && gl.multipropietario) {
-                //cboEstado.setSelection(1);
-            } else if (bodlist.size() > 0 && !gl.multipropietario) {
-                cboEstado.setSelection(index - 1);
             }
 
             //llama a ws para cargar spinner con presentaciones del producto
@@ -505,6 +506,7 @@ public class frm_inv_cic_add extends PBase {
             }
 
             txtLicencia.setText(gl.inv_ciclico.getLicence_plate());
+            txtLicencia.setEnabled(false);
 
             if (BeInvEnc.Cambia_Ubicacion) {
                 tblNuevaUbic.setVisibility(View.VISIBLE);
@@ -674,6 +676,7 @@ public class frm_inv_cic_add extends PBase {
                         //GT03122021: Al no encontrar match por cod_producto, se busca como LP
                         if(Scan_por_LP()){
                             respuesta = true;
+                            txtProd.setText(gl.inv_ciclico.Codigo);
                         }else{
                             respuesta = false;
                             mu.msgbox("Producto o licencia no asignado para conteo. Intente con otro!");
@@ -1386,7 +1389,32 @@ public class frm_inv_cic_add extends PBase {
 
                 if (BeListPres.items!=null){
 
-                    Listar_Presentaciones();
+                    Set<Integer> presentaciones = new HashSet<>();
+                    BeListPres.items = BeListPres.items.stream()
+                            .filter(obj -> presentaciones.add(obj.getIdPresentacion()))
+                            .collect(Collectors.toList());
+
+                    clsBeProducto_Presentacion pres = new clsBeProducto_Presentacion();
+                    pres.IdPresentacion = 0;
+                    pres.Nombre = "Sin Presentación";
+
+                    BeListPres.items.add(0, pres);
+
+                    ArrayAdapter<clsBeProducto_Presentacion> dataAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, BeListPres.items);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    cboPres.setAdapter(dataAdapter);
+
+                    int indice = BeListPres.items.stream()
+                            .filter(obj -> obj.getIdPresentacion() == gl.inv_ciclico.IdPresentacion)
+                            .map(BeListPres.items::indexOf)
+                            .findFirst()
+                            .orElse(-1);
+
+                    if (indice != -1) {
+                        cboPres.setSelection(indice);
+                    } else {
+                        cboPres.setSelection(0);
+                    }
                 }
             }
 
