@@ -592,10 +592,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             val =  obj.NombreUbicacion.split("-");
 
-                            if (val.length == 2) {
+                            //#AT20240902 Solo se toma en cuenta el rack, sin agregarle nivels
+                            if (val.length > 0) {
                                 Rack = val[0].trim();
-                            } else {
-                                Rack = val[0].trim() + val[2].replace("T","").trim();
                             }
 
                             if (!ListRack.contains(Rack.trim())) {
@@ -1382,10 +1381,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 val =  BeListPickingUbic.get(i).NombreUbicacion.split("-");
 
-                if (val.length == 2) {
+                //#AT20240902 Solo se toma en cuenta el rack, sin agregarle nivels
+                if (val.length > 0) {
                     Racks = val[0].trim();
-                } else {
-                    Racks = val[0].trim() + val[2].replace("T","").trim();
                 }
 
                 if (!ListRackSel.contains(Racks)) {
