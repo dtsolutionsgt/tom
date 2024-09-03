@@ -206,8 +206,8 @@ public class frm_preparacion_packing extends PBase {
 
             item_list.clear();
 
-            item=new clsBeTrans_packing_enc();
-            item_list.add(item);
+            /*item=new clsBeTrans_packing_enc();
+            item_list.add(item);*/
 
             for (int i = 0; i <items.size(); i++) {
                 item=items.get(i);

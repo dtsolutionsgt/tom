@@ -6,6 +6,77 @@
         android:layout_height="match_parent"
         tools:context=".Transacciones.Packing.frm_preparacion_packing">
 
+    <LinearLayout
+        android:id="@+id/lyFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/label_1"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Licencia packing:"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/input_text_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/imageView24"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/btn_agregar" />
+
+            <ImageView
+                android:id="@+id/imageView26"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="doList"
+                android:src="@drawable/btn_buscar" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/label_2"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Licencia:"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/input_text_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
+
+        </TableRow>
+
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/imageView13"
@@ -21,7 +92,8 @@
         android:clickable="true"
         android:onClick="doList"
         android:padding="5dp"
-        android:src="@drawable/btn_lupa" />
+        android:src="@drawable/btn_lupa"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnRegsList2"
@@ -55,7 +127,7 @@
             android:progressDrawable="@drawable/progress_bar_circular_style"
             android:visibility="invisible" />
 
-        <TextView
+    <TextView
         android:id="@+id/textView105"
         style="@style/StyleText"
         android:layout_width="wrap_content"
@@ -65,7 +137,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="No. Línea"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="gone" />
 
     <RelativeLayout
             android:id="@+id/relbot"
@@ -136,7 +210,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="70dp"
         android:inputType="number|textPersonName"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView55"
@@ -148,7 +223,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:text="Licencia"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnRegsList"
@@ -167,19 +243,158 @@
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 
-    <HorizontalScrollView
+    <RelativeLayout
+        android:id="@+id/relCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnRegsList"
-        android:layout_below="@id/editText8"
-        android:layout_marginBottom="10dp">
+        android:layout_above="@+id/relbot"
+        android:layout_below="@+id/lyFiltros"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp">
 
-        <ListView
-            android:id="@+id/listTareas"
+
+        <HorizontalScrollView
+            android:id="@+id/scrollCiclico"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="horizontal" />
-    </HorizontalScrollView>
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/color_medium"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lblLicencia"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Licencia"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCodigo"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Código"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblProducto"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Nombre"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblCant"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Cantidad"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblPres"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Presentación"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblUnidad"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Unidad"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblVence"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Vence"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblLote"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Lote"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblEstado"
+                        android:layout_width="125dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="50dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Estado"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listTareas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/editTextNumber"
@@ -192,7 +407,8 @@
         android:layout_marginEnd="0dp"
         android:ems="10"
         android:inputType="number"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -208,7 +424,8 @@
         android:clickable="true"
         android:onClick="doLP"
         android:padding="5dp"
-        android:src="@drawable/scan" />
+        android:src="@drawable/scan"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -223,7 +440,8 @@
         android:clickable="true"
         android:onClick="doAdd"
         android:padding="5dp"
-        android:src="@drawable/btn_agregar" />
+        android:src="@drawable/btn_agregar"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
