@@ -476,6 +476,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
                         cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
+                        cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;
+
+                        if (cvUbicDestID!=0){
+                            txtUbicDestino.setText(cvUbicDestID);
+                        }
                     }
 
                 } catch (Exception ex) {
@@ -493,35 +498,32 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         });
 
-        txtCodigoPrd.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    //#AT 20220324 Si no se ingresa la licencia no deja buscar por codigo de producto  esto aplica si
-                    //inferir_origen_en_cambio_ubic es verdadero
-                    if (inferir_origen_en_cambio_ubic) {
-                        if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
-                            escaneoPallet = true;
-                            pLicensePlate = txtLicPlate.getText().toString();
-                            //Procesa_Lp();
-                            execws(17);
-                        } else {
-                            if (gl.modo_cambio == 2){
-                                toast("No se puede cambiar estado sin licencia cuando el parámetro inferir ubicación está activo");
-                                txtLicPlate.requestFocus();
-
-                            }else{
-                                toast("No se puede ubicar sin licencia cuando el parámetro inferir ubicación está activo");
-                                txtLicPlate.requestFocus();
-                            }
-                        }
+        txtCodigoPrd.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                //#AT 20220324 Si no se ingresa la licencia no deja buscar por codigo de producto  esto aplica si
+                //inferir_origen_en_cambio_ubic es verdadero
+                if (inferir_origen_en_cambio_ubic) {
+                    if (!txtLicPlate.getText().toString().isEmpty() && !txtCodigoPrd.getText().toString().isEmpty()) {
+                        escaneoPallet = true;
+                        pLicensePlate = txtLicPlate.getText().toString();
+                        //Procesa_Lp();
+                        execws(17);
                     } else {
-                        llenaDatosProducto();
-                    }
-                }
+                        if (gl.modo_cambio == 2){
+                            toast("No se puede cambiar estado sin licencia cuando el parámetro inferir ubicación está activo");
+                            txtLicPlate.requestFocus();
 
-                return false;
+                        }else{
+                            toast("No se puede ubicar sin licencia cuando el parámetro inferir ubicación está activo");
+                            txtLicPlate.requestFocus();
+                        }
+                    }
+                } else {
+                    llenaDatosProducto();
+                }
             }
+
+            return false;
         });
 
         txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
@@ -1146,10 +1148,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             cmbEstadoDestinoList.clear();
 
             for (int i = 0; i < productoEstadoDestinoList.items.size(); i++) {
-                cmbEstadoDestinoList.add(productoEstadoDestinoList.items.get(i).Nombre);
+                if(productoEstadoDestinoList.items.get(i).Utilizable){
+                    cmbEstadoDestinoList.add(productoEstadoDestinoList.items.get(i).Nombre);
+                }
             }
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cmbEstadoDestinoList);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cmbEstadoDestinoList);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             cmbEstadoDestino.setAdapter(dataAdapter);
 

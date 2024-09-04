@@ -772,6 +772,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     if (preguntoPorDiferencia) {
                         if (gBePedido.getTipoPedido().getPermitir_Despacho_Parcial()){
                             msgAskIncompleta("La verificación está incompleta, está seguro(a) de finalizarla");
+                            return;
                         }else{
                             progress.cancel();
                             msgbox("No se permiten despachos parciales, debe terminar la verificación");
@@ -1076,7 +1077,6 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     if (preguntoPorDiferencia){
                         msgAskFinalizar("Finalizar tarea de verificación");
                     }
-
                 }
             });
 

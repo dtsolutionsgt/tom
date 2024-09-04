@@ -516,6 +516,7 @@ public class frm_detalle_ingresos extends PBase {
 
                 //#GT24102023: se carga el tipo ingreso y los tiempos del proveedor
                 gl.pTipoIngreso = gBeRecepcion.OrdenCompraRec.OC.TipoIngreso;
+                gl.gMostrarCantidadEsperada = gBeRecepcion.Mostrar_Cantidad_Esperada;
 
                 if(gBeRecepcion.OrdenCompraRec.OC.ProveedorBodega.Proveedor.TiemposProveedor !=null){
                     if(gBeRecepcion.OrdenCompraRec.OC.ProveedorBodega.Proveedor.TiemposProveedor.items !=null){

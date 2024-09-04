@@ -118,6 +118,10 @@ public class frm_imagenes extends PBase {
         return inSampleSize;
     }
 
+    public void ExitForm(View view){
+        onBackPressed();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

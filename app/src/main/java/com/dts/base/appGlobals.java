@@ -121,6 +121,7 @@ public class appGlobals extends Application {
     public boolean Carga_Producto_x_Pallet = false;
     public clsBeTrans_re_detList gListTransRecDet = new clsBeTrans_re_detList();
     public boolean gCapturaPalletNoEstandar = false;
+    public boolean gMostrarCantidadEsperada = false;
     public boolean gCapturaEstibaIngreso = false;
     public boolean gVerifCascade = false;
     public int gVCascIdEnc;
@@ -220,7 +221,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.0.2";
+    public final String version="6.0.3";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking

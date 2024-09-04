@@ -385,6 +385,12 @@ public class frm_recepcion_datos extends PBase {
                 chkPalletNoEstandar.setVisibility(View.GONE);
             }
 
+            if (gl.gMostrarCantidadEsperada){
+                btnCantPendiente.setVisibility(View.VISIBLE);
+            }else{
+                btnCantPendiente.setVisibility(View.GONE);
+            }
+
             lblUbicacion.setText("");
             txtLoteRec.setText("");
             cmbVenceRec.setText(du.getActDateStr());
@@ -3422,7 +3428,10 @@ public class frm_recepcion_datos extends PBase {
                 pIdProductoBodega = BeProducto.IdProductoBodega;
             }
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
+            String vFamilia = (BeProducto.Familia.Nombre.equals("")?"N/D":BeProducto.Familia.Nombre);
+            String vIndiceRotacion = (BeProducto.Indice_Rotacion.Descripcion.equals("")?"N/D":BeProducto.Indice_Rotacion.Descripcion);
+
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n F:" + vFamilia + " - IR: " + vIndiceRotacion);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -9120,8 +9129,6 @@ public class frm_recepcion_datos extends PBase {
         }
 
     }
-
-
 
     private void msgSinUbicaciones(String msg) {
         try{

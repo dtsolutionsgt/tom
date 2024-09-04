@@ -16,7 +16,7 @@
     <RelativeLayout
         android:id="@+id/reltop"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="83dp"
         android:background="@drawable/color_medium">
 
         <TextView
@@ -71,7 +71,7 @@
         android:layout_height="518dp"
         android:layout_above="@id/relbot"
         android:layout_below="@id/reltop"
-        android:layout_marginTop="35dp">
+        android:layout_marginTop="3dp">
 
         <LinearLayout
             android:id="@+id/lnDatos"
@@ -633,7 +633,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relFotosVerificacion"
+            android:id="@+id/relFotosRecepcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -641,7 +641,7 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/relVerFoto"
             android:gravity="center_horizontal"
-            android:onClick="verImagenesVerificacion">
+            android:onClick="verImagenesRec">
 
             <ImageView
                 android:id="@+id/imgGaleria"
@@ -674,7 +674,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="0dp"
-            android:layout_toEndOf="@+id/relFotosVerificacion"
+            android:layout_toEndOf="@+id/relFotosRecepcion"
             android:gravity="center_horizontal"
             android:onClick="Capturar">
 
@@ -710,7 +710,7 @@
             android:layout_marginBottom="0dp"
             android:layout_toEndOf="@+id/relTomarFoto"
             android:gravity="center_horizontal"
-            android:onClick="CapturarVerificacion">
+            android:onClick="CapturarRec">
 
             <ImageView
                 android:id="@+id/imgCamaraRec"

@@ -2338,7 +2338,7 @@ public class frm_picking_datos extends PBase {
                         break;
                     case 14:
                         callMethod("Valida_Licencia_By_ProductoBodega",
-                                "pLicencia", txtLicencia.getText().toString().replace("$", ""),
+                                "pLicencia", txtLicencia.getText().toString().replace("$", "").toUpperCase(),
                                 "pIdBodega", gl.IdBodega,
                                 "pIdProductoBodega", gBePickingUbic.IdProductoBodega);
                         break;
