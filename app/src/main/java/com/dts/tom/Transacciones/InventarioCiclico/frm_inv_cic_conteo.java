@@ -293,7 +293,8 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.idPresentacion_nuevo = Integer.parseInt(DT.getString(29));
                             data_rec.IdProductoEst_nuevo = Integer.parseInt(DT.getString(31));
                             data_rec.Codigo = DT.getString(32);
-                            data_rec.Factor = Double.valueOf(DT.getString(37));
+                            data_rec.Factor = Double.valueOf(DT.getString(36));
+                            data_rec.IdUbicacion_nuevo = DT.getInt(37);
 
                             data_list.add(data_rec);
 
@@ -350,7 +351,7 @@ public class frm_inv_cic_conteo extends PBase {
         esconteo = (idreconteo == 0);
 
         if(esconteo){
-            lblConteo.setText("Conteo");
+            lblConteo.setText("Conteo - Inventario "+ BeInvEnc.Idinventarioenc);
         }else{
             lblConteo.setText("Reconteo #" + idreconteo);
         }

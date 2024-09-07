@@ -510,6 +510,7 @@ public class frm_inv_cic_add extends PBase {
 
             if (BeInvEnc.Cambia_Ubicacion) {
                 tblNuevaUbic.setVisibility(View.VISIBLE);
+                txtUbicNueva.setText(""+gl.inv_ciclico.IdUbicacion_nuevo);
             } else {
                 tblNuevaUbic.setVisibility(View.GONE);
             }
@@ -1752,6 +1753,11 @@ public class frm_inv_cic_add extends PBase {
                 lblCantidadContada.setText("");
             }
 
+            if (BeInvEnc.Cambia_Ubicacion) {
+                if (gl.inv_ciclico.IdUbicacion_nuevo != 0) {
+                    execws(6);
+                }
+            }
         } catch (Exception e) {
             mu.msgbox("processAgregarConteo: " + e.getMessage());
         }
