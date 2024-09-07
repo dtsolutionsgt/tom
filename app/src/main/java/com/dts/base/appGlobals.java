@@ -256,6 +256,7 @@ public class appGlobals extends Application {
 
     public boolean marcaje_temporal =false;
     public int ubicacionInv = 0;
+    public clsBeTrans_packing_lotes auxPacking = null;
 
     @Override
     public void onCreate() {

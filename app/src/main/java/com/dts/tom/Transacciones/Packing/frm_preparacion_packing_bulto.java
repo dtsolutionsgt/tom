@@ -196,7 +196,7 @@ public class frm_preparacion_packing_bulto extends PBase {
     private void listItems() {
         clsBeTrans_packing_enc_bulto item,itemt;
         clsBeTrans_packing_enc enc;
-        int bult=0,linea=0;
+        int bult=0; String linea="";
 
         try {
             item_list.clear();proc=0;
@@ -224,7 +224,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                 item.Lote=enc.Lote;
                 item.Fecha_vence=enc.Fecha_vence;
                 item.Lic_plate=enc.Lic_plate;
-                item.No_linea=enc.No_linea;
+                //item.No_linea=enc.No_linea;
                 item.Cantidad_bultos_packing=enc.Cantidad_bultos_packing;
                 item.Cantidad_camas_packing=enc.Cantidad_camas_packing;
                 item.Idoperadorbodega=enc.Idoperadorbodega;
@@ -244,7 +244,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                     bult+=(int) enc.Cantidad_bultos_packing;
                 } else {
                     itemt=new clsBeTrans_packing_enc_bulto();
-                    itemt.No_linea=linea;
+                    //itemt.No_linea=linea;
                     itemt.Cantidad_bultos_packing=bult;
                     itemt.bandera=1;
                     item_list.add(itemt);
@@ -260,7 +260,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
             if (bult>0) {
                 itemt=new clsBeTrans_packing_enc_bulto();
-                itemt.No_linea=linea;
+                //itemt.No_linea=linea;
                 itemt.Cantidad_bultos_packing=bult;
                 itemt.bandera=1;
                 item_list.add(itemt);
@@ -421,7 +421,7 @@ public class frm_preparacion_packing_bulto extends PBase {
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
             item.Lic_plate="";
-            item.No_linea=lin;
+            item.No_linea= String.valueOf(lin);
             item.Cantidad_bultos_packing=gl.paCant;
             item.Cantidad_camas_packing=gl.paCamas;
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
@@ -710,7 +710,7 @@ public class frm_preparacion_packing_bulto extends PBase {
 
     public class OrdenarPorLinea implements Comparator<clsBeTrans_packing_enc> {
         public int compare(clsBeTrans_packing_enc left,clsBeTrans_packing_enc rigth){
-            return left.No_linea-rigth.No_linea;
+            return left.No_linea.compareTo(rigth.No_linea);
         }
     }
 

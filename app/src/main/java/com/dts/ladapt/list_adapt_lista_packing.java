@@ -2,6 +2,7 @@ package com.dts.ladapt;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,45 +77,43 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position>= 0) {
+        holder.lbl1.setText(" ");
+        holder.lbl2.setText(" ");
+        holder.lbl3.setText(" ");
+        holder.lbl4.setText(" ");
+        holder.lbl5.setText(" ");
+        holder.lbl6.setText(" ");
+        holder.lbl7.setText(" ");
+        holder.lbl8.setText(" ");
+        holder.lbl9.setText(" ");
+        holder.lbl10.setText(" ");
 
-            holder.lbl1.setText(" ");
-            holder.lbl2.setText(" ");
-            holder.lbl3.setText(" ");
-            holder.lbl4.setText(" ");
-            holder.lbl5.setText(" ");
-            holder.lbl6.setText(" ");
-            holder.lbl7.setText(" ");
-            holder.lbl8.setText(" ");
-            holder.lbl9.setText(" ");
-            holder.lbl10.setText(" ");
-
-            try {
-                ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");
-                if (pp>=0) {
-                    ss=ss.substring(0,pp);
-                } else {
-                    ss=items.get(position).Fecha_vence;
-                }
-            } catch (Exception e) {
+        try {
+            ss=items.get(position).Fecha_vence;pp=ss.indexOf("T");
+            if (pp>=0) {
+                ss=ss.substring(0,pp);
+            } else {
                 ss=items.get(position).Fecha_vence;
             }
-
-            holder.lbl1.setText(""+ items.get(position).No_linea);
-            holder.lbl7.setText(""+items.get(position).Lic_plate);
-            holder.lbl2.setText(""+items.get(position).CodigoProducto);
-            holder.lbl3.setText(""+items.get(position).nom_prod);
-            holder.lbl4.setText(""+items.get(position).Cantidad_bultos_packing);
-            holder.lbl5.setText(""+ items.get(position).ProductoPresentacion);
-            holder.lbl6.setText(""+ items.get(position).ProductoUnidadMedida);
-            holder.lbl8.setText(""+ ss);
-            holder.lbl9.setText(""+ items.get(position).Lote);
-            holder.lbl10.setText(""+ items.get(position).ProductoEstado);
-
+        } catch (Exception e) {
+            ss=items.get(position).Fecha_vence;
         }
 
-        if(selectedIndex!= -1 && position == selectedIndex) {
-            convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+        holder.lbl1.setText(""+ items.get(position).No_linea);
+        holder.lbl7.setText(""+items.get(position).Lic_plate);
+        holder.lbl2.setText(""+items.get(position).CodigoProducto);
+        holder.lbl3.setText(""+items.get(position).nom_prod);
+        holder.lbl4.setText(""+items.get(position).Cantidad_bultos_packing);
+        holder.lbl5.setText(""+ items.get(position).ProductoPresentacion);
+        holder.lbl6.setText(""+ items.get(position).ProductoUnidadMedida);
+        holder.lbl8.setText(""+ ss);
+        holder.lbl9.setText(""+ items.get(position).Lote);
+        holder.lbl10.setText(""+ items.get(position).ProductoEstado);
+
+
+        if (items.get(position).EsConteo) {
+            holder.lbl3.setTypeface(null, Typeface.BOLD);
+            convertView.setBackgroundColor(Color.parseColor("#FBE9E7"));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }

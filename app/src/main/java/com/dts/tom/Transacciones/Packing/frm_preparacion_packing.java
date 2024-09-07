@@ -3,7 +3,6 @@ package com.dts.tom.Transacciones.Packing;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,33 +16,28 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_encList;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
-import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.ladapt.list_adapt_lista_packing;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
-import org.simpleframework.xml.Element;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+import java.util.Optional;
 
 import static br.com.zbra.androidlinq.Linq.stream;
-import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.plistPickingUbi;
 
 public class frm_preparacion_packing extends PBase {
 
     private ListView listView;
     private EditText txtLP,txtLinea;
-    private TextView lblProc,lblPend;
+    private TextView lblProc,lblPend, txtLicenciaPacking;
     private ProgressBar pbar;
 
     private WebServiceHandler ws;
@@ -64,6 +58,8 @@ public class frm_preparacion_packing extends PBase {
     private int idPickingEnc,selidx,pendientes;
     private String sellp=".";
     private boolean idle=true;
+    private clsBeResolucion_lp_operador nBeResolucion = null;
+    private String pNumeroLP = "";
 
 
     @Override
@@ -73,10 +69,12 @@ public class frm_preparacion_packing extends PBase {
         super.InitBase();
 
         listView = findViewById(R.id.listTareas);
-        txtLP = findViewById(R.id.editText8);
+        txtLP = findViewById(R.id.txtLicencia);
         txtLinea = findViewById(R.id.editTextNumber);txtLinea.setText("1");
         lblProc = findViewById(R.id.btnRegsList);
         lblPend = findViewById(R.id.btnRegsList2);
+
+        txtLicenciaPacking = findViewById(R.id.txtLicenciaPacking);
 
         pbar = findViewById(R.id.pgrtareas2);
 
@@ -128,11 +126,7 @@ public class frm_preparacion_packing extends PBase {
             msgbox("No se puede finalizar una tarea vacia");return;
         }
 
-        if (pendientes==0) {
-            msgAskSave("¿Finalizar la tarea?");
-        } else {
-            msgAskSave("Quedan articulos pendientes de procesar.\n¿Guardar la tarea y continuar más tarde?");
-        }
+        msgAskSave("¿Finalizar la tarea?");
     }
 
     public void SalirTareas(View view){
@@ -164,15 +158,14 @@ public class frm_preparacion_packing extends PBase {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     selid = 0;
-                    if (position > 0){
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                        selitem = sitem;
-                        sellp = selitem.Lic_plate;
-                        adapter.setSelectedIndex(position);
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
+                    selitem = sitem;
+                    sellp = selitem.Lic_plate;
+                    adapter.setSelectedIndex(position);
 
-                        msgAskBorrar("Eliminar registro");
-                    }
+                    msgAskBorrar("Eliminar registro");
+
                     return true;
                 }
             });
@@ -197,7 +190,8 @@ public class frm_preparacion_packing extends PBase {
     //region Main
 
     private void listItems() {
-
+        String actLinea = "";
+        int count = 0;
         clsBeTrans_packing_enc item;
 
         try {
@@ -216,7 +210,37 @@ public class frm_preparacion_packing extends PBase {
                 item.ProductoPresentacion=productoPresentacion(item.Idpresentacion);
                 item.ProductoUnidadMedida=productoUnidadMedida(item.Idunidadmedida);
                 item.ProductoEstado=estadoProducto(item.Idproductoestado);
+
+                if (!item.No_linea.equals(actLinea)) {
+                    // Si no es la primera iteración, agregar un item que indica el número de registros
+                    if (!actLinea.equals("")) {
+                        clsBeTrans_packing_enc tmp = new clsBeTrans_packing_enc();
+                        tmp.Lic_plate = "";
+                        tmp.CodigoProducto = "";
+                        tmp.Fecha_vence = "";
+                        tmp.Lote = "";
+                        tmp.EsConteo = true;
+                        tmp.nom_prod = actLinea + ": " + count;
+                        item_list.add(tmp);
+                    }
+
+                    actLinea = item.No_linea;
+                    count = 0;
+                }
+
                 item_list.add(item);
+                count++;
+            }
+
+            if (!actLinea.equals("")) {
+                clsBeTrans_packing_enc tmpU = new clsBeTrans_packing_enc();
+                tmpU.Lic_plate = "";
+                tmpU.CodigoProducto = "";
+                tmpU.Fecha_vence = "";
+                tmpU.Lote = "";
+                tmpU.EsConteo = true;
+                tmpU.nom_prod = actLinea + ": " + count;
+                item_list.add(tmpU);
             }
 
 
@@ -257,8 +281,6 @@ public class frm_preparacion_packing extends PBase {
 
             pick=xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
 
-            //listItems();
-            //idle=true;
             execws(2);
         } catch (Exception e) {
             progress.cancel();
@@ -322,7 +344,7 @@ public class frm_preparacion_packing extends PBase {
             progress.setMessage("Cargando tarea ...");
             progress.show();
 
-            execws(1);
+            execws(4);
         } catch (Exception e){
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -333,23 +355,35 @@ public class frm_preparacion_packing extends PBase {
         clsBeTrans_picking_ubic p;
         int lin;
 
-        try {
-            lin=Integer.parseInt(txtLinea.getText().toString());
-            if (lin<1 | lin>99) {
-                msgbox("Número de linea incorrecto");return;
-            }
-        } catch (Exception e) {
-            lin=1;txtLinea.setText("1");
-        }
-
         if (selidx<0) return;
 
         try {
 
+            if (items.size() > 0) {
+                Optional<clsBeTrans_packing_enc> itemOpt = items.stream()
+                .filter(o -> o.getIdproductobodega() == gl.auxPacking.IdProductoBodega)
+                .filter(o -> o.getFecha_vence().equals(gl.auxPacking.fecha))
+                .filter(o -> o.getLic_plate().equals(gl.auxPacking.licencia))
+                .filter(o -> o.getLote().equals(gl.auxPacking.lote))
+                .findFirst();
+
+                if (itemOpt.isPresent()) {
+                    itemOpt.ifPresent(obj -> obj.setCantidad_bultos_packing(obj.getCantidad_bultos_packing() + gl.auxPacking.cant));
+                    adapter.notifyDataSetChanged();
+
+                    itemList = new clsBeTrans_packing_encList();
+                    itemList.items = new ArrayList<>();
+                    itemList.items.add(itemOpt.get());
+
+                    execws(3);
+                    return;
+                }
+            }
+
             item=new clsBeTrans_packing_enc();
 
             p=pick.items.get(selidx);
-            item.Idpackingenc=items.size()+1;
+            item.Idpackingenc=0;
             item.Idbodega=gl.IdBodega;
             item.Idpickingenc=p.IdPickingEnc;
             item.IdDespachoEnc=0;
@@ -360,8 +394,8 @@ public class frm_preparacion_packing extends PBase {
             item.Lote=p.Lote;
             item.Fecha_vence=p.Fecha_Vence;
             item.Lic_plate=""+p.Lic_plate;sellp=p.Lic_plate;
-            item.No_linea=lin;
-            item.Cantidad_bultos_packing=p.Cantidad_Recibida;
+            item.No_linea=txtLicenciaPacking.getText().toString();
+            item.Cantidad_bultos_packing=gl.auxPacking.cant;
             item.Cantidad_camas_packing=1;
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
             item.Idempresaservicio=gl.IdEmpresa;
@@ -372,27 +406,26 @@ public class frm_preparacion_packing extends PBase {
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
             item.ProductoEstado=p.ProductoEstado;
-            items.add(item);
+
+            itemList = new clsBeTrans_packing_encList();
+            itemList.items = new ArrayList<>();
+            itemList.items.add(item);
 
             txtLP.setText("");
 
-            listItems();
-
+            execws(3);
+            //listItems();
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
     private void delItem() {
-
-        for (int i = 0; i <items.size(); i++) {
-            if (items.get(i).Lic_plate.equalsIgnoreCase(selitem.Lic_plate)
-                & items.get(i).ProductoEstado.equalsIgnoreCase(selitem.ProductoEstado)) {
-                items.remove(i);
-                listItems();return;
-            }
+        try {
+            execws(6);
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
-
     }
 
     private void GetFila() {
@@ -441,13 +474,10 @@ public class frm_preparacion_packing extends PBase {
         }
 
         try {
-            itemList = new clsBeTrans_packing_encList();
-            itemList.items = stream(items).toList();
-
             progress.setMessage("Finalizando tarea ...");
             progress.show();
             idle=false;
-            execws(3);
+            execws(5);
 
         } catch (Exception e) {
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
@@ -464,7 +494,10 @@ public class frm_preparacion_packing extends PBase {
             if (!ws.errorflag) {
                 regs = xobj.getresult(Integer.class,"Inserta_Packing");
                 if (regs>0) {
-                    toast("Tarea finalizada.");finish();
+                    toast("Producto agregado.");
+
+                    nBeResolucion = null;
+                    execws(2);
                 } else {
                     mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
                 }
@@ -476,7 +509,132 @@ public class frm_preparacion_packing extends PBase {
         }
     }
 
-    private void creaListaLotes(String prid) {
+    private void processLicenciaPacking() {
+        try {
+
+            if (nBeResolucion == null){
+                nBeResolucion = new clsBeResolucion_lp_operador();
+                if (xobj!=null){
+                    nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+                }else{
+                    toast("El objeto SI es nulo");
+                }
+            }
+
+            if (nBeResolucion !=null){
+                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+
+                long intLPSig = pLpSiguiente;
+                int MaxL = largoMaximo;
+
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
+
+                pNumeroLP= nBeResolucion.Serie + result;
+                txtLicenciaPacking.setText(pNumeroLP);
+            } else {
+                gl.IdResolucionLpOperador =0;
+                return;
+            }
+
+            execws(1);
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP_RE: "+e.getMessage());
+        }
+    }
+
+    private void processActualizaEstado(){
+        int exito;
+
+        try {
+
+            idle=true; progress.cancel();
+
+            if (!ws.errorflag) {
+                exito = xobj.getresult(Integer.class,"Actualizar_Estado_Packing");
+                if (exito>0) {
+                    toast("Tarea finalizada.");
+                    finish();
+                } else {
+                    mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
+                }
+            } else {
+                mu.msgbox("processActualizaEstado : "+ws.error);
+            }
+        } catch (Exception e){
+            mu.msgbox("cantidadRegGuardados : "+e.getMessage());
+        }
+    }
+
+    private void processEliminarLinea(){
+        int exito;
+
+        try {
+            idle=true; progress.cancel();
+
+            if (!ws.errorflag) {
+                exito = xobj.getresult(Integer.class,"Eliminar_Linea_Packing");
+                if (exito>0) {
+                    toast("Línea eliminada con éxito.");
+                    execws(2);
+                } else {
+                    mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
+                }
+            } else {
+                mu.msgbox("processEliminarLinea : "+ws.error);
+            }
+        } catch (Exception e){
+            mu.msgbox("processEliminarLinea : "+e.getMessage());
+        }
+    }
+
+    private void creaListaLotes(String licencia) {
+        clsBeTrans_packing_lotes item;
+        try {
+            gl.packlotes.clear();
+            gl.filtroprod=licencia;
+
+            if (pick.items.size() > 0) {
+                for (clsBeTrans_picking_ubic obj: pick.items) {
+                    item = new clsBeTrans_packing_lotes();
+
+                    item.codigo = obj.getCodigoProducto();
+                    item.producto = obj.getNombreProducto();
+                    item.lote = obj.getLote();
+                    item.licencia = obj.getLic_plate();
+                    item.IdProductoBodega = obj.IdProductoBodega;
+                    item.cant = obj.getCantidad_Recibida();
+                    item.fecha = obj.getFecha_Vence();
+
+                    if (items.size() > 0) {
+                        double totalCantidad = 0;
+                        totalCantidad = items.stream()
+                        .filter(p -> p.getLote().equals(obj.Lote))
+                        .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
+                        .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
+                        .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
+                        .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
+                        .sum();
+
+                        item.disp = (int) (obj.getCantidad_Recibida() - totalCantidad);
+
+                    } else {
+                        item.disp = (int) obj.getCantidad_Recibida();
+                    }
+
+                    if (item.disp > 0) {
+                        gl.packlotes.add(item);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("creaListaLotes: "+e.getMessage());
+        }
+    }
+
+    private void creaListaLotes_D(String prid) {
         clsBeTrans_packing_lotes item;
         boolean flag;
 
@@ -496,6 +654,7 @@ public class frm_preparacion_packing extends PBase {
                     item.presentacion = pick.items.get(i).CodigoProducto+" - "+pick.items.get(i).NombreProducto;
                     item.lote = pick.items.get(i).Lic_plate;
                     item.estado=estadoProducto(pick.items.get(i).IdProductoEstado);
+                    item.cant = pick.items.get(i).getCantidad_Recibida();
 
                     flag=false;
                     if (prid.isEmpty()) {
@@ -528,8 +687,23 @@ public class frm_preparacion_packing extends PBase {
 
     private void agregaLP() {
         focusLP();
-        if (gl.paBulto.isEmpty()) return;
+        if (gl.auxPacking == null) return;
 
+        Optional<clsBeTrans_picking_ubic> pitem = pick.items.stream()
+                .filter(p -> p.getLote().equals(gl.auxPacking.lote))
+                .filter(p -> p.getLic_plate().equals(gl.auxPacking.licencia))
+                .filter(p -> p.getIdProductoBodega() == gl.auxPacking.IdProductoBodega)
+                .filter(p -> p.getFecha_Vence().equals(gl.auxPacking.fecha))
+                .findFirst();
+
+        if (pitem.isPresent()) {
+            int index = pick.items.indexOf(pitem.get());
+            selidx=index;
+            addItem();
+        } else {
+            System.out.println("Producto no encontrado");
+        }
+        /*
         for (int i = 0; i <pick.items.size(); i++) {
             if (pick.items.get(i).Lic_plate.equalsIgnoreCase(gl.paBulto)
             & pick.items.get(i).ProductoEstado.equalsIgnoreCase(gl.paEstado)) {
@@ -537,7 +711,7 @@ public class frm_preparacion_packing extends PBase {
                 addItem();
                 return;
             }
-        }
+        }*/
     }
 
     //endregion
@@ -562,7 +736,24 @@ public class frm_preparacion_packing extends PBase {
                         callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc);
                         break;
                     case 3:
-                        callMethod("Inserta_Packing","pTrans_packing_enc",itemList.items);
+                        int idresolucion = 0;
+
+                        if (nBeResolucion != null) {
+                            idresolucion = nBeResolucion.IdResolucionlp;
+                        }
+
+                        callMethod("Inserta_Packing","pTrans_packing_enc",itemList.items, "pIdResolucion", idresolucion);
+                        break;
+                    case 4:
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
+                        break;
+                    case 5:
+                        callMethod("Actualizar_Estado_Packing", "pIdPicking", idPickingEnc);
+                        break;
+                    case 6:
+                        callMethod("Eliminar_Linea_Packing", "pIdPackingEnc", selitem.Idpackingenc);
                         break;
                 }
 
@@ -587,6 +778,15 @@ public class frm_preparacion_packing extends PBase {
                     processListSaved();break;
                 case 3:
                     cantidadRegGuardados();break;
+                case 4:
+                    processLicenciaPacking();
+                    break;
+                case 5:
+                    processActualizaEstado();
+                    break;
+                case 6:
+                    processEliminarLinea();
+                    break;
             }
 
         } catch (Exception e) {
@@ -608,7 +808,7 @@ public class frm_preparacion_packing extends PBase {
 
     public class OrdenarPorLinea implements Comparator<clsBeTrans_packing_enc> {
         public int compare(clsBeTrans_packing_enc left,clsBeTrans_packing_enc rigth){
-            return left.No_linea-rigth.No_linea;
+            return left.No_linea.compareTo(rigth.No_linea);
         }
     }
 
@@ -675,9 +875,36 @@ public class frm_preparacion_packing extends PBase {
         return "";
     }
 
+    public void generarNuevaLicencia(View v) {
+        try {
+            msgAskConfirmar("Está seguro de generar una nueva licencia");
+        } catch (Exception e) {
+
+        }
+    }
     //endregion
 
     //region Dialogs
+    private void msgAskConfirmar(String msg) {
+        if (!idle) return;
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Si", (dialog1, which) -> execws(4));
+            dialog.setNegativeButton("No", (dialog12, which) -> {
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
 
     private void msgAskExit(String msg) {
         if (!idle) return;
@@ -719,6 +946,23 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void msgAskBorrar(String msg) {
+        try {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Si", (dialog12, which) -> msgAskBorrarConfirmar("Está seguro"));
+            dialog.setNegativeButton("No", (dialog1, which) -> {});
+            dialog.show();
+
+        } catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
+    private void msgAskBorrarConfirmar(String msg) {
         try {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 

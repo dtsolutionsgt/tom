@@ -1,8 +1,10 @@
 package com.dts.tom.Transacciones.Packing;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ public class frm_lista_packing_lp extends PBase {
     private list_adapt_packing_lp adapter;
 
     public ArrayList<clsBeTrans_packing_lotes> items = new ArrayList<clsBeTrans_packing_lotes>();
+    private clsBeTrans_packing_lotes sitem = new clsBeTrans_packing_lotes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class frm_lista_packing_lp extends PBase {
         lblFiltro = findViewById(R.id.lblTituloForma);lblFiltro.setText("Filtro : "+gl.filtroprod);
 
         gl.paBulto="";
+        gl.auxPacking = null;
         setHandlers();
         listItems();
     }
@@ -62,15 +66,18 @@ public class frm_lista_packing_lp extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_packing_lotes sitem = (clsBeTrans_packing_lotes) lvObj;
-                    gl.paBulto=sitem.lote;
-                    gl.paEstado=sitem.estado;
 
-                    if (sitem.lote.isEmpty()) {
+                    sitem = (clsBeTrans_packing_lotes) lvObj;
+                    //gl.paBulto=sitem.lote;
+                    //gl.paEstado=sitem.estado;
+
+                    /*if (sitem.lote.isEmpty()) {
                         msgbox("No se pueden adicionar productos sin licencia al empaque por tarima");
                     } else {
                         finish();
-                    }
+                    }*/
+
+                    showFormDialog();
                 }
             });
 
@@ -78,6 +85,7 @@ public class frm_lista_packing_lp extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        listItems();
                     }
                     return false;
                 }
@@ -108,8 +116,8 @@ public class frm_lista_packing_lp extends PBase {
                 if (ft.isEmpty()) {
                     flag=true;
                 } else {
-                    if (item.presentacion.toUpperCase().indexOf(ft)>=0 |
-                        item.lote.toUpperCase().indexOf(ft)>=0) flag=true;
+                    if (item.producto.toUpperCase().indexOf(ft)>=0 |
+                        item.licencia.toUpperCase().indexOf(ft)>=0) flag=true;
                 }
                 if (flag) items.add(item);
             }
@@ -160,15 +168,47 @@ public class frm_lista_packing_lp extends PBase {
 
     //endregion
 
-    //region Dialogs
+    private void showFormDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_form, null, false);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-    //endregion
+        TextView txtProducto = dialogView.findViewById(R.id.txtProducto);
+        TextView txtLicencia = dialogView.findViewById(R.id.txtLicencia);
+        EditText txtCantidad = dialogView.findViewById(R.id.txtCantidad);
 
-    //region Activity Events
+        txtProducto.setText(sitem.codigo +" - "+ sitem.producto);
+        txtLicencia.setText(sitem.licencia);
+        txtCantidad.setText(""+sitem.disp);
 
+        builder.setView(dialogView)
+        .setPositiveButton("Aceptar", null)
+        .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
 
-    //endregion
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            double cantidad = 0;
+            try {
+                cantidad = Double.parseDouble(txtCantidad.getText().toString());
+            } catch (NumberFormatException e) {
+                toast("Por favor ingrese una cantidad válida.");
+            }
 
+            if (cantidad > 0) {
+                if (cantidad > sitem.disp) {
+                    toast("La cantidad no debe ser mayor a la pickeada.");
+                } else {
+                    gl.auxPacking = sitem;
+                    gl.auxPacking.cant = cantidad;
+                    dialog.dismiss();
+                    finish();
+                }
+            } else {
+                toast("La cantidad debe ser mayor a 0.");
+            }
+        });
+    }
 }

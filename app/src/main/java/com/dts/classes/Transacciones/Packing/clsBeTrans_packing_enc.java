@@ -16,7 +16,7 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public String Lote;
     @Element(required=false) public String Fecha_vence;
     @Element(required=false) public String Lic_plate;
-    @Element(required=false) public int No_linea;
+    @Element(required=false) public String No_linea;
     @Element(required=false) public double Cantidad_bultos_packing;
     @Element(required=false) public double Cantidad_camas_packing;
     @Element(required=false) public int Idoperadorbodega;
@@ -29,13 +29,15 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public String ProductoPresentacion="";
     @Element(required=false) public String ProductoUnidadMedida="";
     @Element(required=false) public String ProductoEstado="";
+    @Element(required=false) public boolean EsConteo=false;
+
 
     public clsBeTrans_packing_enc() {
     }
 
     public clsBeTrans_packing_enc(int Idpackingenc,int Idbodega,int Idpickingenc,int Iddespachoenc,
                                   int Idproductobodega,int Idproductoestado,int Idpresentacion,int Idunidadmedida,
-                                  String Lote,String Fecha_vence,String Lic_plate,int No_linea,
+                                  String Lote,String Fecha_vence,String Lic_plate,String No_linea,
                                   double Cantidad_bultos_packing,double Cantidad_camas_packing,int Idoperadorbodega,int Idempresaservicio,
                                   String Referencia,String Fecha_packing) {
 
@@ -123,10 +125,10 @@ public class clsBeTrans_packing_enc {
     public void setLic_plate(String value) {
         Lic_plate=value;
     }
-    public int getNo_linea() {
+    public String getNo_linea() {
         return No_linea;
     }
-    public void setNo_linea(int value) {
+    public void setNo_linea(String value) {
         No_linea=value;
     }
     public double getCantidad_bultos_packing() {

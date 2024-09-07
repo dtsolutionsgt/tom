@@ -30,10 +30,11 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/input_text_1"
+                android:id="@+id/txtLicenciaPacking"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:inputType="text" />
 
             <ImageView
@@ -41,14 +42,15 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/btn_agregar" />
+                android:src="@drawable/btn_agregar"
+                android:onClick="generarNuevaLicencia"/>
 
             <ImageView
                 android:id="@+id/imageView26"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:onClick="doList"
-                android:src="@drawable/btn_buscar" />
+                android:padding="4dp"
+                android:src="@drawable/login_printer" />
 
         </TableRow>
 
@@ -67,11 +69,18 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/input_text_2"
+                android:id="@+id/txtLicencia"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/btnBuscars"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="doList"
+                android:src="@drawable/btn_buscar" />
 
         </TableRow>
 

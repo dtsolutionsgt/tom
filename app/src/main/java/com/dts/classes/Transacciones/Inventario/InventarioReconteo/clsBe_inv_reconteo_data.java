@@ -41,6 +41,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public Double Factor=0.0;
     @Element(required=false) public int index=0;
     @Element(required=false) public String Licence_plate="";
+    @Element(required=false) public int IdUbicacion_nuevo = 0;
 
 
     public clsBe_inv_reconteo_data(){}
