@@ -4646,7 +4646,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 gMovimientoDet.IdEmpresa = gl.IdEmpresa;
                 gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
                 gMovimientoDet.IdTransaccion = 1;
-                gMovimientoDet.IdPropietarioBodega = obj.Stock.IdPropietarioBodega;
+                gMovimientoDet.IdPropietarioBodega = obj.IdPropietario;
                 gMovimientoDet.IdProductoBodega = obj.IdProductoBodega;
                 gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion;
                 gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
