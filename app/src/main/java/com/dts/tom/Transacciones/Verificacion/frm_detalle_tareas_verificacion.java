@@ -1072,11 +1072,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.cambioubic);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    if (preguntoPorDiferencia){
-                        msgAskFinalizar("Finalizar tarea de verificación");
-                    }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                if (preguntoPorDiferencia){
+                    msgAskFinalizar("Finalizar tarea de verificación");
                 }
             });
 
@@ -1104,18 +1102,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.cambioubic);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    //Llamo a método del WS Set_Estado_Pedido_Verificado
-                    progress.setMessage("Finalizando la tarea de verificación...");
-                    progress.show();
-                    execws(5);
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                //Llamo a método del WS Set_Estado_Pedido_Verificado
+                progress.setMessage("Finalizando la tarea de verificación...");
+                progress.show();
+                execws(5);
             });
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
             });
 
             dialog.show();
@@ -1137,16 +1131,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.cambioubic);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    gl.gVerifCascade=false;
-                    frm_detalle_tareas_verificacion.super.finish();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                gl.gVerifCascade=false;
+                frm_detalle_tareas_verificacion.super.finish();
             });
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            dialog.setNegativeButton("No", (dialog12, which) -> {
             });
 
             dialog.show();
@@ -1174,21 +1164,14 @@ public class frm_detalle_tareas_verificacion extends PBase {
         AlertDialog.Builder menudlg = new AlertDialog.Builder(this);
         menudlg.setTitle("Ordenar por:");
 
-        menudlg.setItems(selitems , new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                gl.sortOrd = item;
-                orderar();
-                listSortedItems();
-                dialog.cancel();
-            }
+        menudlg.setItems(selitems , (dialog, item) -> {
+            gl.sortOrd = item;
+            orderar();
+            listSortedItems();
+            dialog.cancel();
         });
 
-        menudlg.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        menudlg.setNegativeButton("Salir", (dialog, which) -> dialog.cancel());
 
         Dialog = menudlg.create();
         Dialog.show();

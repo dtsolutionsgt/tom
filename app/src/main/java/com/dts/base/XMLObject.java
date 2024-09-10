@@ -143,8 +143,8 @@ public class XMLObject  {
 
             if (!body.isEmpty())
             {
-                 serializer.read(cl, body);
-                 return  cl;
+                serializer.read(cl, body);
+                return  cl;
             }
         }
 
@@ -300,15 +300,17 @@ public class XMLObject  {
             t.setOutputProperty(OutputKeys.INDENT, "yes");
             t.transform(new DOMSource(node), new StreamResult(sw));
         } catch (Exception te) {
-             throw new Exception("XMLObject nodeToString : "+te.getMessage());
+            throw new Exception("XMLObject nodeToString : "+te.getMessage());
         }
         return sw.toString();
     }
 
     private boolean parseXMLArray() throws Exception {
+
         String sv,en;
 
         try {
+
             InputStream istream = new ByteArrayInputStream(ws.xmlresult.getBytes() );
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
@@ -339,11 +341,11 @@ public class XMLObject  {
 
                     for (int vv =0;vv<vList.getLength();vv++){
                         en=vList.item(vv).getNodeName();
-                           sv=getNodeValue(en,elm);
+                        sv=getNodeValue(en,elm);
                         try{
                             crow[vv]=sv;
                         }catch (Exception ex){
-                           String error = ex.getMessage();
+                            String error = ex.getMessage();
                         }
 
                     }
@@ -360,6 +362,7 @@ public class XMLObject  {
     }
 
     private boolean parseXMLArray(String nombreArray) throws Exception {
+
         String sv,en;
 
         try {
@@ -434,5 +437,4 @@ public class XMLObject  {
         }
         return null;
     }
-
 }

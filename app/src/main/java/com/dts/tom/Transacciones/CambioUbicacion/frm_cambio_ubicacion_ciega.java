@@ -1831,6 +1831,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                 "pPosiciones",vPosiciones);
                         break;
                     case 15:
+
                         callMethod("ml_get_ubicacion_sugerida","pIdProducto",cvProdID,
                                 "pIdBodega",gl.IdBodega,
                                 "pIdProductoBodega",cvProd.IdProductoBodega,
@@ -2248,7 +2249,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if (bodega_ubicacion_destino == null){
                 //#EJC202211022130:Validar que no sea una ubicación vacía antes de decir que es incorrecta.
                 if (!txtUbicSug.getText().toString().isEmpty()){
-                    throw new Exception("Ubicación destino sugerida incorrecta");
+                    //throw new Exception("Ubicación destino sugerida incorrecta");
                 }
             }else{
 
