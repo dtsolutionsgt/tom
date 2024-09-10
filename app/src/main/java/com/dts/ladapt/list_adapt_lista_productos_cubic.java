@@ -87,6 +87,13 @@ public class list_adapt_lista_productos_cubic extends BaseAdapter {
         holder.lbl4.setText(items.get(position).Stock.getLote());
         holder.lbl5.setText(items.get(position).Stock.getFecha_Vence());
 
+        double vCantidadReservada = items.get(position).Stock.CantidadReservadaUMBas;
+        if (vCantidadReservada != 0) {
+            convertView.setBackgroundColor(Color.parseColor("#FFFDE7"));
+        } else {
+            convertView.setBackgroundColor(Color.TRANSPARENT); 
+        }
+
         return convertView;
     }
 

@@ -184,14 +184,14 @@
             <RelativeLayout
                 android:id="@+id/relProductos"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
                 android:visibility="gone"
                 tools:visibility="gone">
 
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -258,7 +258,8 @@
                         <ListView
                             android:id="@+id/listProductos"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="wrap_content"
+                            android:background="#FFFFFF"
                             android:scrollbars="horizontal|vertical" />
 
                     </LinearLayout>

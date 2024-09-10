@@ -168,7 +168,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private boolean licencia_reservada_completamente = false;
     private boolean reservada_parcialmente = false;
     private boolean stock_misma_licencia = false;
-    private boolean LicenciasCompletas;
+    private boolean LicenciasCompletas, TieneReserva = false;
     private clsBeTrans_movimientosList  movList = new clsBeTrans_movimientosList();
     private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
     private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
@@ -526,18 +526,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             return false;
         });
 
-        txtLicPlate.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+        txtLicPlate.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                    inicializaTareaLP();
+                TieneReserva = false;
+                inicializaTareaLP();
 
-                    Procesa_Lp();
-                }
-
-                return false;
+                Procesa_Lp();
             }
+
+            return false;
         });
 
         txtLicPlate.addTextChangedListener(new TextWatcher() {
@@ -2130,7 +2128,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (gl.modo_cambio == 2) {
                         cmbEstadoDestino.requestFocus();
                     } else {
-                        AplicaLicenciasCompletas();
+                        if (TieneReserva) {
+                            msgAskAplicarLicenciaCompleta("Pallet con reserva ¿mover cantidades no reservadas de producto?");
+                        } else {
+                            AplicaLicenciasCompletas();
+                        }
                     }
 
                     progress.cancel();
@@ -2472,15 +2474,22 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
 
-                       if (gl.modo_cambio == 2) {
+                        if (gl.modo_cambio == 2) {
                             BeProductoUbicacion = ListaActualizada.get(0);
                             cvPropID = BeProductoUbicacion.IdPropietario;
                             execws(10);
-                       }else{
+                        } else {
                            BeProductoUbicacion = ListaActualizada.get(0);
                            cvPropID = BeProductoUbicacion.IdPropietario;
-                           execws(25);
-                       }
+                            execws(25);
+                        }
+
+                        for (clsBeProducto obj: ListaActualizada) {
+                            if (obj.Stock.CantidadReservadaUMBas > 0) {
+                                TieneReserva = true;
+                                break;
+                            }
+                        }
 
                         txtLicPlate.clearFocus();
                     } else {
@@ -2758,6 +2767,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     LicenciasCompletas = false;
                 }
 
+                TieneReserva = false;
                 progress.cancel();
             }
 
@@ -4120,6 +4130,41 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
     }
 
+    private void msgAskAplicarLicenciaCompleta(String msg) {
+
+        try{
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(R.string.app_name);
+            alertDialogBuilder.setIcon(R.drawable.ic_quest);
+
+            alertDialogBuilder
+                    .setMessage(msg)
+                    .setCancelable(false)
+                    .setPositiveButton("Si", (dialog, id) -> {
+                        AplicaLicenciasCompletas();
+                    })
+                    .setNegativeButton("No", (dialog, id) -> btnGuardarCiega.setVisibility(View.VISIBLE));
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            alertDialog.show();
+            Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            nbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setTextColor(getResources().getColor(R.color.colorAccent));
+            pbutton.setPadding(0, 10, 10, 0);
+
+            pbutton.setFocusable(true);
+            pbutton.setFocusableInTouchMode(true);
+            pbutton.requestFocus();
+
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            btnGuardarCiega.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void msgAskImprimir(String msg) {
 
         try{
@@ -4264,7 +4309,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     public void AplicarCambio(View view){
 
         if (LicenciasCompletas) {
-            AplicaLicenciasCompletas();
+            if (TieneReserva) {
+                msgAskAplicarLicenciaCompleta("No se puede reubicar el pallet tiene producto reservado, ¿Mover el producto no reservado?");
+            } else {
+                AplicaLicenciasCompletas();
+            }
         } else {
             AplicarCambioBoton();
         }
