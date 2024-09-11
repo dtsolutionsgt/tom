@@ -279,7 +279,20 @@ public class frm_preparacion_packing extends PBase {
 
         lblProc.setText("Procesado : "+(items.size()));
         try {
-            pendientes=pick.items.size()-items.size();
+            pendientes = 0;
+            for (clsBeTrans_picking_ubic obj : pick.items) {
+
+                double cant = 0;
+                for (clsBeTrans_packing_enc packing: items) {
+                    if (obj.Lic_plate.equals(packing.Lic_plate)) {
+                        cant += packing.Cantidad_bultos_packing;
+                    }
+                }
+
+                if (obj.Cantidad_Recibida != cant) {
+                    pendientes++;
+                }
+            }
         } catch (Exception e) {
             String ss=e.getMessage();
             pendientes=0;
@@ -516,7 +529,7 @@ public class frm_preparacion_packing extends PBase {
                     toast("Producto agregado.");
 
                     nBeResolucion = null;
-                    execws(2);
+                    execws(1);
                 } else {
                     mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
                 }
@@ -722,15 +735,6 @@ public class frm_preparacion_packing extends PBase {
         } else {
             System.out.println("Producto no encontrado");
         }
-        /*
-        for (int i = 0; i <pick.items.size(); i++) {
-            if (pick.items.get(i).Lic_plate.equalsIgnoreCase(gl.paBulto)
-            & pick.items.get(i).ProductoEstado.equalsIgnoreCase(gl.paEstado)) {
-                selidx=i;
-                addItem();
-                return;
-            }
-        }*/
     }
 
     //endregion
