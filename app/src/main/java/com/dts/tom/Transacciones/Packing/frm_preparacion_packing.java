@@ -203,6 +203,7 @@ public class frm_preparacion_packing extends PBase {
     private void listItems() {
         String actLinea = "";
         int count = 0;
+        double cantidad = 0;
         clsBeTrans_packing_enc item;
 
         try {
@@ -210,9 +211,6 @@ public class frm_preparacion_packing extends PBase {
             if (items.size()>1) Collections.sort(items,new OrdenarPorLinea());
 
             item_list.clear();
-
-            /*item=new clsBeTrans_packing_enc();
-            item_list.add(item);*/
 
             for (int i = 0; i <items.size(); i++) {
                 item=items.get(i);
@@ -232,15 +230,18 @@ public class frm_preparacion_packing extends PBase {
                         tmp.Lote = "";
                         tmp.EsConteo = true;
                         tmp.nom_prod = actLinea + ": " + count;
+                        tmp.Cantidad_bultos_packing = cantidad;
                         item_list.add(tmp);
                     }
 
                     actLinea = item.No_linea;
                     count = 0;
+                    cantidad = 0;
                 }
 
                 item_list.add(item);
                 count++;
+                cantidad += item.Cantidad_bultos_packing;
             }
 
             if (!actLinea.equals("")) {
@@ -251,6 +252,7 @@ public class frm_preparacion_packing extends PBase {
                 tmpU.Lote = "";
                 tmpU.EsConteo = true;
                 tmpU.nom_prod = actLinea + ": " + count;
+                tmpU.Cantidad_bultos_packing = cantidad;
                 item_list.add(tmpU);
             }
 

@@ -135,20 +135,27 @@ public class frm_lista_packing_lp extends PBase {
 
             if (items.size()>0) {
                 if (gl.filtroprod.isEmpty()) {
-                    Collections.sort(items,new OrdenarPorProducto());
+                    Collections.sort(items, new OrdenarPorProducto());
                 } else {
-                    Collections.sort(items,new OrdenarPorLote());
+                    Collections.sort(items, new OrdenarPorLote());
                 }
             }
 
             adapter=new list_adapt_packing_lp(this,items);
             listView.setAdapter(adapter);
+
         } catch (Exception e) {
             mu.msgbox("listItems : "+e.getMessage());
         }
 
-        txtFiltro.selectAll();
-        focusFiltro();
+        if (items.size() == 1)  {
+            Object lvObj = listView.getItemAtPosition(0);
+            sitem = (clsBeTrans_packing_lotes) lvObj;
+            showFormDialog();
+        } else {
+            txtFiltro.selectAll();
+            focusFiltro();
+        }
     }
     //endregion
 
@@ -193,6 +200,7 @@ public class frm_lista_packing_lp extends PBase {
         txtLicencia.setText(sitem.licencia);
         txtCantidad.setText("" + sitem.disp);
 
+        txtCantidad.setOnClickListener(view -> { });
         txtCantidad.setSelectAllOnFocus(true);
 
         builder.setView(dialogView)
