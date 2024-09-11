@@ -116,9 +116,19 @@ public class frm_preparacion_packing extends PBase {
     }
 
     public void doList(View view){
-        creaListaLotes(txtLP.getText().toString());
-        browse=1;
-        startActivity(new Intent(this,frm_lista_packing_lp.class));
+        verLista();
+    }
+
+    private void verLista() {
+        try {
+            gl.LicenciaPacking = txtLicenciaPacking.getText().toString();
+            browse = 1;
+
+            creaListaLotes(txtLP.getText().toString());
+            startActivity(new Intent(this, frm_lista_packing_lp.class));
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" verLista . "+e.getMessage());
+        }
     }
 
     public void guardarTarea(View view) {
@@ -141,16 +151,19 @@ public class frm_preparacion_packing extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     selid = 0;
-                    if (position > 0){
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                        selitem = sitem;
-                        selid = sitem.Idpackingenc;
-                        selidx = position;
-                        adapter.setSelectedIndex(position);
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
+                    selitem = sitem;
+                    selid = sitem.Idpackingenc;
+                    selidx = position;
+                    adapter.setSelectedIndex(position);
 
-                        //procesar_registro();
+                    if (selitem.Idpackingenc == 0) {
+                        nBeResolucion = null;
+                        String[] licencia = selitem.nom_prod.split(":");
+                        txtLicenciaPacking.setText(licencia[0].trim());
                     }
+
                 }
             });
 
@@ -170,14 +183,12 @@ public class frm_preparacion_packing extends PBase {
                 }
             });
 
-            txtLP.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        GetFila();
-                    }
-                    return false;
+            txtLP.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    gl.filtroprod = txtLP.getText().toString();
+                    verLista();
                 }
+                return false;
             });
 
         } catch (Exception e){
@@ -365,18 +376,24 @@ public class frm_preparacion_packing extends PBase {
                 .filter(o -> o.getFecha_vence().equals(gl.auxPacking.fecha))
                 .filter(o -> o.getLic_plate().equals(gl.auxPacking.licencia))
                 .filter(o -> o.getLote().equals(gl.auxPacking.lote))
+                .filter(o -> o.getNo_linea().equals(txtLicenciaPacking.getText().toString()))
                 .findFirst();
 
                 if (itemOpt.isPresent()) {
-                    itemOpt.ifPresent(obj -> obj.setCantidad_bultos_packing(obj.getCantidad_bultos_packing() + gl.auxPacking.cant));
-                    adapter.notifyDataSetChanged();
+                    clsBeTrans_packing_enc tmpObj;
+                    tmpObj = itemOpt.get();
 
-                    itemList = new clsBeTrans_packing_encList();
-                    itemList.items = new ArrayList<>();
-                    itemList.items.add(itemOpt.get());
+                    if (tmpObj.No_linea.equals(txtLicenciaPacking.getText().toString())) {
+                        tmpObj.setCantidad_bultos_packing(tmpObj.getCantidad_bultos_packing() + gl.auxPacking.cant);
+                        adapter.notifyDataSetChanged();
 
-                    execws(3);
-                    return;
+                        itemList = new clsBeTrans_packing_encList();
+                        itemList.items = new ArrayList<>();
+                        itemList.items.add(tmpObj);
+
+                        execws(3);
+                        return;
+                    }
                 }
             }
 
