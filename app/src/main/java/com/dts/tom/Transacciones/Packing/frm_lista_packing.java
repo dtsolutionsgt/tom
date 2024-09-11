@@ -98,19 +98,15 @@ public class frm_lista_packing extends PBase {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     selid = 0;
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
 
-                    if (position > 0){
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                    selid = sitem.IdPickingEnc;
+                    selidx = position;
+                    adapterPicking.setSelectedIndex(position);
 
-                        selid = sitem.IdPickingEnc;
-                        selidx = position;
-                        adapterPicking.setSelectedIndex(position);
-
-                        procesar_registro();
-                    }
+                    procesar_registro();
                }
             });
 
@@ -147,10 +143,6 @@ public class frm_lista_packing extends PBase {
             if (pListBeTareasPickingHH!=null){
 
                 if (pListBeTareasPickingHH.items!=null){
-
-                    vItem = new clsBeTrans_picking_enc();
-
-                    BeListTareasPicking.add(vItem);
 
                     for (clsBeTrans_picking_enc BePicking:pListBeTareasPickingHH.items ){
 
