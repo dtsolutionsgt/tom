@@ -1721,7 +1721,13 @@ public class frm_list_rec_prod extends PBase {
                             }*/
                         }
                     }
+                }else{
+                    msgbox("La recepción no tiene registros, no se puede finalizar");
+                    doExit();
                 }
+            }else{
+                msgbox("La recepción no tiene registros, no se puede finalizar");
+                doExit();
             }
 
         }catch (Exception e){

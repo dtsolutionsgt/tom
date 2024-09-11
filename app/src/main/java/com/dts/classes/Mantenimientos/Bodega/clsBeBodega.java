@@ -115,7 +115,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        String Horario_Ejecucion_Historico, boolean Filtrar_Pedidos_Usuario,
                        boolean Liberar_Stock_Despachos_Parciales,
                        boolean Escanear_Licencia_Picking, int IdTipoEtiquetaLicencia, int IdSimbologiaLicencia,
-                       boolean Interface_SAP, boolean Restringir_Areas_SAP, boolean Control_Pallet_Mixto, boolean Despacho_Automatico_HH) {
+                       boolean Interface_SAP, boolean Restringir_Areas_SAP, boolean Control_Pallet_Mixto,
+                       boolean Despacho_Automatico_HH) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -699,5 +700,10 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setRestringir_Areas_SAP(boolean value) {
         Restringir_Areas_SAP=value;
     }
-
+    public boolean getDespacho_Automatico_HH() {
+        return Despacho_Automatico_HH;
+    }
+    public void setDespacho_Automatico_HH(boolean value) {
+        Despacho_Automatico_HH=value;
+    }
 }

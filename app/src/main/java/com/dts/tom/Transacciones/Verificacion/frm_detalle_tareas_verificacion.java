@@ -47,6 +47,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -502,6 +504,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                     "pIdBodega", gl.IdBodega,
                                     "pIdPickingEnc",gl.gIdPickingEnc);
                         break;
+                    case 12:
+                        callMethod("Despachar_Pedido",
+                                         "IdPedidoEnc", gl.pIdPedidoEnc,
+                                               "IdBodega", gl.IdBodega,
+                                               "IdOperadorVerifico",gl.IdOperador);
+                        break;
                 }
 
             }catch (Exception e){
@@ -548,6 +556,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     break;
                 case 11:
                     processCodigoBarraProducto();
+                    break;
+                case 12:
+                    processDespachoPedido();
                     break;
             }
 
@@ -601,8 +612,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
            gl.gFotografiaVerificacion= gBePedido.Picking.Fotografia_Verificacion;
 
-            lblNoDocumento.setText(String.format("IdPedido:%s Referencia:%s \n Cliente: %s", gl.pIdPedidoEnc,
-                    gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial));
+            lblNoDocumento.setText(String.format("Pedido:%s Referencia:%s \n Cliente: %s \n Destino: %s", gl.pIdPedidoEnc,
+                    gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial, gBePedido.Bodega_Destino));
 
             progress.setMessage("Cargando detalle del Picking Ubic");
 
@@ -643,6 +654,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
+                msgAskFinalizar("Finalizar tarea de verificación");
             }
             orderar();
         } catch (Exception e) {
@@ -673,6 +685,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
+                msgAskFinalizar("Finalizar tarea de verificación");
+
             }
             orderar();
         } catch (Exception e) {
@@ -814,8 +828,15 @@ public class frm_detalle_tareas_verificacion extends PBase {
             progress.show();
             int actualizados = (Integer) xobj.getSingle("Set_Estado_Pedido_VerificadoResult",Integer.class);
 
-            //Llama a método del WS Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc
-            execws(6);
+            if (gl.pBeBodega.Despacho_Automatico_HH){
+
+                //Llama a método del WS Despachar_Pedido
+                execws(12);
+            }else{
+
+                //Llama a método del WS Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc
+                execws(6);
+            }
 
         }catch (Exception ex){
             progress.cancel();
@@ -832,7 +853,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             boolean tienePedidosSV = (Boolean) xobj.getSingle("Tiene_Pedidos_Sin_Verificar_By_IdPickingEncResult",Boolean.class);
 
-            if (! tienePedidosSV) {
+            if (!tienePedidosSV) {
                 //Llama a método del WS Get_Picking_By_IdPickingEnc
                 execws(7);
             } else {
@@ -890,6 +911,38 @@ public class frm_detalle_tareas_verificacion extends PBase {
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
+    }
+
+    private void processDespachoPedido(){
+        String jsDespacho="";
+
+        try{
+
+            progress.setMessage("Obteniendo despacho...");
+            progress.show();
+
+            Pattern pattern = Pattern.compile("^\\d+"); // Busca uno o más dígitos al inicio
+            Matcher matcher = pattern.matcher(ws.xmlresult);
+
+            if (matcher.find()) {
+                jsDespacho = matcher.group();
+            }
+
+            if (jsDespacho != null){
+               toastlong(jsDespacho);
+            }else{
+                toastlong("No se pudo procesar el despacho");
+            }
+
+            //Llama a método del WS Tiene_Pedidos_Sin_Verificar_By_IdPickingEnc
+            execws(6);
+
+        }catch (Exception ex){
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
+        }
+
     }
 
     private void Lista_Detalle_Pedido(){
@@ -992,6 +1045,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             btnRegs.setBackgroundColor(Color.parseColor("#C8E6C9"));
                             relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
                             btnRegs.setTextColor(Color.BLACK);
+
+                            msgAskFinalizar("Finalizar tarea de verificación");
+                            return;
                         }
 
                         if ( gl.gVerifCascade && selidx>-1) {
