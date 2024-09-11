@@ -24,7 +24,7 @@ public class frm_lista_packing_lp extends PBase {
 
     private ListView listView;
     private EditText txtFiltro;
-    private TextView lblFiltro;
+    private TextView lblFiltro, lblPackingLicencia;
 
     private list_adapt_packing_lp adapter;
 
@@ -40,7 +40,18 @@ public class frm_lista_packing_lp extends PBase {
 
         listView = findViewById(R.id.listView1);
         txtFiltro = findViewById(R.id.editTextTextPersonName);
-        lblFiltro = findViewById(R.id.lblTituloForma);lblFiltro.setText("Filtro : "+gl.filtroprod);
+        lblFiltro = findViewById(R.id.lblTituloForma);
+        lblPackingLicencia = findViewById(R.id.lblPackingLicencia);
+
+        lblPackingLicencia.setText("Licencia Packing: "+ gl.LicenciaPacking);
+
+        if (gl.filtroprod.isEmpty()) {
+            lblFiltro.setVisibility(View.GONE);
+        } else {
+            lblFiltro.setVisibility(View.VISIBLE);
+            lblFiltro.setText("Filtro : "+gl.filtroprod);
+            txtFiltro.setText(gl.filtroprod);
+        }
 
         gl.paBulto="";
         gl.auxPacking = null;
@@ -178,37 +189,52 @@ public class frm_lista_packing_lp extends PBase {
         TextView txtLicencia = dialogView.findViewById(R.id.txtLicencia);
         EditText txtCantidad = dialogView.findViewById(R.id.txtCantidad);
 
-        txtProducto.setText(sitem.codigo +" - "+ sitem.producto);
+        txtProducto.setText(sitem.codigo + " - " + sitem.producto);
         txtLicencia.setText(sitem.licencia);
-        txtCantidad.setText(""+sitem.disp);
+        txtCantidad.setText("" + sitem.disp);
+
+        txtCantidad.setSelectAllOnFocus(true);
 
         builder.setView(dialogView)
-        .setPositiveButton("Aceptar", null)
-        .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+                .setPositiveButton("Aceptar", null)
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            double cantidad = 0;
-            try {
-                cantidad = Double.parseDouble(txtCantidad.getText().toString());
-            } catch (NumberFormatException e) {
-                toast("Por favor ingrese una cantidad válida.");
+        txtCantidad.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                procesarCantidad(dialogView, dialog);
+                return true;
             }
-
-            if (cantidad > 0) {
-                if (cantidad > sitem.disp) {
-                    toast("La cantidad no debe ser mayor a la pickeada.");
-                } else {
-                    gl.auxPacking = sitem;
-                    gl.auxPacking.cant = cantidad;
-                    dialog.dismiss();
-                    finish();
-                }
-            } else {
-                toast("La cantidad debe ser mayor a 0.");
-            }
+            return false;
         });
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> procesarCantidad(dialogView, dialog));
+    }
+
+    private void procesarCantidad(View dialogView, AlertDialog dialog) {
+        EditText txtCantidad = dialogView.findViewById(R.id.txtCantidad);
+        double cantidad = 0;
+
+        try {
+            cantidad = Double.parseDouble(txtCantidad.getText().toString());
+        } catch (NumberFormatException e) {
+            toast("Por favor ingrese una cantidad válida.");
+            return;
+        }
+
+        if (cantidad > 0) {
+            if (cantidad > sitem.disp) {
+                toast("La cantidad no debe ser mayor a la pickeada.");
+            } else {
+                gl.auxPacking = sitem;
+                gl.auxPacking.cant = cantidad;
+                dialog.dismiss();  // Cierra el cuadro de diálogo correctamente
+                finish();
+            }
+        } else {
+            toast("La cantidad debe ser mayor a 0.");
+        }
     }
 }

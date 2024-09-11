@@ -351,13 +351,7 @@ public class frm_picking_datos extends PBase {
             txtLicencia.setOnClickListener(view -> { });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
-            txtCodigoProducto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
+            txtCodigoProducto.setOnClickListener(view -> { });
 
             txtCodigoProducto.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -382,12 +376,7 @@ public class frm_picking_datos extends PBase {
             });
 
             //GT06042022: no remover, hacen de pivote para retener el focus
-            txtCantidadPick.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
+            txtCantidadPick.setOnClickListener(view -> { });
 
             txtCantidadPick.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -1077,6 +1066,8 @@ public class frm_picking_datos extends PBase {
                     //#AT 20220225 Si confirmar_codigo_en_picking es verdadero solicita
                     //que se ingrese el código del producto para cargar los datos del picking
                     if (confirmar_codigo_en_picking) {
+                        txtLicencia.setFocusable(false);
+                        txtLicencia.clearFocus();
                         txtCodigoProducto.requestFocus();
                         Log.d("focus: ", "20220502_24");
                         txtCodigoProducto.setEnabled(true);
@@ -1734,6 +1725,8 @@ public class frm_picking_datos extends PBase {
                 txtLicencia.setEnabled(false);
             }
 
+            txtCodigoProducto.setFocusable(false);
+            txtCodigoProducto.clearFocus();
             txtCantidadPick.selectAll();
             txtCantidadPick.setSelectAllOnFocus(true);
             txtCantidadPick.requestFocus();
