@@ -1,0 +1,5 @@
+<!-- res/drawable/scrollbar_track.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:width="10dp" /> <!-- Cambia el valor para hacer el scroll más ancho -->
+    <solid android:color="#E0E0E0" /> <!-- Color del track de la barra de scroll -->
+</shape>

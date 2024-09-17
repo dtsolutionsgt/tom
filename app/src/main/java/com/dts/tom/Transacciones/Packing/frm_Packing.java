@@ -394,7 +394,7 @@ public class frm_Packing extends PBase {
                 imprimirDesdeBoton = true;
                 //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
                 //para luego poder imprimirla
-                tmpLicencia  = txtNuevoLp.getText().toString();
+                tmpLicencia  = txtNuevoLp.getText().toString().replace("$","");
                 Imprimir(v);
             });
 
@@ -1287,7 +1287,7 @@ public class frm_Packing extends PBase {
                 }
             }
 
-            NuevoLp = txtNuevoLp.getText().toString();
+            NuevoLp = txtNuevoLp.getText().toString().replace("$","");
 
             if (!Crear_Movimiento_Ubicacion_ND(true)){
                 return;
@@ -1333,7 +1333,7 @@ public class frm_Packing extends PBase {
             //Set_LP_Stock(gMovimientoDet, vStockRes);
             //#AT20220408 Asigno la licencia de destino a tmpLicencia para no perderla
             //para luego poder imprimirla
-            tmpLicencia  = txtNuevoLp.getText().toString();
+            tmpLicencia  = txtNuevoLp.getText().toString().replace("$","");
             execws(8);
 
         }catch (Exception e){
@@ -1349,10 +1349,9 @@ public class frm_Packing extends PBase {
             stockList.items = new ArrayList<>();
             stockList.items.clear();
 
-            NuevoLp = txtNuevoLp.getText().toString();
+            NuevoLp = txtNuevoLp.getText().toString().replace("$","");
 
             for (clsBeProducto obj : ListaActualizada) {
-
 
                 clsBeVW_stock_res auxStockRes = new clsBeVW_stock_res();
 
@@ -1780,7 +1779,7 @@ public class frm_Packing extends PBase {
                     case 11:
                         //#CKFK 20210617 Agregué el llamado a esta función para obtener la ubicación del LP
                         callMethod("Get_Ubicacion_LP",
-                                   "pLic_Plate",txtNuevoLp.getText().toString(),
+                                   "pLic_Plate",txtNuevoLp.getText().toString().replace("$",""),
                                    "pIdBodega",gl.IdBodega,
                                    "nombre_ubicacion",pNombreUbicacionLP);
                         break;
@@ -1944,6 +1943,8 @@ public class frm_Packing extends PBase {
 
                 }
 
+            }else{
+                LlenaLotes();
             }
 
         } catch (Exception e) {
@@ -2146,7 +2147,8 @@ public class frm_Packing extends PBase {
                                         .distinct()
                                         .count() > 1;
 
-                                if (gl.pBeBodega.Control_Pallet_Mixto && ProductosDiferentes) {
+                                //#CKFK20240913 le quité esto porque no importa si los productos son iguales && ProductosDiferentes
+                                if (gl.pBeBodega.Control_Pallet_Mixto) {
                                     LicenciasMixtas = true;
 
                                     relForm.setVisibility(View.GONE);
@@ -2768,7 +2770,7 @@ public class frm_Packing extends PBase {
                 //zPrinterIns.sendCommand("! U1 setvar \"device.languages\" \"zpl\"\r\n");
                 String zpl="";
 
-                NuevoLp = txtNuevoLp.getText().toString();
+                NuevoLp = txtNuevoLp.getText().toString().replace("$","");
 
                 if (NuevoLp!=null && !NuevoLp.isEmpty()){
 

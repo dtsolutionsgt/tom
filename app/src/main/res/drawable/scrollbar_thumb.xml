@@ -1,0 +1,5 @@
+<!-- res/drawable/scrollbar_thumb.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:width="10dp" /> <!-- Cambia el ancho del thumb -->
+    <solid android:color="#FF6200EE" /> <!-- Color del thumb del scroll -->
+</shape>

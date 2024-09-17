@@ -88,6 +88,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private CheckBox chkExplosionar;
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
+    private TableRow tblLicenciaMixta;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -227,6 +228,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             reltop = findViewById(R.id.reltop);
             relForm = findViewById(R.id.relForm);
             relProductos = findViewById(R.id.relProductos);
+            tblLicenciaMixta = findViewById(R.id.tblLicenciaMixta);
 
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
@@ -234,6 +236,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
+            tblLicenciaMixta.setVisibility(View.GONE);
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -546,7 +549,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                 if (LicenciasCompletas) {
                     if (txtLicPlate.getText().toString().isEmpty()) {
-                        relProductos.setVisibility(View.GONE);
+                        tblLicenciaMixta.setVisibility(View.GONE);
                         relForm.setVisibility(View.VISIBLE);
                         trCodigoProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setText("-");
@@ -2438,9 +2441,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (!CambioUbicExistencia && gl.pBeBodega.Control_Pallet_Mixto){
 
                     if (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                       //#CKFK20240913 Quité el .distinct en esta validación porque puede pasar que solo quede un producto
+                        // en la licencia mixta, pero al ser varios IdStock aplica
                         LicenciasCompletas = productoList.items.stream()
                                 .map(clsBeProducto::getCodigo)
-                                .distinct()
                                 .count() > 1;
                     } else {
                         msgbox("La licencia no es válida");
@@ -2470,7 +2474,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             stockResList.items.add(obj.Stock);
                         }
 
-                        relProductos.setVisibility(View.VISIBLE);
+                        tblLicenciaMixta.setVisibility(View.VISIBLE);
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
 
@@ -2503,7 +2507,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     progress.cancel();
                 } else {
 
-                    relProductos.setVisibility(View.GONE);
+                    tblLicenciaMixta.setVisibility(View.GONE);
                     relForm.setVisibility(View.VISIBLE);
                     trCodigoProducto.setVisibility(View.VISIBLE);
 
@@ -2529,6 +2533,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             AuxList = stream(productoList.items)
                                     .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
                                     .where(c -> c.Stock.IdPresentacion == gl.existencia.IdPresentacion)
+                                    .where(c -> c.Stock.IdProductoBodega == gl.existencia.IdProductoBodega)
                                     .toList();
                         } else {
                             AuxList = stream(productoList.items)
@@ -2755,7 +2760,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             resultado = (Boolean) xobj.getSingle("Aplica_Cambio_Estado_Ubic_HH_LicCompletaResult", boolean.class);
 
             if (resultado) {
-                relProductos.setVisibility(View.GONE);
+                tblLicenciaMixta.setVisibility(View.GONE);
                 relForm.setVisibility(View.VISIBLE);
                 trCodigoProducto.setVisibility(View.VISIBLE);
                 lblDescProducto.setText("-");
