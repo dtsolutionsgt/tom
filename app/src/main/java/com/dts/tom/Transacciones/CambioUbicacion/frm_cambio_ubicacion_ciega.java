@@ -3017,6 +3017,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 cvUbicDestID = 0;
+                lblUbicCompDestino.setText("");
+                txtUbicDestino.setText("");
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
 
@@ -3051,6 +3053,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (matcher.find()) {
                 jsUbic = matcher.group();
+                if (jsUbic != null){
+                    if (jsUbic.equals("0")){
+                        jsUbic = null;
+                    }
+                }
             }
 
             if (jsUbic != null){
@@ -3060,6 +3067,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 cvUbicDestID = 0;
+                lblUbicCompDestino.setText("");
+                txtUbicDestino.setText("");
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
 
