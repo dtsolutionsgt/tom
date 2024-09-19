@@ -3430,8 +3430,10 @@ public class frm_recepcion_datos extends PBase {
 
             String vFamilia = (BeProducto.Familia.Nombre.equals("")?"N/D":BeProducto.Familia.Nombre);
             String vIndiceRotacion = (BeProducto.Indice_Rotacion.Descripcion.equals("")?"N/D":BeProducto.Indice_Rotacion.Descripcion);
+            String vTipoProducto = (BeProducto.TipoProducto.NombreTipoProducto.equals("")?"N/D":BeProducto.TipoProducto.NombreTipoProducto);
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n F:" + vFamilia + " - IR: " + vIndiceRotacion);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n IR: " + vIndiceRotacion + " - TP:" + vTipoProducto);
+
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
