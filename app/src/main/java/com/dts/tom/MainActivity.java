@@ -997,6 +997,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     fillSpinemp();
 
                 }
+            }else{
+                //#GT19092024: limpiar el spin y asignar 0 a la empresa
+                gl.IdEmpresa=0;
+                spinemp.setAdapter(null);
+                msgbox("No se obtuvieron empresas");
+                progress.cancel();
             }
 
         } catch (Exception e) {
@@ -1027,6 +1033,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
 
             }else{
+                //#GT19092024: limpiar el spin y asignar 0 a la bodega
+                gl.IdBodega=0;
+                spinbod.setAdapter(null);
                 msgbox("No se obtuvieron bodegas");
                 progress.cancel();
             }
@@ -1110,6 +1119,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
                     fillSpinUser();
                 }
+            }else{
+                //#GT19092024: limpiar el spin y asignar 0 al operador
+                spinuser.setAdapter(null);
+                gl.IdOperador = 0;
+                mu.msgbox("No hay operadores asignados a la bodega.");
+                progress.cancel();
             }
 
         } catch (Exception e) {
