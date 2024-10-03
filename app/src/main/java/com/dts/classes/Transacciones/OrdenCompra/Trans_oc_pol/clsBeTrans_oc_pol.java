@@ -54,6 +54,8 @@ public class clsBeTrans_oc_pol {
     @Element(required=false) public double total_liquidar=0;
     @Element(required=false) public double total_general=0;
     @Element(required=false) public String Codigo_Barra="";
+    @Element(required=false) public int IdBodega=0;
+
 
     @Element(required=false) public boolean activo=false;
 
@@ -72,7 +74,7 @@ public class clsBeTrans_oc_pol {
                              String fecha_llegada,double total_otros, double Total_bultos_Peso_Neto,String clave_aduana,
                              String nit_imp_exp,String clase,String mod_transporte,double total_liquidar,
                              double total_general, String Codigo_Barra,
-                             boolean activo
+                             boolean activo, int IdBodega
     ) {
 
         this.IdOrdenCompraPol=IdOrdenCompraPol;
@@ -123,6 +125,7 @@ public class clsBeTrans_oc_pol {
         this.total_general=total_general;
         this.Codigo_Barra=Codigo_Barra;
         this.activo=activo;
+        this.IdBodega = IdBodega;
     }
 
 

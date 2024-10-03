@@ -63,7 +63,7 @@ public class frm_preparacion_packing extends PBase {
     private ObjectAnimator anim;
     private ProgressDialog progress;
 
-    private int idPickingEnc,selidx,pendientes;
+    private int idPickingEnc,selidx,pendientes, IdPedidoEnc;
     private String sellp=".";
     private boolean idle=true;
     private clsBeResolucion_lp_operador nBeResolucion = null;
@@ -89,6 +89,7 @@ public class frm_preparacion_packing extends PBase {
         pbar = findViewById(R.id.pgrtareas2);
 
         idPickingEnc=gl.gIdPickingEnc;
+        IdPedidoEnc = gl.gIdPedidoEnc;
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
         ProgressDialog("Cargando forma");
@@ -296,17 +297,22 @@ public class frm_preparacion_packing extends PBase {
             for (clsBeTrans_picking_ubic obj : pick.items) {
 
                 double cant = 0;
+                String vLotePacking = "";
+
                 for (clsBeTrans_packing_enc packing: items) {
+
+                    vLotePacking = (packing.Lote==null?"":packing.Lote);
+
                     if (obj.Lic_plate.equals(packing.Lic_plate) &&
                         obj.Fecha_Vence.equals(packing.Fecha_vence) &&
-                        obj.Lote.equals(packing.Lote) &&
-                        obj.IdProductoBodega == packing.getIdproductobodega()) {
+                            obj.IdProductoBodega == packing.getIdproductobodega()&&
+                            (obj.Lote ==null || obj.Lote.equals(vLotePacking)) ) {
 
                         cant += packing.Cantidad_bultos_packing;
                     }
                 }
 
-                if (obj.Cantidad_Recibida != cant) {
+                if ((obj.Cantidad_Verificada - obj.getCantidad_despachada()) != cant) {
                     pendientes++;
                 }
             }
@@ -405,11 +411,12 @@ public class frm_preparacion_packing extends PBase {
         try {
 
             if (items.size() > 0) {
+
                 Optional<clsBeTrans_packing_enc> itemOpt = items.stream()
                 .filter(o -> o.getIdproductobodega() == gl.auxPacking.IdProductoBodega)
                 .filter(o -> o.getFecha_vence().equals(gl.auxPacking.fecha))
                 .filter(o -> o.getLic_plate().equals(gl.auxPacking.licencia))
-                .filter(o -> o.getLote().equals(gl.auxPacking.lote))
+                .filter(o -> o.getLote() == null || o.getLote().equals(gl.auxPacking.lote))
                 .filter(o -> o.getNo_linea().equals(txtLicenciaPacking.getText().toString()))
                 .findFirst();
 
@@ -457,6 +464,7 @@ public class frm_preparacion_packing extends PBase {
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
             item.ProductoEstado=p.ProductoEstado;
+            item.IdPedidoEnc = p.getIdPedidoEnc();
 
             itemList = new clsBeTrans_packing_encList();
             itemList.items = new ArrayList<>();
@@ -525,6 +533,10 @@ public class frm_preparacion_packing extends PBase {
         }
 
         try {
+            if (pendientes>0){
+                msgbox("Tiene productos pendientes de empacar, no se puede finalizar");return;
+            }
+
             progress.setMessage("Finalizando tarea ...");
             progress.show();
             idle=false;
@@ -651,9 +663,11 @@ public class frm_preparacion_packing extends PBase {
                 for (clsBeTrans_picking_ubic obj: pick.items) {
                     item = new clsBeTrans_packing_lotes();
 
+                    obj.Lote = (obj.getLote()==null?"":obj.getLote());
+
                     item.codigo = obj.getCodigoProducto();
                     item.producto = obj.getNombreProducto();
-                    item.lote = obj.getLote();
+                    item.lote = obj.Lote;
                     item.licencia = obj.getLic_plate();
                     item.IdProductoBodega = obj.IdProductoBodega;
                     item.cant = obj.getCantidad_Recibida();
@@ -662,17 +676,17 @@ public class frm_preparacion_packing extends PBase {
                     if (items.size() > 0) {
                         double totalCantidad = 0;
                         totalCantidad = items.stream()
-                        .filter(p -> p.getLote().equals(obj.Lote))
-                        .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
-                        .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
-                        .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
-                        .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
-                        .sum();
+                                .filter(p -> p.getLote() == null || p.getLote().equals(obj.Lote)) // Maneja el caso cuando obj.Lote es null
+                                .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
+                                .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
+                                .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
+                                .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
+                                .sum();
 
-                        item.disp = (int) (obj.getCantidad_Recibida() - totalCantidad);
+                        item.disp = (int) (obj.getCantidad_Verificada()-obj.getCantidad_despachada() - totalCantidad);
 
                     } else {
-                        item.disp = (int) obj.getCantidad_Recibida();
+                        item.disp = (int) (obj.getCantidad_Verificada() - obj.getCantidad_despachada());
                     }
 
                     if (item.disp > 0) {
@@ -772,10 +786,12 @@ public class frm_preparacion_packing extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc);
+                        callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc,
+                                "pIdPedidoEnc",IdPedidoEnc);
                         break;
                     case 2:
-                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc);
+                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc,
+                                "IdPedidoEnc",IdPedidoEnc);
                         break;
                     case 3:
                         int idresolucion = 0;
@@ -792,7 +808,8 @@ public class frm_preparacion_packing extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 5:
-                        callMethod("Actualizar_Estado_Packing", "pIdPicking", idPickingEnc);
+                        callMethod("Actualizar_Estado_Packing", "pIdPicking", idPickingEnc,
+                                "pIdPedidoEnc", gl.gIdPedidoEnc);
                         break;
                     case 6:
                         callMethod("Eliminar_Linea_Packing", "pIdPackingEnc", selitem.Idpackingenc);
@@ -802,6 +819,7 @@ public class frm_preparacion_packing extends PBase {
                 anim.cancel();
 
             } catch (Exception e) {
+                idle = true;
                 anim.cancel();
                 error=e.getMessage();errorflag =true;msgbox(error);
             }

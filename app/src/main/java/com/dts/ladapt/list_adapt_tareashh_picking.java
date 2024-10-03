@@ -67,6 +67,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblEstadoPick = convertView.findViewById(R.id.lblEstadoPick);
             holder.lblFechaPick = convertView.findViewById(R.id.lblFechaPick);
             holder.lblPrioridad = convertView.findViewById(R.id.lblPrioridad);
+            holder.lblIdPedidoEnc =  convertView.findViewById(R.id.lblIdPedidoEnc);
 //            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
 //            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
 //            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);
@@ -80,6 +81,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 
 
             holder.lblIdPickingEnc.setText("0");
+            holder.lblIdPedidoEnc.setText("0");
             holder.lblBodegaPick.setText("0");
             holder.lblPropietarioPick.setText("--");
 //            holder.lblUbicacionPick.setText("--");
@@ -99,6 +101,10 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
 
             if (!BeListTareasHH.get(position).NombrePropietarioPicking.isEmpty()){
                 holder.lblPropietarioPick.setText(BeListTareasHH.get(position).NombrePropietarioPicking);
+            }
+
+            if (BeListTareasHH.get(position).IdPedidoEnc>0){
+                holder.lblIdPedidoEnc.setText(""+BeListTareasHH.get(position).IdPedidoEnc);
             }
 
 //            if (!BeListTareasHH.get(position).NombreUbicacionPicking.isEmpty()){
@@ -177,7 +183,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick, lblPrioridad;
+        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick, lblPrioridad, lblIdPedidoEnc;
     }
 
 }

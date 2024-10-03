@@ -99,10 +99,12 @@ public class frm_lista_packing extends PBase {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     selid = 0;
+                    selPedido=0;
                     Object lvObj = listView.getItemAtPosition(position);
                     clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
 
                     selid = sitem.IdPickingEnc;
+                    selPedido = sitem.IdPedidoEnc;
                     selidx = position;
                     adapterPicking.setSelectedIndex(position);
 
@@ -158,6 +160,7 @@ public class frm_lista_packing extends PBase {
 //                        vItem.Hora_ini=du.convierteHoraMostarhm(BePicking.Hora_ini);
 //                        vItem.Hora_fin=du.convierteHoraMostarhm(BePicking.Hora_fin);
                         vItem.Tipo_Preparacion=BePicking.Tipo_Preparacion;
+                        vItem.IdPedidoEnc = BePicking.IdPedidoEnc;
 
                         BeListTareasPicking.add(vItem);
 
@@ -272,10 +275,12 @@ public class frm_lista_packing extends PBase {
         try {
 
             gl.gIdPickingEnc = selid; gl.gVerifCascade =false;
+            gl.gIdPedidoEnc = selPedido;
 
             for (int i = 0; i <BeListTareasPicking.size(); i++) {
 
-                if (BeListTareasPicking.get(i).IdPickingEnc==gl.gIdPickingEnc) {
+                if (BeListTareasPicking.get(i).IdPickingEnc==gl.gIdPickingEnc &&
+                        BeListTareasPicking.get(i).IdPedidoEnc==gl.gIdPedidoEnc) {
 
                     tipoprep=BeListTareasPicking.get(i).Tipo_Preparacion;
 

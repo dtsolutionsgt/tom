@@ -30,7 +30,8 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public String ProductoUnidadMedida="";
     @Element(required=false) public String ProductoEstado="";
     @Element(required=false) public boolean EsConteo=false;
-
+    @Element(required=false) public int IdPedidoEnc;
+    @Element(required=false) public boolean Finalizado=false;
 
     public clsBeTrans_packing_enc() {
     }
@@ -39,7 +40,7 @@ public class clsBeTrans_packing_enc {
                                   int Idproductobodega,int Idproductoestado,int Idpresentacion,int Idunidadmedida,
                                   String Lote,String Fecha_vence,String Lic_plate,String No_linea,
                                   double Cantidad_bultos_packing,double Cantidad_camas_packing,int Idoperadorbodega,int Idempresaservicio,
-                                  String Referencia,String Fecha_packing) {
+                                  String Referencia,String Fecha_packing, int IdPedidoEnc, boolean Finalizado) {
 
         this.Idpackingenc=Idpackingenc;
         this.Idbodega=Idbodega;
@@ -59,7 +60,8 @@ public class clsBeTrans_packing_enc {
         this.Idempresaservicio=Idempresaservicio;
         this.Referencia=Referencia;
         this.Fecha_packing=Fecha_packing;
-
+        this.IdPedidoEnc = IdPedidoEnc;
+        this.Finalizado = Finalizado;
     }
 
 
@@ -167,6 +169,17 @@ public class clsBeTrans_packing_enc {
     public void setFecha_packing(String value) {
         Fecha_packing=value;
     }
-
+    public int getIdPedidoEnc() {
+        return IdPedidoEnc;
+    }
+    public void setIdPedidoEnc(int value) {
+        IdPedidoEnc=value;
+    }
+    public boolean getFinalizado() {
+        return Finalizado;
+    }
+    public void setIdPedidoEnc(boolean value) {
+        Finalizado=value;
+    }
 }
 
