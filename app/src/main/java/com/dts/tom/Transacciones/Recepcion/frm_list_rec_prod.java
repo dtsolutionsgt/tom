@@ -582,7 +582,7 @@ public class frm_list_rec_prod extends PBase {
                 //selitem = pListDetalleOC.items.get(position);
 
                 selitem  = stream(pListDetalleOC.items)
-                        .where(c -> c.No_Linea == sitem.No_Linea)
+                        .where(c -> c.No_Linea == sitem.No_Linea && c.Codigo_Producto.equals(sitem.Producto.Codigo))
                         .first();
 
                 selid = sitem.No_Linea;
@@ -611,7 +611,7 @@ public class frm_list_rec_prod extends PBase {
                 //selitem = pListDetalleOC.items.get(position);
 
                 selitem  = stream(pListDetalleOC.items)
-                        .where(c -> c.No_Linea == sitem.No_Linea)
+                        .where(c -> c.No_Linea == sitem.No_Linea && c.Codigo_Producto.equals(sitem.Producto.Codigo))
                         .first();
 
                 selid = sitem.No_Linea;
