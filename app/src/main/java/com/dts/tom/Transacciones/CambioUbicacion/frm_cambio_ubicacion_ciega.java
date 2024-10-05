@@ -88,6 +88,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private CheckBox chkExplosionar;
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
+    private TableRow tblLicenciaMixta;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -227,6 +228,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             reltop = findViewById(R.id.reltop);
             relForm = findViewById(R.id.relForm);
             relProductos = findViewById(R.id.relProductos);
+            tblLicenciaMixta = findViewById(R.id.tblLicenciaMixta);
 
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
@@ -234,6 +236,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
+            tblLicenciaMixta.setVisibility(View.GONE);
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -475,8 +478,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         spinlabel.setTextSize(18);
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                        cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
-                        cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;
+                        String estadoSeleccionado = cmbEstadoDestino.getSelectedItem().toString();
+
+                        for (clsBeProducto_estado item : productoEstadoDestinoList.items) {
+                            if (item.getNombre().equals(estadoSeleccionado)) {
+                                cvEstDestino = item.getIdEstado();
+                                cvUbicDestID = item.IdUbicacionDefecto;
+                                break; // Termina el bucle una vez encontrado
+                            }
+                        }
+
+/*                        cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
+                        cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;*/
 
                         if (cvUbicDestID!=0){
                             txtUbicDestino.setText(cvUbicDestID);
@@ -546,7 +559,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             public void onTextChanged(CharSequence termino, int i, int i1, int i2) {
                 if (LicenciasCompletas) {
                     if (txtLicPlate.getText().toString().isEmpty()) {
-                        relProductos.setVisibility(View.GONE);
+                        tblLicenciaMixta.setVisibility(View.GONE);
                         relForm.setVisibility(View.VISIBLE);
                         trCodigoProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setText("-");
@@ -2197,7 +2210,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUbicDestID = 0;
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
-                throw new Exception("La ubicación destino, no permite este tipo de producto!");
+                msgAskUbicacionNoValida("La ubicación destino, no permite este tipo de producto!");
             }else{
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
                 lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
@@ -2259,12 +2272,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
+                    if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
                         throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                     }
                 }else{
-                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea() && gl.Restringir_Areas_SAP){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if(gl.Interface_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea && gl.Restringir_Areas_SAP){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
                 }
 
@@ -2439,9 +2454,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (!CambioUbicExistencia && gl.pBeBodega.Control_Pallet_Mixto){
 
                     if (!pLicensePlate.isEmpty() && !pLicensePlate.equals("0") && !pLicensePlate.equals("1")) {
+                       //#CKFK20240913 Quité el .distinct en esta validación porque puede pasar que solo quede un producto
+                        // en la licencia mixta, pero al ser varios IdStock aplica
                         LicenciasCompletas = productoList.items.stream()
                                 .map(clsBeProducto::getCodigo)
-                                .distinct()
                                 .count() > 1;
                     } else {
                         msgbox("La licencia no es válida");
@@ -2471,7 +2487,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             stockResList.items.add(obj.Stock);
                         }
 
-                        relProductos.setVisibility(View.VISIBLE);
+                        tblLicenciaMixta.setVisibility(View.VISIBLE);
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
 
@@ -2504,7 +2520,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     progress.cancel();
                 } else {
 
-                    relProductos.setVisibility(View.GONE);
+                    tblLicenciaMixta.setVisibility(View.GONE);
                     relForm.setVisibility(View.VISIBLE);
                     trCodigoProducto.setVisibility(View.VISIBLE);
 
@@ -2530,6 +2546,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             AuxList = stream(productoList.items)
                                     .where(c -> c.Stock.IdUbicacion == cvUbicOrigID)
                                     .where(c -> c.Stock.IdPresentacion == gl.existencia.IdPresentacion)
+                                    .where(c -> c.Stock.IdProductoBodega == gl.existencia.IdProductoBodega)
                                     .toList();
                         } else {
                             AuxList = stream(productoList.items)
@@ -2756,7 +2773,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             resultado = (Boolean) xobj.getSingle("Aplica_Cambio_Estado_Ubic_HH_LicCompletaResult", boolean.class);
 
             if (resultado) {
-                relProductos.setVisibility(View.GONE);
+                tblLicenciaMixta.setVisibility(View.GONE);
                 relForm.setVisibility(View.VISIBLE);
                 trCodigoProducto.setVisibility(View.VISIBLE);
                 lblDescProducto.setText("-");
@@ -2778,6 +2795,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         }
     }
+
     private void processNuevoCorrelativoLP(){
 
         try {
@@ -3013,6 +3031,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 cvUbicDestID = 0;
+                lblUbicCompDestino.setText("");
+                txtUbicDestino.setText("");
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
 
@@ -3047,6 +3067,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (matcher.find()) {
                 jsUbic = matcher.group();
+                if (jsUbic != null){
+                    if (jsUbic.equals("0")){
+                        jsUbic = null;
+                    }
+                }
             }
 
             if (jsUbic != null){
@@ -3056,6 +3081,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }else{
 
                 cvUbicDestID = 0;
+                lblUbicCompDestino.setText("");
+                txtUbicDestino.setText("");
                 toast("No existen ubicaciones sugeridas");
                 progress.cancel();
 
@@ -3619,6 +3646,41 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    //#CKFK 20211215 Explosionar el producto de presentación a unidades
+    private void msgAskUbicacionNoValida(String msg){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                    lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+
+                    if(gl.modo_cambio==2 && !vProcesar){
+                        progress.cancel();
+                        cmbEstadoDestino.requestFocus();
+                    }else{
+                        datosOk();
+                    }
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
     private void msgAskImprimirEtiqueta(String msg){
 
         try{
@@ -4075,7 +4137,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             inicializaTarea(true);
         }
     }
-
 
     private void msgAskAplicar(String msg) {
 

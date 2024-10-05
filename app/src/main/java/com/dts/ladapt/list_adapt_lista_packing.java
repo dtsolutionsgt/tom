@@ -115,6 +115,7 @@ public class list_adapt_lista_packing extends BaseAdapter {
             holder.lbl3.setTypeface(null, Typeface.BOLD);
             convertView.setBackgroundColor(Color.parseColor("#FBE9E7"));
         } else {
+            holder.lbl3.setTypeface(null, Typeface.NORMAL);
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 

@@ -89,6 +89,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public String Bodega_Destino="";
     @Element(required=false) public int IdAcuerdoComercial = 0;
     @Element(required=false) public int IdMotivoDevolucion = 0;
+    @Element(required=false) public String Codigo_Empresa_ERP="";
 
     public clsBeTrans_pe_enc() {
     }
@@ -111,7 +112,7 @@ public class clsBeTrans_pe_enc {
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
                              int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
                              boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino,
-                             int IdAcuerdoComercial, int IdMotivoDevolucion) {
+                             int IdAcuerdoComercial, int IdMotivoDevolucion, String Codigo_Empresa_ERP) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -187,6 +188,7 @@ public class clsBeTrans_pe_enc {
         this.Bodega_Origen = Bodega_Destino;
         this.IdAcuerdoComercial = IdAcuerdoComercial;
         this.IdMotivoDevolucion = IdMotivoDevolucion;
+        this.Codigo_Empresa_ERP = Codigo_Empresa_ERP;
     }
 
 
@@ -645,4 +647,12 @@ public class clsBeTrans_pe_enc {
     public void setIdMotivoDevolucion(int value) {
         IdMotivoDevolucion=value;
     }
+
+    public String getCodigo_Empresa_ERP() {
+        return Codigo_Empresa_ERP;
+    }
+    public void setCodigo_Empresa_ERP(String value) {
+        Codigo_Empresa_ERP=value;
+    }
+
 }

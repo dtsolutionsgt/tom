@@ -33,7 +33,7 @@ public class PBase extends Activity {
     protected clsClasses clsCls = new clsClasses();
 
     protected int itemid,browse,mode;
-    protected int selid,selidx,deposito;
+    protected int selid,selidx,deposito,selPedido;
     protected long fecha;
     protected String s,ss ;
 

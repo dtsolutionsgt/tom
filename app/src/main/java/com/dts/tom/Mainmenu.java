@@ -457,6 +457,7 @@ public class Mainmenu extends PBase {
                 case 6:
                     //process_cambio_operador();break;
                     //#GT24042023: si app en 2do plano, no cerrar la sesión
+
                     if (!gl.marcaje_temporal){
                         Mainmenu.super.finish();
                     }else{

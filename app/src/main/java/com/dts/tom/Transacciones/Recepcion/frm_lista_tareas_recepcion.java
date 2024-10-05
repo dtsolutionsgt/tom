@@ -685,6 +685,7 @@ public class frm_lista_tareas_recepcion extends PBase {
             gl.gBeRecepcion = xobj.getresult(clsBeTrans_re_enc.class, "GetSingleRec");
             gl.IdPropietario = gl.gBeRecepcion.PropietarioBodega.getIdPropietario();
             gl.pTipoIngreso = gl.gBeRecepcion.OrdenCompraRec.OC.TipoIngreso;
+            gl.gMostrarCantidadEsperada = gl.gBeRecepcion.Mostrar_Cantidad_Esperada;
 
             txtTarea.setText("");
             startActivity(new Intent(this, frm_list_rec_prod.class));

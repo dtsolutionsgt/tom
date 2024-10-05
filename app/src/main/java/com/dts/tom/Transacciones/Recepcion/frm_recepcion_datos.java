@@ -3430,8 +3430,10 @@ public class frm_recepcion_datos extends PBase {
 
             String vFamilia = (BeProducto.Familia.Nombre.equals("")?"N/D":BeProducto.Familia.Nombre);
             String vIndiceRotacion = (BeProducto.Indice_Rotacion.Descripcion.equals("")?"N/D":BeProducto.Indice_Rotacion.Descripcion);
+            String vTipoProducto = (BeProducto.TipoProducto.NombreTipoProducto.equals("")?"N/D":BeProducto.TipoProducto.NombreTipoProducto);
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n F:" + vFamilia + " - IR: " + vIndiceRotacion);
+            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n IR: " + vIndiceRotacion + " - TP:" + vTipoProducto);
+
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             if (BeProducto.Control_vencimiento){
@@ -3827,23 +3829,23 @@ public class frm_recepcion_datos extends PBase {
                         cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(du.getFechaActual()));
                     }
 
-                    //#AT20240528 Si IdEstado_Defecto_Recepcion <> 0 se carga estado en el combo
-                    if (gl.gBeRecepcion.IdEstado_Defecto_Recepcion != 0) {
-
-                        int indice = LProductoEstado.items.stream()
-                                .filter(clsBeProducto_estado -> clsBeProducto_estado.getIdEstado() == gl.gBeRecepcion.getIdEstado_Defecto_Recepcion())
-                                .map(LProductoEstado.items::indexOf)
-                                .findFirst()
-                                .orElse(-1);
-
-                        if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indice);
-
-                    } else  {
-                        cmbEstadoProductoRec.setSelection(0);
-                    }
                 }
             }
 
+            //#AT20240528 Si IdEstado_Defecto_Recepcion <> 0 se carga estado en el combo
+            if (gl.gBeRecepcion.IdEstado_Defecto_Recepcion != 0) {
+
+                int indice = LProductoEstado.items.stream()
+                        .filter(clsBeProducto_estado -> clsBeProducto_estado.getIdEstado() == gl.gBeRecepcion.getIdEstado_Defecto_Recepcion())
+                        .map(LProductoEstado.items::indexOf)
+                        .findFirst()
+                        .orElse(-1);
+
+                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indice);
+
+            } else  {
+                cmbEstadoProductoRec.setSelection(0);
+            }
 
             if (!gl.gBeRecepcion.Muestra_precio){
                 txtCostoOC.setVisibility(View.GONE);

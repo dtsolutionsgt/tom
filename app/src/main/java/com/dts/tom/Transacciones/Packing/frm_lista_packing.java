@@ -98,19 +98,17 @@ public class frm_lista_packing extends PBase {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     selid = 0;
+                    selPedido=0;
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
 
-                    if (position > 0){
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+                    selid = sitem.IdPickingEnc;
+                    selPedido = sitem.IdPedidoEnc;
+                    selidx = position;
+                    adapterPicking.setSelectedIndex(position);
 
-                        selid = sitem.IdPickingEnc;
-                        selidx = position;
-                        adapterPicking.setSelectedIndex(position);
-
-                        procesar_registro();
-                    }
+                    procesar_registro();
                }
             });
 
@@ -148,10 +146,6 @@ public class frm_lista_packing extends PBase {
 
                 if (pListBeTareasPickingHH.items!=null){
 
-                    vItem = new clsBeTrans_picking_enc();
-
-                    BeListTareasPicking.add(vItem);
-
                     for (clsBeTrans_picking_enc BePicking:pListBeTareasPickingHH.items ){
 
                         vItem = new clsBeTrans_picking_enc();
@@ -166,6 +160,7 @@ public class frm_lista_packing extends PBase {
 //                        vItem.Hora_ini=du.convierteHoraMostarhm(BePicking.Hora_ini);
 //                        vItem.Hora_fin=du.convierteHoraMostarhm(BePicking.Hora_fin);
                         vItem.Tipo_Preparacion=BePicking.Tipo_Preparacion;
+                        vItem.IdPedidoEnc = BePicking.IdPedidoEnc;
 
                         BeListTareasPicking.add(vItem);
 
@@ -280,10 +275,12 @@ public class frm_lista_packing extends PBase {
         try {
 
             gl.gIdPickingEnc = selid; gl.gVerifCascade =false;
+            gl.gIdPedidoEnc = selPedido;
 
             for (int i = 0; i <BeListTareasPicking.size(); i++) {
 
-                if (BeListTareasPicking.get(i).IdPickingEnc==gl.gIdPickingEnc) {
+                if (BeListTareasPicking.get(i).IdPickingEnc==gl.gIdPickingEnc &&
+                        BeListTareasPicking.get(i).IdPedidoEnc==gl.gIdPedidoEnc) {
 
                     tipoprep=BeListTareasPicking.get(i).Tipo_Preparacion;
 

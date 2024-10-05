@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
@@ -218,6 +219,13 @@ public class frm_picking_datos extends PBase {
         MostrarBotones();
         Load();
 
+        //AT20220721 Si Permitir_Decimales = true  txtCantidadRec  cambia a decimal si no a entero
+        if (gl.Permitir_Decimales) {
+            txtCantidadPick.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        } else {
+            txtCantidadPick.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+
         //#EJC20210201: voice picking jajajaja :)
         //AT20220510 Si Notificacion_Voz es verdadero
         if (gl.Notificacion_Voz) {
@@ -312,6 +320,7 @@ public class frm_picking_datos extends PBase {
                 txtLicencia.setOnKeyListener((v, keyCode, event) -> {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         if (!txtLicencia.getText().toString().isEmpty()) {
+                            txtLicencia.setText(txtLicencia.getText().toString().toUpperCase());
                             //#AT20240514 Incio del proceso para el remplazo automático
                             String tmpLic = txtLicencia.getText().toString().replace("$", "");
 
@@ -345,7 +354,6 @@ public class frm_picking_datos extends PBase {
                 });
 
             }
-
 
             //GT06042022: no remover, hacen de pivote para retener el focus
             txtLicencia.setOnClickListener(view -> { });
@@ -763,7 +771,7 @@ public class frm_picking_datos extends PBase {
 
                         Escaneo_Pallet = true;
 
-                        pLP = txtLicencia.getText().toString().replace("$", "");
+                        pLP = txtLicencia.getText().toString().replace("$", "").toUpperCase();
 
                         if ( confirmar_codigo_en_picking ){
 

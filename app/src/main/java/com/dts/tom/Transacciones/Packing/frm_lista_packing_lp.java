@@ -79,14 +79,6 @@ public class frm_lista_packing_lp extends PBase {
                     Object lvObj = listView.getItemAtPosition(position);
 
                     sitem = (clsBeTrans_packing_lotes) lvObj;
-                    //gl.paBulto=sitem.lote;
-                    //gl.paEstado=sitem.estado;
-
-                    /*if (sitem.lote.isEmpty()) {
-                        msgbox("No se pueden adicionar productos sin licencia al empaque por tarima");
-                    } else {
-                        finish();
-                    }*/
 
                     showFormDialog();
                 }
@@ -116,7 +108,7 @@ public class frm_lista_packing_lp extends PBase {
         clsBeTrans_packing_lotes item;
         boolean flag;
         int pp;
-        String ft=txtFiltro.getText().toString().toUpperCase();
+        String ft=txtFiltro.getText().toString();
 
         try {
             items.clear();
@@ -127,28 +119,36 @@ public class frm_lista_packing_lp extends PBase {
                 if (ft.isEmpty()) {
                     flag=true;
                 } else {
-                    if (item.producto.toUpperCase().indexOf(ft)>=0 |
-                        item.licencia.toUpperCase().indexOf(ft)>=0) flag=true;
+                    if (item.codigo.equals(ft) || item.licencia.equals(ft)) {
+                        flag=true;
+                    }
                 }
                 if (flag) items.add(item);
             }
 
             if (items.size()>0) {
                 if (gl.filtroprod.isEmpty()) {
-                    Collections.sort(items,new OrdenarPorProducto());
+                    Collections.sort(items, new OrdenarPorProducto());
                 } else {
-                    Collections.sort(items,new OrdenarPorLote());
+                    Collections.sort(items, new OrdenarPorLote());
                 }
             }
 
             adapter=new list_adapt_packing_lp(this,items);
             listView.setAdapter(adapter);
+
         } catch (Exception e) {
             mu.msgbox("listItems : "+e.getMessage());
         }
 
-        txtFiltro.selectAll();
-        focusFiltro();
+        if (items.size() == 1)  {
+            Object lvObj = listView.getItemAtPosition(0);
+            sitem = (clsBeTrans_packing_lotes) lvObj;
+            showFormDialog();
+        } else {
+            txtFiltro.selectAll();
+            focusFiltro();
+        }
     }
     //endregion
 
@@ -193,6 +193,7 @@ public class frm_lista_packing_lp extends PBase {
         txtLicencia.setText(sitem.licencia);
         txtCantidad.setText("" + sitem.disp);
 
+        txtCantidad.setOnClickListener(view -> { });
         txtCantidad.setSelectAllOnFocus(true);
 
         builder.setView(dialogView)

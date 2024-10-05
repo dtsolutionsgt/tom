@@ -181,90 +181,103 @@
                     android:textSize="18sp" />
             </TableRow>
 
-            <RelativeLayout
-                android:id="@+id/relProductos"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:visibility="gone"
+            <TableRow
+                android:id="@+id/tblLicenciaMixta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 tools:visibility="gone">
 
 
-                <HorizontalScrollView
+                <RelativeLayout
+                    android:id="@+id/relProductos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="200dp"
+                    android:visibility="visible"
+                    tools:visibility="visible">
 
-                    <LinearLayout
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:background="@drawable/color_medium"
-                            android:orientation="horizontal">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/lblCodigoP"
-                                android:layout_width="120dp"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Código"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/color_medium"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/lblProducto"
-                                android:layout_width="200dp"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Nombre"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/lblCodigoP"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Código"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/lblCantidadG"
-                                android:layout_width="120dp"
-                                android:layout_height="match_parent"
-                                android:gravity="right|center_vertical"
-                                android:text="Cantidad"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/lblProducto"
+                                    android:layout_width="200dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Nombre"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/lblLote"
-                                android:layout_width="120dp"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Lote"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/lblCantidadG"
+                                    android:layout_width="120dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="right|center_vertical"
+                                    android:text="Cantidad"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/lblFechaVence"
-                                android:layout_width="120dp"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="Vence"
-                                android:textColor="#FFFFFF"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/lblLote"
+                                    android:layout_width="120dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Lote"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/lblFechaVence"
+                                    android:layout_width="120dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Vence"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <ListView
+                                android:id="@+id/listProductos"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#FFFFFF"
+                                android:fadeScrollbars="false"
+                                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                                android:scrollbarTrackVertical="@drawable/scrollbar_track"
+                                android:scrollbars="horizontal|vertical" />
+
                         </LinearLayout>
+                    </HorizontalScrollView>
+                </RelativeLayout>
 
-                        <ListView
-                            android:id="@+id/listProductos"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#FFFFFF"
-                            android:scrollbars="horizontal|vertical" />
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </RelativeLayout>
+            </TableRow>
 
             <RelativeLayout
                 android:id="@+id/relForm"
@@ -460,6 +473,7 @@
                             android:textSize="17sp" />
                     </TableRow>
                 </LinearLayout>
+
             </RelativeLayout>
 
             <TableRow

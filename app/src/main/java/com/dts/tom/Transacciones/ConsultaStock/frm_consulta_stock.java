@@ -917,7 +917,7 @@ public class frm_consulta_stock extends PBase {
 
                         ProgressDialog("Cargando existencias");
                         //Get_Stock_Por_Pallet_By_IdUbicacion_CI
-                        execws(2);
+                        execws(4);
                     }
                 } else {
 
