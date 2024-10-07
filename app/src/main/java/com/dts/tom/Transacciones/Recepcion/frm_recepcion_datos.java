@@ -6883,16 +6883,9 @@ public class frm_recepcion_datos extends PBase {
                             int vIdUbicacion = 0;
 
                             if (BeEstado.IdUbicacionBodegaDefecto>0){
-                                /*BeStockRecNuevaRec = BeStockRec;
-                                vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionBodegaDefecto;
                             }else if (BeEstado.IdUbicacionDefecto>0){
                                 BeStockRecNuevaRec = BeStockRec;
-                                /*vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionDefecto;
                             }else{
                                 if (BeEstado.Danado){
