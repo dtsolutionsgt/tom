@@ -72,6 +72,9 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.checkerframework.checker.units.qual.A;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
@@ -89,6 +92,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
     private TableRow tblLicenciaMixta;
+    private RecyclerView recyclerView;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -233,10 +237,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
 
-            listProductos = findViewById(R.id.listProductos);
+            //listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
             tblLicenciaMixta.setVisibility(View.GONE);
+
+            recyclerView = findViewById(R.id.recyclerViewProductos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -2478,7 +2485,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     if (ListaActualizada.size() > 0) {
                         adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
-                        listProductos.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);
 
                         stockResList.items = new ArrayList<>();
 

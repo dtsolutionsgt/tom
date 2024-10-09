@@ -179,11 +179,16 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <ListView
+                        <!--ListView
                             android:id="@+id/listProductos"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:scrollbars="horizontal|vertical" />
+                            android:scrollbars="horizontal|vertical" /-->
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerViewProductos"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
 
                     </LinearLayout>
                 </HorizontalScrollView>
