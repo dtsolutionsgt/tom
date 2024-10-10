@@ -2278,12 +2278,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea ){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
                 }else{
-                    if(gl.Interface_SAP){
-                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea && gl.Restringir_Areas_SAP){
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea){
                             throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                         }
                     }
