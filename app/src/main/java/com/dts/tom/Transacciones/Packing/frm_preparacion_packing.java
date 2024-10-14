@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_enc;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_encList;
@@ -25,10 +28,14 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.ladapt.list_adapt_lista_packing;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.zebra.sdk.comm.BluetoothConnection;
+import com.zebra.sdk.printer.ZebraPrinter;
+import com.zebra.sdk.printer.ZebraPrinterFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 
 import static br.com.zbra.androidlinq.Linq.stream;
@@ -39,6 +46,7 @@ public class frm_preparacion_packing extends PBase {
     private EditText txtLP,txtLinea;
     private TextView lblProc,lblPend, txtLicenciaPacking;
     private ProgressBar pbar;
+    private ImageView btnImprimir;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -55,7 +63,7 @@ public class frm_preparacion_packing extends PBase {
     private ObjectAnimator anim;
     private ProgressDialog progress;
 
-    private int idPickingEnc,selidx,pendientes;
+    private int idPickingEnc,selidx,pendientes, IdPedidoEnc;
     private String sellp=".";
     private boolean idle=true;
     private clsBeResolucion_lp_operador nBeResolucion = null;
@@ -76,9 +84,12 @@ public class frm_preparacion_packing extends PBase {
 
         txtLicenciaPacking = findViewById(R.id.txtLicenciaPacking);
 
+        btnImprimir = findViewById(R.id.btnImprimir);
+
         pbar = findViewById(R.id.pgrtareas2);
 
         idPickingEnc=gl.gIdPickingEnc;
+        IdPedidoEnc = gl.gIdPedidoEnc;
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
         ProgressDialog("Cargando forma");
@@ -191,6 +202,10 @@ public class frm_preparacion_packing extends PBase {
                 return false;
             });
 
+            btnImprimir.setOnClickListener(view -> {
+                msgImprimir("¿Imprimir licencia?");
+            });
+
         } catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -277,22 +292,32 @@ public class frm_preparacion_packing extends PBase {
 
         progress.cancel();
 
-        lblProc.setText("Procesado : "+(items.size()));
         try {
             pendientes = 0;
             for (clsBeTrans_picking_ubic obj : pick.items) {
 
                 double cant = 0;
+                String vLotePacking = "";
+
                 for (clsBeTrans_packing_enc packing: items) {
-                    if (obj.Lic_plate.equals(packing.Lic_plate)) {
+
+                    vLotePacking = (packing.Lote==null?"":packing.Lote);
+
+                    if (obj.Lic_plate.equals(packing.Lic_plate) &&
+                        obj.Fecha_Vence.equals(packing.Fecha_vence) &&
+                            obj.IdProductoBodega == packing.getIdproductobodega()&&
+                            (obj.Lote ==null || obj.Lote.equals(vLotePacking)) ) {
+
                         cant += packing.Cantidad_bultos_packing;
                     }
                 }
 
-                if (obj.Cantidad_Recibida != cant) {
+                if ((obj.Cantidad_Verificada - obj.getCantidad_despachada()) != cant) {
                     pendientes++;
                 }
             }
+
+            lblProc.setText("Procesado : "+(pick.items.size() - pendientes));
         } catch (Exception e) {
             String ss=e.getMessage();
             pendientes=0;
@@ -386,11 +411,12 @@ public class frm_preparacion_packing extends PBase {
         try {
 
             if (items.size() > 0) {
+
                 Optional<clsBeTrans_packing_enc> itemOpt = items.stream()
                 .filter(o -> o.getIdproductobodega() == gl.auxPacking.IdProductoBodega)
                 .filter(o -> o.getFecha_vence().equals(gl.auxPacking.fecha))
                 .filter(o -> o.getLic_plate().equals(gl.auxPacking.licencia))
-                .filter(o -> o.getLote().equals(gl.auxPacking.lote))
+                .filter(o -> o.getLote() == null || o.getLote().equals(gl.auxPacking.lote))
                 .filter(o -> o.getNo_linea().equals(txtLicenciaPacking.getText().toString()))
                 .findFirst();
 
@@ -438,6 +464,7 @@ public class frm_preparacion_packing extends PBase {
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
             item.ProductoEstado=p.ProductoEstado;
+            item.IdPedidoEnc = p.getIdPedidoEnc();
 
             itemList = new clsBeTrans_packing_encList();
             itemList.items = new ArrayList<>();
@@ -506,6 +533,10 @@ public class frm_preparacion_packing extends PBase {
         }
 
         try {
+            if (pendientes>0){
+                msgbox("Tiene productos pendientes de empacar, no se puede finalizar");return;
+            }
+
             progress.setMessage("Finalizando tarea ...");
             progress.show();
             idle=false;
@@ -626,15 +657,17 @@ public class frm_preparacion_packing extends PBase {
         clsBeTrans_packing_lotes item;
         try {
             gl.packlotes.clear();
-            gl.filtroprod=licencia;
+            gl.filtroprod=licencia.replace("$", "");
 
             if (pick.items.size() > 0) {
                 for (clsBeTrans_picking_ubic obj: pick.items) {
                     item = new clsBeTrans_packing_lotes();
 
+                    obj.Lote = (obj.getLote()==null?"":obj.getLote());
+
                     item.codigo = obj.getCodigoProducto();
                     item.producto = obj.getNombreProducto();
-                    item.lote = obj.getLote();
+                    item.lote = obj.Lote;
                     item.licencia = obj.getLic_plate();
                     item.IdProductoBodega = obj.IdProductoBodega;
                     item.cant = obj.getCantidad_Recibida();
@@ -643,17 +676,17 @@ public class frm_preparacion_packing extends PBase {
                     if (items.size() > 0) {
                         double totalCantidad = 0;
                         totalCantidad = items.stream()
-                        .filter(p -> p.getLote().equals(obj.Lote))
-                        .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
-                        .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
-                        .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
-                        .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
-                        .sum();
+                                .filter(p -> p.getLote() == null || p.getLote().equals(obj.Lote)) // Maneja el caso cuando obj.Lote es null
+                                .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
+                                .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
+                                .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
+                                .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
+                                .sum();
 
-                        item.disp = (int) (obj.getCantidad_Recibida() - totalCantidad);
+                        item.disp = (int) (obj.getCantidad_Verificada()-obj.getCantidad_despachada() - totalCantidad);
 
                     } else {
-                        item.disp = (int) obj.getCantidad_Recibida();
+                        item.disp = (int) (obj.getCantidad_Verificada() - obj.getCantidad_despachada());
                     }
 
                     if (item.disp > 0) {
@@ -753,10 +786,12 @@ public class frm_preparacion_packing extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
-                        callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc);
+                        callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc,
+                                "pIdPedidoEnc",IdPedidoEnc);
                         break;
                     case 2:
-                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc);
+                        callMethod("Get_All_Packing_By_IdPicking","IdPicking",idPickingEnc,
+                                "IdPedidoEnc",IdPedidoEnc);
                         break;
                     case 3:
                         int idresolucion = 0;
@@ -773,7 +808,8 @@ public class frm_preparacion_packing extends PBase {
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 5:
-                        callMethod("Actualizar_Estado_Packing", "pIdPicking", idPickingEnc);
+                        callMethod("Actualizar_Estado_Packing", "pIdPicking", idPickingEnc,
+                                "pIdPedidoEnc", gl.gIdPedidoEnc);
                         break;
                     case 6:
                         callMethod("Eliminar_Linea_Packing", "pIdPackingEnc", selitem.Idpackingenc);
@@ -783,6 +819,7 @@ public class frm_preparacion_packing extends PBase {
                 anim.cancel();
 
             } catch (Exception e) {
+                idle = true;
                 anim.cancel();
                 error=e.getMessage();errorflag =true;msgbox(error);
             }
@@ -1028,7 +1065,179 @@ public class frm_preparacion_packing extends PBase {
 
     }
 
+    private void msgImprimir(String msg) {
+        try {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg + "\n\nImpresora: " + gl.MacPrinter);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setCancelable(false);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+
+                    Imprimir_Licencia();
+                    progress.cancel();
+
+                }, 300);
+
+
+            });
+
+            dialog.setNegativeButton("No", (dialog12, which) -> {});
+            dialog.show();
+
+        } catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+
+    private void Imprimir_Licencia(){
+        try{
+
+            if (!txtLicenciaPacking.getText().toString().trim().isEmpty()){
+                pNumeroLP = txtLicenciaPacking.getText().toString().trim().replace("$","");
+            }
+
+            BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
+
+            if (!printerIns.isConnected()){
+                printerIns.open();
+            }
+
+            if (printerIns.isConnected()){
+
+                ZebraPrinter zPrinterIns = ZebraPrinterFactory.getInstance(printerIns);
+
+                String zpl="";
+
+                if (!pNumeroLP.isEmpty()) {
+
+                    if (gl.pBeBodega.IdTipoEtiquetaLicencia == 1) {
+
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                        "",
+                                        "$" + pNumeroLP,
+                                        "");
+
+                    } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW600\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,80^A0I,20,14^FH^FD%5$s^FS\\n" +
+                                        "^FO2,110^GB670,0,5^FS \n" +
+                                        "^FT440,130^A0I,28,30^FH^FD%1$s^FS\n" +
+                                        "^FT560,130^A0I,26,30^FH^FDBodega:^FS\n" +
+                                        "^FT440,165^A0I,28,30^FH^FD%2$s^FS\n" +
+                                        "^FT560,165^A0I,26,30^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,220^A0I,70,70^FH^FD%3$s^FS\n" +
+                                        "^BY3,3,160^FT550,300^BCI,,N,N\n" +
+                                        "^FD%3$s^FS\n" +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT560,480^A0I,35,30^FH^FD%4$s^FS\n" +
+                                        "^FO2,520^GB670,14,14^FS\n" +
+                                        "^FT560,540^A0I,25,24^FH^FDTOMWMS  No. Licencia^FS\n" +
+                                        "^XZ", gl.CodigoBodega + "-" + gl.gNomBodega,
+                                        gl.gNomEmpresa,
+                                        "$" + pNumeroLP,
+                                        "",
+                                        "");
+
+                    } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 4) {
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW812 \n" +
+                                        "^LL0630 \n" +
+                                        "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                        "",
+                                        "$" + pNumeroLP,
+                                        "");
+
+                    }else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 5) {
+
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW700\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB700,5,5^FS\n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS\n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS\n" +
+                                        "^FT700,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT290,135^A0I,85,54^FH^FDV.%7$s^FS\n" +
+                                        "^FT290,225^A0I,85,49^FH^FDL.%6$s^FS\n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT700,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT700,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                        "^FO2,340^GB700,14,14^FS\n" +
+                                        "^BY3,3,160^FT700,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                        "",
+                                        "$" + pNumeroLP,
+                                        "",
+                                        "");
+
+                    }
+
+                    if (!zpl.isEmpty()) {
+                        zPrinterIns.sendCommand(zpl);
+                    } else {
+                        msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
+                    }
+                }
+
+            }else{
+                mu.msgbox("No se pudo obtener conexión con la impresora");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            //#EJC20210126
+            if (e.getMessage().contains("Could not connect to device:")){
+                mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
+            }else{
+                mu.msgbox("Imprimir_licencia: "+e.getMessage());
+            }
+        }
+    }
     //endregion
 
     //region Activity Events

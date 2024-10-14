@@ -1,14 +1,14 @@
 package com.dts.tom.Transacciones.ReubicarStockRes;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -16,13 +16,16 @@ import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega_ubicacion;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
+import com.dts.ladapt.list_adapt_lista_productos_recubic;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
-import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 
 import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.selitem;
+import static com.dts.tom.Transacciones.ReubicarStockRes.frm_lista_stock_res.lista;
 
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class frm_datos_stock_res extends PBase {
 
@@ -32,12 +35,16 @@ public class frm_datos_stock_res extends PBase {
     private TextView lblTituloForma, lblNomDestino, lbCant, lblCantidad,
                      txtUnidadMedida, txtPresentacion, txtPropietario, txtLote, txtVence, txtEstado, txtDescProd;
     private EditText txtUbicOrigen, txtLicensePlate, txtCodigoPrd, txtCantidad, txtUbicDestino;
-    private TableRow trDestino, trPresentacion, trLote, trVence, trProducto;
+    private TableRow trDestino, trPresentacion, trLote, trVence, trProducto, trCodigo, trEstado, trCantidad, tblLicenciaMixta;
+    private ListView listProductos;
+    private RecyclerView recyclerView;
 
     private int IdUbicacion = 0;
     private final int IdUbicacionDest = 0;
     private int CambioUbicRealizado = 0;
     private boolean UbicValida = false;
+    private list_adapt_lista_productos_recubic adapter;
+    private ArrayList<clsBeVW_stock_res> filtrada = new ArrayList<>();
 
     private clsBeBodega_ubicacion BeUbic = new clsBeBodega_ubicacion();
 
@@ -74,10 +81,22 @@ public class frm_datos_stock_res extends PBase {
         trLote = findViewById(R.id.trLote);
         trVence = findViewById(R.id.trVence);
         trProducto = findViewById(R.id.trProducto);
+        trCodigo = findViewById(R.id.trCodigo);
+        trEstado = findViewById(R.id.trEstado);
+        trCantidad = findViewById(R.id.trCantidad);
+        tblLicenciaMixta = findViewById(R.id.tblLicenciaMixta);
+
+        recyclerView = findViewById(R.id.recyclerViewProductos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         UbicValida = false;
 
-        Load();
+        if (gl.pBeBodega.Control_Pallet_Mixto) {
+            LoadMixto();
+        } else {
+            Load();
+        }
+
         setHandlers();
     }
 
@@ -102,60 +121,51 @@ public class frm_datos_stock_res extends PBase {
                 }
             });
 
-            txtUbicOrigen.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    try {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            txtUbicOrigen.setOnKeyListener((v, keyCode, event) -> {
+                try {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                            switch (keyCode) {
+                        switch (keyCode) {
 
-                                case KeyEvent.KEYCODE_ENTER:
-                                    ValidaUbicacionOrigen();
-                            }
+                            case KeyEvent.KEYCODE_ENTER:
+                                ValidaUbicacionOrigen();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                return false;
             });
 
-            txtLicensePlate.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    try {
-                        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                            ValidaLicencia();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            txtLicensePlate.setOnKeyListener((v, keyCode, event) -> {
+                try {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        ValidaLicencia();
                     }
-                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                return false;
             });
 
-            txtCodigoPrd.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    try {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            txtCodigoPrd.setOnKeyListener((v, keyCode, event) -> {
+                try {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                            switch (keyCode) {
+                        switch (keyCode) {
 
-                                case KeyEvent.KEYCODE_ENTER:
-                                    ValidaCodigoPrd();
-                            }
+                            case KeyEvent.KEYCODE_ENTER:
+                                ValidaCodigoPrd();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                return false;
             });
 
-            txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
-            txtCantidad.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+            txtUbicDestino.setOnClickListener(v -> { });
+            txtCantidad.setOnClickListener(v -> { });
 
         } catch (Exception e) {
             mu.msgbox("setHandlers: "+e.getMessage());
@@ -168,6 +178,7 @@ public class frm_datos_stock_res extends PBase {
             txtUbicOrigen.setHint(""+selitem.IdUbicacion);
             txtLicensePlate.setHint(selitem.Lic_plate);
             txtCodigoPrd.setHint(selitem.Codigo_Producto);
+            tblLicenciaMixta.setVisibility(View.GONE);
 
             if (selitem.IdPresentacion > 0) {
                 lblCantidad.setText("Cantidad ("+selitem.Nombre_Presentacion+"): ");
@@ -205,6 +216,32 @@ public class frm_datos_stock_res extends PBase {
 
         } catch (Exception e) {
             mu.msgbox("Load: "+e.getMessage());
+        }
+    }
+
+    private void LoadMixto() {
+        try {
+            trCodigo.setVisibility(View.GONE);
+            trLote.setVisibility(View.GONE);
+            trVence.setVisibility(View.GONE);
+            trEstado.setVisibility(View.GONE);
+            trCantidad.setVisibility(View.GONE);
+            trProducto.setVisibility(View.GONE);
+
+            lblTituloForma.setText(selitem.Ubicacion_Nombre);
+            txtUbicOrigen.setHint(""+selitem.IdUbicacion);
+            txtLicensePlate.setHint(selitem.Lic_plate);
+            txtPropietario.setText(selitem.Propietario);
+
+            filtrada = lista.items.stream()
+                    .filter(item -> selitem.Lic_plate.equals(item.Lic_plate) && item.IdUbicacion == selitem.IdUbicacion) // Filtra por Lic_plate e IdUbicacion
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            adapter = new list_adapt_lista_productos_recubic(getApplicationContext(), filtrada);
+            recyclerView.setAdapter(adapter);
+
+        } catch (Exception e) {
+            mu.msgbox("LoadMixto: "+e.getMessage());
         }
     }
 
@@ -267,7 +304,12 @@ public class frm_datos_stock_res extends PBase {
                     mu.msgbox("La licencia ingresada " + Lic + " no coincide con: " + selitem.Lic_plate);
                     Lic= "";
                 } else {
-                    setCodigoProd();
+                    if (gl.pBeBodega.Control_Pallet_Mixto) {
+                        toast("Licencia válida");
+                        txtUbicDestino.requestFocus();
+                    } else {
+                        setCodigoProd();
+                    }
                 }
             } else {
                 txtLicensePlate.requestFocus();
@@ -355,6 +397,22 @@ public class frm_datos_stock_res extends PBase {
         }
     }
 
+    private void processActualizaUbicPalletMixto() {
+        try {
+
+            CambioUbicRealizado = (Integer) xobj.getSingle("Actualizar_Ubicaciones_Reservadas_Pallet_MixtoResult",int.class);
+
+            if (CambioUbicRealizado > 0) {
+                msgExito("Cambio aplicado correctamente.");
+            } else {
+                msgbox("No se pudo completar el cambio.");
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("processActualizaUbic: "+e.getMessage());
+        }
+    }
+
     private boolean ValidaDatos() {
         boolean permite = true;
 
@@ -401,6 +459,39 @@ public class frm_datos_stock_res extends PBase {
         return permite;
     }
 
+    private boolean ValidaDatosPalletMixto() {
+        boolean permite = true;
+
+        try {
+            if (txtUbicOrigen.getText().toString().isEmpty()) {
+                mu.msgbox("Ingrese ubicación de origen.");
+                return false;
+            } else if (Integer.valueOf(txtUbicOrigen.getText().toString()) != selitem.IdUbicacion) {
+                mu.msgbox("La ubicación origen no coincide.");
+                return false;
+            }
+
+            if (txtLicensePlate.getText().toString().isEmpty()) {
+                mu.msgbox("Ingrese licencia.");
+                return false;
+            } else if (!txtLicensePlate.getText().toString().replace("$","").equals(selitem.Lic_plate)) {
+                mu.msgbox("La licencia no coincide.");
+                return false;
+            }
+
+            if (txtUbicDestino.getText().toString().isEmpty() ) {
+                mu.msgbox("Ingrese ubicación destino.");
+                return false;
+            }
+
+        } catch (Exception e) {
+            mu.msgbox("ValidaDatos: "+e.getMessage());
+            return false;
+        }
+
+        return permite;
+    }
+
     public void BotonAplicaCambio(View view) {
         try {
 
@@ -421,11 +512,15 @@ public class frm_datos_stock_res extends PBase {
 
     private void ActualizaUbicacion() {
         try {
-
-            if (ValidaDatos()) {
-                execws(2);
+            if (gl.pBeBodega.Control_Pallet_Mixto) {
+                if (ValidaDatosPalletMixto()) {
+                    execws(3);
+                }
+            } else {
+                if (ValidaDatos()) {
+                    execws(2);
+                }
             }
-
         } catch (Exception e) {
             mu.msgbox("ActualizaUbicacion: "+e.getMessage());
         }
@@ -456,6 +551,14 @@ public class frm_datos_stock_res extends PBase {
                                          "pIdUbicacion",IdUbicacion,
                                          "pIdOperador", gl.IdOperador);
                         break;
+
+                    case 3:
+                        callMethod("Actualizar_Ubicaciones_Reservadas_Pallet_Mixto",
+                                "pLista", filtrada,
+                                "pIdBodega", gl.IdBodega,
+                                "pIdUbicacion",IdUbicacion,
+                                "pIdOperador", gl.IdOperador);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -476,6 +579,10 @@ public class frm_datos_stock_res extends PBase {
                 case 2:
                     processActualizaUbic();
                     break;
+                case 3:
+                    processActualizaUbicPalletMixto();
+                    break;
+
             }
 
         } catch (Exception e) {
@@ -498,6 +605,7 @@ public class frm_datos_stock_res extends PBase {
 
     }
 
+
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
@@ -505,6 +613,11 @@ public class frm_datos_stock_res extends PBase {
 
     public void Regresar(View view) {
         super.finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

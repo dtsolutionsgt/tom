@@ -79,14 +79,6 @@ public class frm_lista_packing_lp extends PBase {
                     Object lvObj = listView.getItemAtPosition(position);
 
                     sitem = (clsBeTrans_packing_lotes) lvObj;
-                    //gl.paBulto=sitem.lote;
-                    //gl.paEstado=sitem.estado;
-
-                    /*if (sitem.lote.isEmpty()) {
-                        msgbox("No se pueden adicionar productos sin licencia al empaque por tarima");
-                    } else {
-                        finish();
-                    }*/
 
                     showFormDialog();
                 }
@@ -116,7 +108,7 @@ public class frm_lista_packing_lp extends PBase {
         clsBeTrans_packing_lotes item;
         boolean flag;
         int pp;
-        String ft=txtFiltro.getText().toString().toUpperCase();
+        String ft=txtFiltro.getText().toString();
 
         try {
             items.clear();
@@ -127,8 +119,9 @@ public class frm_lista_packing_lp extends PBase {
                 if (ft.isEmpty()) {
                     flag=true;
                 } else {
-                    if (item.producto.toUpperCase().indexOf(ft)>=0 |
-                        item.licencia.toUpperCase().indexOf(ft)>=0) flag=true;
+                    if (item.codigo.equals(ft) || item.licencia.equals(ft)) {
+                        flag=true;
+                    }
                 }
                 if (flag) items.add(item);
             }

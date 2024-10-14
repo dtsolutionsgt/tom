@@ -72,6 +72,9 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.checkerframework.checker.units.qual.A;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
@@ -89,6 +92,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
     private TableRow tblLicenciaMixta;
+    private RecyclerView recyclerView;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -233,10 +237,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
 
-            listProductos = findViewById(R.id.listProductos);
+            //listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
             tblLicenciaMixta.setVisibility(View.GONE);
+
+            recyclerView = findViewById(R.id.recyclerViewProductos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -478,8 +485,18 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         spinlabel.setTextSize(18);
                         spinlabel.setTypeface(spinlabel.getTypeface(), Typeface.BOLD);
 
-                        cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
-                        cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;
+                        String estadoSeleccionado = cmbEstadoDestino.getSelectedItem().toString();
+
+                        for (clsBeProducto_estado item : productoEstadoDestinoList.items) {
+                            if (item.getNombre().equals(estadoSeleccionado)) {
+                                cvEstDestino = item.getIdEstado();
+                                cvUbicDestID = item.IdUbicacionDefecto;
+                                break; // Termina el bucle una vez encontrado
+                            }
+                        }
+
+/*                        cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
+                        cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;*/
 
                         if (cvUbicDestID!=0){
                             txtUbicDestino.setText(cvUbicDestID);
@@ -2199,7 +2216,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUbicDestID = 0;
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
-                throw new Exception("La ubicación destino, no permite este tipo de producto!");
+                msgAskUbicacionNoValida("La ubicación destino, no permite este tipo de producto!");
             }else{
                 cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
                 lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
@@ -2261,12 +2278,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.getIdArea()!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea ){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
                 }else{
-                    if (bodega_ubicacion_destino.getIdArea()!=bodega_ubicacion_origen.getIdArea() && gl.Restringir_Areas_SAP){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
                 }
 
@@ -2466,7 +2487,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     if (ListaActualizada.size() > 0) {
                         adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
-                        listProductos.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);
 
                         stockResList.items = new ArrayList<>();
 
@@ -2782,6 +2803,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         }
     }
+
     private void processNuevoCorrelativoLP(){
 
         try {
@@ -3632,6 +3654,41 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         }
     }
 
+    //#CKFK 20211215 Explosionar el producto de presentación a unidades
+    private void msgAskUbicacionNoValida(String msg){
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage( msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.cambioubic);
+
+            dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                    lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
+
+                    if(gl.modo_cambio==2 && !vProcesar){
+                        progress.cancel();
+                        cmbEstadoDestino.requestFocus();
+                    }else{
+                        datosOk();
+                    }
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+    }
+
     private void msgAskImprimirEtiqueta(String msg){
 
         try{
@@ -4088,7 +4145,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             inicializaTarea(true);
         }
     }
-
 
     private void msgAskAplicar(String msg) {
 

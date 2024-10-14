@@ -134,6 +134,7 @@ public class appGlobals extends Application {
 
     //Variables para picking
     public int gIdPickingEnc = 0;
+    public int gIdPedidoEnc = 0;
     public String gReferencia = "";
     public boolean asignar_operador_linea_picking = false;
 
@@ -221,7 +222,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.0.8";
+    public final String version="6.1.6";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking

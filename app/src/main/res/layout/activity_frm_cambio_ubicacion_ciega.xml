@@ -185,8 +185,6 @@
                 android:id="@+id/tblLicenciaMixta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 tools:visibility="gone">
 
 
@@ -263,7 +261,7 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
 
-                            <ListView
+                            <!--ListView
                                 android:id="@+id/listProductos"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -271,7 +269,12 @@
                                 android:fadeScrollbars="false"
                                 android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
                                 android:scrollbarTrackVertical="@drawable/scrollbar_track"
-                                android:scrollbars="horizontal|vertical" />
+                                android:scrollbars="horizontal|vertical" /-->
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerViewProductos"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
 
                         </LinearLayout>
                     </HorizontalScrollView>

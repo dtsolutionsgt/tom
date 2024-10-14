@@ -3829,23 +3829,23 @@ public class frm_recepcion_datos extends PBase {
                         cmbVenceRec.setText(du.convierteFechaMostrarDiagonal(du.getFechaActual()));
                     }
 
-                    //#AT20240528 Si IdEstado_Defecto_Recepcion <> 0 se carga estado en el combo
-                    if (gl.gBeRecepcion.IdEstado_Defecto_Recepcion != 0) {
-
-                        int indice = LProductoEstado.items.stream()
-                                .filter(clsBeProducto_estado -> clsBeProducto_estado.getIdEstado() == gl.gBeRecepcion.getIdEstado_Defecto_Recepcion())
-                                .map(LProductoEstado.items::indexOf)
-                                .findFirst()
-                                .orElse(-1);
-
-                        if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indice);
-
-                    } else  {
-                        cmbEstadoProductoRec.setSelection(0);
-                    }
                 }
             }
 
+            //#AT20240528 Si IdEstado_Defecto_Recepcion <> 0 se carga estado en el combo
+            if (gl.gBeRecepcion.IdEstado_Defecto_Recepcion != 0) {
+
+                int indice = LProductoEstado.items.stream()
+                        .filter(clsBeProducto_estado -> clsBeProducto_estado.getIdEstado() == gl.gBeRecepcion.getIdEstado_Defecto_Recepcion())
+                        .map(LProductoEstado.items::indexOf)
+                        .findFirst()
+                        .orElse(-1);
+
+                if (EstadoList.size()>0) cmbEstadoProductoRec.setSelection(indice);
+
+            } else  {
+                cmbEstadoProductoRec.setSelection(0);
+            }
 
             if (!gl.gBeRecepcion.Muestra_precio){
                 txtCostoOC.setVisibility(View.GONE);
@@ -6883,16 +6883,9 @@ public class frm_recepcion_datos extends PBase {
                             int vIdUbicacion = 0;
 
                             if (BeEstado.IdUbicacionBodegaDefecto>0){
-                                /*BeStockRecNuevaRec = BeStockRec;
-                                vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionBodegaDefecto;
                             }else if (BeEstado.IdUbicacionDefecto>0){
                                 BeStockRecNuevaRec = BeStockRec;
-                                /*vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionDefecto;
                             }else{
                                 if (BeEstado.Danado){
@@ -7681,6 +7674,7 @@ public class frm_recepcion_datos extends PBase {
                                 gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+                                gl.gBeRecepcion.Detalle.items.get(0).Host = gl.deviceId;
                             }
 
                             callMethod("Guardar_Recepcion_Sin_Presentacion",
@@ -7698,6 +7692,11 @@ public class frm_recepcion_datos extends PBase {
 
                         }else{
                             if (gl.gBeRecepcion.Detalle.items.size()>1){
+
+                                for (int i = 0; i < gl.gBeRecepcion.Detalle.items.size(); i++) {
+                                    gl.gBeRecepcion.Detalle.items.get(i).Host = gl.deviceId;
+                                }
+
                                 callMethod("Guardar_Recepcion",
                                         "pRecEnc", gl.gBeRecepcion,
                                               "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec.OC,
@@ -7711,6 +7710,9 @@ public class frm_recepcion_datos extends PBase {
                                               "pIdResolucionLp", gl.IdResolucionLpOperador,
                                               "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
                             }else{
+
+                                BeTransReDet.Host = gl.deviceId;
+
                                 callMethod("Guardar_Recepcion_S",
                                         "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
                                         "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,

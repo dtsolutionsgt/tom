@@ -30,6 +30,7 @@ import com.dts.base.WebService;
 import com.dts.base.XMLObject;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_PresentacionList;
+import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagen;
 import com.dts.classes.Mantenimientos.Producto.Producto_imagen.clsBeProducto_imagenList;
@@ -1559,9 +1560,21 @@ public class frm_picking_datos extends PBase {
 
             if (gBePickingUbic.IdProductoEstado>0){
                 if (LProductoEstadoIngreso!=null){
-                    List Aux = stream(LProductoEstadoIngreso.items).select(c->c.IdEstado).toList();
+                    /*List Aux = stream(LProductoEstadoIngreso.items).select(c->c.IdEstado).toList();
                     int inx= Aux.indexOf(gBePickingUbic.IdProductoEstado);
-                    cmbEstado.setSelection(inx);
+                    cmbEstado.setSelection(inx);*/
+
+                    Spinner cmbEstado = findViewById(R.id.cmbEstado);
+                    ArrayAdapter<String> adapter = (ArrayAdapter<String>) cmbEstado.getAdapter();
+
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        String item = adapter.getItem(i);
+                        if (item.equals(gBePickingUbic.ProductoEstado)){
+                            cmbEstado.setSelection(i);
+                            break;
+                        }
+                        Log.d("SpinnerItem", "Item en la posición " + i + ": " + item);
+                    }
                 }
             }
 
@@ -2278,7 +2291,8 @@ public class frm_picking_datos extends PBase {
                                          "oBeTrans_picking_ubic",gBePickingUbic,
                                          "BeStockRes",BeStockRes,
                                          "IdBodega",gl.IdBodega,
-                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")));
+                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                         "host", gl.deviceId);
                        /* callMethod("Actualizar_Picking_From_HH",
                                 "oBeTrans_picking_ubic",gBePickingUbic,
                                 "IdBodega",gl.IdBodega,
@@ -2305,7 +2319,8 @@ public class frm_picking_datos extends PBase {
                                 "ReemplazoLP",ReemplazoLP,
                                 "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
-                                "BeStockPallet",BeStockPallet);
+                                "BeStockPallet",BeStockPallet,
+                                "host", gl.deviceId);
                         break;
                     case 10:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
