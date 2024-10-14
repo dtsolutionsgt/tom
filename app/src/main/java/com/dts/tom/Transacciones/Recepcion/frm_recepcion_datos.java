@@ -7674,6 +7674,7 @@ public class frm_recepcion_datos extends PBase {
                                 gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+                                gl.gBeRecepcion.Detalle.items.get(0).Host = gl.deviceId;
                             }
 
                             callMethod("Guardar_Recepcion_Sin_Presentacion",
@@ -7691,6 +7692,11 @@ public class frm_recepcion_datos extends PBase {
 
                         }else{
                             if (gl.gBeRecepcion.Detalle.items.size()>1){
+
+                                for (int i = 0; i < gl.gBeRecepcion.Detalle.items.size(); i++) {
+                                    gl.gBeRecepcion.Detalle.items.get(i).Host = gl.deviceId;
+                                }
+
                                 callMethod("Guardar_Recepcion",
                                         "pRecEnc", gl.gBeRecepcion,
                                               "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec.OC,
@@ -7704,6 +7710,9 @@ public class frm_recepcion_datos extends PBase {
                                               "pIdResolucionLp", gl.IdResolucionLpOperador,
                                               "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
                             }else{
+
+                                BeTransReDet.Host = gl.deviceId;
+
                                 callMethod("Guardar_Recepcion_S",
                                         "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
                                         "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,

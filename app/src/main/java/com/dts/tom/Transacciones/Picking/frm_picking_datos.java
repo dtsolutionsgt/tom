@@ -2291,7 +2291,8 @@ public class frm_picking_datos extends PBase {
                                          "oBeTrans_picking_ubic",gBePickingUbic,
                                          "BeStockRes",BeStockRes,
                                          "IdBodega",gl.IdBodega,
-                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")));
+                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                         "host", gl.deviceId);
                        /* callMethod("Actualizar_Picking_From_HH",
                                 "oBeTrans_picking_ubic",gBePickingUbic,
                                 "IdBodega",gl.IdBodega,
@@ -2318,7 +2319,8 @@ public class frm_picking_datos extends PBase {
                                 "ReemplazoLP",ReemplazoLP,
                                 "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
-                                "BeStockPallet",BeStockPallet);
+                                "BeStockPallet",BeStockPallet,
+                                "host", gl.deviceId);
                         break;
                     case 10:
                         callMethod("Get_All_Producto_Imagen","pIdProducto",gBeProducto.IdProducto);
