@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.dts.base.ExDialog;
 import com.dts.base.NetWorkInfoUtility;
@@ -197,6 +198,13 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 ws= new WebServiceHandler(MainActivity.this, gl.wsurl);
                 xobj= new XMLObject(ws);
                 setHandlers();
+            }
+
+            //#CKFK20241114 Agregué esta validación para los permisos por el Bluetooth
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, 1);
+                }
             }
 
             //'#EJC2023020610120: Buscar siempre el ID Marca y Modelo.

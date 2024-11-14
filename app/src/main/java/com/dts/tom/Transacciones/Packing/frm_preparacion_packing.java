@@ -683,10 +683,10 @@ public class frm_preparacion_packing extends PBase {
                                 .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
                                 .sum();
 
-                        item.disp = (int) (obj.getCantidad_Verificada()-obj.getCantidad_despachada() - totalCantidad);
+                        item.disp = (double) (obj.getCantidad_Verificada()-obj.getCantidad_despachada() - totalCantidad);
 
                     } else {
-                        item.disp = (int) (obj.getCantidad_Verificada() - obj.getCantidad_despachada());
+                        item.disp = (double) (obj.getCantidad_Verificada() - obj.getCantidad_despachada());
                     }
 
                     if (item.disp > 0) {

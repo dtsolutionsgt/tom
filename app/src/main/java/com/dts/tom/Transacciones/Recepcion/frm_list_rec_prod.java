@@ -161,6 +161,8 @@ public class frm_list_rec_prod extends PBase {
 
         txtCodigoProductoRecepcion = findViewById(R.id.txtCodigoProductoRecepcion);
 
+        btnTareas.setVisibility(gl.Finalizar_Recepcion?View.VISIBLE:View.INVISIBLE);
+
         browse = 0;
 
         setHandlers();
@@ -583,23 +585,28 @@ public class frm_list_rec_prod extends PBase {
 
                 selitem  = stream(pListDetalleOC.items)
                         .where(c -> c.No_Linea == sitem.No_Linea && c.Codigo_Producto.equals(sitem.Producto.Codigo))
-                        .first();
+                        .firstOrNull();
 
-                selid = sitem.No_Linea;
-                selidx = position;
+                if (selitem!=null){
+                    selid = sitem.No_Linea;
+                    selidx = position;
 
-                //#GT09032022: si tiene mostrar_area cealsa
-                if (gl.TipoPantallaRecepcion == 3) {
-                    listdetadpater3.setSelectedIndex(position);
-                } else {
-                    if (areaprimera) {
-                        listdetadapter2.setSelectedIndex(position);
+                    //#GT09032022: si tiene mostrar_area cealsa
+                    if (gl.TipoPantallaRecepcion == 3) {
+                        listdetadpater3.setSelectedIndex(position);
                     } else {
-                        listdetadapter.setSelectedIndex(position);
+                        if (areaprimera) {
+                            listdetadapter2.setSelectedIndex(position);
+                        } else {
+                            listdetadapter.setSelectedIndex(position);
+                        }
                     }
+
+                    procesar_registro();
+                }else{
+                    msgbox("No se pudo obtener el registro a recepcionar: " + sitem.No_Linea + " " + sitem.Producto.Codigo);
                 }
 
-                procesar_registro();
             });
 
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -679,7 +686,8 @@ public class frm_list_rec_prod extends PBase {
             gl.gFechaVenceAnterior = "";
             gl.gLoteAnterior ="";
             gl.Escaneo_Pallet=false;
-            btnTareas.setVisibility(View.VISIBLE);
+
+            btnTareas.setVisibility(gl.Finalizar_Recepcion?View.VISIBLE:View.INVISIBLE);
             relbot.setVisibility(View.VISIBLE);
             gl.recepcion_cerrada_concurrencia=false;
             super.finish();
@@ -892,8 +900,6 @@ public class frm_list_rec_prod extends PBase {
                     gl.gselitem = selitem;
 
                     gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                    //#CKFK20220625 Al parecer esta asignación es innecesaria
-                 // gl.gpListDetalleOC.items = pListDetalleOC.items;
 
                     browse=1;
                     startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
@@ -2013,10 +2019,6 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==1){
                 browse=0;
-                //#AT20230224 Cerrar forma si la tarea de recepcion esta finalizada
-                /*if (gl.recepcion_cerrada_concurrencia) {
-                    super.finish();
-                }*/
                 //#GT22022023: si esta cerrada no es necesario seguir validando el resto de código.
                 if(Recepcion_Completa()){
                     msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
@@ -2029,8 +2031,6 @@ public class frm_list_rec_prod extends PBase {
                     }
 
                     if (!gl.gSinPresentacion){
-                        //#CKFK20220625 Al parecer esta asignación es innecesaria
-                        // pListDetalleOC.items= gl.gpListDetalleOC.items;
                         if(Recepcion_Completa()){
                             msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                         }
@@ -2052,8 +2052,6 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==2){
                 browse=0;
-                //#CKFK20220625 Al parecer esta asignación es innecesaria
-                //pListDetalleOC.items= gl.gpListDetalleOC.items;
                 Lista_Detalle_Documento_Ingreso();
                 Recepcion_Completa();
             }

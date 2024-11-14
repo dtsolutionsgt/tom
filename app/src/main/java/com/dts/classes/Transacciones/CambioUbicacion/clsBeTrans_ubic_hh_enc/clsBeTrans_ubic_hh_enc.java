@@ -31,6 +31,8 @@ public class clsBeTrans_ubic_hh_enc {
     @Element(required=false) public String Nombre_Operador = "";
     @Element(required=false) public boolean Es_Traslado_SAP = false;
     @Element(required=false) public String No_Documento = "";
+    @Element(required=false) public String Usuario = "";
+    @Element(required=false) public String Rol = "";
 
     public clsBeTrans_ubic_hh_enc() {
     }
@@ -40,7 +42,8 @@ public class clsBeTrans_ubic_hh_enc {
                                   String Fec_agr,String User_mod,String Fec_mod,String Observacion,
                                   boolean Activo,boolean Operador_por_linea,boolean Ubicacion_con_hh,String Estado,
                                   boolean Cambio_estado,int IdPrioridad,int IdTipoTarea,int IdBodega,
-                                  String Asunto,String DescripcionMotivo,boolean IsNew, String Nombre_Operador) {
+                                  String Asunto,String DescripcionMotivo,boolean IsNew,
+                                  String Nombre_Operador, String Usuario, String Rol) {
 
         this.IdTareaUbicacionEnc=IdTareaUbicacionEnc;
         this.IdPropietarioBodega=IdPropietarioBodega;
@@ -66,6 +69,8 @@ public class clsBeTrans_ubic_hh_enc {
         this.DescripcionMotivo=DescripcionMotivo;
         this.Nombre_Operador = Nombre_Operador;
         this.IsNew=IsNew;
+        this.Usuario = Usuario;
+        this.Rol = Rol;
 
     }
 
@@ -212,6 +217,18 @@ public class clsBeTrans_ubic_hh_enc {
     }
     public void setIdReabastecimientoLog(int value) {
         IdReabastecimientoLog=value;
+    }
+    public String getUsuario() {
+        return Usuario;
+    }
+    public void setUsuario(String value) {
+        Usuario=value;
+    }
+    public String getRol() {
+        return Rol;
+    }
+    public void setRol(String value) {
+        Rol=value;
     }
 }
 

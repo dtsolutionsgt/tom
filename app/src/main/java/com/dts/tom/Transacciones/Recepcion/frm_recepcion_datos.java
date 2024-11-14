@@ -462,7 +462,8 @@ public class frm_recepcion_datos extends PBase {
 
             //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
             CantidadCopias = 0;
-            HabilitarCopias();
+            //#CKFK20241015 Puse esto en comentario porque lo voy a llamar mas adelante
+            //HabilitarCopias();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -8595,10 +8596,9 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
-            //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
             if (nBeResolucion !=null){
 
-                //toast("Se obtuvo la resolución");
+                gl.TieneResoluciones = true;
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
@@ -8706,6 +8706,8 @@ public class frm_recepcion_datos extends PBase {
             }
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+            HabilitarCopias();
 
             execws(27);
 
