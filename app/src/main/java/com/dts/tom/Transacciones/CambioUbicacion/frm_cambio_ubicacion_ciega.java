@@ -3584,7 +3584,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (BeStockPallet.getIdPresentacion()!=0) {
 
                         if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
-                            msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
+                            //***GT15112024: para cealsa que usa area, se valida para que no pregunte y mantenga la lp original
+                            if(gl.Mostrar_Area_En_HH){
+                                Es_Explosion = false;
+                                if (!CambioUbicExistencia){
+                                    inicializaTarea(true);
+                                }else{
+                                    CambioUbicExistencia=false;
+                                    finish();
+                                }
+                            }else{
+                                msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
+                            }
+
                         } else {
                             CambioUbicExistencia=false;
                             finish();
