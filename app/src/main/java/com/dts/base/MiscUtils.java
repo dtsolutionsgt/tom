@@ -273,7 +273,7 @@ public class MiscUtils {
 		Toast.makeText(cCont,msg, Toast.LENGTH_SHORT).show();
 	}
 	  
-	public double round(double val,int ndec) {
+	/*public double round(double val,int ndec) {
 		double v,pw;
 		
 		if (ndec>10)return val;
@@ -286,6 +286,14 @@ public class MiscUtils {
 		v=v/pw;
 	
 		return v;
+	}*/
+
+	public double round(double val, int ndec) {
+		if (ndec > 10) return val; // Limitar ndec
+		if (ndec < 0) ndec = 0;    // Evitar valores negativos
+
+		double pw = Math.pow(10, ndec); // Calcular la potencia de 10
+		return Math.round(val * pw) / pw; // Redondear y devolver el valor
 	}
 
 	public double roundr(double val,int ndec) {
