@@ -467,7 +467,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         && checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
                         && checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
                         && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                        && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                        && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                        && checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
                     startApplication();
                 } else {
                     ActivityCompat.requestPermissions(this,
@@ -476,7 +477,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                                     Manifest.permission.CALL_PHONE,
                                     Manifest.permission.CAMERA,
                                     Manifest.permission.WAKE_LOCK,
-                                    Manifest.permission.READ_PHONE_STATE
+                                    Manifest.permission.READ_PHONE_STATE,
+                                    Manifest.permission.BLUETOOTH_SCAN
                             }, 1);
                     startApplication();
                 }
