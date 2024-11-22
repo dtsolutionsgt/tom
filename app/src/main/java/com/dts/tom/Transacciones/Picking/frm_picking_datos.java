@@ -477,7 +477,7 @@ public class frm_picking_datos extends PBase {
                 vPeso = gBePickingUbic.Peso_solicitado;
                 vCantidad = gBePickingUbic.Cantidad_Solicitada;
 
-                vCantidadIngresada =Double.valueOf(txtCantidadPick.getText().toString().replace(",",""));
+                vCantidadIngresada = mu.round(Double.valueOf(txtCantidadPick.getText().toString().replace(",","")), gl.gCantDecCalculo);
 
                 if (vCantidad>0){
                     vPesoUni = vPeso/vCantidad;
@@ -1508,7 +1508,7 @@ public class frm_picking_datos extends PBase {
             }
 
 
-            CantARec = gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida;
+            CantARec = mu.round(gBePickingUbic.Cantidad_Solicitada - gBePickingUbic.Cantidad_Recibida, gl.gCantDecCalculo);
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
                 trCaducidad.setVisibility(View.VISIBLE);
@@ -1553,7 +1553,7 @@ public class frm_picking_datos extends PBase {
                 }else{
                     txtCantidadPick.setText(""+mu.frmdecimal(CantARec,gl.gCantDecDespliegue));
                     //#EJC20220406:No formatear para aquellos casos que tienen muchos decimales.
-                    txtCantidadPick.setText(""+CantARec);
+                    //txtCantidadPick.setText(""+CantARec);
                 }
 
             }
@@ -1666,7 +1666,7 @@ public class frm_picking_datos extends PBase {
             CantSol = gBePickingUbic.Cantidad_Solicitada;
             CantRec = gBePickingUbic.Cantidad_Recibida;
 
-            CantARec = CantSol - CantRec;
+            CantARec = mu.round(CantSol - CantRec, gl.gCantDecCalculo);
 
             if(!gBePickingUbic.Fecha_Vence.equals("01-01-1900") && !gBePickingUbic.Fecha_Vence.isEmpty()){
 
@@ -1714,29 +1714,6 @@ public class frm_picking_datos extends PBase {
             }else{
                 txtPesoPick.setText("0");
             }
-
-            /*if (gBeProducto.Presentaciones!=null) {
-
-                if (gBeProducto.Presentaciones.items != null) {
-
-                    double tmpCantPick = Double.valueOf(txtCantidadPick.getText().toString());
-                    double CantidadDecimal = tmpCantPick % 1;
-                    double CantidadPresentacion = 0;
-                    CantidadPresentacion = tmpCantPick - CantidadDecimal;
-                    double CantidadUMBas = CantidadDecimal * factor;
-
-                    if (CantidadPresentacion > 0) {
-
-                        if ((tmpCantPick % 1) > 0 || (tmpCantPick > factor)) {
-                            calculaCajaUnidades(CantidadPresentacion,CantidadUMBas);
-                        }
-
-                    }else if ((tmpCantPick % 1) > 0 || (factor > 0)) {
-                        calculaUnidades(CantidadUMBas);
-                    }
-
-                }
-            }*/
 
             //#AT20220818 se hacia unicamente en el picking detallado
             //para no perder el orden del cambio de focus
@@ -1846,7 +1823,9 @@ public class frm_picking_datos extends PBase {
 
                 if (TipoLista==2){
 
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida);
+                    Double vDif = 0.0;
+                    Double vCantidadPickeada =  mu.round(Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),gl.gCantDecCalculo);
+                    vDif =mu.round( gBePickingUbic.Cantidad_Solicitada  - vCantidadPickeada - gBePickingUbic.Cantidad_Recibida,gl.gCantDecCalculo);
 
                     if (vDif<0){
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -1863,11 +1842,15 @@ public class frm_picking_datos extends PBase {
 
                     double vCantidadRec = 0;
                     double vCantidadSol = 0;
+                    double vCantidadPickeada = 0;
+                    double vCantidadPickeadaT = 0;
 
                     vCantidadRec = gBePickingUbic.Cantidad_Recibida;
                     vCantidadSol = gBePickingUbic.Cantidad_Solicitada;
+                    vCantidadPickeada = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                    vCantidadPickeadaT = mu.round(vCantidadPickeada +vCantidadRec,gl.gCantDecCalculo);
 
-                    if (Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""))+vCantidadRec>vCantidadSol){
+                    if ( vCantidadPickeadaT>vCantidadSol){
                         mu.msgbox("La cantidad es mayor a la solicitada");
                         txtCantidadPick.selectAll();
                         txtCantidadPick.setSelectAllOnFocus(true);
@@ -1910,6 +1893,7 @@ public class frm_picking_datos extends PBase {
             if (TipoLista==2){
 
                 double vDif = gBePickingUbic.Cantidad_Solicitada - Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")) + gBePickingUbic.Cantidad_Recibida;
+                vDif = mu.round(vDif,gl.gCantDecCalculo);
 
                 if (vDif<0){
                     mu.msgbox("La cantidad recibida es mayor a la cantidad solicitada, no se puede ingresar esa cantidad");
@@ -1917,9 +1901,11 @@ public class frm_picking_datos extends PBase {
                 }
 
                 //GT14022022: quitamos el simbolo , a la cantidad
-                gBePickingUbic.Cantidad_Recibida +=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                double vCantidadPickeada = gBePickingUbic.Cantidad_Recibida;
+                vCantidadPickeada +=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                gBePickingUbic.Cantidad_Recibida = mu.round(vCantidadPickeada,gl.gCantDecCalculo);
 
-                //#EJC20220303: Caputrar el Peso.
+                //#EJC20220303: Capturar el Peso.
                 gBePickingUbic.Peso_recibido += Double.parseDouble(txtPesoPick.getText().toString().replace(",",""));
 
                 if (gBePicking.verifica_auto){
@@ -1990,7 +1976,12 @@ public class frm_picking_datos extends PBase {
                     Log.d("focus: ", "20220502_43");
                     return false;
                 } else {
-                    Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",", "")) + gBePickingUbic.Cantidad_Recibida);
+
+                    //Double vDif = gBePickingUbic.Cantidad_Solicitada - (Double.parseDouble(txtCantidadPick.getText().toString().replace(",", "")) + gBePickingUbic.Cantidad_Recibida);
+
+                    double vDif = 0.0;
+                    double vCantidadPickeada =  mu.round(Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),gl.gCantDecCalculo);
+                    vDif =mu.round( gBePickingUbic.Cantidad_Solicitada  - vCantidadPickeada - gBePickingUbic.Cantidad_Recibida,gl.gCantDecCalculo);
 
                     if (vDif < 0) {
                         mu.msgbox("La cantidad es mayor a la solicitada");
@@ -2291,7 +2282,7 @@ public class frm_picking_datos extends PBase {
                                          "oBeTrans_picking_ubic",gBePickingUbic,
                                          "BeStockRes",BeStockRes,
                                          "IdBodega",gl.IdBodega,
-                                         "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                         "pCantidad",BePickingDet.Cantidad_recibida,
                                          "host", gl.deviceId);
                        /* callMethod("Actualizar_Picking_From_HH",
                                 "oBeTrans_picking_ubic",gBePickingUbic,
@@ -2313,11 +2304,14 @@ public class frm_picking_datos extends PBase {
                             gBePickingUbic.Fecha_Vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);
                         }
 
+                        double vCantidadPickeada = Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                        vCantidadPickeada = mu.round(vCantidadPickeada, gl.gCantDecCalculo);
+
                         callMethod("Actualiza_Picking_Consolidado",
                                 "pBePickingUbic",gBePickingUbic,
                                 "pIdOperador",gl.OperadorBodega.IdOperador,
                                 "ReemplazoLP",ReemplazoLP,
-                                "pCantidad",Double.parseDouble(txtCantidadPick.getText().toString().replace(",","")),
+                                "pCantidad",vCantidadPickeada,
                                 "pPeso",Double.parseDouble(txtPesoPick.getText().toString()),
                                 "BeStockPallet",BeStockPallet,
                                 "host", gl.deviceId);
@@ -2772,7 +2766,10 @@ public class frm_picking_datos extends PBase {
 
             if(BePickingDet!=null){
 
-                BePickingDet.Cantidad_recibida+=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                double vCantidadPickeada = 0;
+                vCantidadPickeada +=Double.parseDouble(txtCantidadPick.getText().toString().replace(",",""));
+                BePickingDet.Cantidad_recibida = mu.round(vCantidadPickeada,gl.gCantDecCalculo);
+
                 BePickingDet.User_mod = gl.OperadorBodega.IdOperador+"";
                 BePickingDet.Fec_mod =  du.getFechaActual();
                 BeStockRes.IdStockRes = gBePickingUbic.IdStockRes;
