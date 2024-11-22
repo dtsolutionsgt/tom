@@ -42,6 +42,8 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public int index=0;
     @Element(required=false) public String Licence_plate="";
     @Element(required=false) public int IdUbicacion_nuevo = 0;
+    @Element(required=false) public String Nuevo_Estado="";
+    @Element(required=false) public int IdStock = 0;
 
 
     public clsBe_inv_reconteo_data(){}
@@ -51,7 +53,7 @@ public class clsBe_inv_reconteo_data {
                                    Double Peso_Stock,Double Peso,String Lote,String Lote_stock,String Fecha_Vence, boolean control_peso,int Conteo,
                                    String Ubic_nombre,String Estado,int IdProductoBodega,String Tramo,int IndiceX,int idPresentacion_nuevo,
                                    int IdProductoEst_nuevo,String codigo_producto,
-                                   int Nivel,String Pos,Double Factor, int index, String License_plate){
+                                   int Nivel,String Pos,Double Factor, int index, String License_plate, String Nuevo_Estado){
 
         this.idinventarioenc = idinventarioenc;
         this.idinvreconteo = idinvreconteo;
@@ -86,6 +88,7 @@ public class clsBe_inv_reconteo_data {
         this.Factor = Factor;
         this.index = index;
         this.Licence_plate = License_plate;
+        this.Nuevo_Estado = Nuevo_Estado;
     }
 
 

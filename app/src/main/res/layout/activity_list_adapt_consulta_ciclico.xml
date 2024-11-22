@@ -23,6 +23,19 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/lblStock"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/lblNoUbic"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/lblCodigo"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -124,6 +137,18 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/lblLoteStock"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="25/10/2020"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/lblLote"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -132,6 +157,18 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="25/10/2020"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblFecha_Vence_Stock"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="1900-01-01"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
@@ -172,6 +209,18 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/lblEstadoStock"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Buen estado"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
             android:id="@+id/lblEstado"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -179,7 +228,7 @@
             android:minHeight="50dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:text="BUen estado"
+            android:text="Buen estado"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 

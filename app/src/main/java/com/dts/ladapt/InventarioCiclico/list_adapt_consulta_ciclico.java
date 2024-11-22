@@ -75,10 +75,11 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblCant_Stock = convertView.findViewById(R.id.lblCant_Stock);
                 holder.lblPeso_Stock = convertView.findViewById(R.id.lblPeso_Stock);
                 holder.lblLote = convertView.findViewById(R.id.lblLote);
+                holder.lblFecha_Vence_Stock = convertView.findViewById(R.id.lblFecha_Vence_Stock);
                 holder.lblFecha_Vence = convertView.findViewById(R.id.lblFecha_Vence);
                 holder.lblConteo = convertView.findViewById(R.id.lblConteo);
                 holder.lblUbic_nombre = convertView.findViewById(R.id.lblUbic_nombre);
-                holder.lblEstado = convertView.findViewById(R.id.lblEstado);
+                holder.lblEstadoStock = convertView.findViewById(R.id.lblEstado);
                 holder.lblIdProductoBodega = convertView.findViewById(R.id.lblIdProductoBodega);
                 holder.lblTramo = convertView.findViewById(R.id.lblTramo);
                 holder.lblIndiceX = convertView.findViewById(R.id.lblIndiceX);
@@ -87,6 +88,9 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
                 holder.lblFactor = convertView.findViewById(R.id.lblFactor);
                 holder.lblidinvreconteo = convertView.findViewById(R.id.lblidinvreconteo);
                 holder.lbllicplate = convertView.findViewById(R.id.lblicplate);
+                holder.lblLoteStock = convertView.findViewById(R.id.lblLoteStock);
+                holder.lblEstado = convertView.findViewById(R.id.lblEstado);
+                holder.lblStock = convertView.findViewById(R.id.lblStock);
 
                 convertView.setTag(holder);
             }else {
@@ -103,10 +107,11 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             holder.lblCant_Stock.setText(data_list.get(position).Cant_Stock  +"");
             holder.lblPeso_Stock.setText(data_list.get(position).Peso_Stock  +"");
             holder.lblLote.setText(data_list.get(position).Lote  +"");
+            holder.lblFecha_Vence_Stock.setText(data_list.get(position).Fecha_Vence_Stock  +"");
             holder.lblFecha_Vence.setText(data_list.get(position).Fecha_Vence  +"");
             holder.lblConteo.setText(data_list.get(position).Conteo  +"");
             holder.lblUbic_nombre.setText(data_list.get(position).Ubic_nombre  +"");
-            holder.lblEstado.setText(data_list.get(position).Estado  +"");
+            holder.lblEstadoStock.setText(data_list.get(position).Estado  +"");
             holder.lblIdProductoBodega.setText(data_list.get(position).IdProductoBodega  +"");
             holder.lblTramo.setText(data_list.get(position).Tramo  +"");
             holder.lblIndiceX.setText(data_list.get(position).IndiceX  +"");
@@ -115,6 +120,9 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             holder.lblFactor.setText(data_list.get(position).Factor  +"");
             holder.lblidinvreconteo.setText(data_list.get(position).idinvreconteo +"");
             holder.lbllicplate.setText(data_list.get(position).Licence_plate +"");
+            holder.lblLoteStock.setText(data_list.get(position).Lote_stock);
+            holder.lblEstado.setText(data_list.get(position).Nuevo_Estado);
+            holder.lblStock.setText(data_list.get(position).IdStock+"");
 
             if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -134,7 +142,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblNoUbic,lblCodigo,lblProducto_nombre,lblUMBas,lblPres,lblCant_Conteo,lblPeso_Conteo,lblCant_Stock,
-                lblPeso_Stock,lblLote,lblFecha_Vence,lblConteo,lblUbic_nombre,lblEstado,lblIdProductoBodega,lblTramo,
-                lblIndiceX,lblNivel,lblPos,lblFactor,lblidinvreconteo,lbllicplate;
+                lblPeso_Stock,lblLote,lblFecha_Vence_Stock, lblFecha_Vence,lblConteo,lblUbic_nombre,lblEstado,lblIdProductoBodega,lblTramo,
+                lblIndiceX,lblNivel,lblPos,lblFactor,lblidinvreconteo,lbllicplate, lblLoteStock, lblEstadoStock, lblStock;
     }
 }
