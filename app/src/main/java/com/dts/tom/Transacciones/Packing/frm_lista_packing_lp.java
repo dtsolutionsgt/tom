@@ -219,7 +219,7 @@ public class frm_lista_packing_lp extends PBase {
         double cantidad = 0;
 
         try {
-            cantidad = Double.parseDouble(txtCantidad.getText().toString());
+            cantidad =mu.round(Double.parseDouble(txtCantidad.getText().toString()),gl.gCantDecCalculo);
         } catch (NumberFormatException e) {
             toast("Por favor ingrese una cantidad válida.");
             return;

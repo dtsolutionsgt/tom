@@ -108,6 +108,7 @@ public class frm_verificacion_datos extends PBase {
     private double pPeso;
     private double pCantidad;
     private int pTipo = 0;
+    private double vDif = 0;
     //#GT10062022: variable para guardar el peso del picking...luego se modifique el editext, no hay contra que validar el peso original
     private double peso_picking = 0;
     // Fecha
@@ -256,13 +257,17 @@ public class frm_verificacion_datos extends PBase {
 
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                    double vCantidadVerificada = 0;
+
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         switch (keyCode) {
                             case KeyEvent.KEYCODE_ENTER:
 
                                 if (valida_Valor(txtCantVeri)){
 
-                                    vDif = BePedidoDetVerif.Cantidad_Recibida - BePedidoDetVerif.Cantidad_Verificada + Double.valueOf(txtCantVeri.getText().toString());
+                                    vCantidadVerificada = Double.valueOf(txtCantVeri.getText().toString());
+                                    vDif = mu.round( BePedidoDetVerif.Cantidad_Recibida - BePedidoDetVerif.Cantidad_Verificada + vCantidadVerificada, gl.gCantDecCalculo);
 
                                     if (vDif < 0 && Math.abs(vDif) > 0.000000001) {
                                         msgbox("La cantidad recibida es mayor a la cantidad solicitada, no se puede ingresar esa cantidad");
@@ -364,6 +369,7 @@ public class frm_verificacion_datos extends PBase {
             Rec = BePedidoDetVerif.getCantidad_Recibida();
             Ver = BePedidoDetVerif.getCantidad_Verificada();
             UM = BePedidoDetVerif.getNom_Unid_Med();
+            vDif = mu.round(Rec - Ver,gl.gCantDecCalculo);
 
             int IdPedidoDet = BePedidoDetVerif.getIdPedidoDet();
             int IdPresentacion = BePedidoDetVerif.getIdPresentacion();
@@ -424,7 +430,7 @@ public class frm_verificacion_datos extends PBase {
             }
 
             txtVenceVeri.setText(Expira);
-            txtCantVeri.setText(String.valueOf(Rec-Ver));
+            txtCantVeri.setText(String.valueOf(vDif));
 
             //txtUmbasVeri.setText(UM);
             if (BePedidoDetVerif.Lote.isEmpty()) {
@@ -772,7 +778,7 @@ public class frm_verificacion_datos extends PBase {
         boolean result = false;
 
         try{
-            Double cantPendiente = Rec - Ver;
+            double cantPendiente = mu.round( Rec - Ver, gl.gCantDecCalculo);
 
 
             //#GT10062022: antes de castear el valor, se le debe remover la "," porque no forma parte del valor númerico
@@ -963,7 +969,6 @@ public class frm_verificacion_datos extends PBase {
             }else{
                 throw new Exception("#ERR_20220612: No se obtuvo la lista de verificación.");
             }
-
 
         }catch (Exception ex){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
@@ -1385,11 +1390,11 @@ public class frm_verificacion_datos extends PBase {
 
         try {
 
-            Double vDif;
+            double vDif;
             boolean permite = true;
 
-            Double valor = Double.valueOf(txtCantVeri.getText().toString());
-            vDif = BePedidoDetVerif.Cantidad_Recibida - (BePedidoDetVerif.Cantidad_Verificada + valor);
+            double valor = Double.valueOf(txtCantVeri.getText().toString());
+            vDif = mu.round( BePedidoDetVerif.Cantidad_Recibida - (BePedidoDetVerif.Cantidad_Verificada + valor),gl.gCantDecCalculo);
 
             if (valor == 0){
                 mu.msgbox("Ingrese la cantidad de producto a reemplazar");

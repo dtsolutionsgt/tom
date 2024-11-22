@@ -283,7 +283,6 @@ public class frm_inv_cic_conteo extends PBase {
                             //GT01122021:se agrega licence plate  y los index se corren 1 posición del 20 en adelante
                             data_rec.Licence_plate = DT.getString(18);
 
-
                             data_rec.Estado = DT.getString(21);
                             data_rec.Producto_nombre = DT.getString(22);
                             data_rec.Ubic_nombre = DT.getString(23);
@@ -430,7 +429,6 @@ public class frm_inv_cic_conteo extends PBase {
         }
         if(registros > 1){
 
-
             //carga la lista con el Filtro Código
             FiltroxCodigo(evaluar);
 
@@ -461,6 +459,7 @@ public class frm_inv_cic_conteo extends PBase {
                     }
                 }
             }
+
             if(registros > 1){
 
                 //GT 18012020 carga la lista con el Filtro Lote
@@ -477,13 +476,12 @@ public class frm_inv_cic_conteo extends PBase {
                 execws(4);
             }
 
-
             //GT 18012020 se omite validación de capturar_noexiste porque no se insertará código si existe en la bd, pero no en la lista del conteo
             //AT 20240823 Preguntar si se debe aplicar de esta forma o no
             if(BeInvEnc.Capturar_no_existente){
                 execws(2);
             } else {
-                toastlong("Código de ubicación no existe en ubicaciones asignadas de inventario");
+                toastlong("Producto no existe en maestro");
             }
         }
     }

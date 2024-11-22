@@ -148,6 +148,8 @@ public class frm_inv_cic_add extends PBase {
         idubic = 0;
         IDInventarioCiclico = 0;
 
+        cboPres.setEnabled(false);
+
         Index = 0;
         tam_lista = 0;
 

@@ -376,6 +376,24 @@ public class frm_inv_cic_guardar extends PBase {
 
         try {
             idprodbod = xobj.getresult(Integer.class,"Get_IdProductoBodega_By_IdProducto_And_IdBodega");
+
+            if (idprodbod!=0){
+
+                BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
+                BeTrans_inv_ciclico.IdInvCiclico = 0;
+                BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
+                BeTrans_inv_ciclico.IdStock = 0;
+                BeTrans_inv_ciclico.IdProductoBodega = idprodbod;
+                BeTrans_inv_ciclico.IdProductoEstado = Estado;
+                BeTrans_inv_ciclico.IdProductoEst_nuevo = Estado;
+                BeTrans_inv_ciclico.IdPresentacion = Presentacion;
+                BeTrans_inv_ciclico.IdPresentacion_nuevo = Presentacion;
+                BeTrans_inv_ciclico.IdUbicacion = nidubic;
+                BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
+                BeTrans_inv_ciclico.EsNuevo = true;
+
+            }
+
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
@@ -503,19 +521,6 @@ public class frm_inv_cic_guardar extends PBase {
 
                 //Get_IdProdBodega
                 execws(4);
-
-                BeTrans_inv_ciclico = new clsBeTrans_inv_ciclico();
-                BeTrans_inv_ciclico.IdInvCiclico = 0;
-                BeTrans_inv_ciclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
-                BeTrans_inv_ciclico.IdStock = 0;
-                BeTrans_inv_ciclico.IdProductoBodega = idprodbod;
-                BeTrans_inv_ciclico.IdProductoEstado = Estado;
-                BeTrans_inv_ciclico.IdProductoEst_nuevo = Estado;
-                BeTrans_inv_ciclico.IdPresentacion = Presentacion;
-                BeTrans_inv_ciclico.IdPresentacion_nuevo = Presentacion;
-                BeTrans_inv_ciclico.IdUbicacion = nidubic;
-                BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
-                BeTrans_inv_ciclico.EsNuevo = true;
 
             } else {
 

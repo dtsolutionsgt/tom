@@ -319,7 +319,7 @@
                     android:id="@+id/txtCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number|numberDecimal" />
 
                 <EditText
                     android:id="@+id/txtPesoContado"

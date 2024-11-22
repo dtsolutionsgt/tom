@@ -202,10 +202,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             }
 
             //#CKFK20241114 Agregué esta validación para los permisos por el Bluetooth
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, 1);
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
                 }
