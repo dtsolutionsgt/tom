@@ -389,8 +389,10 @@ public class frm_inv_cic_add extends PBase {
                     EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     cboEstado.setAdapter(EstadosAdapter);
 
+                    int estado = (gl.inv_ciclico.cantidad > 0  && gl.inv_ciclico.IdProductoEst_nuevo != 0) ? gl.inv_ciclico.IdProductoEst_nuevo: gl.inv_ciclico.IdProductoEstado;
+
                     int indice = gl.lista_estados.items.stream()
-                            .filter(obj -> obj.getIdEstado() == gl.inv_ciclico.IdProductoEstado)
+                            .filter(obj -> obj.getIdEstado() == estado)
                             .map(gl.lista_estados.items::indexOf)
                             .findFirst()
                             .orElse(-1);
@@ -412,8 +414,12 @@ public class frm_inv_cic_add extends PBase {
             lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
             lblProd.setTypeface(null, Typeface.BOLD);
             lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
-            txtLote1.setText(gl.inv_ciclico.Lote+"");
-            dtpVence.setText(gl.inv_ciclico.Fecha_Vence);
+
+            String lote = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Lote : gl.inv_ciclico.Lote_stock;
+            txtLote1.setText(lote);
+
+            String fecha = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Fecha_Vence : gl.inv_ciclico.Fecha_Vence_Stock;
+            dtpVence.setText(fecha);
 
             if(gl.inv_ciclico.IdPresentacion == 0){
                 lblUM.setText(gl.inv_ciclico.UMBas);
