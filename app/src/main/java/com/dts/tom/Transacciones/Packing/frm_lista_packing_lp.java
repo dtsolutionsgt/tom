@@ -191,7 +191,9 @@ public class frm_lista_packing_lp extends PBase {
 
         txtProducto.setText(sitem.codigo + " - " + sitem.producto);
         txtLicencia.setText(sitem.licencia);
-        txtCantidad.setText("" + sitem.disp);
+        //#EJC20241122> Redondear.
+        //txtCantidad.setText("" + sitem.disp);
+        txtCantidad.setText("" + mu.round(Double.parseDouble(String.valueOf(sitem.disp)), gl.gCantDecCalculo));
 
         txtCantidad.setOnClickListener(view -> { });
         txtCantidad.setSelectAllOnFocus(true);

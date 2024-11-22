@@ -3,7 +3,6 @@ package com.dts.base;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.util.Log;
-import android.util.Xml;
 
 import com.dts.classes.Mantenimientos.CustomError.clsBeCustomError;
 
@@ -13,21 +12,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -156,105 +149,58 @@ public class XMLObject  {
     private boolean isParsing=false;
 
     public String getXMLRegion(String nodename) throws Exception {
-
-        String ss ="";
-        String sxml="";
-        Node xmlnode;
-        int cVals=0;
-        double mequedeaqui=0;
-
-        InputStream istream=null;
-        DocumentBuilder docBuilder;
-        DocumentBuilderFactory builderFactory;
-
-        if (!isParsing)
-        {
-            isParsing =true;
-
-            try {
-
-                try{
-
-                    istream = new ByteArrayInputStream(ws.xmlresult.getBytes() );
-
-                }catch (Exception ex){
-                    Log.i("A","B");
-                }
-
-                builderFactory = DocumentBuilderFactory.newInstance();
-                docBuilder = builderFactory.newDocumentBuilder();
-
-                if(istream.available()==0)
-                {
-                    istream = new ByteArrayInputStream(ws.xmlresult.getBytes());
-                }
-
-                if(istream.available()==0)
-                {
-                    Log.i("try2","de todas formas no se pudo asignar el result.. sospecho problema en la memoria *del dispositivo no la m[ia, la mia anda bien");
-                    return  "";
-
-                }
-
-                Document doc = docBuilder.parse(istream);
-                Element root=doc.getDocumentElement();
-                NodeList children=root.getChildNodes();
-                Node bodyroot=children.item(0);
-                NodeList body=bodyroot.getChildNodes();
-                Node responseroot=body.item(0);
-
-                //#eEJC20210317: Si viene nulo no procesar para evitar error.
-                if (responseroot!=null){
-
-                    NodeList response=responseroot.getChildNodes();
-
-                    ss="";
-
-                    for(int i =0;i<response.getLength();i++)
-                    {
-
-                        ss+=response.item(i).getNodeName()+",\n";
-
-                        if (response.item(i).getNodeName().equalsIgnoreCase(nodename))
-                        {
-                            cVals=response.item(i).getChildNodes().getLength();
-                            mequedeaqui=6;
-                            if (cVals>0)
-                            {
-                                xmlnode=response.item(i);
-                                sxml=nodeToString(xmlnode);
-                                return sxml;
-                            }
-                        }
-                    }
-
-                }else{
-                    Log.e("Un nulo","Hace nulo a todos los que no son nulos");
-                    if(ws.xmlresult.contains("CustomError")){
-                        return ws.xmlresult;
-                    }
-                }
-
-            } catch (Exception e)
-            {
-
-                //#EJC20210612: No se obtenia el customERror.
-                if(ws.xmlresult.contains("CustomError")){
-                    return ws.xmlresult;
-                }else{
-                    debg = e.getMessage() + "\n "+ ws.xmlresult;
-                    throw new Exception(" XMLObject getXMLRegion : "+ debg);
-                }
-
-            } finally {
-                isParsing =false;
-            }
-        }else{
-            Log.e("imbussy","telodije");
+        if (isParsing) {
+            Log.e("XMLObject", "Parsing already in progress");
+            return ""; // O manejar de otra manera si es crítico
         }
 
-        return "";
+        isParsing = true;
+        String sxml = "";
+        try (ByteArrayInputStream istream = new ByteArrayInputStream(ws.xmlresult.getBytes())) {
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
+
+            if (istream.available() == 0) {
+                Log.i("XMLObject", "InputStream is empty");
+                return "";
+            }
+
+            Document doc = docBuilder.parse(istream);
+            Element root = doc.getDocumentElement();
+            NodeList children = root.getChildNodes();
+            Node bodyroot = children.item(0);
+            NodeList body = bodyroot.getChildNodes();
+            Node responseroot = body.item(0);
+
+            if (responseroot != null) {
+                NodeList response = responseroot.getChildNodes();
+                for (int i = 0; i < response.getLength(); i++) {
+                    Node item = response.item(i);
+                    if (item.getNodeName().equalsIgnoreCase(nodename) && item.getChildNodes().getLength() > 0) {
+                        sxml = nodeToString(item);
+                        break;
+                    }
+                }
+            } else {
+                Log.e("XMLObject", "Response root is null");
+                if (ws.xmlresult.contains("CustomError")) {
+                    return ws.xmlresult;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("XMLObject", "Error parsing XML: " + e.getMessage());
+            if (ws.xmlresult.contains("CustomError")) {
+                return ws.xmlresult;
+            } else {
+                throw new Exception("Error in getXMLRegion: " + e.getMessage(), e);
+            }
+        } finally {
+            isParsing = false;
+        }
+
+        return sxml;
     }
+
 
     public String getXMLRegionSingle(String nodename) throws Exception {
 
@@ -306,60 +252,71 @@ public class XMLObject  {
     }
 
     private boolean parseXMLArray() throws Exception {
+        // Inicializa variables para almacenar el nombre del elemento y su valor
+        String elementValue, elementName;
 
-        String sv,en;
-
-        try {
-
-            InputStream istream = new ByteArrayInputStream(ws.xmlresult.getBytes() );
+        try (InputStream istream = new ByteArrayInputStream(ws.xmlresult.getBytes())) {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(istream);
 
-            NodeList nList = null;
-            try {
-                nList = doc.getElementsByTagName("DocumentElement");
-                NodeList ccList=nList.item(0).getChildNodes();
-                adimy=ccList.getLength();
-                NodeList vvList=ccList.item(0).getChildNodes();
-                adimx=vvList.getLength();
-            } catch (Exception e) {
+            // Obtiene la lista de nodos 'DocumentElement', que se espera sea la raíz de los datos
+            NodeList nodeList = doc.getElementsByTagName("DocumentElement");
+            if (nodeList == null || nodeList.getLength() == 0) {
+                // No hay elementos que procesar, retorna false indicando que no se completó el parseo
                 return false;
             }
 
-            String[] crow = new String[adimx];
-            MatrixCursor cursor = new MatrixCursor(crow);
+            // Obtiene los nodos hijos del primer 'DocumentElement' encontrado
+            NodeList childNodes = nodeList.item(0).getChildNodes();
+            adimy = childNodes.getLength();
+            if (adimy == 0) {
+                // Si no hay nodos hijos, retorna false
+                return false;
+            }
 
-            for (int i =0;i<nList.getLength();i++){
+            // Prepara las dimensiones del cursor basado en el primer conjunto de nodos hijos
+            NodeList firstChildNodes = childNodes.item(0).getChildNodes();
+            adimx = firstChildNodes.getLength();
+            String[] columnNames = new String[adimx];
 
-                NodeList cList=nList.item(i).getChildNodes();
+            // Configura los nombres de las columnas para el cursor basándose en los nodos hijos
+            for (int i = 0; i < adimx; i++) {
+                columnNames[i] = firstChildNodes.item(i).getNodeName();
+            }
+            MatrixCursor cursor = new MatrixCursor(columnNames);
 
-                for (int ii =0;ii<cList.getLength();ii++){
+            // Itera sobre cada nodo en la lista de nodos 'DocumentElement'
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList childList = nodeList.item(i).getChildNodes();
 
-                    Element elm = (Element) cList.item(ii);
-                    NodeList vList=cList.item(ii).getChildNodes();
+                // Itera sobre cada nodo hijo en el elemento
+                for (int j = 0; j < childList.getLength(); j++) {
+                    Element element = (Element) childList.item(j);
+                    NodeList valueList = element.getChildNodes();
+                    String[] rowData = new String[adimx];
 
-                    for (int vv =0;vv<vList.getLength();vv++){
-                        en=vList.item(vv).getNodeName();
-                        sv=getNodeValue(en,elm);
-                        try{
-                            crow[vv]=sv;
-                        }catch (Exception ex){
-                            String error = ex.getMessage();
-                        }
-
+                    // Rellena rowData con los valores de cada nodo hijo
+                    for (int k = 0; k < valueList.getLength(); k++) {
+                        elementName = valueList.item(k).getNodeName();
+                        elementValue = getNodeValue(elementName, element);
+                        rowData[k] = elementValue;
                     }
 
-                    cursor.addRow(crow);
+                    // Agrega la fila de datos al cursor
+                    cursor.addRow(rowData);
                 }
             }
 
-            data=cursor;
+            // Establece el cursor de datos
+            data = cursor;
             return true;
         } catch (Exception e) {
-            throw new Exception("XMLObject parseXMLArray : "+e.getMessage());
+            // Lanza una excepción con un mensaje más informativo en caso de error
+            throw new Exception("Error in parseXMLArray: " + e.getMessage(), e);
         }
     }
+
 
     private boolean parseXMLArray(String nombreArray) throws Exception {
 
