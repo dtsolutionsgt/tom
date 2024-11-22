@@ -27,6 +27,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Permitir_Despacho_Multiple=true;
     @Element(required=false) public boolean Fotografia_Verificacion = false;
     @Element(required=false) public boolean Es_Devolucion = false;
+    @Element(required=false) public boolean Empaque_Tarima=false;
 
     public clsBeTrans_pe_tipo() {
     }
@@ -48,7 +49,8 @@ public class clsBeTrans_pe_tipo {
                               boolean Permitir_Despacho_Parcial,
                               boolean Permitir_Despacho_Multiple,
                               boolean Fotografia_Verificacion,
-                              boolean Es_Devolucion
+                              boolean Es_Devolucion,
+                              boolean Empaque_Tarima
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -69,6 +71,7 @@ public class clsBeTrans_pe_tipo {
         this.Permitir_Despacho_Multiple = Permitir_Despacho_Multiple;
         this.Fotografia_Verificacion = Fotografia_Verificacion;
         this.Es_Devolucion = Es_Devolucion;
+        this.Empaque_Tarima = Empaque_Tarima;
 
     }
 
@@ -224,5 +227,12 @@ public class clsBeTrans_pe_tipo {
     }
     public void setEs_Devolucion(boolean value) {
         Es_Devolucion=value;
+    }
+
+    public void setEmpaque_Tarima(boolean value) {
+        Empaque_Tarima=value;
+    }
+    public boolean getEmpaque_Tarima() {
+        return Empaque_Tarima;
     }
 }

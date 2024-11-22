@@ -21,13 +21,19 @@ import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_resList;
 import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion3;
 import com.dts.ladapt.list_adapt_detalle_rec_prod;
 import com.dts.ladapt.list_adapt_stock_res;
+import com.dts.ladapt.list_adapt_stock_res_mixto;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class frm_lista_stock_res extends PBase {
 
@@ -42,7 +48,9 @@ public class frm_lista_stock_res extends PBase {
     private clsBeVW_stock_resList detStockRes = new clsBeVW_stock_resList();
     private static final ArrayList<clsBeVW_stock_res> BeListStockRes= new ArrayList<clsBeVW_stock_res>() ;
     public static clsBeVW_stock_res selitem = new clsBeVW_stock_res();
+    public static clsBeVW_stock_resList lista = new clsBeVW_stock_resList();
     private list_adapt_stock_res adapter;
+    private list_adapt_stock_res_mixto adapterMixto;
     private String ubicacion, codigo = "", referencia = "";
 
     @Override
@@ -213,44 +221,57 @@ public class frm_lista_stock_res extends PBase {
     }
     private void processGetStockRes() {
         try {
-
             detStockRes = xobj.getresult(clsBeVW_stock_resList.class, "Get_Stock_Res_By_Codigo_And_IdUbicacion");
 
-            if (detStockRes != null) {
-                if (detStockRes.items != null) {
+            if (gl.pBeBodega.Control_Pallet_Mixto) {
+                lista = detStockRes;
 
-                    BeListStockRes.clear();
+                ArrayList<clsBeVW_stock_res> distinctStockList = detStockRes.items.stream()
+                        .filter(mu.distinctByKey(item -> Objects.hash(item.Propietario, item.Lic_plate, item.IdUbicacion)))
+                        .collect(Collectors.toCollection(ArrayList::new));
 
-                    for (clsBeVW_stock_res obj : detStockRes.items) {
 
-                        if (obj.Fecha_Vence.contains("T")) {
-                            obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                lblRegs.setText("REGS: " + distinctStockList.size());
+                adapterMixto = new list_adapt_stock_res_mixto(this, distinctStockList);
+                listStockRes.setAdapter(adapterMixto);
+
+            } else {
+                if (detStockRes != null) {
+                    if (detStockRes.items != null) {
+
+                        BeListStockRes.clear();
+
+                        for (clsBeVW_stock_res obj : detStockRes.items) {
+
+                            if (obj.Fecha_Vence.contains("T")) {
+                                obj.Fecha_Vence = du.convierteFechaMostrar(obj.Fecha_Vence);
+                            }
+
+                            if (obj.Fecha_Preparacion.contains("T")) {
+                                obj.Fecha_Preparacion = du.convierteFechaMostrar(obj.Fecha_Preparacion);
+                            }
+
+                            if (obj.Fecha_Pedido.contains("T")) {
+                                obj.Fecha_Pedido = du.convierteFechaMostrar(obj.Fecha_Pedido);
+                            }
+
+                            BeListStockRes.add(obj);
                         }
 
-                        if (obj.Fecha_Preparacion.contains("T")) {
-                            obj.Fecha_Preparacion = du.convierteFechaMostrar(obj.Fecha_Preparacion);
-                        }
+                        lblRegs.setText("REGS: " + detStockRes.items.size());
+                        adapter = new list_adapt_stock_res(this, BeListStockRes);
+                        listStockRes.setAdapter(adapter);
 
-                        if (obj.Fecha_Pedido.contains("T")) {
-                            obj.Fecha_Pedido = du.convierteFechaMostrar(obj.Fecha_Pedido);
-                        }
-
-                        BeListStockRes.add(obj);
+                    } else {
+                        toast("No se encontró stock reservado");
+                        listStockRes.setAdapter(null);
+                        lblRegs.setText("REGS: 0");
                     }
-
-                    lblRegs.setText("REGS: "+detStockRes.items.size());
-                    adapter = new list_adapt_stock_res(this, BeListStockRes);
-                    listStockRes.setAdapter(adapter);
-
                 } else {
                     toast("No se encontró stock reservado");
                     listStockRes.setAdapter(null);
                     lblRegs.setText("REGS: 0");
                 }
-            } else {
-                toast("No se encontró stock reservado");
-                listStockRes.setAdapter(null);
-                lblRegs.setText("REGS: 0");
             }
 
         } catch (Exception e) {

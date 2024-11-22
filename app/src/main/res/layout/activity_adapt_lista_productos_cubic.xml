@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relListPicking"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="70dp"
     tools:context="com.dts.ladapt.list_adapt_tareashh_picking">
 
     <LinearLayout
@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/lblCodigoProd"
-            android:layout_width="130dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"

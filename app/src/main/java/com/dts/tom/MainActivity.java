@@ -34,7 +34,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.dts.base.ExDialog;
 import com.dts.base.NetWorkInfoUtility;
@@ -199,9 +201,23 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 setHandlers();
             }
 
+            //#CKFK20241114 Agregué esta validación para los permisos por el Bluetooth
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, 1);
+                }
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                }
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+                }
+            }
+
             //'#EJC2023020610120: Buscar siempre el ID Marca y Modelo.
             gl.deviceId =androidid();
-            gl.devicename = getDeviceName();//getLocalBluetoothName();
+            gl.devicename = getDeviceName();
+            //getLocalBluetoothName();
 
             try {
 
@@ -449,6 +465,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     //region Grant permissions
 
+/*
     private void grantPermissions()   {
         try {
 
@@ -460,6 +477,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                         && checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
                         && checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                         && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+
                     startApplication();
                 } else {
                     ActivityCompat.requestPermissions(this,
@@ -479,6 +497,64 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
             msgbox(new Object() {
             }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+*/
+
+    private void grantPermissions() {
+        try {
+            // Lista para permisos faltantes
+            List<String> permissionsNeeded = new ArrayList<>();
+
+            // Permisos comunes (Android <12 y Android 12+)
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.CALL_PHONE);
+            }
+            if (checkCallingOrSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.WAKE_LOCK);
+            }
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.CAMERA);
+            }
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+            }
+
+            // Permisos específicos de Bluetooth según versión de Android
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsNeeded.add(Manifest.permission.BLUETOOTH_SCAN);
+                }
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsNeeded.add(Manifest.permission.BLUETOOTH_CONNECT);
+                }
+            } else { // Android <= 11
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsNeeded.add(Manifest.permission.BLUETOOTH);
+                }
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsNeeded.add(Manifest.permission.BLUETOOTH_ADMIN);
+                }
+            }
+
+            // Solicitar permisos si es necesario
+            if (!permissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(this, permissionsNeeded.toArray(new String[0]), 1);
+                startApplication();
+            } else {
+                // Iniciar aplicación si ya se tienen todos los permisos
+                startApplication();
+            }
+
+        } catch (Exception e) {
+            Log.e("grantPermissions", "Error al conceder permisos", e);
+            msgbox("Error: " + e.getMessage());
         }
     }
 
@@ -997,6 +1073,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     fillSpinemp();
 
                 }
+            }else{
+                //#GT19092024: limpiar el spin y asignar 0 a la empresa
+                gl.IdEmpresa=0;
+                spinemp.setAdapter(null);
+                msgbox("No se obtuvieron empresas");
+                progress.cancel();
             }
 
         } catch (Exception e) {
@@ -1027,6 +1109,9 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 }
 
             }else{
+                //#GT19092024: limpiar el spin y asignar 0 a la bodega
+                gl.IdBodega=0;
+                spinbod.setAdapter(null);
                 msgbox("No se obtuvieron bodegas");
                 progress.cancel();
             }
@@ -1110,6 +1195,12 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
                     fillSpinUser();
                 }
+            }else{
+                //#GT19092024: limpiar el spin y asignar 0 al operador
+                spinuser.setAdapter(null);
+                gl.IdOperador = 0;
+                mu.msgbox("No hay operadores asignados a la bodega.");
+                progress.cancel();
             }
 
         } catch (Exception e) {

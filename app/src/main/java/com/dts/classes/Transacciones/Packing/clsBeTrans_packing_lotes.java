@@ -10,7 +10,7 @@ public class clsBeTrans_packing_lotes {
     public String fecha="";
     public String presentacion="";
     public String estado="";
-    public int disp=0;
+    public double disp=0;
     public double cant=0;
     public int IdProductoBodega=0;
 

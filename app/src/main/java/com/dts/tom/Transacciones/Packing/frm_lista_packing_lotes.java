@@ -28,7 +28,7 @@ public class frm_lista_packing_lotes extends PBase {
     private list_adapt_packing_lotes adapter;
 
     private String codigo;
-    private int cantm;
+    private double cantm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +87,8 @@ public class frm_lista_packing_lotes extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                         try {
-                            int val=Integer.parseInt(txtCant.getText().toString());
-                            if (val<1) throw new Exception();
+                            double val=Integer.parseInt(txtCant.getText().toString());
+                            if (val<0) throw new Exception();
                             txtBulto.requestFocus();
                         } catch (Exception e) {
                             toast("Cantidad incorrecta");
@@ -161,7 +161,8 @@ public class frm_lista_packing_lotes extends PBase {
     //region Aux
 
     private boolean validaValores() {
-        int val,lin;
+        int lin, valCamas;
+        double val;
 
         if (gl.paPickUbicId==-1) {
             toast("Falta seleccionar un lote");return false;
@@ -178,7 +179,7 @@ public class frm_lista_packing_lotes extends PBase {
         }
 
         try {
-            val=Integer.parseInt(txtCant.getText().toString());
+            val=Double.parseDouble(txtCant.getText().toString());
             if (val<1) throw new Exception();
 
             if (val>cantm) {
@@ -195,9 +196,9 @@ public class frm_lista_packing_lotes extends PBase {
         }
 
         try {
-            val=Integer.parseInt(txtCamas.getText().toString());
-            if (val<1) throw new Exception();
-            gl.paCamas=val;
+            valCamas=Integer.parseInt(txtCamas.getText().toString());
+            if (valCamas<1) throw new Exception();
+            gl.paCamas=valCamas;
         } catch (Exception e) {
             txtCamas.requestFocus();txtCamas.selectAll();
             toast("Cantidad camas incorrecta");return false;

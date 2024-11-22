@@ -645,7 +645,8 @@ public class frm_list_rec_prod_detalle extends PBase {
                         callMethod("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet",
                                 "pIdOrdenCompraEnc",BeOcDet.IdOrdenCompraEnc,
                                 "pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pIdRecepcionDet",selid);
+                                "pIdRecepcionDet",selid,
+                                "pIdHost",gl.deviceId);
                         break;
                 }
 

@@ -262,6 +262,10 @@ public class Mainmenu extends PBase {
                         items.add(item);
                     }
 
+                    if (gl.beOperador.RolOperador.ListMenuRolOp.items.get(i).MenuSistemaOp.Nombre.equals("Finalizar recepción")){
+                        gl.Finalizar_Recepcion = true;
+                    }
+
                 }
 
                 item = clsCls.new clsMenu();

@@ -49,6 +49,9 @@ import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class frm_Packing extends PBase {
 
     private WebServiceHandler ws;
@@ -60,6 +63,7 @@ public class frm_Packing extends PBase {
     private Spinner cmbPresentacion,cmbLote,cmbVence,cmbEstado;
     private Button btnGuardarDirigida,btnBack;
     private ImageView cmdImprimir;
+    private RecyclerView recyclerView;
 
     private ProgressDialog progress;
     private Dialog dialog;
@@ -164,11 +168,14 @@ public class frm_Packing extends PBase {
             btnGuardarDirigida = findViewById(R.id.btnGuardarDirigida);
             cmdImprimir = findViewById(R.id.cmdImprimir2);
 
-            listProductos = findViewById(R.id.listProductos);
+            //listProductos = findViewById(R.id.listProductos);
             relForm = findViewById(R.id.relForm);
             relProductos = findViewById(R.id.relProductos);
             trCodigoProd = findViewById(R.id.trCodigoProd);
             trDescripcion = findViewById(R.id.trDescripcion);
+
+            recyclerView = findViewById(R.id.recyclerViewProductos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -2169,7 +2176,7 @@ public class frm_Packing extends PBase {
 
                                         if (ListaActualizada.size() > 0) {
                                             adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
-                                            listProductos.setAdapter(adapter);
+                                            recyclerView.setAdapter(adapter);
                                         }
                                     } else {
                                         msgbox("La licencia no es válida");

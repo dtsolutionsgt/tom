@@ -304,6 +304,8 @@ public class frm_recepcion_datos extends PBase {
     /*** boton flotante guardar recepción para poder activar o desactivar para evitar doble clic ***/
     private FloatingActionButton btnTareas;
 
+    private boolean isButtonClickable = true; // Flag para controlar el estado del botón
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -460,7 +462,8 @@ public class frm_recepcion_datos extends PBase {
 
             //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
             CantidadCopias = 0;
-            HabilitarCopias();
+            //#CKFK20241015 Puse esto en comentario porque lo voy a llamar mas adelante
+            //HabilitarCopias();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -964,11 +967,34 @@ public class frm_recepcion_datos extends PBase {
                 }
             });
 
+
+            btnTareas.setOnClickListener(v -> {
+                if (isButtonClickable) {
+                    // Desactiva temporalmente el FAB
+                    disableFabTemporarily();
+
+                    // Realiza la acción del botón Guardar Recepcion
+                    btnTareas_Clickable();
+
+                }
+            });
+
         }catch (Exception e){
             mu.msgbox(e.getClass()+" "+e.getMessage());
             progress.cancel();
         }
 
+    }
+
+    private void disableFabTemporarily() {
+        btnTareas.setEnabled(false); // Desactiva el botón
+        btnTareas.setAlpha(0.5f);    // Cambia la opacidad para indicar deshabilitado
+
+        // Rehabilita el botón después de 2 segundos
+        new Handler().postDelayed(() -> {
+            btnTareas.setEnabled(true);
+            btnTareas.setAlpha(1.0f); // Restaura la opacidad
+        }, 3000); // Cambia el tiempo según sea necesario
     }
 
     private void HabilitarCopias() {
@@ -1099,7 +1125,7 @@ public class frm_recepcion_datos extends PBase {
                         Mostrar_Propiedades_Parametros();
                     }else{
                         //#GT12102022: habilitar boton porque no cumplio validaDatosIngresados
-                        btnTareas.setEnabled(true);
+                        //btnTareas.setEnabled(true);
                         progress.cancel();
                     }
                 }
@@ -4828,7 +4854,7 @@ public class frm_recepcion_datos extends PBase {
                     }else{
                         //#GT12102022_1400: sino pasa la validación cancelar el progress y habilitar Guardar
                         progress.cancel();
-                        btnTareas.setEnabled(true);
+                        //btnTareas.setEnabled(true);
                     }
                 }else{
                     msgbox("No está definido el producto que se va a recepcionar");
@@ -4842,12 +4868,14 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
+    //GT30102024: Se sustituye por evento Listener para controlar el doble click
     public void BotonGuardarRecepcion(View view) {
 
         progress.setMessage("Guardando Recepción");
         progress.show();
 
         try {
+
             //#GT06022023: si se genera la LP auto, validar que este seteada en el input
             if (gl.bloquear_lp_hh) {
                 if (txtNoLP!=null){
@@ -4862,6 +4890,33 @@ public class frm_recepcion_datos extends PBase {
             }
 
         } catch (Exception e) {
+            btnTareas.setEnabled(true);
+            mu.msgbox("BotonGuardarRecepcion: "+ e.getMessage());;
+        }
+    }
+
+    private void btnTareas_Clickable(){
+
+        progress.setMessage("Guardando Recepción");
+        progress.show();
+
+        try {
+
+            //#GT06022023: si se genera la LP auto, validar que este seteada en el input
+            if (gl.bloquear_lp_hh) {
+                if (txtNoLP!=null){
+                    if (txtNoLP.getText().equals("")){
+                        mu.msgbox("El proceso no ha asignado una LP para la recepción.");
+                    }else{
+                        guardar_recepcion();
+                    }
+                }
+            }else{
+                guardar_recepcion();
+            }
+
+        } catch (Exception e) {
+            btnTareas.setEnabled(true);
             mu.msgbox("BotonGuardarRecepcion: "+ e.getMessage());;
         }
     }
@@ -4871,7 +4926,8 @@ public class frm_recepcion_datos extends PBase {
         try{
 
             /***********Deshabilitar boton guardar para evitar doble clic *****************/
-            btnTareas.setEnabled(false);
+            /*******GT30102024:el boton se deshabilita en evento OnClick y se reactiva tras un delay *****/
+            //btnTareas.setEnabled(false);
 
             imprimirDesdeBoton=false;
 
@@ -4937,10 +4993,7 @@ public class frm_recepcion_datos extends PBase {
 
                     ValidaCampos();
                 }
-
             }
-
-            //btnTareas.setEnabled(true);
 
         }catch (Exception e){
             btnTareas.setEnabled(true);
@@ -6883,16 +6936,9 @@ public class frm_recepcion_datos extends PBase {
                             int vIdUbicacion = 0;
 
                             if (BeEstado.IdUbicacionBodegaDefecto>0){
-                                /*BeStockRecNuevaRec = BeStockRec;
-                                vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionBodegaDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionBodegaDefecto;
                             }else if (BeEstado.IdUbicacionDefecto>0){
                                 BeStockRecNuevaRec = BeStockRec;
-                                /*vCantNuevaRec = vCant;
-                                vFactorNuevaRec = Factor;
-                                BeStockRecNuevaRec.IdUbicacion =  BeEstado.IdUbicacionDefecto;*/
                                 vIdUbicacion = BeEstado.IdUbicacionDefecto;
                             }else{
                                 if (BeEstado.Danado){
@@ -7681,6 +7727,7 @@ public class frm_recepcion_datos extends PBase {
                                 gl.gBeRecepcion.Detalle.items.get(0).IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
+                                gl.gBeRecepcion.Detalle.items.get(0).Host = gl.deviceId;
                             }
 
                             callMethod("Guardar_Recepcion_Sin_Presentacion",
@@ -7698,6 +7745,11 @@ public class frm_recepcion_datos extends PBase {
 
                         }else{
                             if (gl.gBeRecepcion.Detalle.items.size()>1){
+
+                                for (int i = 0; i < gl.gBeRecepcion.Detalle.items.size(); i++) {
+                                    gl.gBeRecepcion.Detalle.items.get(i).Host = gl.deviceId;
+                                }
+
                                 callMethod("Guardar_Recepcion",
                                         "pRecEnc", gl.gBeRecepcion,
                                               "pRecOrdenCompra", gl.gBeRecepcion.OrdenCompraRec.OC,
@@ -7711,6 +7763,9 @@ public class frm_recepcion_datos extends PBase {
                                               "pIdResolucionLp", gl.IdResolucionLpOperador,
                                               "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
                             }else{
+
+                                BeTransReDet.Host = gl.deviceId;
+
                                 callMethod("Guardar_Recepcion_S",
                                         "pIdRecpecionEnc", gl.gBeRecepcion.IdRecepcionEnc,
                                         "pIdTipoDocumentoDI", gl.gBeRecepcion.OrdenCompraRec.OC.IdTipoIngresoOC,
@@ -8541,10 +8596,9 @@ public class frm_recepcion_datos extends PBase {
                 }
             }
 
-            //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
             if (nBeResolucion !=null){
 
-                //toast("Se obtuvo la resolución");
+                gl.TieneResoluciones = true;
 
                 gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
 
@@ -8652,6 +8706,8 @@ public class frm_recepcion_datos extends PBase {
             }
 
             pBeTipo_etiqueta.IdTipoEtiqueta=BeProducto.IdTipoEtiqueta;
+
+            HabilitarCopias();
 
             execws(27);
 

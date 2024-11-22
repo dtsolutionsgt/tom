@@ -72,6 +72,9 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.checkerframework.checker.units.qual.A;
 
 public class frm_cambio_ubicacion_ciega extends PBase {
@@ -89,6 +92,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
     private TableRow tblLicenciaMixta;
+    private RecyclerView recyclerView;
 
     private clsBeMotivo_ubicacionList pListBeMotivoUbicacion = new clsBeMotivo_ubicacionList();
 
@@ -233,10 +237,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
 
-            listProductos = findViewById(R.id.listProductos);
+            //listProductos = findViewById(R.id.listProductos);
 
             tblExplosionar.setVisibility(View.GONE);
             tblLicenciaMixta.setVisibility(View.GONE);
+
+            recyclerView = findViewById(R.id.recyclerViewProductos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -2272,12 +2279,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#CKFK20240410 Agregué validación para que las areas del destino y el origen
                 //sean iguales cuando la bodega tenga interface con SAP
                 if (CambioUbicExistencia){
-                    if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea && gl.Restringir_Areas_SAP){
-                        throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=gl.existencia.IdArea ){
+                            throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
+                        }
                     }
                 }else{
-                    if(gl.Interface_SAP){
-                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea && gl.Restringir_Areas_SAP){
+                    if(gl.Interface_SAP && gl.Restringir_Areas_SAP){
+                        if (bodega_ubicacion_destino.IdArea!=bodega_ubicacion_origen.IdArea){
                             throw new Exception("La ubicación destino está en una bodega diferente, no se puede realizar el cambio de ubicación");
                         }
                     }
@@ -2479,7 +2488,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     if (ListaActualizada.size() > 0) {
                         adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
-                        listProductos.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);
 
                         stockResList.items = new ArrayList<>();
 
@@ -3576,7 +3585,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (BeStockPallet.getIdPresentacion()!=0) {
 
                         if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
-                            msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
+                            //***GT15112024: para cealsa que usa area, se valida para que no pregunte y mantenga la lp original
+                            if(gl.Mostrar_Area_En_HH){
+                                Es_Explosion = false;
+                                if (!CambioUbicExistencia){
+                                    inicializaTarea(true);
+                                }else{
+                                    CambioUbicExistencia=false;
+                                    finish();
+                                }
+                            }else{
+                                msgAskExplosionar("La ubicación parcial  requiere explosión, ¿generar nueva licencia?");
+                            }
+
                         } else {
                             CambioUbicExistencia=false;
                             finish();

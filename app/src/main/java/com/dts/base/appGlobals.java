@@ -147,7 +147,8 @@ public class appGlobals extends Application {
     //gBePedidoEnc = new clsBeTrans_pe_enc;
 
     //Variables para packing
-    public int modo_packing, paPickUbicId, paCant, paCamas, paLinea;
+    public int modo_packing, paPickUbicId, paCamas, paLinea;
+    public double paCant;
     public String paCodigo, paNombre, paBulto, filtroprod, paLote, paEstado;
     public ArrayList<clsBeTrans_packing_lotes> packlotes = new ArrayList<clsBeTrans_packing_lotes>();
 
@@ -196,6 +197,8 @@ public class appGlobals extends Application {
     public boolean Mostrar_Area_En_HH=false;
     public boolean confirmar_codigo_en_picking=false;
 
+    public boolean Finalizar_Recepcion=false;
+
     //#EJC20220314: CEALSA, si true, entonces en el cambio de ubicación, al escanear únicamente licencia, se coloca automáticamente la ubicación de origen.
     public boolean inferir_origen_en_cambio_ubic =false;
 
@@ -222,7 +225,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.1.5";
+    public final String version="6.2.9";
     public boolean VerificacionSinLoteFechaVen = false;
 
     //Voz Picking
