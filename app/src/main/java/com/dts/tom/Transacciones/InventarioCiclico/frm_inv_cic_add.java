@@ -1690,7 +1690,13 @@ public class frm_inv_cic_add extends PBase {
                 lblProd.setText ("Código no válido");
                 txtProd.requestFocus();
                 txtProd.selectAll();
-                throw new Exception("Producto no existe");
+                toast("Producto no existe");
+
+                if (NuevoConteo) {
+                    gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
+                    gl.nuevo_producto_cic = txtProd.getText().toString();
+                    startActivity(new Intent(this, frm_inv_cic_nuevo.class));
+                }
             }
 
         } catch (Exception e) {
@@ -1815,5 +1821,15 @@ public class frm_inv_cic_add extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (gl.cerrarActividad2) {
+            gl.cerrarActividad2 = false;
+            finish();
+        }
     }
 }

@@ -218,6 +218,8 @@ public class frm_inv_cic_guardar extends PBase {
                 fillSpinEstado();
             }
 
+            txtNUbic.setText(gl.IdUbicInvCic+"");
+            execws(2);
         } catch (Exception e) {
             mu.msgbox( "spinner_Estados:"+ e.getMessage());
         }

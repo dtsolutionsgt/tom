@@ -262,7 +262,7 @@ public class appGlobals extends Application {
     public int ubicacionInv = 0;
     public clsBeTrans_packing_lotes auxPacking = null;
     public String LicenciaPacking = "";
-
+    public int IdUbicInvCic = 0;
     @Override
     public void onCreate() {
         super.onCreate();
