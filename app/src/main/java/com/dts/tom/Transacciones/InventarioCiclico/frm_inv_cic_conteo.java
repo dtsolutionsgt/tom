@@ -266,13 +266,15 @@ public class frm_inv_cic_conteo extends PBase {
 
                             //fecha_vence_stock = index 9, fecha_vence = index 10
                             if (DT.getString(9)!=null){
-                                data_rec.Fecha_Vence_Stock =  du.convierteFechaMostrar(DT.getString(9));
+                                String fechaVenceStock = DT.getString(9).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(9));
+                                data_rec.Fecha_Vence_Stock =  fechaVenceStock;
                             }else{
                                 data_rec.Fecha_Vence_Stock = "";
                             }
 
                             if (DT.getString(10)!=null){
-                                data_rec.Fecha_Vence =  du.convierteFechaMostrar(DT.getString(10));
+                                String fechaVence = DT.getString(10).contains("1900-01-01T00:00:00") ? "" : du.convierteFechaMostrar(DT.getString(10));
+                                data_rec.Fecha_Vence = fechaVence;
                             }else{
                                 data_rec.Fecha_Vence = "";
                             }

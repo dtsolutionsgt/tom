@@ -545,21 +545,18 @@ public class frm_inv_cic_guardar extends PBase {
 
                 BeTrans_inv_ciclico.Lote = txtNLote.getText().toString().trim();
                 BeTrans_inv_ciclico.Lote_stock = txtNLote.getText().toString().trim();
+                BeTrans_inv_ciclico.lic_plate = "0";
 
-                //BeTrans_inv_ciclico.fecha_vence = dtpNVence.getText().toString().trim();
+                String fechaVencimiento = "";
 
                 try {
-                    BeTrans_inv_ciclico.Fecha_vence = du.convierteFecha(dtpNVence.getText().toString().trim());
+                    fechaVencimiento = gl.pBeProductoNuevo.Control_vencimiento ? du.convierteFecha(dtpNVence.getText().toString().trim()) : "1900-01-01T00:00:00";
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
-                //BeTrans_inv_ciclico.fecha_vence_stock = dtpNVence.getText().toString().trim();
-                try {
-                    BeTrans_inv_ciclico.Fecha_vence_stock = du.convierteFecha(dtpNVence.getText().toString().trim());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                BeTrans_inv_ciclico.Fecha_vence = fechaVencimiento;
+                BeTrans_inv_ciclico.Fecha_vence_stock = fechaVencimiento;
 
                 BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
                 BeTrans_inv_ciclico.Cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());
