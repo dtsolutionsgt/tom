@@ -3,6 +3,7 @@ package com.dts.tom.Transacciones.Packing;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -188,6 +189,12 @@ public class frm_lista_packing_lp extends PBase {
         TextView txtProducto = dialogView.findViewById(R.id.txtProducto);
         TextView txtLicencia = dialogView.findViewById(R.id.txtLicencia);
         EditText txtCantidad = dialogView.findViewById(R.id.txtCantidad);
+
+        if (gl.Permitir_Decimales){
+            txtCantidad.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);}
+        else {
+            txtCantidad.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
 
         txtProducto.setText(sitem.codigo + " - " + sitem.producto);
         txtLicencia.setText(sitem.licencia);
