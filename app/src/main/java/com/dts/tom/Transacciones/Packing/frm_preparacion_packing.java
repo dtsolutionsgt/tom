@@ -751,7 +751,8 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void agregaLP() {
-        focusLP();
+        runOnUiThread(() -> focusLP());
+        //focusLP();
         if (gl.auxPacking == null) return;
 
         Optional<clsBeTrans_picking_ubic> pitem = pick.items.stream()
@@ -1250,8 +1251,23 @@ public class frm_preparacion_packing extends PBase {
 
             if (browse==1) {
                 browse=0;
-                agregaLP();
-                return;
+
+                progress.setCancelable(false);
+                progress.show();
+
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1000);
+                        agregaLP();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    runOnUiThread(() -> {
+                        progress.dismiss();
+                    });
+                }).start();
             }
         } catch (Exception e) {
             mu.msgbox("OnResume "+e.getMessage());
