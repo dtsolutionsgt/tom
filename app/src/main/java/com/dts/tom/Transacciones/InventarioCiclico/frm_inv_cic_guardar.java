@@ -114,7 +114,6 @@ public class frm_inv_cic_guardar extends PBase {
 
             if(gl.pBeProductoNuevo != null){
 
-
                 LlenaCampos_Producto_Nuevo();
 
                 txtNProd.setText(gl.pBeProductoNuevo.Nombre);
@@ -392,6 +391,7 @@ public class frm_inv_cic_guardar extends PBase {
                 BeTrans_inv_ciclico.IdPresentacion_nuevo = Presentacion;
                 BeTrans_inv_ciclico.IdUbicacion = nidubic;
                 BeTrans_inv_ciclico.IdUbicacion_nuevo = nidubic;
+                BeTrans_inv_ciclico.IdUnidadMedida = gl.pBeProductoNuevo.IdUnidadMedidaBasica ;
                 BeTrans_inv_ciclico.EsNuevo = true;
 
             }
@@ -546,6 +546,7 @@ public class frm_inv_cic_guardar extends PBase {
                 BeTrans_inv_ciclico.Lote = txtNLote.getText().toString().trim();
                 BeTrans_inv_ciclico.Lote_stock = txtNLote.getText().toString().trim();
                 BeTrans_inv_ciclico.lic_plate = "0";
+                BeTrans_inv_ciclico.IdUnidadMedida = gl.pBeProductoNuevo.IdUnidadMedidaBasica;
 
                 String fechaVencimiento = "";
 
@@ -559,7 +560,7 @@ public class frm_inv_cic_guardar extends PBase {
                 BeTrans_inv_ciclico.Fecha_vence_stock = fechaVencimiento;
 
                 BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtNCantContada.getText().toString().trim());
-                BeTrans_inv_ciclico.Cant_stock = Double.parseDouble(txtNCantContada.getText().toString().trim());
+                BeTrans_inv_ciclico.Cant_stock = 0.00;
                 BeTrans_inv_ciclico.Cant_reconteo = 0.00;
 
                 if(gl.pBeProductoNuevo.Control_peso){

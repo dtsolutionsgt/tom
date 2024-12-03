@@ -7715,7 +7715,6 @@ public class frm_recepcion_datos extends PBase {
                             }
                         }
 
-
                         //#AT 20220328 Si chkPresentacion no esta marcado, IdPresentación = 0
                         if (!chkPresentacion.isChecked() && chkPresentacion.getVisibility() == View.VISIBLE) {
 

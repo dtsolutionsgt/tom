@@ -234,6 +234,11 @@ public class frm_inv_cic_nuevo extends PBase {
                 e.printStackTrace();
             }
 
+            if (IdUmBas==0){
+                msgbox("Debe ingresar la unidad de medida del producto");
+                return;
+            }
+
             gl.pBeProductoNuevo.IdPropietario = BeInvEnc.Idpropietario;
             gl.pBeProductoNuevo.IdClasificacion = IdClasificacion;
             gl.pBeProductoNuevo.IdFamilia = IdFamilia;
