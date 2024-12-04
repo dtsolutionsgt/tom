@@ -46,7 +46,7 @@ public class frm_preparacion_packing extends PBase {
     private EditText txtLP,txtLinea;
     private TextView lblProc,lblPend, txtLicenciaPacking;
     private ProgressBar pbar;
-    private ImageView btnImprimir;
+    private ImageView btnImprimir, btnBuscars;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
@@ -85,6 +85,7 @@ public class frm_preparacion_packing extends PBase {
         txtLicenciaPacking = findViewById(R.id.txtLicenciaPacking);
 
         btnImprimir = findViewById(R.id.btnImprimir);
+        btnBuscars = findViewById(R.id.btnBuscars);
 
         pbar = findViewById(R.id.pgrtareas2);
 
@@ -92,7 +93,7 @@ public class frm_preparacion_packing extends PBase {
         IdPedidoEnc = gl.gIdPedidoEnc;
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
-        ProgressDialog("Cargando forma");
+        showProgressDialog("Cargando forma");
 
         ws = new WebServiceHandler(frm_preparacion_packing.this, gl.wsurl);
         xobj = new XMLObject(ws);
@@ -127,6 +128,8 @@ public class frm_preparacion_packing extends PBase {
     }
 
     public void doList(View view){
+
+        //btnBuscars.setEnabled(false);
         verLista();
     }
 
@@ -287,10 +290,11 @@ public class frm_preparacion_packing extends PBase {
             } catch (Exception e) {}
 
         } catch (Exception e) {
+            hideProgressDialog();
             mu.msgbox("listItems : "+e.getMessage());
         }
 
-        progress.cancel();
+
 
         try {
             pendientes = 0;
@@ -319,6 +323,7 @@ public class frm_preparacion_packing extends PBase {
 
             lblProc.setText("Procesado : "+(pick.items.size() - pendientes));
         } catch (Exception e) {
+            hideProgressDialog();
             String ss=e.getMessage();
             pendientes=0;
         }
@@ -328,13 +333,15 @@ public class frm_preparacion_packing extends PBase {
 
     private void processListUbic(){
         try {
-            progress.setMessage("Obteniendo lista de articulos");
+            showProgressDialog("Obteniendo lista de articulos");
+            btnBuscars.setEnabled(false);
 
             pick=xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
 
             execws(2);
         } catch (Exception e) {
-            progress.cancel();
+            hideProgressDialog();
+            btnBuscars.setEnabled(true);
             String ss=e.getMessage();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -342,9 +349,12 @@ public class frm_preparacion_packing extends PBase {
 
     private void processListSaved(){
         try {
+
+            //btnBuscars.setEnabled(false);
+
             items.clear();
 
-            progress.setMessage("Obteniendo lista de articulos guardados");
+            showProgressDialog("Obteniendo lista de articulos guardados");
 
             savedList =xobj.getresult(clsBeTrans_packing_encList.class,"Get_All_Packing_By_IdPicking");
 
@@ -355,19 +365,22 @@ public class frm_preparacion_packing extends PBase {
             } catch (Exception e) {}
 
             listItems();
+            btnBuscars.setEnabled(true);
 
        } catch (Exception e) {
-            progress.cancel();
+            hideProgressDialog();
+            btnBuscars.setEnabled(true);
             String ss=e.getMessage();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
        }
 
        idle=true;
+       hideProgressDialog();
+       btnBuscars.setEnabled(true);
     }
 
     private void cargaListaGuardados() {
         try {
-
 
             for (int i = 0; i <savedList.items.size(); i++) {
 
@@ -392,11 +405,11 @@ public class frm_preparacion_packing extends PBase {
 
         try {
             idle=false;
-            progress.setMessage("Cargando tarea ...");
-            progress.show();
+            showProgressDialog("Cargando tarea ...");
 
             execws(4);
         } catch (Exception e){
+            hideProgressDialog();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -537,12 +550,12 @@ public class frm_preparacion_packing extends PBase {
                 msgbox("Tiene productos pendientes de empacar, no se puede finalizar");return;
             }
 
-            progress.setMessage("Finalizando tarea ...");
-            progress.show();
+            showProgressDialog("Finalizando tarea ...");
             idle=false;
             execws(5);
 
         } catch (Exception e) {
+            hideProgressDialog();
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
@@ -552,7 +565,8 @@ public class frm_preparacion_packing extends PBase {
 
         try {
 
-            idle=true; progress.cancel();
+            idle=true;
+            hideProgressDialog();
 
             if (!ws.errorflag) {
                 regs = xobj.getresult(Integer.class,"Inserta_Packing");
@@ -613,7 +627,8 @@ public class frm_preparacion_packing extends PBase {
 
         try {
 
-            idle=true; progress.cancel();
+            idle=true;
+            hideProgressDialog();
 
             if (!ws.errorflag) {
                 exito = xobj.getresult(Integer.class,"Actualizar_Estado_Packing");
@@ -635,7 +650,8 @@ public class frm_preparacion_packing extends PBase {
         int exito;
 
         try {
-            idle=true; progress.cancel();
+            idle=true;
+            hideProgressDialog();
 
             if (!ws.errorflag) {
                 exito = xobj.getresult(Integer.class,"Eliminar_Linea_Packing");
@@ -787,6 +803,7 @@ public class frm_preparacion_packing extends PBase {
             try {
                 switch (ws.callback) {
                     case 1:
+
                         callMethod("Get_All_PickingUbic_By_PickingEnc","pIdPickingEnc",idPickingEnc,
                                 "pIdPedidoEnc",IdPedidoEnc);
                         break;
@@ -852,7 +869,7 @@ public class frm_preparacion_packing extends PBase {
 
         } catch (Exception e) {
             try {
-                progress.cancel();
+                hideProgressDialog();
             } catch (Exception ee) {}
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -879,15 +896,26 @@ public class frm_preparacion_packing extends PBase {
         }
     }
 
-    public void ProgressDialog(String mensaje){
-        progress=new ProgressDialog(this);
+    public void showProgressDialog(String mensaje) {
+        // Si el ProgressDialog ya existe y está mostrando, lo cerramos
+        if (progress != null && progress.isShowing()) {
+            progress.dismiss();
+        }
+
+        // Creamos una nueva instancia del ProgressDialog
+        progress = new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
-        progress.setProgress(0);
+        progress.setCancelable(false); // Opcional: Evita que el usuario lo cierre
         progress.show();
     }
 
+    public void hideProgressDialog() {
+        if (progress != null && progress.isShowing()) {
+            progress.dismiss();
+        }
+    }
     private void focusLP() {
         Handler mtimer = new Handler();
         Runnable mrunner=new Runnable() {
@@ -1080,7 +1108,7 @@ public class frm_preparacion_packing extends PBase {
                 handler.postDelayed(() -> {
 
                     Imprimir_Licencia();
-                    progress.cancel();
+                    hideProgressDialog();
 
                 }, 300);
 
@@ -1230,7 +1258,7 @@ public class frm_preparacion_packing extends PBase {
                 mu.msgbox("No se pudo obtener conexión con la impresora");
             }
         } catch (Exception e) {
-            progress.cancel();
+            hideProgressDialog();
             //#EJC20210126
             if (e.getMessage().contains("Could not connect to device:")){
                 mu.toast("Error al imprimir la licencia del producto. No existe conexión a la impresora: "+ gl.MacPrinter);
@@ -1250,10 +1278,10 @@ public class frm_preparacion_packing extends PBase {
             txtLP.requestFocus();
 
             if (browse==1) {
+
                 browse=0;
 
-                progress.setCancelable(false);
-                progress.show();
+                showProgressDialog("");
 
                 new Thread(() -> {
                     try {
@@ -1265,10 +1293,11 @@ public class frm_preparacion_packing extends PBase {
                     }
 
                     runOnUiThread(() -> {
-                        progress.dismiss();
+                        hideProgressDialog();
                     });
                 }).start();
             }
+
         } catch (Exception e) {
             mu.msgbox("OnResume "+e.getMessage());
         }
