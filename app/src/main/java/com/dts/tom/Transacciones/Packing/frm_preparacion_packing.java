@@ -209,6 +209,11 @@ public class frm_preparacion_packing extends PBase {
                 msgImprimir("¿Imprimir licencia?");
             });
 
+            btnBuscars.setOnClickListener(view -> {
+                doList(view);
+                btnBuscars.setEnabled(false);
+            });
+
         } catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -769,7 +774,10 @@ public class frm_preparacion_packing extends PBase {
     private void agregaLP() {
         runOnUiThread(() -> focusLP());
         //focusLP();
-        if (gl.auxPacking == null) return;
+        if (gl.auxPacking == null) {
+            runOnUiThread(() -> btnBuscars.setEnabled(true));
+            return;
+        }
 
         Optional<clsBeTrans_picking_ubic> pitem = pick.items.stream()
                 .filter(p -> p.getLote().equals(gl.auxPacking.lote))
