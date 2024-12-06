@@ -40,6 +40,7 @@ public class clsBeProveedor {
     @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
 
     @Element(required=false) public int IdBodegaAreaSAP = 0;
+    @Element(required=false) private int IdPais;
 
     public clsBeProveedor() {
     }
@@ -259,5 +260,14 @@ public class clsBeProveedor {
         IdBodegaAreaSAP=value;
     }
 
+    // Getter
+    public int getIdPais() {
+        return IdPais;
+    }
+
+    // Setter
+    public void setIdPais(int value) {
+        IdPais = value;
+    }
 }
 
