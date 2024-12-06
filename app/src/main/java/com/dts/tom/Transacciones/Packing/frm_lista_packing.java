@@ -166,7 +166,7 @@ public class frm_lista_packing extends PBase {
 
                     }
 
-                    count = BeListTareasPicking.size()-1;
+                    count = BeListTareasPicking.size();
                     lblRegs.setText("Regs: "+ count);
                 }
             }

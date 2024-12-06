@@ -29,17 +29,20 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/btnDet"
-                android:layout_width="match_parent"
+                android:id="@+id/btnRegsList"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
                 android:layout_toEndOf="@+id/btnBack"
                 android:background="@drawable/color_medium"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="doLoad"
+                android:text="@string/regs_0"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -102,22 +105,6 @@
             android:textColor="@android:color/background_light"
             android:textSize="18sp"
             android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/btnRegsList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/relbot"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/color_medium"
-        android:clickable="true"
-        android:onClick="doLoad"
-        android:text="@string/regs_0"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp"
-        android:focusable="true" />
 
     <RelativeLayout
         android:id="@+id/relCenter"
