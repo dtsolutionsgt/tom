@@ -1009,7 +1009,8 @@ public class frm_verificacion_datos extends PBase {
                                    "pIdOperador",gl.OperadorBodega.IdOperadorBodega,
                                    "pCantidad",pCantidad,
                                    "pPeso",pPeso,
-                                   "pTipo", pTipo);
+                                   "pTipo", pTipo,
+                                   "pIdPedidoEnc", gl.pIdPedidoEnc);
                         break;
                     case 4:
                         callMethod("Get_All_Presentaciones_By_IdProducto","pIdProducto",gBeProducto.getIdProducto(),"pActivo",true);
