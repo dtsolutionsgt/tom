@@ -94,7 +94,7 @@ public class frm_inv_cic_add extends PBase {
 
     //respuesta de validación
     boolean respuesta_producto;
-    private boolean existeConteo = false;
+    private boolean existeConteo = false, esOriginal = false;
 
     private clsBeBodega_ubicacion ubicacion = new clsBeBodega_ubicacion();
     private clsBeProducto BeProductoUbicacion = new clsBeProducto();
@@ -361,173 +361,181 @@ public class frm_inv_cic_add extends PBase {
     }
 
     private void Load() {
+        try {
+            if (gl.inv_ciclico != null) {
 
-        if(gl.inv_ciclico !=null){
+                //#AT20241205 Validar si es el registro es original
+                esOriginal = gl.inv_ciclico.IdProductoEstado == gl.inv_ciclico.IdProductoEst_nuevo &&
+                        gl.inv_ciclico.Fecha_Vence.equals(gl.inv_ciclico.Fecha_Vence_Stock) &&
+                        gl.inv_ciclico.Lote.equals(gl.inv_ciclico.Lote_stock) &&
+                        gl.inv_ciclico.IdUbicacion_nuevo == 0;
 
-            //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
-            Index = gl.IndexCiclico;
-            tam_lista = gl.reconteo_list.size() -1;
+                //Index para determinar el registro seleccionado de la lista para avanzar o retroceder y tam_list para saber minimo y maximo a recorrer
+                Index = gl.IndexCiclico;
+                tam_lista = gl.reconteo_list.size() - 1;
+
+                //index para el combobox estados
+                int index = 0;
+
+                if (gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor == 0) {
+                    vFactor = 0;
+                } else {
+                    vFactor = gl.inv_ciclico.Factor;
+                }
+
+                idPresentacion = gl.inv_ciclico.IdPresentacion;
+
+                //validaciones para obtener lista de estados por idPropietario
+                if (gl.lista_estados != null) {
+
+                    if (gl.lista_estados.items != null) {
+
+                        ArrayAdapter<clsBeProducto_estado> EstadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, gl.lista_estados.items);
+                        EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cboEstado.setAdapter(EstadosAdapter);
+
+                        int estado = (gl.inv_ciclico.cantidad > 0 && gl.inv_ciclico.IdProductoEst_nuevo != 0) ? gl.inv_ciclico.IdProductoEst_nuevo : gl.inv_ciclico.IdProductoEstado;
+
+                        int indice = gl.lista_estados.items.stream()
+                                .filter(obj -> obj.getIdEstado() == estado)
+                                .map(gl.lista_estados.items::indexOf)
+                                .findFirst()
+                                .orElse(-1);
+
+                        if (indice != -1) {
+                            cboEstado.setSelection(indice);
+                        } else {
+                            cboEstado.setSelection(0);
+                        }
+                    }
+                }
+
+                //llama a ws para cargar spinner con presentaciones del producto
+                execws(4);
+
+                txtUbic.setText(gl.inv_ciclico.NoUbic + "");
+                idubic = gl.inv_ciclico.NoUbic;
+                lblUbic1.setTypeface(null, Typeface.BOLD);
+                lblUbic1.setText(gl.inv_ciclico.Ubic_nombre + "");
+                lblProd.setTypeface(null, Typeface.BOLD);
+                lblProd.setText(gl.inv_ciclico.Codigo + " - " + gl.inv_ciclico.Producto_nombre);
+
+                String lote = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Lote : gl.inv_ciclico.Lote_stock;
+                txtLote1.setText(lote);
+
+                String fecha = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Fecha_Vence : gl.inv_ciclico.Fecha_Vence_Stock;
+                dtpVence.setText(fecha);
+
+                if (gl.inv_ciclico.IdPresentacion == 0) {
+                    lblUM.setText(gl.inv_ciclico.UMBas);
+                } else {
+
+                    String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
+                    lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
+                }
+
+                if (gl.pprod.Control_lote) {
+                    txtlote_cic.setVisibility(TextView.VISIBLE);
+                    txtLote1.setVisibility(TextView.VISIBLE);
+                    //txtLote1.setEnabled(false);
+                } else {
+                    txtlote_cic.setVisibility(TextView.INVISIBLE);
+                    txtLote1.setVisibility(TextView.INVISIBLE);
+                }
+
+                if (gl.pprod.Control_vencimiento) {
+                    txtFecha_cic.setVisibility(TextView.VISIBLE);
+                    imgDate.setVisibility(TextView.VISIBLE);
+                    dtpVence.setVisibility(TextView.VISIBLE);
+                } else {
+                    txtFecha_cic.setVisibility(TextView.INVISIBLE);
+                    imgDate.setVisibility(TextView.INVISIBLE);
+                    dtpVence.setVisibility(TextView.INVISIBLE);
+                }
+
+                if (gl.inv_ciclico.control_peso) {
+
+                    txtpeso_cic.setVisibility(TextView.VISIBLE);
+
+                    txtPesoContado.setVisibility(TextView.VISIBLE);
+
+                } else {
+                    txtpeso_cic.setVisibility(TextView.INVISIBLE);
+
+                    txtPesoContado.setVisibility(TextView.INVISIBLE);
+                }
 
 
-            //index para el combobox estados
-            int index = 0;
+                if (BeInvEnc.Mostrar_Cantidad_Teorica_hh) {
 
-            if(gl.inv_ciclico.Factor.toString().isEmpty() || gl.inv_ciclico.Factor ==0){
-                vFactor = 0;
-            }else {
-                vFactor = gl.inv_ciclico.Factor;
-            }
+                    if (!gl.inv_ciclico.cantidad.equals(0.00)) {
 
-            idPresentacion = gl.inv_ciclico.IdPresentacion;
+                        if (idPresentacion == 0) {
 
-           //validaciones para obtener lista de estados por idPropietario
-            if (gl.lista_estados != null) {
+                            lblCantStock.setVisibility(TextView.VISIBLE);
+                            lblCantStock.setText(gl.inv_ciclico.Cant_Stock + "");
 
-                if (gl.lista_estados.items != null) {
+                        } else {
 
-                    ArrayAdapter<clsBeProducto_estado> EstadosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, gl.lista_estados.items);
-                    EstadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    cboEstado.setAdapter(EstadosAdapter);
-
-                    int estado = (gl.inv_ciclico.cantidad > 0  && gl.inv_ciclico.IdProductoEst_nuevo != 0) ? gl.inv_ciclico.IdProductoEst_nuevo: gl.inv_ciclico.IdProductoEstado;
-
-                    int indice = gl.lista_estados.items.stream()
-                            .filter(obj -> obj.getIdEstado() == estado)
-                            .map(gl.lista_estados.items::indexOf)
-                            .findFirst()
-                            .orElse(-1);
-
-                    if (indice != -1) {
-                        cboEstado.setSelection(indice);
+                            double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                            String stringDecimal = String.format("%.6f", resultado_);
+                            lblCantStock.setText(stringDecimal);
+                        }
                     } else {
-                        cboEstado.setSelection(0);
+
+                        if (idPresentacion == 0) {
+
+                            lblCantStock.setVisibility(TextView.VISIBLE);
+                            lblCantStock.setText(gl.inv_ciclico.Cant_Stock + "");
+
+                        } else {
+
+                            double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                            String stringDecimal = String.format("%.6f", resultado_);
+                            lblCantStock.setText(stringDecimal);
+                        }
                     }
+
+                } else {
+
+                    lblCantStock.setVisibility(TextView.INVISIBLE);
                 }
-            }
 
-            //llama a ws para cargar spinner con presentaciones del producto
-             execws(4);
+                lbltitulo_cic.setText("Ubic # " + gl.inv_ciclico.NoUbic);
 
-            txtUbic.setText(gl.inv_ciclico.NoUbic +"");
-            idubic = gl.inv_ciclico.NoUbic;
-            lblUbic1.setTypeface(null, Typeface.BOLD);
-            lblUbic1.setText(gl.inv_ciclico.Ubic_nombre +"");
-            lblProd.setTypeface(null, Typeface.BOLD);
-            lblProd.setText(gl.inv_ciclico.Codigo +" - "+ gl.inv_ciclico.Producto_nombre);
+                if (!gl.inv_ciclico.cantidad.equals(0.00)) {
 
-            String lote = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Lote : gl.inv_ciclico.Lote_stock;
-            txtLote1.setText(lote);
+                    if (idPresentacion == 0) {
 
-            String fecha = gl.inv_ciclico.cantidad > 0 ? gl.inv_ciclico.Fecha_Vence : gl.inv_ciclico.Fecha_Vence_Stock;
-            dtpVence.setText(fecha);
+                        String stringDecimal = String.format("%.6f", gl.inv_ciclico.cantidad);
+                        txtCantContada.setText(stringDecimal);
 
-            if(gl.inv_ciclico.IdPresentacion == 0){
-                lblUM.setText(gl.inv_ciclico.UMBas);
-            }else{
+                    } else {
 
-                String stringDecimal = String.format("%.6f", gl.inv_ciclico.Factor);
-                lblUM.setText(gl.inv_ciclico.Pres + "->" + stringDecimal);
-            }
-
-            if( gl.pprod.Control_lote){
-                txtlote_cic.setVisibility(TextView.VISIBLE);
-                txtLote1.setVisibility(TextView.VISIBLE);
-                //txtLote1.setEnabled(false);
-            }else{
-                txtlote_cic.setVisibility(TextView.INVISIBLE);
-                txtLote1.setVisibility(TextView.INVISIBLE);
-            }
-
-            if(gl.pprod.Control_vencimiento){
-                txtFecha_cic.setVisibility(TextView.VISIBLE);
-                imgDate.setVisibility(TextView.VISIBLE);
-                dtpVence.setVisibility(TextView.VISIBLE);
-            }else{
-                txtFecha_cic.setVisibility(TextView.INVISIBLE);
-                imgDate.setVisibility(TextView.INVISIBLE);
-                dtpVence.setVisibility(TextView.INVISIBLE);
-            }
-
-            if(gl.inv_ciclico.control_peso){
-
-                txtpeso_cic.setVisibility(TextView.VISIBLE);
-
-                txtPesoContado.setVisibility(TextView.VISIBLE);
-
-            }else{
-                txtpeso_cic.setVisibility(TextView.INVISIBLE);
-
-                txtPesoContado.setVisibility(TextView.INVISIBLE);
-            }
-
-
-            if(BeInvEnc.Mostrar_Cantidad_Teorica_hh){
-
-                if(!gl.inv_ciclico.cantidad.equals(0.00)){
-
-                    if(idPresentacion == 0){
-
-                        lblCantStock.setVisibility(TextView.VISIBLE);
-                        lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
-
-                    }else{
-
-                        double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
+                        double resultado_ = gl.inv_ciclico.cantidad / vFactor;
                         String stringDecimal = String.format("%.6f", resultado_);
-                        lblCantStock.setText(stringDecimal);
-                    }
-                }else{
-
-                    if(idPresentacion == 0){
-
-                        lblCantStock.setVisibility(TextView.VISIBLE);
-                        lblCantStock.setText(gl.inv_ciclico.Cant_Stock+"");
-
-                    }else{
-
-                        double resultado_ = gl.inv_ciclico.Cant_Stock / vFactor;
-                        String stringDecimal = String.format("%.6f", resultado_);
-                        lblCantStock.setText(stringDecimal);
+                        txtCantContada.setText(stringDecimal);
                     }
                 }
 
-            }else{
+                txtLicencia.setText(gl.inv_ciclico.getLicence_plate());
+                txtLicencia.setEnabled(false);
 
-                lblCantStock.setVisibility(TextView.INVISIBLE);
-            }
-
-            lbltitulo_cic.setText("Ubic # "+ gl.inv_ciclico.NoUbic);
-
-            if(!gl.inv_ciclico.cantidad.equals(0.00)){
-
-                if(idPresentacion == 0){
-
-                    String stringDecimal = String.format("%.6f", gl.inv_ciclico.cantidad);
-                    txtCantContada.setText(stringDecimal);
-
-                }else{
-
-                    double resultado_ = gl.inv_ciclico.cantidad / vFactor;
-                    String stringDecimal = String.format("%.6f", resultado_);
-                    txtCantContada.setText(stringDecimal);
+                if (BeInvEnc.Cambia_Ubicacion) {
+                    tblNuevaUbic.setVisibility(View.VISIBLE);
+                    txtUbicNueva.setText("" + gl.inv_ciclico.IdUbicacion_nuevo);
+                } else {
+                    tblNuevaUbic.setVisibility(View.GONE);
                 }
-            }
 
-            txtLicencia.setText(gl.inv_ciclico.getLicence_plate());
-            txtLicencia.setEnabled(false);
+                txtProd.requestFocus();
 
-            if (BeInvEnc.Cambia_Ubicacion) {
-                tblNuevaUbic.setVisibility(View.VISIBLE);
-                txtUbicNueva.setText(""+gl.inv_ciclico.IdUbicacion_nuevo);
             } else {
-                tblNuevaUbic.setVisibility(View.GONE);
+
+                mu.msgbox("El registro seleccionado no es válido.");
             }
-
-            txtProd.requestFocus();
-
-        }else{
-
-            mu.msgbox( "El registro seleccionado no es válido.");
+        } catch (Exception e) {
+            mu.msgbox(e.getClass()+" Load: "+e.getMessage());
         }
     }
 
@@ -1097,8 +1105,10 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
                 pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
+                pitem.IdProductoEstado = gl.inv_ciclico.IdProductoEstado;
                 pitem.lic_plate = gl.inv_ciclico.Licence_plate;
                 pitem.Idoperador = gl.IdOperador;
+                pitem.IdInvCiclico = gl.inv_ciclico.IdInventarioCiclico;
 
                 if (pitem.IdPresentacion > 0) {
 
@@ -1291,9 +1301,10 @@ public class frm_inv_cic_add extends PBase {
                             }
                         }
 
-                        callMethod("Inventario_Ciclico_Actualiza_Conteo_Andr",
+                        callMethod("Inventario_Ciclico_Act_Conteo_Andr",
                                 "pitem",pitem,
                                 "pReconteo",0,
+                                "esOriginal", esOriginal,
                                 "Resultado",Resultado);
                         break;
                     case 2:
@@ -1331,7 +1342,7 @@ public class frm_inv_cic_add extends PBase {
                     case 10:
                         clsBeTrans_inv_ciclico item = new clsBeTrans_inv_ciclico();
                         item.Lote_stock = gl.inv_ciclico.Lote_stock;
-                        item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence);
+                        item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
                         item.IdUbicacion = gl.inv_ciclico.NoUbic;
                         item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                         item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
@@ -1487,7 +1498,7 @@ public class frm_inv_cic_add extends PBase {
     private void Inv_Ciclico_Actualiza_Conteo() {
 
         try {
-            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Actualiza_Conteo_Andr");
+            int respuesta = xobj.getresult(Integer.class,"Inventario_Ciclico_Act_Conteo_Andr");
 
             if(respuesta !=0){
 

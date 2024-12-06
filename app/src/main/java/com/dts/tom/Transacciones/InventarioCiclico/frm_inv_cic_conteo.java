@@ -304,6 +304,7 @@ public class frm_inv_cic_conteo extends PBase {
                             data_rec.IdUbicacion_nuevo = DT.getInt(37);
                             data_rec.Nuevo_Estado = DT.getString(38);
                             data_rec.IdStock = Integer.valueOf(DT.getString(39));
+                            data_rec.IdInventarioCiclico = Integer.valueOf(DT.getString(40));
 
                             data_list.add(data_rec);
 
