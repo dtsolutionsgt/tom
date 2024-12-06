@@ -282,6 +282,9 @@ public class frm_recepcion_datos extends PBase {
     String LPInicial = "";
     boolean reload_lp = false;
 
+    /** validar si redirecciona a la lista de recepcion por un error al guardar**/
+    boolean redireccion_a_lista_recepcion = false;
+
     //Imagen
     private String encoded="";
     private clsBeImagen BeImagen;
@@ -4869,7 +4872,7 @@ public class frm_recepcion_datos extends PBase {
     }
 
     //GT30102024: Se sustituye por evento Listener para controlar el doble click
-    public void BotonGuardarRecepcion(View view) {
+   /* public void BotonGuardarRecepcion(View view) {
 
         progress.setMessage("Guardando Recepción");
         progress.show();
@@ -4893,7 +4896,7 @@ public class frm_recepcion_datos extends PBase {
             btnTareas.setEnabled(true);
             mu.msgbox("BotonGuardarRecepcion: "+ e.getMessage());;
         }
-    }
+    }*/
 
     private void btnTareas_Clickable(){
 
@@ -6436,6 +6439,8 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.IdPropietarioBodega =  pIdPropietarioBodega;
 
                 BeTransReDet.Producto = new clsBeProducto();
+                //#GT02122024: si asignamos propiedades, asignar si genera LP, por presentacion se hace en otra linea
+                BeTransReDet.Producto.Genera_lp = BeProducto.Genera_lp;
                 BeTransReDet.Producto.IdProducto = BeProducto.IdProducto;
                 BeTransReDet.Producto.Codigo = BeProducto.Codigo;
                 BeTransReDet.IdProductoBodega = BeProducto.IdProductoBodega;
@@ -7988,13 +7993,6 @@ public class frm_recepcion_datos extends PBase {
                 progress.cancel();
                 switch (ws.callback) {
                     case 16:
-
-//                        if(e.getMessage().contains("ERROR_202208182042") || e.getMessage().contains("ERROR_20220823_1604")){
-//                            msgAskAsignarNuevaLp("La LP ya existe, se asignara una nueva.");
-//                        }else{
-//                            msgboxErrorCallBack(e.getMessage(),false);
-//                        }
-
                         msgboxErrorCallBack(e.getMessage(),false);
                         break;
                     case 25:
@@ -8159,8 +8157,13 @@ public class frm_recepcion_datos extends PBase {
                             String Msg = "La recepción " + gl.gIdRecepcionEnc + " ya fue finalizada, se re-direccionara a la lista principal.";
                             msgAskRecepcionCerrada_By_Concurrencia(Msg);
                         } else {
-                            msgbox(Objects.requireNonNull(new Object() {
+
+                            //GT04122024: si es un error no parametrizado, significa que se debe redireccionar a la lista de recepcion.
+                            msgAskRecepcionCerrada_By_Concurrencia(Objects.requireNonNull(new Object() {
                             }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+
+                            //msgbox(Objects.requireNonNull(new Object() {
+                            //}.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
                         }
                     }
 
@@ -9872,24 +9875,24 @@ public class frm_recepcion_datos extends PBase {
 
     public void msgboxErrorCallBack(String msg,boolean guardo) {
         try{
-            ExDialog dialog = new ExDialog(this);
-            dialog.setCancelable(false);
-            dialog.setMessage(msg);
 
+            ExDialog dialog = new ExDialog(frm_recepcion_datos.this);
+            dialog.setCancelable(false);
+            dialog.setMessage(msg + " GT066");
             dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-
-                    if (guardo){
-                        Imprime_Barra_Despues_Guardar();
-                    }else{
-                        Actualiza_Valores_Despues_Imprimir(true);
-                    }
+                        if (guardo) {
+                            Imprime_Barra_Despues_Guardar();
+                        } else {
+                            Actualiza_Valores_Despues_Imprimir(true);
+                        }
                 }
             });
-
             dialog.show();
+
+
         }catch (Exception e){
-            //Log.println(1,"msg",e.getMessage());
+            Log.e("msgboxErrorCallBack", "Error: " + e.getMessage(), e);
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
