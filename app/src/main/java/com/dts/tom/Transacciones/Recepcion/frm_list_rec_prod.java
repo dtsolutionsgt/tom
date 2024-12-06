@@ -2019,17 +2019,21 @@ public class frm_list_rec_prod extends PBase {
 
             if (browse==1){
                 browse=0;
+
+                //#GT06122024: se utiliza la bandera de recepcion cerrada para validar si al eliminar detalle recepcion
+                //la recepcion ya esta cerrada, en ese caso, cerrar la recepcion sin preguntar
+                if(gl.recepcion_cerrada_concurrencia){
+                    doExit();
+                }else{
                 //#GT22022023: si esta cerrada no es necesario seguir validando el resto de código.
                 if(Recepcion_Completa()){
                     msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
                 }else{
-
                     if (Escaneo_Pallet){
                         mu.toast("Licencia procesada correctamente");
                         txtCodigoProductoRecepcion.setText("");
                         txtCodigoProductoRecepcion.requestFocus();
                     }
-
                     if (!gl.gSinPresentacion){
                         if(Recepcion_Completa()){
                             msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
@@ -2037,7 +2041,6 @@ public class frm_list_rec_prod extends PBase {
                     }else{
                         gl.gSinPresentacion=false;
                     }
-
                     if(gl.recepcion_cerrada_concurrencia){
                         doExit();
                     }else{
@@ -2045,9 +2048,8 @@ public class frm_list_rec_prod extends PBase {
                         progress.show();
                         execws(15);
                     }
-
+                    }
                 }
-
             }
 
             if (browse==2){

@@ -651,6 +651,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                 }
 
             }catch (Exception e){
+                progress.cancel();
                 mu.msgbox(e.getClass()+"WebServiceHandler:"+e.getMessage());
             }
 
@@ -681,9 +682,30 @@ public class frm_list_rec_prod_detalle extends PBase {
             }
 
         } catch (Exception e) {
-            msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName() + e.getMessage());
-            progress.cancel();
+
+            //progress.cancel();
+
+            switch (ws.callback) {
+                case 3:
+
+                    if (e.getMessage().contains("ERROR_DE_PROCESO_20241205_HH")) {
+                        gl.recepcion_cerrada_concurrencia = true;
+                        msgAskRecepcionCerrada(Objects.requireNonNull(new Object() {
+                        }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                    }else{
+                        msgbox(Objects.requireNonNull(new Object() {
+                        }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                    }
+
+                    break;
+
+                default:
+                    msgbox(Objects.requireNonNull(new Object() {
+                    }.getClass().getEnclosingMethod()).getName() + "wsCallBack: case(" + ws.callback + ") " + e.getMessage());
+                    break;
+            }
+
+
         }
 
     }
@@ -812,6 +834,32 @@ public class frm_list_rec_prod_detalle extends PBase {
     public void onBackPressed() {
         try{
             doExit();
+        }catch (Exception e){
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskRecepcionCerrada(String msg) {
+
+        try{
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+            dialog.setCancelable(false);
+            dialog.setIcon(R.drawable.ic_quest);
+            dialog.setPositiveButton("Ok", (dialog12, which) -> {
+
+
+                doExit();
+
+            });
+
+            dialog.show();
+
         }catch (Exception e){
             addlog(Objects.requireNonNull(new Object() {
             }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");

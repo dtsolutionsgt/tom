@@ -109,7 +109,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             holder.lblLote.setText(data_list.get(position).Lote  +"");
             holder.lblFecha_Vence_Stock.setText(data_list.get(position).Fecha_Vence_Stock  +"");
             holder.lblFecha_Vence.setText(data_list.get(position).Fecha_Vence  +"");
-            holder.lblConteo.setText(data_list.get(position).Conteo  +"");
+            holder.lblConteo.setText(data_list.get(position).cantidad  +"");
             holder.lblUbic_nombre.setText(data_list.get(position).Ubic_nombre  +"");
             holder.lblEstadoStock.setText(data_list.get(position).Estado  +"");
             holder.lblIdProductoBodega.setText(data_list.get(position).IdProductoBodega  +"");

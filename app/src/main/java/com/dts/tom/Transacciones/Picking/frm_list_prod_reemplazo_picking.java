@@ -100,7 +100,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
         setHandles();
 
-        ProgressDialog("Listando existencias de producto:"+gBePickingUbic.CodigoProducto);
+        showProgressDialog("Listando existencias de producto:"+gBePickingUbic.CodigoProducto);
 
         CantidadTotal = CantReemplazar;
         // #AT 20211228 Creacón de objeto para obtener el stock para reemplazo
@@ -140,13 +140,25 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         execws(1);
     }
 
-    public void ProgressDialog(String mensaje) {
+    public void showProgressDialog(String mensaje) {
+        // Si el ProgressDialog ya existe y está mostrando, lo cerramos
+        if (progress != null && progress.isShowing()) {
+            progress.dismiss();
+        }
+
+        // Creamos una nueva instancia del ProgressDialog
         progress = new ProgressDialog(this);
         progress.setMessage(mensaje);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
-        progress.setProgress(0);
+        progress.setCancelable(false); // Opcional: Evita que el usuario lo cierre
         progress.show();
+    }
+
+    public void hideProgressDialog() {
+        if (progress != null && progress.isShowing()) {
+            progress.dismiss();
+        }
     }
 
     private void setHandles(){
@@ -269,6 +281,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try {
 
+            showProgressDialog("Procesando reemplazo");
+
             CantPendSel = 0;
 
             if (CantReemplazar > 0) {
@@ -291,8 +305,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     CantReemplazar = selitem.Cant;
                 }
 
-                progress.show();
-                progress.setMessage("Reservando el stock seleccionado...");
+                showProgressDialog("Reservando el stock seleccionado...");
 
                 //TipoLista 1 Resumido, 2 Detallado
                 if (TipoLista == 1) {
@@ -303,10 +316,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     execws(3);
                 }
 
-                progress.cancel();
             }
 
         }catch (Exception e){
+            hideProgressDialog();
             mu.msgbox("Continua_procesando_registro:"+e.getMessage());
         }
     }
@@ -410,7 +423,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
 
-            progress.setMessage("Procesando datos de StockRes...");
+            showProgressDialog("Procesando datos de StockRes...");
 
             lblTituloForma.setText("Picking List No: "+ gBePickingUbic.IdPickingEnc+
                     "\n Lista de Productos");
@@ -430,7 +443,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             BeListStock.clear();
 
-            progress.setMessage("Listando stock disponible...");
+            showProgressDialog("Listando stock disponible...");
 
             if (DT.getCount()>0) {
                 ConExistencia = true;
@@ -486,11 +499,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             adapter=new list_adapt_detalle_reemplazo_picking(this,BeListStock);
             listDispProd.setAdapter(adapter);
 
-            progress.cancel();
-
         } catch (Exception e){
-            progress.cancel();
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
+        }finally {
+            hideProgressDialog();
         }
 
     }
@@ -559,11 +571,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             adapter=new list_adapt_detalle_reemplazo_picking(this,TempBeListStock);
             listDispProd.setAdapter(adapter);
 
-            progress.cancel();
-
         } catch (Exception e){
-            progress.cancel();
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
+        }finally {
+            hideProgressDialog();
         }
 
     }
@@ -693,7 +704,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 case 8:
                     if (!Distinto){
                         processNoEncontrado();
-                        progress.cancel();
+                        hideProgressDialog();
                         doExit();
                     }else{
                         BeListStock = (ArrayList<clsBeStockReemplazo>) stream(BeListStock).where(c->c.IdStock==selitem.IdStock).toList();
@@ -704,6 +715,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }finally {
+            hideProgressDialog();
         }
     }
 
@@ -719,7 +732,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (DT.getCount()>0){
                 Load();
             }else{
-                progress.cancel();
+                hideProgressDialog();
             }
 
             if (DT.getCount() == 0) {
@@ -737,8 +750,9 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             }
 
         }catch (Exception e){
-            progress.cancel();
             mu.msgbox("processListStockRes:"+e.getMessage());
+        }finally {
+            hideProgressDialog();
         }
     }
 
@@ -746,7 +760,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo stock...");
+            showProgressDialog("Obteniendo stock...");
 
             if (!Completo){
 
@@ -771,12 +785,13 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     }
                 }
             }else{
-                progress.cancel();
+                hideProgressDialog();
             }
 
         }catch (Exception e){
-            progress.cancel();
-            mu.msgbox("processGetAllStock:"+e.getMessage());
+           mu.msgbox("processGetAllStock:"+e.getMessage());
+        }finally {
+            hideProgressDialog();
         }
     }
 
@@ -784,7 +799,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try {
 
-            progress.cancel();
+            hideProgressDialog();
 
             boolean StockReservado = false;
 
@@ -810,7 +825,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     lbldDetProducto.setText(gBePickingUbic.CodigoProducto+" - "+gBePickingUbic.NombreProducto+
                             "\n Cant. Reemplazar: "+CantReemplazar+" "+gBePickingUbic.ProductoUnidadMedida);
 
-                    progress.setMessage(Tipo == 1? "Obteniendo inventario disponible para reemplazo":"Obteniendo inventario disponible para reemplazo(No Encontrado)");
+                    showProgressDialog(Tipo == 1? "Obteniendo inventario disponible para reemplazo":"Obteniendo inventario disponible para reemplazo(No Encontrado)");
                     execws(1);
                 }
             }
@@ -837,7 +852,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
 
-            progress.setMessage("Obteniendo el stock reservado...");
+            showProgressDialog("Obteniendo el stock reservado...");
 
             lBeStockResAux = xobj.getresult(clsBeStock_resList.class,"Get_All_Reemplazo_By_IdPedidoDet");
 
@@ -854,11 +869,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
                     if (Tipo==1){
 
-                        progress.setMessage("Reemplazando el stock...");
+                        showProgressDialog("Reemplazando el stock...");
                         execws(5);
 
                     }else{
-                        progress.setMessage("Sustituyendo el stock no encontrado...");
+                        showProgressDialog("Sustituyendo el stock no encontrado...");
                         execws(6);
                     }
 

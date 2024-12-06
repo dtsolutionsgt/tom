@@ -79,7 +79,6 @@
                 android:id="@+id/btnBuscars"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:onClick="doList"
                 android:src="@drawable/btn_buscar" />
 
         </TableRow>

@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class frm_lista_packing_lp extends PBase {
     private ListView listView;
     private EditText txtFiltro;
     private TextView lblFiltro, lblPackingLicencia;
+    private Button btnRegsList;
 
     private list_adapt_packing_lp adapter;
 
@@ -45,6 +47,7 @@ public class frm_lista_packing_lp extends PBase {
         lblPackingLicencia = findViewById(R.id.lblPackingLicencia);
 
         lblPackingLicencia.setText("Licencia Packing: "+ gl.LicenciaPacking);
+        btnRegsList = findViewById(R.id.btnRegsList);
 
         if (gl.filtroprod.isEmpty()) {
             lblFiltro.setVisibility(View.GONE);
@@ -150,6 +153,8 @@ public class frm_lista_packing_lp extends PBase {
             txtFiltro.selectAll();
             focusFiltro();
         }
+
+        btnRegsList.setText("REGISTRO(S): "+items.size());
     }
     //endregion
 

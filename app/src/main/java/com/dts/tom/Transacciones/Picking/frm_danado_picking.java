@@ -155,10 +155,12 @@ public class frm_danado_picking extends PBase {
     public void BotonGuardarDanado(View view){
 
         if (!txtUbicDest.getText().toString().isEmpty()){
-            /*BeUbicDestino = new clsBeBodega_ubicacion();
-            BeUbicDestino.IdUbicacion = Integer.parseInt(txtUbicDest.getText().toString().trim());
-            IdUbicacionDestino = BeUbicDestino.IdUbicacion;
-            execws(2);*/
+
+           if (lblNomUbic.getText().toString().isEmpty()){
+               msgbox("Confirme la ubicación destino");
+               txtUbicDest.requestFocus();
+               return;
+           }
 
             validaUbicacion();
 
