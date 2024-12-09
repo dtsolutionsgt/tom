@@ -364,7 +364,7 @@ public class frm_inv_cic_add extends PBase {
         try {
             if (gl.inv_ciclico != null) {
 
-                //#AT20241205 Validar si es el registro es original
+                //#AT20241205 Validar si es el registro es original//#AT20241205 Validar si es el registro es original
                 esOriginal = gl.inv_ciclico.IdProductoEstado == gl.inv_ciclico.IdProductoEst_nuevo &&
                         gl.inv_ciclico.Fecha_Vence.equals(gl.inv_ciclico.Fecha_Vence_Stock) &&
                         gl.inv_ciclico.Lote.equals(gl.inv_ciclico.Lote_stock) &&

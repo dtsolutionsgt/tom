@@ -117,6 +117,37 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/tblLicencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/lblLicencia"
+                    style="@style/StyleText"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="Licencia:" />
+
+                <EditText
+                    android:id="@+id/txtLicencia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:inputType="textPersonName" />
+
+                <ImageView
+                    android:id="@+id/imgImprimir"
+                    android:layout_width="35dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/printimg"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
+            </TableRow>
+
+            <TableRow
                 android:id="@+id/tblUmbas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -176,10 +207,9 @@
                     android:layout_height="match_parent" />
 
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/txtNLote"
-                    >
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 </EditText>
 
@@ -239,8 +269,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                >
+                android:layout_marginTop="10dp">
 
                 <EditText
                     android:id="@+id/txtCantContada"
@@ -258,8 +287,8 @@
                     android:id="@+id/btnGuardar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Guardar"
                     android:onClick="guardar_cic"
+                    android:text="Guardar"
                     android:textSize="14sp" />
 
             </TableRow>
@@ -275,8 +304,16 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="1dp"
-        android:background="@drawable/color_medium"
-        >
+        android:background="@drawable/color_medium">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="61dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/back"/>
 
     </RelativeLayout>
 
