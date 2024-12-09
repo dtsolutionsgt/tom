@@ -657,7 +657,6 @@ public class frm_inv_cic_guardar extends PBase {
                 return;
             }
 
-            execws(1);
         }catch (Exception e){
             mu.msgbox("processNuevoLP_RE: "+e.getMessage());
         }
