@@ -114,37 +114,34 @@ public class frm_inv_cic_conteo extends PBase {
 
         try{
 
-            txtBuscFiltro.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
+            txtBuscFiltro.setOnKeyListener((v, keyCode, event) -> {
 
-                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
 
-                                if (txtBuscFiltro.getText().toString().isEmpty())
-                                {
-                                    toast("No ingreso una Ubicación!");
+                            if (txtBuscFiltro.getText().toString().isEmpty())
+                            {
+                                toast("No ingreso una Ubicación!");
 
-                                }else{
-                                    adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
-                                    listCiclico.setAdapter(adapter_ciclico);
+                            }else{
+                                adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
+                                listCiclico.setAdapter(adapter_ciclico);
 
-                                    if(chkPendientes){
+                                if(chkPendientes){
 
-                                        ListaFiltrada();
+                                    ListaFiltrada();
 
-                                    }else {
+                                }else {
 
-                                        ListaFiltrada2();
-
-                                    }
+                                    ListaFiltrada2();
 
                                 }
-                        }
+
+                            }
                     }
-                    return false;
                 }
+                return false;
             });
 
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -591,6 +588,7 @@ public class frm_inv_cic_conteo extends PBase {
                 data_rec.Factor = gl.reconteo_list.get(i).Factor;
                 data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
                 data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
+                data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
                 lista_filtro.add(data_rec);
             }
         }
@@ -644,6 +642,7 @@ public class frm_inv_cic_conteo extends PBase {
                 data_rec.Factor = gl.reconteo_list.get(i).Factor;
                 data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
                 data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
+                data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
                 lista_filtro.add(data_rec);
             }
         }
