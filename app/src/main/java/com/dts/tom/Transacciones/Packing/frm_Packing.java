@@ -434,7 +434,7 @@ public class frm_Packing extends PBase {
 
             Escaneo_Pallet = true;
 
-            pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
+            pLicensePlate = txtLic_Plate.getText().toString().replace("$", "").toUpperCase();
 
             //Llama al método del WS Existe_LP
             execws(9);
@@ -481,7 +481,7 @@ public class frm_Packing extends PBase {
                 if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("")) {
                     Escaneo_Pallet = true;
 
-                    pLicensePlate = txtLic_Plate.getText().toString().replace("$", "");
+                    pLicensePlate = txtLic_Plate.getText().toString().replace("$", "").toUpperCase();
 
                     //Llama al método del WS Get_Stock_By_Lic_Plate_And_Codigo
                     execws(12);
@@ -1028,7 +1028,7 @@ public class frm_Packing extends PBase {
             if (Escaneo_Pallet && ListBeStockPallet != null) {
                 if(cmbVence.getAdapter() != null){
                     cvVence = cmbVence.getSelectedItem().toString();
-                    if (cmbLote.getAdapter().getCount() == 1) {
+                    if (cmbVence.getAdapter().getCount() == 1) {
                         cmbVence.setEnabled(false);
                     }
                 } else{
@@ -1089,7 +1089,7 @@ public class frm_Packing extends PBase {
             //#CKFK 20210728 Agregué la condición del LP
             if (!txtLic_Plate.getText().toString().isEmpty() && !txtLic_Plate.getText().toString().equals("") ){
 
-                String LpSinComodin = txtLic_Plate.getText().toString().replace("$", "");
+                String LpSinComodin = txtLic_Plate.getText().toString().replace("$", "").toUpperCase();
 
                 AuxList = stream(stockResList.items)
                         .where(c -> c.IdProducto == gIdProductoOrigen)
@@ -1642,6 +1642,7 @@ public class frm_Packing extends PBase {
             msgAskAsociar("Asociar producto al número de pallet: "+txtNuevoLp.getText().toString());
 
         }catch (Exception e){
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }finally {
@@ -1669,6 +1670,7 @@ public class frm_Packing extends PBase {
             dialog.show();
 
         }catch (Exception e){
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
@@ -2361,6 +2363,8 @@ public class frm_Packing extends PBase {
 
             if (pResultado!=""){
                 mu.msgbox("Cambio Aplicado");
+                btnGuardarDirigida.setVisibility(View.VISIBLE);
+                txtLic_Plate.setText("");
 
                 txtPrd.setText(gl.gCProdAnterior);
                 txtUbicOr.setText(gl.gCUbicAnterior);
@@ -2467,6 +2471,7 @@ public class frm_Packing extends PBase {
             }
 
         }catch (Exception e){
+            btnGuardarDirigida.setVisibility(View.VISIBLE);
             mu.msgbox("processUbicacionLP:"+e.getMessage());
         }
     }
