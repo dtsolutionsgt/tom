@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -101,6 +104,14 @@ public class frm_inv_cic_add extends PBase {
     private clsBeProducto_estadoList listaEstados = new clsBeProducto_estadoList();
     private double CantidadContada = 0;
     private clsBeTrans_inv_ciclico pItemBase = new clsBeTrans_inv_ciclico();
+    private clsBe_inv_reconteo_data auxInvCiclico = new clsBe_inv_reconteo_data();
+    private int IdUbicacion = 0;
+    private boolean esCambioUbicacion = false;
+    private clsBeTrans_inv_ciclico invCongelado = new clsBeTrans_inv_ciclico();
+    private clsBeProducto gBeProducto = new clsBeProducto();
+    private int IdStock = 0;
+    private boolean esInvCongelado = false;
+    private String NomPresentacion = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +176,7 @@ public class frm_inv_cic_add extends PBase {
         if (!NuevoConteo) {
             Load();
         } else {
+            IdStock = 0;
             lblProd.setText("");
             lblUbic1.setText("");
             txtUbic.requestFocus();
@@ -214,15 +226,13 @@ public class frm_inv_cic_add extends PBase {
                         }
                     } else {
                         codigo_producto = txtProd.getText().toString().trim();
+                        IdUbicacion = gl.inv_ciclico.NoUbic;
 
                         //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
                         if (Scan_Codigo_Producto()) {
-
                             btGuardar.setEnabled(true);
                             respuesta_producto = false;
-
                         } else {
-
                             respuesta_producto = false;
                         }
                     }
@@ -297,6 +307,7 @@ public class frm_inv_cic_add extends PBase {
                         clsBeProducto_Presentacion aux = (clsBeProducto_Presentacion) parentView.getItemAtPosition(position);
                         IdPresentacionselected = aux.IdPresentacion;
                         vFactor = aux.Factor;
+                        NomPresentacion = aux.Nombre;
 
                         /*if (!NuevoConteo) {
                             IdPresentacionselected = IndexPresList.get(position);
@@ -522,14 +533,17 @@ public class frm_inv_cic_add extends PBase {
                 txtLicencia.setEnabled(false);
 
                 if (BeInvEnc.Cambia_Ubicacion) {
-                    tblNuevaUbic.setVisibility(View.VISIBLE);
-                    txtUbicNueva.setText("" + gl.inv_ciclico.IdUbicacion_nuevo);
+                    if (esCambioUbicacion) {
+                        txtUbicNueva.setText(""+IdUbicacion);
+                    } else {
+                        tblNuevaUbic.setVisibility(View.VISIBLE);
+                        txtUbicNueva.setText("" + gl.inv_ciclico.IdUbicacion_nuevo);
+                    }
                 } else {
                     tblNuevaUbic.setVisibility(View.GONE);
                 }
 
                 txtProd.requestFocus();
-
             } else {
 
                 mu.msgbox("El registro seleccionado no es válido.");
@@ -661,52 +675,83 @@ public class frm_inv_cic_add extends PBase {
         }
     }
 
+    private void LoadInvCongelado() {
+        try {
+            if (invCongelado != null) {
+                idPresentacion = invCongelado.IdPresentacion;
+
+                txtUbic.setText(gl.inv_ciclico.NoUbic + "");
+                lblUbic1.setTypeface(null, Typeface.BOLD);
+                lblUbic1.setText(gl.inv_ciclico.Ubic_nombre + "");
+
+                lblProd.setTypeface(null, Typeface.BOLD);
+                lblProd.setText(gBeProducto.Codigo + " - " + gBeProducto.Nombre);
+
+                txtLote1.setText(invCongelado + "");
+                dtpVence.setText(du.convierteFechaMostrar(invCongelado.Fecha_vence));
+                txtLicencia.setText(invCongelado.lic_plate);
+
+                txtProd.setText(gBeProducto.Codigo);
+                txtLote1.setText(invCongelado.Lote);
+                btGuardar.setEnabled(true);
+
+                if (invCongelado.IdPresentacion == 0) {
+                    lblUM.setText(gBeProducto.UnidadMedida.Nombre);
+                } else {
+                    String stringDecimal = String.format("%.6f", vFactor);
+                    lblUM.setText(NomPresentacion + "->" + stringDecimal);
+                }
+
+                if (BeInvEnc.Mostrar_Cantidad_Teorica_hh) {
+                    if (invCongelado.IdPresentacion == 0) {
+                        lblCantStock.setVisibility(TextView.VISIBLE);
+                        lblCantStock.setText(invCongelado.Cant_stock + "");
+                    } else {
+                        double resultado_ = invCongelado.Cant_stock / vFactor;
+                        String stringDecimal = String.format("%.6f", resultado_);
+                        lblCantStock.setText(stringDecimal);
+                    }
+                } else {
+                    lblCantStock.setVisibility(TextView.INVISIBLE);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
+            }
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
 
     private boolean Scan_Codigo_Producto(){
-
         boolean respuesta = false;
 
-        try{
-
+        try {
             if(!codigo_producto.isEmpty()){
-
                 if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
-
                     cboEstado.requestFocus();
                     respuesta = true;
-
-                }else{
-
+                } else {
                     IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
 
                     //el codigo ingresado no tiene match con el registro seleccionado, se procede a buscar en la lista
-                    if(Buscar_producto(codigo_producto)){
-
+                    if (Buscar_producto(codigo_producto)){
                         respuesta = true;
-
-                    }else{
-
-                        //respuesta = false;
-                        //txtProd.setText("");
-                        //mu.msgbox("Producto no asignado para conteo. Intente con otro!");
-
+                        new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
+                    } else {
                         //GT03122021: Al no encontrar match por cod_producto, se busca como LP
                         if(Scan_por_LP()){
                             respuesta = true;
                             txtProd.setText(gl.inv_ciclico.Codigo);
+                            new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
                         }else{
-                            respuesta = false;
-                            mu.msgbox("Producto o licencia no asignado para conteo. Intente con otro!");
+                            //#AT20241210 Busca en inventario congelado
+                            execws(11);
                         }
-
                     }
                 }
-
-            }else {
-
+            } else {
                 mu.msgbox("No ha ingresado un código.");
             }
-
         }
         catch (Exception e){
             respuesta = false;
@@ -727,6 +772,7 @@ public class frm_inv_cic_add extends PBase {
             if (codigo.equals(codigo_producto) ) {
 
                 gl.inv_ciclico = gl.reconteo_list.get(i);
+                esCambioUbicacion = IdUbicacion != gl.inv_ciclico.NoUbic;
                 Load();
 
                 respuesta = true;
@@ -739,7 +785,6 @@ public class frm_inv_cic_add extends PBase {
     }
 
     private boolean Buscar_lp(String licence_plate){
-
         boolean respuesta = false;
 
         for (int i = 0; i < gl.reconteo_list.size() ; i++) {
@@ -749,14 +794,13 @@ public class frm_inv_cic_add extends PBase {
             if (license_p.equals(licence_plate) ) {
 
                 gl.inv_ciclico = gl.reconteo_list.get(i);
+                esCambioUbicacion = IdUbicacion != gl.inv_ciclico.NoUbic;
                 Load();
 
                 respuesta = true;
                 break;
-
             }
         }
-
         return respuesta;
     }
 
@@ -964,88 +1008,145 @@ public class frm_inv_cic_add extends PBase {
     }
 
     public void btnGuardar(View view) {
+        try {
+            if (txtUbic.getText().toString().trim().isEmpty()) {
+                msgbox("¡Ubicacion vacia!");
+                txtUbic.requestFocus();
 
-        if(txtUbic.getText().toString().trim().isEmpty()){
-            msgbox("¡Ubicacion vacia!");
-            txtUbic.requestFocus();
+            } else if (txtProd.getText().toString().trim().isEmpty()) {
+                toast("¡Producto vacio!");
+                txtProd.requestFocus();
 
-        }else if(txtProd.getText().toString().trim().isEmpty()){
-            toast("¡Producto vacio!");
-            txtProd.requestFocus();
+            } else if (txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")) {
+                toast("¡Cantidad incorrecta!");
+                txtCantContada.requestFocus();
 
-        }else if(txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")){
-            toast("¡Cantidad incorrecta!");
-            txtCantContada.requestFocus();
-
-        }else if (gl.pprod.Control_lote && txtLote1.getText().toString().trim().isEmpty() ){
+            } else if (gl.pprod.Control_lote && txtLote1.getText().toString().trim().isEmpty()) {
                 toast("¡Lote incorrecto!");
                 txtLote1.requestFocus();
 
-        }else if(gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()){
+            } else if (gl.inv_ciclico.control_peso && txtPesoContado.getText().toString().trim().isEmpty()) {
                 toast("¡Peso incorrecto!");
                 txtPesoContado.requestFocus();
 
-        }else{
-
-            btGuardar.setEnabled(true);
-
-            if (NuevoConteo && !existeConteo) {
-                pitem= new clsBeTrans_inv_ciclico();
-
-                pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
-                pitem.IdStock = 0;
-                pitem.IdProductoBodega = BeProductoUbicacion.IdProductoBodega;
-                pitem.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
-                pitem.IdPresentacion = IdPresentacionselected;
-                pitem.IdPresentacion_nuevo = IdPresentacionselected;
-                pitem.IdProductoEstado = IdEstadoselected;
-                pitem.IdProductoEst_nuevo = IdEstadoselected;
-                pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
-                pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbic.getText().toString());
-
-                if (BeProductoUbicacion.Control_lote) {
-                    String lote = txtLote1.getText().toString();
-
-                    pitem.Lote = lote;
-                    pitem.Lote_stock = lote;
-                } else {
-                    pitem.Lote = "";
-                    pitem.Lote_stock = "";
-                }
-
-                if (BeProductoUbicacion.Control_vencimiento) {
-                    String fecha = app.strFechaXML2(dtpVence.getText().toString());
-
-                    pitem.Fecha_vence = fecha;
-                    pitem.Fecha_vence_stock = fecha;
-                } else {
-                    pitem.Fecha_vence = "1900-01-01T00:00:00";
-                    pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
-                }
-
-                if (BeProductoUbicacion.Control_peso) {
-                    pitem.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
-                } else {
-                    pitem.Peso = 0;
-                }
-
-                pitem.Cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
-
-                if (pitem.IdPresentacion_nuevo > 0) {
-                    pitem.Cantidad = pitem.Cantidad *vFactor;
-                }
-
-                pitem.lic_plate = txtLicencia.getText().toString();
-                pitem.Fec_agr = du.Fecha_CompletaT();
-                pitem.Idoperador = gl.IdOperador;
-                pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
-                pitem.IdBodega = gl.IdBodega;
-
-                execws(9);
             } else {
-                Guardar();
-            }
+                btGuardar.setEnabled(true);
 
+                if (NuevoConteo && !existeConteo) {
+                    pitem = new clsBeTrans_inv_ciclico();
+
+                    pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
+                    pitem.IdStock = 0;
+                    pitem.IdProductoBodega = BeProductoUbicacion.IdProductoBodega;
+                    pitem.IdUnidadMedida = BeProductoUbicacion.IdUnidadMedidaBasica;
+                    pitem.IdPresentacion = IdPresentacionselected;
+                    pitem.IdPresentacion_nuevo = IdPresentacionselected;
+                    pitem.IdProductoEstado = IdEstadoselected;
+                    pitem.IdProductoEst_nuevo = IdEstadoselected;
+                    pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
+                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbic.getText().toString());
+
+                    if (BeProductoUbicacion.Control_lote) {
+                        String lote = txtLote1.getText().toString();
+
+                        pitem.Lote = lote;
+                        pitem.Lote_stock = lote;
+                    } else {
+                        pitem.Lote = "";
+                        pitem.Lote_stock = "";
+                    }
+
+                    if (BeProductoUbicacion.Control_vencimiento) {
+                        String fecha = app.strFechaXML2(dtpVence.getText().toString());
+
+                        pitem.Fecha_vence = fecha;
+                        pitem.Fecha_vence_stock = fecha;
+                    } else {
+                        pitem.Fecha_vence = "1900-01-01T00:00:00";
+                        pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
+                    }
+
+                    if (BeProductoUbicacion.Control_peso) {
+                        pitem.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
+                    } else {
+                        pitem.Peso = 0;
+                    }
+
+                    pitem.Cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
+
+                    if (pitem.IdPresentacion_nuevo > 0) {
+                        pitem.Cantidad = pitem.Cantidad * vFactor;
+                    }
+
+                    pitem.lic_plate = txtLicencia.getText().toString();
+                    pitem.Fec_agr = du.Fecha_CompletaT();
+                    pitem.Idoperador = gl.IdOperador;
+                    pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
+                    pitem.IdBodega = gl.IdBodega;
+
+                    execws(9);
+                } else if (esInvCongelado) {
+                    pitem = new clsBeTrans_inv_ciclico();
+
+                    pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
+                    pitem.IdStock = invCongelado.IdStock;
+
+                    pitem.IdProductoBodega = gBeProducto.IdProductoBodega;
+                    pitem.IdUnidadMedida = gBeProducto.IdUnidadMedidaBasica;
+                    pitem.IdPresentacion = IdPresentacionselected;
+                    pitem.IdPresentacion_nuevo = IdPresentacionselected;
+                    pitem.IdProductoEstado = IdEstadoselected;
+                    pitem.IdProductoEst_nuevo = IdEstadoselected;
+                    pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
+                    pitem.IdUbicacion_nuevo = 0;
+
+                    if (gBeProducto.Control_lote) {
+                        String lote = txtLote1.getText().toString();
+
+                        pitem.Lote = lote;
+                        pitem.Lote_stock = lote;
+                    } else {
+                        pitem.Lote = "";
+                        pitem.Lote_stock = "";
+                    }
+
+                    if (gBeProducto.Control_vencimiento) {
+                        String fecha = app.strFechaXML2(dtpVence.getText().toString());
+
+                        pitem.Fecha_vence = fecha;
+                        pitem.Fecha_vence_stock = fecha;
+                    } else {
+                        pitem.Fecha_vence = "1900-01-01T00:00:00";
+                        pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
+                    }
+
+                    if (gBeProducto.Control_peso) {
+                        pitem.Peso = Double.valueOf(txtPesoContado.getText().toString().trim());
+                    } else {
+                        pitem.Peso = 0;
+                    }
+
+                    pitem.Cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
+                    pitem.Cant_stock = invCongelado.Cant_stock;
+
+                    if (pitem.IdPresentacion_nuevo > 0) {
+                        pitem.Cantidad = pitem.Cantidad * vFactor;
+                    }
+
+                    pitem.lic_plate = txtLicencia.getText().toString();
+                    pitem.Fec_agr = du.Fecha_CompletaT();
+                    pitem.Idoperador = gl.IdOperador;
+                    pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
+                    pitem.IdBodega = gl.IdBodega;
+                    pitem.EsNuevo = true;
+
+                    execws(9);
+                } else {
+                    Guardar();
+                }
+            }
+        } catch (Exception e) {
+            mu.msgbox("btnGuardar: " + e.getMessage());
         }
     }
 
@@ -1341,14 +1442,34 @@ public class frm_inv_cic_add extends PBase {
                         break;
                     case 10:
                         clsBeTrans_inv_ciclico item = new clsBeTrans_inv_ciclico();
-                        item.Lote_stock = gl.inv_ciclico.Lote_stock;
-                        item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
-                        item.IdUbicacion = gl.inv_ciclico.NoUbic;
-                        item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                        item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
                         item.Idinventarioenc = BeInvEnc.Idinventarioenc;
 
+                        if (esInvCongelado) {
+                            item.Lote_stock = invCongelado.Lote_stock;
+                            item.Fecha_vence_stock = invCongelado.Fecha_vence_stock;
+                            item.IdUbicacion =invCongelado.IdUbicacion;
+                            item.IdProductoBodega = invCongelado.IdProductoBodega;
+                            item.IdPresentacion = invCongelado.IdPresentacion;
+                        } else {
+                            item.Lote_stock = gl.inv_ciclico.Lote_stock;
+                            item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
+                            item.IdUbicacion = gl.inv_ciclico.NoUbic;
+                            item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
+                            item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                        }
+
                         callMethod("Get_Conteo_Inv_Ciclico", "pInvCiclico", item);
+                        break;
+                    case 11:
+                        clsBeTrans_inv_ciclico invCiclico = new clsBeTrans_inv_ciclico();
+                        invCiclico.lic_plate = codigo_producto;
+                        invCiclico.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
+                        invCiclico.IdBodega = gl.IdBodega;
+                        
+                        callMethod("Get_Stock_Congelado", "pInvCiclico", invCiclico);
+                        break;
+                    case 12:
+                        callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega", invCongelado.IdProductoBodega);
                         break;
                 }
             } catch (Exception e) {
@@ -1393,6 +1514,12 @@ public class frm_inv_cic_add extends PBase {
                 case 10:
                     processGetCantidadContada();
                     break;
+                case 11:
+                    processGetStockCongelado();
+                    break;
+                case 12:
+                    processProductoUbic();
+                    break;
             }
 
         } catch (Exception e) {
@@ -1424,8 +1551,16 @@ public class frm_inv_cic_add extends PBase {
                     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     cboPres.setAdapter(dataAdapter);
 
+                    int presentacion = 0;
+                    if (esInvCongelado) {
+                        presentacion = invCongelado.IdPresentacion;
+                    } else {
+                        presentacion = gl.inv_ciclico.IdPresentacion;
+                    }
+
+                    int Presentacion = presentacion;
                     int indice = BeListPres.items.stream()
-                            .filter(obj -> obj.getIdPresentacion() == gl.inv_ciclico.IdPresentacion)
+                            .filter(obj -> obj.getIdPresentacion() == Presentacion)
                             .map(BeListPres.items::indexOf)
                             .findFirst()
                             .orElse(-1);
@@ -1779,14 +1914,73 @@ public class frm_inv_cic_add extends PBase {
             }
 
             if (BeInvEnc.Cambia_Ubicacion) {
-                if (gl.inv_ciclico.IdUbicacion_nuevo != 0) {
+                if (gl.inv_ciclico.IdUbicacion_nuevo != 0 ||
+                        (esCambioUbicacion && !txtUbicNueva.getText().toString().isEmpty())) {
                     execws(6);
                 }
             }
+
+            if (esInvCongelado) LoadInvCongelado();
         } catch (Exception e) {
             mu.msgbox("processAgregarConteo: " + e.getMessage());
         }
     }
+
+    private void processGetStockCongelado() {
+        try {
+            invCongelado = xobj.getresult(clsBeTrans_inv_ciclico.class,"Get_Stock_Congelado");
+
+            if (invCongelado != null) {
+                esInvCongelado = true;
+                execws(12);
+            } else {
+                toastlong("Producto o licencia no asignado para conteo. Intente con otro!");
+
+                gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
+                gl.nuevo_producto_cic = codigo_producto;
+                startActivity(new Intent(this, frm_inv_cic_nuevo.class));
+            }
+        } catch (Exception e) {
+            mu.msgbox("processGetStockCongelado: " + e.getMessage());
+        }
+    }
+
+    private void processProductoUbic(){
+        try {
+            gBeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
+
+            if (gBeProducto != null) {
+                lblProd.setText(gBeProducto.Nombre);
+                lblUM.setText(gBeProducto.UnidadMedida.Nombre);
+
+                if (!gBeProducto.Control_lote) {
+                    tblote_cic.setVisibility(View.GONE);
+                } else {
+                    tblote_cic.setVisibility(View.VISIBLE);
+                }
+
+                if (!gBeProducto.Control_vencimiento) {
+                    tblVence.setVisibility(View.GONE);
+                } else {
+                    tblVence.setVisibility(View.VISIBLE);
+                }
+
+                if (!gBeProducto.Control_peso) {
+                    txtpeso_cic.setVisibility(View.INVISIBLE);
+                    txtPesoContado.setVisibility(View.INVISIBLE);
+                } else {
+                    txtpeso_cic.setVisibility(View.VISIBLE);
+                    txtPesoContado.setVisibility(View.VISIBLE);
+                }
+
+                gl.pprod.IdProducto = gBeProducto.IdProducto;
+                execws(4);
+            }
+        } catch (Exception e) {
+            mu.msgbox("processProducto:"+e.getMessage());
+        }
+    }
+
 
     private void LLenaPresentacion() {
         try {
