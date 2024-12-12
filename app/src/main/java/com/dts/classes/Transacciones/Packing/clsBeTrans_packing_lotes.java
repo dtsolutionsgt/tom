@@ -13,5 +13,6 @@ public class clsBeTrans_packing_lotes {
     public double disp=0;
     public double cant=0;
     public int IdProductoBodega=0;
+    public int IdStock=0;
 
 }

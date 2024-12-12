@@ -444,7 +444,11 @@ public class frm_preparacion_packing extends PBase {
 
                     if (tmpObj.No_linea.equals(txtLicenciaPacking.getText().toString())) {
                         tmpObj.setCantidad_bultos_packing(tmpObj.getCantidad_bultos_packing() + gl.auxPacking.cant);
-                        adapter.notifyDataSetChanged();
+                        try{
+                            runOnUiThread(() -> adapter.notifyDataSetChanged());
+                        }catch (Exception e){
+                            toastlong(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+                        }
 
                         itemList = new clsBeTrans_packing_encList();
                         itemList.items = new ArrayList<>();
@@ -493,7 +497,7 @@ public class frm_preparacion_packing extends PBase {
             execws(3);
             //listItems();
         } catch (Exception e) {
-            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            toastlong(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
     }
 
@@ -693,6 +697,7 @@ public class frm_preparacion_packing extends PBase {
                     item.IdProductoBodega = obj.IdProductoBodega;
                     item.cant = obj.getCantidad_Recibida();
                     item.fecha = obj.getFecha_Vence();
+                    item.IdStock = obj.IdStock;
 
                     if (items.size() > 0) {
                         double totalCantidad = 0;
