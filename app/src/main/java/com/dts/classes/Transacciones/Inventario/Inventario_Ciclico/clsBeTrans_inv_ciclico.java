@@ -54,6 +54,9 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public String TipoProducto ="";
     @Element(required=false) public double Factor =0.00;
     @Element(required=false) public int IdBodega = 0;
+    @Element(required=false) public String Nombre_Completo_Destino = "";
+    @Element(required=false) public String Ubicacion_Nueva = "";
+    @Element(required=false) public String EstadoNuevo = "";
 
     public clsBeTrans_inv_ciclico(){}
 

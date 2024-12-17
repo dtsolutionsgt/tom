@@ -680,9 +680,10 @@ public class frm_inv_cic_add extends PBase {
             if (invCongelado != null) {
                 idPresentacion = invCongelado.IdPresentacion;
 
-                txtUbic.setText(gl.inv_ciclico.NoUbic + "");
-                lblUbic1.setTypeface(null, Typeface.BOLD);
-                lblUbic1.setText(gl.inv_ciclico.Ubic_nombre + "");
+                //#CKFK20241217 Cambié la ubicación nueva por la del inventario cíclico que estaba cargado
+                txtUbicNueva.setText(gl.inv_ciclico.NoUbic + "");
+                lblUbicNueva.setTypeface(null, Typeface.BOLD);
+                lblUbicNueva.setText(gl.inv_ciclico.Ubic_nombre + "");
 
                 lblProd.setTypeface(null, Typeface.BOLD);
                 lblProd.setText(gBeProducto.Codigo + " - " + gBeProducto.Nombre);
@@ -738,7 +739,7 @@ public class frm_inv_cic_add extends PBase {
                         respuesta = true;
                         new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
                     } else {
-                        //GT03122021: Al no encontrar match por cod_producto, se busca como LP
+                        /*//GT03122021: Al no encontrar match por cod_producto, se busca como LP
                         if(Scan_por_LP()){
                             respuesta = true;
                             txtProd.setText(gl.inv_ciclico.Codigo);
@@ -746,7 +747,9 @@ public class frm_inv_cic_add extends PBase {
                         }else{
                             //#AT20241210 Busca en inventario congelado
                             execws(11);
-                        }
+                        }*/
+                        //#AT20241210 Busca en inventario congelado
+                        execws(11);
                     }
                 }
             } else {
@@ -762,14 +765,15 @@ public class frm_inv_cic_add extends PBase {
 
     private boolean Buscar_producto(String codigo_producto){
 
-        boolean respuesta = false;
+       /* boolean respuesta = false;
 
         for (int i = 0; i < gl.reconteo_list.size() ; i++) {
 
             String codigo = gl.reconteo_list.get(i).Codigo;
+            String licencia = gl.reconteo_list.get(i).Licence_plate;
 
             //if (codigo.equals(codigo_producto) && gl.reconteo_list.get(i).cantidad.equals(0.0) ) {
-            if (codigo.equals(codigo_producto) ) {
+            if (codigo.equals(codigo_producto) || ) {
 
                 gl.inv_ciclico = gl.reconteo_list.get(i);
                 esCambioUbicacion = IdUbicacion != gl.inv_ciclico.NoUbic;
@@ -781,7 +785,20 @@ public class frm_inv_cic_add extends PBase {
             }
         }
 
-        return respuesta;
+        return respuesta;*/
+
+        Optional<clsBe_inv_reconteo_data> resultado = gl.reconteo_list.stream()
+                .filter(item -> codigo_producto.equals(item.Codigo) || codigo_producto.equals(item.Licence_plate))
+                .findFirst();
+
+        if (resultado.isPresent()) {
+            gl.inv_ciclico = resultado.get();
+            esCambioUbicacion = IdUbicacion != gl.inv_ciclico.NoUbic;
+            Load();
+            return true;
+        }
+
+        return false;
     }
 
     private boolean Buscar_lp(String licence_plate){
@@ -794,6 +811,8 @@ public class frm_inv_cic_add extends PBase {
             if (license_p.equals(licence_plate) ) {
 
                 gl.inv_ciclico = gl.reconteo_list.get(i);
+                txtProd.setText(gl.inv_ciclico.codigo_producto);
+                txtLicencia.setText(gl.inv_ciclico.Licence_plate);
                 esCambioUbicacion = IdUbicacion != gl.inv_ciclico.NoUbic;
                 Load();
 
@@ -1032,7 +1051,7 @@ public class frm_inv_cic_add extends PBase {
             } else {
                 btGuardar.setEnabled(true);
 
-                if (NuevoConteo && !existeConteo) {
+                if (NuevoConteo && !existeConteo && !esInvCongelado) {
                     pitem = new clsBeTrans_inv_ciclico();
 
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
@@ -1044,7 +1063,7 @@ public class frm_inv_cic_add extends PBase {
                     pitem.IdProductoEstado = IdEstadoselected;
                     pitem.IdProductoEst_nuevo = IdEstadoselected;
                     pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
-                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbic.getText().toString());
+                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbicNueva.getText().toString());
 
                     if (BeProductoUbicacion.Control_lote) {
                         String lote = txtLote1.getText().toString();
@@ -1093,18 +1112,18 @@ public class frm_inv_cic_add extends PBase {
 
                     pitem.IdProductoBodega = gBeProducto.IdProductoBodega;
                     pitem.IdUnidadMedida = gBeProducto.IdUnidadMedidaBasica;
-                    pitem.IdPresentacion = IdPresentacionselected;
+                    pitem.IdPresentacion = invCongelado.IdPresentacion;
                     pitem.IdPresentacion_nuevo = IdPresentacionselected;
-                    pitem.IdProductoEstado = IdEstadoselected;
+                    pitem.IdProductoEstado = invCongelado.IdProductoEstado;
                     pitem.IdProductoEst_nuevo = IdEstadoselected;
                     pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
-                    pitem.IdUbicacion_nuevo = 0;
+                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbicNueva.getText().toString());
 
                     if (gBeProducto.Control_lote) {
                         String lote = txtLote1.getText().toString();
 
                         pitem.Lote = lote;
-                        pitem.Lote_stock = lote;
+                        pitem.Lote_stock = invCongelado.Lote_stock;
                     } else {
                         pitem.Lote = "";
                         pitem.Lote_stock = "";
@@ -1114,7 +1133,7 @@ public class frm_inv_cic_add extends PBase {
                         String fecha = app.strFechaXML2(dtpVence.getText().toString());
 
                         pitem.Fecha_vence = fecha;
-                        pitem.Fecha_vence_stock = fecha;
+                        pitem.Fecha_vence_stock = invCongelado.Fecha_vence_stock;
                     } else {
                         pitem.Fecha_vence = "1900-01-01T00:00:00";
                         pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
@@ -1423,7 +1442,7 @@ public class frm_inv_cic_add extends PBase {
                         break;
                     case 6:
                         int ubicacion  = 0;
-                        ubicacion = NuevoConteo ? Integer.valueOf(txtUbic.getText().toString()): Integer.valueOf(txtUbicNueva.getText().toString());
+                        ubicacion = NuevoConteo ? Integer.valueOf(txtUbicNueva.getText().toString()): Integer.valueOf(txtUbic.getText().toString());
 
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
                                 "pBarra", ubicacion,
@@ -1465,6 +1484,7 @@ public class frm_inv_cic_add extends PBase {
                         invCiclico.lic_plate = codigo_producto;
                         invCiclico.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
                         invCiclico.IdBodega = gl.IdBodega;
+                        invCiclico.Idinventarioenc = BeInvEnc.Idinventarioenc;
                         
                         callMethod("Get_Stock_Congelado", "pInvCiclico", invCiclico);
                         break;
@@ -1932,6 +1952,12 @@ public class frm_inv_cic_add extends PBase {
 
             if (invCongelado != null) {
                 esInvCongelado = true;
+                esCambioUbicacion = IdUbicacion != invCongelado.IdUbicacion;
+                txtUbicNueva.setText(""+IdUbicacion);
+                txtUbic.setText(""+invCongelado.IdUbicacion);
+                IdUbicacion = invCongelado.IdUbicacion;
+
+                NuevoConteo = true;
                 execws(12);
             } else {
                 toastlong("Producto o licencia no asignado para conteo. Intente con otro!");

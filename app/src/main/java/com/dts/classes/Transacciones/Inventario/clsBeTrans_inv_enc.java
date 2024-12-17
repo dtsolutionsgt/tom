@@ -72,6 +72,7 @@ public class clsBeTrans_inv_enc {
     @Element(required=false) public int IdCentroCosto=0;
     @Element(required=false) public int Tipo_Asignacion=2;
     @Element(required=false) public boolean Capturar_No_Asignados = false;
+    @Element(required=false) public int IdStock = 0;
 
     public clsBeTrans_inv_enc() {
     }
