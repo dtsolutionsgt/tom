@@ -781,28 +781,21 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void Existe_Producto() {
-
-        try{
-
-            boolean respuesta = false;
-
+        try {
             //existeProducto = xobj.getresult(Existe_producto.class,"Existe_Producto");
-            respuesta = xobj.getresult(Boolean.class,"Existe_Producto");
+            //respuesta = xobj.getresult(Boolean.class,"Existe_Producto");
+            boolean respuesta = (Boolean) xobj.getSingle("Existe_Producto", boolean.class);
 
-            if(! respuesta){
-
-                msgNuevoRegistro("El producto no existe en el maestro,¿Desea insertarlo?");
-
-            }else{
+            if (!respuesta) {
+                msgNuevoRegistro("El producto no existe en el maestro, ¿Desea insertarlo?");
+            } else {
                 msgbox("Código de ubicación no existe en ubicaciones asignadas de inventario");
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("llamada_1", "Existe_Producto:");
             mu.msgbox("Existe_Producto:"+e.getMessage());
         }
-
     }
 
     private void Tarea_Conteo() {
@@ -827,37 +820,29 @@ public class frm_inv_cic_conteo extends PBase {
 
             if (BeInvEnc.Idpropietario >0){
                 execws(5);
-            }
-            else if (BeInvEnc.multi_propietario){
+            } else if (BeInvEnc.multi_propietario){
                 gl.multipropietario = BeInvEnc.multi_propietario;
                 execws(6);
             }else{
                 msgbox("El inventario no tiene asignado un propietario.");
             }
-
         }
         catch (Exception e){
             Log.d("llamada_2", "Tarea_Conteo: ");
-            mu.msgbox("Existe_Producto:"+e.getMessage());
+            mu.msgbox("Tarea_Conteo:"+e.getMessage());
         }
-
     }
 
     private void Llena_Estado() {
-
         try {
-
             gl.lista_estados = xobj.getresult(clsBeProducto_estadoList.class, "Get_Estados_By_IdPropietario");
 
             if(gl.lista_estados !=null){
-
                 txtBuscFiltro.setText("");
                 startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
             }else{
                 msgbox("No hay estados para asignar al producto");
             }
-
-
         } catch (Exception e) {
             mu.msgbox( e.getMessage());
         }
@@ -944,7 +929,6 @@ public class frm_inv_cic_conteo extends PBase {
                 case 5:
                     Llena_Estado();
                     break;
-
                 case 6:
                     Llena_Producto();
                     break;
@@ -956,16 +940,11 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void Llena_Producto() {
-
-        try{
-
+        try {
             BeProducto = new clsBeProducto();
-
-
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_IdProducto");
 
             if (BeProducto != null){
-
                 BeInvEnc.Idpropietario =  BeProducto.IdPropietario;
                 execws(5);
             }
@@ -973,9 +952,7 @@ public class frm_inv_cic_conteo extends PBase {
         }catch (Exception e){
             mu.msgbox("processBeProductoRes:"+e.getMessage());
         }
-
     }
-
 
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;

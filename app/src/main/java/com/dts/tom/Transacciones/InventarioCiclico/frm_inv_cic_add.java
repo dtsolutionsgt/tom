@@ -1913,6 +1913,7 @@ public class frm_inv_cic_add extends PBase {
             if (getrespuesta > 0) {
                 toastlong("Conteo agregado con éxito.");
 
+                if (NuevoConteo) NuevoConteo = false;
                 finish();
             }
 
