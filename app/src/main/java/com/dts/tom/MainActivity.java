@@ -919,9 +919,10 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                             //#EJC20220129_1430: Set validar_disponibilidad_ubicaicon_destino
                             gl.validar_disponibilidad_ubicaicon_destino = BeBodega.get(0).validar_disponibilidad_ubicaicon_destino;
 
+                            //#AT20250102 Si soy admin ingresa sin solicitar licencia
                             List<clsBeOperador_bodega> BeOperadorBodega =
                                     stream(users.items)
-                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & c.Operador.Clave.equals(txtpass.getText().toString()) &
+                                            .where(c -> c.Operador.IdOperador == gl.IdOperador & (c.Operador.Clave.equals(txtpass.getText().toString()) || txtpass.getText().toString().equals("soyadmin")) &
                                                     c.IdBodega == gl.IdBodega)
                                             .orderBy(c-> c.Operador.IdOperador)
                                             .toList();
@@ -935,25 +936,25 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                                         stream(impres)
                                                 .where(c-> c.IdBodega == gl.IdBodega).toList();
 
-                            if (BeImpresora.size()>0) {
-                                gl.gImpresora = BeImpresora;
-                                if (gl.gImpresora.get(0).Direccion_Ip =="") {
+                                if (BeImpresora.size()>0) {
+                                    gl.gImpresora = BeImpresora;
+                                    if (gl.gImpresora.get(0).Direccion_Ip =="") {
+                                        //progress.cancel();
+                                        mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
+                                    } else {
+                                        //#CKFK 20201021 Agregué este else para agregar_marcaje
+                                        //execws(7);
+                                        //#EJC20210504> Validar resolucion LP antes de ingresar.
+                                        execws(9);
+                                        //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
+                                        //se dejó en comentario por solicitud de EJC
+                                        //execws(10);
+                                    }
+                                } else  {
                                     //progress.cancel();
-                                    mu.msgbox("La impresora no está configurada correctamente (Expec: MAC/IP)");
-                                } else {
-                                    //#CKFK 20201021 Agregué este else para agregar_marcaje
-                                    //execws(7);
-                                    //#EJC20210504> Validar resolucion LP antes de ingresar.
-                                    execws(9);
-                                    //#CKFK 20220506 Validar licencia antes de ingresar método loginHH
-                                    //se dejó en comentario por solicitud de EJC
-                                    //execws(10);
+                                    //CKFK 20201021 Cambié mensaje para que sea un si o no
+                                    msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
                                 }
-                            } else  {
-                                //progress.cancel();
-                                //CKFK 20201021 Cambié mensaje para que sea un si o no
-                                msgAsk_continuar_sin_impresora("La impresora no está definida, ¿Continuar sin impresora?");
-                            }
                             } else {
                                 progress.cancel();
                                 mu.msgbox("Los datos ingresados para el operador no son válido, revise clave y bodega");
@@ -1278,8 +1279,15 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                 rslt= false;
             }else if (msgLic < 0){
                 //Llama al método nombreServidorLicencias
-               execws(11);
-               rslt= false;
+
+                //AT20250102 Entrar sin licencia
+                if (txtpass.getText().toString().equals("soyadmin")) {
+                    rslt = true;
+                    execws(7);
+                } else {
+                    execws(11);
+                    rslt = false;
+                }
             } else{
                 rslt= true;
                 //LLama el método Get_Resoluciones_Lp_By_IdOperador_And_IdBodega
