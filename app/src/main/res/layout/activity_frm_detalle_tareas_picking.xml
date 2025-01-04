@@ -600,11 +600,11 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/medium"
-        app:fabCustomSize="60dp"
+        android:backgroundTint="#009688"
         android:clickable="true"
         android:onClick="BotonFinalizar"
         android:src="@drawable/ok_btn"
+        app:fabCustomSize="60dp"
         app:maxImageSize="35dp" />
 
 </RelativeLayout>

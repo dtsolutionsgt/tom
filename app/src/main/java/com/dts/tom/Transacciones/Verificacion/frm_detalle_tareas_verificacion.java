@@ -157,7 +157,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
     private void Load(){
 
         try {
-            progress.setMessage("Actualizado detalle de tareas de verificación...");
+            progress.setMessage("Actualizando detalle de tareas de verificación...");
             progress.show();
 
             listDetVeri.setAdapter(null);

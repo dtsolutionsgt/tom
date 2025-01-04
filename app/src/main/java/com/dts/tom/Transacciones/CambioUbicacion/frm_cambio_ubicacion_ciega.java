@@ -2796,6 +2796,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 TieneReserva = false;
                 progress.cancel();
+            }else{
+                progress.cancel();
+                msgAsk(gl.modo_cambio == 1 ? "No se pudo aplicar el cambio de ubicación" : "No se pudo aplicar el cambio de estado");
             }
 
         } catch (Exception e) {
@@ -4726,7 +4729,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             stockList.items.clear();
 
             for (clsBeProducto obj: ListaActualizada) {
-
 
                 clsBeVW_stock_res auxStockRes = new clsBeVW_stock_res();
 
