@@ -985,7 +985,8 @@ public class frm_detalle_tareas_picking extends PBase {
                         //callMethod("Actualizar_PickingEnc_Procesado","oBeTrans_picking_enc",gBePicking);
                         callMethod("Actualizar_PickingEnc_Procesado_Andr",
                                 "pIdPickingEnc",gBePicking.IdPickingEnc,
-                                "pIdOperadorBodegaCerro",  gl.OperadorBodega.IdOperadorBodega);
+                                "pIdOperadorBodegaCerro",  gl.OperadorBodega.IdOperadorBodega,
+                                "pHostCerro", gl.deviceId);
                         break;
 
                     case 5:
