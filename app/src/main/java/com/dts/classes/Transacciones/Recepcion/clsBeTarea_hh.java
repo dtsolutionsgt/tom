@@ -23,7 +23,8 @@ public class clsBeTarea_hh {
   @Element(required=false) public String Recordatorio="";
   @Element(required=false) public boolean CreaTarea=false;
   @Element(required=false) public boolean IsNew=false;
-
+  @Element(required=false) public int IdOperadorBodega_Cerro=0;
+  @Element(required=false) public String Host_Cerro="";
 
   public clsBeTarea_hh() {
   }

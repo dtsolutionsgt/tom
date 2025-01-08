@@ -1520,9 +1520,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             //#CKFK20240818 Agregué esta validación por si hay una presentación, un lote,
             // una fecha con cantidad disponible para mover
             if (vCantidadDisponible==0 &&
-                    cmbPresentacion.getAdapter().getCount()==1 &&
-                    cmbLote.getAdapter().getCount()==1 &&
-                    cmbVence.getAdapter().getCount()==1){
+                    (cmbPresentacion.getAdapter()!=null && cmbPresentacion.getAdapter().getCount()==1) &&
+                    (cmbLote.getAdapter()!=null && cmbLote.getAdapter().getCount()==1) &&
+                    (cmbVence.getAdapter()!=null && cmbVence.getAdapter().getCount()==1)){
                 msgbox("No hay existencias disponibles de este producto en esta ubicación o las existentes están reservadas");
                 inicializaTarea(false);
                 return;
