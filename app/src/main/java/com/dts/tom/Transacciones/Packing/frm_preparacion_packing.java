@@ -650,22 +650,22 @@ public class frm_preparacion_packing extends PBase {
     }
 
     private void processEliminarLinea(){
-        int exito;
+        boolean exito;
 
         try {
             idle=true;
             hideProgressDialog();
 
             if (!ws.errorflag) {
-                exito = xobj.getresult(Integer.class,"Eliminar_Linea_Packing");
-                if (exito>0) {
+                exito = xobj.getresult(Boolean.class,"Eliminar_Linea_Packing");
+                if (exito) {
                     toast("Línea eliminada con éxito.");
                     execws(2);
                 } else {
                     mu.msgbox("No se logró finalizar la tarea, por favor repite el proceso.");
                 }
             } else {
-                mu.msgbox("processEliminarLinea : "+ws.error);
+                mu.msgbox("processEliminarLinea : "+ ws.error);
             }
         } catch (Exception e){
             mu.msgbox("processEliminarLinea : "+e.getMessage());
@@ -837,7 +837,9 @@ public class frm_preparacion_packing extends PBase {
                                 "pIdPedidoEnc", gl.gIdPedidoEnc);
                         break;
                     case 6:
-                        callMethod("Eliminar_Linea_Packing", "pIdPackingEnc", selitem.Idpackingenc);
+                        callMethod("Eliminar_Linea_Packing",
+                                "pBePackingEnc", selitem,
+                                "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
                         break;
                 }
 
