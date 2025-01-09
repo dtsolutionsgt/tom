@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -175,7 +176,7 @@ public class frm_Packing extends PBase {
             trDescripcion = findViewById(R.id.trDescripcion);
 
             recyclerView = findViewById(R.id.recyclerViewProductos);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            setPropsRecycler();
 
             ws = new WebServiceHandler(frm_Packing.this, gl.wsurl);
             xobj = new XMLObject(ws);
@@ -194,6 +195,17 @@ public class frm_Packing extends PBase {
             e.printStackTrace();
         }
 
+    }
+
+    private void setPropsRecycler() {
+        try {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
+        } catch (Exception e) {
+            mu.msgbox("setHandles:"+e.getMessage());
+        }
     }
 
     private void setHandles(){

@@ -72,6 +72,7 @@ import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock_detalleCI.CambioUbicExistencia;
 import static com.dts.tom.Transacciones.ConsultaStock.frm_consulta_stock.CambioUbicDetallado;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -243,7 +244,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             tblLicenciaMixta.setVisibility(View.GONE);
 
             recyclerView = findViewById(R.id.recyclerViewProductos);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            setPropsRecycler();
 
             txtPosiciones = new EditText(this,null);
             txtPosiciones.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -326,6 +327,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
 
+    }
+
+    private void setPropsRecycler() {
+        try {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
+        } catch (Exception e) {
+            mu.msgbox("setHandles:"+e.getMessage());
+        }
     }
 
     private void setHandlers() {

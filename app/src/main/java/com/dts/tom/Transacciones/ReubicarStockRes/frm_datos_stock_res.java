@@ -1,5 +1,6 @@
 package com.dts.tom.Transacciones.ReubicarStockRes;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,7 +88,7 @@ public class frm_datos_stock_res extends PBase {
         tblLicenciaMixta = findViewById(R.id.tblLicenciaMixta);
 
         recyclerView = findViewById(R.id.recyclerViewProductos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setPropsRecycler();
 
         UbicValida = false;
 
@@ -98,6 +99,17 @@ public class frm_datos_stock_res extends PBase {
         }
 
         setHandlers();
+    }
+
+    private void setPropsRecycler() {
+        try {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
+        } catch (Exception e) {
+            mu.msgbox("setHandles:"+e.getMessage());
+        }
     }
 
     private void setHandlers() {

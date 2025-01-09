@@ -161,40 +161,34 @@ public class frm_preparacion_packing extends PBase {
 
         try {
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selid = 0;
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                    selitem = sitem;
-                    selid = sitem.Idpackingenc;
-                    selidx = position;
-                    adapter.setSelectedIndex(position);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                selid = 0;
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
+                selitem = sitem;
+                selid = sitem.Idpackingenc;
+                selidx = position;
+                adapter.setSelectedIndex(position);
 
-                    if (selitem.Idpackingenc == 0) {
-                        nBeResolucion = null;
-                        String[] licencia = selitem.nom_prod.split(":");
-                        txtLicenciaPacking.setText(licencia[0].trim());
-                    }
-
+                if (selitem.Idpackingenc == 0) {
+                    String[] licencia = selitem.nom_prod.split(":");
+                    String lic = licencia[0].trim();
+                    msgCambioLicPacking("¿Cambiar a licencia packing: "+ lic +"?" ,lic);
                 }
+
             });
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    selid = 0;
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                    selitem = sitem;
-                    sellp = selitem.Lic_plate;
-                    adapter.setSelectedIndex(position);
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                selid = 0;
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
+                selitem = sitem;
+                sellp = selitem.Lic_plate;
+                adapter.setSelectedIndex(position);
 
-                    msgAskBorrar("Eliminar registro");
+                msgAskBorrar("Eliminar registro");
 
-                    return true;
-                }
+                return true;
             });
 
             txtLP.setOnKeyListener((v, keyCode, event) -> {
@@ -1096,6 +1090,31 @@ public class frm_preparacion_packing extends PBase {
                 creaListaLotes("");
                 browse=1;
                 startActivity(new Intent(frm_preparacion_packing.this,frm_lista_packing_lp.class));
+            });
+
+            dialog.setNegativeButton("No", (dialog12, which) -> {});
+            dialog.show();
+
+        } catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgCambioLicPacking(String msg, String lic_packing) {
+        try {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                nBeResolucion = null;
+                txtLicenciaPacking.setText(lic_packing);
             });
 
             dialog.setNegativeButton("No", (dialog12, which) -> {});
