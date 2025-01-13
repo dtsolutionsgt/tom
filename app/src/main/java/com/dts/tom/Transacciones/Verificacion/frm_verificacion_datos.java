@@ -376,10 +376,13 @@ public class frm_verificacion_datos extends PBase {
 
             Lp = BePedidoDetVerif.getLicPlate();
 
+            String vIndiceRotacion = (gBeProducto.Indice_Rotacion.Descripcion.equals("")?"N/D":gBeProducto.Indice_Rotacion.Descripcion);
+            String vTipoProducto = (gBeProducto.TipoProducto.NombreTipoProducto.equals("")?"N/D":gBeProducto.TipoProducto.NombreTipoProducto);
+
             if (gl.VerificacionSinLoteFechaVen) {
-                lblTituloForma.setText(String.format("Prod: %s-%s",
-                        Codigo, Nombre));
-            } else {
+                lblTituloForma.setText(String.format("Prod: %s-%s %s %s",
+                        Codigo, Nombre, "\n IR: " + vIndiceRotacion, " - TP:" + vTipoProducto));
+            }else{
                 lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
                         Codigo, Nombre, Expira, Lote));
             }

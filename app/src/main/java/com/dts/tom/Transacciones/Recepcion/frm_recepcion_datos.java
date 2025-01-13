@@ -7694,7 +7694,8 @@ public class frm_recepcion_datos extends PBase {
                                 }
                             }
 
-                            if (pListBeStockRec.items.get(0).Lic_plate.equals("") || pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
+                            if (pListBeStockRec.items.get(0).Lic_plate.equals("") ||
+                                    pListBeStockRec.items.get(0).Lic_plate.isEmpty()) {
                                 if (!txtNoLP.getText().toString().trim().isEmpty()) {
                                     pListBeStockRec.items.get(0).Lic_plate = txtNoLP.getText().toString().trim().replace("$","");
 
