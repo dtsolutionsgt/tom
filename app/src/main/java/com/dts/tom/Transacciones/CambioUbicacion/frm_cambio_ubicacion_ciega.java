@@ -650,13 +650,25 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 String ubicDestino = txtUbicDestino.getText().toString();
                 procesando = true;
 
+                //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor original
                 if (ubicDestino.isEmpty()) {
                     toast("Debe ingresar la ubicación destino");
+                    procesando = false; // Restablece la variable si hay un error
+                    return true;
                 }
 
-                validaDestino();
-                procesando = false;
-                return true;
+                try {
+                    validaDestino(); // Llama a la función de validación
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    // Restablece la variable después de que el proceso termine
+                    procesando = false;
+                }
+
+                //validaDestino();
+                //procesando = false;
+                //return true;
             }
             return false;
         });
