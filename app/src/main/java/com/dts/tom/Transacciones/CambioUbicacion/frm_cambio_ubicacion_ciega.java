@@ -643,12 +643,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
+
+
                 if (procesando) {
                     return true;
                 }
 
                 String ubicDestino = txtUbicDestino.getText().toString();
-                procesando = true;
 
                 //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor origina
                 if (ubicDestino.isEmpty()) {
@@ -656,6 +657,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     procesando = false; // Restablece la variable si hay un error
                     return true;
                 }
+
+                //continua validando que no se ejecute segundo intento.
+                procesando = true; // Bloquea nuevos intentos
+                toast("Validando destino...");
 
                 //GT13012025: validamos el destino antes de regresar la bandera a valor original
                 try {
@@ -1735,6 +1740,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            procesando=false;
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -2135,6 +2141,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 txtUbicDestino.selectAll();
                 txtUbicDestino.requestFocus();
                 progress.cancel();
+                //se resetea la variable para permitir nuevo Enter en cambio ubicación
+                procesando = false;
                 msgbox("Ubicación destino incorrecta");
                 //throw new Exception("Ubicación destino incorrecta");
             } else{
@@ -4011,8 +4019,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino
                 execws(12);
+
+
             }else
             {
+                procesando = false;
                 //#GT27072022_1635: Avisar que no se ha digitado el destino.
                 mu.msgbox("No hay una úbicación destino ingresada.");
             }
