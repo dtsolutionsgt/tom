@@ -178,6 +178,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private clsBeTrans_movimientosList  movList = new clsBeTrans_movimientosList();
     private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
     private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
+    private boolean procesando = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -637,28 +638,27 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         });
 
         //#AT 20211125 Agregué este evento para que detecte cuando el usuario presione enter
-        txtUbicDestino.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View v) { } });
+        txtUbicDestino.setOnClickListener(v -> { });
 
-        txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
+        txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_ENTER:
-                            if (txtUbicDestino.getText().toString().length() > 0) {
-                                if (txtUbicSug.getText().toString().isEmpty()) {
-                                    Log.d("llamada_1", "onKey: valida_ubicacion");
-                                    validaDestino();
-                                }else{
-                                    AplicarCambioBoton();
-                                }
-                            }else
-                                toast("Debe ingresar la ubicación destino");
-                    }
+                if (procesando) {
+                    return true;
                 }
-                return false;
+
+                String ubicDestino = txtUbicDestino.getText().toString();
+                procesando = true;
+
+                if (ubicDestino.isEmpty()) {
+                    toast("Debe ingresar la ubicación destino");
+                }
+
+                validaDestino();
+                procesando = false;
+                return true;
             }
+            return false;
         });
 
         txtUbicDestino.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -682,35 +682,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         }
                     }
                 }
-            }
-        });
-
-        //#CKFK20220815 Agregué este método para la ubicación destino
-        txtUbicDestino.setOnKeyListener(new View.OnKeyListener() {
-
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_ENTER:
-
-                            try {
-
-                                if (!txtUbicDestino.getText().toString().equals("") &&
-                                        !txtUbicDestino.getText().toString().isEmpty() &&
-                                        txtUbicDestino.getText().toString()!=null){
-                                    cvUbicDestID = Integer.valueOf(txtUbicDestino.getText().toString());
-                                    Log.d("llamada_2", "onKey: valida_ubicacion2");
-                                    validaDestino();
-                                }else{
-                                    msgbox("Debe ingresar la ubicación destino");
-                                }
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
-                            }
-                    }
-                }
-                return false;
             }
         });
 
