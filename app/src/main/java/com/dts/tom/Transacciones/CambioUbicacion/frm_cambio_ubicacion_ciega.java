@@ -642,9 +642,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-
-
                 if (procesando) {
                     return true;
                 }
@@ -658,10 +655,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     return true;
                 }
 
-                //continua validando que no se ejecute segundo intento.
                 procesando = true; // Bloquea nuevos intentos
-                toast("Validando destino...");
 
+/*
                 //GT13012025: validamos el destino antes de regresar la bandera a valor original
                 try {
                     validaDestino(); // Llama a la función de validación
@@ -670,7 +666,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 } finally {
                     // Restablece la variable después de que el proceso termine
                     procesando = false;
-                }
+                }*/
+
+                new Handler().postDelayed(() -> {
+                    validaDestino(); // Llama a la función de validación
+                    procesando = false; // Restablece la bandera
+                    txtUbicDestino.setEnabled(true); // Vuelve a habilitar el EditText
+                }, 200); // Cambia el tiempo según la duración de tu proceso
+
 
                 //validaDestino();
                 //procesando = false;
