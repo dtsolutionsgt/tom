@@ -2781,6 +2781,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 relForm.setVisibility(View.VISIBLE);
                 trCodigoProducto.setVisibility(View.VISIBLE);
                 lblDescProducto.setText("-");
+                lblCantidadProducto.setVisibility(View.GONE);
 
                 if (!ocultar_mensajes) {
                     msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
