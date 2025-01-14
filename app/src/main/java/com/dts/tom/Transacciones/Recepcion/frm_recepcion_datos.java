@@ -308,6 +308,8 @@ public class frm_recepcion_datos extends PBase {
     private FloatingActionButton btnTareas;
 
     private boolean isButtonClickable = true; // Flag para controlar el estado del botón
+    private boolean procesando= false;  //flag para controlar que no se procese por doble Enter en el input
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -658,10 +660,20 @@ public class frm_recepcion_datos extends PBase {
             txtCantidadRec.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
+                    //#GT13012025: Mejora al proceso, evitar que usuario presione mas de una vez Enter!!
+                    if (procesando) {
+                        return true;
+                    }
+
                     progress.setMessage("Guardando Recepción");
                     progress.show();
+                    procesando = true; // Bloquea para permitir solo un intento.
 
-                    guardar_recepcion();
+                    new Handler().postDelayed(() -> {
+                        guardar_recepcion(); // Llama a la función de validación
+                        procesando = false; // Restablece la bandera
+                        txtCantidadRec.setEnabled(true); // Vuelve a habilitar el EditText
+                    }, 200); // Cambia el tiempo según la duración de tu proceso
 
                 }
 
