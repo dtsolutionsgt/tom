@@ -85,7 +85,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ProgressDialog progress;
 
     private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
-    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino,lblCantidad;
+    private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino,lblCantidad, lblCantidadProducto;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
     private TableRow trPeso,tblExplosionar,tblPresentacion, trCodigoProducto;
@@ -214,6 +214,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             lblTituloForma = findViewById(R.id.lblTituloForma);
             lblUbicCompDestino = findViewById(R.id.lblUbicCompDestino);
             lblCantidad = findViewById(R.id.lblCantidad);
+            lblCantidadProducto = findViewById(R.id.lblCantidadProducto);
             txtUbicSug = findViewById(R.id.txtUbicSug);
 
             cmbPresentacion = findViewById(R.id.cmbPresentacion);
@@ -2497,6 +2498,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             .collect(Collectors.toCollection(ArrayList::new));
 
                     if (ListaActualizada.size() > 0) {
+                        lblCantidadProducto.setText("Registro(s): " + ListaActualizada.size());
                         adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
                         recyclerView.setAdapter(adapter);
 
@@ -2509,6 +2511,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         tblLicenciaMixta.setVisibility(View.VISIBLE);
                         relForm.setVisibility(View.GONE);
                         trCodigoProducto.setVisibility(View.GONE);
+                        lblDescProducto.setVisibility(View.GONE);
 
                         if (gl.modo_cambio == 2) {
                             BeProductoUbicacion = ListaActualizada.get(0);
@@ -2532,6 +2535,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         LicenciasCompletas = false;
                         txtLicPlate.requestFocus();
                         msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblDescProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;
                         lblDescProducto.setText("Licencia N.E.E.U");
