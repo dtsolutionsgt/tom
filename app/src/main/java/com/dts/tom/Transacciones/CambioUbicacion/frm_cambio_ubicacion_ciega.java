@@ -579,6 +579,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (LicenciasCompletas) {
                     if (txtLicPlate.getText().toString().isEmpty()) {
                         tblLicenciaMixta.setVisibility(View.GONE);
+                        lblCantidadProducto.setVisibility(View.GONE);
                         relForm.setVisibility(View.VISIBLE);
                         trCodigoProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setText("-");
