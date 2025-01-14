@@ -562,10 +562,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         txtLicPlate.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
                 TieneReserva = false;
                 inicializaTareaLP();
-
                 Procesa_Lp();
             }
 
@@ -584,7 +582,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         relForm.setVisibility(View.VISIBLE);
                         trCodigoProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setText("-");
-
                         LicenciasCompletas = false;
                     }
                 }
@@ -648,10 +645,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
                 String ubicDestino = txtUbicDestino.getText().toString();
-
                 //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor origina
-
-
 
                 if (ubicDestino.isEmpty()) {
                     toast("Debe ingresar la ubicación destino");
@@ -661,27 +655,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 procesando = true; // Bloquea nuevos intentos
 
-/*
-                //GT13012025: validamos el destino antes de regresar la bandera a valor original
-                try {
-                    validaDestino(); // Llama a la función de validación
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    // Restablece la variable después de que el proceso termine
-                    procesando = false;
-                }*/
-
                 new Handler().postDelayed(() -> {
                     validaDestino(); // Llama a la función de validación
                     procesando = false; // Restablece la bandera
                     txtUbicDestino.setEnabled(true); // Vuelve a habilitar el EditText
                 }, 200); // Cambia el tiempo según la duración de tu proceso
 
-
-                //validaDestino();
-                //procesando = false;
-                //return true;
             }
             return false;
         });

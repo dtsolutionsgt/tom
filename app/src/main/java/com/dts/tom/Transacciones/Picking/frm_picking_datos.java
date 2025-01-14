@@ -387,6 +387,15 @@ public class frm_picking_datos extends PBase {
             //GT06042022: no remover, hacen de pivote para retener el focus
             txtCantidadPick.setOnClickListener(view -> { });
 
+            //#GT14012024: evita que el contenido del input quede seleccionado,
+            // //porque Enter borra el contenido al presionarse.
+            txtCantidadPick.setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) {
+                    // Coloca el cursor al final del texto
+                    txtCantidadPick.setSelection(txtCantidadPick.getText().length());
+                }
+            });
+
             txtCantidadPick.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
