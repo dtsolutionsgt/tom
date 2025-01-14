@@ -787,9 +787,11 @@ public class frm_picking_datos extends PBase {
 
                             //#EJC20220502 / Copiado de >  AT20220428 Se llama a la funcion ProcesaLicUbic si la licencia ingresada es diferente
                             if (!gBePickingUbic.Lic_plate.equals(pLP)) {
+                                //#GT14012025: aqui valida si existe Enter en input de LP
                                 ProcesaLicUbic();
                             }else{
                                 if (gBePickingUbic.Lic_plate.equals(pLP)){
+                                    PressEnterLp = true;
                                     Continua_procesando_barra();
                                 }else{
                                     mu.msgbox("Licencia no válida.");
