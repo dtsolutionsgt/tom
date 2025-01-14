@@ -2477,6 +2477,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                             .collect(Collectors.toCollection(ArrayList::new));
 
                     if (ListaActualizada.size() > 0) {
+                        lblCantidadProducto.setVisibility(View.VISIBLE);
                         lblCantidadProducto.setText("Registro(s): " + ListaActualizada.size());
                         adapter = new list_adapt_lista_productos_cubic(getApplicationContext(), ListaActualizada);
                         recyclerView.setAdapter(adapter);
@@ -2514,6 +2515,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         LicenciasCompletas = false;
                         txtLicPlate.requestFocus();
                         msgbox("La licencia no se encuentra en la ubicación: " + cvUbicOrigID);
+                        lblCantidadProducto.setVisibility(View.GONE);
                         lblDescProducto.setVisibility(View.VISIBLE);
                         lblDescProducto.setTextColor(Color.RED);
                         cvProdID = 0;

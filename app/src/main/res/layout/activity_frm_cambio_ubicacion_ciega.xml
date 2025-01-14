@@ -184,20 +184,19 @@
             <TableRow
                 android:id="@+id/tblLicenciaMixta"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:visibility="gone">
+                android:layout_height="wrap_content">
 
 
                 <RelativeLayout
                     android:id="@+id/relProductos"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="250dp"
                     android:visibility="visible">
 
                     <HorizontalScrollView
                         android:id="@+id/horizontalScrollView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="0dp">
 
                         <LinearLayout
@@ -280,23 +279,23 @@
 
                         </LinearLayout>
                     </HorizontalScrollView>
-
-                    <TextView
-                        android:id="@+id/lblCantidadProducto"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:layout_below="@+id/horizontalScrollView"
-                        android:layout_marginTop="0dp"
-                        android:background="@color/medium"
-                        android:gravity="center|center_vertical"
-                        android:paddingLeft="10dp"
-                        android:text="TextView"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
                 </RelativeLayout>
 
             </TableRow>
+
+            <TextView
+                android:id="@+id/lblCantidadProducto"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/medium"
+                android:gravity="center|center_vertical"
+                android:paddingLeft="10dp"
+                android:text="TextView"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:id="@+id/relForm"
