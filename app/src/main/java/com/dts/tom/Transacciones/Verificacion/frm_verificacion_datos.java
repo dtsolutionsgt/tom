@@ -42,6 +42,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgLis
 import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.Packing.frm_preparacion_packing;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -183,6 +184,7 @@ public class frm_verificacion_datos extends PBase {
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
+        gl.PackingAuto = false;
 
         setCurrentDateOnView();
 
@@ -1153,16 +1155,25 @@ public class frm_verificacion_datos extends PBase {
     }
 
     private void processActualizaCantPesoVerif(){
-
         try {
 
             progress.setMessage("Actualizando cantidad y peso de la verificación...");
 
             Boolean resultado = (Boolean)xobj.getSingle("Actualiza_Cant_Peso_VerificacionResult",Boolean.class);
 
-            progress.cancel();
-
-            frm_verificacion_datos.super.finish();
+            if (resultado) {
+                if (gl.EmpaqueTarima) {
+                    progress.cancel();
+                    gl.PackingAuto = true;
+                    startActivity(new Intent(this, frm_preparacion_packing.class));
+                } else {
+                    progress.cancel();
+                    frm_verificacion_datos.super.finish();
+                }
+            } else {
+                progress.cancel();
+                mu.msgbox("No se completo el proceso de verificación.");
+            }
 
         }catch (Exception e){
             progress.cancel();
@@ -1598,7 +1609,13 @@ public class frm_verificacion_datos extends PBase {
                 reemplazoCorrecto = false;
                 browse=0;
                 super.finish();
+            } else {
+                if (gl.PackingAuto) {
+                    gl.PackingAuto = false;
+                    finish();
+                }
             }
+
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }

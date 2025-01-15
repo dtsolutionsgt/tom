@@ -263,6 +263,8 @@ public class appGlobals extends Application {
     public clsBeTrans_packing_lotes auxPacking = null;
     public String LicenciaPacking = "";
     public int IdUbicInvCic = 0;
+    public boolean PackingAuto = false;
+    public boolean EmpaqueTarima = false;
     @Override
     public void onCreate() {
         super.onCreate();

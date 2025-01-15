@@ -616,6 +616,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                     browse=6;
                     txtTarea.setText("");
                     gl.pIdPedidoEnc = selid;
+                    gl.gIdPedidoEnc = selid;
+                    gl.gIdPickingEnc = selitempe.IdPickingEnc;
                     startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
                     break;
             }
