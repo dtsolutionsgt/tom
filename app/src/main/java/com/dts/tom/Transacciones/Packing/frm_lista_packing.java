@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,6 +52,8 @@ public class frm_lista_packing extends PBase {
 
     private boolean idle=true;
 
+    private ImageView btnBuscarPedido;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class frm_lista_packing extends PBase {
         lblRegs = findViewById(R.id.btnRegsList);
         btnNueva = findViewById(R.id.btnNuevaTarea);
         pbar = findViewById(R.id.pgrtareas);
+        btnBuscarPedido = findViewById(R.id.btnBuscarPedido);
 
         anim = ObjectAnimator.ofInt(pbar, "progress", 0, 100);
         ProgressDialog("Cargando forma");
@@ -122,6 +126,13 @@ public class frm_lista_packing extends PBase {
                 }
             });
 
+            btnBuscarPedido.setOnClickListener(view -> {
+                //btnBuscarPedido.setEnabled(false);
+                doListPedidos(view);
+                //btnBuscarPedido.setEnabled(false);
+            });
+
+
         } catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
         }
@@ -129,8 +140,21 @@ public class frm_lista_packing extends PBase {
 
 
     //endregion
-
     //region Main
+
+    public void doListPedidos(View view){
+        //btnBuscars.setEnabled(false);
+        verLista();
+    }
+
+    private void verLista() {
+        try {
+            startActivity(new Intent(this, frm_lista_packing_cerrado_by_pedido.class));
+        } catch (Exception e) {
+            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" verListaPackingByPedido . "+e.getMessage());
+        }
+    }
+
 
     private void listItems(){
 

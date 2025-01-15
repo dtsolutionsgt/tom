@@ -7,7 +7,16 @@
         tools:context=".Transacciones.Packing.frm_lista_packing">
 
 
-        <RelativeLayout
+    <ImageView
+        android:id="@+id/imgOrdenar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="39dp"
+        android:onClick="showItemMenu"
+        android:src="@drawable/transferir" />
+
+    <RelativeLayout
             android:id="@+id/relbot"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -69,18 +78,32 @@
 
     <EditText
         android:id="@+id/editText8"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reltop"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="100dp"
         android:layout_toEndOf="@+id/textView55"
         android:importantForAutofill="no"
         android:inputType="number|textPersonName"
         android:minHeight="48dp"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/btnBuscarPedido"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reltop"
+        android:layout_alignBottom="@+id/editText8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="Reimpresión"
+        android:clickable="true"
+        android:src="@drawable/login_printer"/>
 
         <TextView
             android:id="@+id/textView55"
@@ -246,4 +269,5 @@
         android:progress="1"
         android:progressDrawable="@drawable/progress_bar_circular_style"
         android:visibility="invisible" />
-    </RelativeLayout>
+
+</RelativeLayout>

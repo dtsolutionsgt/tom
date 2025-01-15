@@ -98,6 +98,8 @@
         <activity android:name=".Transacciones.ReubicarStockRes.frm_lista_stock_res" />
         <activity android:name=".Transacciones.ReubicarStockRes.frm_datos_stock_res" />
         <activity android:name=".Transacciones.Reabastecimiento.frm_datos_reabastecimiento" />
+        <activity android:name=".Transacciones.Packing.frm_lista_packing_cerrado_by_pedido" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
