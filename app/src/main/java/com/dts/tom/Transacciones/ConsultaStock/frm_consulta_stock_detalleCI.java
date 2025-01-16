@@ -491,6 +491,37 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                                "$" + gl.existencia.LicPlate,
                                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
                                                gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"));
+                    }else if(gl.existencia.IdTipoEtiqueta==9){
+
+                        //nuevo formato importación de etiqueta Licencia para La Cumbre imprimiendo Indice Rotación.
+
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FO2,40^GB670,0,5^FS \n" +
+                                        "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^FT80,150^A0I,160,60^FH^FD%6$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                         gl.existencia.Codigo + " - " + gl.existencia.Nombre,
+                                        "$" + gl.existencia.LicPlate,
+                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                        gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"),gl.existencia.Nombre);
+
+                        //#GT16012025: REEMPLAZAR gl.existencia.Nombre por el objeto producto que tenga Indice de Rotacion y colocar el campo descripcion,
+                        //adjunto ejemplo: BeProducto.Indice_Rotacion.Descripcion
+
                     }
 
                     if (!zpl.isEmpty()){

@@ -1,6 +1,7 @@
 package com.dts.tom.Transacciones.Packing;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -41,6 +42,8 @@ public class frm_list_packing_cerrados extends PBase {
     private String Licencia = "";
     private Boolean procesando = false;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,38 +69,61 @@ public class frm_list_packing_cerrados extends PBase {
             txtFiltro.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
 
+                    ProgressDialog();
+                    progress.setMessage("Buscando...");
+
                     if (procesando) {
                         return  true;
                     }
 
                     procesando = true;
-                    if (!txtFiltro.getText().toString().isEmpty()) {
-                        execws(1);
-                    } else {
-                        msgbox("Debe ingresar un pedido.");
-                    }
+                    new Handler().postDelayed(() -> {
+                        if (!txtFiltro.getText().toString().isEmpty()) {
+                            execws(1);
+                            procesando = false;
+                        } else {
+                            progress.cancel();
+                            msgbox("Debe ingresar un pedido.");
+                        }
+                    }, 200); // Cambia el tiempo según la duración de tu proceso
 
-                    procesando = false;
                 }
                 return false;
             });
 
             btnBuscar.setOnClickListener(view -> {
-                if (!txtFiltro.getText().toString().isEmpty()) {
-                    execws(1);
-                } else {
-                    msgbox("Debe ingresar un pedido.");
+                ProgressDialog();
+                progress.setMessage("Buscando...");
+
+                if (procesando) {
+                    return;
                 }
+
+                procesando = true;
+
+                new Handler().postDelayed(() -> {
+                    if (!txtFiltro.getText().toString().isEmpty()) {
+                        execws(1);
+                        procesando = false;
+                    } else {
+                        progress.cancel();
+                        msgbox("Debe ingresar un pedido.");
+                    }
+                }, 200); // Cambia el tiempo según la duración de tu proceso
+
             });
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
     private void processLicenciasPackingCerrado() {
         try {
-            LicenciasPacking = xobj.getresult(clsBeTrans_packing_encList.class,"Get_LicenciasPacking_Cerrado");
 
+            progress.cancel();
+
+            LicenciasPacking = xobj.getresult(clsBeTrans_packing_encList.class,"Get_LicenciasPacking_Cerrado");
             auxPacking.clear();
             if (LicenciasPacking != null) {
 
@@ -108,8 +134,11 @@ public class frm_list_packing_cerrados extends PBase {
                 adapter = new list_adapt_licenciaspacking(this, auxPacking);
                 onClickRv();
                 listaRv.setAdapter(adapter);
+            }else{
+                msgbox("No se encontraron licencias de packing asociadas al parámetro de busqueda.");
             }
         } catch (Exception e) {
+            progress.cancel();
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
@@ -323,8 +352,7 @@ public class frm_list_packing_cerrados extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_LicenciasPacking_Cerrado",
-                                "pIdPedidoEnc", Integer.valueOf(txtFiltro.getText().toString()),
-                                "pIdOperadorBodega", gl.OperadorBodega.IdOperadorBodega);
+                                "pIdPedidoEnc", Integer.valueOf(txtFiltro.getText().toString()));
                         break;
                 }
             } catch (Exception e) {
@@ -357,4 +385,14 @@ public class frm_list_packing_cerrados extends PBase {
     public void botonAtras(View view){
         finish();
     }
+
+    public void ProgressDialog(){
+        progress=new ProgressDialog(this);
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
+    }
+
 }
