@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.TipoEtiqueta.clsBeTipo_etiqueta;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
@@ -38,6 +39,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     private Integer CantCopias =1;
     public static boolean CambioUbicExistencia = false;
+    private clsBeProducto BeProducto = new clsBeProducto();
 
     @Override
 
@@ -183,6 +185,9 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 case 1:
                     processTipoEtiqueta();
                     break;
+                case 2:
+                    processBeProducto();
+                    break;
             }
 
         } catch (Exception e) {
@@ -203,6 +208,10 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     case 1://Obtiene el Tipo de Etiqueta del producto
                         callMethod("Get_Tipo_Etiqueta_By_IdTipoEtiqueta","pBeTipo_etiqueta",pBeTipo_etiqueta);
                         break;
+                    case 2:
+                        callMethod("Get_Producto_By_IdProductoBodega",
+                                "IdProductoBodega",gl.existencia.IdProductoBodega);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -212,22 +221,36 @@ public class frm_consulta_stock_detalleCI extends PBase {
     }
 
     private void processTipoEtiqueta(){
-
         try {
 
             progress.setMessage("Obteniendo tipo de etiqueta del producto");
 
             pBeTipo_etiqueta = xobj.getresultSingle(clsBeTipo_etiqueta.class,"pBeTipo_etiqueta");
-
-            progress.cancel();
-
             lblcodigo.requestFocus();
 
-        } catch (Exception e) {
-            msgbox(new Object() {
-            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
-        }
+            //#AT20240116 Se obtiene datos del producto.
+            execws(2);
 
+            progress.cancel();
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processBeProducto(){
+        try {
+            progress.setMessage("Obteniendo valores de producto");
+
+            BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
+
+            if (BeProducto == null) msgbox("No se logró cargar el producto.");
+
+            progress.cancel();
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(" processBeProducto: " + e.getMessage());
+        }
     }
 
     public void printBarras(View view){
@@ -491,7 +514,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                                "$" + gl.existencia.LicPlate,
                                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
                                                gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"));
-                    }else if(gl.existencia.IdTipoEtiqueta==9){
+                    }else if(gl.existencia.IdTipoEtiqueta == 9){
 
                         //nuevo formato importación de etiqueta Licencia para La Cumbre imprimiendo Indice Rotación.
 
@@ -517,7 +540,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                          gl.existencia.Codigo + " - " + gl.existencia.Nombre,
                                         "$" + gl.existencia.LicPlate,
                                         gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                        gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"),gl.existencia.Nombre);
+                                        gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"),BeProducto.Indice_Rotacion.Descripcion);
 
                         //#GT16012025: REEMPLAZAR gl.existencia.Nombre por el objeto producto que tenga Indice de Rotacion y colocar el campo descripcion,
                         //adjunto ejemplo: BeProducto.Indice_Rotacion.Descripcion
