@@ -241,7 +241,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/lblLote"
+                                    android:id="@+id/lblLoteEnc"
                                     android:layout_width="120dp"
                                     android:layout_height="match_parent"
                                     android:gravity="center"
