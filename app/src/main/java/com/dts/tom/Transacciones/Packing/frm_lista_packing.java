@@ -99,22 +99,19 @@ public class frm_lista_packing extends PBase {
 
         try {
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selid = 0;
-                    selPedido=0;
-                    Object lvObj = listView.getItemAtPosition(position);
-                    clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                selid = 0;
+                selPedido=0;
+                Object lvObj = listView.getItemAtPosition(position);
+                clsBeTrans_picking_enc sitem = (clsBeTrans_picking_enc) lvObj;
 
-                    selid = sitem.IdPickingEnc;
-                    selPedido = sitem.IdPedidoEnc;
-                    selidx = position;
-                    adapterPicking.setSelectedIndex(position);
+                selid = sitem.IdPickingEnc;
+                selPedido = sitem.IdPedidoEnc;
+                selidx = position;
+                adapterPicking.setSelectedIndex(position);
 
-                    procesar_registro();
-               }
-            });
+                procesar_registro();
+           });
 
             txtTarea.setOnKeyListener(new View.OnKeyListener() {
                 @Override
@@ -127,9 +124,7 @@ public class frm_lista_packing extends PBase {
             });
 
             btnBuscarPedido.setOnClickListener(view -> {
-                //btnBuscarPedido.setEnabled(false);
-                doListPedidos(view);
-                //btnBuscarPedido.setEnabled(false);
+                startActivity(new Intent(this, frm_list_packing_cerrados.class));
             });
 
 
