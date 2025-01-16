@@ -136,8 +136,7 @@ public class frm_preparacion_packing extends PBase {
     private void verLista() {
         try {
             gl.LicenciaPacking = txtLicenciaPacking.getText().toString();
-
-            browse = !gl.PackingAuto ? 1:2;
+            browse = 1;
 
             creaListaLotes(txtLP.getText().toString());
             startActivity(new Intent(this, frm_lista_packing_lp.class));
@@ -573,12 +572,6 @@ public class frm_preparacion_packing extends PBase {
                 regs = xobj.getresult(Integer.class,"Inserta_Packing");
                 if (regs>0) {
                     toast("Producto agregado.");
-
-                    if (browse == 2) {
-                        browse = 0;
-                        finish();
-                        return;
-                    }
 
                     nBeResolucion = null;
                     execws(1);
@@ -1315,8 +1308,8 @@ public class frm_preparacion_packing extends PBase {
             super.onResume();
             txtLP.requestFocus();
 
-            if (browse==1 || browse == 2) {
-                if (browse ==1) browse=0;
+            if (browse==1) {
+                browse=0;
 
                 showProgressDialog("");
 
