@@ -881,8 +881,6 @@ public class frm_verificacion_datos extends PBase {
 
     }
 
-
-
     private boolean Guardar_Verificacion() {
 
         boolean result = false;
