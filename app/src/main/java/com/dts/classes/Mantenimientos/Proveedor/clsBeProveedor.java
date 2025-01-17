@@ -40,7 +40,8 @@ public class clsBeProveedor {
     @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
 
     @Element(required=false) public int IdBodegaAreaSAP = 0;
-    @Element(required=false) private int IdPais;
+
+    @Element(required=false) public int IdPais=0;
 
     public clsBeProveedor() {
     }
@@ -52,9 +53,8 @@ public class clsBeProveedor {
                           String User_mod,String Fec_mod,boolean Actualiza_costo_oc,int IdUbicacionVirtual,
                           boolean Es_Bodega_Recepcion,boolean Es_Bodega_Traslado,String Referencia,boolean Sistema,
                           int IdConfiguracionBarraPallet,
-                          clsBeProveedor_tiemposList TiemposProveedor, int IdBodegaAreaSAP
-
-    ) {
+                          clsBeProveedor_tiemposList TiemposProveedor, int IdBodegaAreaSAP, int IdPais)
+    {
 
         this.IdEmpresa=IdEmpresa;
         this.Empresa=Empresa;
@@ -83,6 +83,7 @@ public class clsBeProveedor {
         this.IdConfiguracionBarraPallet=IdConfiguracionBarraPallet;
         this.TiemposProveedor = TiemposProveedor;
         this.IdBodegaAreaSAP = IdBodegaAreaSAP;
+        this.IdPais = IdPais;
 
     }
 
@@ -260,14 +261,14 @@ public class clsBeProveedor {
         IdBodegaAreaSAP=value;
     }
 
-    // Getter
     public int getIdPais() {
         return IdPais;
     }
-
-    // Setter
     public void setIdPais(int value) {
-        IdPais = value;
+        IdPais=value;
     }
+
 }
+
+
 
