@@ -452,7 +452,6 @@
                             android:textColor="@color/colorPrimary"
                             android:textSize="17sp" />
                     </TableRow>
-                    --Peso
 
                     <TableRow
                         android:id="@+id/trPeso"

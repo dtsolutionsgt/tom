@@ -180,12 +180,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
     private boolean procesando = false;
 
+    final int[] intentos = {0};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
-            super.onCreate(savedInstanceState);
 
+            super.onCreate(savedInstanceState);
             super.InitBase();
 
             setContentView(R.layout.activity_frm_cambio_ubicacion_ciega);
@@ -641,9 +643,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                Log.e("EnterKeyPress",  " procesando: " + procesando );
+
                 if (procesando) {
+                    Log.e("EnterKeyPress",  " rechazo: " + intentos[0] );
                     return true;
+                }else{
+                    intentos[0]=0;
+                    Log.d("EnterKeyPress", "Intento: " + intentos[0]);
                 }
+
+                intentos[0]++;
+
+                procesando = true; // Bloquea nuevos intentos*/
 
                 String ubicDestino = txtUbicDestino.getText().toString();
                 //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor origina
@@ -654,13 +667,19 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     return true;
                 }
 
-                procesando = true; // Bloquea nuevos intentos
-
-                new Handler().postDelayed(() -> {
+                if(intentos[0]==1){
+                    Log.d("EnterKeyPress", " proceso: " + intentos[0]);
                     validaDestino(); // Llama a la función de validación
-                    procesando = false; // Restablece la bandera
+                }else{
+                    Log.d("EnterKeyPress", " rechazo2: " + intentos[0]);
+                }
+
+              /*  new Handler().postDelayed(() -> {
+                    Log.d("EnterKeyPress_delay", "Intento número: " + intentos[0]);
+                    validaDestino(); // Llama a la función de validación
+                    //procesando = false; // Restablece la bandera
                     txtUbicDestino.setEnabled(true); // Vuelve a habilitar el EditText
-                }, 200); // Cambia el tiempo según la duración de tu proceso
+                }, 400); // Cambia el tiempo según la duración de tu proceso*/
 
             }
             return false;
@@ -758,9 +777,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
         });
 
-        txtUbicDestino.setOnClickListener(view -> {
+/*        txtUbicDestino.setOnClickListener(view -> {
 
-        });
+        });*/
 
     }
 
@@ -2017,18 +2036,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     msgbox("Ubicación origen no válida");
                     txtUbicOrigen.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 if (cvProdID == 0) {
                     msgbox("Producto no válido");
                     txtCodigoPrd.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 if (vCantidadDisponible == 0) {
                     msgbox("Cantidad disponible es 0, no se puede realizar el movimiento");
                     txtCodigoPrd.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 if (gl.modo_cambio==2) {
@@ -2036,6 +2058,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         msgbox("Estado destino incorrecto");
                         cmbEstadoDestino.requestFocus();
                         datosCorrectos = false;
+                        procesando = false;
                     }
                 }
 
@@ -2046,18 +2069,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     mu.msgbox("La cantidad no puede ser negativa");
                     txtCantidad.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 if (vCantidadAUbicar==0) {
                     msgbox("La cantidad debe ser mayor que 0");
                     txtCantidad.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 if (vCantidadAUbicar> vCantidadDisponible) {
                     msgbox("Cantidad incorrecta") ;
                     txtCantidad.requestFocus();
                     datosCorrectos = false;
+                    procesando = false;
                 }
 
                 //#GT27072022-1610: el peso se recalcula solo si cambia la cantidad
@@ -2066,9 +2092,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if(cvUbicDestID == 0){
                     if(txtUbicDestino.getText().toString().isEmpty()){
+                        procesando = false;
                         msgbox("La ubicación de destino no puede ser vacía");
                     }else{
+                        procesando = false;
                         msgbox("Confirme la ubicación de destino.");
+
                     }
                     txtUbicDestino.requestFocus();
                     datosCorrectos = false;
@@ -2188,6 +2217,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
+            procesando = false;
             progress.cancel();
             msgbox( e.getMessage());
         }
@@ -2963,6 +2993,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if( resultado){
 
                 if (CambioUbicExistencia) {
+                    procesando = false;
                     msgCambioUbicExistencia("Cambio de ubicación aplicado.");
                 } else {
 
@@ -3003,18 +3034,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                     //#AT 202203011 Si ocultar mensajes es falso se muestran los mensajes de lo contrario se ocultan
                     if (!ocultar_mensajes) {
+                        procesando = false;
                         msgAsk(gl.modo_cambio == 1 ? "Cambio de ubicación aplicado" : "Cambio de estado aplicado");
                     } else {
                         completaProceso();
                     }
                }
             }else{
+                procesando = false;
                 progress.cancel();
                 msgbox("No se pudo realizar el cambio de ubicación");
             }
 
             lblCantidad.setText("Cantidad:");
         }catch (Exception ex){
+            procesando = false;
             progress.cancel();
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),ex.getMessage(),"");
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
@@ -3343,6 +3377,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             progress.setMessage("Inicializando tarea");
             progress.show();
+
+            //#GT16012024: reset de la bandera, para iniciar nueva reubicacion
+            //y bloquear el multiple Enter o Scan
+            procesando=false;
 
             cvUbicOrigID = 0;
             txtCodigoPrd.setText("");
@@ -4008,7 +4046,6 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.show();
 
             if (!txtUbicDestino.getText().toString().isEmpty()){
-
                 bodega_ubicacion_destino = new clsBeBodega_ubicacion();
                 //Llama al método del WS Get_Ubicacion_By_Codigo_Barra_And_IdBodega para validar ubicacion destino
                 execws(12);
@@ -4024,6 +4061,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             progress.cancel();
 
         }catch (Exception e){
+            procesando = false;
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
             btnGuardarCiega.setVisibility(View.VISIBLE);
@@ -4062,6 +4100,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             execws(11);
 
         }catch (Exception e){
+            procesando = false;
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
             mu.msgbox( e.getMessage());
         }
@@ -4130,10 +4169,12 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if (BeStockPallet.CantidadPresentacion != vCantidadAUbicar) {
                     Toast.makeText(frm_cambio_ubicacion_ciega.this, "La ubicación parcial de pallet requiere explosionar el material.", Toast.LENGTH_SHORT).show();
                     Es_Explosion = true;
+                    procesando = false;
                     inicializaTarea(true);
                     msgAskImprimirEtiqueta("Imprimir etiqueta");
                     //msgAskExplosionar("La ubicación parcial de pallet requiere explosionar el material, ¿generar nuevo palletId y continuar?");
                 } else {
+                    procesando = false;
                     Toast.makeText(getBaseContext(), "Ubicación realizada correctamente.", Toast.LENGTH_LONG).show();
                     inicializaTarea(true);
                 }
@@ -4186,6 +4227,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // if this button is clicked, just close
+                            procesando = false;
                             {btnGuardarCiega.setVisibility(View.VISIBLE); }
                         }
                     });

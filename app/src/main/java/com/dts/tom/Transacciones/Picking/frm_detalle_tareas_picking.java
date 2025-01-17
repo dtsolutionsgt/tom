@@ -97,6 +97,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private ArrayList<Integer> IdxFiltos = new ArrayList<>();
     private int sortord, TipoOrdenDetalle = 0;
     public Activity myActivity;
+    private Boolean procesando = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -692,25 +693,32 @@ public class frm_detalle_tareas_picking extends PBase {
 
     public void BotonFinalizar(View view){
         primeravez = true;
-        msgAskFinalizarPicking("Está seguro de finalizar el Picking");
+        msgAskFinalizarPicking("¿Proceder a cerrar el Picking?");
     }
 
     public void BotonR(View view){
 
         try{
-            if (btnRes_Det.getText().toString().equals("C.")){
 
-                btnRes_Det.setText("D.");
-                TipoLista=2;
-                execws(3);
-
-            }else{
-                btnRes_Det.setText("C.");
-
-                TipoLista=1;
-
-                execws(3);
+            //#GT16012025: gestiona que el usuario no presione multiples veces clic
+            if (procesando) {
+                return;
             }
+
+            procesando = true;
+
+            new Handler().postDelayed(() -> {
+                if (btnRes_Det.getText().toString().equals("C.")){
+                    btnRes_Det.setText("D.");
+                    TipoLista=2;
+                    execws(3);
+                }else{
+                    btnRes_Det.setText("C.");
+                    TipoLista=1;
+                    execws(3);
+                }
+
+            }, 200); // Cambia el tiempo según la duración de tu proceso
 
         }catch (Exception e) {
             mu.msgbox("BotonR:"+e.getMessage());
@@ -833,7 +841,7 @@ public class frm_detalle_tareas_picking extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     if (primeravez){
                         primeravez  = false;
-                        msgAskFinalizarPicking("Está completamente seguro");
+                        msgAskFinalizarPicking("¿Está completamente seguro?");
                     }else{
                         Finalizar_Picking();
                     }
@@ -1084,9 +1092,7 @@ public class frm_detalle_tareas_picking extends PBase {
         try{
 
             plistPickingUbi = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_Tipo");
-
             Lista_Detalle_Picking();
-
             Lista_Detalle();
 
             if (!gl.termino.isEmpty())

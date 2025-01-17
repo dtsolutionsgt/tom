@@ -83,7 +83,7 @@ public class frm_list_packing_cerrados extends PBase {
                             procesando = false;
                         } else {
                             progress.cancel();
-                            msgbox("Debe ingresar un pedido.");
+                            msgbox("Debe ingresar un pedido o referencia.");
                         }
                     }, 200); // Cambia el tiempo según la duración de tu proceso
 
@@ -107,7 +107,7 @@ public class frm_list_packing_cerrados extends PBase {
                         procesando = false;
                     } else {
                         progress.cancel();
-                        msgbox("Debe ingresar un pedido.");
+                        msgbox("Debe ingresar un pedido o referencia.");
                     }
                 }, 200); // Cambia el tiempo según la duración de tu proceso
 
