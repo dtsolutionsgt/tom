@@ -111,8 +111,7 @@ public class frm_inv_cic_conteo extends PBase {
     }
 
     private void setHandles() {
-
-        try{
+        try {
 
             txtBuscFiltro.setOnKeyListener((v, keyCode, event) -> {
 
@@ -144,45 +143,39 @@ public class frm_inv_cic_conteo extends PBase {
                 return false;
             });
 
-            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                    tareapos = 0;
+                tareapos = 0;
 
-                    if (isChecked) {
+                if (isChecked) {
 
-                        chkPendientes = true;
-                        checkbox.setText("Pendientes");
-                        ProgressDialog("Cargando pendientes.");
-                        execws(1);
+                    chkPendientes = true;
+                    checkbox.setText("Pendientes");
+                    ProgressDialog("Cargando pendientes.");
+                    execws(1);
 
-                    } else {
+                } else {
 
-                        chkPendientes = false;
-                        checkbox.setText("Contados");
-                        ProgressDialog("Cargando contados.");
-                        execws(1);
+                    chkPendientes = false;
+                    checkbox.setText("Contados");
+                    ProgressDialog("Cargando contados.");
+                    execws(1);
 
-                    }
                 }
             });
 
-            listCiclico.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listCiclico.setOnItemClickListener((parent, view, position, id) -> {
 
-                    gl.IndexCiclico = 0;
+                gl.IndexCiclico = 0;
 
-                    gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
-                    gl.inv_ciclico.index = position;
-                    gl.IndexCiclico = gl.inv_ciclico.index;
+                gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(position);
+                gl.inv_ciclico.index = position;
+                gl.IndexCiclico = gl.inv_ciclico.index;
 
-                    gl.Es_Reconteo = gl.inv_ciclico.idinvreconteo > 0;
-                    NuevoConteo = false;
+                gl.Es_Reconteo = gl.inv_ciclico.idinvreconteo > 0;
+                NuevoConteo = false;
 
-                    execws(4);
-                }
-
+                execws(4);
             });
 
         }catch(Exception e){

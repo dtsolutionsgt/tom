@@ -124,8 +124,21 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             holder.lblEstado.setText(data_list.get(position).Nuevo_Estado);
             holder.lblStock.setText(data_list.get(position).IdStock+"");
 
-            if(selectedIndex!= -1 && position == selectedIndex) {
-                convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+            boolean esOriginal = false;
+
+            esOriginal = data_list.get(position).IdProductoEstado == data_list.get(position).IdProductoEst_nuevo &&
+                    data_list.get(position).Fecha_Vence.equals(data_list.get(position).Fecha_Vence_Stock) &&
+                    data_list.get(position).Lote.equals(data_list.get(position).Lote_stock) &&
+                    data_list.get(position).IdUbicacion_nuevo == 0;
+
+            if (esOriginal) {
+            //if(selectedIndex!= -1 && position == selectedIndex) {
+                convertView.setBackgroundColor(Color.parseColor("#D5F5E3"));
+                /*if (esOriginal) {
+
+                } else {
+                    convertView.setBackgroundColor(Color.rgb(0, 128, 0));
+                }*/
             } else {
                 convertView.setBackgroundColor(Color.TRANSPARENT);
             }
