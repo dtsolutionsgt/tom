@@ -10,10 +10,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dts.base.WebService;
@@ -68,7 +70,8 @@ public class frm_preparacion_packing extends PBase {
     private boolean idle=true;
     private clsBeResolucion_lp_operador nBeResolucion = null;
     private String pNumeroLP = "";
-
+    private Spinner cmbCantidad;
+    private Integer CantCopias =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +203,8 @@ public class frm_preparacion_packing extends PBase {
             });
 
             btnImprimir.setOnClickListener(view -> {
-                msgImprimir("¿Imprimir licencia?");
+                //msgImprimir("¿Imprimir licencia?");
+                msgImprimirLicencia(view);
             });
 
             btnBuscars.setOnClickListener(view -> {
@@ -216,6 +220,11 @@ public class frm_preparacion_packing extends PBase {
     //endregion
 
     //region Main
+
+    public void msgImprimirLicencia(View view){
+        msgImprimir("Imprimir Licencia");
+    }
+
 
     private void listItems() {
         String actLinea = "";
@@ -1122,12 +1131,20 @@ public class frm_preparacion_packing extends PBase {
         } catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
-
     }
+
 
     private void msgImprimir(String msg) {
         try {
+
+            LayoutInflater inflater = getLayoutInflater();
+            View vistaDialog = inflater.inflate(R.layout.impresion_cantidad, null, false);
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            cmbCantidad = vistaDialog.findViewById(R.id.cmbCantidad);
+            setHandlersImpresion();
+            dialog.setView(vistaDialog);
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage(msg + "\n\nImpresora: " + gl.MacPrinter);
@@ -1138,7 +1155,9 @@ public class frm_preparacion_packing extends PBase {
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
 
-                    Imprimir_Licencia();
+                    //#GT18012025: mejora para enviar mutliples impresiones de packing
+                    //Imprimir_Licencia();
+                    Imprimir_Licencia(CantCopias);
                     hideProgressDialog();
 
                 }, 300);
@@ -1156,7 +1175,23 @@ public class frm_preparacion_packing extends PBase {
     }
 
 
-    private void Imprimir_Licencia(){
+    private void setHandlersImpresion() {
+        Integer[] cantidad = {1,2,4,6,8,10};
+        cmbCantidad.setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,cantidad));
+
+        cmbCantidad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                CantCopias = Integer.valueOf(cmbCantidad.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { }
+
+        });
+    }
+
+    private void Imprimir_Licencia(int Copias){
         try{
 
             if (!txtLicenciaPacking.getText().toString().trim().isEmpty()){
@@ -1279,7 +1314,14 @@ public class frm_preparacion_packing extends PBase {
                     }
 
                     if (!zpl.isEmpty()) {
-                        zPrinterIns.sendCommand(zpl);
+
+                        if (Copias > 0) {
+                            for (int i = 0; i < Copias; i++ ) {
+                                zPrinterIns.sendCommand(zpl);
+                            }
+                        }
+
+                        //zPrinterIns.sendCommand(zpl);
                     } else {
                         msgbox("No se pudo generar la etiqueta porque el tipo de etiqueta no está definido (LP)");
                     }

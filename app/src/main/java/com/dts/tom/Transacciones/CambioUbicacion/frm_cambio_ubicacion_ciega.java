@@ -644,6 +644,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         txtUbicDestino.setOnKeyListener((view, keyCode, keyEvent) -> {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
+                //#GT18012025: mejora en proceso para evitar multiple Enter manual o por Trigger de la pistola
                 Log.e("EnterKeyPress",  " procesando: " + procesando );
 
                 if (procesando) {
@@ -655,32 +656,23 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 }
 
                 intentos[0]++;
-
                 procesando = true; // Bloquea nuevos intentos*/
 
                 String ubicDestino = txtUbicDestino.getText().toString();
-                //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor origina
-
+                //#GT13012025: aparte de mostrar el aviso, la bandera regresa a valor original
                 if (ubicDestino.isEmpty()) {
                     toast("Debe ingresar la ubicación destino");
                     procesando = false; // Restablece la variable si hay un error
                     return true;
                 }
 
+                //#GT18012025: valida que el proceso se ejecuta una vez, las demas serán rechazadas.
                 if(intentos[0]==1){
                     Log.d("EnterKeyPress", " proceso: " + intentos[0]);
                     validaDestino(); // Llama a la función de validación
                 }else{
                     Log.d("EnterKeyPress", " rechazo2: " + intentos[0]);
                 }
-
-              /*  new Handler().postDelayed(() -> {
-                    Log.d("EnterKeyPress_delay", "Intento número: " + intentos[0]);
-                    validaDestino(); // Llama a la función de validación
-                    //procesando = false; // Restablece la bandera
-                    txtUbicDestino.setEnabled(true); // Vuelve a habilitar el EditText
-                }, 400); // Cambia el tiempo según la duración de tu proceso*/
-
             }
             return false;
         });
