@@ -6144,7 +6144,8 @@ public class frm_recepcion_datos extends PBase {
                                         "^FD%4$s^FS \n" +
                                         "^FT80,150^A0I,160,60^FH^FD%6$s^FS \n" +
                                         "^PQ1,0,1,Y " +
-                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega,
+                                        gl.gNomEmpresa,
                                         BeProducto.Codigo + " - " + BeProducto.Nombre,
                                         "$" + pNumeroLP,
                                         gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),

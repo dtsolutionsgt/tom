@@ -536,14 +536,12 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                         "^FD%4$s^FS \n" +
                                         "^FT80,150^A0I,160,60^FH^FD%6$s^FS \n" +
                                         "^PQ1,0,1,Y " +
-                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                         gl.existencia.Codigo + " - " + gl.existencia.Nombre,
-                                        "$" + gl.existencia.LicPlate,
-                                        gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                        gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"),BeProducto.Indice_Rotacion.Descripcion);
-
-                        //#GT16012025: REEMPLAZAR gl.existencia.Nombre por el objeto producto que tenga Indice de Rotacion y colocar el campo descripcion,
-                        //adjunto ejemplo: BeProducto.Indice_Rotacion.Descripcion
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega,
+                                               gl.gNomEmpresa,
+                                               gl.existencia.Codigo + " - " + gl.existencia.Nombre,
+                                               "$" + gl.existencia.LicPlate,
+                                               gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                               BeProducto.Indice_Rotacion.Descripcion);
 
                     }
 

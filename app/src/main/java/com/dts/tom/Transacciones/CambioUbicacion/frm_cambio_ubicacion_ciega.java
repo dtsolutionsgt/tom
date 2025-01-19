@@ -3716,12 +3716,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
                     lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
 
-                    if(gl.modo_cambio==2 && !vProcesar){
+                    //#CKFK20250118 Coloqué esto en comentario para que permita hacer el cambio de ubicación en el cambio de estado
+                    /*if(gl.modo_cambio==2 && !vProcesar){
                         progress.cancel();
                         cmbEstadoDestino.requestFocus();
-                    }else{
+                    }else{*/
                         datosOk();
-                    }
+                    //}
                 }
             });
 
