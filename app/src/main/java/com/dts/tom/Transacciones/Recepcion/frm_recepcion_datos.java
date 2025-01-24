@@ -4136,10 +4136,17 @@ public class frm_recepcion_datos extends PBase {
 
             List AuxLis1=stream(LProductoEstado.items).select(c->c.IdEstado).toList();
 
+            //#GT24012025: esto es redundante, ya que cuando se cargan los estados, se valida que
+            //Si existe un Estado por defecto, se asigna inmediatamente, o de lo contrario se deja el index 0
             int indxEstado=AuxLis1.indexOf(gl.gIdProductoBuenEstadoPorDefecto);
 
             if(indxEstado>-1){
-                cmbEstadoProductoRec.setSelection(indxEstado);
+                //#GT24012025: considerando mi post anterior, si estan recargando el estado, aca valido que
+                //si existe un estado por defecto en la recepcion, no asignar el buen estado por defecto,
+                if(gl.gBeRecepcion.IdEstado_Defecto_Recepcion==0){
+                    cmbEstadoProductoRec.setSelection(indxEstado);
+                }
+
             }else{
                 mu.msgbox("No existe un estado por defecto");
                 return;
@@ -8689,6 +8696,7 @@ public class frm_recepcion_datos extends PBase {
                         (dataContractDI.Orden_De_Produccion == gl.gBeOrdenCompra.IdTipoIngresoOC ||
                                 dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
                                 dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC))) {
+
                     txtNoLP.setText(pNumeroLP);
                 }
             }else{
