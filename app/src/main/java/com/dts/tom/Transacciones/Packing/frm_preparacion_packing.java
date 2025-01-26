@@ -203,7 +203,6 @@ public class frm_preparacion_packing extends PBase {
             });
 
             btnImprimir.setOnClickListener(view -> {
-                //msgImprimir("¿Imprimir licencia?");
                 msgImprimirLicencia(view);
             });
 
@@ -222,7 +221,7 @@ public class frm_preparacion_packing extends PBase {
     //region Main
 
     public void msgImprimirLicencia(View view){
-        msgImprimir("Imprimir Licencia");
+        msgImprimir("¿Imprimir licencia?");
     }
 
 
@@ -268,6 +267,7 @@ public class frm_preparacion_packing extends PBase {
                 item_list.add(item);
                 count++;
                 cantidad += item.Cantidad_bultos_packing;
+                cantidad = mu.round(cantidad,6);
             }
 
             if (!actLinea.equals("")) {
@@ -302,8 +302,6 @@ public class frm_preparacion_packing extends PBase {
             mu.msgbox("listItems : "+e.getMessage());
         }
 
-
-
         try {
             pendientes = 0;
             for (clsBeTrans_picking_ubic obj : pick.items) {
@@ -321,6 +319,7 @@ public class frm_preparacion_packing extends PBase {
                             (obj.Lote ==null || obj.Lote.equals(vLotePacking)) ) {
 
                         cant += packing.Cantidad_bultos_packing;
+                        cant = mu.round(cant,6);
                     }
                 }
 
@@ -479,7 +478,8 @@ public class frm_preparacion_packing extends PBase {
             item.Cantidad_camas_packing=1;
             item.Idoperadorbodega=gl.OperadorBodega.IdOperadorBodega;
             item.Idempresaservicio=gl.IdEmpresa;
-            item.Referencia="";
+            //#CKFK20250124 Agregué el campo referencia para la bodega de destino
+            item.Referencia=p.Referencia;
             item.Fecha_packing=app.strFechaXML(du.getFechaActual());
             item.nom_prod=p.NombreProducto;
             item.CodigoProducto=p.CodigoProducto;
@@ -710,9 +710,11 @@ public class frm_preparacion_packing extends PBase {
                                 .sum();
 
                         item.disp = (double) (obj.getCantidad_Verificada()-obj.getCantidad_despachada() - totalCantidad);
+                        item.disp = mu.round(item.disp,6);
 
                     } else {
                         item.disp = (double) (obj.getCantidad_Verificada() - obj.getCantidad_despachada());
+                        item.disp = mu.round(item.disp,6);
                     }
 
                     if (item.disp > 0) {
@@ -1156,7 +1158,6 @@ public class frm_preparacion_packing extends PBase {
                 handler.postDelayed(() -> {
 
                     //#GT18012025: mejora para enviar mutliples impresiones de packing
-                    //Imprimir_Licencia();
                     Imprimir_Licencia(CantCopias);
                     hideProgressDialog();
 
@@ -1230,11 +1231,12 @@ public class frm_preparacion_packing extends PBase {
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
+                                        "^PQ1,0,1,Y  \n" +
+                                        "^FT120,160^A0I,150,50^FH^FDCol%6$s^FS \n" +
                                         "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                         "",
                                         "$" + pNumeroLP,
-                                        "");
+                                        "",gl.referenciaPedido );
 
                     } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {
                         zpl = String.format("^XA\n" +

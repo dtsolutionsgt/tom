@@ -73,6 +73,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public int IdUbicacionTemporal=0;
     @Element(required=false) public String NombreUbicacionTemporal="";
     @Element(required=false) public int IdOperadorBodega_Asignado=0;
+    @Element(required=false) public String Referencia = "";
 
     public clsBeTrans_picking_ubic() {
     }

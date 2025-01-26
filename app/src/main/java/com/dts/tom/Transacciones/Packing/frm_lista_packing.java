@@ -137,20 +137,6 @@ public class frm_lista_packing extends PBase {
     //endregion
     //region Main
 
-    public void doListPedidos(View view){
-        //btnBuscars.setEnabled(false);
-        verLista();
-    }
-
-    private void verLista() {
-        try {
-            startActivity(new Intent(this, frm_lista_packing_cerrado_by_pedido.class));
-        } catch (Exception e) {
-            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" verListaPackingByPedido . "+e.getMessage());
-        }
-    }
-
-
     private void listItems(){
 
         clsBeTrans_picking_enc vItem;
@@ -180,6 +166,7 @@ public class frm_lista_packing extends PBase {
 //                        vItem.Hora_fin=du.convierteHoraMostarhm(BePicking.Hora_fin);
                         vItem.Tipo_Preparacion=BePicking.Tipo_Preparacion;
                         vItem.IdPedidoEnc = BePicking.IdPedidoEnc;
+                        vItem.Referencia = BePicking.Referencia;
 
                         BeListTareasPicking.add(vItem);
 
@@ -302,6 +289,7 @@ public class frm_lista_packing extends PBase {
                         BeListTareasPicking.get(i).IdPedidoEnc==gl.gIdPedidoEnc) {
 
                     tipoprep=BeListTareasPicking.get(i).Tipo_Preparacion;
+                    gl.referenciaPedido = BeListTareasPicking.get(i).Referencia;
 
                     browse=1;
 

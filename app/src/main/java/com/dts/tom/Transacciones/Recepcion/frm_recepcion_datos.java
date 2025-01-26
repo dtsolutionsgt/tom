@@ -5849,6 +5849,30 @@ public class frm_recepcion_datos extends PBase {
                             gl.CodigoBodega + "-" + gl.gNomBodega,
                             gl.gNomEmpresa,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / "+ du.getFechaActual());
+                }else if (BeProducto.IdTipoEtiqueta==9){
+
+                    zpl = String.format("^XA \n" +
+                                    "^MMT \n" +
+                                    "^PW700 \n" +
+                                    "^LL0406 \n" +
+                                    "^LS0 \n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                    "^FO2,40^GB670,0,5^FS \n" +
+                                    "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                    "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS Codigo de Producto^FS \n" +
+                                    "^FO2,340^GB670,0,14^FS \n" +
+                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                    "^FD%4$s^FS \n" +
+                                    "^PQ1,0,1,Y " +
+                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                            BeProducto.Codigo+" - "+BeProducto.Nombre,
+                            BeProducto.Codigo_barra,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
                 }
 
                 if (!zpl.isEmpty()){
@@ -8071,6 +8095,10 @@ public class frm_recepcion_datos extends PBase {
                         vMensajeError=e.getMessage();
                         msgboxErrorCallBack(vMensajeError,false);
                         break;
+                    case 21:
+                        vMensajeError=e.getMessage();
+                        msgbox(vMensajeError);
+                        break;
                     default:
                         msgboxErrorCallBack(e.getClass() + " WebServiceHandler: " + e.getMessage(),true);
                         break;
@@ -8697,7 +8725,9 @@ public class frm_recepcion_datos extends PBase {
                                 dataContractDI.Transferencia_de_Ingreso == gl.gBeOrdenCompra.IdTipoIngresoOC  ||
                                 dataContractDI.Devolucion_Venta == gl.gBeOrdenCompra.IdTipoIngresoOC))) {
 
-                    txtNoLP.setText(pNumeroLP);
+                    if (!Escaneo_Pallet){
+                        txtNoLP.setText(pNumeroLP);
+                    }
                 }
             }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);

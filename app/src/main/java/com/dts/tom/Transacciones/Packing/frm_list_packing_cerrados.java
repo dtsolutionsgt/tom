@@ -40,6 +40,7 @@ public class frm_list_packing_cerrados extends PBase {
     private clsBeTrans_packing_encList LicenciasPacking;
     private ArrayList<clsBeTrans_packing_enc> auxPacking = new ArrayList<>();
     private String Licencia = "";
+    private String bodDestino= "";
     private Boolean procesando = false;
 
     private ProgressDialog progress;
@@ -210,11 +211,12 @@ public class frm_list_packing_cerrados extends PBase {
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%4$s^FS \n" +
-                                        "^PQ1,0,1,Y " +
+                                        "^PQ1,0,1,Y \n" +
+                                        "^FT120,160^A0I,150,50^FH^FDCol %6$s^FS \n" +
                                         "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                "",
-                                "$" + Licencia,
-                                "");
+                                        "",
+                                        "$" + Licencia,
+                                        bodDestino);
 
                     } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {
                         zpl = String.format("^XA\n" +
@@ -324,6 +326,7 @@ public class frm_list_packing_cerrados extends PBase {
                     selidx = position;
                     adapter.setSelectedIndex(position);
                     Licencia = sitem.No_linea;
+                    bodDestino = sitem.Referencia;
 
                     msgImprimir("¿Imprimir Licencia "+ Licencia +"?");
                 }

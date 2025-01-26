@@ -14,5 +14,6 @@ public class clsBeTrans_packing_lotes {
     public double cant=0;
     public int IdProductoBodega=0;
     public int IdStock=0;
+    public String referencia="";
 
 }

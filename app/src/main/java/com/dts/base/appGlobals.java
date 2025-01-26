@@ -225,8 +225,10 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.5.4";
+    public final String version="6.5.9";
     public boolean VerificacionSinLoteFechaVen = false;
+
+    public String referenciaPedido="";
 
     //Voz Picking
     public boolean Notificacion_Voz = false;
