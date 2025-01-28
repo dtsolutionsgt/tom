@@ -200,22 +200,23 @@ public class frm_list_packing_cerrados extends PBase {
                                         "^PW700 \n" +
                                         "^LL0406 \n" +
                                         "^LS0 \n" +
-                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS \n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%4$s^FS \n" +
                                         "^FO2,40^GB670,0,5^FS \n" +
                                         "^FT270,61^A0I,30,24^FH^FD%1$s^FS \n" +
                                         "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
                                         "^FT360,61^A0I,30,24^FH^FDBodega:^FS \n" +
                                         "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
                                         "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
                                         "^FO2,340^GB670,0,14^FS \n" +
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                        "^FD%4$s^FS \n" +
+                                        "^FD%3$s^FS \n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^FT120,160^A0I,150,50^FH^FDCol %6$s^FS \n" +
-                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                                        "",
+                                        "^FT130,160^A0I,150,50^FH^FDCol %5$s^FS \n" +
+                                        "^XZ",
+                                        gl.CodigoBodega + " - " + gl.gNomBodega,
+                                        gl.gNomEmpresa,
                                         "$" + Licencia,
+                                        gl.IdOperador + " " + gl.gNomOperador + " / " + du.Fecha_Completa(),
                                         bodDestino);
 
                     } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {

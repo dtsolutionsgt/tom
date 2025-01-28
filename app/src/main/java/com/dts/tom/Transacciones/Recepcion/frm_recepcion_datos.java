@@ -4145,6 +4145,12 @@ public class frm_recepcion_datos extends PBase {
                 //si existe un estado por defecto en la recepcion, no asignar el buen estado por defecto,
                 if(gl.gBeRecepcion.IdEstado_Defecto_Recepcion==0){
                     cmbEstadoProductoRec.setSelection(indxEstado);
+                }else{
+                    //#CKFK20250127 si la recepción tiene un estado por defecto, con ese debe guardarse la recepción.
+                    IdEstadoSelect = gl.gBeRecepcion.IdEstado_Defecto_Recepcion;
+                    List AuxEst = stream(LProductoEstado.items).select(c->c.IdEstado).toList();
+                    int indx = AuxEst.indexOf(IdEstadoSelect);
+                    cmbEstadoProductoRec.setSelection(indx);
                 }
 
             }else{
@@ -4166,16 +4172,15 @@ public class frm_recepcion_datos extends PBase {
                             +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
                             +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                            +"¿El producto está completo y en buen estado?";
+                            +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
                 }else{
                     vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
                             +"Cant: "+vCantidad +"\n "
                             +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
                             +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                            +"¿El producto está completo y en buen estado?";
+                            +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
                 }
-
 
                 msgValidaProductoPallet(vMensaje1);
 
