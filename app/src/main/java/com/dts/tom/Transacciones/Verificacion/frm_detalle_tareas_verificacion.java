@@ -163,6 +163,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             listDetVeri.setAdapter(null);
 
             if (gl.pIdPedidoEnc>0){
+                gl.referenciaPedido = gBePedido.Bodega_Destino;
                 //Llama al método del WS Get_Single_By_IdPedidoEnc
                 execws(2);
             }else{
@@ -674,6 +675,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
             pListaPedidoDet = xobj.getresult(clsBeDetallePedidoAVerificarList.class,"Get_Detalle_Verificacion_Consolidada");
 
             listDetVeri.setAdapter(null);
+
+            if (gl.pIdPedidoEnc>0) {
+                gl.referenciaPedido = gBePedido.Bodega_Destino;
+            }
 
             if (pListaPedidoDet!=null){
                 if(pListaPedidoDet.items!=null) Lista_Detalle_Pedido();
