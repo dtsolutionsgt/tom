@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -73,7 +74,19 @@ public class frm_list_packing_cerrados extends PBase {
                     ProgressDialog();
                     progress.setMessage("Buscando...");
 
-                    if (procesando) {
+                    if (event.getRepeatCount() >  0) {
+                        Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                        return true;
+                    }
+
+                    if (!txtFiltro.getText().toString().isEmpty()) {
+                        execws(1);
+                    } else {
+                        progress.cancel();
+                        msgbox("Debe ingresar un pedido o referencia.");
+                    }
+
+                    /*if (procesando) {
                         return  true;
                     }
 
@@ -86,7 +99,7 @@ public class frm_list_packing_cerrados extends PBase {
                             progress.cancel();
                             msgbox("Debe ingresar un pedido o referencia.");
                         }
-                    }, 200); // Cambia el tiempo según la duración de tu proceso
+                    }, 200); // Cambia el tiempo según la duración de tu proceso*/
 
                 }
                 return false;

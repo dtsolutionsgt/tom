@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -134,6 +135,7 @@ public class frm_Packing extends PBase {
     private clsBeTrans_movimientosList movList = new clsBeTrans_movimientosList();
     private clsBeVW_stock_resList stockList = new clsBeVW_stock_resList();
     private ArrayList<clsBeProducto> ListaActualizada = new ArrayList<>();
+    private boolean procesando = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,23 +214,24 @@ public class frm_Packing extends PBase {
 
         try{
 
-            txtLic_Plate.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            txtLic_Plate.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                        if(!txtLic_Plate.getText().toString().equals("")){
-                            Procesa_Lp();
-                        }else{
-
-                            mu.msgbox("La licencia está vacía.");
-                            txtLic_Plate.selectAll();
-                            txtLic_Plate.requestFocus();
-                        }
+                    if (event.getRepeatCount() >  0) {
+                        Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                        return true;
                     }
 
-                    return false;
+                    if (!txtLic_Plate.getText().toString().equals("")) {
+                        Procesa_Lp();
+                    } else {
+                        mu.msgbox("La licencia está vacía.");
+                        txtLic_Plate.selectAll();
+                        txtLic_Plate.requestFocus();
+                    }
                 }
+
+                return false;
             });
 
             cmbPresentacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -372,41 +375,37 @@ public class frm_Packing extends PBase {
 
             });
 
-            txtUbicOr.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        Scan_Ubic_Origen();
-                    }
-
-                    return false;
+            txtUbicOr.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    Scan_Ubic_Origen();
                 }
+
+                return false;
             });
 
-            txtPrd.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        if (!txtPrd.getText().equals("")){
-                            Busca_Producto();
-                        }
+            txtPrd.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    if (!txtPrd.getText().equals("")){
+                        Busca_Producto();
                     }
-
-                    return false;
                 }
+
+                return false;
             });
 
-            txtNuevoLp.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                        if (!txtPrd.getText().equals("")){
-                            AplicaPacking();
-                        }
+            txtNuevoLp.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    if (event.getRepeatCount() >  0) {
+                        toast("Ignorando repetición de tecla.");
+                        return true;
                     }
 
-                    return false;
+                    if (!txtPrd.getText().equals("")) {
+                        AplicaPacking();
+                    }
                 }
+
+                return false;
             });
 
             cmdImprimir.setOnClickListener(v -> {
@@ -1799,9 +1798,11 @@ public class frm_Packing extends PBase {
                         break;
                     case 11:
                         //#CKFK 20210617 Agregué el llamado a esta función para obtener la ubicación del LP
+                        //#AT20250129 Agregué el parámetro pIdUbicStock
                         callMethod("Get_Ubicacion_LP",
                                    "pLic_Plate",txtNuevoLp.getText().toString().replace("$",""),
                                    "pIdBodega",gl.IdBodega,
+                                   "pIdUbicStock", Integer.valueOf(txtUbicOr.getText().toString()),
                                    "nombre_ubicacion",pNombreUbicacionLP);
                         break;
                     case 12://#CKFK 20210729 Agregué este llamado Get_Stock_By_Lic_Plate_And_Codigo en el WS para buscar con LP y Producto

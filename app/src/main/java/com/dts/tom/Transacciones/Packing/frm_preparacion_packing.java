@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,6 +197,11 @@ public class frm_preparacion_packing extends PBase {
 
             txtLP.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    if (event.getRepeatCount() >  0) {
+                        Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                        return true;
+                    }
+
                     gl.filtroprod = txtLP.getText().toString();
                     verLista();
                 }
