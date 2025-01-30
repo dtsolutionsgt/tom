@@ -40,6 +40,8 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public int IdPedidoDet;
     @Element(required=false) public int IdDespachoEnc;
     @Element(required=false) public int IdDespachoDet;
+    @Element(required=false) public int IdProducto;
+    @Element(required=false) public String Lic_plate;
 
 
     public clsBeTrans_movimientos() {

@@ -4162,22 +4162,23 @@ public class frm_recepcion_datos extends PBase {
 
                 Llena_Stock_Rec_Pallet_Proveedor();
 
-                double vCantidad  = BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
+                //#AT20250130 Ya no se calcula BeINavBarraPallet.Cajas_Por_Cama * BeINavBarraPallet.Camas_Por_Tarima;
+                double vCantidad  = !EsTransferenciaInternaWMS ? BeINavBarraPallet.Cantidad_UMP : BeINavBarraPallet.Cantidad_Presentacion;
 
                 String vMensaje1 ="";
 
                 if (indxPres !=-1){
-                    vMensaje1= "Código: "+BeINavBarraPallet.Codigo+"\n "
-                            +"Cant: "+vCantidad +"\n "
+                    vMensaje1= "Código: "+BeINavBarraPallet.Codigo+"\n"
+                            +"Cant: "+vCantidad +"\n"
                             +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
-                            +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                            +"Venc: "+du.convierteFechaMostrar(BeINavBarraPallet.Fecha_Vence)+"\n"
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
                             +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
                 }else{
-                    vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n "
-                            +"Cant: "+vCantidad +"\n "
+                    vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n"
+                            +"Cant: "+vCantidad +"\n"
                             +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
-                            +"Venc: "+BeINavBarraPallet.Fecha_Vence+"\n "
+                            +"Venc: "+du.convierteFechaMostrar(BeINavBarraPallet.Fecha_Vence)+"\n"
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
                             +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
                 }

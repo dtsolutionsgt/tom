@@ -653,6 +653,10 @@ public class frm_consulta_stock extends PBase {
                         }
                     }
                 }
+
+                txtCodigo.setText("");
+                txtCodigo.requestFocus();
+                txtUbic.setText("");
             } else {
                 //#AT20221115 Limpiar listview
                 LimpiarLista();
@@ -1099,7 +1103,9 @@ public class frm_consulta_stock extends PBase {
 
             if (browse==1){
                 browse=0;
-                execws(1);
+
+                if (!txtUbic.getText().toString().isEmpty())
+                    execws(1);
             }
 
 
