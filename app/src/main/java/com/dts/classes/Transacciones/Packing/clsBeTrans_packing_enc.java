@@ -32,6 +32,10 @@ public class clsBeTrans_packing_enc {
     @Element(required=false) public boolean EsConteo=false;
     @Element(required=false) public int IdPedidoEnc;
     @Element(required=false) public boolean Finalizado=false;
+    @Element(required = false) public String Usr_agr = "";
+    @Element(required = false) public String Usr_mod = "";
+    @Element(required = false) public String Fec_mod = "1900-01-01T00:00:00";
+    @Element(required = false) public String Fec_agr = "1900-01-01T00:00:00";
 
     public clsBeTrans_packing_enc() {
     }

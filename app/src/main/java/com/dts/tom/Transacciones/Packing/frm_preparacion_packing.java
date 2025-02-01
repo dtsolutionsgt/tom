@@ -455,6 +455,9 @@ public class frm_preparacion_packing extends PBase {
                             toastlong(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
                         }
 
+                        tmpObj.Fec_mod = du.Fecha_CompletaT();
+                        tmpObj.Usr_mod = gl.OperadorBodega.Nombre_Completo;
+
                         itemList = new clsBeTrans_packing_encList();
                         itemList.items = new ArrayList<>();
                         itemList.items.add(tmpObj);
@@ -465,6 +468,7 @@ public class frm_preparacion_packing extends PBase {
                 }
             }
 
+            String pfecha = du.Fecha_CompletaT();
             item=new clsBeTrans_packing_enc();
 
             p=pick.items.get(selidx);
@@ -486,13 +490,16 @@ public class frm_preparacion_packing extends PBase {
             item.Idempresaservicio=gl.IdEmpresa;
             //#CKFK20250124 Agregué el campo referencia para la bodega de destino
             item.Referencia=p.Referencia;
-            item.Fecha_packing=app.strFechaXML(du.getFechaActual());
+            item.Fecha_packing = pfecha;
             item.nom_prod=p.NombreProducto;
             item.CodigoProducto=p.CodigoProducto;
             item.ProductoPresentacion=p.ProductoPresentacion;
             item.ProductoUnidadMedida=p.ProductoUnidadMedida;
             item.ProductoEstado=p.ProductoEstado;
             item.IdPedidoEnc = p.getIdPedidoEnc();
+            item.Usr_agr = gl.OperadorBodega.Nombre_Completo;
+            item.Fec_mod = pfecha;
+            item.Usr_mod = gl.OperadorBodega.Nombre_Completo;
 
             itemList = new clsBeTrans_packing_encList();
             itemList.items = new ArrayList<>();
