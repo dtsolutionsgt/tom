@@ -1203,7 +1203,7 @@ public class frm_list_rec_prod extends PBase {
                                    "pAnulada",Anulada);
                         break;
                     case 5:
-                       callMethod("Get_All_Pallet_Ingreso_By_Barra","pCodigoBarraPallet",pLP,
+                       callMethod("Get_All_Pallet_Ingreso_By_Barra","pCodigoBarraPallet",pLP.trim(),
                                "pIdBodega",gl.IdBodega,
                                "BeProducto",BeProducto);
                         break;
@@ -1406,7 +1406,12 @@ public class frm_list_rec_prod extends PBase {
 
             lBeINavBarraPallet = xobj.getresult(clsBeI_nav_barras_palletList.class,"Get_All_Pallet_Ingreso_By_Barra");
 
+            if(lBeINavBarraPallet ==null){
+                mu.msgbox("processPalletIngreso: "+"No se pudo obtener una barra pallet." );
+            }
+
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
+
 
             if (ValidaEstadoPallet()){
 

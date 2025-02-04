@@ -324,7 +324,6 @@ public class frm_picking_datos extends PBase {
                             txtLicencia.setText(txtLicencia.getText().toString().toUpperCase());
                             //#AT20240514 Incio del proceso para el remplazo automático
                             String tmpLic = txtLicencia.getText().toString().replace("$", "");
-
                             if(gl.pBeBodega.getPermitir_Reemplazo_Picking()){
                                 if (!tmpLic.equals(gBePickingUbic.Lic_plate)) {
                                     execws(14);

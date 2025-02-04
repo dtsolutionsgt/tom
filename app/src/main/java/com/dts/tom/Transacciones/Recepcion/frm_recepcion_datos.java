@@ -4173,14 +4173,14 @@ public class frm_recepcion_datos extends PBase {
                             +"Pres: "+ BeProducto.Presentaciones.items.get(indxPres).Nombre +"\n"
                             +"Venc: "+du.convierteFechaMostrar(BeINavBarraPallet.Fecha_Vence)+"\n"
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                            +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
+                            +"¿El producto está completo y en estado " + cmbEstadoProductoRec.getSelectedItem() + "?";
                 }else{
                     vMensaje1 = "Código: "+BeINavBarraPallet.Codigo+"\n"
                             +"Cant: "+vCantidad +"\n"
                             +"UM: "+ BeProducto.UnidadMedida.Nombre +"\n"
                             +"Venc: "+du.convierteFechaMostrar(BeINavBarraPallet.Fecha_Vence)+"\n"
                             +"Lote: "+BeINavBarraPallet.Lote +"\n"
-                            +"¿El producto está completo y en estado "+ cmbEstadoProductoRec.getSelectedItem() + "?";
+                            +"¿El producto está completo y en estado " + cmbEstadoProductoRec.getSelectedItem() + "?";
                 }
 
                 msgValidaProductoPallet(vMensaje1);
@@ -6974,6 +6974,7 @@ public class frm_recepcion_datos extends PBase {
             listaStockPalletsNuevos = new clsBeStock_recList();
             listaProdPalletsNuevos = new clsBeProducto_palletList();
 
+            //#GT03022025: validar que este objeto no este null antes de llenar el siguiente objeto listaStock
             if (pListBeStockRec.items!=null){
 
                 clsBeStock_recList listaStock = new clsBeStock_recList();
@@ -7109,6 +7110,10 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
+            }else{
+                mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+                progress.cancel();
+                lResult = false;
             }
 
             BeTransReDet.MotivoDevolucion = new  clsBeMotivo_devolucion();
@@ -8404,6 +8409,9 @@ public class frm_recepcion_datos extends PBase {
                             pListBeStockRec.items.get(0).Lic_plate = pNumeroLP;
                         }
                     }
+                }else{
+                    progress.cancel();
+                    mu.msgbox("processActualizaCantidades:"+ " No se pudo crear el stock correctamente!");
                 }
 
                 if ( gl.gBeRecepcion.Detalle!=null){
@@ -9550,7 +9558,13 @@ public class frm_recepcion_datos extends PBase {
 
             pListBeStockRec = xobj.getresult(clsBeStock_recList.class,"Get_Stock_By_IdRecepcionEnc_And_IdRecpecionDet");
 
-            execws(2);
+            if (pListBeStockRec != null){
+
+                execws(2);
+            }else{
+                return ;
+            }
+
 
         }catch (Exception e){
             mu.msgbox("processGetStock:"+e.getMessage());
