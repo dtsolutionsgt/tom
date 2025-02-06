@@ -238,7 +238,9 @@ public class frm_list_rec_prod extends PBase {
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
 
-                             vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+3);
+                             if (vCodigoProductoBarraPallet.length()>=vLongitudCodigoProducto+3){
+                                 vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+3);
+                             }
 
                              if (gBeConfiguracionBarraPallet!=null){
                                  if (gBeConfiguracionBarraPallet.CodigoNumerico){
@@ -1413,12 +1415,13 @@ public class frm_list_rec_prod extends PBase {
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
 
 
-            if (ValidaEstadoPallet()){
+            //#CKFK20250204 Confirmar con Anderly
+            //if (ValidaEstadoPallet()){
 
                 execws(8);
                 //msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
 
-            }
+            //}
 /*
 
             if (lBeINavBarraPallet!=null){

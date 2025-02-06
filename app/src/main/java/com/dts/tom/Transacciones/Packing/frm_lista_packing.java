@@ -289,7 +289,9 @@ public class frm_lista_packing extends PBase {
                         BeListTareasPicking.get(i).IdPedidoEnc==gl.gIdPedidoEnc) {
 
                     tipoprep=BeListTareasPicking.get(i).Tipo_Preparacion;
-                    gl.referenciaPedido = BeListTareasPicking.get(i).Referencia;
+                    if ( BeListTareasPicking.get(i).Referencia.length()>=2){
+                        gl.referenciaPedido = BeListTareasPicking.get(i).Referencia.substring(0,2);
+                    }
 
                     browse=1;
 

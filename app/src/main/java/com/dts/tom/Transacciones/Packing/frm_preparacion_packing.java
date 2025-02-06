@@ -329,6 +329,7 @@ public class frm_preparacion_packing extends PBase {
                     }
                 }
 
+                obj.Cantidad_Verificada = mu.round(obj.Cantidad_Verificada,6);
                 if ((obj.Cantidad_Verificada - obj.getCantidad_despachada()) != cant) {
                     pendientes++;
                 }

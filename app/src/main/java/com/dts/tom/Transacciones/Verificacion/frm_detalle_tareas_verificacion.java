@@ -163,7 +163,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
             listDetVeri.setAdapter(null);
 
             if (gl.pIdPedidoEnc>0){
-                gl.referenciaPedido = gBePedido.Bodega_Destino;
+                if (gBePedido.Bodega_Destino.length()>=2){
+                    gl.referenciaPedido = gBePedido.Bodega_Destino.substring(0,2);
+                }
                 //Llama al método del WS Get_Single_By_IdPedidoEnc
                 execws(2);
             }else{
@@ -677,7 +679,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
             listDetVeri.setAdapter(null);
 
             if (gl.pIdPedidoEnc>0) {
-                gl.referenciaPedido = gBePedido.Bodega_Destino;
+                if (gBePedido.Bodega_Destino.length()>=2){
+                    gl.referenciaPedido = gBePedido.Bodega_Destino.substring(0,2);
+                }
             }
 
             if (pListaPedidoDet!=null){
