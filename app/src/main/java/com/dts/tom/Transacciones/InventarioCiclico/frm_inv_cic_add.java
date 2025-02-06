@@ -112,6 +112,7 @@ public class frm_inv_cic_add extends PBase {
     private int IdStock = 0;
     private boolean esInvCongelado = false;
     private String NomPresentacion = "";
+    private int pIdUbicacion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +188,7 @@ public class frm_inv_cic_add extends PBase {
 
             if (gl.ubicacionInv != 0) {
                 txtUbic.setText(gl.ubicacionInv+"");
+                pIdUbicacion = gl.ubicacionInv;
                 execws(6);
             }
         }
@@ -204,6 +206,7 @@ public class frm_inv_cic_add extends PBase {
                     if (!txtUbicNueva.getText().toString().isEmpty()) {
 
                         if (!txtUbic.getText().toString().equals(txtUbicNueva.getText().toString())) {
+                            pIdUbicacion = Integer.valueOf(txtUbicNueva.getText().toString());
                             execws(6);
                         } else {
                             msgbox("La ubicación deber ser diferente a la de origen.");
@@ -353,6 +356,7 @@ public class frm_inv_cic_add extends PBase {
             txtUbic.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     if (!txtUbic.getText().toString().isEmpty()) {
+                        pIdUbicacion = Integer.valueOf(txtUbic.getText().toString());
                         execws(6);
                     } else {
                         toast("Ingrese ubicación");
@@ -1051,8 +1055,12 @@ public class frm_inv_cic_add extends PBase {
             } else {
                 btGuardar.setEnabled(true);
 
+                pitem = new clsBeTrans_inv_ciclico();
+                String Ubic = txtUbicNueva.getText().toString();
+                int UbicNueva =  Ubic.isEmpty() ? 0 : Integer.valueOf(Ubic);
+                pitem.IdUbicacion_nuevo = UbicNueva;
+
                 if (NuevoConteo && !existeConteo && !esInvCongelado) {
-                    pitem = new clsBeTrans_inv_ciclico();
 
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
                     pitem.IdStock = 0;
@@ -1063,7 +1071,7 @@ public class frm_inv_cic_add extends PBase {
                     pitem.IdProductoEstado = IdEstadoselected;
                     pitem.IdProductoEst_nuevo = IdEstadoselected;
                     pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
-                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbicNueva.getText().toString());
+                    pitem.IdUbicacion_nuevo = UbicNueva;
 
                     if (BeProductoUbicacion.Control_lote) {
                         String lote = txtLote1.getText().toString();
@@ -1105,8 +1113,6 @@ public class frm_inv_cic_add extends PBase {
 
                     execws(9);
                 } else if (esInvCongelado) {
-                    pitem = new clsBeTrans_inv_ciclico();
-
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
                     pitem.IdStock = invCongelado.IdStock;
 
@@ -1117,7 +1123,7 @@ public class frm_inv_cic_add extends PBase {
                     pitem.IdProductoEstado = invCongelado.IdProductoEstado;
                     pitem.IdProductoEst_nuevo = IdEstadoselected;
                     pitem.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
-                    pitem.IdUbicacion_nuevo = Integer.valueOf(txtUbicNueva.getText().toString());
+                    pitem.IdUbicacion_nuevo = UbicNueva;
 
                     if (gBeProducto.Control_lote) {
                         String lote = txtLote1.getText().toString();
@@ -1441,11 +1447,11 @@ public class frm_inv_cic_add extends PBase {
                         callMethod("Inventario_Ciclico_Actualiza_Reconteo", "idinvreconteo", gl.inv_ciclico.idinvreconteo, "pCantidad_Reconteo", Nueva_Cantidad );
                         break;
                     case 6:
-                        int ubicacion  = 0;
-                        ubicacion = NuevoConteo ? Integer.valueOf(txtUbicNueva.getText().toString()): Integer.valueOf(txtUbic.getText().toString());
+
+                        if (pIdUbicacion == 0) return;
 
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega",
-                                "pBarra", ubicacion,
+                                "pBarra", pIdUbicacion,
                                 "pIdBodega",gl.IdBodega);
                         break;
                     case 7:
@@ -1858,7 +1864,7 @@ public class frm_inv_cic_add extends PBase {
                 txtProd.selectAll();
                 toast("Producto no existe");
 
-                if (NuevoConteo) {
+                if (NuevoConteo || invCongelado == null) {
                     gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
                     gl.nuevo_producto_cic = txtProd.getText().toString();
                     startActivity(new Intent(this, frm_inv_cic_nuevo.class));
@@ -1935,10 +1941,12 @@ public class frm_inv_cic_add extends PBase {
             }
 
             if (BeInvEnc.Cambia_Ubicacion) {
-                if (gl.inv_ciclico.IdUbicacion_nuevo != 0 ||
-                        (esCambioUbicacion && !txtUbicNueva.getText().toString().isEmpty())) {
-                    execws(6);
+                if (gl.inv_ciclico.IdUbicacion_nuevo != 0) {
+                    pIdUbicacion = gl.inv_ciclico.IdUbicacion_nuevo;
+                } else if (esCambioUbicacion && !txtUbicNueva.getText().toString().isEmpty() && !txtUbicNueva.getText().toString().equals("0")) {
+                    pIdUbicacion = Integer.parseInt(txtUbicNueva.getText().toString());
                 }
+                if (pIdUbicacion > 0) execws(6);
             }
 
             if (esInvCongelado) LoadInvCongelado();
@@ -1951,6 +1959,7 @@ public class frm_inv_cic_add extends PBase {
         try {
             invCongelado = xobj.getresult(clsBeTrans_inv_ciclico.class,"Get_Stock_Congelado");
 
+            NuevoConteo = true;
             if (invCongelado != null) {
                 esInvCongelado = true;
                 esCambioUbicacion = IdUbicacion != invCongelado.IdUbicacion;
@@ -1958,14 +1967,11 @@ public class frm_inv_cic_add extends PBase {
                 txtUbic.setText(""+invCongelado.IdUbicacion);
                 IdUbicacion = invCongelado.IdUbicacion;
 
-                NuevoConteo = true;
                 execws(12);
             } else {
-                toastlong("Producto o licencia no asignado para conteo. Intente con otro!");
-
-                gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
-                gl.nuevo_producto_cic = codigo_producto;
-                startActivity(new Intent(this, frm_inv_cic_nuevo.class));
+                toastlong("Producto o licencia no asignado para conteo.");
+                txtLicencia.setText("");
+                execws(7);
             }
         } catch (Exception e) {
             mu.msgbox("processGetStockCongelado: " + e.getMessage());
