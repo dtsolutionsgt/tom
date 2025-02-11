@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -219,8 +220,13 @@ public class frm_lista_packing_lp extends PBase {
 
         txtCantidad.setOnKeyListener((v, keyCode, event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
+                if (event.getRepeatCount() >  0) {
+                    Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                    return true;
+                }
+
                 procesarCantidad(dialogView, dialog);
-                return true;
             }
             return false;
         });
