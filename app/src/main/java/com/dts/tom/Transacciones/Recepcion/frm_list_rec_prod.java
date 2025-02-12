@@ -238,7 +238,7 @@ public class frm_list_rec_prod extends PBase {
 
                              vCodigoBodegaBarraPallet = vCodigoBodegaBarraPallet.replace("0", "");
 
-                             if (vCodigoProductoBarraPallet.length()>=vLongitudCodigoProducto+3){
+                             if (pLP.length()>=vLongitudCodigoProducto+3){
                                  vCodigoProductoBarraPallet = pLP.substring(vLongitudBodegaOrigen, vLongitudCodigoProducto+3);
                              }
 
@@ -1414,47 +1414,14 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresultSingle(clsBeProducto.class,"BeProducto");
 
-
-            //#CKFK20250204 Confirmar con Anderly
+            //#CKFK20250204 Esta validación no es necesaria
             //if (ValidaEstadoPallet()){
 
                 execws(8);
                 //msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
 
-            //}
-/*
+           // }
 
-            if (lBeINavBarraPallet!=null){
-
-                if (lBeINavBarraPallet.items!=null){
-
-                    if (lBeINavBarraPallet.items.size()==1){
-                        BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
-                    }else {
-                        if(gBeOrdenCompra.IdTipoIngresoOC ==4){
-                            BeINavBarraPallet = stream(lBeINavBarraPallet.items).where(c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo) && c.Bodega_Destino.equals(gl. gCodigoBodega)).first();
-                        }else{
-                            mu.msgbox("Excepción no controlada por licencia en tipo de documento, reporte esto a desarrollo (Desarrollo, en teoría, no debería ocurrir):"+gBeOrdenCompra.IdTipoIngresoOC);
-                        return;
-                        }
-                    }
-
-                }else{
-                    mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
-                    return;
-                }
-            }else{
-                mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
-                return;
-            }
-
-            Continua_Validando_Barra();
-
-            //#CKFK20220830 Voy a poner esto aqui porque cuando se hace por esta opción no se limpian los campos
-            mu.msgbox("Licencia procesada correctamente");
-                txtCodigoProductoRecepcion.setText("");
-                txtCodigoProductoRecepcion.requestFocus();
-*/
 
         }catch (Exception e){
             mu.msgbox("processPalletIngreso"+e.getMessage());
