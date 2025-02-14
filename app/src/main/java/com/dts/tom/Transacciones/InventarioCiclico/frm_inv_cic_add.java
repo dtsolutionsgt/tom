@@ -29,6 +29,7 @@ import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProduc
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Mantenimientos.Resolucion_LP.clsBeResolucion_lp_operador;
 import com.dts.classes.Transacciones.Inventario.InventarioReconteo.clsBe_inv_reconteo_data;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico;
 import com.dts.classes.Transacciones.Inventario.Inventario_Ciclico.clsBeTrans_inv_ciclico_vw;
@@ -58,7 +59,7 @@ public class frm_inv_cic_add extends PBase {
     private XMLObject xobj;
 
     private Button btnBack_cic,btAdelante,btAtras, btGuardar;
-    private ImageView imgDate;
+    private ImageView imgDate, btnSetLicencia;
     private EditText txtUbic,txtProd,txtLote1,txtCantContada,txtPesoContado,dtpVence, txtLicencia, txtUbicNueva;
     private Spinner cboEstado,cboPres;
     private TextView txtlote_cic,lblCantStock,lblUM,lblUbic1,lblProd,txtFecha_cic,txtpeso_cic,lbltitulo_cic, lblCantidadContada, lblUbicNueva;
@@ -113,6 +114,8 @@ public class frm_inv_cic_add extends PBase {
     private boolean esInvCongelado = false;
     private String NomPresentacion = "";
     private int pIdUbicacion = 0;
+    private clsBeResolucion_lp_operador nBeResolucion = null;
+    private String pNumeroLP = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +156,7 @@ public class frm_inv_cic_add extends PBase {
         tblNuevaUbic = findViewById(R.id.tblNuevaUbic);
         txtUbicNueva = findViewById(R.id.txtUbicNueva);
         lblUbicNueva = findViewById(R.id.lblUbicNueva);
+        btnSetLicencia = findViewById(R.id.btnSetLicencia);
 
         idPresentacion =0;
         vFactor = 0.00;
@@ -181,6 +185,8 @@ public class frm_inv_cic_add extends PBase {
             lblProd.setText("");
             lblUbic1.setText("");
             txtUbic.requestFocus();
+            btnSetLicencia.setVisibility(View.VISIBLE);
+            txtLicencia.setEnabled(true);
 
             btAdelante.setVisibility(View.GONE);
             btAtras.setVisibility(View.GONE);
@@ -367,6 +373,12 @@ public class frm_inv_cic_add extends PBase {
                 }
 
                 return false;
+            });
+
+            btnSetLicencia.setOnClickListener(view -> {
+                btnSetLicencia.setEnabled(false);
+                txtLicencia.setText("");
+                execws(13);
             });
 
         }
@@ -1463,7 +1475,13 @@ public class frm_inv_cic_add extends PBase {
                         callMethod("Get_Estados_By_IdPropietario","pIdPropietario",BeInvEnc.Idpropietario);
                         break;
                     case 9:
-                        callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", pitem);
+                        int idresolucion = 0;
+
+                        if (nBeResolucion != null) {
+                            idresolucion = nBeResolucion.IdResolucionlp;
+                        }
+
+                        callMethod("Inventario_Agregar_Conteo", "pBeTransInvCiclico", pitem, "pIdResolucion", idresolucion);
                         break;
                     case 10:
                         clsBeTrans_inv_ciclico item = new clsBeTrans_inv_ciclico();
@@ -1496,6 +1514,11 @@ public class frm_inv_cic_add extends PBase {
                         break;
                     case 12:
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega", invCongelado.IdProductoBodega);
+                        break;
+                    case 13:
+                        callMethod("Get_Resoluciones_Lp_By_IdOperador_And_IdBodega",
+                                "pIdOperador",gl.IdOperador,
+                                "pIdBodega",gl.IdBodega);
                         break;
                 }
             } catch (Exception e) {
@@ -1546,10 +1569,48 @@ public class frm_inv_cic_add extends PBase {
                 case 12:
                     processProductoUbic();
                     break;
+                case 13:
+                    processLicenciaInv();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processLicenciaInv() {
+        try {
+
+            if (nBeResolucion == null){
+                nBeResolucion = new clsBeResolucion_lp_operador();
+                if (xobj!=null){
+                    nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
+                }else{
+                    toast("El objeto SI es nulo");
+                }
+            }
+
+            if (nBeResolucion !=null){
+                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
+
+                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
+                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
+
+                long intLPSig = pLpSiguiente;
+                int MaxL = largoMaximo;
+
+                String result = String.format("%0"+ MaxL + "d",intLPSig);
+
+                pNumeroLP= nBeResolucion.Serie + result;
+                txtLicencia.setText(pNumeroLP);
+                btnSetLicencia.setEnabled(true);
+            } else {
+                gl.IdResolucionLpOperador =0;
+                return;
+            }
+        }catch (Exception e){
+            mu.msgbox("processNuevoLP_RE: "+e.getMessage());
         }
     }
 
@@ -1853,6 +1914,9 @@ public class frm_inv_cic_add extends PBase {
 
                     LoadExisteConteo();
                     toastlong("Ya existe un conteo del producto en inventario en la ubicación " + txtUbic.getText().toString());
+                } else {
+                    btnSetLicencia.setVisibility(View.VISIBLE);
+                    txtLicencia.setEnabled(true);
                 }
 
                 execws(8);
@@ -1920,6 +1984,7 @@ public class frm_inv_cic_add extends PBase {
                 toastlong("Conteo agregado con éxito.");
 
                 if (NuevoConteo) NuevoConteo = false;
+                nBeResolucion = null;
                 finish();
             }
 

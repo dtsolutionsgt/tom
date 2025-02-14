@@ -153,25 +153,44 @@
                     android:textStyle="bold" />
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tlbLicencia"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <TextView
                     android:id="@+id/lblLicencia"
                     style="@style/StyleText"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:text="Licencia:" />
+                    android:layout_height="0dp"
+                    android:text="Licencia:"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/txtLicencia"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </TableRow>
+                    android:inputType="text"
+                    app:layout_constraintStart_toEndOf="@id/lblLicencia"
+                    app:layout_constraintEnd_toStartOf="@id/btnSetLicencia"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btnSetLicencia"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/btn_agregar"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="gone" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <TableRow
                 android:id="@+id/tblUmbas"
