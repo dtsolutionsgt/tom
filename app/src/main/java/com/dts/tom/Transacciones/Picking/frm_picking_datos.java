@@ -2676,6 +2676,11 @@ public class frm_picking_datos extends PBase {
                 execws(3);
             }
 
+            //#AT20250218 Carga los datos en automatico
+            if (gl.autoLoad) {
+                txtLicencia.setText(gBePickingUbic.Lic_plate);
+                Procesa_Barra();
+            }
             ReubicarPickingAereo = false;
 //            //#EJC20220524: Validar si se reubica a posición de piso.
 //            if (gl.Permitir_Cambio_Ubic_Producto_Picking) {

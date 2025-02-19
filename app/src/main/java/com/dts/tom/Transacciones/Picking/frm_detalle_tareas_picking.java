@@ -145,6 +145,7 @@ public class frm_detalle_tareas_picking extends PBase {
             lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
             gl.mostar_filtros = false;
+            gl.autoLoad = false;
             gl.termino = "";
             ListRackSel.clear();
             ListRack.clear();
@@ -256,7 +257,7 @@ public class frm_detalle_tareas_picking extends PBase {
             txtUbicacionFiltro.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                    if (event.getRepeatCount() >  0) {
+                    if (event.getRepeatCount() > 0) {
                         Log.e("EnterKeyPress", "Ignorando repetición.");
                         return true;
                     }
@@ -265,21 +266,18 @@ public class frm_detalle_tareas_picking extends PBase {
                     String termino = txtUbicacionFiltro.getText().toString();
 
                     if (termino.isEmpty()) {
-                        msgbox("Debe ingresar la ubicación o licencia.");
+                        msgbox("Debe ingresar una ubicación o licencia.");
+                        return true;
                     }
 
-                    if (!termino.isEmpty()){
-                        if (isNumeric(termino)){
-                            execws(5);
-                        } else {
-                            procesaLicencia(termino);
-                        }
+                    if (isNumeric(termino)){
+                        execws(5);
+                    } else {
+                        procesaLicencia(termino);
                     }
                 }
-
                 return false;
             });
-
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }
@@ -341,6 +339,8 @@ public class frm_detalle_tareas_picking extends PBase {
                 return;
             }
 
+
+            gl.autoLoad = true;
             clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
 
             if (TipoLista == 1) {//Resumido
@@ -580,6 +580,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.autoLoad = false;
                     return;
                 }
             });
@@ -1266,6 +1267,7 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
+                gl.autoLoad = false;
 
                 //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
                 if (TipoLista > 0) {

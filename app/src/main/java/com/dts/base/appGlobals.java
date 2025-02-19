@@ -267,6 +267,8 @@ public class appGlobals extends Application {
     public int IdUbicInvCic = 0;
     public boolean PackingAuto = false;
     public boolean EmpaqueTarima = false;
+    public boolean autoLoad = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
