@@ -801,6 +801,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             if (detalle != null) {
                 gl.pIdPedidoEnc = detalle.IdPedidoEnc;
+                gl.gIdPedidoEnc = detalle.IdPedidoEnc;
                 gl.gBePedidoDetVerif = detalle;
                 gl.gBePedidoDetVerif.Fecha_Vence = app.strFecha(gl.gBePedidoDetVerif.Fecha_Vence);
                 execws(10);
