@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -212,6 +213,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        if (event.getRepeatCount() >  0) {
+                            Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                            return true;
+                        }
+
                         if (!txtTarea.getText().toString().isEmpty()) {
                             if (gl.tipoTarea == 1) {
                                 if (gl.Interface_SAP) {
@@ -788,7 +794,7 @@ public class frm_lista_tareas_recepcion extends PBase {
         clsBeDetallePedidoAVerificar detalle = null;
 
         try {
-            progress.setMessage("Obteniendo Tareas de verificación en HH...");
+            progress.setMessage("Obteniendo detalle verificación..");
 
             detalle = xobj.getresult(clsBeDetallePedidoAVerificar.class,"Get_Verificacion_By_Producto_And_Pedido");
 
@@ -799,7 +805,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                 gl.gBePedidoDetVerif.Fecha_Vence = app.strFecha(gl.gBePedidoDetVerif.Fecha_Vence);
                 execws(10);
             } else {
-                msgbox("No se encontró  el producto.");
+                msgbox("No se encontró  el producto ó el producto no se ha pickeado.");
             }
         } catch (Exception e) {
             progress.cancel();
