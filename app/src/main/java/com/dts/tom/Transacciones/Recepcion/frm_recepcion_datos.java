@@ -3666,11 +3666,6 @@ public class frm_recepcion_datos extends PBase {
             if (BeProducto.Presentacion.Genera_lp_auto) {
                 progress.setMessage("Buscando Licencia");
                 progress.show();
-
-                //String valores = gl.IdOperador +"-"+ gl.IdBodega;
-                //toastlong("GT: cmb_pres resolución LP " + valores);
-
-                //toastlong("nueva LP P1 ");
                 Log.e("Licencia","Call_From_B.");
                 execws(6);
                 Call_From_B = true;
