@@ -946,11 +946,6 @@ public class Mainmenu extends PBase {
 
     }
 
-
-    //endregion
-
-    //region Activity Events
-
     protected void onResume() {
         try{
             Load();
