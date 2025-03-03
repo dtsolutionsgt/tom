@@ -225,7 +225,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.6.1";
+    public final String version="6.6.7";
     public boolean VerificacionSinLoteFechaVen = false;
 
     public String referenciaPedido="";
@@ -267,6 +267,8 @@ public class appGlobals extends Application {
     public int IdUbicInvCic = 0;
     public boolean PackingAuto = false;
     public boolean EmpaqueTarima = false;
+    public boolean autoLoad = false;
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -654,9 +654,9 @@ public class frm_consulta_stock extends PBase {
                     }
                 }
 
-                txtCodigo.setText("");
-                txtCodigo.requestFocus();
-                txtUbic.setText("");
+                if (gl.pBeBodega.Limpiar_Campos) {
+                    LimpiarFiltros();
+                }
             } else {
                 //#AT20221115 Limpiar listview
                 LimpiarLista();
@@ -668,6 +668,16 @@ public class frm_consulta_stock extends PBase {
             e.printStackTrace();
         }finally {
             progress.cancel();
+        }
+    }
+
+    private void LimpiarFiltros() {
+        try {
+            txtCodigo.setText("");
+            txtCodigo.requestFocus();
+            txtUbic.setText("");
+        } catch (Exception e) {
+            msgbox(new Object() {} .getClass().getEnclosingMethod().getName() + " - " + e.getMessage());
         }
     }
 

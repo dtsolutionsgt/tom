@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -299,7 +301,152 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
         }
     }
 
-    private void setURL(){
+    private void setURL() {
+        try {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Conexión");
+            alert.setMessage("Ingrese la URL:");
+            alert.setIcon(R.drawable.link);
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.dialog_url, null);
+            alert.setView(dialogView);
+
+            EditText input = dialogView.findViewById(R.id.txtUrl);
+            Spinner cmbUrls = dialogView.findViewById(R.id.cmbUrls);
+            ImageView btnTrash = dialogView.findViewById(R.id.btnTrash);
+
+            getListaUrls();
+
+            if (listaUrls.size() > 1) {
+                btnTrash.setVisibility(View.VISIBLE);
+                cmbUrls.setVisibility(View.VISIBLE);
+                input.setVisibility(View.GONE);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaUrls);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                cmbUrls.setAdapter(adapter);
+
+                String tmpUrl = lblurl.getText().toString();
+                if (!tmpUrl.isEmpty() && listaUrls.contains(tmpUrl)) {
+                    int position = listaUrls.indexOf(tmpUrl);
+                    cmbUrls.setSelection(position);
+                }
+
+                alert.setNeutralButton("Nueva", (dialog, whichButton) -> {});
+            } else {
+                btnTrash.setVisibility(View.GONE);
+                input.setVisibility(View.VISIBLE);
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                cmbUrls.setVisibility(View.GONE);
+
+                if (!lblurl.getText().toString().isEmpty()) {
+                    input.setText(lblurl.getText());
+                } else {
+                    input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+                }
+                input.requestFocus();
+            }
+
+            alert.setNegativeButton("Cancelar", (dialog, whichButton) -> msgbox(""));
+
+            alert.setPositiveButton("Guardar", (dialog, whichButton) -> {
+                if (listaUrls.size() > 1) {
+                    gl.wsurl = cmbUrls.getSelectedItem().toString();
+
+                    String urlTmp = input.getText().toString();
+                    if (!gl.wsurl.equals(urlTmp) && !urlTmp.isEmpty()) {
+                        gl.wsurl = urlTmp;
+                    }
+                    guardaDatosConexion();
+                } else {
+                    gl.wsurl = input.getText().toString();
+                    if (!gl.wsurl.isEmpty()) {
+                        guardaDatosConexion();
+                    } else {
+                        toast("Debe ingresar la URL");
+                        setURL();
+                    }
+                }
+            });
+
+            AlertDialog dialog = alert.create();
+            dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> {
+                btnTrash.setVisibility(View.GONE);
+                cmbUrls.setVisibility(View.GONE);
+                input.setVisibility(View.VISIBLE);
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.GONE);
+
+                if (!lblurl.getText().toString().isEmpty()) {
+                    input.setText(lblurl.getText());
+                } else {
+                    input.setText("http://10.10.20.181/WCFTOM4/tomhhws.asmx");
+                }
+            });
+
+            btnTrash.setOnClickListener(view -> {
+                String url;
+
+                if (cmbUrls.getVisibility() == View.VISIBLE) {
+                    url = cmbUrls.getSelectedItem().toString();
+                } else {
+                    url = input.getText().toString();
+                }
+
+                if (eliminarUrl(url)) {
+                    getListaUrls();
+
+                    if (listaUrls.size() > 1) {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaUrls);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cmbUrls.setAdapter(adapter);
+
+                        String tmpUrl = lblurl.getText().toString();
+                        if (!tmpUrl.isEmpty() && listaUrls.contains(tmpUrl)) {
+                            int position = listaUrls.indexOf(tmpUrl);
+                            cmbUrls.setSelection(position);
+                        }
+                    } else {
+                        dialog.cancel();
+                    }
+
+                    Toast.makeText(this, "Url: "+ url +" eliminada con éxito.", Toast.LENGTH_LONG);
+                }
+            });
+
+            showkeyb();
+
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+        }
+    }
+
+    private boolean eliminarUrl(String pUrl) {
+        BufferedWriter writer2;
+        FileWriter wfile2;
+
+        try {
+            listaUrls.removeIf(elemento -> elemento.equals(pUrl));
+            String fname2 = gl.PathDataDir+"/lista_ws.txt";
+
+            wfile2 = new FileWriter(fname2);
+            writer2 = new BufferedWriter(wfile2);
+            for (String url : listaUrls) {
+                writer2.write(url + "\n");
+            }
+            writer2.close();
+
+        } catch (Exception e) {
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void setURL_(){
 
         String url="";
 

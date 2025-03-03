@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_encList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
@@ -33,6 +35,8 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking;
 import com.dts.tom.Transacciones.Verificacion.frm_detalle_tareas_verificacion;
+import com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,6 +74,8 @@ public class frm_lista_tareas_recepcion extends PBase {
     private ObjectAnimator anim;
     private ProgressDialog progress;
     private int IdOrdenCompra = 0, vIdTarea=0;
+    private List<Integer> pListaPedidos = new ArrayList<>();
+    private clsBeTrans_pe_enc gBePedido = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,13 +213,20 @@ public class frm_lista_tareas_recepcion extends PBase {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        if (event.getRepeatCount() >  0) {
+                            Log.e("EnterKeyPress", "Ignorando repetición de tecla.");
+                            return true;
+                        }
+
                         if (!txtTarea.getText().toString().isEmpty()) {
                             if (gl.tipoTarea == 1) {
-                                if (gl.Interface_SAP){
+                                if (gl.Interface_SAP) {
                                     execws(8);
-                                }else{
+                                } else {
                                     execws(6);
                                 }
+                            } else if (gl.tipoTarea == 6) {
+                                execws(9);
                             } else {
                                 GetFila();
                             }
@@ -277,6 +290,18 @@ public class frm_lista_tareas_recepcion extends PBase {
                                          "pCodigo",txtTarea.getText().toString().replace("$",""),
                                                "pIdOperadorBodega",gl.OperadorBodega.getIdOperadorBodega());
                         break;
+                    case 9:
+                        String producto = txtTarea.getText().toString();
+                        Gson gson = new Gson();
+                        String Lista =  gson.toJson(pListaPedidos);
+
+                        callMethod("Get_Verificacion_By_Producto_And_Pedido",
+                                "pProducto",producto, "pListaPedidos", Lista);
+                        break;
+                    case 10:
+                        callMethod("Get_Single_By_IdPedidoEnc",
+                                "pIdPedidoEnc",gl.pIdPedidoEnc);
+                        break;
                 }
 
                 anim.cancel();
@@ -313,6 +338,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                     break;
                 case 8:
                     processListaOrdenCompra();
+                    break;
+                case 9:
+                    processDetallePedido();
+                    break;
+                case 10:
+                    processEncabezadoPedido();
                     break;
             }
 
@@ -445,6 +476,7 @@ public class frm_lista_tareas_recepcion extends PBase {
 
         clsBeTrans_pe_enc vItem;
         BeListTareasPedido.clear();
+        pListaPedidos.clear();
         int count;
 
         try{
@@ -478,7 +510,7 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Picking.IdPrioridadPicking = BePedEnc.Picking.IdPrioridadPicking;
 
                         BeListTareasPedido.add(vItem);
-
+                        pListaPedidos.add(vItem.IdPedidoEnc);
                     }
 
                     count = BeListTareasPedido.size();
@@ -755,6 +787,60 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.cancel();
         } catch (Exception e) {
             mu.msgbox("processIdOrdenCompra: "+e.getMessage());
+        }
+    }
+
+    private void processDetallePedido(){
+        clsBeDetallePedidoAVerificar detalle = null;
+
+        try {
+            progress.setMessage("Obteniendo detalle verificación..");
+
+            detalle = xobj.getresult(clsBeDetallePedidoAVerificar.class,"Get_Verificacion_By_Producto_And_Pedido");
+
+
+            if (detalle != null) {
+                gl.pIdPedidoEnc = detalle.IdPedidoEnc;
+                gl.gIdPedidoEnc = detalle.IdPedidoEnc;
+                gl.gBePedidoDetVerif = detalle;
+                gl.gBePedidoDetVerif.Fecha_Vence = app.strFecha(gl.gBePedidoDetVerif.Fecha_Vence);
+                execws(10);
+            } else {
+                msgbox("No se encontró  el producto ó el producto no se ha pickeado.");
+            }
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+    }
+
+    private void processEncabezadoPedido(){
+        try{
+            progress.setMessage("Cargando datos del encabezado del pedido...");
+            progress.show();
+
+            gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
+
+            gl.gIdPickingEnc = gBePedido.IdPickingEnc;
+            gl.EmpaqueTarima = gBePedido.TipoPedido.Empaque_Tarima;
+
+            progress.setMessage("Cargando detalle del Picking Ubic");
+
+            if (gl.gIdPickingEnc>0){
+                gl.gBePickingUbicList = gBePedido.Picking.getListaPickingUbic();
+                gl.VerificacionSinLoteFechaVen = gl.VerificacionConsolidada;
+                browse=6;
+
+                startActivity(new Intent(this, frm_verificacion_datos.class));
+            }else{
+                progress.cancel();
+            }
+
+        } catch (Exception e) {
+            progress.cancel();
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 

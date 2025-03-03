@@ -85,6 +85,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Restringir_Areas_SAP = false;
     @Element(required=false) public boolean Control_Pallet_Mixto = false;
     @Element(required=false) public boolean Despacho_Automatico_HH = false;
+    @Element(required=false) public boolean Limpiar_Campos = false;
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -116,7 +117,7 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Liberar_Stock_Despachos_Parciales,
                        boolean Escanear_Licencia_Picking, int IdTipoEtiquetaLicencia, int IdSimbologiaLicencia,
                        boolean Interface_SAP, boolean Restringir_Areas_SAP, boolean Control_Pallet_Mixto,
-                       boolean Despacho_Automatico_HH) {
+                       boolean Despacho_Automatico_HH, boolean Limpiar_Campos) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -193,6 +194,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Restringir_Areas_SAP = Restringir_Areas_SAP;
         this.Control_Pallet_Mixto = Control_Pallet_Mixto;
         this.Despacho_Automatico_HH = Despacho_Automatico_HH;
+        this.Limpiar_Campos = Limpiar_Campos;
     }
 
     public int getIdPais() {
@@ -706,4 +708,6 @@ public class clsBeBodega extends clsBeBodegaBase {
     public void setDespacho_Automatico_HH(boolean value) {
         Despacho_Automatico_HH=value;
     }
+    public boolean getLimpiar_Campos() { return Limpiar_Campos; }
+    public void setLimpiar_Campos(boolean v) { Limpiar_Campos = v; }
 }

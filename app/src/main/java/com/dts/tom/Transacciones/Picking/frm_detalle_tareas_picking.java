@@ -145,6 +145,7 @@ public class frm_detalle_tareas_picking extends PBase {
             lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
 
             gl.mostar_filtros = false;
+            gl.autoLoad = false;
             gl.termino = "";
             ListRackSel.clear();
             ListRack.clear();
@@ -183,40 +184,36 @@ public class frm_detalle_tareas_picking extends PBase {
     private void setHandlers() {
 
         try {
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //#EJC20220403: Force scan location...
-                    if (areaprimera) {
-                        listView.setClickable(false);
-                        toast("Por favor, escaneé la ubicación");
-                        txtUbicacionFiltro.requestFocus();
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                //#EJC20220403: Force scan location...
+                if (areaprimera) {
+                    listView.setClickable(false);
+                    toast("Por favor, escaneé la ubicación");
+                    txtUbicacionFiltro.requestFocus();
+                } else {
+                    selid = 0;
+                    //AT 20211222 No importa que la posición sea = a 0
+                    Object lvObj = listView.getItemAtPosition(position);
+                    clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
+                    selitem = new clsBeTrans_picking_ubic();
+                    //selitem = BeListPickingUbic.get(position);
+                    selitem = sitem;
+
+                    selid = sitem.IdPickingUbic;
+                    selidx = position;
+
+                    if (gl.TipoPantallaPicking == 3) {
+                        adapter3.getItem(position);
                     } else {
-                        selid = 0;
-                        //AT 20211222 No importa que la posición sea = a 0
-                        Object lvObj = listView.getItemAtPosition(position);
-                        clsBeTrans_picking_ubic sitem = (clsBeTrans_picking_ubic) lvObj;
-                        selitem = new clsBeTrans_picking_ubic();
-                        //selitem = BeListPickingUbic.get(position);
-                        selitem = sitem;
-
-                        selid = sitem.IdPickingUbic;
-                        selidx = position;
-
-                        if (gl.TipoPantallaPicking == 3) {
-                            adapter3.getItem(position);
+                        if (areaprimera) {
+                            adapter2.getItem(position);
                         } else {
-                            if (areaprimera) {
-                                adapter2.getItem(position);
-                            } else {
-                                adapter.getItem(position);
-                            }
+                            adapter.getItem(position);
                         }
-
-                        procesar_registro();
                     }
-                }
 
+                    procesar_registro();
+                }
             });
 
             cmbOrdenadorPor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -255,34 +252,32 @@ public class frm_detalle_tareas_picking extends PBase {
             });
 
 
-            txtUbicacionFiltro.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            txtUbicacionFiltro.setOnClickListener(view -> {});
 
-                }
-            });
+            txtUbicacionFiltro.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-            txtUbicacionFiltro.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
-                        //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
-                        String ubicacion=txtUbicacionFiltro.getText().toString();
-
-                        if (!ubicacion.isEmpty()){
-                            if (isNumeric(ubicacion)){
-                                execws(5);
-                            }else{
-                                msgbox("La ubicación debe ser numérica " + ubicacion );
-                            }
-                        }
+                    if (event.getRepeatCount() > 0) {
+                        Log.e("EnterKeyPress", "Ignorando repetición.");
+                        return true;
                     }
 
-                    return false;
-                }
-            });
+                    //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
+                    String termino = txtUbicacionFiltro.getText().toString();
 
+                    if (termino.isEmpty()) {
+                        msgbox("Debe ingresar una ubicación o licencia.");
+                        return true;
+                    }
+
+                    if (isNumeric(termino)){
+                        execws(5);
+                    } else {
+                        procesaLicencia(termino);
+                    }
+                }
+                return false;
+            });
         } catch (Exception e) {
             mu.msgbox("setHandles:" + e.getMessage());
         }
@@ -324,6 +319,95 @@ public class frm_detalle_tareas_picking extends PBase {
                 relFiltros.setVisibility(gl.mostar_filtros ? View.VISIBLE : View.GONE);
             }
         });
+
+    }
+
+    private void procesaLicencia(String termino) {
+        boolean exite = false;
+        try {
+            for (clsBeTrans_picking_ubic r:BeListPickingUbic){
+                if (termino.equals(r.Lic_plate)){
+                    selitem = r;
+                    selid = r.IdPickingUbic;
+                    exite = true;
+                    break;
+                }
+            }
+
+            if (!exite) {
+                msgbox("No se encontro la licencia: " + termino);
+                return;
+            }
+
+
+            gl.autoLoad = true;
+            clsBeTrans_picking_ubicList pSubListPickingU = new clsBeTrans_picking_ubicList();
+
+            if (TipoLista == 1) {//Resumido
+
+                clsBeTrans_picking_ubic ubi = new clsBeTrans_picking_ubic();
+
+                txtUbicacionFiltro.setText(""+selitem.Lic_plate);
+
+                pSubListPickingU.items = stream(plistPickingUbi.items).where(c->c.Lic_plate == selitem.Lic_plate).toList();
+
+                if (gBePicking.Detalle_operador) {
+
+                    if (pSubListPickingU!=null){
+
+                        if (pSubListPickingU.items!=null){
+
+                            for (clsBeTrans_picking_ubic ubicacion: pSubListPickingU.items){
+
+                                clsBeTrans_picking_ubic finalUbi = ubicacion;
+
+                                gbePickingDet = stream(gBePicking.ListaPickingDet.items).where(c -> c.IdPickingDet == finalUbi.IdPickingDet).first();
+
+                                if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
+                                    msgIngresaDetalle("Este picking no está asignado a este operador- ¿Quiere continuar con la tarea?");
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }else{
+                    AbreFormaDatos();
+                }
+
+            } else if (TipoLista == 2) {//Detallado
+
+                txtUbicacionFiltro.setText(""+selitem.Lic_plate);
+
+                if (gBePicking.Detalle_operador) {
+
+                    if (gBePicking.ListaPickingDet != null) {
+
+                        if (gBePicking.ListaPickingDet.items != null) {
+
+                            gbePickingDet = stream(gBePicking.ListaPickingDet.items).where(c -> c.IdPickingDet == selitem.IdPickingDet).first();
+
+                            if (gbePickingDet.IdOperadorBodega != gl.OperadorBodega.IdOperadorBodega) {
+                                msgIngresaDetalle("Este picking no está asignado a este operador- ¿Quiere continuar con la tarea?");
+                            }else{
+                                AbreFormaDatos();
+                            }
+
+                        }
+                    }
+                }else{
+                    AbreFormaDatos();
+                }
+
+            }
+
+            txtFiltro.setText("");
+
+        } catch (Exception e) {
+            mu.msgbox("procesar_registro:" + e.getMessage());
+        }
 
     }
 
@@ -496,6 +580,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    gl.autoLoad = false;
                     return;
                 }
             });
@@ -1182,6 +1267,7 @@ public class frm_detalle_tareas_picking extends PBase {
             if (browse==1){
                 browse=0;
                 txtUbicacionFiltro.setText("");
+                gl.autoLoad = false;
 
                 //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
                 if (TipoLista > 0) {

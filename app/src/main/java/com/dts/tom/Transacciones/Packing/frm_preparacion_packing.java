@@ -213,8 +213,8 @@ public class frm_preparacion_packing extends PBase {
             });
 
             btnBuscars.setOnClickListener(view -> {
-                doList(view);
                 btnBuscars.setEnabled(false);
+                doList(view);
             });
 
         } catch (Exception e){
@@ -329,6 +329,7 @@ public class frm_preparacion_packing extends PBase {
                     }
                 }
 
+                obj.Cantidad_Verificada = mu.round(obj.Cantidad_Verificada,6);
                 if ((obj.Cantidad_Verificada - obj.getCantidad_despachada()) != cant) {
                     pendientes++;
                 }
@@ -342,6 +343,7 @@ public class frm_preparacion_packing extends PBase {
         }
         lblPend.setText("Pendiente : "+pendientes);
         txtLP.setText("");focusLP();
+        btnBuscars.setEnabled(true);
     }
 
     private void processListUbic(){
@@ -351,7 +353,15 @@ public class frm_preparacion_packing extends PBase {
 
             pick=xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_PickingEnc");
 
-            execws(2);
+            //#AT20250211 Si no se obtiene la lista de picking,
+            //ya no se continua el proceso, ya que dentro del case 2 se llama
+            //a la funcion listItems() que hace uso de pick.items
+            if (pick.items.size() > 0) {
+                execws(2);
+            } else {
+                btnBuscars.setEnabled(true);
+                msgbox("No se pudo obtener la lista de Picking");
+            }
         } catch (Exception e) {
             hideProgressDialog();
             btnBuscars.setEnabled(true);
@@ -375,7 +385,6 @@ public class frm_preparacion_packing extends PBase {
             } catch (Exception e) {}
 
             listItems();
-            btnBuscars.setEnabled(true);
 
        } catch (Exception e) {
             hideProgressDialog();

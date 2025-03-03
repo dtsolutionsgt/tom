@@ -3393,7 +3393,6 @@ public class frm_recepcion_datos extends PBase {
 
             }
 
-
         }catch (Exception e){
             mu.msgbox("CargarDatos: "+e.getMessage());
         }
@@ -7106,10 +7105,11 @@ public class frm_recepcion_datos extends PBase {
                     }
                 }
 
-            }else{
-                mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
+           }else{
+                //#CKFK20250210 Este sino no aplica, hay que buscar otra forma de validar el error que dio en CEALSA
+                /*mu.msgbox("¡ERROR!, reporte al equipo de desarrollo");
                 progress.cancel();
-                lResult = false;
+                lResult = false;*/
             }
 
             BeTransReDet.MotivoDevolucion = new  clsBeMotivo_devolucion();
