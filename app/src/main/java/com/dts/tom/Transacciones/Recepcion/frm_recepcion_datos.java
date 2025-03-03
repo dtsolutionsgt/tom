@@ -3686,6 +3686,7 @@ public class frm_recepcion_datos extends PBase {
 
         try{
 
+            /*prueba gt */
             progress.setMessage("Procesando valores int. ref. #20210601");
 
             if (!pListTransRecDet.items.get(0).Lic_plate.isEmpty()) {
