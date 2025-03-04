@@ -86,21 +86,6 @@ public class frm_list_packing_cerrados extends PBase {
                         msgbox("Debe ingresar un pedido o referencia.");
                     }
 
-                    /*if (procesando) {
-                        return  true;
-                    }
-
-                    procesando = true;
-                    new Handler().postDelayed(() -> {
-                        if (!txtFiltro.getText().toString().isEmpty()) {
-                            execws(1);
-                            procesando = false;
-                        } else {
-                            progress.cancel();
-                            msgbox("Debe ingresar un pedido o referencia.");
-                        }
-                    }, 200); // Cambia el tiempo según la duración de tu proceso*/
-
                 }
                 return false;
             });
@@ -224,13 +209,15 @@ public class frm_list_packing_cerrados extends PBase {
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%3$s^FS \n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^FT130,160^A0I,150,50^FH^FDCol %5$s^FS \n" +
+                                        "^FT130,210^A0I,100,40^FH^FDCol %5$s^FS \n" +
+                                        "^FT130,110^A0I,100,40^FH^FD%6$s^FS \n" +
                                         "^XZ",
                                         gl.CodigoBodega + " - " + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         "$" + Licencia,
                                         gl.IdOperador + " " + gl.gNomOperador + " / " + du.Fecha_Completa(),
-                                        bodDestino);
+                                        bodDestino,
+                                        txtFiltro.getText());
 
                     } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {
                         zpl = String.format("^XA\n" +

@@ -225,8 +225,9 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.6.7";
+    public final String version="6.7.6";
     public boolean VerificacionSinLoteFechaVen = false;
+    public String gBodega_Destino = "";
 
     public String referenciaPedido="";
 
@@ -301,6 +302,7 @@ public class appGlobals extends Application {
         listValidDevices.add("MC21");
         listValidDevices.add("h31");
         listValidDevices.add("h33");
+        listValidDevices.add("h35");
         }
 
     public <T> List<T> getList(String jsonArray, Class<T> clazz) {

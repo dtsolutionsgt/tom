@@ -615,6 +615,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
             gl.gFotografiaVerificacion= gBePedido.Picking.Fotografia_Verificacion;
             gl.EmpaqueTarima = gBePedido.TipoPedido.Empaque_Tarima;
+            gl.gBodega_Destino = gBePedido.getBodega_Destino();
 
             lblNoDocumento.setText(String.format("Pedido:%s Referencia:%s \n Cliente: %s \n Destino: %s", gl.pIdPedidoEnc,
                     gBePedido.Referencia, gBePedido.Cliente.Nombre_comercial, gBePedido.Bodega_Destino));

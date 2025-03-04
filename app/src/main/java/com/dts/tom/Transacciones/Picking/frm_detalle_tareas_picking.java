@@ -39,6 +39,8 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_det;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI_List;
 import com.dts.classes.extListChkDlg;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking2;
 import com.dts.ladapt.list_adapt_detalle_tareas_picking3;
@@ -432,8 +434,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
             AuxBePickingUbic.clear();
             for (clsBeTrans_picking_ubic obj : BeListPickingUbic) {
-
-                if (obj.CodigoProducto.toLowerCase().contains(termino.toLowerCase()) || obj.NombreProducto.toLowerCase().contains(termino.toLowerCase())) {
+                if (obj.CodigoProducto.equalsIgnoreCase(termino) || obj.NombreProducto.equalsIgnoreCase(termino)) {
                     AuxBePickingUbic.add(obj);
                 }
             }
@@ -628,7 +629,7 @@ public class frm_detalle_tareas_picking extends PBase {
             progress_setMessage("Obteniendo picking Fase 2...");
 
             if (gl.gIdPickingEnc>0){
-                execws(1);
+               execws(1);
             }
 
         }catch (Exception e){
@@ -678,7 +679,7 @@ public class frm_detalle_tareas_picking extends PBase {
 
                             val =  obj.NombreUbicacion.split("-");
 
-                            //#AT20240902 Solo se toma en cuenta el rack, sin agregarle nivels
+                            //#AT20240902 Solo se toma en cuenta el rack, sin agregarle niveles
                             if (val.length > 0) {
                                 Rack = val[0].trim();
                             }
@@ -796,11 +797,13 @@ public class frm_detalle_tareas_picking extends PBase {
                 if (btnRes_Det.getText().toString().equals("C.")){
                     btnRes_Det.setText("D.");
                     TipoLista=2;
-                    execws(3);
+                    //execws(3);
+                    execws(6);
                 }else{
                     btnRes_Det.setText("C.");
                     TipoLista=1;
-                    execws(3);
+                    //execws(3);
+                    execws(6);
                 }
 
             }, 200); // Cambia el tiempo según la duración de tu proceso
@@ -1085,6 +1088,13 @@ public class frm_detalle_tareas_picking extends PBase {
                     case 5:
                         callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicacionFiltro.getText().toString(),"pIdBodega",gl.IdBodega);
                         break;
+                    case 6:
+                        callMethodJsonPost("Get_All_PickingUbic_By_IdPickingEnc_Tipo_Json",
+                                "pIdPickingEnc",gl.gIdPickingEnc,
+                                      "pDetalleOperador",gBePicking.Detalle_operador,
+                                      "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,
+                                      "Tipo",TipoLista);
+                        break;
                 }
 
                 //progress.cancel();
@@ -1116,6 +1126,9 @@ public class frm_detalle_tareas_picking extends PBase {
                     break;
                 case 5:
                     processGetUbicacion();
+                    break;
+                case 6:
+                    processGetAllPickingUbic_Json();
                     break;
             }
 
@@ -1159,9 +1172,11 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            plistPickingUbi = gBePicking.ListaPickingUbic;
+            execws(6);
 
-            Lista_Detalle_Picking();
+           /* plistPickingUbi = gBePicking.ListaPickingUbic;
+
+            Lista_Detalle_Picking();*/
 
         }catch (Exception e){
             progress.cancel();
@@ -1185,6 +1200,38 @@ public class frm_detalle_tareas_picking extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
+        }
+    }
+
+    private void processGetAllPickingUbic_Json(){
+
+        try{
+
+           /* plistPickingUbi = xobj.getresult(clsBeTrans_picking_ubicList.class,"Get_All_PickingUbic_By_IdPickingEnc_Tipo");
+            Lista_Detalle_Picking();
+            Lista_Detalle();
+
+            if (!gl.termino.isEmpty()){
+                Filtro();
+            }*/
+
+            String jsonArray = ws.xmlresult;
+            List<clsBeTrans_picking_ubic> vListStock2 = gl.getList(jsonArray, clsBeTrans_picking_ubic.class);
+            if(vListStock2 != null){
+                plistPickingUbi = new clsBeTrans_picking_ubicList();
+                plistPickingUbi.items = vListStock2;
+            }
+            Lista_Detalle_Picking();
+            Lista_Detalle();
+
+            if (!gl.termino.isEmpty()){
+                Filtro();
+            }
+
+        }catch (Exception e){
+            mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
+        }finally {
+            procesando = false;
         }
     }
 
@@ -1271,7 +1318,8 @@ public class frm_detalle_tareas_picking extends PBase {
 
                 //Llamar execws(3); ya que carga el detalle según el tipo de lista 1:Consolidado 2:Detallado
                 if (TipoLista > 0) {
-                    execws(3);
+                   //execws(3);
+                   execws(6);
                 } else {
                     execws(1);
                 }

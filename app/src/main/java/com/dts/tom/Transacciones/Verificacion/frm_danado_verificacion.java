@@ -325,7 +325,7 @@ public class frm_danado_verificacion extends PBase {
                     case 1:
                         callMethod("Get_Estados_By_IdPropietario_And_IdBodegaHH",
                                    "pIdPropietario",gBeProducto.Propietario.IdPropietario,
-                                   "pIdBod0.ega",gl.IdBodega);
+                                   "pIdBodega",gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Ubicacion_Valida_By_IdUbicacion_And_IdEstado",

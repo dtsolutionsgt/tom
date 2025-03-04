@@ -71,7 +71,8 @@ public class frm_verificacion_datos extends PBase {
     private ProgressDialog progress;
 
     private EditText txtVenceVeri,txtCantVeri,txtPesoVeri, txtUmbasVeri, txtLoteVeri, txtCajas, txtUnidades, txtPreSol, txtPresRec, txtUnidadSol, txtUnidadRec;
-    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri, lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec;
+    private TextView lblTituloForma,lblLicPlate2,lblVenceVeri,lblCantVeri,lblPesoVeri, lblUmbasVeri, lblLoteVeri,
+            lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec, txtBodegaDestino;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
     private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo,llBono;
@@ -181,10 +182,17 @@ public class frm_verificacion_datos extends PBase {
         relOpciones = findViewById(R.id.relOpciones);
         llBono = findViewById(R.id.llBono);
         chkBono = findViewById(R.id.chkBono);
+        txtBodegaDestino = findViewById(R.id.txtBodegaDestino);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
         gl.PackingAuto = false;
+
+        if (gl.gBodega_Destino.isEmpty()){
+            txtBodegaDestino.setText("");
+        }else{
+            txtBodegaDestino.setText("Destino:" + gl.gBodega_Destino + "\n No.Pedido: " + gl.gIdPedidoEnc);
+        }
 
         setCurrentDateOnView();
 
@@ -383,7 +391,7 @@ public class frm_verificacion_datos extends PBase {
 
             if (gl.VerificacionSinLoteFechaVen) {
                 lblTituloForma.setText(String.format("Prod: %s-%s %s %s",
-                        Codigo, Nombre, "\n IR: " + vIndiceRotacion, " - TP:" + vTipoProducto));
+                        Codigo, Nombre,"\n IR: " + vIndiceRotacion, " - TP:" + vTipoProducto));
             }else{
                 lblTituloForma.setText(String.format("Prod: %s-%s Expira: %s Lote: %s",
                         Codigo, Nombre, Expira, Lote));

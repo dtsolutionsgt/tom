@@ -236,6 +236,8 @@ public class frm_preparacion_packing extends PBase {
         int count = 0;
         double cantidad = 0;
         clsBeTrans_packing_enc item;
+        String producto="";
+        double empacado=0, verificado=0;
 
         try {
 
@@ -332,7 +334,14 @@ public class frm_preparacion_packing extends PBase {
                 obj.Cantidad_Verificada = mu.round(obj.Cantidad_Verificada,6);
                 if ((obj.Cantidad_Verificada - obj.getCantidad_despachada()) != cant) {
                     pendientes++;
+                    producto=obj.CodigoProducto;
+                    verificado = (obj.Cantidad_Verificada - obj.getCantidad_despachada());
+                    empacado = cant;
                 }
+            }
+
+            if (pendientes==1){
+                toastlong("Pendiente " + producto + ", Verificado: " + verificado + ", Packing: " + empacado );
             }
 
             lblProc.setText("Procesado : "+(pick.items.size() - pendientes));
@@ -1253,13 +1262,15 @@ public class frm_preparacion_packing extends PBase {
                                         "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
                                         "^FD%3$s^FS \n" +
                                         "^PQ1,0,1,Y \n" +
-                                        "^FT130,160^A0I,150,50^FH^FDCol %5$s^FS \n" +
+                                        "^FT130,210^A0I,100,40^FH^FDCol %5$s^FS \n" +
+                                        "^FT130,110^A0I,100,40^FH^FD%6$s^FS  \n" +
                                         "^XZ",
                                         gl.CodigoBodega + " - " + gl.gNomBodega,
                                         gl.gNomEmpresa,
                                         "$" + pNumeroLP,
                                         gl.IdOperador + " " + gl.gNomOperador + " / " + du.Fecha_Completa(),
-                                        gl.referenciaPedido );
+                                        gl.referenciaPedido,
+                                        IdPedidoEnc);
 
                     } else if (gl.pBeBodega.IdTipoEtiquetaLicencia == 2) {
                         zpl = String.format("^XA\n" +

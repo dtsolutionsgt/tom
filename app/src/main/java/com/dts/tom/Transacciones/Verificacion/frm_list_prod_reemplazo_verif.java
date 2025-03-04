@@ -39,7 +39,6 @@ import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.Cant
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.gBeProducto;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
 
-
 public class frm_list_prod_reemplazo_verif extends PBase {
 
     private frm_list_prod_reemplazo_verif.WebServiceHandler ws;
@@ -99,7 +98,6 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         setHandlers();
 
         ProgressDialog("Listando existencias de producto:"+gBeProducto.Codigo);
-
 
         StockResReemplazo = new clsBeStock_res();
 
@@ -647,11 +645,13 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 AuxList = stream(pSubListPickingU.items)
                         .where(z -> z.CodigoProducto.equals(BePedidoDetVerif.Codigo))
                         .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() != 0)
+                        .where(z -> z.getIdPedidoEnc() == BePedidoDetVerif.getIdPedidoEnc())
                         .toList();
             } else {
                 AuxList = stream(pSubListPickingU.items)
                         .where(z -> z.getIdPedidoDet() == BePedidoDetVerif.getIdPedidoDet())
                         .where(z -> z.getCantidad_Recibida() - z.getCantidad_Verificada() != 0)
+                        .where(z -> z.getIdPedidoEnc() == BePedidoDetVerif.getIdPedidoEnc())
                         .toList();
             }
 

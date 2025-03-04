@@ -565,6 +565,19 @@
             android:background="@drawable/back"
             android:onClick="Regresar" />
 
+        <TextView
+            android:id="@+id/txtBodegaDestino"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/btnBack"
+            android:gravity="center_vertical"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
     </RelativeLayout>
 
     <RelativeLayout

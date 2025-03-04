@@ -25,6 +25,7 @@ import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
 import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_encList;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_encList;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
@@ -299,8 +300,12 @@ public class frm_lista_tareas_recepcion extends PBase {
                                 "pProducto",producto, "pListaPedidos", Lista);
                         break;
                     case 10:
-                        callMethod("Get_Single_By_IdPedidoEnc",
-                                "pIdPedidoEnc",gl.pIdPedidoEnc);
+                        /*callMethod("Get_Single_By_IdPedidoEnc",
+                                "pIdPedidoEnc",gl.pIdPedidoEnc);*/
+                        String codigo = txtTarea.getText().toString();
+                        callMethod("Get_Single_By_IdPedidoEnc_Json",
+                                "pIdPedidoEnc",gl.pIdPedidoEnc,
+                                     "pCodigoProducto",codigo);
                         break;
                 }
 
@@ -798,7 +803,6 @@ public class frm_lista_tareas_recepcion extends PBase {
 
             detalle = xobj.getresult(clsBeDetallePedidoAVerificar.class,"Get_Verificacion_By_Producto_And_Pedido");
 
-
             if (detalle != null) {
                 gl.pIdPedidoEnc = detalle.IdPedidoEnc;
                 gl.gIdPedidoEnc = detalle.IdPedidoEnc;
@@ -820,7 +824,12 @@ public class frm_lista_tareas_recepcion extends PBase {
             progress.setMessage("Cargando datos del encabezado del pedido...");
             progress.show();
 
-            gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
+            //gBePedido =  xobj.getresult(clsBeTrans_pe_enc.class,"Get_Single_By_IdPedidoEnc");
+
+            String jsonArray = ws.xmlresult;
+            jsonArray = jsonArray.substring(0,jsonArray.indexOf("<!DOCTYPE html><html>"));
+            Gson gson = new Gson();
+            gBePedido = gson.fromJson(jsonArray,clsBeTrans_pe_enc.class);
 
             gl.gIdPickingEnc = gBePedido.IdPickingEnc;
             gl.EmpaqueTarima = gBePedido.TipoPedido.Empaque_Tarima;
@@ -830,9 +839,19 @@ public class frm_lista_tareas_recepcion extends PBase {
             if (gl.gIdPickingEnc>0){
                 gl.gBePickingUbicList = gBePedido.Picking.getListaPickingUbic();
                 gl.VerificacionSinLoteFechaVen = gl.VerificacionConsolidada;
+                gl.gBodega_Destino = gBePedido.Bodega_Destino;
+                gl.referenciaPedido = gl.gBodega_Destino.substring(0,2);
+
+                txtTarea.setText("");
+
                 browse=6;
 
-                startActivity(new Intent(this, frm_verificacion_datos.class));
+               /* if (gBePedido.TipoPedido.Empaque_Tarima){
+                    startActivity(new Intent(this, frm_detalle_tareas_verificacion.class));
+                }else{*/
+                    startActivity(new Intent(this, frm_verificacion_datos.class));
+               // }
+
             }else{
                 progress.cancel();
             }
