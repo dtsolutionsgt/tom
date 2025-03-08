@@ -20,13 +20,16 @@ public class clsBeImpresora {
     @Element(required=false) public int IdImpresoraMarca=0;
     @Element(required=false) public int IdLenguaje=0;
     @Element(required=false) public int IdTipoConexion=0;
+    @Element(required=false) public int Puerto=0;
+    @Element(required=false) public double Velocidad=0;
+    @Element(required=false) public boolean Es_Movil= false;
 
     public clsBeImpresora() {
     }
 
     public clsBeImpresora(int IdImpresora,int IdEmpresa,String Nombre,String Direccion_Ip,
                           String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                          boolean Activo,String mac_adress,int IdBodega) {
+                          boolean Activo,String mac_adress,int IdBodega, int Puerto, double Velocidad, boolean Es_Movil) {
 
         this.IdImpresora=IdImpresora;
         this.IdEmpresa=IdEmpresa;
@@ -38,8 +41,9 @@ public class clsBeImpresora {
         this.Fec_mod=Fec_mod;
         this.Activo=Activo;
         this.mac_adress=mac_adress;
-        this.IdBodega=IdBodega;
-
+        this.Puerto=Puerto;
+        this.Velocidad=Velocidad;
+        this.Es_Movil=Es_Movil;
     }
 
 
