@@ -589,7 +589,7 @@ public class frm_inv_cic_guardar extends PBase {
 
                 BeTrans_inv_ciclico.Idoperador =  gl.IdOperador;
                 BeTrans_inv_ciclico.User_agr = gl.gNomOperador;
-                BeTrans_inv_ciclico.lic_plate = txtLicencia.getText().toString();
+                BeTrans_inv_ciclico.lic_plate = txtLicencia.getText().toString().replace("$", "");
 
                 try {
                     fecha_vence = du.getFechaActual();
