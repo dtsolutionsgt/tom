@@ -116,10 +116,7 @@ public class frm_inv_cic_nuevo extends PBase {
             mu.msgbox("Load:"+e.getMessage());
         }
 
-
-
     }
-
 
     private void setHandlers() {
         try{

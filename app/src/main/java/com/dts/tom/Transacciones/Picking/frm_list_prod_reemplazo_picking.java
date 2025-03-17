@@ -119,7 +119,6 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             StockResReemplazo.Lic_plate = gBePickingUbic.Lic_plate;
         }
 
-
         try {
             if (! gBePickingUbic.Fecha_Vence.contains("T")){
                 StockResReemplazo.Fecha_vence = du.convierteFecha(gBePickingUbic.Fecha_Vence);

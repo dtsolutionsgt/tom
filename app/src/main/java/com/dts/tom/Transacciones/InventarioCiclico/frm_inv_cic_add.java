@@ -1117,7 +1117,7 @@ public class frm_inv_cic_add extends PBase {
                         pitem.Cantidad = pitem.Cantidad * vFactor;
                     }
 
-                    pitem.lic_plate = txtLicencia.getText().toString();
+                    pitem.lic_plate = txtLicencia.getText().toString().replace("$","");
                     pitem.Fec_agr = du.Fecha_CompletaT();
                     pitem.Idoperador = gl.IdOperador;
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
@@ -1170,7 +1170,7 @@ public class frm_inv_cic_add extends PBase {
                         pitem.Cantidad = pitem.Cantidad * vFactor;
                     }
 
-                    pitem.lic_plate = txtLicencia.getText().toString();
+                    pitem.lic_plate = txtLicencia.getText().toString().replace("$","");
                     pitem.Fec_agr = du.Fecha_CompletaT();
                     pitem.Idoperador = gl.IdOperador;
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
