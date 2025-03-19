@@ -108,6 +108,7 @@ public class clsBeProducto {
   @Element(required=false) public clsBeIndice_rotacion Indice_Rotacion=new clsBeIndice_rotacion();
 
   @Element(required=false) public int IdTipoManufactura =0;
+  @Element(required=false) public int Margen_Impresion =0;
 
 //EJC
 

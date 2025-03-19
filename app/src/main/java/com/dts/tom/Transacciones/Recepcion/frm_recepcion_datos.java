@@ -5874,6 +5874,32 @@ public class frm_recepcion_datos extends PBase {
                             BeProducto.Codigo_barra,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
+                }else if(BeProducto.IdTipoEtiqueta == 10){
+
+                    //nuevo formato de etiqueta Producto para Killios .
+                    zpl = String.format("^XA\n" +
+                                    "^MMT\n" +
+                                    "^PW609\n" +
+                                    "^LL0406\n" +
+                                    "^LS0\n" +
+                                    "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                    "^FO2,40^GB560,5,5^FS\n" +
+                                    "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
+                                    "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
+                                    "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                    "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                    "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                    "^FT560,367^A0I,25,24^FH^FDCodigo de Producto^FS\n" +
+                                    "^FO2,340^GB560,14,14^FS\n" +
+                                    "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
+                                    "^FD%4$s^FS\n" +
+                                    "^PQ1,0,1,Y\n" +
+                                    "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega,
+                            gl.gNomEmpresa,
+                            BeProducto.Codigo + " - " + BeProducto.Nombre,
+                            BeProducto.Codigo,
+                            gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
                 }
 
                 if (!zpl.isEmpty()){
@@ -6203,6 +6229,60 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
                                 BeProducto.Codigo + " - " + BeProducto.Nombre,
                                 BeProducto.Codigo_barra,
+                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
+
+                    }else if(BeProducto.IdTipoEtiqueta == 10){
+
+                        //nuevo formato importación de etiqueta Licencia para Killios .
+                        zpl = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW609\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT430,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB560,5,5^FS\n" +
+                                        "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
+                                        "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
+                                        "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT110,145^A0I,40,20^FH^FD%8$s^FS\n" +
+                                        "^FT110,200^A0I,40,20^FH^FDV.%7$s^FS\n" +
+                                        "^FT110,255^A0I,40,18^FH^FDL.%6$s^FS\n" +
+                                        "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                        "^FO2,340^GB560,14,14^FS\n" +
+                                        "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega,
+                                              gl.gNomEmpresa,
+                                              BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                              BeProducto.Codigo_barra,
+                                              gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
+                                              vLote, vFechaVence.replace("-","/"),
+                                              "");
+
+                        zplSKU = String.format("^XA\n" +
+                                        "^MMT\n" +
+                                        "^PW609\n" +
+                                        "^LL0406\n" +
+                                        "^LS0\n" +
+                                        "^FT450,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                        "^FO2,40^GB560,5,5^FS\n" +
+                                        "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
+                                        "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
+                                        "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                        "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                        "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                        "^FT560,367^A0I,25,24^FH^FDCodigo de Producto^FS\n" +
+                                        "^FO2,340^GB560,14,14^FS\n" +
+                                        "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
+                                        "^FD%4$s^FS\n" +
+                                        "^PQ1,0,1,Y\n" +
+                                        "^XZ", gl.CodigoBodega + " - " + gl.gNomBodega,
+                                gl.gNomEmpresa,
+                                BeProducto.Codigo + " - " + BeProducto.Nombre,
+                                BeProducto.Codigo,
                                 gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa());
 
                     }

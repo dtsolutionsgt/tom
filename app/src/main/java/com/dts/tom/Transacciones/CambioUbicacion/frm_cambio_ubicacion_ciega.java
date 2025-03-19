@@ -3911,24 +3911,50 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
                 if (BeStockPallet!=null){
 
-                    zpl = String.format("^XA \n" +
-                                    "^MMT \n" +
-                                    "^PW700 \n" +
-                                    "^LL0406 \n" +
-                                    "^LS0 \n" +
-                                    "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
-                                    "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
-                                    "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
-                                    "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
-                                    "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
-                                    "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
-                                    "^FO2,340^GB670,0,14^FS \n" +
-                                    "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
-                                    "^FD%4$s^FS \n" +
-                                    "^PQ1,0,1,Y " +
-                                    "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
-                            BeStockPallet.Codigo_Producto + " - " + BeStockPallet.Nombre_Producto,
-                            (!vNuevoPalletId.isEmpty() ? "$" + vNuevoPalletId: BeStockPallet.Codigo_Producto));
+                    if (BeProductoUbicacion.IdTipoEtiqueta == 10){
+                        zpl = String.format("^XA\n" +
+                                "^MMT\n" +
+                                "^PW609\n" +
+                                "^LL0406\n" +
+                                "^LS0\n" +
+                                "^FT430,21^A0I,20,14^FH^FD%5$s^FS\n" +
+                                "^FO2,40^GB560,5,5^FS\n" +
+                                "^FT220,61^A0I,30,20^FH^FD%1$s^FS\n" +
+                                "^FT470,61^A0I,30,20^FH^FD%2$s^FS\n" +
+                                "^FT560,306^A0I,30,24^FH^FD%3$s^FS\n" +
+                                "^FT110,145^A0I,40,20^FH^FD%8$s^FS\n" +
+                                "^FT110,200^A0I,40,20^FH^FDV.%7$s^FS\n" +
+                                "^FT110,255^A0I,40,18^FH^FDL.%6$s^FS\n" +
+                                "^FT300,61^A0I,30,24^FH^FDBodega:^FS\n" +
+                                "^FT560,61^A0I,30,24^FH^FDEmpresa:^FS\n" +
+                                "^FT560,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS\n" +
+                                "^FO2,340^GB560,14,14^FS\n" +
+                                "^BY3,3,160^FT560,131^BCI,,Y,N\n" +
+                                "^FD%4$s^FS\n" +
+                                "^PQ1,0,1,Y\n" +
+                                "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeStockPallet.Codigo_Producto + " - " + BeStockPallet.Nombre_Producto,
+                                (!vNuevoPalletId.isEmpty() ? "$" + vNuevoPalletId: BeStockPallet.Codigo_Producto));
+                    }else{
+                        zpl = String.format("^XA \n" +
+                                        "^MMT \n" +
+                                        "^PW700 \n" +
+                                        "^LL0406 \n" +
+                                        "^LS0 \n" +
+                                        "^FT231,61^A0I,30,24^FH^FD%1$s^FS \n" +
+                                        "^FT550,61^A0I,30,24^FH^FD%2$s^FS \n" +
+                                        "^FT670,306^A0I,30,24^FH^FD%3$s^FS \n" +
+                                        "^FT292,61^A0I,30,24^FH^FDBodega:^FS \n" +
+                                        "^FT670,61^A0I,30,24^FH^FDEmpresa:^FS \n" +
+                                        "^FT670,367^A0I,25,24^FH^FDTOMWMS No. Licencia^FS \n" +
+                                        "^FO2,340^GB670,0,14^FS \n" +
+                                        "^BY3,3,160^FT670,131^BCI,,Y,N \n" +
+                                        "^FD%4$s^FS \n" +
+                                        "^PQ1,0,1,Y " +
+                                        "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega, gl.gNomEmpresa,
+                                BeStockPallet.Codigo_Producto + " - " + BeStockPallet.Nombre_Producto,
+                                (!vNuevoPalletId.isEmpty() ? "$" + vNuevoPalletId: BeStockPallet.Codigo_Producto));
+                    }
 
                     if (!zpl.isEmpty()){
                         zPrinterIns.sendCommand(zpl);

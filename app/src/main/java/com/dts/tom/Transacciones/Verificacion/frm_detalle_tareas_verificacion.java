@@ -502,10 +502,11 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                 "pIdPedidoEnc",gl.pIdPedidoEnc);
                         break;
                     case 11:
-                        callMethod("Get_Lista_Codigos_By_CodigoBarra_By_Picking",
+                        callMethod("Get_Lista_Codigos_By_CodigoBarra_By_Picking_And_Pedido",
                                     "pCodigoBarra", txtCodProd.getText().toString(),
                                     "pIdBodega", gl.IdBodega,
-                                    "pIdPickingEnc",gl.gIdPickingEnc);
+                                    "pIdPickingEnc",gl.gIdPickingEnc,
+                                    "pIdPedidoEnc",gl.gIdPedidoEnc);
                         break;
                     case 12:
                         callMethod("Despachar_Pedido",
