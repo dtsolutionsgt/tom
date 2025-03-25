@@ -453,6 +453,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.IdPrioridadPicking = BePicking.IdPrioridadPicking;
                         vItem.NombrePrioridad = BePicking.NombrePrioridad;
                         vItem.Tiene_Manufactura = BePicking.Tiene_Manufactura;
+                        vItem.NombreMuelle = BePicking.NombreMuelle;
+                        vItem.IdBodegaMuelle = BePicking.IdBodegaMuelle;
 
                         BeListTareasPicking.add(vItem);
 
