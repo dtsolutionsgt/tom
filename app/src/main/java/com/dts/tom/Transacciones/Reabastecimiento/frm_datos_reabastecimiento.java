@@ -311,6 +311,7 @@ public class frm_datos_reabastecimiento extends PBase {
             gMovimientoDet.IdEmpresa = gl.IdEmpresa;
             gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
             gMovimientoDet.IdTransaccion = 1;
+            gMovimientoDet.IdOperadorBodega = gl.OperadorBodega.IdOperadorBodega;
             gMovimientoDet.IdPropietarioBodega = selitem.IdPropietarioBodega;
             gMovimientoDet.IdProductoBodega = selitem.IdProductoBodega;
             gMovimientoDet.IdUbicacionOrigen = selitem.IdUbicacion;
@@ -351,11 +352,11 @@ public class frm_datos_reabastecimiento extends PBase {
             gMovimientoDet.Peso = selitem.Peso;
             gMovimientoDet.Lote = selitem.Lote;
             gMovimientoDet.Fecha_vence = selitem.Fecha_Vence;
-            gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Barra_pallet = "";
-            gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Fecha = du.Fecha_CompletaT();
+            gMovimientoDet.Barra_pallet = selitem.Lic_plate;
+            gMovimientoDet.Hora_ini =  du.Fecha_CompletaT();
+            gMovimientoDet.Hora_fin =  du.Fecha_CompletaT();
+            gMovimientoDet.Fecha_agr =  du.Fecha_CompletaT();
             gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
