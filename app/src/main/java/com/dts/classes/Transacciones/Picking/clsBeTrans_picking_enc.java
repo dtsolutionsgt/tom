@@ -43,6 +43,7 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public int IdPrioridadPicking = 0;
     @Element(required=false) public String NombrePrioridad="";
     @Element(required=false) public boolean Tiene_Manufactura =false;
+    @Element(required=false) public String NombreMuelle="";
 
     public clsBeTrans_picking_enc() {
     }
