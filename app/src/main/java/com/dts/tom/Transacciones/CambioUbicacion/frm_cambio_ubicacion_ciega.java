@@ -4541,7 +4541,14 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(txtUbicDestino.getText().toString().isEmpty()){
                     msgbox("La ubicación de destino no puede ser vacía.");
                 }else{
-                    msgbox("Confirme la ubicación de destino.");
+                    if(cvUbicDestID==0 && !txtUbicDestino.getText().toString().isEmpty()){
+                        cvUbicDestID =  Integer.parseInt(txtUbicDestino.getText().toString());
+                        txtUbicDestino.requestFocus();
+                        datosCorrectos = false;
+                        return;
+                    }else{
+                        msgbox("Confirme la ubicación de destino.");
+                    }
                 }
                 txtUbicDestino.requestFocus();
                 datosCorrectos = false;

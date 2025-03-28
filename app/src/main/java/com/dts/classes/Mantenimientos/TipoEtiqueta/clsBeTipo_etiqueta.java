@@ -21,6 +21,7 @@ public class clsBeTipo_etiqueta {
     @Element(required=false) public String codigo_zpl="";
 
     @Element(required=false) public int Idclasificacion_etiqueta = 0;//#CKFK20231008 Campo faltante
+    @Element(required=false) public boolean Es_Inkjet = false;//#CKFK20250324 Campo faltante
 
     public clsBeTipo_etiqueta() {
     }
