@@ -29,7 +29,7 @@ public class clsBeTipo_etiqueta {
     public clsBeTipo_etiqueta(int IdTipoEtiqueta,String Nombre,double Alto,double Ancho,
                               double MargenIzq,double MagenDer,double MargenSup,double MargenInf,
                               String User_agr,String Fec_agr,String User_mod,String Fec_mod,
-                              boolean Activo,int dpi,String codigo_zpl, int Idclasificacion_etiqueta) {
+                              boolean Activo,int dpi,String codigo_zpl, int Idclasificacion_etiqueta, boolean Es_Inkjet) {
 
         this.IdTipoEtiqueta=IdTipoEtiqueta;
         this.Nombre=Nombre;
@@ -47,6 +47,7 @@ public class clsBeTipo_etiqueta {
         this.dpi=dpi;
         this.codigo_zpl=codigo_zpl;
         this.Idclasificacion_etiqueta = Idclasificacion_etiqueta;
+        this.Es_Inkjet = Es_Inkjet;
     }
 
 
@@ -151,6 +152,12 @@ public class clsBeTipo_etiqueta {
     }
     public void setIdclasificacion_etiqueta(int value) {
         Idclasificacion_etiqueta=value;
+    }
+    public boolean getEs_Inkjet() {
+        return Es_Inkjet;
+    }
+    public void setEs_Inkjet(boolean value) {
+        Es_Inkjet=value;
     }
 
 }

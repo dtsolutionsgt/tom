@@ -30,6 +30,11 @@ public class clsBeTrans_oc_ti {
 
     @Element(required=false) public boolean Es_Importacion = false;
 
+    @Element(required=false) public int IdProductoEstado = 0;
+    @Element(required=false) public int IdPropietario = 0;
+
+
+
 
     public clsBeTrans_oc_ti() {
 
@@ -51,7 +56,9 @@ public class clsBeTrans_oc_ti {
                             boolean Bloquear_Lotes,
                             boolean Permitir_Excedente_Lotes,
                             boolean Permitir_Vencido_Ingreso,
-                            boolean Es_Importacion
+                            boolean Es_Importacion,
+                            int IdProductoEstado,
+                            int IdPropietario
     ) {
 
         this.IdTipoIngresoOC=IdTipoIngresoOC;
@@ -71,6 +78,8 @@ public class clsBeTrans_oc_ti {
         this.Permitir_Excedente_Lotes = Permitir_Excedente_Lotes;
         this.Permitir_Vencido_Ingreso = Permitir_Vencido_Ingreso;
         this.Es_Importacion = Es_Importacion;
+        this.IdProductoEstado= IdProductoEstado;
+        this.IdPropietario = IdPropietario;
     }
 
     public int getIdTipoIngresoOC() {
@@ -216,6 +225,22 @@ public class clsBeTrans_oc_ti {
     }
     public void setEs_Importacion(boolean value) {
         Es_Importacion=value;
+    }
+
+
+    public int getIdProductoEstado() {
+        return IdProductoEstado;
+    }
+    public void setIdProductoEstado(int value) {
+        IdProductoEstado=value;
+    }
+
+
+    public int getIdPropietario() {
+        return IdPropietario;
+    }
+    public void setIdPropietario(int value) {
+        IdPropietario=value;
     }
 
 

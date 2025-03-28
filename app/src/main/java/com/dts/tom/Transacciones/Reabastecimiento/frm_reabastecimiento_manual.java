@@ -75,33 +75,24 @@ public class frm_reabastecimiento_manual extends PBase {
 
     private void setHandlers(){
         try {
-            txtCodigoPrd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            txtCodigoPrd.setOnClickListener(view -> {
 
-                }
             });
 
-            txtCodigoPrd.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        Buscar_Lista_Reabastecimiento();
-                    }
-
-                    return false;
+            txtCodigoPrd.setOnKeyListener((v, keyCode, event) -> {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    Buscar_Lista_Reabastecimiento();
                 }
+
+                return false;
             });
 
-            listExist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            listExist.setOnItemClickListener((adapterView, view, i, l) -> {
 
-                    idx = i;
-                    Object lvObj = listExist.getItemAtPosition(i);
-                    selitem = (clsBeVW_stock_res) lvObj;
-                    ProcesarRegistro();
-                }
+                idx = i;
+                Object lvObj = listExist.getItemAtPosition(i);
+                selitem = (clsBeVW_stock_res) lvObj;
+                ProcesarRegistro();
             });
 
         } catch (Exception e) {

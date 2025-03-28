@@ -68,6 +68,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblFechaPick = convertView.findViewById(R.id.lblFechaPick);
             holder.lblPrioridad = convertView.findViewById(R.id.lblPrioridad);
             holder.lblIdPedidoEnc =  convertView.findViewById(R.id.lblIdPedidoEnc);
+            holder.lblMuellePicking = convertView.findViewById(R.id.lblMuellePicking);
 //            holder.lblOperadorPick = (TextView) convertView.findViewById(R.id.lblOperadorPick);
 //            holder.lblHoraInicial = (TextView) convertView.findViewById(R.id.lblHoraInicial);
 //            holder.lblHoraFinal = (TextView) convertView.findViewById(R.id.lblHoraFinal);
@@ -129,6 +130,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder.lblPrioridad.setText("--");
         }
 
+        if (!BeListTareasHH.get(position).NombreMuelle.isEmpty()  && BeListTareasHH.get(position).IdBodegaMuelle != 0){
+            holder.lblMuellePicking.setText(""+BeListTareasHH.get(position).NombreMuelle);
+        } else {
+            holder.lblMuellePicking.setText("--");
+        }
+
         int IdPrioridadPicking = BeListTareasHH.get(position).IdPrioridadPicking;
         boolean Tiene_Manufactura = BeListTareasHH.get(position).Tiene_Manufactura;
         int IdPicking = BeListTareasHH.get(position).IdPickingEnc;
@@ -183,7 +190,7 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick, lblPrioridad, lblIdPedidoEnc;
+        TextView lblIdPickingEnc,lblBodegaPick,lblPropietarioPick,lblEstadoPick,lblFechaPick, lblPrioridad, lblIdPedidoEnc, lblMuellePicking;
     }
 
 }

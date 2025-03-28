@@ -66,7 +66,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
-    private TextView  lblBodega, lblOperador, lblTituloForma;
+    private TextView  lblBodega, lblOperador, lblTituloForma, lblMuelle;
     private ImageView btnLimpiar, btnFiltros, imgOrdenar;
     private RelativeLayout relbot, relFiltros;
 
@@ -135,6 +135,7 @@ public class frm_detalle_tareas_picking extends PBase {
             txtUbicacionFiltro = findViewById(R.id.txtUbicacionFiltro);
             lblBodega = findViewById(R.id.lblBodega);
             lblOperador = findViewById(R.id.lblOperador);
+            lblMuelle = findViewById(R.id.lblMuelle);
             lblTituloForma = findViewById(R.id.lblTituloForma);
             txtFiltro = findViewById(R.id.txtFiltro);
             btnLimpiar = findViewById(R.id.btnLimpiar);
@@ -1146,7 +1147,12 @@ public class frm_detalle_tareas_picking extends PBase {
             gBePicking =xobj.getresult(clsBeTrans_picking_enc.class,"Get_Picking_By_IdPickingEnc");
 
             if (gBePicking!=null){
-
+                if (gBePicking.IdBodegaMuelle != 0 && !gBePicking.NombreMuelle.isEmpty()) {
+                    lblMuelle.setVisibility(View.VISIBLE);
+                    lblMuelle.setText("Muelle: " + gBePicking.IdBodegaMuelle + " - " + gBePicking.NombreMuelle);
+                }  else {
+                    lblMuelle.setVisibility(View.GONE);
+                }
                 progress_setMessage("Actualizando picking a estado pendiente...");
 
                 if (gBePicking.Estado.equals("Nuevo")){

@@ -1064,6 +1064,13 @@ public class frm_inv_cic_add extends PBase {
                 toast("¡Peso incorrecto!");
                 txtPesoContado.requestFocus();
 
+            } else if (NuevoConteo && !existeConteo && !esInvCongelado && txtLicencia.getText().toString().trim().isEmpty()) {
+                toast("¡Debe ingresar una licencia!");
+                txtLicencia.requestFocus();
+
+            } else if( txtLicencia.getText().toString().trim().isEmpty()) {
+                toast("¡Debe ingresar una licencia!!");
+                txtLicencia.requestFocus();
             } else {
                 btGuardar.setEnabled(true);
 
