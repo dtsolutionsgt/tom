@@ -2087,8 +2087,16 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                         procesando = false;
                         msgbox("La ubicación de destino no puede ser vacía");
                     }else{
-                        procesando = false;
-                        msgbox("Confirme la ubicación de destino.");
+                        //#CKFK20250331 Validacion para el cambio de estado
+                        if(cvUbicDestID==0 && !txtUbicDestino.getText().toString().isEmpty()){
+                            cvUbicDestID =  Integer.parseInt(txtUbicDestino.getText().toString());
+                            txtUbicDestino.requestFocus();
+                            datosCorrectos = false;
+                            return;
+                        }else{
+                            procesando = false;
+                            msgbox("Confirme la ubicación de destino.");
+                        }
 
                     }
                     txtUbicDestino.requestFocus();
@@ -4541,6 +4549,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(txtUbicDestino.getText().toString().isEmpty()){
                     msgbox("La ubicación de destino no puede ser vacía.");
                 }else{
+                    //#CKFK20250331 Validacion para el cambio de estado
                     if(cvUbicDestID==0 && !txtUbicDestino.getText().toString().isEmpty()){
                         cvUbicDestID =  Integer.parseInt(txtUbicDestino.getText().toString());
                         txtUbicDestino.requestFocus();
@@ -4779,7 +4788,15 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(txtUbicDestino.getText().toString().isEmpty()){
                     msgbox("La ubicación de destino no puede ser vacía");
                 }else{
-                    msgbox("Confirme la ubicación de destino.");
+                    //#CKFK20250331 Validacion para el cambio de estado
+                    if(cvUbicDestID==0 && !txtUbicDestino.getText().toString().isEmpty()){
+                        cvUbicDestID =  Integer.parseInt(txtUbicDestino.getText().toString());
+                        txtUbicDestino.requestFocus();
+                        datosCorrectos = false;
+                        return;
+                    }else{
+                        msgbox("Confirme la ubicación de destino.");
+                    }
                 }
                 txtUbicDestino.requestFocus();
                 return;
