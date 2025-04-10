@@ -85,6 +85,7 @@ import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_recList;
 import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
+import com.dts.tom.Transacciones.CambioUbicacion.frm_cambio_ubicacion_ciega;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -467,6 +468,7 @@ public class frm_recepcion_datos extends PBase {
 
             //#AT20220921 Muestra campos necesarios para habilitar las copias en la recepción
             CantidadCopias = 0;
+            gl.CambioUbicRecepcion = false;
             //#CKFK20241015 Puse esto en comentario porque lo voy a llamar mas adelante
             //HabilitarCopias();
 
@@ -9261,6 +9263,18 @@ public class frm_recepcion_datos extends PBase {
             gl.CantRec = beTransOCDet.Cantidad_recibida;
 
             gl.Carga_Producto_x_Pallet=false;
+
+            //#AT20250404 Solo se debe permitir hacer el C.U cuando
+            //Permitir_Cambio_Ubic_Recepcion = true, Habilitar Stock = true y Control_Pallet_Mixto = false
+            if (gl.pBeBodega.Permitir_Cambio_Ubic_Recepcion &&
+                gl.gBeRecepcion.Habilitar_Stock &&
+                !gl.pBeBodega.Control_Pallet_Mixto) {
+
+                gl.LicenciaCUR = txtNoLP.getText().toString();
+                gl.modo_cambio = 1;
+                gl.CambioUbicRecepcion = true;
+                startActivity(new Intent(this, frm_cambio_ubicacion_ciega.class));
+            }
 
             doExit();
 

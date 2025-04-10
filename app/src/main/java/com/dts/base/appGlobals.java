@@ -269,6 +269,8 @@ public class appGlobals extends Application {
     public boolean PackingAuto = false;
     public boolean EmpaqueTarima = false;
     public boolean autoLoad = false;
+    public String LicenciaCUR = "";
+    public boolean CambioUbicRecepcion = false;
 
     @Override
     public void onCreate() {

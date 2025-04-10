@@ -315,9 +315,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                     if (!inferir_origen_en_cambio_ubic) {
                         execws(1);
                     } else {
-                        progress.cancel();
-                        txtLicPlate.requestFocus();
-                        txtUbicOrigen.setEnabled(false);
+                        if (gl.CambioUbicRecepcion) {
+                            execws(1);
+                        } else {
+                            progress.cancel();
+                            txtLicPlate.requestFocus();
+                            txtUbicOrigen.setEnabled(false);
+                        }
                     }
                 }
             }else{
@@ -331,6 +335,20 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }.getClass().getEnclosingMethod().getName() + " . " + ex.getMessage());
         }
 
+    }
+
+    private void setLicPlateCUR() {
+        try {
+            TieneReserva = false;
+            txtLicPlate.setText(gl.LicenciaCUR);
+            inicializaTareaLP();
+            Procesa_Lp();
+        } catch (Exception e) {
+            addlog(new Object() {
+            }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+            msgbox(new Object() {
+            }.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
     }
 
     private void setPropsRecycler() {
@@ -2018,6 +2036,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 cvUbicOrigID=bodega_ubicacion_origen.getIdUbicacion();
                 lblUbicCompleta.setText(bodega_ubicacion_origen.getDescripcion());
                 txtLicPlate.requestFocus();
+
+                if (gl.CambioUbicRecepcion && !gl.LicenciaCUR.isEmpty()) {
+                    setLicPlateCUR();
+                }
             }
 
             if (validarDatos){
@@ -3554,6 +3576,9 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             txtUbicDestino.setText("");
             txtPeso.setText("");
             txtCodigoPrd.setText("");
+            gl.CambioUbicRecepcion = false;
+            gl.LicenciaCUR = "";
+
             //cmbPresentacion.setEnabled(false);
 
             tblPresentacion.setVisibility(View.GONE);
