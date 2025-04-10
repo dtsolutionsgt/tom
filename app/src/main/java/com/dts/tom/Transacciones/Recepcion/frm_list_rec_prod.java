@@ -393,8 +393,9 @@ public class frm_list_rec_prod extends PBase {
     private void Continua_Validando_Barra(){
 
         try{
-
-            if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) | BeINavBarraPallet.Bodega_Destino.trim().equals(gl.gCodigoBodega)){
+            //#AT20250410 Se cambio  gl.gCodigoBodega por  gl.pBeBodega.Codigo
+            if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) |
+                    BeINavBarraPallet.Bodega_Destino.trim().equals(gl.pBeBodega.Codigo)){
 
             List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
 
