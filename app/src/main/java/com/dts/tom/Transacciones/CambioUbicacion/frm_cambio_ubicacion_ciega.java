@@ -532,8 +532,13 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 /*                        cvEstDestino = productoEstadoDestinoList.items.get(position).IdEstado;
                         cvUbicDestID = productoEstadoDestinoList.items.get(position).IdUbicacionDefecto;*/
 
+                        //#GT28032025: si tiene ubicacion segun el estado, pero sino tiene?
                         if (cvUbicDestID!=0){
                             txtUbicDestino.setText(cvUbicDestID);
+
+                            addlog(Objects.requireNonNull(new Object() {
+                            }.getClass().getEnclosingMethod()).getName(),"cmbEstadoDestino: "+ cvUbicDestID,"");
+
                         }
                     }
 
@@ -688,6 +693,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 if(intentos[0]==1){
                     Log.d("EnterKeyPress", " proceso: " + intentos[0]);
                     validaDestino(); // Llama a la función de validación
+                    procesando=false;
                 }else{
                     Log.d("EnterKeyPress", " rechazo2: " + intentos[0]);
                 }
@@ -2103,7 +2109,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 //#GT27072022-1610: el peso se recalcula solo si cambia la cantidad
                 //a reubicar, y eso se hizo cuando se digito un valor
                 //Recalcula_Peso();
-
+                
                 if(cvUbicDestID == 0){
                     if(txtUbicDestino.getText().toString().isEmpty()){
                         procesando = false;
@@ -4573,20 +4579,30 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             if(cvUbicDestID == 0 || txtUbicDestino.getText().toString().isEmpty()){
                 if(txtUbicDestino.getText().toString().isEmpty()){
                     msgbox("La ubicación de destino no puede ser vacía.");
+                    txtUbicDestino.requestFocus();
+                    datosCorrectos = false;
+                    return;
                 }else{
                     //#CKFK20250331 Validacion para el cambio de estado
                     if(cvUbicDestID==0 && !txtUbicDestino.getText().toString().isEmpty()){
                         cvUbicDestID =  Integer.parseInt(txtUbicDestino.getText().toString());
+                        //#GT31032025: si la ubicacion destino se obtiene, ejecutar proceso,
+                        //no debe retornar nuevamente al input de ubicacion destino
+
+                        //txtUbicDestino.requestFocus();
+                        //datosCorrectos = false;
+                        //return;
+                    }else{
+
+                        msgbox("Confirme la ubicación de destino.");
                         txtUbicDestino.requestFocus();
                         datosCorrectos = false;
                         return;
-                    }else{
-                        msgbox("Confirme la ubicación de destino.");
                     }
                 }
-                txtUbicDestino.requestFocus();
-                datosCorrectos = false;
-                return;
+                //txtUbicDestino.requestFocus();
+                //datosCorrectos = false;
+                //return;
             }
 
             if ((cvUbicOrigID == cvUbicDestID) && (gl.modo_cambio ==1)) {

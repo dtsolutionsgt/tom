@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -258,7 +259,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 }
             });
 
-            txtCodProd.setOnKeyListener(new View.OnKeyListener(){
+            /*txtCodProd.setOnKeyListener(new View.OnKeyListener(){
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -281,7 +282,33 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     }
                     return false;
                 }
+            });*/
+
+            txtCodProd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    // Aceptamos IME_ACTION_DONE o Enter físico desde escáner
+                    if (actionId == EditorInfo.IME_ACTION_DONE ||
+                            (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                        String cod = txtCodProd.getText().toString().trim();
+
+                        if (cod.isEmpty()) {
+                            if (VerSinLoteFechaVen) {
+                                execws(10);
+                            } else {
+                                execws(1);
+                            }
+                        } else {
+                            execws(11);
+                        }
+
+                        return true; // Consumimos el evento
+                    }
+                    return false;
+                }
             });
+
 
             imgReemplazo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -712,7 +739,8 @@ public class frm_detalle_tareas_verificacion extends PBase {
         try {
             buscarPres = false;
 
-            lBeProducto = xobj.getresult(clsBeProductoList.class, "Get_Lista_Codigos_By_CodigoBarra_By_Picking");
+            //#GT14042025: aqui habian acortado el nombre de la clase :(
+            lBeProducto = xobj.getresult(clsBeProductoList.class, "Get_Lista_Codigos_By_CodigoBarra_By_Picking_And_Pedido");
 
             if (lBeProducto != null){
                 if(lBeProducto.items != null){
