@@ -225,7 +225,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.8.1";
+    public final String version="6.8.3";
     public boolean VerificacionSinLoteFechaVen = false;
     public String gBodega_Destino = "";
 

@@ -5948,6 +5948,7 @@ public class frm_recepcion_datos extends PBase {
 
         String vFechaVence = "";
         String vLote = "";
+        String vEstadoProducto = "";
 
         try{
 
@@ -5958,9 +5959,11 @@ public class frm_recepcion_datos extends PBase {
             if (BeTransReDet!=null){
                 vLote = BeTransReDet.Lote;
                 vFechaVence = du.convierteFechaMostrar(BeTransReDet.Fecha_vence.toString());
+                vEstadoProducto = BeTransReDet.Nombre_producto_estado;
             }else{
                 vLote = txtLoteRec.getText().toString();
                 vFechaVence = cmbVenceRec.getText().toString();
+                vEstadoProducto = cmbEstadoProductoRec.getSelectedItem().toString();
             }
 
             if(pNumeroLP.isEmpty() || pNumeroLP.equals("")){
@@ -6259,10 +6262,10 @@ public class frm_recepcion_datos extends PBase {
                                         "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega,
                                               gl.gNomEmpresa,
                                               BeProducto.Codigo + " - " + BeProducto.Nombre,
-                                              BeProducto.Codigo_barra,
+                                              "$" + pNumeroLP,
                                               gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
                                               vLote, vFechaVence.replace("-","/"),
-                                              "");
+                                              vEstadoProducto);
 
                         zplSKU = String.format("^XA\n" +
                                         "^MMT\n" +

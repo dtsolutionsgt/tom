@@ -536,7 +536,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
                         String valor= gl.existencia.Fecha_Vence.toString();
                         //#AT 20211123 Se ajusta el formato a la fecha
-                        String fecha_ajustada =  du.convierteFechaSinHora(valor);
+                        String fecha_ajustada =  du.convierteFechaMostrar(valor);
 
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
@@ -593,6 +593,10 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
                     }else if(gl.existencia.IdTipoEtiqueta == 10){
 
+                        String valor= gl.existencia.Fecha_Vence.toString();
+                        //#AT 20211123 Se ajusta el formato a la fecha
+                        String fecha_ajustada =  du.convierteFechaMostrar(valor);
+
                         //nuevo formato importación de etiqueta Licencia para Killios .
 
                         zpl = String.format("^XA\n" +
@@ -620,7 +624,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                                                gl.existencia.Codigo + " - " + gl.existencia.Nombre,
                                                "$" + gl.existencia.LicPlate,
                                                gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                                              gl.existencia.Lote, gl.existencia.Fecha_Vence.replace("-","/"),
+                                              gl.existencia.Lote, fecha_ajustada.replace("-","/"),
                                               gl.existencia.Estado);
 
                     }
