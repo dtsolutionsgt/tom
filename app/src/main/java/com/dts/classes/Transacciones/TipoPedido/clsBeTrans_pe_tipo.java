@@ -31,6 +31,10 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public int IdProductoEstado=0;
     @Element(required=false) public int IdPropietario=0;
 
+    @Element(required=false) public boolean Mover_Producto_Zona_Muelle=false;
+    @Element(required=false) public boolean Escanear_Muelle_Picking=false;
+
+
     public clsBeTrans_pe_tipo() {
     }
 
@@ -52,7 +56,9 @@ public class clsBeTrans_pe_tipo {
                               boolean Permitir_Despacho_Multiple,
                               boolean Fotografia_Verificacion,
                               boolean Es_Devolucion,
-                              boolean Empaque_Tarima
+                              boolean Empaque_Tarima,
+                              boolean Mover_Producto_Zona_Muelle,
+                              boolean Escanear_Muelle_Picking
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -74,6 +80,8 @@ public class clsBeTrans_pe_tipo {
         this.Fotografia_Verificacion = Fotografia_Verificacion;
         this.Es_Devolucion = Es_Devolucion;
         this.Empaque_Tarima = Empaque_Tarima;
+        this.Escanear_Muelle_Picking = Escanear_Muelle_Picking;
+        this.Mover_Producto_Zona_Muelle= Mover_Producto_Zona_Muelle;
 
     }
 
@@ -237,4 +245,19 @@ public class clsBeTrans_pe_tipo {
     public boolean getEmpaque_Tarima() {
         return Empaque_Tarima;
     }
+
+    public void setEscanear_Muelle_Picking(boolean value) {
+        Escanear_Muelle_Picking=value;
+    }
+    public boolean getEscanear_Muelle_Picking() {
+        return Escanear_Muelle_Picking;
+    }
+
+    public void setMover_Producto_Zona_Muelle(boolean value) {
+        Mover_Producto_Zona_Muelle=value;
+    }
+    public boolean getMover_Producto_Zona_Muelle() {
+        return Mover_Producto_Zona_Muelle;
+    }
+
 }
