@@ -79,18 +79,12 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-
-
             holder.lblIdPickingEnc.setText("0");
             holder.lblIdPedidoEnc.setText("0");
             holder.lblBodegaPick.setText("0");
             holder.lblPropietarioPick.setText("--");
-//            holder.lblUbicacionPick.setText("--");
             holder.lblEstadoPick.setText("--");
             holder.lblFechaPick.setText("1900-01-01");
-//            holder.lblOperadorPick.setText("--");
-//            holder.lblHoraInicial.setText("00:00:01");
-//            holder.lblHoraFinal.setText("00:00:01");
 
             if (BeListTareasHH.get(position).IdPickingEnc>0){
                 holder.lblIdPickingEnc.setText(""+BeListTareasHH.get(position).IdPickingEnc);
@@ -108,33 +102,25 @@ public class list_adapt_tareashh_picking extends BaseAdapter {
                 holder.lblIdPedidoEnc.setText(""+BeListTareasHH.get(position).IdPedidoEnc);
             }
 
-//            if (!BeListTareasHH.get(position).NombreUbicacionPicking.isEmpty()){
-//                holder.lblUbicacionPick.setText(BeListTareasHH.get(position).NombreUbicacionPicking);
-//            }
-
             if (!BeListTareasHH.get(position).Estado.isEmpty()){
                 holder.lblEstadoPick.setText(BeListTareasHH.get(position).Estado);
             }
-
-//            if (BeListTareasHH.get(position).Detalle_operador){
-//                holder.lblOperadorPick.setText(""+BeListTareasHH.get(position).Detalle_operador);
-//            }
 
             if (!BeListTareasHH.get(position).Fecha_picking.isEmpty()){
                 holder.lblFechaPick.setText(""+BeListTareasHH.get(position).Fecha_picking);
             }
 
-        if (!BeListTareasHH.get(position).NombrePrioridad.isEmpty()  && BeListTareasHH.get(position).IdPrioridadPicking != 0){
-            holder.lblPrioridad.setText(""+BeListTareasHH.get(position).NombrePrioridad);
-        } else {
-            holder.lblPrioridad.setText("--");
-        }
+            if (!BeListTareasHH.get(position).NombrePrioridad.isEmpty()  && BeListTareasHH.get(position).IdPrioridadPicking != 0){
+                holder.lblPrioridad.setText(""+BeListTareasHH.get(position).NombrePrioridad);
+            } else {
+                holder.lblPrioridad.setText("--");
+            }
 
-        if (!BeListTareasHH.get(position).NombreMuelle.isEmpty()  && BeListTareasHH.get(position).IdBodegaMuelle != 0){
-            holder.lblMuellePicking.setText(""+BeListTareasHH.get(position).NombreMuelle);
-        } else {
-            holder.lblMuellePicking.setText("--");
-        }
+            if (!BeListTareasHH.get(position).NombreMuelle.isEmpty()  && BeListTareasHH.get(position).IdBodegaMuelle != 0){
+                holder.lblMuellePicking.setText(""+BeListTareasHH.get(position).NombreMuelle);
+            } else {
+                holder.lblMuellePicking.setText("--");
+            }
 
         int IdPrioridadPicking = BeListTareasHH.get(position).IdPrioridadPicking;
         boolean Tiene_Manufactura = BeListTareasHH.get(position).Tiene_Manufactura;

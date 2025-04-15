@@ -486,6 +486,10 @@ public class frm_list_rec_prod_detalle extends PBase {
 
                 }else if(BeProducto.IdTipoEtiqueta == 10){
 
+                    String valor= selitem.Fecha_vence.toString();
+                    //#AT 20211123 Se ajusta el formato a la fecha
+                    String fecha_ajustada =  du.convierteFechaMostrar(valor);
+
                     //nuevo formato importación de etiqueta Licencia para Killios .
                     zpl = String.format("^XA\n" +
                                     "^MMT\n" +
@@ -510,9 +514,9 @@ public class frm_list_rec_prod_detalle extends PBase {
                                     "^XZ",gl.CodigoBodega + " - " + gl.gNomBodega,
                             gl.gNomEmpresa,
                             BeProducto.Codigo + " - " + BeProducto.Nombre,
-                            BeProducto.Codigo_barra,
+                            "$" + pNumeroLP,
                             gl.beOperador.Nombres + " " + gl.beOperador.Apellidos + " / " + du.Fecha_Completa(),
-                            selitem.Lote, selitem.Fecha_vence.replace("-","/"),
+                            selitem.Lote, fecha_ajustada.replace("-","/"),
                             selitem.ProductoEstado.Nombre);
 
                 }

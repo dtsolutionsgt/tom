@@ -28,6 +28,8 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Fotografia_Verificacion = false;
     @Element(required=false) public boolean Es_Devolucion = false;
     @Element(required=false) public boolean Empaque_Tarima=false;
+    @Element(required=false) public int IdProductoEstado=0;
+    @Element(required=false) public int IdPropietario=0;
 
     public clsBeTrans_pe_tipo() {
     }

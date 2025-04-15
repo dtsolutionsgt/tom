@@ -397,7 +397,7 @@ public class frm_list_rec_prod extends PBase {
             if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) |
                     BeINavBarraPallet.Bodega_Destino.trim().equals(gl.pBeBodega.Codigo)){
 
-            List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+                List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
 
                 Idx = AuxList.indexOf(vCodigoProductoBarraPallet);
 
