@@ -1,10 +1,7 @@
 package com.dts.base;
 
 import android.app.Application;
-import android.graphics.Bitmap;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.dts.classes.Mantenimientos.Bodega.clsBeBodega;
 import com.dts.classes.Mantenimientos.Impresora.clsBeImpresora;
@@ -12,8 +9,6 @@ import com.dts.classes.Mantenimientos.Operador.clsBeOperador;
 import com.dts.classes.Mantenimientos.Operador.clsBeOperador_bodega;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estadoList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
-import com.dts.classes.Mantenimientos.Proveedor.Proveedor_bodega.clsBeProveedor_bodega;
-import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiempos;
 import com.dts.classes.Mantenimientos.Proveedor.Proveedor_tiempos.clsBeProveedor_tiemposList;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_det.clsBeTrans_ubic_hh_det;
 import com.dts.classes.Transacciones.CambioUbicacion.clsBeTrans_ubic_hh_enc.clsBeTrans_ubic_hh_enc;
@@ -25,24 +20,20 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Packing.clsBeTrans_packing_lotes;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificar;
-import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_enc;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
-import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeVW_stock_res_CI;
+import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
 import com.dts.classes.clsBeImagen;
 import com.dts.tom.ForceUpdateChecker;
 import com.dts.tom.MainActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,6 +93,10 @@ public class appGlobals extends Application {
 
     //Objeto para controlar si el ingreso acepta producto ya vencido
     public clsBeTrans_oc_ti pTipoIngreso;
+    //objeto para controlar si el pedido maneja tipo estado en el producto o escanear el muelle en picking
+    public clsBeTrans_pe_tipo peTipoPedido;
+
+
 
     //Objeto para controlar si ingreso  maneja tiempos de aceptacíon con el proveedor
     public clsBeProveedor_tiemposList pProveedor_Tiempos;

@@ -29,6 +29,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHH;
 import com.dts.classes.Transacciones.Recepcion.clsBeTareasIngresoHHList;
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
+import com.dts.classes.Transacciones.TipoPedido.clsBeTrans_pe_tipo;
 import com.dts.ladapt.Verificacion.list_adapt_tareas_verificacion;
 import com.dts.ladapt.list_adapt_tareashh_picking;
 import com.dts.ladapt.list_adapter_tareashh;
@@ -187,12 +188,16 @@ public class frm_lista_tareas_recepcion extends PBase {
                     selitempicking = sitem;
 
                     selid = sitem.IdPickingEnc;
+                    gl.gIdPickingEnc = selid;
                     gl.gReferencia = selitempicking.Referencia;
 
                     selidx = position;
                     adapterPicking.setSelectedIndex(position);
 
-                    procesar_registro();
+                    //#GT15042025: cargar el tipo de pedido segun pickingEnc
+                    execws(11);
+
+                    //procesar_registro();
                    // }
 
                 } else if(gl.tipoTarea==6){
@@ -307,6 +312,11 @@ public class frm_lista_tareas_recepcion extends PBase {
                                 "pIdPedidoEnc",gl.pIdPedidoEnc,
                                      "pCodigoProducto",codigo);
                         break;
+
+                    case 11:
+                        callMethod("Get_Tipo_Pedido_Json","pIdPickingEnc",gl.gIdPickingEnc);
+                        break;
+
                 }
 
                 anim.cancel();
@@ -350,6 +360,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                 case 10:
                     processEncabezadoPedido();
                     break;
+                case 11:
+                    processTipoPedido();break;
             }
 
         } catch (Exception e) {
@@ -360,6 +372,29 @@ public class frm_lista_tareas_recepcion extends PBase {
     private void execws(int callbackvalue) {
         ws.callback=callbackvalue;
         ws.execute();
+    }
+
+    private void processTipoPedido(){
+
+        try {
+            progress.setMessage("Obteniendo Tipo Pedido...");
+
+            //#GT21042025: respuesta en Json
+            //gl.peTipoPedido=xobj.getresult(clsBeTrans_pe_tipo.class,"Get_Tipo_Pedido");
+            String jsonResponse = ws.xmlresult;
+
+            jsonResponse = jsonResponse.substring(0,jsonResponse.indexOf("<!DOCTYPE html><html>"));
+            Gson gson = new Gson();
+            gl.peTipoPedido = gson.fromJson(jsonResponse, clsBeTrans_pe_tipo.class);
+
+            procesar_registro();
+
+
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+        }
+
     }
 
     private void processListRecep(){

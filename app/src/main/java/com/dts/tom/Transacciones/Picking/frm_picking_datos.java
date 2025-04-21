@@ -14,8 +14,10 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,6 +47,7 @@ import com.dts.classes.clsBeImagen;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.tom.Transacciones.ProcesaImagen.frm_imagenes;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -130,6 +133,9 @@ public class frm_picking_datos extends PBase {
     public clsBeTrans_picking_ubic remPickingUbic = new clsBeTrans_picking_ubic();
     public clsBeStock_res pStockRes = new clsBeStock_res();
     public boolean RemAuto = false;
+
+    //si el tipo pedido requiere escanear muelle
+    Integer muelle =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,21 +406,51 @@ public class frm_picking_datos extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         btnGuardar = true;
-                        Recalcula_Peso();
-                        if (pEntre_Reemplazo){
-                            pEntre_Reemplazo = false;
-                            Reemplazar_Producto();
-                        }else if (pEntre_NoEnc){
-                            pEntre_NoEnc = false;
-                            Producto_No_Encontrado();
+
+                        //#GT21042025: validar si escanea muelle o no cuanto presiona Enter en cantidad o presiona el boton Guardar
+                        if(gl.peTipoPedido.Escanear_Muelle_Picking){
+                            //#GT21042025: si escanea muelle, levantar modal para lectura
+                            show_Scan_Muelle_Picking();
                         }else{
-                            Procesar_Registro();
+                            Recalcula_Peso();
+                            if (pEntre_Reemplazo){
+                                pEntre_Reemplazo = false;
+                                Reemplazar_Producto();
+                            }else if (pEntre_NoEnc){
+                                pEntre_NoEnc = false;
+                                Producto_No_Encontrado();
+                            }else{
+                                Procesar_Registro();
+                            }
                         }
                     }
 
                     return false;
                 }
             });
+
+            btnConfirmarPk.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        btnGuardar = true;
+
+                        if(gl.peTipoPedido.Escanear_Muelle_Picking){
+
+                            //#GT21042025: si escanea muelle, levantar modal para lectura
+                            show_Scan_Muelle_Picking();
+
+                        }else{
+                            //#GT21042025: proceso normal, donde valida reemplazo, enter en inputs, etc.
+                            Pre_Registro_Picking();
+                        }
+
+                    }
+
+                    return false;
+                }
+            });
+
 
         } catch (Exception e) {
             mu.msgbox("setHandlers:" + e.getMessage());
@@ -869,6 +905,93 @@ public class frm_picking_datos extends PBase {
     }
 
     private boolean vPalletValido = false;
+
+    //#GT21042025: modal para confirmar el scan del muelle para idealsa
+    private void show_Scan_Muelle_Picking() {
+
+        //#GT15042025: mostrar modal para confirmar muelle, si el tipo pedido tiene el parametro.
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.frm_picking_escanear_muelle, null);
+
+        EditText etValor = dialogView.findViewById(R.id.etValor);
+        Button btnConfirmar = dialogView.findViewById(R.id.btnConfirmar);
+        Button btnCerrar = dialogView.findViewById(R.id.btnCerrar);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(dialogView);
+
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String valorIngresado = etValor.getText().toString().trim();
+
+                if (valorIngresado.isEmpty()) {
+                    etValor.setError("Debe ingresar un valor");
+                    return;
+                }
+
+                try {
+                    //validar que concida con la barra del muelle destino
+                    muelle=Integer.valueOf(valorIngresado);
+                    if(gBePicking.IdBodegaMuelle == muelle){
+                        dialog.dismiss();
+                        Pre_Registro_Picking();
+                    }else{
+                        etValor.setError("Muelle no valido!");
+                    }
+                } catch (NumberFormatException e) {
+                    etValor.setError("Ingresa solo números válidos");
+                }
+            }
+        });
+
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        etValor.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                String valorIngresado = etValor.getText().toString().trim();
+
+                if (valorIngresado.isEmpty()) {
+                    etValor.setError("Debe ingresar un valor");
+                     return false;
+                }
+
+                try {
+                    //validar que concida con la barra del muelle destino
+                    muelle=Integer.valueOf(valorIngresado);
+                    if(gBePicking.IdBodegaMuelle == muelle){
+                        dialog.dismiss();
+                        Pre_Registro_Picking();
+                    }else{
+                        etValor.setError("Muelle no valido!");
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
+                    etValor.setError("Ingresa solo números válidos");
+                    return false;
+                }
+
+                    //dialog.dismiss(); // o lo que necesites hacer
+                //return true;
+            }
+            return false;
+        });
+
+        btnCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 
     private void Continua_procesando_barra(){
 
@@ -1754,7 +1877,16 @@ public class frm_picking_datos extends PBase {
     public void BotonGuardar(View view){
 
         btnGuardar = true;
+        //#GT21042025: para idealsa es importante confirmar el muelle durante el picking
+        if(gl.peTipoPedido.Escanear_Muelle_Picking){
+            show_Scan_Muelle_Picking();
+        }else{
+            Pre_Registro_Picking();
+        }
+    }
 
+
+    private void Pre_Registro_Picking(){
         if (pEntre_Reemplazo || pEntre_NoEnc){
             msgbox("Entró en proceso de Reemplazo o de No encontrado, ingrese la cantidad y " +
                     "presione enter para continuar con el proceso");
@@ -1816,11 +1948,8 @@ public class frm_picking_datos extends PBase {
                     return;
                 }
             }
-
             Procesar_Registro();
-            //gl.termino = "";
         }
-
     }
 
     private void Procesar_Registro(){
