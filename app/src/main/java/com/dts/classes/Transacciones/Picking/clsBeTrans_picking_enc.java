@@ -45,6 +45,8 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public boolean Tiene_Manufactura =false;
     @Element(required=false) public String NombreMuelle="";
 
+    @Element(required=false) public int IdTipoPicking = 0;
+
     public clsBeTrans_picking_enc() {
     }
 
@@ -56,7 +58,7 @@ public class clsBeTrans_picking_enc {
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
                                   String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle, int IdPrioridadPicking,
-                                  int IdBodegaMuelle, String NombrePrioridad, boolean Tarea_Manufactura
+                                  int IdBodegaMuelle, String NombrePrioridad, boolean Tiene_Manufactura, int IdTipoPicking
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -91,7 +93,8 @@ public class clsBeTrans_picking_enc {
         this.IdPrioridadPicking = IdPrioridadPicking;
         this.IdBodegaMuelle = IdBodegaMuelle;
         this.NombrePrioridad = NombrePrioridad;
-        this.Tiene_Manufactura = Tarea_Manufactura;
+        this.Tiene_Manufactura = Tiene_Manufactura;
+        this.IdTipoPicking = IdTipoPicking;
     }
 
 
@@ -293,6 +296,14 @@ public class clsBeTrans_picking_enc {
     public void setTiene_Manufactura(boolean value) {
         Tiene_Manufactura =value;
     }
+
+    public int getIdTipoPicking() {
+        return IdTipoPicking;
+    }
+    public void setIdTipoPicking(int value) {
+        IdTipoPicking=value;
+    }
+
 }
 
 

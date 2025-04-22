@@ -1,5 +1,6 @@
 package com.dts.tom.Transacciones.Picking;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -907,6 +909,7 @@ public class frm_picking_datos extends PBase {
     private boolean vPalletValido = false;
 
     //#GT21042025: modal para confirmar el scan del muelle para idealsa
+    @SuppressLint("ClickableViewAccessibility")
     private void show_Scan_Muelle_Picking() {
 
         //#GT15042025: mostrar modal para confirmar muelle, si el tipo pedido tiene el parametro.
@@ -980,6 +983,12 @@ public class frm_picking_datos extends PBase {
                 //return true;
             }
             return false;
+        });
+
+        etValor.setShowSoftInputOnFocus(false);
+
+        etValor.setOnTouchListener((v, event) -> {
+            return true; // No permite interacción manual
         });
 
         btnCerrar.setOnClickListener(new View.OnClickListener() {
