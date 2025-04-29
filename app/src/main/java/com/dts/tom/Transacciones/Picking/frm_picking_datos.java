@@ -137,7 +137,8 @@ public class frm_picking_datos extends PBase {
     public boolean RemAuto = false;
 
     //si el tipo pedido requiere escanear muelle
-    Integer muelle =0;
+    //Integer muelle =0;
+    String muelle="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -408,21 +409,20 @@ public class frm_picking_datos extends PBase {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                         btnGuardar = true;
-
-                        //#GT21042025: validar si escanea muelle o no cuanto presiona Enter en cantidad o presiona el boton Guardar
-                        if(gl.peTipoPedido.Escanear_Muelle_Picking){
-                            //#GT21042025: si escanea muelle, levantar modal para lectura
-                            show_Scan_Muelle_Picking();
+                        //GT29042025: validar cualquier proceso antes que si se escanea el muelle (reemplazo por ejemplo)
+                        Recalcula_Peso();
+                        if (pEntre_Reemplazo){
+                            pEntre_Reemplazo = false;
+                            Reemplazar_Producto();
+                        }else if (pEntre_NoEnc){
+                            pEntre_NoEnc = false;
+                            Producto_No_Encontrado();
                         }else{
-                            Recalcula_Peso();
-                            if (pEntre_Reemplazo){
-                                pEntre_Reemplazo = false;
-                                Reemplazar_Producto();
-                            }else if (pEntre_NoEnc){
-                                pEntre_NoEnc = false;
-                                Producto_No_Encontrado();
-                            }else{
-                                Procesar_Registro();
+                            //#GT21042025: validar si escanea muelle o no cuanto presiona Enter en cantidad o presiona el boton Guardar
+                            //Procesar_Registro();
+                            if(gl.peTipoPedido.Escanear_Muelle_Picking){
+                                //#GT21042025: si escanea muelle, levantar modal para lectura
+                                show_Scan_Muelle_Picking();
                             }
                         }
                     }
@@ -922,6 +922,13 @@ public class frm_picking_datos extends PBase {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(dialogView);
 
+        String hint1 = String.valueOf(gBePicking.IdBodegaMuelle);
+        String hint2 = String.valueOf(gl.IdUbicacionMuelle);
+        String hint3 = gl.Codigo_Barra_Muelle;
+
+        String hintText = "Muelle: " + hint1 + " / " + hint2 + " / " + hint3;
+        etValor.setHint(hintText);
+
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -932,18 +939,33 @@ public class frm_picking_datos extends PBase {
                     return;
                 }
 
-                try {
-                    //validar que concida con la barra del muelle destino
-                    muelle=Integer.valueOf(valorIngresado);
-                    if(gBePicking.IdBodegaMuelle == muelle){
-                        dialog.dismiss();
-                        Pre_Registro_Picking();
-                    }else{
-                        etValor.setError("Muelle no valido!");
-                    }
-                } catch (NumberFormatException e) {
-                    etValor.setError("Ingresa solo números válidos");
+                //#GT29042025: validar que el escaneo coincida contra el muelle, la barra o la ubicaciondefault del pedido/picking
+                /*    muelle = valorIngresado;
+                if(gBePicking.IdBodegaMuelle== Integer.parseInt(muelle) || gl.IdUbicacionMuelle == Integer.parseInt(muelle) || gl.Codigo_Barra_Muelle.equals(muelle)){
+                    dialog.dismiss();
+                    Pre_Registro_Picking();
+                }else{
+                    etValor.setError("Muelle no valido!");
+                }*/
+
+
+
+                // Bandera para validar si es un número válido
+                muelle = etValor.getText().toString().trim();
+                boolean esNumero = muelle.matches("\\d+"); // Solo números
+
+                if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
+                        (esNumero && Integer.parseInt(muelle) == gl.IdUbicacionMuelle) ||
+                        (!esNumero && muelle.equals(gl.Codigo_Barra_Muelle))) {
+
+                    dialog.dismiss();
+                    Pre_Registro_Picking();
+
+                } else {
+                    etValor.setError("¡Muelle no válido!");
+                    etValor.requestFocus();
                 }
+
             }
         });
 
@@ -964,23 +986,23 @@ public class frm_picking_datos extends PBase {
                      return false;
                 }
 
-                try {
-                    //validar que concida con la barra del muelle destino
-                    muelle=Integer.valueOf(valorIngresado);
-                    if(gBePicking.IdBodegaMuelle == muelle){
-                        dialog.dismiss();
-                        Pre_Registro_Picking();
-                    }else{
-                        etValor.setError("Muelle no valido!");
-                        return false;
-                    }
-                } catch (NumberFormatException e) {
-                    etValor.setError("Ingresa solo números válidos");
+                // Bandera para validar si es un número válido
+                muelle = etValor.getText().toString().trim();
+                boolean esNumero = muelle.matches("\\d+"); // Solo números
+
+                if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
+                        (esNumero && Integer.parseInt(muelle) == gl.IdUbicacionMuelle) ||
+                        (!esNumero && muelle.equals(gl.Codigo_Barra_Muelle))) {
+
+                    dialog.dismiss();
+                    Pre_Registro_Picking();
+
+                } else {
+                    etValor.setError("¡Muelle no válido!");
+                    etValor.requestFocus();
                     return false;
                 }
 
-                    //dialog.dismiss(); // o lo que necesites hacer
-                //return true;
             }
             return false;
         });

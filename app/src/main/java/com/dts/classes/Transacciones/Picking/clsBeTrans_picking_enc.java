@@ -47,6 +47,8 @@ public class clsBeTrans_picking_enc {
 
     @Element(required=false) public int IdTipoPicking = 0;
 
+    @Element(required=false) public String Codigo_Barra_Muelle="";
+
     public clsBeTrans_picking_enc() {
     }
 
@@ -58,7 +60,8 @@ public class clsBeTrans_picking_enc {
                                   boolean IsNew, String NombreUbicacionPicking, clsBeBodega_ubicacion UbicacionPicking, clsBeTrans_picking_detList ListaPickingDet,
                                   clsBeTrans_picking_ubicList ListaPickingUbic, String NombreBodega, String NombrePropietarioPicking, int IdPedidoEnc,
                                   String Referencia, boolean Fotografia_Verificacion,int IdUbicacionMuelle, int IdPrioridadPicking,
-                                  int IdBodegaMuelle, String NombrePrioridad, boolean Tiene_Manufactura, int IdTipoPicking
+                                  int IdBodegaMuelle, String NombrePrioridad, boolean Tiene_Manufactura, int IdTipoPicking,
+                                  String Codigo_Barra_Muelle
     ) {
 
         this.IdPickingEnc=IdPickingEnc;
@@ -95,6 +98,7 @@ public class clsBeTrans_picking_enc {
         this.NombrePrioridad = NombrePrioridad;
         this.Tiene_Manufactura = Tiene_Manufactura;
         this.IdTipoPicking = IdTipoPicking;
+        this.Codigo_Barra_Muelle= Codigo_Barra_Muelle;
     }
 
 
@@ -302,6 +306,13 @@ public class clsBeTrans_picking_enc {
     }
     public void setIdTipoPicking(int value) {
         IdTipoPicking=value;
+    }
+
+    public String getCodigo_Barra_Muelle() {
+        return Codigo_Barra_Muelle;
+    }
+    public void setCodigo_Barra_Muelle(String value) {
+        Codigo_Barra_Muelle=value;
     }
 
 }

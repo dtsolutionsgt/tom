@@ -190,6 +190,9 @@ public class frm_lista_tareas_recepcion extends PBase {
                     selid = sitem.IdPickingEnc;
                     gl.gIdPickingEnc = selid;
                     gl.gReferencia = selitempicking.Referencia;
+                    //#GT29042025: obtener datos del muelle asignado en el pedido/picking
+                    gl.IdUbicacionMuelle= selitempicking.IdUbicacionMuelle;
+                    gl.Codigo_Barra_Muelle= selitempicking.Codigo_Barra_Muelle;
 
                     selidx = position;
                     adapterPicking.setSelectedIndex(position);
@@ -490,7 +493,8 @@ public class frm_lista_tareas_recepcion extends PBase {
                         vItem.Tiene_Manufactura = BePicking.Tiene_Manufactura;
                         vItem.NombreMuelle = BePicking.NombreMuelle;
                         vItem.IdBodegaMuelle = BePicking.IdBodegaMuelle;
-
+                        vItem.IdUbicacionMuelle = BePicking.IdUbicacionMuelle;
+                        vItem.Codigo_Barra_Muelle =BePicking.Codigo_Barra_Muelle;
                         BeListTareasPicking.add(vItem);
 
                     }

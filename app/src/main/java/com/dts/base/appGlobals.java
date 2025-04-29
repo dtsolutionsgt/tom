@@ -133,6 +133,10 @@ public class appGlobals extends Application {
     public String gReferencia = "";
     public boolean asignar_operador_linea_picking = false;
 
+    //control del tipo doc pedido (si requiere escanear muelle)
+    public int IdUbicacionMuelle = 0;
+    public String Codigo_Barra_Muelle = "";
+
     //Variables para verificación
     public int pIdPedidoEnc;
     public int pIdPedidoDet;

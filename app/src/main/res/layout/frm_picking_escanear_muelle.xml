@@ -18,8 +18,8 @@
         android:id="@+id/etValor"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="muelle 0"
-        android:inputType="number"
+        android:hint=""
+        android:inputType="textPersonName"
         android:layout_marginTop="16dp"/>
 
     <Button
