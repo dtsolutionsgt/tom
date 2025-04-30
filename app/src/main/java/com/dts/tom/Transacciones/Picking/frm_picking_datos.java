@@ -940,19 +940,11 @@ public class frm_picking_datos extends PBase {
                     return;
                 }
 
-                //#GT29042025: validar que el escaneo coincida contra el muelle, la barra o la ubicaciondefault del pedido/picking
-                /*    muelle = valorIngresado;
-                if(gBePicking.IdBodegaMuelle== Integer.parseInt(muelle) || gl.IdUbicacionMuelle == Integer.parseInt(muelle) || gl.Codigo_Barra_Muelle.equals(muelle)){
-                    dialog.dismiss();
-                    Pre_Registro_Picking();
-                }else{
-                    etValor.setError("Muelle no valido!");
-                }*/
-
-
+                //#GT30042025: obtener el el escan, y remover dolar si tuviera en la lectura
+                String tmpMuelle = etValor.getText().toString().trim();
+                muelle= tmpMuelle.toString().replace("$","");
 
                 // Bandera para validar si es un número válido
-                muelle = etValor.getText().toString().trim();
                 boolean esNumero = muelle.matches("\\d+"); // Solo números
 
                 if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
@@ -987,8 +979,11 @@ public class frm_picking_datos extends PBase {
                      return false;
                 }
 
+
+                String tmpMuelle = etValor.getText().toString().trim();
+                muelle= tmpMuelle.toString().replace("$","");
+
                 // Bandera para validar si es un número válido
-                muelle = etValor.getText().toString().trim();
                 boolean esNumero = muelle.matches("\\d+"); // Solo números
 
                 if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
