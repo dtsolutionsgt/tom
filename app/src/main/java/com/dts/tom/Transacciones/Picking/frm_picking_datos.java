@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
@@ -422,6 +423,10 @@ public class frm_picking_datos extends PBase {
                             //#GT21042025: validar si escanea muelle o no cuanto presiona Enter en cantidad o presiona el boton Guardar
                             if(gl.peTipoPedido.Escanear_Muelle_Picking){
                                 //#GT21042025: si escanea muelle, levantar modal para lectura
+                                if(gl.IdUbicacionMuelle==0 || gl.Codigo_Barra_Muelle.isEmpty() || gBePicking.IdBodegaMuelle==0){
+                                    toastlong("El proceso requiere confirmar el muelle, pero no fue asignado en el pedido o picking!");
+                                    return false;
+                                }
                                 show_Scan_Muelle_Picking();
                             }else{
                                 Procesar_Registro();
@@ -440,8 +445,11 @@ public class frm_picking_datos extends PBase {
                         btnGuardar = true;
 
                         if(gl.peTipoPedido.Escanear_Muelle_Picking){
-
                             //#GT21042025: si escanea muelle, levantar modal para lectura
+                            if(gl.IdUbicacionMuelle==0 || gl.Codigo_Barra_Muelle.isEmpty() || gBePicking.IdBodegaMuelle==0){
+                                toastlong("El proceso requiere confirmar el muelle, pero no fue asignado en el pedido o picking!");
+                                return false;
+                            }
                             show_Scan_Muelle_Picking();
 
                         }else{
