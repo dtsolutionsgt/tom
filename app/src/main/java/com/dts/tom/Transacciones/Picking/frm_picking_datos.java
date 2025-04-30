@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -913,7 +914,6 @@ public class frm_picking_datos extends PBase {
     @SuppressLint("ClickableViewAccessibility")
     private void show_Scan_Muelle_Picking() {
 
-        //#GT15042025: mostrar modal para confirmar muelle, si el tipo pedido tiene el parametro.
         View dialogView = LayoutInflater.from(this).inflate(R.layout.frm_picking_escanear_muelle, null);
 
         EditText etValor = dialogView.findViewById(R.id.etValor);
@@ -930,61 +930,61 @@ public class frm_picking_datos extends PBase {
         String hintText = "Muelle: " + hint1 + " / " + hint2 + " / " + hint3;
         etValor.setHint(hintText);
 
-        btnConfirmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String valorIngresado = etValor.getText().toString().trim();
+        // 🔒 Evitar teclado pero permitir foco
+        etValor.setShowSoftInputOnFocus(false);
 
-                if (valorIngresado.isEmpty()) {
-                    etValor.setError("Debe ingresar un valor");
-                    return;
-                }
+        // Mostrar el diálogo primero
+        dialog.show();
 
-                //#GT30042025: obtener el el escan, y remover dolar si tuviera en la lectura
-                String tmpMuelle = etValor.getText().toString().trim();
-                muelle= tmpMuelle.toString().replace("$","");
+        // Darle foco al EditText después de mostrar el diálogo
+        etValor.requestFocus();
 
-                // Bandera para validar si es un número válido
-                boolean esNumero = muelle.matches("\\d+"); // Solo números
+        // También evitar que el sistema muestre el teclado automáticamente
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
-                        (esNumero && Integer.parseInt(muelle) == gl.IdUbicacionMuelle) ||
-                        (!esNumero && muelle.equals(gl.Codigo_Barra_Muelle))) {
+        btnConfirmar.setOnClickListener(v -> {
+            String valorIngresado = etValor.getText().toString().trim();
 
-                    dialog.dismiss();
-                    Pre_Registro_Picking();
-
-                } else {
-                    etValor.setError("¡Muelle no válido!");
-                    etValor.requestFocus();
-                }
-
+            if (valorIngresado.isEmpty()) {
+                etValor.setError("Debe ingresar un valor");
+                etValor.requestFocus();
+                return;
             }
-        });
 
-        btnCerrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            String tmpMuelle = valorIngresado.replace("$", "");
+            muelle = tmpMuelle;
+
+            boolean esNumero = muelle.matches("\\d+");
+
+            if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
+                    (esNumero && Integer.parseInt(muelle) == gl.IdUbicacionMuelle) ||
+                    (!esNumero && muelle.equals(gl.Codigo_Barra_Muelle))) {
+
                 dialog.dismiss();
+                Pre_Registro_Picking();
+
+            } else {
+                etValor.setError("¡Muelle no válido!");
+                etValor.requestFocus();
             }
         });
 
         etValor.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
                 String valorIngresado = etValor.getText().toString().trim();
 
                 if (valorIngresado.isEmpty()) {
                     etValor.setError("Debe ingresar un valor");
-                     return false;
+                    etValor.requestFocus();
+                    return false;
                 }
 
+                String tmpMuelle = valorIngresado.replace("$", "");
+                muelle = tmpMuelle;
 
-                String tmpMuelle = etValor.getText().toString().trim();
-                muelle= tmpMuelle.toString().replace("$","");
-
-                // Bandera para validar si es un número válido
-                boolean esNumero = muelle.matches("\\d+"); // Solo números
+                boolean esNumero = muelle.matches("\\d+");
 
                 if ((esNumero && Integer.parseInt(muelle) == gBePicking.IdBodegaMuelle) ||
                         (esNumero && Integer.parseInt(muelle) == gl.IdUbicacionMuelle) ||
@@ -998,25 +998,12 @@ public class frm_picking_datos extends PBase {
                     etValor.requestFocus();
                     return false;
                 }
-
             }
             return false;
         });
 
-        etValor.setShowSoftInputOnFocus(false);
+        btnCerrar.setOnClickListener(v -> dialog.dismiss());
 
-        etValor.setOnTouchListener((v, event) -> {
-            return true; // No permite interacción manual
-        });
-
-        btnCerrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 
 
