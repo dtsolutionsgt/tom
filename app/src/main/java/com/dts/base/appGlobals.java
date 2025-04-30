@@ -214,6 +214,9 @@ public class appGlobals extends Application {
     //#CKFK20220610 Parametrizacion verificacion consolidada
     public boolean VerificacionConsolidada = false;
 
+    //#EJC20210728:
+    public boolean Permitir_Verificacion_Consolidada= false;
+
     //#EJC20220330_CEALSA: Si true, se permite realizar el cambio de ubicación de producto que está reservado en picking pero se actualiza el IdUbicacionTemporal.
     public boolean Permitir_Cambio_Ubic_Producto_Picking = false;
 
@@ -224,7 +227,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="6.8.3";
+    public final String version="6.8.9";
     public boolean VerificacionSinLoteFechaVen = false;
     public String gBodega_Destino = "";
 

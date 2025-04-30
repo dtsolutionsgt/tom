@@ -419,10 +419,11 @@ public class frm_picking_datos extends PBase {
                             Producto_No_Encontrado();
                         }else{
                             //#GT21042025: validar si escanea muelle o no cuanto presiona Enter en cantidad o presiona el boton Guardar
-                            //Procesar_Registro();
                             if(gl.peTipoPedido.Escanear_Muelle_Picking){
                                 //#GT21042025: si escanea muelle, levantar modal para lectura
                                 show_Scan_Muelle_Picking();
+                            }else{
+                                Procesar_Registro();
                             }
                         }
                     }
@@ -2449,10 +2450,10 @@ public class frm_picking_datos extends PBase {
                     case 7:
 
                         callMethod("Actualizar_Picking",
-                                         "oBeTrans_picking_ubic",gBePickingUbic,
-                                         "BeStockRes",BeStockRes,
-                                         "IdBodega",gl.IdBodega,
-                                         "pCantidad",BePickingDet.Cantidad_recibida,
+                                        "oBeTrans_picking_ubic",gBePickingUbic,
+                                               "BeStockRes",BeStockRes,
+                                              "IdBodega",gl.IdBodega,
+                                              "pCantidad",BePickingDet.Cantidad_recibida,
                                          "host", gl.deviceId);
                        /* callMethod("Actualizar_Picking_From_HH",
                                 "oBeTrans_picking_ubic",gBePickingUbic,
