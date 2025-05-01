@@ -266,7 +266,7 @@ public class frm_detalle_tareas_picking extends PBase {
                     }
 
                     //#CKFK20220425 Se agregó validación de que la ubicación sea numérica
-                    String termino = txtUbicacionFiltro.getText().toString();
+                    String termino = txtUbicacionFiltro.getText().toString().replace("$","");
 
                     if (termino.isEmpty()) {
                         msgbox("Debe ingresar una ubicación o licencia.");
@@ -326,19 +326,19 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void procesaLicencia(String termino) {
-        boolean exite = false;
+        boolean existe = false;
         try {
             for (clsBeTrans_picking_ubic r:BeListPickingUbic){
                 if (termino.equals(r.Lic_plate)){
                     selitem = r;
                     selid = r.IdPickingUbic;
-                    exite = true;
+                    existe = true;
                     break;
                 }
             }
 
-            if (!exite) {
-                msgbox("No se encontro la licencia: " + termino);
+            if (!existe) {
+                msgbox("No se encontró la licencia: " + termino);
                 return;
             }
 
@@ -426,7 +426,7 @@ public class frm_detalle_tareas_picking extends PBase {
     }
 
     private void Filtro() {
-        String termino  = gl.termino;
+        String termino  = gl.termino.replace("$","");
 
         try {
             if (!termino.isEmpty()) {
@@ -1087,7 +1087,7 @@ public class frm_detalle_tareas_picking extends PBase {
                         break;
 
                     case 5:
-                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicacionFiltro.getText().toString(),"pIdBodega",gl.IdBodega);
+                        callMethod("Get_Ubicacion_By_Codigo_Barra_And_IdBodega","pBarra",txtUbicacionFiltro.getText().toString().replace("$",""),"pIdBodega",gl.IdBodega);
                         break;
                     case 6:
                         callMethodJsonPost("Get_All_PickingUbic_By_IdPickingEnc_Tipo_Json",
@@ -1294,7 +1294,7 @@ public class frm_detalle_tareas_picking extends PBase {
             }else{
 
                 //mu.msgbox("El código de ubicacion escaneado: "+txtUbicacionFiltro.getText().toString()+ " no es válido para la bodega: "+gl.IdBodega);
-                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString()+ " no esta en la ola de picking");
+                mu.msgbox("La úbicación escaneada: "+txtUbicacionFiltro.getText().toString().replace("$","")+ " no esta en la ola de picking");
                 txtUbicacionFiltro.setSelectAllOnFocus(true);
                 txtUbicacionFiltro.requestFocus();
                 txtUbicacionFiltro.setText("");
