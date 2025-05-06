@@ -68,6 +68,7 @@ public class clsBeTrans_oc_enc {
     @Element(required=false) public String No_Documento_Ubicacion_ERP="";
     @Element(required=false) public boolean PutAway_Registrado=false;
     @Element(required=false) public String Codigo_Empresa_ERP="";
+    @Element(required=false) public int IdCampana=0;
 
     public clsBeTrans_oc_enc()
     {

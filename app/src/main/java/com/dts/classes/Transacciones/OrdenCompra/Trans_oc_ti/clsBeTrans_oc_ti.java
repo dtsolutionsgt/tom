@@ -33,9 +33,6 @@ public class clsBeTrans_oc_ti {
     @Element(required=false) public int IdProductoEstado = 0;
     @Element(required=false) public int IdPropietario = 0;
 
-
-
-
     public clsBeTrans_oc_ti() {
 
     }
