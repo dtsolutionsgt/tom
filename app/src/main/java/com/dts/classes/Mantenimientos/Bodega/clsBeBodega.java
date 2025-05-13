@@ -87,6 +87,8 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Despacho_Automatico_HH = false;
     @Element(required=false) public boolean Limpiar_Campos = false;
     @Element(required=false) public boolean Permitir_Cambio_Ubic_Recepcion = false;
+    @Element(required=false) public String Ruta_CDN = "";
+
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
