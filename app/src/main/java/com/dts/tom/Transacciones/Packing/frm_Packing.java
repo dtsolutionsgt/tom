@@ -1420,7 +1420,7 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.IdTransaccion = 1;
                 gMovimientoDet.IdPropietarioBodega = obj.Stock.IdPropietarioBodega;
                 gMovimientoDet.IdProductoBodega = obj.Stock.IdProductoBodega;
-                gMovimientoDet.IdUbicacionOrigen = cvUbicOrigID;
+                gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion_Anterior;
                 gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
 
                 gMovimientoDet.IdPresentacion = obj.Stock.IdPresentacion;
@@ -1452,6 +1452,8 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.Serie = obj.Stock.Serial;
                 gMovimientoDet.Peso = 0;
                 gMovimientoDet.Lote = obj.Stock.Lote;
+                gMovimientoDet.Lic_plate = obj.Stock.Lic_plate;
+                gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
 
                 if(obj.Control_vencimiento ){
                     gMovimientoDet.Fecha_vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
@@ -1462,7 +1464,7 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
 
                 if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
-                    gMovimientoDet.Barra_pallet = obj.Stock.Lic_plate;
+                    gMovimientoDet.Barra_pallet =txtNuevoLp.getText().toString();
                 } else {
                     gMovimientoDet.Barra_pallet = "";
                 }
