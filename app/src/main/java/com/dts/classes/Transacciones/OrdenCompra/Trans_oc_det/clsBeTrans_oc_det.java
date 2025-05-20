@@ -63,6 +63,7 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public int IdEmbarcador=0;
     @Element(required=false) public String Nombre_Embarcador="";
     @Element(required=false) public String Nombre_Clasificacion ="";
+    @Element(required=false) public int IdProductoTallaColor=0;
 
     public clsBeTrans_oc_det()
     {
