@@ -1034,6 +1034,23 @@ public class frm_inv_ini_conteo extends PBase {
 
         try{
 
+            if (BeProducto!=null){
+
+                if (BeProducto.Control_lote){
+                    if (ditem.getLote().isEmpty()){
+                        mu.msgbox("Debe ingresar lote");
+                        return;
+                    }
+                }
+
+                if (BeProducto.Control_vencimiento){
+                    if (ditem.getFecha_vence().toString().contains("1900-01-01")){
+                        mu.msgbox("Debe ingresar fecha de vencimiento");
+                        return;
+                    }
+                }
+            }
+
             if (ditem.Idunidadmedida==0){
                 mu.msgbox("Unidad de medida básica es 0");
                 return;
