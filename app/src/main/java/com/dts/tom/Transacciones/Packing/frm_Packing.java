@@ -1242,7 +1242,7 @@ public class frm_Packing extends PBase {
                     double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
                     boolean vPaletizado = ListBeProductoPresentacion.items.get(0).getEsPallet();
 
-                    if (vPaletizado){
+                    if (vPaletizado || ){
                         if (!gl.Permitir_Decimales){
                             resto = vCantidadAUbicar % vFactor;
                             if (resto!=0){
