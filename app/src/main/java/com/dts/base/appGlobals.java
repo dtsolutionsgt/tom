@@ -273,6 +273,7 @@ public class appGlobals extends Application {
     public boolean autoLoad = false;
     public String LicenciaCUR = "";
     public boolean CambioUbicRecepcion = false;
+    public boolean Control_Talla_Color = false;
 
     @Override
     public void onCreate() {

@@ -66,6 +66,7 @@ public class clsBeTrans_re_det implements Cloneable {
     @Element(required=false) public int Posiciones=0;
     @Element(required=false) public int IdJornadaSistema=0;
     @Element(required=false) public String Host="";
+    @Element(required=false) public int IdProductoTallaColor = 0;
 
     public clsBeTrans_re_det() {
     }
@@ -82,7 +83,8 @@ public class clsBeTrans_re_det implements Cloneable {
                              boolean IsNew,boolean Control_Peso,int IdPropietarioBodega,int IdUbicacion,
                              int IdUbicacionAnterior,int IdOrdenCompraEnc,String Fecha_Rec,String Fecha_tarea,
                              String Hora_ini,String Hora_Fin,String Estado_Rec,String UbicacionCompleta,
-                             String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar, int IdOrdenCompraDet, int IdJornadaSistema, String Host) {
+                             String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar, int IdOrdenCompraDet,
+                             int IdJornadaSistema, String Host, int IdProductoTallaColor) {
 
         this.IdPresentacion=IdPresentacion;
         this.IdUnidadMedida=IdUnidadMedida;
@@ -138,7 +140,7 @@ public class clsBeTrans_re_det implements Cloneable {
         this.IdOrdenCompraDet = IdOrdenCompraDet;
         this.IdJornadaSistema = IdJornadaSistema;
         this.Host = Host;
-
+        this.IdProductoTallaColor = IdProductoTallaColor;
     }
 
     public int getIdPresentacion() {

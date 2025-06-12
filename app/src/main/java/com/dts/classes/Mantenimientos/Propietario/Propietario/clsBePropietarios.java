@@ -26,8 +26,8 @@ public class clsBePropietarios {
     @Element(required=false) public String Codigo="";
     @Element(required=false) public boolean Sistema=false;
     @Element(required=false) public String NIT="";
-    @Element(required=false) public String codigo_acceso="";
-    @Element(required=false) public String clave_acceso="";
+    @Element(required=false) public String Codigo_Acceso="";
+    @Element(required=false) public String Clave_Acceso="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public boolean Es_Consolidador = false;
 
@@ -39,8 +39,8 @@ public class clsBePropietarios {
                              String Nombre_comercial,String Imagen,String Telefono,String Direccion,
                              boolean Activo,String User_agr,String Fec_agr,String User_mod,
                              String Fec_mod,String Email,boolean Actualiza_costo_oc,int Color,
-                             String Codigo,boolean Sistema,String NIT,String codigo_acceso,
-                             String clave_acceso,clsBeEmpresa Empresa, boolean Es_Consolidador) {
+                             String Codigo,boolean Sistema,String NIT,String Codigo_Acceso,
+                             String Clave_Acceso,clsBeEmpresa Empresa, boolean Es_Consolidador) {
 
         this.IdPropietario=IdPropietario;
         this.IdEmpresa=IdEmpresa;
@@ -62,8 +62,8 @@ public class clsBePropietarios {
         this.Sistema=Sistema;
         this.NIT = NIT;
         this.Empresa=Empresa;
-        this.codigo_acceso=codigo_acceso;
-        this.clave_acceso=clave_acceso;
+        this.Codigo_Acceso=Codigo_Acceso;
+        this.Clave_Acceso=Clave_Acceso;
         this.Es_Consolidador=Es_Consolidador;
     }
 
@@ -188,17 +188,17 @@ public class clsBePropietarios {
     public void setEmpresa(clsBeEmpresa value) {
         Empresa=value;
     }
-    public String getCodigo_acceso() {
-        return codigo_acceso;
+    public String getCodigo_Acceso() {
+        return Codigo_Acceso;
     }
-    public void setCodigo_acceso(String value) {
-        codigo_acceso=value;
+    public void setCodigo_Acceso(String value) {
+        Codigo_Acceso=value;
     }
-    public String getClave_acceso() {
-        return clave_acceso;
+    public String getClave_Acceso() {
+        return Clave_Acceso;
     }
-    public void setClave_acceso(String value) {
-        clave_acceso=value;
+    public void setClave_Acceso(String value) {
+        Clave_Acceso=value;
     }
     public boolean getEs_Consolidador() {
         return Es_Consolidador;

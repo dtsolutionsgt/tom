@@ -34,6 +34,8 @@ import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
+import com.dts.classes.Mantenimientos.Producto.Producto_talla_color.clsBeProducto_talla_color;
+import com.dts.classes.Mantenimientos.Producto.Producto_talla_color.clsBeProducto_talla_colorList;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
 import com.dts.classes.Mantenimientos.Producto.clsBeProductoList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_det;
@@ -42,6 +44,9 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
 import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
+import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
+import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
@@ -53,11 +58,13 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -119,7 +126,9 @@ public class frm_list_rec_prod extends PBase {
     private list_adapt_detalle_recepcion listdetadapter;
     private list_adapt_detalle_recepcion2 listdetadapter2;
     private list_adapt_detalle_recepcion3 listdetadpater3;
-
+    private clsBeTrans_oc_det BeDetalleOc = null;
+    public static clsBeProducto_talla_color BeTallColor = null;
+    public static clsBeProducto_talla_colorList ListaBeTallColor = null;
     private boolean areaprimera = true;
 
     @Override
@@ -294,11 +303,23 @@ public class frm_list_rec_prod extends PBase {
 
                 }else{
 
-                    Escaneo_Pallet = false;
-                    gl.Escaneo_Pallet=false;
-                    BeProducto = new clsBeProducto();
+                    if (gl.Control_Talla_Color) {
+                        selitem  = stream(pListDetalleOC.items)
+                                .where(c -> c.Codigo_Producto.equals(txtCodigoProductoRecepcion.getText().toString()))
+                                .firstOrNull();
 
-                    execws(9);
+                        if (selitem!=null) {
+                            BeDetalleOc = selitem;
+                            execws(17);
+                        }
+                    } else {
+
+                        Escaneo_Pallet = false;
+                        gl.Escaneo_Pallet = false;
+                        BeProducto = new clsBeProducto();
+
+                        execws(9);
+                    }
 
                 }
 
@@ -1011,7 +1032,7 @@ public class frm_list_rec_prod extends PBase {
                         if (pListDetalleOC.items.get(i).Cantidad_recibida!=0){
 
                             vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
-                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Producto.Codigo;
+                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Codigo_Producto;
                             vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
                             vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
                             vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
@@ -1033,7 +1054,7 @@ public class frm_list_rec_prod extends PBase {
                     }else{
 
                             vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
-                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Producto.Codigo;
+                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Codigo_Producto;
                             vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
                             vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
                             vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
@@ -1277,6 +1298,9 @@ public class frm_list_rec_prod extends PBase {
                         callMethod("Get_Detalle_Lotes_OC_By_IdOrdenCompraEnc_HH",
                                    "pIdOrdenCompraEnc",vIdOrdenCompra);
                         break;
+                    case 17:
+                        callMethod("Get_Producto_Talla_Color");
+                        break;
                 }
 
             }catch (Exception e){
@@ -1351,6 +1375,9 @@ public class frm_list_rec_prod extends PBase {
                         break;
                     case 16:
                         process_actualizar_oc_lotes();
+                        break;
+                    case 17:
+                        processProductoTallaColor();
                         break;
                 }
 
@@ -1637,6 +1664,66 @@ public class frm_list_rec_prod extends PBase {
 
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            progress.cancel();
+        }
+    }
+
+    private void processDetalleOc() {
+        try {
+
+            BeDetalleOc = xobj.getresult(clsBeTrans_oc_det.class,"Get_DetalleOc_By_CodigoProducto");
+
+            if (BeDetalleOc != null){
+                if (BeDetalleOc.IdProductoTallaColor > 0) {
+                    execws(18);
+                } else {
+                    Procesa_Producto_Talla_Color();
+                }
+            }
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+            progress.cancel();
+        }
+    }
+
+    private void processProductoTallaColor() {
+        try {
+
+            ListaBeTallColor = xobj.getresult(clsBeProducto_talla_colorList.class,"Get_Producto_Talla_Color");
+
+            if (ListaBeTallColor != null) {
+                BeTallColor = ListaBeTallColor.items.stream()
+                        .filter(x -> x.IdProductoTallaColor == BeDetalleOc.IdProductoTallaColor)
+                        .findFirst()
+                        .orElse(null);
+            }
+
+            procesar_registro();
+
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+            progress.cancel();
+        }
+    }
+
+    private void Procesa_Producto_Talla_Color() {
+        try {
+            List AuxList = stream(pListDetalleOC.items).select(c->c.IdOrdenCompraDet).toList();
+            Idx = AuxList.indexOf(BeDetalleOc.IdOrdenCompraDet);
+
+            gl.mode=1;
+            selitem = pListDetalleOC.items.get(Idx);
+            gl.gselitem = selitem;
+
+            gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+            browse=1;
+
+            startActivity(new Intent(this, frm_recepcion_datos.class));
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
             progress.cancel();
         }
     }
