@@ -51,6 +51,7 @@ public class clsBeStock_rec implements Cloneable{
     @Element(required=false) public double PesoEnStock=0;
     @Element(required=false) public double Cantidad_Nav=0;
     @Element(required=false) public boolean Pallet_No_Estandar= false;
+    @Element(required=false) public int IdProductoTallaColor = 0;
 
     public clsBeStock_rec() {
     }
@@ -65,7 +66,7 @@ public class clsBeStock_rec implements Cloneable{
                           boolean Activo,double Peso,double Temperatura,boolean Regularizado,
                           String Fecha_regularizacion,int No_linea,String Atributo_Variante_1,boolean IsNew,
                           boolean ProductoValidado,clsBeProducto_Presentacion Presentacion,clsBeProducto_estado ProductoEstado,double CantidadEnStock,
-                          double PesoEnStock,double Cantidad_Nav, boolean Pallet_No_Estandar) {
+                          double PesoEnStock,double Cantidad_Nav, boolean Pallet_No_Estandar, int IdProductoTallaColor) {
 
         this.IdBodega=IdBodega;
         this.IdStockRec=IdStockRec;
@@ -110,6 +111,7 @@ public class clsBeStock_rec implements Cloneable{
         this.PesoEnStock=PesoEnStock;
         this.Cantidad_Nav=Cantidad_Nav;
         this.Pallet_No_Estandar=Pallet_No_Estandar;
+        this.IdProductoTallaColor = IdProductoTallaColor;
 
     }
 

@@ -129,9 +129,9 @@ public class frm_recepcion_datos extends PBase {
 
     Calendar calendario = Calendar.getInstance();
 
-    private Spinner cmbEstadoProductoRec,cmbPresRec, cmbVence, cmbLote, cmbTalla, cmbColor;
-    private EditText txtNoLP,txtLoteRec,txtUmbasRec,txtCantidadRec,txtPeso,txtPesoUnitario,txtCostoReal,txtCostoOC,cmbVenceRec, txtCantidadCopias;
-    private TextView lblDatosProd,lblPropPrd,lblPeso,lblPUn,lblCosto,lblCReal,lblPres,lblLote,lblVence, lblEstiba, lblUbicacion,lblParametrosA,lblSerieTit,lblsinPresentacion,lblPresentacion;
+    private Spinner cmbEstadoProductoRec, cmbPresRec, cmbVence, cmbLote, cmbTalla, cmbColor;
+    private EditText txtNoLP, txtLoteRec, txtUmbasRec, txtCantidadRec, txtPeso, txtPesoUnitario, txtCostoReal, txtCostoOC, cmbVenceRec, txtCantidadCopias;
+    private TextView lblDatosProd, lblPropPrd, lblPeso, lblPUn, lblCosto, lblCReal, lblPres, lblLote, lblVence, lblEstiba, lblUbicacion, lblParametrosA, lblSerieTit, lblsinPresentacion, lblPresentacion;
     private TextView lblFecIngreso;
     private Button btnCantPendiente;
     private Button btnCantRecibida;
@@ -146,7 +146,7 @@ public class frm_recepcion_datos extends PBase {
     private CheckBox chkPresentacion, chkCantidadCopias;
     private Dialog dialog;
 
-    private boolean imprimirDesdeBoton=false;
+    private boolean imprimirDesdeBoton = false;
 
     private TextView lblSerialP;
     private TextView lblPesoTit;
@@ -176,62 +176,62 @@ public class frm_recepcion_datos extends PBase {
     private Spinner cmbPresParams;
     private Spinner cmbCantidad;
     private RelativeLayout relOpciones;
-    int pIndexStock=-1;
-    double Cant_Recibida_Actual=0;
+    int pIndexStock = -1;
+    double Cant_Recibida_Actual = 0;
 
     private WebServiceHandler ws;
     private XMLObject xobj;
     private clsDataContractDI dataContractDI;
 
-    private boolean Mostro_Propiedades,Escaneo_Pallet;
+    private boolean Mostro_Propiedades, Escaneo_Pallet;
     private boolean mostrar_parametros_producto;
     private final boolean Mostrar_Propiedades_Parametros = false;
-    private double Cant_Recibida_Anterior = 0,Cant_Recibida,Cant_A_Recibir,Cant_Pendiente;
-    private int pIdOrdenCompraDet,pIdOrdenCompraEnc,pLineaOC,pIdRecepcionDet,pIdProductoBodega;
-    private int IdEstadoSelect,IdPreseSelect=-1,IdPreseSelectParam=-1;
+    private double Cant_Recibida_Anterior = 0, Cant_Recibida, Cant_A_Recibir, Cant_Pendiente;
+    private int pIdOrdenCompraDet, pIdOrdenCompraEnc, pLineaOC, pIdRecepcionDet, pIdProductoBodega;
+    private int IdEstadoSelect, IdPreseSelect = -1, IdPreseSelectParam = -1;
     private String pNumeroLP = "";
-    private Integer CantCopias =1;
-    private final Integer CantVeces=0;
+    private Integer CantCopias = 1;
+    private final Integer CantVeces = 0;
 
-    private boolean PallCorrecto= false;
-    private int pIndexProdPallet=-1;
-    private int pIndexParam=-1;
-    private int IndexPresSelected=-1;
-    private String MensajeParam="";
+    private boolean PallCorrecto = false;
+    private int pIndexProdPallet = -1;
+    private int pIndexParam = -1;
+    private int IndexPresSelected = -1;
+    private String MensajeParam = "";
     private int pIndiceListaStock = -1;
-    private double CostoOC=0;
+    private double CostoOC = 0;
     private int vPresentacion;
     private String vLote;
-    private String pLp="";
-    private String pSerie="";
-    private boolean Existe_Lp=false;
-    private boolean Existe_Serie=false;
-    private String ubiDetLote=null;
+    private String pLp = "";
+    private String pSerie = "";
+    private boolean Existe_Lp = false;
+    private boolean Existe_Serie = false;
+    private String ubiDetLote = null;
     private boolean guardando_recepcion = false, editarSinPresentacion = false;
 
     private clsBeTrans_oc_det BeOcDet;
     private clsBeProducto_parametrosList pListBEProductoParametro = new clsBeProducto_parametrosList();
-    private clsBeTrans_re_det_parametrosList plistBeReDetParametros  = new clsBeTrans_re_det_parametrosList();
+    private clsBeTrans_re_det_parametrosList plistBeReDetParametros = new clsBeTrans_re_det_parametrosList();
     private clsBeStock_se_recList pListBeStockSeRec = new clsBeStock_se_recList();
     private clsBeStock_recList pListBeStockRec = new clsBeStock_recList();
     private clsBeProducto_palletList pListBeProductoPallet = new clsBeProducto_palletList();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
     private clsBeI_nav_barras_pallet BeINavBarraPallet = new clsBeI_nav_barras_pallet();
-    private clsBeTrans_re_det BeTransReDet= new clsBeTrans_re_det();
-    private clsBeTrans_oc_det_lote BeDetalleLotes  = new clsBeTrans_oc_det_lote();
+    private clsBeTrans_re_det BeTransReDet = new clsBeTrans_re_det();
+    private clsBeTrans_oc_det_lote BeDetalleLotes = new clsBeTrans_oc_det_lote();
     private clsBeStock_rec BeStockRecNuevaRec = new clsBeStock_rec();
     private clsBeStock_recList listaStockPalletsNuevos = new clsBeStock_recList();
     private clsBeProducto_palletList listaProdPalletsNuevos = new clsBeProducto_palletList();
     private clsBeStock_rec vBeStockRec = new clsBeStock_rec();
     private clsBeStock_rec vBeStockRecPallet = new clsBeStock_rec();
-    private clsBeProducto_pallet BeProdPallet  = new clsBeProducto_pallet();
+    private clsBeProducto_pallet BeProdPallet = new clsBeProducto_pallet();
     private clsBeStock gBeStockAnt;
-    private clsBeTrans_oc_det beTransOCDet =new clsBeTrans_oc_det();
-    private  clsBeStock_rec gBeStockRec = new clsBeStock_rec();
-    private  clsBeStock_se_rec ObjNS =new clsBeStock_se_rec();
+    private clsBeTrans_oc_det beTransOCDet = new clsBeTrans_oc_det();
+    private clsBeStock_rec gBeStockRec = new clsBeStock_rec();
+    private clsBeStock_se_rec ObjNS = new clsBeStock_se_rec();
     private clsBeTipo_etiqueta pBeTipo_etiqueta;
     private clsBeProducto_Presentacion auxPres = new clsBeProducto_Presentacion();
-    boolean Pperzonalizados=false,PCap_Manu=false,PCap_Anada=false,PGenera_lp=false,PTiene_Ctrl_Peso=false,PTiene_Ctrl_Temp=false,PTiene_PorSeries=false,PTiene_Pres=false;
+    boolean Pperzonalizados = false, PCap_Manu = false, PCap_Anada = false, PGenera_lp = false, PTiene_Ctrl_Peso = false, PTiene_Ctrl_Temp = false, PTiene_PorSeries = false, PTiene_Pres = false;
 
     private final clsBeResolucion_lp_operador BeResolucion = new clsBeResolucion_lp_operador();
 
@@ -244,30 +244,30 @@ public class frm_recepcion_datos extends PBase {
     TextView lbltipo_fecha;
 
     /******** tipos de valores del parametro personalizado *******************/
-    EditText txtvalor_n ;
-    EditText txtvalor_t ;
-    EditText txtvalor_f ;
-    CheckBox cb_valor_b ;
+    EditText txtvalor_n;
+    EditText txtvalor_t;
+    EditText txtvalor_f;
+    CheckBox cb_valor_b;
 
     private clsBeStock_parametro ObjStock_parametro;
     Integer IdProductoParametro;
     String tipo_parametro;
-    private final String pRespuesta="";
+    private final String pRespuesta = "";
 
     /******* respuesta al validar si el parametro personalizado esta lleno o no, pero  no aplica para boolean ****/
     Boolean parametro_personalizado_valido;
 
-    private int pIdPropietarioBodega=0;
-    double vFactorNuevaRec=0;
-    double vCantNuevaRec=0;
-    double vCantAnteriorRec=0;
+    private int pIdPropietarioBodega = 0;
+    double vFactorNuevaRec = 0;
+    double vCantNuevaRec = 0;
+    double vCantAnteriorRec = 0;
 
     private clsBeProducto BeProducto = new clsBeProducto();
     private clsBeProducto_estadoList LProductoEstado = new clsBeProducto_estadoList();
 
-    private final ArrayList<String> EstadoList= new ArrayList<>();
-    private final ArrayList<String> PresList= new ArrayList<>();
-    private final ArrayList<String> VenceList= new ArrayList<>();
+    private final ArrayList<String> EstadoList = new ArrayList<>();
+    private final ArrayList<String> PresList = new ArrayList<>();
+    private final ArrayList<String> VenceList = new ArrayList<>();
     private final ArrayList<String> LotesList = new ArrayList<>();
     private final ArrayList<String> UbicLotesList = new ArrayList<>();
     private final ArrayList<String> NuevasLicencias = new ArrayList<>();
@@ -282,26 +282,32 @@ public class frm_recepcion_datos extends PBase {
     double CajasPorCama = 0;
     double CamasPorTarima = 0;
 
-    private String MensajeAdicionalParaImpresion="";
+    private String MensajeAdicionalParaImpresion = "";
 
-    /**Variables para las cantidad por lotes de ubicación de las órdenes de producción**/
-    private double CantRec=0;
-    private double CantTotal =0;
-    private double DifCantUbic =0;
+    /**
+     * Variables para las cantidad por lotes de ubicación de las órdenes de producción
+     **/
+    private double CantRec = 0;
+    private double CantTotal = 0;
+    private double DifCantUbic = 0;
 
-    /** guardar la LP inicial para validar si ya fue grabada ***/
+    /**
+     * guardar la LP inicial para validar si ya fue grabada
+     ***/
     String LPInicial = "";
     boolean reload_lp = false;
 
-    /** validar si redirecciona a la lista de recepcion por un error al guardar**/
+    /**
+     * validar si redirecciona a la lista de recepcion por un error al guardar
+     **/
     boolean redireccion_a_lista_recepcion = false;
 
     //Imagen
-    private String encoded="";
+    private String encoded = "";
     private clsBeImagen BeImagen;
     private clsBeProducto_imagen BeProductoImagen = new clsBeProducto_imagen();
-    private clsBeProducto_imagenList BeListProductoImagen  =  new clsBeProducto_imagenList();
-    private clsBeTrans_re_imgList BeListTranReImagen  =  new clsBeTrans_re_imgList();
+    private clsBeProducto_imagenList BeListProductoImagen = new clsBeProducto_imagenList();
+    private clsBeTrans_re_imgList BeListTranReImagen = new clsBeTrans_re_imgList();
     private int tipoCaptura = 1;
     private long CorelSiguiente;
     private int TmpMaxL;
@@ -309,8 +315,8 @@ public class frm_recepcion_datos extends PBase {
 
     private clsBeStock pStock;
 
-    int dias_aceptacion_exterior =0;
-    int dias_aceptacion_local=0;
+    int dias_aceptacion_exterior = 0;
+    int dias_aceptacion_local = 0;
 
     //#GT20112023:maneja la fecha vencimiento si aplicara la homologación de lote vencimiento
     String pVencimiento_Homologado = "1900-01-01T00:00:00";
@@ -319,12 +325,13 @@ public class frm_recepcion_datos extends PBase {
     private FloatingActionButton btnTareas;
 
     private boolean isButtonClickable = true; // Flag para controlar el estado del botón
-    private boolean procesando= false;  //flag para controlar que no se procese por doble Enter en el input
+    private boolean procesando = false;  //flag para controlar que no se procese por doble Enter en el input
 
     private clsBeColorList colores = new clsBeColorList();
     private clsBeTallaList tallas = new clsBeTallaList();
     private int IdTallaSelect = 0;
     private int IdColorSelect = 0;
+    private clsBeProducto_talla_color AuxTallaColor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -7937,7 +7944,7 @@ public class frm_recepcion_datos extends PBase {
 
                     case 16:
                         progress.setMessage("Procesando recepción");
-                        clsBeProducto_talla_color AuxTallaColor = null;
+                        AuxTallaColor = null;
 
                         if (gl.Control_Talla_Color) {
                             if (ListaBeTallColor != null && ListaBeTallColor.items != null) {
@@ -7945,6 +7952,10 @@ public class frm_recepcion_datos extends PBase {
                                         .filter(x -> x.IdTalla == IdTallaSelect && x.IdColor == IdColorSelect)
                                         .findFirst()
                                         .orElse(null);
+                            }
+
+                            if (AuxTallaColor != null) {
+                                pListBeStockRec.items.get(0).IdProductoTallaColor = AuxTallaColor.IdProductoTallaColor;
                             }
                         }
 
@@ -7998,6 +8009,7 @@ public class frm_recepcion_datos extends PBase {
                                 gl.gBeRecepcion.Detalle.items.get(0).Presentacion.IdPresentacion = 0;
                                 gl.gBeRecepcion.Detalle.items.get(0).Nombre_presentacion = "";
                                 gl.gBeRecepcion.Detalle.items.get(0).Host = gl.deviceId;
+
                                 if (AuxTallaColor != null) {
                                     gl.gBeRecepcion.Detalle.items.get(0).IdProductoTallaColor = AuxTallaColor.IdProductoTallaColor;
                                 }
@@ -8023,7 +8035,7 @@ public class frm_recepcion_datos extends PBase {
                                     gl.gBeRecepcion.Detalle.items.get(i).Host = gl.deviceId;
 
                                     if (AuxTallaColor != null) {
-                                        gl.gBeRecepcion.Detalle.items.get(0).IdProductoTallaColor = AuxTallaColor.IdProductoTallaColor;
+                                        gl.gBeRecepcion.Detalle.items.get(i).IdProductoTallaColor = AuxTallaColor.IdProductoTallaColor;
                                     }
                                 }
 
