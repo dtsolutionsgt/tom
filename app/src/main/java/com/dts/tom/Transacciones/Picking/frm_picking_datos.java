@@ -95,7 +95,7 @@ public class frm_picking_datos extends PBase {
                      txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec,
                      txtLicEscaneada;
     private Spinner cmbPresentacion, cmbEstado;
-    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba;
+    private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba, trTalla, trColor;
     private RelativeLayout relNe, relReemplazo, tblCajasUnidades;
 
     private boolean Escaneo_Pallet = false, pEntre_Reemplazo = false, pEntre_NoEnc = false;
@@ -195,6 +195,8 @@ public class frm_picking_datos extends PBase {
 
         relReemplazo = findViewById(R.id.relReemplazo);
         relNe = findViewById(R.id.relNe);
+        trTalla = findViewById(R.id.trTalla);
+        trColor = findViewById(R.id.trColor);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -613,6 +615,17 @@ public class frm_picking_datos extends PBase {
                     + (!gBePickingUbic.Lote.isEmpty()?" Lote: " + gBePickingUbic.Lote:""));
 
             gBeProducto = new clsBeProducto();
+
+            if (gl.Control_Talla_Color) {
+                trTalla.setVisibility(View.VISIBLE);
+                trColor.setVisibility(View.VISIBLE);
+
+                trLote.setVisibility(View.GONE);
+                trCaducidad.setVisibility(View.GONE);
+            } else {
+                trTalla.setVisibility(View.GONE);
+                trColor.setVisibility(View.GONE);
+            }
 
             execws(1);
 

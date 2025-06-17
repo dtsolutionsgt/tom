@@ -275,32 +275,28 @@ public class frm_consulta_stock extends PBase {
 
             });
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
 
-                    // AT 20211221 lo hace sin importar que la posición sea  = a 0
-                    //if (position > 0) {
-                    gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
+                // AT 20211221 lo hace sin importar que la posición sea  = a 0
+                //if (position > 0) {
+                gl.existencia = (clsBeVW_stock_res_CI) listView.getItemAtPosition(position);
 
-                    CambioUbicDetallado = chkDetalle.isChecked();
+                CambioUbicDetallado = chkDetalle.isChecked();
 
-                    try {
-                        if (gl.existencia.IdProductoBodega!=-1) {
-                            browse = 1;
-                            Intent intent = new Intent(getApplicationContext(), frm_consulta_stock_detalleCI.class);
-                            startActivity(intent);
-                        }
-                    } catch (Exception e) {
-                        msgbox("Error al intentar cargar detalle del producto");
-                        addlog(new Object() {
-                        }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
+                try {
+                    if (gl.existencia.IdProductoBodega!=-1) {
+                        browse = 1;
+                        Intent intent = new Intent(getApplicationContext(), frm_consulta_stock_detalleCI.class);
+                        startActivity(intent);
                     }
-                    //}
+                } catch (Exception e) {
+                    msgbox("Error al intentar cargar detalle del producto");
+                    addlog(new Object() {
+                    }.getClass().getEnclosingMethod().getName(), e.getMessage(), "");
                 }
-
+                //}
             });
 
             chkDetalle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
@@ -549,6 +545,10 @@ public class frm_consulta_stock extends PBase {
                         item.IdPresentacion = pListStock2.items.get(i).IdPresentacion;
                         item.IdArea = pListStock2.items.get(i).IdArea;
                         item.IdStock = pListStock2.items.get(i).IdStock;
+                        item.Nombre_Talla = pListStock2.items.get(i).Nombre_Talla;
+                        item.Codigo_Talla = pListStock2.items.get(i).Codigo_Talla;
+                        item.Nombre_Color = pListStock2.items.get(i).Nombre_Color;
+                        item.Codigo_Color = pListStock2.items.get(i).Codigo_Color;
 
                         items_stock.add(item);
 
