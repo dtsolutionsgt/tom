@@ -4938,6 +4938,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 gMovimientoDet.IdRecepcion = obj.Stock.IdRecepcionEnc;
                 gMovimientoDet.Cantidad = vCantidadAUbicar;
                 gMovimientoDet.Serie = obj.Stock.Serial;
+                gMovimientoDet.IdProductoTallaColor = obj.Stock.IdProductoTallaColor;
 
                 if (obj.Control_peso) {
                     gMovimientoDet.Peso = Double.valueOf(txtPeso.getText().toString().replace(",", ""));

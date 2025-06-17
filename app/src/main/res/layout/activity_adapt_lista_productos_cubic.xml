@@ -77,5 +77,31 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/lblTalla"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|center_vertical"
+            android:minHeight="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:text="390"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/lblColor"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|center_vertical"
+            android:minHeight="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:text="Negro"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+
     </LinearLayout>
 </RelativeLayout>

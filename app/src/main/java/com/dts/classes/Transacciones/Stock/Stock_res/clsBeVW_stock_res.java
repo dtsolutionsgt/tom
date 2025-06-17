@@ -124,6 +124,11 @@ public class clsBeVW_stock_res {
   @Element(required=false) public String Nombre_UnidadMedida="";
   @Element(required=false) public double Peso_referencia=0;
   @Element(required=false) public int IdTipoEtiqueta=0;
+  @Element(required=false) public String Nombre_Talla = "";
+  @Element(required=false) public String Codigo_Talla = "";
+  @Element(required=false) public String Nombre_Color = "";
+  @Element(required=false) public String Codigo_Color = "";
+  @Element(required=false) public int IdProductoTallaColor = 0;
 
   @Element(required=false) public clsBeTrans_movimientos Movimiento = new clsBeTrans_movimientos();
 
@@ -153,7 +158,8 @@ public class clsBeVW_stock_res {
                            int IdClasificacion,int IdTipoProducto,String NombreTipoProducto,
                            Boolean Pallet_No_Estandar,int Posiciones, String codigo_poliza,String numero_orden,
                            String Documento_Ingreso, String Nombre_clasificacion, String Nombre_Completo, int no_linea, int IdPresentacion_Anterior,
-                           int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion, clsBeTrans_movimientos Movimiento) {
+                           int IdOperadorBodega_Asignado, String Fecha_Pedido, String Fecha_Preparacion, clsBeTrans_movimientos Movimiento,
+                           String Nombre_Talla, String Codigo_Talla, String Nombre_Color, String Codigo_Color, int IdProductoTallaColor) {
 
     this.IdBodega=IdBodega;
     this.IdPropietario=IdPropietario;
@@ -250,6 +256,11 @@ public class clsBeVW_stock_res {
     this.Fecha_Pedido = Fecha_Pedido;
     this.Fecha_Preparacion = Fecha_Preparacion;
     this.Movimiento = Movimiento;
+    this.Nombre_Talla = Nombre_Talla;
+    this.Codigo_Talla = Codigo_Talla;
+    this.Nombre_Color = Nombre_Color;
+    this.Codigo_Color = Codigo_Color;
+    this.IdProductoTallaColor = IdProductoTallaColor;
   }
 
 

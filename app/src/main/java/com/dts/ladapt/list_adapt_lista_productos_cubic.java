@@ -63,7 +63,15 @@ public class list_adapt_lista_productos_cubic extends RecyclerView.Adapter<list_
 
         holder.lbl3.setText(String.valueOf(vCantidadAUbicar));
         holder.lbl4.setText(items.get(position).Stock.getLote());
-        holder.lbl5.setText(items.get(position).Stock.getFecha_Vence());
+
+        if (items.get(position).Stock.Fecha_Vence.contains("01-01-1900")) {
+            holder.lbl5.setText("");
+        } else {
+            holder.lbl5.setText(items.get(position).Stock.getFecha_Vence());
+        }
+
+        holder.lbl6.setText(items.get(position).Stock.Codigo_Talla);
+        holder.lbl7.setText(items.get(position).Stock.Nombre_Color);
 
         double vCantidadReservada = items.get(position).Stock.CantidadReservadaUMBas;
         if (vCantidadReservada != 0) {
@@ -80,7 +88,7 @@ public class list_adapt_lista_productos_cubic extends RecyclerView.Adapter<list_
 
     // Clase interna para el ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView lbl1, lbl2, lbl3, lbl4, lbl5;
+        TextView lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl7;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +98,8 @@ public class list_adapt_lista_productos_cubic extends RecyclerView.Adapter<list_
             lbl3 = itemView.findViewById(R.id.lblCantidad);
             lbl4 = itemView.findViewById(R.id.lblLote);
             lbl5 = itemView.findViewById(R.id.lblFechaVence);
+            lbl6 = itemView.findViewById(R.id.lblTalla);
+            lbl7 = itemView.findViewById(R.id.lblColor);
         }
     }
 }

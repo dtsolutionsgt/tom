@@ -42,7 +42,7 @@ public class clsBeTrans_movimientos {
     @Element(required=false) public int IdDespachoDet;
     @Element(required=false) public int IdProducto;
     @Element(required=false) public String Lic_plate;
-
+    @Element(required=false) public int IdProductoTallaColor = 0;
 
     public clsBeTrans_movimientos() {
     }
@@ -54,7 +54,7 @@ public class clsBeTrans_movimientos {
                                   String Serie,double Peso,String Lote,String Fecha_vence,
                                   String Fecha,String Barra_pallet,String Hora_ini,String Hora_fin,
                                   String Fecha_agr,String Usuario_agr,double Cantidad_hist,double Peso_hist,
-                                  boolean IsNew, int IdOperadorBodega) {
+                                  boolean IsNew, int IdOperadorBodega, int IdProductoTallaColor) {
 
         this.IdMovimiento=IdMovimiento;
         this.IdEmpresa=IdEmpresa;
@@ -86,6 +86,7 @@ public class clsBeTrans_movimientos {
         this.Peso_hist=Peso_hist;
         this.IsNew=IsNew;
         this.IdOperadorBodega = IdOperadorBodega;
+        this.IdProductoTallaColor = IdProductoTallaColor;
 
     }
 

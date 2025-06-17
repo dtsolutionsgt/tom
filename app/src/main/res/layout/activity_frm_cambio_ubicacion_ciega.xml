@@ -259,6 +259,26 @@
                                     android:textColor="#FFFFFF"
                                     android:textSize="18sp"
                                     android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/lblTalla"
+                                    android:layout_width="120dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Talla"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/lblColor"
+                                    android:layout_width="120dp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="Color"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
 
                             <!--ListView
