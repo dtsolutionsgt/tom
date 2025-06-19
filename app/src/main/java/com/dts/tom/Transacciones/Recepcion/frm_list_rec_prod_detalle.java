@@ -752,6 +752,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                         callMethod("Get_Producto_By_IdProductoBodega","IdProductoBodega",BeOcDet.IdProductoBodega);
                         break;
                     case 2:
+                        //#CKFK20250618 Agregué el IdOrdenCompraDet
                         callMethod("Get_Detalle_By_IdRecepcionDet_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                 "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea,
                                 "pIdOrdenCompraDet",BeOcDet.IdOrdenCompraDet);
