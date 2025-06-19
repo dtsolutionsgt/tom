@@ -93,7 +93,7 @@ public class frm_picking_datos extends PBase {
     private FloatingActionButton btnConfirmarPk;
     private EditText txtLicencia, txtFechaCad, txtLote, txtUniBas, txtCantidadPick, txtPesoPick,
                      txtCodigoProducto, txtCajas, txtUnidades, txtPreSol, txtUnidadSol, txtPresRec, txtUnidadRec,
-                     txtLicEscaneada;
+                     txtLicEscaneada, txtTalla, txtColor;
     private Spinner cmbPresentacion, cmbEstado;
     private TableRow trCaducidad, trLP, trCodigo, trPeso, trPresentacion, trLote, tblEstiba, trTalla, trColor;
     private RelativeLayout relNe, relReemplazo, tblCajasUnidades;
@@ -197,6 +197,8 @@ public class frm_picking_datos extends PBase {
         relNe = findViewById(R.id.relNe);
         trTalla = findViewById(R.id.trTalla);
         trColor = findViewById(R.id.trColor);
+        txtTalla = findViewById(R.id.txtTalla);
+        txtColor = findViewById(R.id.txtColor);
 
         ProgressDialog("Cargando datos de producto picking");
 
@@ -1664,6 +1666,11 @@ public class frm_picking_datos extends PBase {
                 btnEnterLp = true;
             }
 
+            if (gl.Control_Talla_Color) {
+                txtTalla.setText(String.format("%s - %s", gBePickingUbic.Codigo_Talla, gBePickingUbic.Nombre_Talla));
+                txtColor.setText(String.format("%s - %s", gBePickingUbic.Codigo_Color, gBePickingUbic.Nombre_Color));
+            }
+
             txtCantidadPick.setEnabled(true);
 
             txtCodigoProducto.setText(gBePickingUbic.CodigoProducto);
@@ -1824,6 +1831,11 @@ public class frm_picking_datos extends PBase {
                 btnEnterCod = true;
             } else {
                 btnEnterLp = true;
+            }
+
+            if (gl.Control_Talla_Color) {
+                txtTalla.setText(String.format("%s - %s", gBePickingUbic.Codigo_Talla, gBePickingUbic.Nombre_Talla));
+                txtColor.setText(String.format("%s - %s", gBePickingUbic.Codigo_Color, gBePickingUbic.Nombre_Color));
             }
 
             txtCantidadPick.setEnabled(true);
