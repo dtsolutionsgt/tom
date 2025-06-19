@@ -6032,6 +6032,18 @@ public class frm_recepcion_datos extends PBase {
                 pNumeroLP = txtNoLP.getText().toString().trim().replace("$","");
             }
 
+            if (!pNumeroLP.equals(BeTransReDet.getLic_plate())) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Desfase de licencia")
+                        .setMessage("Hubo un desfase de licencia, se actualizará a la enviada en el objeto.")
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            // Actualiza la licencia al nuevo valor
+                            pNumeroLP= BeTransReDet.Lic_plate;
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+
             if (BeTransReDet!=null){
                 vLote = BeTransReDet.Lote;
                 vFechaVence = du.convierteFechaMostrar(BeTransReDet.Fecha_vence.toString());
@@ -7675,16 +7687,11 @@ public class frm_recepcion_datos extends PBase {
 
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", (dialog1, which) -> Guardar_Pallet());
-
             dialog.setNegativeButton("No", (dialog12, which) -> {
             });
 
@@ -8334,8 +8341,6 @@ public class frm_recepcion_datos extends PBase {
                     break;
                 case 6:
                     processNuevoLPA();
-                    //#EJC20210504: Refactor por resolución LP
-                    //processNuevoLP();
                     break;
                 case 7:
                     processLicensePallet();
@@ -8961,65 +8966,6 @@ public class frm_recepcion_datos extends PBase {
     private clsBeResolucion_lp_operador nBeResolucion = null;
 
 
-    //#GT22082022_0828: valida si la LP ya fue registrada previo a guardar, porque se puede asignar a varios dispositivos
-    // si es el mismo Operador de la bodega.
-
-    private void Valida_LP_Previo_Guardar(){
-        try {
-
-            String LPvalidado = "";
-
-            if (nBeResolucion == null){
-                //toast("Buscando la resolución");
-                nBeResolucion = new clsBeResolucion_lp_operador();
-                //toast("Inicializando la instancia");
-                if (xobj!=null){
-                    //toast("El objeto no es nulo");
-                    nBeResolucion = xobj.getresult(clsBeResolucion_lp_operador.class, "Get_Resoluciones_Lp_By_IdOperador_And_IdBodega");
-
-                }else{
-                    toast("El objeto SI es nulo");
-                }
-            }
-
-            //toastlong("nuevo lp" + nBeResolucion.Correlativo_Actual);
-            if (nBeResolucion !=null){
-
-                gl.IdResolucionLpOperador = nBeResolucion.IdResolucionlp;
-
-                long pLpSiguiente = nBeResolucion.Correlativo_Actual +1;
-                int largoMaximo = String.valueOf(nBeResolucion.Correlativo_Final).length();
-
-                long intLPSig = pLpSiguiente;
-                int MaxL = largoMaximo;
-
-                //#CKFK20220410 Reemplacé el código de arriba por esta línea
-                String result = String.format("%0"+ MaxL + "d",intLPSig);
-                LPvalidado= nBeResolucion.Serie + result;
-                //#GT23082022_0803: Si la LP en resolución ya cambio porque la grabaron desde otro dispositivo alerta, sino continua registrando
-                if (LPInicial.contains(LPvalidado)){
-                    //toast("Continuar grabando");
-                    guardar_recepcion();
-                }else{
-                    toast("Se ha asignado una nueva LP, porque la anterior ya fue asignada, reintente Guardar o, regrese a la lista de tareas.");
-                    txtNoLP.setText(LPvalidado);
-                    btnTareas.setEnabled(true);
-                }
-
-            }else{
-                Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
-                gl.IdResolucionLpOperador =0;
-                return;
-            }
-
-
-            //GT23082022_0939: recargamos el resto de codigo de una carga normal de LP, aunque esto sea un reload
-
-        }catch (Exception e){
-            mu.msgbox("Valida_LP_Previo_Guardar: "+e.getMessage());
-        }
-    }
-
     private void processNuevoLPA(){
 
 
@@ -9071,8 +9017,6 @@ public class frm_recepcion_datos extends PBase {
                 }
             }else{
                 Log.e("Licencia","recursivecall_by_ejc : " + CantVeces);
-                //execws(6);
-                //toastlong("No se obtuvo resolución de licencia "+ pNumeroLP);
                 gl.IdResolucionLpOperador =0;
                 return;
             }
@@ -9108,7 +9052,7 @@ public class frm_recepcion_datos extends PBase {
                         //#CKFK20220306 Agregué esta validación para el License Plate
                         BeUbicaciones = new ArrayList<clsBeTrans_oc_det_lote>();
 
-                        if (BeProducto.getControl_vencimiento() && VenceList.size()>0){
+                        if (BeProducto.getControl_vencimiento() && !VenceList.isEmpty()){
 
                             //#CKFK 20211030 Validé que BeOCDetLoteList.items no fuera nulo
                             if (BeOCDetLoteList.items!=null){
@@ -9137,7 +9081,7 @@ public class frm_recepcion_datos extends PBase {
                         //#CKFK 20211030 Validé que BeUbicaciones no fuera nulo
                         if (BeUbicaciones!=null){
                             //#CKFK 20211030 Validé que BeUbicaciones.size() fuera mayor que 0
-                            if (BeUbicaciones.size()==0 && !Escaneo_Pallet){
+                            if (BeUbicaciones.isEmpty() && !Escaneo_Pallet){
                                 txtNoLP.setText(pNumeroLP);
                             }
                         }else{
@@ -9179,7 +9123,6 @@ public class frm_recepcion_datos extends PBase {
                         }else{
                             pNumeroLP = pLp;
                         }
-
                         break;
                     }
                 }
@@ -9696,43 +9639,6 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void msgAskAsignarNuevaLp(String msg) {
-
-
-        try{
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
-            dialog.setCancelable(false);
-            dialog.setIcon(R.drawable.ic_quest);
-            dialog.setPositiveButton("Si", (dialog12, which) -> {
-
-                //#GT23082022_1250: se recarga nueva LP porque entro en primer validación
-                //de que LP ya esta aisgnada o usada
-                txtNoLP.setText("");
-                execws(6);
-
-            });
-
-            if (!gl.bloquear_lp_hh) {
-                dialog.setNegativeButton("No", (dialog1, which) -> {
-                    txtNoLP.setText("");
-                    txtNoLP.setSelectAllOnFocus(true);
-                    txtNoLP.requestFocus();
-                    txtNoLP.setEnabled(true);
-                });
-            }
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
-        }
-
-    }
-
     private void msgAskExisteLp(String msg) {
 
         try{
@@ -9809,32 +9715,6 @@ public class frm_recepcion_datos extends PBase {
 
     }
 
-    private void msgExisteLp(String msg) {
-
-        try{
-
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage(msg);
-            dialog.setCancelable(false);
-            dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("OK", (dialog12, which) -> {
-                txtNoLP.setText("");
-                txtNoLP.setSelectAllOnFocus(true);
-                txtNoLP.requestFocus();
-            });
-
-            dialog.show();
-
-        }catch (Exception e){
-            addlog(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
-        }
-
-    }
-
     private void doExit(){
         try{
 
@@ -9897,12 +9777,8 @@ public class frm_recepcion_datos extends PBase {
             pListBeStockRec = xobj.getresult(clsBeStock_recList.class,"Get_Stock_By_IdRecepcionEnc_And_IdRecpecionDet");
 
             if (pListBeStockRec != null){
-
                 execws(2);
-            }else{
-                return ;
             }
-
 
         }catch (Exception e){
             mu.msgbox("processGetStock:"+e.getMessage());

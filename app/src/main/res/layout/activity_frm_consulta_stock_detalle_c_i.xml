@@ -72,7 +72,7 @@
 
                 <TextView
                     android:id="@+id/lblUnidad"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
@@ -104,7 +104,7 @@
 
                 <TextView
                     android:id="@+id/lblPresentacion"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -132,8 +132,67 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/lblResUni"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Res UmBas"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="88dp" />
+
+                <TextView
+                    android:id="@+id/txtResUni"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="107dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/trResPresentacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/lblResPres"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Res Caja20:"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="130dp" />
+
+                <TextView
+                    android:id="@+id/txtResPres"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="22dp"
+                    tools:layout_editor_absoluteY="163dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
                     android:id="@+id/textView107"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -162,7 +221,7 @@
 
                 <TextView
                     android:id="@+id/textView109"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -192,7 +251,7 @@
 
                 <TextView
                     android:id="@+id/textView111"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -219,7 +278,7 @@
 
                 <TextView
                     android:id="@+id/textView114"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -244,7 +303,7 @@
 
                 <TextView
                     android:id="@+id/textView116"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -269,7 +328,7 @@
 
                 <TextView
                     android:id="@+id/textView119"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -294,7 +353,7 @@
 
                 <TextView
                     android:id="@+id/textView120"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
@@ -319,7 +378,7 @@
 
                 <TextView
                     android:id="@+id/textView122"
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:text="Licencia:"

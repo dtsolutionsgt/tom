@@ -30,8 +30,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,
             lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate,
-            lblPresentacion, lblUnidad;
-    private TableRow trPresentacion;
+            lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres;
+    private TableRow trPresentacion, trResPresentacion;
     private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
@@ -66,6 +66,11 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblPresentacion = findViewById(R.id.lblPresentacion);
         lblUnidad = findViewById(R.id.lblUnidad);
         trPresentacion = findViewById(R.id.trPresentacion);
+        lblResUni = findViewById(R.id.lblResUni);
+        txtResUni = findViewById(R.id.txtResUni);
+        lblResPres = findViewById(R.id.lblResPres);
+        txtResPres = findViewById(R.id.txtResPres);
+        trResPresentacion = findViewById(R.id.trResPresentacion);
 
         ProgressDialog();
 
@@ -114,12 +119,25 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     //String umbas = gl.existencia.DisponibleUMBas.replace(",",".");
                     Double existencia = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", ""));
                     String stringDecimal = String.format("%.2f", existencia);
-                    lblUnidad.setText(gl.existencia.UM + ":");
+                    lblUnidad.setText("Disp. " + gl.existencia.UM + ":");
                     lblexUnidad.setText(stringDecimal);
 
                 } else {
                     lblexUnidad.setText("0.00");
                 }
+
+                if (!gl.existencia.ReservadoUMBAs.equals("0") || !gl.existencia.ReservadoUMBAs.isEmpty()) {
+
+                    //String umbas = gl.existencia.DisponibleUMBas.replace(",",".");
+                    Double existencia = Double.valueOf(gl.existencia.ReservadoUMBAs.replace(",", ""));
+                    String stringDecimal = String.format("%.2f", existencia);
+                    lblResUni.setText("Res. " + gl.existencia.UM + ":");
+                    txtResUni.setText(stringDecimal);
+
+                } else {
+                    txtResUni.setText("0.00");
+                }
+
 
            /* if(gl.existencia.ExistUMBAs != "" && gl.existencia.factor !=0){
 
@@ -138,11 +156,23 @@ public class frm_consulta_stock_detalleCI extends PBase {
                     Double factor = Double.valueOf(gl.existencia.DisponibleUMBas.replace(",", "")) / Double.valueOf(gl.existencia.factor);
                     String stringDecimal = String.format("%.2f", factor);
 
-                    lblPresentacion.setText(gl.existencia.Pres + ":");
+                    lblPresentacion.setText("Disp. " + gl.existencia.Pres + ":");
                     lblexPres.setText(stringDecimal);
                 } else {
                     trPresentacion.setVisibility(View.GONE);
                     lblexPres.setText(gl.existencia.Pres);
+                }
+
+                if (!gl.existencia.ReservadoUMBAs.isEmpty() && gl.existencia.factor != 0) {
+
+                    Double factor = Double.valueOf(gl.existencia.ReservadoUMBAs.replace(",", "")) / Double.valueOf(gl.existencia.factor);
+                    String stringDecimal = String.format("%.2f", factor);
+
+                    lblResPres.setText("Res. " + gl.existencia.Pres + ":");
+                    txtResPres.setText(stringDecimal);
+                } else {
+                    trResPresentacion.setVisibility(View.GONE);
+                    txtResPres.setText(gl.existencia.Pres);
                 }
 
                 lblestado.setText(gl.existencia.Estado + "");

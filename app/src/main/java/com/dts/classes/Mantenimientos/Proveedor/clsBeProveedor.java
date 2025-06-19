@@ -44,6 +44,8 @@ public class clsBeProveedor {
     @Element(required=false) public int IdPais=0;
     @Element(required=false) public String Codigo_Empresa_ERP="";
 
+    @Element(required=false) public String Codigo_Empresa_ERP="";
+
     public clsBeProveedor() {
     }
 

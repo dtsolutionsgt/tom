@@ -47,6 +47,7 @@ public class clsBeCliente {
     @Element(required=false) public int IdUbicacionAbastecerCon = 0;
     @Element(required=false) public int IdBodegaAreaSAP = 0;
     @Element(required=false) public boolean Es_Proveedor = false;
+    @Element(required=false) public String Codigo_Empresa_ERP="";
 
     public clsBeCliente() {
     }

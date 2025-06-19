@@ -1240,21 +1240,9 @@ public class frm_Packing extends PBase {
 
                     double resto=0;
                     double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
+                    boolean vPaletizado = ListBeProductoPresentacion.items.get(0).getEsPallet();
 
-                    if (!gl.Permitir_Decimales){
-                        resto = vCantidadAUbicar % vFactor;
-                        if (resto!=0){
-                           msgbox("Existencia disponible("+ vCantidadAUbicar  +") del producto no es múltiplo del factor " + vFactor);
-                            datosCorrectos = false;
-                        }
-                    }
-                }else if (AuxList.size() > 1) {
-
-                    double resto=0;
-                    double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
-
-                    for (int i = 0; i < AuxList.size(); i++) {
-
+                    if (vPaletizado ){
                         if (!gl.Permitir_Decimales){
                             resto = vCantidadAUbicar % vFactor;
                             if (resto!=0){
@@ -1262,6 +1250,26 @@ public class frm_Packing extends PBase {
                                 datosCorrectos = false;
                             }
                         }
+                    }
+
+                }else if (AuxList.size() > 1) {
+
+                    double resto=0;
+                    double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
+                    boolean vPaletizado = ListBeProductoPresentacion.items.get(0).getEsPallet();
+
+                    for (int i = 0; i < AuxList.size(); i++) {
+
+                        if (vPaletizado){
+                            if (!gl.Permitir_Decimales){
+                                resto = vCantidadAUbicar % vFactor;
+                                if (resto!=0){
+                                    msgbox("Existencia disponible("+ vCantidadAUbicar  +") del producto no es múltiplo del factor " + vFactor);
+                                    datosCorrectos = false;
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -1418,7 +1426,7 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.IdEmpresa = gl.IdEmpresa;
                 gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
                 gMovimientoDet.IdTransaccion = 1;
-                gMovimientoDet.IdPropietarioBodega = obj.Stock.IdPropietarioBodega;
+                gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
                 gMovimientoDet.IdProductoBodega = obj.Stock.IdProductoBodega;
                 gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion_Anterior;
                 gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
@@ -1453,7 +1461,6 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.Peso = 0;
                 gMovimientoDet.Lote = obj.Stock.Lote;
                 gMovimientoDet.Lic_plate = obj.Stock.Lic_plate;
-                gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
 
                 if(obj.Control_vencimiento ){
                     gMovimientoDet.Fecha_vence = app.strFechaXML2(obj.Stock.Fecha_Vence);
@@ -1461,7 +1468,7 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Fecha_vence = app.strFechaXMLCombo("01/01/1900");
                 }
 
-                gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+                gMovimientoDet.Fecha = du.getFechaActual();
 
                 if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
                     gMovimientoDet.Barra_pallet =txtNuevoLp.getText().toString();
@@ -1469,9 +1476,9 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Barra_pallet = "";
                 }
 
-                gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
-                gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
-                gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+                gMovimientoDet.Hora_ini =  du.getFechaActual();
+                gMovimientoDet.Hora_fin =  du.getFechaActual();
+                gMovimientoDet.Fecha_agr =  du.getFechaActual();
                 gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
                 gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
                 gMovimientoDet.Peso_hist = gMovimientoDet.Peso;

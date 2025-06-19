@@ -726,11 +726,11 @@ public class frm_cambio_ubicacion_dirigida extends PBase {
                 if (gl.BeStockPallet!=null) {
                     gMovimientoDet.Barra_pallet = gl.BeStockPallet.Codigo_Barra;
                 }else{
-                    gMovimientoDet.Barra_pallet = "";
+                    gMovimientoDet.Barra_pallet = txtLicPlate.getText().toString();
                 }
 
             }else{
-                gMovimientoDet.Barra_pallet = "";
+                gMovimientoDet.Barra_pallet = txtLicPlate.getText().toString();
             }
 
             gMovimientoDet.Usuario_agr = String.valueOf(gl.tareadet.IdOperadorBodega);

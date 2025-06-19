@@ -556,7 +556,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.IdProductoBodega = DT.getInt(14);
                     vItem.IdUnidadMedida = DT.getInt(20);
 
-                    if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains(gl.termino.toLowerCase()) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                    if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains("" + Integer.valueOf(gl.termino)) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
                         TempBeListStock.add(vItem);
                     }
 
