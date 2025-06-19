@@ -9,42 +9,71 @@ import org.simpleframework.xml.Element;
 
 public class clsBeProveedor {
 
-    @Element(required=false) public int IdEmpresa=0;
-    @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
-    @Element(required=false) public int IdPropietario=0;
-    @Element(required=false) public clsBePropietarios Propietario=new clsBePropietarios();
-    @Element(required=false) public int IdProveedor=0;
-    @Element(required=false) public String Codigo="";
-    @Element(required=false) public String Nombre="";
-    @Element(required=false) public String Telefono="";
-    @Element(required=false) public String Nit="";
-    @Element(required=false) public String Direccion="";
-    @Element(required=false) public String Email="";
-    @Element(required=false) public String Contacto="";
-    @Element(required=false) public boolean Activo=false;
-    @Element(required=false) public boolean Muestra_precio=false;
-    @Element(required=false) public String User_agr="";
-    @Element(required=false) public String Fec_agr="1900-01-01T00:00:00";
-    @Element(required=false) public String User_mod="";
-    @Element(required=false) public String Fec_mod="1900-01-01T00:00:00";
-    @Element(required=false) public boolean Actualiza_costo_oc=false;
-    @Element(required=false) public int IdUbicacionVirtual=0;
-    @Element(required=false) public boolean Es_Bodega_Recepcion=false;
-    @Element(required=false) public boolean Es_Bodega_Traslado=false;
-    @Element(required=false) public String Referencia="";
-    @Element(required=false) public boolean Sistema=false;
-    @Element(required=false) public int IdConfiguracionBarraPallet=0;
-    @Element(required=false) public boolean Es_Proveedor_Servicio=false;
+    @Element(required = false)
+    public int IdEmpresa = 0;
+    @Element(required = false)
+    public clsBeEmpresa Empresa = new clsBeEmpresa();
+    @Element(required = false)
+    public int IdPropietario = 0;
+    @Element(required = false)
+    public clsBePropietarios Propietario = new clsBePropietarios();
+    @Element(required = false)
+    public int IdProveedor = 0;
+    @Element(required = false)
+    public String Codigo = "";
+    @Element(required = false)
+    public String Nombre = "";
+    @Element(required = false)
+    public String Telefono = "";
+    @Element(required = false)
+    public String Nit = "";
+    @Element(required = false)
+    public String Direccion = "";
+    @Element(required = false)
+    public String Email = "";
+    @Element(required = false)
+    public String Contacto = "";
+    @Element(required = false)
+    public boolean Activo = false;
+    @Element(required = false)
+    public boolean Muestra_precio = false;
+    @Element(required = false)
+    public String User_agr = "";
+    @Element(required = false)
+    public String Fec_agr = "1900-01-01T00:00:00";
+    @Element(required = false)
+    public String User_mod = "";
+    @Element(required = false)
+    public String Fec_mod = "1900-01-01T00:00:00";
+    @Element(required = false)
+    public boolean Actualiza_costo_oc = false;
+    @Element(required = false)
+    public int IdUbicacionVirtual = 0;
+    @Element(required = false)
+    public boolean Es_Bodega_Recepcion = false;
+    @Element(required = false)
+    public boolean Es_Bodega_Traslado = false;
+    @Element(required = false)
+    public String Referencia = "";
+    @Element(required = false)
+    public boolean Sistema = false;
+    @Element(required = false)
+    public int IdConfiguracionBarraPallet = 0;
+    @Element(required = false)
+    public boolean Es_Proveedor_Servicio = false;
 
-    @Element(required=false) public boolean IsNew=false;
-    @Element(required=false) public clsBeProveedor_tiemposList TiemposProveedor= new clsBeProveedor_tiemposList();
+    @Element(required = false)
+    public boolean IsNew = false;
+    @Element(required = false)
+    public clsBeProveedor_tiemposList TiemposProveedor = new clsBeProveedor_tiemposList();
 
-    @Element(required=false) public int IdBodegaAreaSAP = 0;
+    @Element(required = false)
+    public int IdBodegaAreaSAP = 0;
 
-    @Element(required=false) public int IdPais=0;
-    @Element(required=false) public String Codigo_Empresa_ERP="";
-
-    @Element(required=false) public String Codigo_Empresa_ERP="";
+    @Element(required = false)
+    public int IdPais = 0;
+    @Element(required = false)
+    public String Codigo_Empresa_ERP = "";
 
     public clsBeProveedor() {
     }

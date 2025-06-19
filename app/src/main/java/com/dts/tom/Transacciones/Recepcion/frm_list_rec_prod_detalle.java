@@ -753,7 +753,7 @@ public class frm_list_rec_prod_detalle extends PBase {
                         break;
                     case 2:
                         callMethod("Get_Detalle_By_IdRecepcionDet_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea);
+                                "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea, "pIdOrdenCompraDet", BeOcDet.IdOrdenCompraDet);
                         break;
                     case 3:
                         callMethod("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet",
