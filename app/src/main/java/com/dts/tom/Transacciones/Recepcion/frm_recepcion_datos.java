@@ -6187,7 +6187,7 @@ public class frm_recepcion_datos extends PBase {
 
 
                     }else if (BeProducto.IdTipoEtiqueta == 9){
-                        //nuevo formato importación de etiqueta Licencia para La Cumbre imprimiendo Indice Rotación.
+                        //nuevo formato impresión de etiqueta Licencia para La Cumbre imprimiendo Indice Rotación.
 
                         zpl = String.format("^XA \n" +
                                         "^MMT \n" +
@@ -6238,7 +6238,7 @@ public class frm_recepcion_datos extends PBase {
 
                     }else if(BeProducto.IdTipoEtiqueta == 10){
 
-                        //nuevo formato importación de etiqueta Licencia para Killios .
+                        //nuevo formato impresión de etiqueta Licencia para Killios .
                         zpl = String.format("^XA\n" +
                                         "^MMT\n" +
                                         "^PW609\n" +

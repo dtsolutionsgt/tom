@@ -587,7 +587,9 @@ public class frm_list_rec_prod extends PBase {
                 //selitem = pListDetalleOC.items.get(position);
 
                 selitem  = stream(pListDetalleOC.items)
-                        .where(c -> c.No_Linea == sitem.No_Linea && c.Codigo_Producto.equals(sitem.Producto.Codigo))
+                        .where(c -> c.No_Linea == sitem.No_Linea &&
+                                                c.Codigo_Producto.equals(sitem.Producto.Codigo) &&
+                                                c.IdOrdenCompraDet==sitem.IdOrdenCompraDet)
                         .firstOrNull();
 
                 if (selitem!=null){
@@ -621,7 +623,9 @@ public class frm_list_rec_prod extends PBase {
                 //selitem = pListDetalleOC.items.get(position);
 
                 selitem  = stream(pListDetalleOC.items)
-                        .where(c -> c.No_Linea == sitem.No_Linea && c.Codigo_Producto.equals(sitem.Producto.Codigo))
+                        .where(c -> c.No_Linea == sitem.No_Linea &&
+                                                    c.Codigo_Producto.equals(sitem.Producto.Codigo) &&
+                                                    c.IdOrdenCompraDet == sitem.IdOrdenCompraDet)
                         .first();
 
                 selid = sitem.No_Linea;

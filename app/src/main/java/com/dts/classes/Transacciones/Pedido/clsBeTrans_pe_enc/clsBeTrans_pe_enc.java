@@ -90,6 +90,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public int IdAcuerdoComercial = 0;
     @Element(required=false) public int IdMotivoDevolucion = 0;
     @Element(required=false) public String Codigo_Empresa_ERP="";
+    @Element(required=false) public boolean EsExportacion=false;
 
     public clsBeTrans_pe_enc() {
     }
