@@ -128,48 +128,42 @@ public class frm_consulta_stock extends PBase {
     private void setHandlers() {
         try{
 
-            txtUbic.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    try {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            switch (keyCode) {
-                                case KeyEvent.KEYCODE_ENTER:
-                                    //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
-                                    execws(1);
-                            }
+            txtUbic.setOnKeyListener((v, keyCode, event) -> {
+                try {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        switch (keyCode) {
+                            case KeyEvent.KEYCODE_ENTER:
+                                //Get_Ubicacion_By_Codigo_Barra_And_IdBodega
+                                execws(1);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                return false;
             });
 
-            txtCodigo.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
+            txtCodigo.setOnKeyListener((v, keyCode, event) -> {
 
-                    try {
+                try {
 
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                            switch (keyCode) {
+                        switch (keyCode) {
 
-                                case KeyEvent.KEYCODE_ENTER:
+                            case KeyEvent.KEYCODE_ENTER:
 
-                                    lblNombreProducto.setText("");
-                                    lblNombreProducto.setVisibility(View.GONE);
+                                lblNombreProducto.setText("");
+                                lblNombreProducto.setVisibility(View.GONE);
 
-                                    busca_stock();
+                                busca_stock();
 
-                            }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                return false;
             });
 
             txtNombre.setOnKeyListener(new View.OnKeyListener() {
