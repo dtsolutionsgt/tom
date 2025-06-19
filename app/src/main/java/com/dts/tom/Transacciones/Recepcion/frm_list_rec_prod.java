@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,12 +14,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +24,6 @@ import android.widget.TextView;
 import com.dts.base.ExDialog;
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
-import com.dts.base.appGlobals;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_pallet;
 import com.dts.classes.Mantenimientos.Barra_pallet.clsBeI_nav_barras_palletList;
 import com.dts.classes.Mantenimientos.Configuracion_barra_pallet.clsBeConfiguracion_barra_pallet;
@@ -43,12 +36,7 @@ import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det.clsBeTrans_oc_detL
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det_lote.clsBeTrans_oc_det_loteList;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_enc.clsBeTrans_oc_enc;
 import com.dts.classes.Transacciones.OrdenCompra.Trans_oc_ti.clsBeTrans_oc_ti;
-import com.dts.classes.Transacciones.Pedido.clsBeDetallePedidoAVerificar.clsBeDetallePedidoAVerificarList;
-import com.dts.classes.Transacciones.Pedido.clsBeTrans_pe_enc.clsBeTrans_pe_enc;
-import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
-import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubicList;
 import com.dts.classes.Transacciones.Recepcion.Trans_re_det.clsBeTrans_re_detList;
-import com.dts.classes.Transacciones.Recepcion.Trans_re_oc.clsBeTrans_re_oc;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.ladapt.Recepcion.list_adapt_detalle_recepcion2;
@@ -58,7 +46,6 @@ import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_recepcion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,7 +61,8 @@ public class frm_list_rec_prod extends PBase {
     private XMLObject xobj;
 
     private TextView lblTituloForma, lblIdPropietarioBodega, lblNombrePropietario;
-    private Button btnRegs,btnCompletaRec,btnGuardarFirma,btnSalirFirma,btnLimpiar;
+    private Button btnRegs;
+    private Button btnCompletaRec;
     private ListView listView;
     private EditText txtCodigoProductoRecepcion;
     private DrawingView txtFirma;
@@ -82,30 +70,24 @@ public class frm_list_rec_prod extends PBase {
     private CheckBox chkRecepcionados;
     private RelativeLayout relbot;
     private FloatingActionButton btnTareas;
-    private ImageView btnOrdenar;
 
     private clsBeTrans_oc_enc gBeOrdenCompra = new clsBeTrans_oc_enc();
     private clsBeTrans_re_detList pListTransRecDet = new clsBeTrans_re_detList();
-    private  clsBeTrans_re_oc gBeReOC = new clsBeTrans_re_oc();
     private clsBeTrans_oc_detList pListDetalleOC = new clsBeTrans_oc_detList();
-    private clsBeTrans_oc_detList pListDetalleOC_Aux = new clsBeTrans_oc_detList();
     public static clsBeConfiguracion_barra_pallet gBeConfiguracionBarraPallet =  new clsBeConfiguracion_barra_pallet();
     private static clsBeI_nav_barras_palletList lBeINavBarraPallet = new clsBeI_nav_barras_palletList();
     public static clsBeI_nav_barras_pallet BeINavBarraPallet= new clsBeI_nav_barras_pallet();
     private final clsBeStock_recList pListBeStockRecPI = new clsBeStock_recList();
     public static clsBeStock_rec gBeStockRec = new clsBeStock_rec();
-    private static final ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<clsBeTrans_oc_det>() ;
+    private static final ArrayList<clsBeTrans_oc_det> BeListDetalleOC= new ArrayList<>() ;
 
     public  static clsBeProducto BeProducto = new clsBeProducto();
     public static clsBeProductoList lBeProducto = new clsBeProductoList();
-    private int gotop;
 
     private boolean Escaneo_Pallet;
     private boolean Finalizada = false, Anulada = false;
-    private double Cant_Recibida_Anterior;
     private int browse, sortord;
     public String pLP="";
-    private String vLP="";
     public String vCodigoBodegaBarraPallet = "";
     public String vCodigoProductoBarraPallet= "";
     public static boolean EsTransferenciaInternaWMS=false;
@@ -115,11 +97,8 @@ public class frm_list_rec_prod extends PBase {
     //#CKFK 20211116 Agregué esta variable pora poder enviar el backorder de la OC
     private boolean backorder = false;
     private Dialog dialog;
-    private Bitmap FirmaPiloto;
     private byte[] firmByte;
     private String encodedImage;
-
-    private int Idx = -1;
 
     private clsBeTrans_oc_det selitem;
 
@@ -162,7 +141,6 @@ public class frm_list_rec_prod extends PBase {
         btnTareas = findViewById(R.id.btnTareas);
         lblNombrePropietario = findViewById(R.id.lblNombrePropietario);
         lblIdPropietarioBodega = findViewById(R.id.lblIdPropietarioBodega);
-        btnOrdenar = findViewById(R.id.btnOrdenar);
 
         gl.sortOrd = -1;
 
@@ -184,14 +162,11 @@ public class frm_list_rec_prod extends PBase {
 
     private void Procesa_Barra_Producto(){
 
-        int FilaActual= 0;
-        boolean LongitudValida = true;
+        boolean LongitudValida;
         vCodigoBodegaBarraPallet = "";
         vCodigoProductoBarraPallet= "";
-        vLP="";
+        String vLP;
         pLP="";
-        boolean vPalletOk = false;
-        boolean TxtCantidadHasFocus = false;
 
         try{
 
@@ -254,8 +229,6 @@ public class frm_list_rec_prod extends PBase {
                              if (gBeConfiguracionBarraPallet!=null){
                                  if (gBeConfiguracionBarraPallet.CodigoNumerico){
                                      vCodigoProductoBarraPallet =String.valueOf(Integer.parseInt(vCodigoProductoBarraPallet)); //vCodigoProductoBarraPallet.replaceFirst ("^0*", "");
-                                 }else{
-                                     vCodigoProductoBarraPallet = vCodigoProductoBarraPallet;
                                  }
                              }
 
@@ -266,20 +239,13 @@ public class frm_list_rec_prod extends PBase {
                                 int ln1 = vLongitudBodegaOrigen + vLongitudCodigoProducto;
                                 vLP = pLP.substring(ln1,vLongitudBarraPallet);
 
-                                if (vLP.equals("")){
+                                if (vLP.isEmpty()){
                                     txtCodigoProductoRecepcion.setText("");
                                     mu.msgbox("La licencia no tiene el formato correcto");
                                     return;
                                 }
 
-                            }else{
-                                try {
-                                    vLP = pLP.substring(vLongitudBodegaOrigen + vLongitudCodigoProducto, vLongitudBarraPallet - (vLongitudBodegaOrigen + vLongitudCodigoProducto));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
                             }
-
                             if (gBeOrdenCompra.IdTipoIngresoOC == 4){
                                 EsTransferenciaInternaWMS =true;
                              }
@@ -298,7 +264,6 @@ public class frm_list_rec_prod extends PBase {
                          mu.msgbox("El código de licencia : "+pLP+" no tiene la longitud válida");
                          txtCodigoProductoRecepcion.setText("");
                          txtCodigoProductoRecepcion.requestFocus();
-                         return;
                      }
 
                 }else{
@@ -332,73 +297,30 @@ public class frm_list_rec_prod extends PBase {
 
     }
 
-    private boolean ValidaEstadoPallet(){
-
-        try {
-            if (gBeStockRec!=null && gBeStockRec.IdStockRec>0 ){
-
-                mu.msgbox("El número de licencia: "+ pLP+" no es válido para la recepción");
-                txtCodigoProductoRecepcion.setText("");
-                txtCodigoProductoRecepcion.requestFocus();
-                return false;
-
-            }else{
-
-                if (!gBeStockRec.Lic_plate.isEmpty()){
-                    if (gBeStockRec.Uds_lic_plate == gBeStockRec.Cantidad){
-                        mu.msgbox("La licencia ya fue recibida");
-                        txtCodigoProductoRecepcion.setText("");
-                        txtCodigoProductoRecepcion.requestFocus();
-                        return false;
-                    }
-                }
-
-                if (BeProducto==null){
-                    execws(6);
-                    return false;
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    private void msgValidaProductoPallet(String msg) {
+    private void msgValidaProductoPallet() {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
             dialog.setTitle("TOMWMS");
-            dialog.setMessage( msg);
+            dialog.setMessage("¿La licencia está completa y en buen estado?");
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog1, which) -> Guardar_Pallet());
-            dialog.setNegativeButton("No", (dialog12, which) -> {
-                execws(8);
-            });
+            dialog.setNegativeButton("No", (dialog12, which) -> execws(8));
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
     private void Guardar_Pallet(){
 
         try{
-
-/*            vIdOrdenCompra=0;
-
-            if (gl.gBeRecepcion.OrdenCompraRec!=null){
-                if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
-                    vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
-                }
-            }
-*/
 
             gBeStockRec.Uds_lic_plate = gBeStockRec.Cantidad;
             gBeStockRec.No_bulto = 0;
@@ -418,11 +340,11 @@ public class frm_list_rec_prod extends PBase {
             if (gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo.trim().equals(vCodigoBodegaBarraPallet.trim()) |
                     BeINavBarraPallet.Bodega_Destino.trim().equals(gl.pBeBodega.Codigo)){
 
-                List AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
+                List<String> AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
 
-                Idx = AuxList.indexOf(vCodigoProductoBarraPallet);
+                int idx = AuxList.indexOf(vCodigoProductoBarraPallet);
 
-                if (Idx>-1){
+                if (idx >-1){
 
                     if (BeINavBarraPallet!=null){
 
@@ -431,7 +353,7 @@ public class frm_list_rec_prod extends PBase {
                             if (BeINavBarraPallet.Activo){
 
                                 gl.mode=1;
-                                selitem = pListDetalleOC.items.get(Idx);
+                                selitem = pListDetalleOC.items.get(idx);
                                 gl.gselitem = selitem;
                                 gl.gEscaneo_Pallet = true;
 
@@ -450,35 +372,30 @@ public class frm_list_rec_prod extends PBase {
                                 mu.msgbox("El código de licencia : "+ BeINavBarraPallet.Codigo_barra +" está inactivo: "+BeINavBarraPallet.Codigo_barra+" valide tabla de interface");
                                 txtCodigoProductoRecepcion.setText("");
                                 txtCodigoProductoRecepcion.requestFocus();
-                                return;
                             }
 
                         }else{
                             mu.msgbox("El código de licencia: "+BeINavBarraPallet.Codigo_barra+" ya fue recibido con fecha: "+BeINavBarraPallet.Fecha_Agregado);
                             txtCodigoProductoRecepcion.setText("");
                             txtCodigoProductoRecepcion.requestFocus();
-                            return;
                         }
 
                     }else{
                         mu.msgbox("El código de licencia: "+pLP+" no existe en el listado de licencias válidas para ingreso");
                         txtCodigoProductoRecepcion.setText("");
                         txtCodigoProductoRecepcion.requestFocus();
-                        return;
                     }
 
                 }else{
                     mu.msgbox("El producto: "+vCodigoProductoBarraPallet+" no coincide con ningún artículo del documento");
                     txtCodigoProductoRecepcion.setText("");
                     txtCodigoProductoRecepcion.requestFocus();
-                    return;
                 }
 
             }else{
                 mu.msgbox("El almacén emisor: "+vCodigoBodegaBarraPallet+" no coincide con el proveedor del documento: "+gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo);
                 txtCodigoProductoRecepcion.setText("");
                 txtCodigoProductoRecepcion.requestFocus();
-                return;
             }
 
         }catch (Exception e){
@@ -522,7 +439,6 @@ public class frm_list_rec_prod extends PBase {
                     pListTransRecDet = gl.gBeRecepcion.Detalle;
 
                     gBeOrdenCompra = new clsBeTrans_oc_enc();
-                    gBeReOC = new clsBeTrans_re_oc();
                     pListDetalleOC =new clsBeTrans_oc_detList();
 
                     gBeOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.OC;
@@ -531,13 +447,10 @@ public class frm_list_rec_prod extends PBase {
 
                     vIdOrdenCompra=0;
 
-                    if (gl.gBeRecepcion.OrdenCompraRec!=null){
-                        if ( gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc>0){
-                            vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
-                        }
+                    if (gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc > 0) {
+                        vIdOrdenCompra = gl.gBeRecepcion.OrdenCompraRec.IdOrdenCompraEnc;
                     }
 
-                    gBeReOC = gl.gBeRecepcion.OrdenCompraRec;
                     chkRecepcionados.setChecked(false);
 
                     pListDetalleOC = gl.gBeRecepcion.OrdenCompraRec.OC.DetalleOC;
@@ -546,7 +459,7 @@ public class frm_list_rec_prod extends PBase {
                         throw new Exception("El documento de ingreso no tiene detalles");
                     }
 
-                    Collections.sort(pListDetalleOC.items,new OrdenarItems());
+                    pListDetalleOC.items.sort(new OrdenarItems());
 
                     gl.gpListDetalleOC = pListDetalleOC;
 
@@ -686,12 +599,7 @@ public class frm_list_rec_prod extends PBase {
 
             chkRecepcionados.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                if (chkRecepcionados.isChecked()==true) {
-                    //pListDetalleOC.items = stream(pListDetalleOC.items).where(c->c.Cantidad_recibida>0).toList();
-                    Lista_Detalle_Documento_Ingreso();
-                }else{
-                    Lista_Detalle_Documento_Ingreso();
-                }
+                Lista_Detalle_Documento_Ingreso();
             });
 
         }catch (Exception e){
@@ -717,171 +625,115 @@ public class frm_list_rec_prod extends PBase {
             super.finish();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
 
-    private void ValidaProductoForRece(){
+    private void ValidaProductoForRece() {
+        try {
+            if (lBeProducto == null || lBeProducto.items == null) return;
 
-        List AuxList = null;
+            List<clsBeTrans_oc_det> auxList = new ArrayList<>();
 
-        try{
+            if (lBeProducto.items.size() > 1) {
+                for (int j = 0; j < lBeProducto.items.size(); j++) {
+                    clsBeProducto beProd = lBeProducto.items.get(j);
+                    List<clsBeTrans_oc_det> tempList = stream(pListDetalleOC.items)
+                            .where(c -> c.Codigo_Producto.equals(beProd.Codigo))
+                            .toList();
 
-            if (lBeProducto!=null){
-
-                if(lBeProducto.items!=null){
-
-                    if (lBeProducto.items.size()>1){
-
-                        List TempList;
-                        int j = 0;
-
-                        for (clsBeProducto BeProd: lBeProducto.items){
-
-                            if (j==0){
-                                AuxList = stream(pListDetalleOC.items)
-                                        .where(c -> c.Codigo_Producto.equals(BeProd.Codigo))
-                                        .toList();
-                            }else{
-
-                                TempList = stream(pListDetalleOC.items)
-                                        .where(c -> c.Codigo_Producto.equals(BeProd.Codigo))
-                                        .toList();
-
-                                if (TempList.size()>0) {
-                                    for (int i = 0; i <TempList.size(); i++) {
-                                        AuxList.add(AuxList.size(),TempList.get(i));
-                                    }
-                                }
-                            }
-                            j+=1;
-                        }
-
-                        if (AuxList.size()==1){
-
-                            clsBeTrans_oc_detList pListaAux = new clsBeTrans_oc_detList();
-                            clsBeTrans_oc_det vOrdenCompraDet = new clsBeTrans_oc_det();
-                            pListaAux.items = AuxList;
-
-                            String finalSelProd1  = pListaAux.items.get(0).Codigo_Producto;
-
-                            vOrdenCompraDet  = stream(pListDetalleOC.items)
-                                    .where(c -> c.getCodigo_Producto().equals(finalSelProd1))
-                                    .first();
-
-                            if (vOrdenCompraDet != null) {
-
-                                selitem = vOrdenCompraDet;
-                                gl.gselitem = selitem;
-
-                                gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
-                                // lo que tengo en la global
-                               // gl.gpListDetalleOC.items = pListDetalleOC.items;
-
-                                gl.mode =1;
-                                browse=1;
-
-                                txtCodigoProductoRecepcion.setText("");
-                                txtCodigoProductoRecepcion.requestFocus();
-                                startActivity(new Intent(this, frm_recepcion_datos.class));
-
-                            } else {
-                                txtCodigoProductoRecepcion.setText("");
-                                mu.msgbox(String.format("No existe el producto %s en esta Recepción",finalSelProd1));
-                            }
-
-                        }else if (AuxList.size() > 1){
-
-                            txtCodigoProductoRecepcion.setText("");
-                            txtCodigoProductoRecepcion.requestFocus();
-
-                            pListDetalleOC.items= AuxList;
-                            Lista_Detalle_Documento_Ingreso();
-                            ordenar();
-
-                        } else if (AuxList.size() == 0) {
-                            txtCodigoProductoRecepcion.setText("");
-                            toast("No existe el producto en esta Recepción.");
-                        }
-
-                    }else{
-
-                        BeProducto = lBeProducto.items.get(0);
-
-                        if (BeProducto!=null){
-
-                            AuxList = stream(pListDetalleOC.items)
-                                    .where(c->c.Codigo_Producto.equals( BeProducto.Codigo)).toList();
-
-                            if (AuxList.size()==1){
-                                AuxList = stream(pListDetalleOC.items).select(c->c.Codigo_Producto).toList();
-
-                                txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
-
-                                Idx = AuxList.indexOf(txtCodigoProductoRecepcion.getText().toString());
-
-                                if (Idx>-1){
-
-                                    if (gBeStockRec!=null){
-                                        gl.Carga_Producto_x_Pallet= gBeStockRec.IdStockRec > 0;
-                                    }else{
-                                        gl.Carga_Producto_x_Pallet= false;
-                                    }
-
-                                    selitem = pListDetalleOC.items.get(Idx);
-                                    gl.gselitem = selitem;
-
-                                    gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                                    //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
-                                    // lo que tengo en la global
-                                    // gl.gpListDetalleOC.items = pListDetalleOC.items;
-
-                                    gl.mode =1;
-                                    browse=1;
-
-                                    txtCodigoProductoRecepcion.setText("");
-                                    txtCodigoProductoRecepcion.requestFocus();
-
-                                    startActivity(new Intent(this, frm_recepcion_datos.class));
-
-                                }else{
-                                    mu.msgbox("El código de producto no es válido para la recepción");
-                                    txtCodigoProductoRecepcion.setText("");
-                                    txtCodigoProductoRecepcion.requestFocus();
-                                    return;
-                                }
-                            } else{
-
-                                txtCodigoProductoRecepcion.setText(BeProducto.Codigo);
-
-                                pListDetalleOC.items= AuxList;
-                                Lista_Detalle_Documento_Ingreso();
-                                ordenar();
-
-                                txtCodigoProductoRecepcion.setText("");
-                                txtCodigoProductoRecepcion.requestFocus();
-
-                            }
-
-                        }else{
-                            mu.msgbox("El código de producto no es válido para la recepción");
-                            txtCodigoProductoRecepcion.setText("");
-                            txtCodigoProductoRecepcion.requestFocus();
-                            return;
-                        }
-
-                    }
+                    auxList.addAll(tempList);
                 }
-            }else{
 
+                int count = auxList.size();
+                if (count == 1) {
+                    List<clsBeTrans_oc_det> finalAuxList = auxList;
+                    clsBeTrans_oc_det vOrdenCompraDet = stream(pListDetalleOC.items)
+                            .where(c -> c.getCodigo_Producto().equals(finalAuxList.get(0).Codigo_Producto))
+                            .first();
+
+                    if (vOrdenCompraDet != null) {
+                        selitem = vOrdenCompraDet;
+                        gl.gselitem = selitem;
+                        gl.CodigoRecepcion = getCodigoRecepcion(selitem);
+                        gl.mode = 1;
+                        browse = 1;
+                        limpiarYActivarCodigo();
+                        startActivity(new Intent(this, frm_recepcion_datos.class));
+                    } else {
+                        limpiarYActivarCodigo();
+                        mu.msgbox("No existe el producto %s en esta Recepción: " + auxList.get(0).Codigo_Producto);
+                    }
+
+                } else if (count > 1) {
+                    limpiarYActivarCodigo();
+                    pListDetalleOC.items = auxList;
+                    Lista_Detalle_Documento_Ingreso();
+                    ordenar();
+                } else {
+                    limpiarYActivarCodigo();
+                    toast("No existe el producto en esta Recepción.");
+                }
+
+            } else { // Solo 1 producto
+                clsBeProducto beProducto = lBeProducto.items.get(0);
+                if (beProducto == null) {
+                    mostrarErrorProducto();
+                    return;
+                }
+
+                auxList = stream(pListDetalleOC.items)
+                        .where(c -> c.Codigo_Producto.equals(beProducto.Codigo)).toList();
+
+                if (auxList.size() == 1) {
+                    List<String> codigos = stream(pListDetalleOC.items).select(c -> c.Codigo_Producto).toList();
+                    txtCodigoProductoRecepcion.setText(beProducto.Codigo);
+                    int idx = codigos.indexOf(txtCodigoProductoRecepcion.getText().toString());
+
+                    if (idx > -1) {
+                        gl.Carga_Producto_x_Pallet = gBeStockRec != null && gBeStockRec.IdStockRec > 0;
+                        selitem = pListDetalleOC.items.get(idx);
+                        gl.gselitem = selitem;
+                        gl.CodigoRecepcion = getCodigoRecepcion(selitem);
+                        gl.mode = 1;
+                        browse = 1;
+                        limpiarYActivarCodigo();
+                        startActivity(new Intent(this, frm_recepcion_datos.class));
+                    } else {
+                        mostrarErrorProducto();
+                    }
+                } else {
+                    txtCodigoProductoRecepcion.setText(beProducto.Codigo);
+                    pListDetalleOC.items = auxList;
+                    Lista_Detalle_Documento_Ingreso();
+                    ordenar();
+                    limpiarYActivarCodigo();
+                }
             }
 
-        }catch (Exception e){
-         mu.msgbox("ValidaProductoForRece:"+e.getMessage());
+        } catch (Exception e) {
+            mu.msgbox("ValidaProductoForRece: " + e.getMessage());
         }
     }
+
+    private void limpiarYActivarCodigo() {
+        txtCodigoProductoRecepcion.setText("");
+        txtCodigoProductoRecepcion.requestFocus();
+    }
+
+    private void mostrarErrorProducto() {
+        mu.msgbox("El código de producto no es válido para la recepción");
+        limpiarYActivarCodigo();
+    }
+
+    private String getCodigoRecepcion(clsBeTrans_oc_det item) {
+        return (item.Producto.Codigo_barra != null && !item.Producto.Codigo_barra.isEmpty())
+                ? item.Producto.Codigo_barra
+                : item.Producto.Codigo;
+    }
+
 
     private void procesar_registro(){
 
@@ -923,7 +775,9 @@ public class frm_list_rec_prod extends PBase {
                     gl.gEscaneo_Pallet = Escaneo_Pallet;
                     gl.gselitem = selitem;
 
-                    gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
+                    gl.CodigoRecepcion = (selitem.Producto.Codigo_barra != null && !selitem.Producto.Codigo_barra.isEmpty())
+                            ? selitem.Producto.Codigo_barra
+                            : selitem.Producto.Codigo;
 
                     browse=1;
                     startActivity(new Intent(this, frm_list_rec_prod_detalle.class));
@@ -951,8 +805,6 @@ public class frm_list_rec_prod extends PBase {
             backorder = false;
 
             //#GT08112022_1500: para mantener contuidad del msg, se omite aca
-            //progress.setMessage("Validando estado de recepción");
-            //progress.show();
 
             if (gBeOrdenCompra.DetalleOC.items!=null){
 
@@ -981,7 +833,7 @@ public class frm_list_rec_prod extends PBase {
                             progress.cancel();
                             return false;
 
-                        }else if (vTipoDiferencia==0) {
+                        }else {
 
                             btnCompletaRec.setText("COMPLETA");
                             btnCompletaRec.setBackgroundColor(Color.parseColor("#FF99CC00"));
@@ -1027,7 +879,7 @@ public class frm_list_rec_prod extends PBase {
 
                     vItem = new clsBeTrans_oc_det();
 
-                    if (chkRecepcionados.isChecked()==true){
+                    if (chkRecepcionados.isChecked()){
 
                         if (pListDetalleOC.items.get(i).Cantidad_recibida!=0){
 
@@ -1082,7 +934,7 @@ public class frm_list_rec_prod extends PBase {
 
             //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
             boolean es_poliza_consolidada = false;
-            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            clsBeTrans_oc_ti TipoIngreso;
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
@@ -1150,13 +1002,13 @@ public class frm_list_rec_prod extends PBase {
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog12, which) -> procesar_registro_detalle());
             dialog.setNegativeButton("No", (dialog1, which) -> {
-               return;
             });
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
@@ -1182,7 +1034,7 @@ public class frm_list_rec_prod extends PBase {
         Finalizar_Recepcion();
     }
 
-    public class OrdenarItems implements Comparator<clsBeTrans_oc_det> {
+    public static class OrdenarItems implements Comparator<clsBeTrans_oc_det> {
 
         public int compare(clsBeTrans_oc_det left,clsBeTrans_oc_det rigth){
             return left.No_Linea-rigth.No_Linea;
@@ -1221,6 +1073,7 @@ public class frm_list_rec_prod extends PBase {
                                    "pBeTrans_oc_estado",gBeOrdenCompra.EstadoOC);
                         break;
                     case 4:
+                    case 10:
                         callMethod("Get_Banderas_Recepcion",
                                    "pIdRecepcionEnc",gl.gIdRecepcionEnc,
                                    "pFinalizada",Finalizada,
@@ -1232,6 +1085,7 @@ public class frm_list_rec_prod extends PBase {
                                "BeProducto",BeProducto);
                         break;
                     case 6:
+                    case 8:
                         callMethod("Get_BeProducto_By_LP_For_HH",
                                    "pLic_Plate",pLP,
                                    "pIdBodega",gl.IdBodega,
@@ -1247,23 +1101,11 @@ public class frm_list_rec_prod extends PBase {
                                    "pIdUsuario",gl.IdOperador,
                                    "pBeStockRec",gBeStockRec);
                         break;
-                    case 8:
-                        callMethod("Get_BeProducto_By_LP_For_HH",
-                                "pLic_Plate",pLP,
-                                "pIdBodega",gl.IdBodega,
-                                "pBeStockRec",gBeStockRec);
-                        break;
                     case 9:
-                       /* callMethod("Get_BeProducto_By_Codigo_For_HH",
-                                   "pCodigo",txtCodigoProductoRecepcion.getText().toString(),
-                                   "IdBodega",gl.IdBodega);*/
                         callMethod("Get_List_Product_By_CodigoBarra_By_OrdenCompraEnc",
                                    "pCodigo",txtCodigoProductoRecepcion.getText().toString(),
                                    "IdBodega",gl.IdBodega,
                                    "IdOrdenCompraEnc",gl.gBeOrdenCompra.IdOrdenCompraEnc);
-                        break;
-                    case 10:
-                        callMethod("Get_Banderas_Recepcion","pIdRecepcionEnc",gl.gIdRecepcionEnc,"pFinalizada",Finalizada,"pAnulada",Anulada);
                         break;
                     case 11:
                         callMethod("Get_Detalle_By_IdRecepcionEnc","pIdRecepcionEnc",gl.gIdRecepcionEnc,
@@ -1462,7 +1304,7 @@ public class frm_list_rec_prod extends PBase {
 
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_LP_For_HH");
 
-            msgValidaProductoPallet("¿La licencia está completa y en buen estado?");
+            msgValidaProductoPallet();
 
         }catch (Exception e){
             mu.msgbox("processProductoByLP");
@@ -1505,7 +1347,6 @@ public class frm_list_rec_prod extends PBase {
 
                 }else{
                     mu.msgbox("El código de licencia : "+ pLP+" no existe en el listado de barras válidas para ingreso.");
-                    return;
                 }
 
             }else {
@@ -1521,7 +1362,7 @@ public class frm_list_rec_prod extends PBase {
 
         try{
 
-            pListDetalleOC_Aux = new clsBeTrans_oc_detList();
+            clsBeTrans_oc_detList pListDetalleOC_Aux = new clsBeTrans_oc_detList();
             pListDetalleOC_Aux.items= pListDetalleOC.items;
 
             // BeProducto = xobj.getresult(clsBeProducto.class,"Get_BeProducto_By_Codigo_For_HH");
@@ -1627,14 +1468,15 @@ public class frm_list_rec_prod extends PBase {
                 ordenar();
 
                 if(Recepcion_Completa()){
-                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                    msgPreguntaFinalizar();
                 }
             }else{
                 execws(16);
             }
 
         }catch (Exception e){
-            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
             progress.cancel();
         }
     }
@@ -1658,31 +1500,12 @@ public class frm_list_rec_prod extends PBase {
             ordenar();
 
             if(Recepcion_Completa()){
-                msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                msgPreguntaFinalizar();
             }
 
 
         }catch (Exception e){
             msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
-            progress.cancel();
-        }
-    }
-
-    private void processDetalleOc() {
-        try {
-
-            BeDetalleOc = xobj.getresult(clsBeTrans_oc_det.class,"Get_DetalleOc_By_CodigoProducto");
-
-            if (BeDetalleOc != null){
-                if (BeDetalleOc.IdProductoTallaColor > 0) {
-                    execws(18);
-                } else {
-                    Procesa_Producto_Talla_Color();
-                }
-            }
-        } catch (Exception e) {
-            msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
             progress.cancel();
         }
     }
@@ -1708,26 +1531,6 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-    private void Procesa_Producto_Talla_Color() {
-        try {
-            List AuxList = stream(pListDetalleOC.items).select(c->c.IdOrdenCompraDet).toList();
-            Idx = AuxList.indexOf(BeDetalleOc.IdOrdenCompraDet);
-
-            gl.mode=1;
-            selitem = pListDetalleOC.items.get(Idx);
-            gl.gselitem = selitem;
-
-            gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-            browse=1;
-
-            startActivity(new Intent(this, frm_recepcion_datos.class));
-        } catch (Exception e) {
-            msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
-            progress.cancel();
-        }
-    }
-
     public void msgboxErrorOnWS2(String msg) {
         try{
 
@@ -1735,17 +1538,15 @@ public class frm_list_rec_prod extends PBase {
             dialog.setCancelable(false);
             dialog.setMessage(msg);
 
-            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Finalizar = false;
-                    btnTareas.setVisibility(View.VISIBLE);
-                    relbot.setVisibility(View.VISIBLE);
-                }
+            dialog.setPositiveButton("OK", (dialog1, which) -> {
+                Finalizar = false;
+                btnTareas.setVisibility(View.VISIBLE);
+                relbot.setVisibility(View.VISIBLE);
             });
 
             dialog.show();
         }catch (Exception e){
-            Log.println(Log.ERROR,"msg",e.getMessage());
+            Log.println(Log.ERROR,"msg", Objects.requireNonNull(e.getMessage()));
             //addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
 
@@ -1769,15 +1570,15 @@ public class frm_list_rec_prod extends PBase {
 
                             if (vTipoDiferencia<0){
 
-                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+                                msgValidaFaltantes();
 
                             }else if(vTipoDiferencia >0){
 
-                                msgValidaSobrantes("La recepción tiene excedente de producto.¿finalizar de todas formas?");
+                                msgValidaSobrantes();
 
-                            }else if(vTipoDiferencia==0|vTipoDiferencia==0.0){
+                            }else {
 
-                                msgValidaFaltantes("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+                                msgValidaFaltantes();
 
                             }
 
@@ -1785,9 +1586,6 @@ public class frm_list_rec_prod extends PBase {
                             Finalizar = true;
                             Termina_Finalizacion_Recepcion();
 
-                            /*if (gl.recepcion_cerrada_concurrencia){
-                                doExit();
-                            }*/
                         }
                     }
                 }else{
@@ -1804,43 +1602,48 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-    private void msgValidaFaltantes(String msg) {
+    private void msgValidaFaltantes() {
 
         try{
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
-            dialog.setIcon(R.drawable.ic_quest);
-            dialog.setPositiveButton("Si", (dialog12, which) -> {
-                if  (gl.PreguntarEnBackOrder){
-                    msgDocIngresoBackOrder("¿Dejar el documento en BackOrder?");
-                }else{
-                     Finalizar = true;
-                     Termina_Finalizacion_Recepcion();
-                }
-            });
+            AlertDialog.Builder dialog = getBuilder();
             dialog.setNegativeButton("No", (dialog1, which) -> {
                 Finalizar = false;
                 btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
-                return;
             });
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
-    private void msgValidaSobrantes(String msg) {
+    private AlertDialog.Builder getBuilder() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.app_name);
+        dialog.setMessage("La recepción aún tiene faltante de producto. ¿Finalizar de todas formas?");
+        dialog.setIcon(R.drawable.ic_quest);
+        dialog.setPositiveButton("Si", (dialog12, which) -> {
+            if  (gl.PreguntarEnBackOrder){
+                msgDocIngresoBackOrder();
+            }else{
+                 Finalizar = true;
+                 Termina_Finalizacion_Recepcion();
+            }
+        });
+        return dialog;
+    }
+
+    private void msgValidaSobrantes() {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
+            dialog.setMessage("La recepción tiene excedente de producto.¿finalizar de todas formas?");
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 Finalizar = true;
@@ -1850,22 +1653,22 @@ public class frm_list_rec_prod extends PBase {
                 Finalizar = false;
                 btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
-                return;
             });
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
-    private void msgDocIngresoBackOrder(String msg) {
+    private void msgDocIngresoBackOrder() {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
+            dialog.setMessage("¿Dejar el documento en BackOrder?");
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 backorder = true;
@@ -1881,17 +1684,18 @@ public class frm_list_rec_prod extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
-    private void msgPreguntaFinalizar(String msg) {
+    private void msgPreguntaFinalizar() {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage( msg);
+            dialog.setMessage("Recepción completa. ¿Finalizar?");
 
             dialog.setIcon(R.drawable.ic_quest);
 
@@ -1903,13 +1707,13 @@ public class frm_list_rec_prod extends PBase {
             dialog.setNegativeButton("No", (dialog12, which) -> {
                 btnTareas.setVisibility(View.VISIBLE);
                 relbot.setVisibility(View.VISIBLE);
-                return;
             });
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
@@ -1919,7 +1723,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (Finalizar){
 
-                if (gl.gBeRecepcion.Firma_piloto.equals("")){
+                if (gl.gBeRecepcion.Firma_piloto.isEmpty()){
                     MuestraPantallaFirma(this);
                 }else{
                     Finalizar_Recepcion();
@@ -1955,7 +1759,7 @@ public class frm_list_rec_prod extends PBase {
     private void listSortedItems() {
         try {
             boolean es_poliza_consolidada = false;
-            clsBeTrans_oc_ti TipoIngreso=new clsBeTrans_oc_ti();
+            clsBeTrans_oc_ti TipoIngreso;
             TipoIngreso = gBeOrdenCompra.getTipoIngreso();
             if(TipoIngreso!=null) es_poliza_consolidada = TipoIngreso.Es_Poliza_Consolidada;
 
@@ -1979,7 +1783,8 @@ public class frm_list_rec_prod extends PBase {
                 }
             }
         } catch (Exception e) {
-            msgbox(new Object(){}.getClass().getEnclosingMethod().getName()+" . "+e.getMessage());
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
         }
     }
 
@@ -1987,22 +1792,22 @@ public class frm_list_rec_prod extends PBase {
         switch (gl.sortOrd) {
             case 0:
                 sortord=1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+                BeListDetalleOC.sort(new Sort_Codigo());break;
             case 1:
                 sortord=-1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Codigo());break;
+                BeListDetalleOC.sort(new Sort_Codigo());break;
             case 2:
                 sortord=1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+                BeListDetalleOC.sort(new Sort_Producto());break;
             case 3:
                 sortord=-1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Producto());break;
+                BeListDetalleOC.sort(new Sort_Producto());break;
             case 4:
                 sortord=1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+                BeListDetalleOC.sort(new Sort_Cantidad());break;
             case 5:
                 sortord=-1;
-                Collections.sort(BeListDetalleOC, new frm_list_rec_prod.Sort_Cantidad());break;
+                BeListDetalleOC.sort(new Sort_Cantidad());break;
         }
     }
 
@@ -2037,13 +1842,11 @@ public class frm_list_rec_prod extends PBase {
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             txtFirma.init(metrics);
 
-            btnGuardarFirma = dialog.findViewById(R.id.btnGuardarFirma);
-            btnLimpiar = dialog.findViewById(R.id.btnLimpiar);
-            btnSalirFirma = dialog.findViewById(R.id.btnSalirFirma);
+            Button btnGuardarFirma = dialog.findViewById(R.id.btnGuardarFirma);
+            Button btnLimpiar = dialog.findViewById(R.id.btnLimpiar);
+            Button btnSalirFirma = dialog.findViewById(R.id.btnSalirFirma);
 
             btnGuardarFirma.setOnClickListener(v -> {
-
-                FirmaPiloto = txtFirma.getBitmap();
                 //CM_20201130: Se obtienen los bytes de la firma para convertirlos y guardarlos.
                 firmByte = txtFirma.getBytes();
                 encodedImage = Base64.encodeToString(firmByte, Base64.DEFAULT);
@@ -2090,7 +1893,7 @@ public class frm_list_rec_prod extends PBase {
                 }else{
                 //#GT22022023: si esta cerrada no es necesario seguir validando el resto de código.
                 if(Recepcion_Completa()){
-                    msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                    msgPreguntaFinalizar();
                 }else{
                     if (Escaneo_Pallet){
                         mu.toast("Licencia procesada correctamente");
@@ -2099,7 +1902,7 @@ public class frm_list_rec_prod extends PBase {
                     }
                     if (!gl.gSinPresentacion){
                         if(Recepcion_Completa()){
-                            msgPreguntaFinalizar("Recepción completa. ¿Finalizar?");
+                            msgPreguntaFinalizar();
                         }
                     }else{
                         gl.gSinPresentacion=false;
@@ -2131,13 +1934,13 @@ public class frm_list_rec_prod extends PBase {
         doExit();
     }
 
-    private void msgAskExit(String msg) {
+    private void msgAskExit() {
 
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.app_name);
-            dialog.setMessage("¿" + msg + "?");
+            dialog.setMessage("¿" + "Regresar a lista de tareas" + "?");
             dialog.setCancelable(false);
             dialog.setIcon(R.drawable.ic_quest);
             dialog.setPositiveButton("Si", (dialog1, which) -> doExit());
@@ -2146,7 +1949,8 @@ public class frm_list_rec_prod extends PBase {
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
@@ -2155,10 +1959,11 @@ public class frm_list_rec_prod extends PBase {
     public void onBackPressed() {
         try{
             if (btnTareas.getVisibility()==View.VISIBLE){
-                msgAskExit("Regresar a lista de tareas");
+                msgAskExit();
             }
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
 
     }
