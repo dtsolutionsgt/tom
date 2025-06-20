@@ -126,7 +126,6 @@ public class frm_list_rec_prod extends PBase {
     private list_adapt_detalle_recepcion listdetadapter;
     private list_adapt_detalle_recepcion2 listdetadapter2;
     private list_adapt_detalle_recepcion3 listdetadpater3;
-    private clsBeTrans_oc_det BeDetalleOc = null;
     public static clsBeProducto_talla_color BeTallColor = null;
     public static clsBeProducto_talla_colorList ListaBeTallColor = null;
     private boolean areaprimera = true;
@@ -309,7 +308,6 @@ public class frm_list_rec_prod extends PBase {
                                 .firstOrNull();
 
                         if (selitem!=null) {
-                            BeDetalleOc = selitem;
                             execws(17);
                         }
                     } else {
@@ -626,7 +624,11 @@ public class frm_list_rec_prod extends PBase {
                         }
                     }
 
-                    procesar_registro();
+                    if (gl.Control_Talla_Color) {
+                        execws(17);
+                    } else {
+                        procesar_registro();
+                    }
                 }else{
                     msgbox("No se pudo obtener el registro a recepcionar: " + sitem.No_Linea + " " + sitem.Producto.Codigo);
                 }
@@ -1673,25 +1675,6 @@ public class frm_list_rec_prod extends PBase {
         }
     }
 
-    private void processDetalleOc() {
-        try {
-
-            BeDetalleOc = xobj.getresult(clsBeTrans_oc_det.class,"Get_DetalleOc_By_CodigoProducto");
-
-            if (BeDetalleOc != null){
-                if (BeDetalleOc.IdProductoTallaColor > 0) {
-                    execws(18);
-                } else {
-                    Procesa_Producto_Talla_Color();
-                }
-            }
-        } catch (Exception e) {
-            msgbox(Objects.requireNonNull(new Object() {
-            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
-            progress.cancel();
-        }
-    }
-
     private void processProductoTallaColor() {
         try {
 
@@ -1699,7 +1682,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (ListaBeTallColor != null) {
                 BeTallColor = ListaBeTallColor.items.stream()
-                        .filter(x -> x.IdProductoTallaColor == BeDetalleOc.IdProductoTallaColor)
+                        .filter(x -> x.IdProductoTallaColor == selitem.IdProductoTallaColor)
                         .findFirst()
                         .orElse(null);
             }
@@ -1716,7 +1699,7 @@ public class frm_list_rec_prod extends PBase {
     private void Procesa_Producto_Talla_Color() {
         try {
             List AuxList = stream(pListDetalleOC.items).select(c->c.IdOrdenCompraDet).toList();
-            Idx = AuxList.indexOf(BeDetalleOc.IdOrdenCompraDet);
+            Idx = AuxList.indexOf(selitem.IdOrdenCompraDet);
 
             gl.mode=1;
             selitem = pListDetalleOC.items.get(Idx);

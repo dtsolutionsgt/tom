@@ -84,6 +84,8 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblVence.setText("Vence");
             holder.lblLote.setText("Lote");
             holder.lblLp.setText("Licencia");
+            holder.lblTalla.setText("Talla");
+            holder.lblColor.setText("Color");
 
             if (BeDetalleRec.get(position).IdProductoTallaColor != 0) {
                 holder.lblVence.setVisibility(View.GONE);

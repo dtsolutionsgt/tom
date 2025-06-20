@@ -3550,7 +3550,13 @@ public class frm_recepcion_datos extends PBase {
             String vIndiceRotacion = (BeProducto.Indice_Rotacion.Descripcion.equals("")?"N/D":BeProducto.Indice_Rotacion.Descripcion);
             String vTipoProducto = (BeProducto.TipoProducto.NombreTipoProducto.equals("")?"N/D":BeProducto.TipoProducto.NombreTipoProducto);
 
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n IR: " + vIndiceRotacion + " - TP:" + vTipoProducto);
+            String codigo = BeProducto.Codigo;
+
+            if (gl.gselitem.IdProductoTallaColor != 0) {
+                codigo = gl.gselitem.Codigo_Producto;
+            }
+
+            lblDatosProd.setText(codigo + " - " + BeProducto.Nombre + "\n IR: " + vIndiceRotacion + " - TP:" + vTipoProducto);
 
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
@@ -8768,7 +8774,13 @@ public class frm_recepcion_datos extends PBase {
             BeProducto = xobj.getresult(clsBeProducto.class,"Get_Producto_By_IdProductoBodega");
 
             //#CKFK20220714 Agregué esto aquí también porque no siempre entra a la otra opción a actualizar estos label
-            lblDatosProd.setText(BeProducto.Codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
+            String codigo = BeProducto.Codigo;
+
+            if (gl.gselitem.IdProductoTallaColor != 0) {
+                codigo = gl.gselitem.Codigo_Producto;
+            }
+
+            lblDatosProd.setText(codigo + " - " + BeProducto.Nombre + "\n" + BeProducto.Familia.Nombre);
             lblPropPrd.setText("Propietario: "  + BeProducto.Propietario.Nombre_comercial);
 
             //#GT23112023: Si tenemos el producto, ya podemos asignar idtipoEtiqueta
