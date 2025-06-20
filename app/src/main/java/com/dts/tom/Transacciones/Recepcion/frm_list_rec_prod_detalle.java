@@ -210,6 +210,9 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.Lote = obj.Lote;
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
+                       vItem.IdProductoTallaColor = obj.IdProductoTallaColor;
+                       vItem.Talla = obj.Talla;
+                       vItem.Color = obj.Color;
 
                        BeListDetalleRec.add(vItem);
 
@@ -753,7 +756,8 @@ public class frm_list_rec_prod_detalle extends PBase {
                         break;
                     case 2:
                         callMethod("Get_Detalle_By_IdRecepcionDet_HH","pIdRecepcionEnc",gl.gIdRecepcionEnc,
-                                "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea);
+                                "pIdProductoBodega",BeOcDet.IdProductoBodega,"pNoLinea",BeOcDet.No_Linea,
+                                "pIdOrdenCompraDet",BeOcDet.IdOrdenCompraDet);
                         break;
                     case 3:
                         callMethod("Delete_Det_By_IdRecepcionEnc_And_IdRecpecionDet",

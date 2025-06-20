@@ -65,6 +65,8 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblVence = convertView.findViewById(R.id.lblVence);
             holder.lblLote = convertView.findViewById(R.id.lblLote);
             holder.lblLp = convertView.findViewById(R.id.lblLp);
+            holder.lblTalla = convertView.findViewById(R.id.lblTalla);
+            holder.lblColor = convertView.findViewById(R.id.lblColor);
 
             convertView.setTag(holder);
         } else {
@@ -82,6 +84,11 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
             holder.lblVence.setText("Vence");
             holder.lblLote.setText("Lote");
             holder.lblLp.setText("Licencia");
+
+            if (BeDetalleRec.get(position).IdProductoTallaColor != 0) {
+                holder.lblVence.setVisibility(View.GONE);
+                holder.lblLote.setVisibility(View.GONE);
+            }
 
         } else {
 
@@ -131,6 +138,13 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
                 holder.lblLp.setText(BeDetalleRec.get(position).Lic_plate);
             }
 
+            if (BeDetalleRec.get(position).IdProductoTallaColor != 0) {
+                holder.lblVence.setVisibility(View.GONE);
+                holder.lblLote.setVisibility(View.GONE);
+
+                holder.lblTalla.setText(String.format("%s - %s", BeDetalleRec.get(position).Talla.Codigo, BeDetalleRec.get(position).Talla.Nombre));
+                holder.lblColor.setText(String.format("%s - %s", BeDetalleRec.get(position).Color.Codigo, BeDetalleRec.get(position).Color.Nombre));
+            }
 
         }
 
@@ -167,7 +181,7 @@ public class list_adapt_detalle_rec_prod extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblCodigo,lblPres,lblUmbas,lblCantidad,lblProdBod,lblEstado,
-                 lblVence, lblLote, lblLp, lblDiferencia;
+                 lblVence, lblLote, lblLp, lblDiferencia, lblTalla, lblColor;
     }
 
 }

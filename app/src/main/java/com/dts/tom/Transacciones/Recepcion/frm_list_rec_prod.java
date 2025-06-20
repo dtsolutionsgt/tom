@@ -1046,30 +1046,35 @@ public class frm_list_rec_prod extends PBase {
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
                             vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
                             vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
+                            vItem.IdProductoTallaColor = pListDetalleOC.items.get(i).IdProductoTallaColor;
+                            vItem.Talla = pListDetalleOC.items.get(i).Talla;
+                            vItem.Color = pListDetalleOC.items.get(i).Color;
 
                             BeListDetalleOC.add(vItem);
 
                         }
 
                     }else{
+                        vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
+                        vItem.Producto.Codigo = pListDetalleOC.items.get(i).Codigo_Producto;
+                        vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
+                        vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
+                        vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
+                        vItem.Cantidad = pListDetalleOC.items.get(i).Cantidad;
+                        vItem.Cantidad_recibida = pListDetalleOC.items.get(i).Cantidad_recibida;
+                        vItem.Costo = pListDetalleOC.items.get(i).Costo;
+                        vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
+                        vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
+                        vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
+                        vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
+                        vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
+                        vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
+                        vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
+                        vItem.IdProductoTallaColor = pListDetalleOC.items.get(i).IdProductoTallaColor;
+                        vItem.Talla = pListDetalleOC.items.get(i).Talla;
+                        vItem.Color = pListDetalleOC.items.get(i).Color;
 
-                            vItem.No_Linea = pListDetalleOC.items.get(i).No_Linea;
-                            vItem.Producto.Codigo = pListDetalleOC.items.get(i).Codigo_Producto;
-                            vItem.Producto.Nombre = pListDetalleOC.items.get(i).Producto.Nombre;
-                            vItem.Presentacion.Nombre = pListDetalleOC.items.get(i).Presentacion.Nombre;
-                            vItem.UnidadMedida.Nombre = pListDetalleOC.items.get(i).UnidadMedida.Nombre;
-                            vItem.Cantidad = pListDetalleOC.items.get(i).Cantidad;
-                            vItem.Cantidad_recibida = pListDetalleOC.items.get(i).Cantidad_recibida;
-                            vItem.Costo = pListDetalleOC.items.get(i).Costo;
-                            vItem.FactorPresentacion = pListDetalleOC.items.get(i).FactorPresentacion;
-                            vItem.IdOrdenCompraDet = pListDetalleOC.items.get(i).IdOrdenCompraDet;
-                            vItem.IdOrdenCompraEnc = pListDetalleOC.items.get(i).IdOrdenCompraEnc;
-                            vItem.IdPropietarioBodega = pListDetalleOC.items.get(i).IdPropietarioBodega;
-                            vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
-                            vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
-                            vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
-
-                            BeListDetalleOC.add(vItem);
+                        BeListDetalleOC.add(vItem);
 
                     }
 
@@ -1078,7 +1083,7 @@ public class frm_list_rec_prod extends PBase {
                 btnRegs.setText("Registros: "+pListDetalleOC.items.size());
             }
 
-            Collections.sort(BeListDetalleOC, new OrdenarItems());
+        Collections.sort(BeListDetalleOC, new OrdenarItems());
 
             //#EJC20210318: Obtener el tipo de documento de ingreso para saber si es una poliza consolidada o no.
             boolean es_poliza_consolidada = false;

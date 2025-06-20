@@ -2,12 +2,16 @@ package com.dts.classes.Transacciones.OrdenCompra.Trans_oc_det;
 
 
 import com.dts.classes.Mantenimientos.Arancel.clsBeArancel;
+import com.dts.classes.Mantenimientos.Color.clsBeColor;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_kit.clsBeProducto_kit_composicionList;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Talla.clsBeTalla;
 
 import org.simpleframework.xml.Element;
+
+import kotlin.KotlinNothingValueException;
 
 public class clsBeTrans_oc_det {
 
@@ -64,6 +68,8 @@ public class clsBeTrans_oc_det {
     @Element(required=false) public String Nombre_Embarcador="";
     @Element(required=false) public String Nombre_Clasificacion ="";
     @Element(required=false) public int IdProductoTallaColor=0;
+    @Element(required=false) public clsBeTalla Talla;
+    @Element(required=false) public clsBeColor Color;
 
     public clsBeTrans_oc_det()
     {
@@ -80,7 +86,7 @@ public class clsBeTrans_oc_det {
                              clsBeUnidad_medida UnidadMedida,int RowIndex,double valor_aduana,double valor_fob,
                              double valor_iva,double valor_dai,double valor_seguro,double valor_flete,
                              double Peso_Neto, double Peso_Bruto, int IdPedidoCompraDet,String Nombre_Embarcador,
-                             String Nombre_Clasificacion) {
+                             String Nombre_Clasificacion, clsBeTalla Talla, clsBeColor Color) {
 
         this.IdOrdenCompraEnc=IdOrdenCompraEnc;
         this.IdOrdenCompraDet=IdOrdenCompraDet;
@@ -127,6 +133,8 @@ public class clsBeTrans_oc_det {
         this.IdPedidoCompraDet=IdPedidoCompraDet;
         this.Nombre_Embarcador = Nombre_Embarcador;
         this.Nombre_Clasificacion = Nombre_Clasificacion;
+        this.Talla = Talla;
+        this.Color = Color;
     }
 
 

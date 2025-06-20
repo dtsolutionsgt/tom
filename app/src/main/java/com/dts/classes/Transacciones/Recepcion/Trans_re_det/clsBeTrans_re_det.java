@@ -1,11 +1,13 @@
 package com.dts.classes.Transacciones.Recepcion.Trans_re_det;
 
 
+import com.dts.classes.Mantenimientos.Color.clsBeColor;
 import com.dts.classes.Mantenimientos.Motivo_devolucion.clsBeMotivo_devolucion;
 import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Mantenimientos.Producto.Producto_estado.clsBeProducto_estado;
 import com.dts.classes.Mantenimientos.Unidad_medida.clsBeUnidad_medida;
 import com.dts.classes.Mantenimientos.Producto.clsBeProducto;
+import com.dts.classes.Talla.clsBeTalla;
 
 import org.simpleframework.xml.Element;
 
@@ -67,6 +69,8 @@ public class clsBeTrans_re_det implements Cloneable {
     @Element(required=false) public int IdJornadaSistema=0;
     @Element(required=false) public String Host="";
     @Element(required=false) public int IdProductoTallaColor = 0;
+    @Element(required=false) public clsBeTalla Talla;
+    @Element(required=false) public clsBeColor Color;
 
     public clsBeTrans_re_det() {
     }
@@ -84,7 +88,7 @@ public class clsBeTrans_re_det implements Cloneable {
                              int IdUbicacionAnterior,int IdOrdenCompraEnc,String Fecha_Rec,String Fecha_tarea,
                              String Hora_ini,String Hora_Fin,String Estado_Rec,String UbicacionCompleta,
                              String Lic_plate,double Uds_lic_plate, boolean Pallet_No_Estandar, int IdOrdenCompraDet,
-                             int IdJornadaSistema, String Host, int IdProductoTallaColor) {
+                             int IdJornadaSistema, String Host, int IdProductoTallaColor, clsBeTalla Talla, clsBeColor Color) {
 
         this.IdPresentacion=IdPresentacion;
         this.IdUnidadMedida=IdUnidadMedida;
@@ -141,6 +145,8 @@ public class clsBeTrans_re_det implements Cloneable {
         this.IdJornadaSistema = IdJornadaSistema;
         this.Host = Host;
         this.IdProductoTallaColor = IdProductoTallaColor;
+        this.Talla = Talla;
+        this.Color = Color;
     }
 
     public int getIdPresentacion() {
