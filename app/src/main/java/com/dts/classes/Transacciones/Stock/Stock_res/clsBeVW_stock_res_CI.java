@@ -37,25 +37,8 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public String Codigo_Talla = "";
   @Element(required=false) public String Nombre_Color = "";
   @Element(required=false) public String Codigo_Color = "";
-  public
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  clsBeVW_stock_res_CI() {
+  @Element(required=false) public String CodigoSKU = "";
+  public  clsBeVW_stock_res_CI() {
   }
 
   public clsBeVW_stock_res_CI(String Codigo, String Nombre, String UM, String ExistUMBAs,String Pres,
@@ -64,7 +47,7 @@ public class clsBeVW_stock_res_CI {
                               String LicPlate,String IdProductoEstado,int IdProductoBodega, int factor,
                               String ingreso, int IdTipoEtiqueta,String DispPres,String ResPres, String NombreArea,
                               String Clasificacion, int IdPresentacion, String Nombre_Talla, String Codigo_Talla,
-                              String Nombre_Color, String Codigo_Color) {
+                              String Nombre_Color, String Codigo_Color, String CodigoSKU) {
 
     this.Codigo=Codigo;
     this.Nombre=Nombre;
@@ -96,6 +79,7 @@ public class clsBeVW_stock_res_CI {
     this.Codigo_Talla = Codigo_Talla;
     this.Nombre_Color = Nombre_Color;
     this.Codigo_Color = Codigo_Color;
+    this.CodigoSKU = CodigoSKU;
   }
 
   public String getCodigo() {

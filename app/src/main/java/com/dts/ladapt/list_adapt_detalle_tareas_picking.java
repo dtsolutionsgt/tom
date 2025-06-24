@@ -84,7 +84,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
             holder.lblNombreClasificacion = convertView.findViewById(R.id.lblNombreClasificacion);
             holder.lblTalla = convertView.findViewById(R.id.lblTalla);
             holder.lblColor = convertView.findViewById(R.id.lblColor);
-
+            holder.lblCodigoSKU = convertView.findViewById(R.id.lblCodigoSKU);
             convertView.setTag(holder);
 
         }else {
@@ -218,15 +218,18 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         if (BeListTareasHH.get(position).IdProductoTallaColor != 0) {
             holder.lblTalla.setVisibility(View.VISIBLE);
             holder.lblColor.setVisibility(View.VISIBLE);
+            holder.lblCodigoSKU.setVisibility(View.VISIBLE);
 
             holder.lblTalla.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Talla, BeListTareasHH.get(position).Nombre_Talla));
             holder.lblColor.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Color, BeListTareasHH.get(position).Nombre_Color));
+            holder.lblCodigoSKU.setText(BeListTareasHH.get(position).CodigoSKU);
 
             holder.lblVenceDet.setVisibility(View.GONE);
             holder.lblLoteDet.setVisibility(View.GONE);
         } else {
             holder.lblTalla.setVisibility(View.GONE);
             holder.lblColor.setVisibility(View.GONE);
+            holder.lblCodigoSKU.setVisibility(View.GONE);
 
             holder.lblVenceDet.setVisibility(View.VISIBLE);
             holder.lblLoteDet.setVisibility(View.VISIBLE);
@@ -245,7 +248,7 @@ public class list_adapt_detalle_tareas_picking extends BaseAdapter {
         TextView lblUbicDetPick,lblNomUbicDet,lblCodigoDet,lblProductoDet,lblUmbasDet,lblPresDet,lblSol,lblRec,
                 lblLoteDet,lblLpDet,lblVenceDet,lblNomEstadoDet,lblPesoDet,lblIdPresDet,lblIdEstadoDet,
                 lblIdPedidoEnc,lblPedidoDet,lblIdPickingDet,lblProductoBodegaDet,lblPickingUbic,lblStock,
-                lblStockRes, lblTarima,lblNombreArea, lblNombreClasificacion, lblTalla, lblColor;
+                lblStockRes, lblTarima,lblNombreArea, lblNombreClasificacion, lblTalla, lblColor, lblCodigoSKU;
     }
 
 }

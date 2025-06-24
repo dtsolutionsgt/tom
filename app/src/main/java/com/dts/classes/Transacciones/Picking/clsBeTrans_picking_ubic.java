@@ -79,6 +79,7 @@ public class clsBeTrans_picking_ubic {
     @Element(required=false) public String Nombre_Color = "";
     @Element(required=false) public String Codigo_Color = "";
     @Element(required=false) public int IdProductoTallaColor = 0;
+    @Element(required=false) public String CodigoSKU = "";
 
     public clsBeTrans_picking_ubic() {
     }
@@ -99,7 +100,8 @@ public class clsBeTrans_picking_ubic {
                                    int IdUbicacionAnterior, int IdRecepcion, double CantidadDanada, String Lic_plate_Reemplazo,
                                    int IdUbicacion_reemplazo, int IdStock_reemplazo, int IdBodega, double Tarima,
                                    boolean No_encontrado, String NombreClasificacion, int IdUbicacionTemporal, String NombreUbicacionTemporal,
-                                   int IdOperadorBodega_Asignado, String Nombre_Talla, String Codigo_Talla, String Nombre_Color, String Codigo_Color, int IdProductoTallaColor ) {
+                                   int IdOperadorBodega_Asignado, String Nombre_Talla, String Codigo_Talla, String Nombre_Color, String Codigo_Color,
+                                   int IdProductoTallaColor, String CodigoSKU) {
 
         this.IdPickingEnc=IdPickingEnc;
         this.NombreArea = NombreArea;
@@ -172,6 +174,7 @@ public class clsBeTrans_picking_ubic {
         this.Nombre_Color = Nombre_Color;
         this.Codigo_Color = Codigo_Color;
         this.IdProductoTallaColor = IdProductoTallaColor;
+        this.CodigoSKU = CodigoSKU;
     }
 
 

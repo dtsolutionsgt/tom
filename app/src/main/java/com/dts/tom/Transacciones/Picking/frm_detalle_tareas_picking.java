@@ -66,7 +66,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
-    private TextView  lblBodega, lblOperador, lblTituloForma, lblMuelle, lblColor, lblTalla, lblLoteDet, lblVenceDet;
+    private TextView  lblBodega, lblOperador, lblTituloForma, lblMuelle, lblColor, lblTalla, lblLoteDet, lblVenceDet, lblCodigoSKU;
     private ImageView btnLimpiar, btnFiltros, imgOrdenar;
     private RelativeLayout relbot, relFiltros;
 
@@ -145,6 +145,7 @@ public class frm_detalle_tareas_picking extends PBase {
             imgOrdenar = findViewById(R.id.imgOrdenar);
             lblTalla = findViewById(R.id.lblTalla);
             lblColor = findViewById(R.id.lblColor);
+            lblCodigoSKU = findViewById(R.id.lblCodigoSKU);
             lblLoteDet = findViewById(R.id.lblLoteDet);
             lblVenceDet = findViewById(R.id.lblVenceDet);
 
@@ -1228,12 +1229,14 @@ public class frm_detalle_tareas_picking extends PBase {
             if (gl.Control_Talla_Color) {
                 lblColor.setVisibility(View.VISIBLE);
                 lblTalla.setVisibility(View.VISIBLE);
+                lblCodigoSKU.setVisibility(View.VISIBLE);
 
                 lblLoteDet.setVisibility(View.GONE);
                 lblVenceDet.setVisibility(View.GONE);
             } else {
                 lblColor.setVisibility(View.GONE);
                 lblTalla.setVisibility(View.GONE);
+                lblCodigoSKU.setVisibility(View.GONE);
 
                 lblLoteDet.setVisibility(View.VISIBLE);
                 lblVenceDet.setVisibility(View.VISIBLE);
