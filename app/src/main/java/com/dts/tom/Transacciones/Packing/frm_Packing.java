@@ -1468,7 +1468,7 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Fecha_vence = app.strFechaXMLCombo("01/01/1900");
                 }
 
-                gMovimientoDet.Fecha = du.getFechaActual();
+                gMovimientoDet.Fecha = du.getFullDate();
 
                 if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
                     gMovimientoDet.Barra_pallet =txtNuevoLp.getText().toString();
@@ -1476,9 +1476,9 @@ public class frm_Packing extends PBase {
                     gMovimientoDet.Barra_pallet = "";
                 }
 
-                gMovimientoDet.Hora_ini =  du.getFechaActual();
-                gMovimientoDet.Hora_fin =  du.getFechaActual();
-                gMovimientoDet.Fecha_agr =  du.getFechaActual();
+                gMovimientoDet.Hora_ini =  du.getFullDate();
+                gMovimientoDet.Hora_fin =  du.getFullDate();
+                gMovimientoDet.Fecha_agr =  du.getFullDate();
                 gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
                 gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
                 gMovimientoDet.Peso_hist = gMovimientoDet.Peso;

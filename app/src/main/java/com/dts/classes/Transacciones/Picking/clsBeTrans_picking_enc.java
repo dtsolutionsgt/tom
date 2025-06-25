@@ -48,6 +48,7 @@ public class clsBeTrans_picking_enc {
     @Element(required=false) public int IdTipoPicking = 0;
 
     @Element(required=false) public String Codigo_Barra_Muelle="";
+    @Element(required=false) public String Observaciones="";
 
     public clsBeTrans_picking_enc() {
     }

@@ -1390,8 +1390,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try {
             if (escaneoPallet & productoList != null) {
                 if(cmbEstadoOrigen.getAdapter() != null){
-                    cvEstOrigen = BeStockPallet.IdProductoEstado;
+                    if(productoList.items.size()==1){
+                        cvEstOrigen = BeStockPallet.IdProductoEstado;
+                    }
                     if (cmbEstadoOrigen.getAdapter().getCount() == 1) {
+                        cvEstOrigen=Integer.valueOf(cmbEstadoOrigen.getSelectedItem().toString().split(" - ")[0]);
                         cmbEstadoOrigen.setEnabled(false);
                     }
                 }else{
@@ -3279,7 +3282,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                 progress.cancel();
                 txtCodigoPrd.requestFocus();
                 //Get_Stock_By_Lic_Plate
-                execws(5);
+               execws(5);
+               // execws(6);
             }else{
                 progress.cancel();
                 mu.msgbox("Licencia no existe");

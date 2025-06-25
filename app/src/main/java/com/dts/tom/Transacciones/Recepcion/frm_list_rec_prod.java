@@ -1463,7 +1463,7 @@ public class frm_list_rec_prod extends PBase {
                         if (lBeINavBarraPallet.items.size()==1){
                             BeINavBarraPallet = lBeINavBarraPallet.items.get(0);
                         }else {
-                            if(gBeOrdenCompra.IdTipoIngresoOC == 4 || gBeOrdenCompra.IdTipoIngresoOC == 1){
+                            if(gBeOrdenCompra.IdTipoIngresoOC == 4 || gBeOrdenCompra.IdTipoIngresoOC == 1 || gBeOrdenCompra.IdTipoIngresoOC == 5){
                                 BeINavBarraPallet = stream(lBeINavBarraPallet.items).where
                                                           (c->c.Bodega_Origen.equals(gBeOrdenCompra.ProveedorBodega.Proveedor.Codigo)
                                                            && c.Bodega_Destino.equals(gl.CodigoBodega)).first();

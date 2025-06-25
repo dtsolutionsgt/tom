@@ -6639,6 +6639,7 @@ public class frm_recepcion_datos extends PBase {
                 BeTransReDet.Nombre_producto = BeProducto.Nombre;
                 BeTransReDet.IdRecepcionEnc = gl.gBeRecepcion.IdRecepcionEnc;
                 BeTransReDet.IdRecepcionDet = pIdRecepcionDet;
+                BeTransReDet.IdOrdenCompraDet = BeOcDet.IdOrdenCompraDet;
 
                 BeTransReDet.Presentacion = new clsBeProducto_Presentacion();
 

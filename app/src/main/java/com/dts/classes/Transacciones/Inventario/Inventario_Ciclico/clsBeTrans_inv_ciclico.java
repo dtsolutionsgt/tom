@@ -57,6 +57,7 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public String Nombre_Completo_Destino = "";
     @Element(required=false) public String Ubicacion_Nueva = "";
     @Element(required=false) public String EstadoNuevo = "";
+    @Element(required=false) public double Nuevo_Stock = 0;
 
     public clsBeTrans_inv_ciclico(){}
 
