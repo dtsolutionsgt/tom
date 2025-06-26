@@ -88,6 +88,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                         holder.lblIdStock = convertView.findViewById(R.id.lblIdStock);
                         holder.lblTalla = convertView.findViewById(R.id.lblTalla);
                         holder.lblColor = convertView.findViewById(R.id.lblColor);
+                        holder.lblCodigoSKU = convertView.findViewById(R.id.lblCodigoSKU);
                 convertView.setTag(holder);
 
             }else {
@@ -123,6 +124,7 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblClasificacion.setText(BeListStock.get(position).Clasificacion+"");
             holder.lblTalla.setText(BeListStock.get(position).Codigo_Talla +" - " + BeListStock.get(position).Nombre_Talla );
             holder.lblColor.setText(BeListStock.get(position).Codigo_Color +" - " + BeListStock.get(position).Nombre_Color );
+            holder.lblCodigoSKU.setText(BeListStock.get(position).CodigoSKU);
 
             holder.lblCodigo.setTextColor(Color.BLACK);
             holder.lblNombre.setTextColor(Color.BLACK);
@@ -183,6 +185,6 @@ public class list_adapt_consulta_stock extends BaseAdapter {
                 lblLote,lblVence,lblEstado,lblUbic,lblidUbic,lblPedido,
                 lblPick,lbLicPlate,lblIdProductoBodega,lblIngreso, lblIdTipoEtiqueta,
                 lblResPres, lblDispPres,lblNombreArea,lblClasificacion, lblIdStock,
-        lblTalla, lblColor;
+        lblTalla, lblColor, lblCodigoSKU;
     }
 }

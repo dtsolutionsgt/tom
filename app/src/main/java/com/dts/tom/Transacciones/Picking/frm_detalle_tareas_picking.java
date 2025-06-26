@@ -66,7 +66,7 @@ public class frm_detalle_tareas_picking extends PBase {
     private Spinner cmbOrdenadorPor;
     private Button btnPendientes,btnRes_Det;
     private EditText txtUbicacionFiltro, txtFiltro;
-    private TextView  lblBodega, lblOperador, lblTituloForma, lblMuelle;
+    private TextView  lblBodega, lblOperador, lblTituloForma, lblMuelle, lblColor, lblTalla, lblLoteDet, lblVenceDet, lblCodigoSKU;
     private ImageView btnLimpiar, btnFiltros, imgOrdenar;
     private RelativeLayout relbot, relFiltros;
 
@@ -143,6 +143,11 @@ public class frm_detalle_tareas_picking extends PBase {
             relbot = findViewById(R.id.relbot);
             relFiltros = findViewById(R.id.relFiltros);
             imgOrdenar = findViewById(R.id.imgOrdenar);
+            lblTalla = findViewById(R.id.lblTalla);
+            lblColor = findViewById(R.id.lblColor);
+            lblCodigoSKU = findViewById(R.id.lblCodigoSKU);
+            lblLoteDet = findViewById(R.id.lblLoteDet);
+            lblVenceDet = findViewById(R.id.lblVenceDet);
 
             lblBodega.setText("Bodega: "+ gl.IdBodega + " - "+gl.gNomBodega);
             lblOperador.setText("Operador: "+gl.OperadorBodega.IdOperadorBodega+" - "+ gl.OperadorBodega.Nombre_Completo);
@@ -1220,6 +1225,22 @@ public class frm_detalle_tareas_picking extends PBase {
             if (!gl.termino.isEmpty()){
                 Filtro();
             }*/
+
+            if (gl.Control_Talla_Color) {
+                lblColor.setVisibility(View.VISIBLE);
+                lblTalla.setVisibility(View.VISIBLE);
+                lblCodigoSKU.setVisibility(View.VISIBLE);
+
+                lblLoteDet.setVisibility(View.GONE);
+                lblVenceDet.setVisibility(View.GONE);
+            } else {
+                lblColor.setVisibility(View.GONE);
+                lblTalla.setVisibility(View.GONE);
+                lblCodigoSKU.setVisibility(View.GONE);
+
+                lblLoteDet.setVisibility(View.VISIBLE);
+                lblVenceDet.setVisibility(View.VISIBLE);
+            }
 
             String jsonArray = ws.xmlresult;
             List<clsBeTrans_picking_ubic> vListStock2 = gl.getList(jsonArray, clsBeTrans_picking_ubic.class);

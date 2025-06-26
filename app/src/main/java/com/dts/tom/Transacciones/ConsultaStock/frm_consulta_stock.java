@@ -543,6 +543,7 @@ public class frm_consulta_stock extends PBase {
                         item.Codigo_Talla = pListStock2.items.get(i).Codigo_Talla;
                         item.Nombre_Color = pListStock2.items.get(i).Nombre_Color;
                         item.Codigo_Color = pListStock2.items.get(i).Codigo_Color;
+                        item.CodigoSKU = pListStock2.items.get(i).CodigoSKU;
 
                         items_stock.add(item);
 

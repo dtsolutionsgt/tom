@@ -78,6 +78,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
             holder.lblNombrePropietario = convertView.findViewById(R.id.lblNombrePropietario);
             holder.lblShipper = convertView.findViewById(R.id.lblShipper);
             holder.lblClasificacion = convertView.findViewById(R.id.lblClasificacion);
+            holder.lblTalla = convertView.findViewById(R.id.lblTalla);
+            holder.lblColor = convertView.findViewById(R.id.lblColor);
 
             convertView.setTag(holder);
         } else {
@@ -176,6 +178,10 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
         holder.lblClasificacion.setText(""+ BeDetalleOC.get(position).Nombre_Clasificacion);
 
+        if (BeDetalleOC.get(position).IdProductoTallaColor != 0) {
+            holder.lblTalla.setText(String.format("%s - %s", BeDetalleOC.get(position).Talla.Codigo, BeDetalleOC.get(position).Talla.Nombre));
+            holder.lblColor.setText(String.format("%s - %s", BeDetalleOC.get(position).Color.Codigo, BeDetalleOC.get(position).Color.Nombre));
+        }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -213,7 +219,8 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
                  lblIdPropietarioBodega,
                  lblNombrePropietario,
                  lblShipper,
-                 lblClasificacion;
+                 lblClasificacion,
+                lblTalla, lblColor;
     }
 
 }

@@ -141,6 +141,7 @@
                     android:id="@+id/txtTalla"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
@@ -164,6 +165,7 @@
                     android:id="@+id/txtColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:enabled="false"
                     android:inputType="textPersonName"
                     tools:ignore="SpeakableTextPresentCheck" />
             </TableRow>
