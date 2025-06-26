@@ -7740,13 +7740,9 @@ public class frm_recepcion_datos extends PBase {
 
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("Excede la cantidad solicitada. ¿Recibir de todas formas esta cantidad?");
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", (dialog12, which) -> {
-                //DespuesDeValidarCantidad();
                 valida_fecha_vencimiento();
             });
 
@@ -7756,7 +7752,6 @@ public class frm_recepcion_datos extends PBase {
                         progress.cancel();
                         btnTareas.setEnabled(true);
                     }
-
             );
 
             dialog.show();

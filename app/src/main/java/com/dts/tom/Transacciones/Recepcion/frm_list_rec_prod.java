@@ -750,9 +750,6 @@ public class frm_list_rec_prod extends PBase {
                 gl.gEscaneo_Pallet = Escaneo_Pallet;
                 gl.gselitem = selitem;
                 gl.CodigoRecepcion = selitem.Producto.Codigo_barra;
-                //#CKFK20220625 Voy a poner en comentario esto porque no quiero perder
-                // lo que tengo en la global
-                // gl.gpListDetalleOC.items = pListDetalleOC.items;
                 gl.mode = 1;
                 browse=1;
 

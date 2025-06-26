@@ -275,16 +275,11 @@ public class frm_list_rec_prod_detalle extends PBase {
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             AlertDialog dialogT = dialog.create();
-
             dialogT.setCanceledOnTouchOutside(false);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage("Está seguro de eliminar el detalle de la recepción " + selid);
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.ic_quest);
-
             dialog.setPositiveButton("Si", (dialog1, which) ->
             {
                 progress.setMessage("Eliminando registro");
