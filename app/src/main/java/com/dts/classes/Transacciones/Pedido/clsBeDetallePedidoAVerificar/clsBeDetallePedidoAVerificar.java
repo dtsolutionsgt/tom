@@ -25,6 +25,12 @@ public class clsBeDetallePedidoAVerificar {
     @Element(required=false) public String NombreArea = "";
     @Element(required=false) public String NombreClasificacion = "";
     @Element(required=false) public String Bono = "";
+    @Element(required=false) public int IdProductoTallaColor=0;
+    @Element(required=false) public String Nombre_Talla = "";
+    @Element(required=false) public String Codigo_Talla = "";
+    @Element(required=false) public String Nombre_Color = "";
+    @Element(required=false) public String Codigo_Color = "";
+    @Element(required=false) public String CodigoSKU = "";
 
     public clsBeDetallePedidoAVerificar() {
     }
@@ -49,7 +55,13 @@ public class clsBeDetallePedidoAVerificar {
                                         int IdProductoEstado,
                                         String NombreArea,
                                         String NombreClasificacion,
-                                        String Bono) {
+                                        String Bono,
+                                        int IdProductoTallaColor,
+                                        String Nombre_Talla,
+                                        String Codigo_Talla,
+                                        String Nombre_Color,
+                                        String Codigo_Color,
+                                        String CodigoSKU) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdPedidoDet=IdPedidoDet;
@@ -72,6 +84,12 @@ public class clsBeDetallePedidoAVerificar {
         this.NombreArea = NombreArea;
         this.NombreClasificacion = NombreClasificacion;
         this.Bono = Bono;
+        this.IdProductoTallaColor = IdProductoTallaColor;
+        this.Nombre_Talla = Nombre_Talla;
+        this.Codigo_Talla = Codigo_Talla;
+        this.Nombre_Color = Nombre_Color;
+        this.Codigo_Color = Codigo_Color;
+        this.CodigoSKU = CodigoSKU;
     }
 
 

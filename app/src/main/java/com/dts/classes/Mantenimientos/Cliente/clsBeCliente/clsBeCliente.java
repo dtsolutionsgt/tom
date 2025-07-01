@@ -47,7 +47,7 @@ public class clsBeCliente {
     @Element(required=false) public int IdUbicacionAbastecerCon = 0;
     @Element(required=false) public int IdBodegaAreaSAP = 0;
     @Element(required=false) public boolean Es_Proveedor = false;
-    @Element(required=false) public String Codigo_Empresa_ERP="";
+    @Element(required=false) public String Codigo_Empresa_ERP = "";
 
     public clsBeCliente() {
     }
@@ -60,7 +60,7 @@ public class clsBeCliente {
                         boolean Es_bodega_recepcion,boolean Es_Bodega_Traslado,int IdUbicacionVirtual,boolean Control_Ultimo_Lote,
                         String Referencia,clsBeCliente_tipo Tipo,clsBeCliente_direccionList Drecciones,clsBeCliente_tiemposList Tiempos,
                         clsBeEmpresa Empresa,clsBePropietarios Propietario,clsBeCliente_tipo ClienteTipo,
-                        int IdUbicacionAbastecerConz, int IdBodegaAreaSAP, boolean Es_Proveedor) {
+                        int IdUbicacionAbastecerConz, int IdBodegaAreaSAP, boolean Es_Proveedor, String Codigo_Empresa_ERP) {
 
         this.IdCliente=IdCliente;
         this.IdEmpresa=IdEmpresa;
@@ -96,6 +96,7 @@ public class clsBeCliente {
         this.IdUbicacionAbastecerCon = IdUbicacionAbastecerCon;
         this.IdBodegaAreaSAP = IdBodegaAreaSAP;
         this.Es_Proveedor = Es_Proveedor;
+        this.Codigo_Empresa_ERP = Codigo_Empresa_ERP;
     }
 
 

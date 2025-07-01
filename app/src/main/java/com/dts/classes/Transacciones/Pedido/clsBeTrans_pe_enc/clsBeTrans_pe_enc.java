@@ -91,6 +91,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public int IdMotivoDevolucion = 0;
     @Element(required=false) public String Codigo_Empresa_ERP="";
     @Element(required=false) public boolean EsExportacion=false;
+    @Element(required=false) public int IdMotivoAnulacionBodega = 0;
 
     public clsBeTrans_pe_enc() {
     }
@@ -113,7 +114,7 @@ public class clsBeTrans_pe_enc {
                              boolean Control_Ultimo_Lote,String Serie,int Correlativo, clsBeTrans_pe_pol ObjPoliza,
                              int IdTipoPedido, String No_Documento_Externo, String NombreRutaDespacho,
                              boolean Requiere_Tarimas, String Fecha_Preparacion, String Bodega_Origen, String Bodega_Destino,
-                             int IdAcuerdoComercial, int IdMotivoDevolucion, String Codigo_Empresa_ERP) {
+                             int IdAcuerdoComercial, int IdMotivoDevolucion, String Codigo_Empresa_ERP, boolean EsExportacion, int IdMotivoAnulacionBodega) {
 
         this.IdPedidoEnc=IdPedidoEnc;
         this.IdBodega=IdBodega;
@@ -190,6 +191,8 @@ public class clsBeTrans_pe_enc {
         this.IdAcuerdoComercial = IdAcuerdoComercial;
         this.IdMotivoDevolucion = IdMotivoDevolucion;
         this.Codigo_Empresa_ERP = Codigo_Empresa_ERP;
+        this.EsExportacion = EsExportacion;
+        this.IdMotivoAnulacionBodega = IdMotivoAnulacionBodega;
     }
 
 

@@ -75,9 +75,9 @@ public class frm_verificacion_datos extends PBase {
             lblPresentacion,lblPresRec, lblPresSol, lblUnidadSol, lblUnidadRec, txtBodegaDestino;
     private Button btMarcarReemplazoVeri,btnConfirmarV,btnBack;
     private Spinner cmbPresVeri;
-    private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo,llBono;
+    private LinearLayout llFechaVence,llLote, llPresentacion, llCantidad, llPeso, llUMBas, llReemplazo,llBono,lyTalla, lyColor;
     private RelativeLayout relDesglose, relPick, relReemplazo;
-    private EditText txtPresPick, txtUnidadPick;
+    private EditText txtPresPick, txtUnidadPick, txtTalla, txtColor;
     private TextView lblPresPick, lblUnidadPick;
     private FloatingActionButton btnTareas;
     private CheckBox chkBono;
@@ -183,6 +183,11 @@ public class frm_verificacion_datos extends PBase {
         llBono = findViewById(R.id.llBono);
         chkBono = findViewById(R.id.chkBono);
         txtBodegaDestino = findViewById(R.id.txtBodegaDestino);
+
+        lyColor = findViewById(R.id.lyColor);
+        lyTalla = findViewById(R.id.lyTalla);
+        txtColor = findViewById(R.id.txtColor);
+        txtTalla = findViewById(R.id.txtTalla);
 
         BePickingUbicList = gl.gBePickingUbicList;
         pTipo = 0;
@@ -370,8 +375,18 @@ public class frm_verificacion_datos extends PBase {
         List AuxList;
 
         try{
+            if (gl.Control_Talla_Color) {
+                lyColor.setVisibility(View.VISIBLE);
+                lyColor.setVisibility(View.VISIBLE);
 
-            Codigo = BePedidoDetVerif.getCodigo();
+                txtTalla.setText(BePedidoDetVerif.Codigo_Talla +" - "+ BePedidoDetVerif.Nombre_Talla);
+                txtColor.setText(BePedidoDetVerif.Codigo_Color +" - "+ BePedidoDetVerif.Nombre_Color);
+            } else {
+                lyColor.setVisibility(View.GONE);
+                lyColor.setVisibility(View.GONE);
+            }
+
+            Codigo = gl.Control_Talla_Color ? BePedidoDetVerif.CodigoSKU : BePedidoDetVerif.getCodigo();
             Nombre = BePedidoDetVerif.getNombre_Producto();
             Expira = BePedidoDetVerif.getFecha_Vence();
             Lote = BePedidoDetVerif.getLote();

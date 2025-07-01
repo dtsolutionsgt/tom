@@ -86,6 +86,9 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
                 holder.lblEIdProductoBodega = convertView.findViewById(R.id.lblEIdProductoBodega);
                 holder.lblENDias = convertView.findViewById(R.id.lblENDias);
 
+                holder.lblTalla = convertView.findViewById(R.id.lblTalla);
+                holder.lblColor = convertView.findViewById(R.id.lblColor);
+                holder.lblCodigoSKU = convertView.findViewById(R.id.lblCodigoSKU);
                 convertView.setTag(holder);
 
             }else {
@@ -110,6 +113,10 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
             holder.lblNDias.setText(""+pListBeTareasVerificacionHH.get(position).NDias);
             holder.lblArea.setText(""+pListBeTareasVerificacionHH.get(position).NombreArea);
             holder.lblClasificacion.setText(""+pListBeTareasVerificacionHH.get(position).NombreClasificacion);
+
+            holder.lblTalla.setText(String.format("%s - %s", pListBeTareasVerificacionHH.get(position).Codigo_Talla, pListBeTareasVerificacionHH.get(position).Nombre_Talla));
+            holder.lblColor.setText(String.format("%s - %s", pListBeTareasVerificacionHH.get(position).Codigo_Color, pListBeTareasVerificacionHH.get(position).Nombre_Color));
+            holder.lblCodigoSKU.setText(pListBeTareasVerificacionHH.get(position).CodigoSKU);
 
             holder.lblPedidoEnc.setVisibility(View.GONE);
             holder.lblPedidoDet.setVisibility(View.GONE);
@@ -160,7 +167,7 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
         TextView lblPedidoEnc,lblPedidoDet,lblCodigo,lblProducto,lblLote,lblVence,lblLicPlate,lblUmBas,lblPresentacion,
                 lblSolicitado,lblPickeado, lblVerificado, lblEstado, lblIdPresentacion, lblIdProductoBodega, lblNDias,
                 lblEPedidoEnc,lblEPedidoDet, lblEIdPresentacion, lblEIdProductoBodega, lblENDias, lblArea, lblClasificacion,
-                lblEstadoVer;
+                lblEstadoVer, lblColor, lblTalla, lblCodigoSKU;
     }
 
 }

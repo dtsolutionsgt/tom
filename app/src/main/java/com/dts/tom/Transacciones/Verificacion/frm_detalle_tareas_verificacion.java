@@ -1037,6 +1037,12 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             vItem.NombreArea = pListaPedidoDet.items.get(i).getNombreArea();
                             vItem.NombreClasificacion = pListaPedidoDet.items.get(i).getNombreClasificacion();
                             vItem.Bono = pListaPedidoDet.items.get(i).getBono();
+                            vItem.IdProductoTallaColor = pListaPedidoDet.items.get(i).IdProductoTallaColor;
+                            vItem.Nombre_Talla = pListaPedidoDet.items.get(i).Nombre_Talla;
+                            vItem.Codigo_Talla = pListaPedidoDet.items.get(i).Codigo_Talla;
+                            vItem.Nombre_Color = pListaPedidoDet.items.get(i).Nombre_Color;
+                            vItem.Codigo_Color = pListaPedidoDet.items.get(i).Codigo_Color;
+                            vItem.CodigoSKU = pListaPedidoDet.items.get(i).CodigoSKU;
 
                             pListBeTareasVerificacionHH.add(vItem);
 

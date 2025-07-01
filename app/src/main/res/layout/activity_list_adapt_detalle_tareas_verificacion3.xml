@@ -195,6 +195,42 @@
             tools:visibility="visible" />
 
         <TextView
+            android:id="@+id/lblCodigoSKU"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="AGOOO123234123"
+            android:textSize="18sp"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/lblTalla"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="390 - 39"
+            android:textSize="18sp"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/lblColor"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:minHeight="50dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Negro"
+            android:textSize="18sp"
+            tools:visibility="visible" />
+
+        <TextView
             android:id="@+id/lblIdPresentacion"
             android:layout_width="100dp"
             android:layout_height="wrap_content"

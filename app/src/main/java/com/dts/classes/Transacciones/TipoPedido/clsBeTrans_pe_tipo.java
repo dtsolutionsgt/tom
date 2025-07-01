@@ -35,6 +35,7 @@ public class clsBeTrans_pe_tipo {
     @Element(required=false) public boolean Escanear_Muelle_Picking=false;
     @Element(required=false) public boolean Transferir_Ubicacion=false;
 
+
     public clsBeTrans_pe_tipo() {
     }
 
@@ -58,7 +59,8 @@ public class clsBeTrans_pe_tipo {
                               boolean Es_Devolucion,
                               boolean Empaque_Tarima,
                               boolean Mover_Producto_Zona_Muelle,
-                              boolean Escanear_Muelle_Picking
+                              boolean Escanear_Muelle_Picking,
+                              boolean Transferir_Ubicacion
     ) {
 
         this.IdTipoPedido=IdTipoPedido;
@@ -82,7 +84,7 @@ public class clsBeTrans_pe_tipo {
         this.Empaque_Tarima = Empaque_Tarima;
         this.Escanear_Muelle_Picking = Escanear_Muelle_Picking;
         this.Mover_Producto_Zona_Muelle= Mover_Producto_Zona_Muelle;
-
+        this.Transferir_Ubicacion = Transferir_Ubicacion;
     }
 
 
