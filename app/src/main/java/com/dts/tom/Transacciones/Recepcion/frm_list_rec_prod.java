@@ -274,7 +274,6 @@ public class frm_list_rec_prod extends PBase {
                                 .firstOrNull();
 
                         if (selitem!=null) {
-                            BeDetalleOc = selitem;
                             execws(17);
                         }
                     } else {
@@ -541,7 +540,11 @@ public class frm_list_rec_prod extends PBase {
                         }
                     }
 
-                    procesar_registro();
+                    if (gl.Control_Talla_Color) {
+                        execws(17);
+                    } else {
+                        procesar_registro();
+                    }
                 }else{
                     msgbox("No se pudo obtener el registro a recepcionar: " + sitem.No_Linea + " " + sitem.Producto.Codigo);
                 }
@@ -899,6 +902,9 @@ public class frm_list_rec_prod extends PBase {
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
                             vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
                             vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
+                            vItem.Talla = pListDetalleOC.items.get(i).Talla;
+                            vItem.Color = pListDetalleOC.items.get(i).Color;
+                            vItem.IdProductoTallaColor = pListDetalleOC.items.get(i).IdProductoTallaColor;
 
                             BeListDetalleOC.add(vItem);
 
@@ -921,6 +927,9 @@ public class frm_list_rec_prod extends PBase {
                             vItem.Nombre_Propietario = pListDetalleOC.items.get(i).Nombre_Propietario;
                             vItem.Nombre_Embarcador = pListDetalleOC.items.get(i).Nombre_Embarcador;
                             vItem.Nombre_Clasificacion = pListDetalleOC.items.get(i).Producto.Clasificacion.Nombre;
+                            vItem.Talla = pListDetalleOC.items.get(i).Talla;
+                            vItem.Color = pListDetalleOC.items.get(i).Color;
+                            vItem.IdProductoTallaColor = pListDetalleOC.items.get(i).IdProductoTallaColor;
 
                             BeListDetalleOC.add(vItem);
 
@@ -1518,7 +1527,7 @@ public class frm_list_rec_prod extends PBase {
 
             if (ListaBeTallColor != null) {
                 BeTallColor = ListaBeTallColor.items.stream()
-                        .filter(x -> x.IdProductoTallaColor == BeDetalleOc.IdProductoTallaColor)
+                        .filter(x -> x.IdProductoTallaColor == selitem.IdProductoTallaColor)
                         .findFirst()
                         .orElse(null);
             }

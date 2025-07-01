@@ -210,6 +210,9 @@ public class frm_list_rec_prod_detalle extends PBase {
                        vItem.Lote = obj.Lote;
                        vItem.Lic_plate = obj.Lic_plate;
                        vItem.IdRecepcionDet = obj.IdRecepcionDet;
+                       vItem.IdProductoTallaColor = obj.IdProductoTallaColor;
+                       vItem.Color = obj.Color;
+                       vItem.Talla = obj.Talla;
 
                        BeListDetalleRec.add(vItem);
 
