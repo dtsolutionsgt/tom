@@ -72,6 +72,8 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
             holder.lblEstadoRe = convertView.findViewById(R.id.lblEstadoRe);
             holder.lblStock = convertView.findViewById(R.id.lblStock);
             holder.lblDespachar = convertView.findViewById(R.id.lblDespachar);
+            holder.lblTalla = convertView.findViewById(R.id.lblTalla);
+            holder.lblColor = convertView.findViewById(R.id.lblColor);
 
             convertView.setTag(holder);
 
@@ -79,78 +81,81 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-            holder.lblCodigoRe.setText("0");
-            holder.lblProductoRe.setText("--");
-            holder.lblPresRe.setText("--");
-            holder.lblUmbasRe.setText("--");
-            holder.lblCantRe.setText("0");
-            holder.lblUbicRe.setText("0");
-            holder.lblVenceRe.setText("--");
-            holder.lblLpRe.setText("--");
-            holder.lblLoteRe.setText("--");
-            holder.lblCodPrRe.setText("--");
-            holder.lblPesoRe.setText("0");
-            holder.lblEstadoRe.setText("--");
-            holder.lblStock.setText("0");
-            holder.lblDespachar.setText("No");
+        holder.lblCodigoRe.setText("0");
+        holder.lblProductoRe.setText("--");
+        holder.lblPresRe.setText("--");
+        holder.lblUmbasRe.setText("--");
+        holder.lblCantRe.setText("0");
+        holder.lblUbicRe.setText("0");
+        holder.lblVenceRe.setText("--");
+        holder.lblLpRe.setText("--");
+        holder.lblLoteRe.setText("--");
+        holder.lblCodPrRe.setText("--");
+        holder.lblPesoRe.setText("0");
+        holder.lblEstadoRe.setText("--");
+        holder.lblStock.setText("0");
+        holder.lblDespachar.setText("No");
 
-            if (!BeListTareasHH.get(position).Codigo.isEmpty()){
-                holder.lblCodigoRe.setText(BeListTareasHH.get(position).Codigo);
-            }
+        if (!BeListTareasHH.get(position).Codigo.isEmpty()){
+            holder.lblCodigoRe.setText(BeListTareasHH.get(position).Codigo);
+        }
 
-            if (!BeListTareasHH.get(position).Producto.isEmpty()){
-                holder.lblProductoRe.setText(BeListTareasHH.get(position).Producto);
-            }
+        if (!BeListTareasHH.get(position).Producto.isEmpty()){
+            holder.lblProductoRe.setText(BeListTareasHH.get(position).Producto);
+        }
 
-            if (!BeListTareasHH.get(position).Presentacion.isEmpty()){
-                holder.lblPresRe.setText(""+BeListTareasHH.get(position).Presentacion);
-            }
+        if (!BeListTareasHH.get(position).Presentacion.isEmpty()){
+            holder.lblPresRe.setText(""+BeListTareasHH.get(position).Presentacion);
+        }
 
-            if (!BeListTareasHH.get(position).UMBas.isEmpty()){
-                holder.lblUmbasRe.setText(""+BeListTareasHH.get(position).UMBas);
-            }
+        if (!BeListTareasHH.get(position).UMBas.isEmpty()){
+            holder.lblUmbasRe.setText(""+BeListTareasHH.get(position).UMBas);
+        }
 
-            if (BeListTareasHH.get(position).Cant!=0){
-                holder.lblCantRe.setText(""+BeListTareasHH.get(position).Cant);
-            }
+        if (BeListTareasHH.get(position).Cant!=0){
+            holder.lblCantRe.setText(""+BeListTareasHH.get(position).Cant);
+        }
 
-            if (BeListTareasHH.get(position).IdUbicacion!=0){
-                 holder.lblUbicRe.setText(""+BeListTareasHH.get(position).NombreUbicacion);
-            }
+        if (BeListTareasHH.get(position).IdUbicacion!=0){
+             holder.lblUbicRe.setText(""+BeListTareasHH.get(position).NombreUbicacion);
+        }
 
-            if (!BeListTareasHH.get(position).FechaVence.isEmpty()){
-                holder.lblVenceRe.setText(""+BeListTareasHH.get(position).FechaVence);
-            }
+        if (!BeListTareasHH.get(position).FechaVence.isEmpty()){
+            holder.lblVenceRe.setText(""+BeListTareasHH.get(position).FechaVence);
+        }
 
-            if (!BeListTareasHH.get(position).LicPlate.isEmpty()){
-                holder.lblLpRe.setText(""+BeListTareasHH.get(position).LicPlate);
-            }
+        if (!BeListTareasHH.get(position).LicPlate.isEmpty()){
+            holder.lblLpRe.setText(""+BeListTareasHH.get(position).LicPlate);
+        }
 
-            if (!BeListTareasHH.get(position).Lote.isEmpty()){
-                holder.lblLoteRe.setText(""+BeListTareasHH.get(position).Lote);
-            }
+        if (!BeListTareasHH.get(position).Lote.isEmpty()){
+            holder.lblLoteRe.setText(""+BeListTareasHH.get(position).Lote);
+        }
 
-            if (!BeListTareasHH.get(position).CodigoProducto.isEmpty()){
-                holder.lblCodPrRe.setText(""+BeListTareasHH.get(position).CodigoProducto);
-            }
+        if (!BeListTareasHH.get(position).CodigoProducto.isEmpty()){
+            holder.lblCodPrRe.setText(""+BeListTareasHH.get(position).CodigoProducto);
+        }
 
-            if (BeListTareasHH.get(position).Peso!=0){
-                holder.lblPesoRe.setText(""+BeListTareasHH.get(position).Peso);
-            }
+        if (BeListTareasHH.get(position).Peso!=0){
+            holder.lblPesoRe.setText(""+BeListTareasHH.get(position).Peso);
+        }
 
-            if (!BeListTareasHH.get(position).Estado.isEmpty()){
-                holder.lblEstadoRe.setText(""+BeListTareasHH.get(position).Estado);
-            }
+        if (!BeListTareasHH.get(position).Estado.isEmpty()){
+            holder.lblEstadoRe.setText(""+BeListTareasHH.get(position).Estado);
+        }
 
-            if (BeListTareasHH.get(position).IdStock!=0){
-                holder.lblStock.setText(""+BeListTareasHH.get(position).IdStock);
-            }
+        if (BeListTareasHH.get(position).IdStock!=0){
+            holder.lblStock.setText(""+BeListTareasHH.get(position).IdStock);
+        }
 
-            if (!BeListTareasHH.get(position).Despachar.isEmpty()){
-                holder.lblDespachar.setText(""+BeListTareasHH.get(position).Despachar);
-            }
+        if (!BeListTareasHH.get(position).Despachar.isEmpty()){
+            holder.lblDespachar.setText(""+BeListTareasHH.get(position).Despachar);
+        }
 
-       // }
+        if (BeListTareasHH.get(position).IdProductoTallaColor != 0){
+            holder.lblTalla.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Talla, BeListTareasHH.get(position).Nombre_Talla));
+            holder.lblColor.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Color, BeListTareasHH.get(position).Nombre_Color));
+        }
 
         if(selectedIndex!= -1 && position == selectedIndex) {
             convertView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -163,7 +168,7 @@ public class list_adapt_detalle_reemplazo_picking extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblCodigoRe,lblProductoRe,lblPresRe,lblUmbasRe,lblCantRe,lblUbicRe,lblVenceRe,lblLpRe,lblLoteRe,lblCodPrRe,lblPesoRe
-                ,lblEstadoRe,lblStock,lblDespachar;
+                ,lblEstadoRe,lblStock,lblDespachar, lblTalla, lblColor;
     }
 
 }

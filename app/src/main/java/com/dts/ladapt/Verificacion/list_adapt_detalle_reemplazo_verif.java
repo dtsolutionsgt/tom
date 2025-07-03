@@ -71,6 +71,8 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
             holder.lblEstadoRe = convertView.findViewById(R.id.lblEstadoRe);
             holder.lblStock = convertView.findViewById(R.id.lblStock);
             holder.lblDespachar = convertView.findViewById(R.id.lblDespachar);
+            holder.lblTalla = convertView.findViewById(R.id.lblTalla);
+            holder.lblColor = convertView.findViewById(R.id.lblColor);
 
             convertView.setTag(holder);
 
@@ -93,6 +95,11 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
         holder.lblStock.setText(""+BeListTareasHH.get(position).IdStock);
         holder.lblDespachar.setText(""+BeListTareasHH.get(position).Despachar);
 
+        if (BeListTareasHH.get(position).IdProductoTallaColor != 0){
+            holder.lblTalla.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Talla, BeListTareasHH.get(position).Nombre_Talla));
+            holder.lblColor.setText(String.format("%s - %s", BeListTareasHH.get(position).Codigo_Color, BeListTareasHH.get(position).Nombre_Color));
+        }
+
         //LinearLayout encabezado = (LinearLayout) convertView.findViewById(R.id.linearEncCB);
 
        /* if (position>0){
@@ -112,7 +119,7 @@ public class list_adapt_detalle_reemplazo_verif extends BaseAdapter {
 
     static class ViewHolder {
         TextView lblCodigoRe,lblProductoRe,lblPresRe,lblUmbasRe,lblCantRe,lblUbicRe,lblVenceRe,lblLpRe,lblLoteRe,lblCodPrRe,lblPesoRe
-                ,lblEstadoRe,lblStock,lblDespachar;
+                ,lblEstadoRe,lblStock,lblDespachar, lblTalla, lblColor;
     }
 
 }

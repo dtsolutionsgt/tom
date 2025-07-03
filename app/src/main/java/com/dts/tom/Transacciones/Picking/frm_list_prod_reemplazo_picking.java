@@ -485,6 +485,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.IdPresentacion = DT.getInt(13) ;
                     vItem.IdProductoBodega = DT.getInt(14);
                     vItem.IdUnidadMedida = DT.getInt(20);
+                    vItem.IdProductoTallaColor = DT.getInt(41);
+                    vItem.Codigo_Talla = DT.getString(42);
+                    vItem.Nombre_Talla = DT.getString(43);
+                    vItem.Codigo_Color = DT.getString(44);
+                    vItem.Nombre_Color = DT.getString(45);
 
                     BeListStock.add(vItem);
 

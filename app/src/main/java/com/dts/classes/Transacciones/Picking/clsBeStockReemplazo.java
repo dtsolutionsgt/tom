@@ -21,5 +21,9 @@ public class clsBeStockReemplazo {
     public int IdProductoBodega = 0;
     public int IdUnidadMedida = 0;
     public String NombreUbicacion = "";
-
+    public int IdProductoTallaColor = 0;
+    public String Codigo_Talla = "";
+    public String Nombre_Talla = "";
+    public String Codigo_Color = "";
+    public String Nombre_Color = "";
 }

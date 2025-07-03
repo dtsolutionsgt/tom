@@ -136,31 +136,27 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         try{
 
-            listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            listDispProd.setOnItemClickListener((parent, view, position, id) -> {
 
-                    selid = 0;
+                selid = 0;
 
-                    Object lvObj = listDispProd.getItemAtPosition(position);
-                    clsBeStockReemplazo sitem = (clsBeStockReemplazo) lvObj;
-                    selitem = new clsBeStockReemplazo();
-                    //selitem = BeListStock.get(position);
+                Object lvObj = listDispProd.getItemAtPosition(position);
+                clsBeStockReemplazo sitem = (clsBeStockReemplazo) lvObj;
+                selitem = new clsBeStockReemplazo();
+                //selitem = BeListStock.get(position);
 
-                    //#AT20220707 Ya no se obtiene de la lista directamente según la posición,
-                    //ahora selitem = sitem
-                    selitem = sitem;
+                //#AT20220707 Ya no se obtiene de la lista directamente según la posición,
+                //ahora selitem = sitem
+                selitem = sitem;
 
-                    selid = sitem.IdStock;
-                    selidx = position;
-                    adapter.setSelectedIndex(position);
+                selid = sitem.IdStock;
+                selidx = position;
+                adapter.setSelectedIndex(position);
 
-                    int Ubicacion = selitem.IdUbicacion;
+                int Ubicacion = selitem.IdUbicacion;
 
-                    msgAskSeguroReemplazo(String.format("¿Desea reemplazar la cantidad: %s de la ubicación: %s?",
-                            CantReemplazar, Ubicacion));
-
-                }
+                msgAskSeguroReemplazo(String.format("¿Desea reemplazar la cantidad: %s de la ubicación: %s?",
+                        CantReemplazar, Ubicacion));
 
             });
 
@@ -398,6 +394,12 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                     vItem.IdPresentacion = DT.getInt(13) ;
                     vItem.IdProductoBodega = DT.getInt(14);
                     vItem.IdUnidadMedida = DT.getInt(20);
+
+                    vItem.IdProductoTallaColor = DT.getInt(41);
+                    vItem.Codigo_Talla = DT.getString(42);
+                    vItem.Nombre_Talla = DT.getString(43);
+                    vItem.Codigo_Color = DT.getString(44);
+                    vItem.Nombre_Color = DT.getString(45);
 
                     BeListStock.add(vItem);
 

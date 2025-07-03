@@ -84,11 +84,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
     private XMLObject xobj;
     private ProgressDialog progress;
 
-    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso;
+    private EditText txtUbicOrigen, txtCodigoPrd, txtCantidad, txtUbicDestino,txtLicPlate, txtPosiciones, txtPeso, txtTalla, txtColor;
     private TextView lblUbicCompleta, lblDescProducto, lblLote, lblVence, lblEstadoDestino, txtUbicSug, lblCant,lblPesoEst, lblPeso,lblTituloForma,lblUbicCompDestino,lblCantidad, lblCantidadProducto;
     private Spinner cmbPresentacion, cmbLote, cmbVence, cmbEstadoOrigen, cmbEstadoDestino;
     private Button btnGuardarCiega;
-    private TableRow trPeso,tblExplosionar,tblPresentacion, trCodigoProducto;
+    private TableRow trPeso,tblExplosionar,tblPresentacion, trCodigoProducto, trTalla, trColor;
     private CheckBox chkExplosionar;
     private RelativeLayout relbot, reltop, relProductos, relForm;
     private ListView listProductos;
@@ -241,6 +241,11 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             tblPresentacion = findViewById(R.id.tblPresentacion);
             trCodigoProducto = findViewById(R.id.trCodigoProducto);
+
+            txtTalla = findViewById(R.id.txtTalla);
+            txtColor = findViewById(R.id.txtColor);
+            trTalla = findViewById(R.id.trTalla);
+            trColor = findViewById(R.id.trColor);
 
             //listProductos = findViewById(R.id.listProductos);
 
@@ -2649,6 +2654,17 @@ public class frm_cambio_ubicacion_ciega extends PBase {
                                     trPeso.setVisibility(View.GONE);
                                 }
 
+                                if (gl.Control_Talla_Color) {
+                                    trTalla.setVisibility(View.VISIBLE);
+                                    trColor.setVisibility(View.VISIBLE);
+
+                                    txtTalla.setText(BeStockPallet.Codigo_Talla +" - "+BeStockPallet.Nombre_Talla);
+                                    txtColor.setText(BeStockPallet.Codigo_Color +" - "+BeStockPallet.Nombre_Color);
+                                } else {
+                                    trTalla.setVisibility(View.GONE);
+                                    trColor.setVisibility(View.GONE);
+                                }
+
                                 cvLote = BeStockPallet.Lote;
                                 cvPresID = BeStockPallet.IdPresentacion;
                                 //#AT20220713 Asigne valor a la variable cvAtrib
@@ -4456,6 +4472,10 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
             if (Es_Explosion_Manual){
                 gMovimientoDet.IdTipoTarea = 20;
+            }
+
+            if (gl.Control_Talla_Color) {
+                gMovimientoDet.IdProductoTallaColor = BeStockPallet.IdProductoTallaColor;
             }
 
             //#EJC20220330: De momento mover licencias completas y no permitir explosión.
