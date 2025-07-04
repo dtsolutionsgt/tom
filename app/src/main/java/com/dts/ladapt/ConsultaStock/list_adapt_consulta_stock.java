@@ -97,9 +97,14 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             //AT 20211221 Ya no se crea el encabezado unicamente se agrega la información
             holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
             holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
-            holder.lblUM.setText(BeListStock.get(position).UM  +"");
             holder.lblExistUMBAs.setText(BeListStock.get(position).ExistUMBAs  +"");
-            holder.lblPres.setText(BeListStock.get(position).Pres  +"");
+
+            if (BeListStock.get(position).Pres.equals("0")) {
+                holder.lblPres.setText(BeListStock.get(position).UM);
+            } else {
+                holder.lblPres.setText(BeListStock.get(position).Pres + "");
+            }
+
             holder.lblExistPres.setText(BeListStock.get(position).ExistPres  +"");
             holder.lblReservadoUMBAs.setText(BeListStock.get(position).ReservadoUMBAs  +"");
             holder.lblDisponibleUMBas.setText(BeListStock.get(position).DisponibleUMBas  +"");

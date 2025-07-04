@@ -119,10 +119,12 @@ public class list_adapt_detalle_recepcion extends BaseAdapter {
 
         if(BeDetalleOC.get(position).Presentacion.Nombre!=null){
             holder.lblPres.setText(BeDetalleOC.get(position).Presentacion.Nombre);
-        }
-
-        if(BeDetalleOC.get(position).UnidadMedida.Nombre!=null){
-            holder.lblUmbas.setText(BeDetalleOC.get(position).UnidadMedida.Nombre);
+        } else {
+            if(BeDetalleOC.get(position).UnidadMedida.Nombre!=null){
+                holder.lblPres.setText(BeDetalleOC.get(position).UnidadMedida.Nombre);
+            } else {
+                holder.lblPres.setText("---");
+            }
         }
 
         if(BeDetalleOC.get(position).Cantidad>0){
