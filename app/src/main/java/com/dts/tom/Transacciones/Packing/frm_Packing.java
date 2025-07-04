@@ -98,6 +98,7 @@ public class frm_Packing extends PBase {
     private int pUbicacionLP=0;
     private String pNombreUbicacionLP="";
     private boolean Existe_Lp=false, imprimirDesdeBoton = false;
+    private String cvNombreEstado = "";
 
     public static clsBeBodega_ubicacion cUbicOrig = new clsBeBodega_ubicacion();
     public static clsBeBodega_ubicacion cUbicDest = new clsBeBodega_ubicacion();
@@ -436,6 +437,7 @@ public class frm_Packing extends PBase {
             cvLote = "";
             cvPresID = 0;
             cvEstOrigen = 0;
+            cvNombreEstado = "";
             cvProdID = 0;
             cvVence = "01/01/1900";
             tmpLicencia = "";
@@ -1007,6 +1009,7 @@ public class frm_Packing extends PBase {
 
                     cmbEstado.setSelection(0);
                     cvEstEst = Integer.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[0]);
+                    cvNombreEstado = String.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[1]);
                     muestraCantidad();
 
                 }
@@ -1242,7 +1245,7 @@ public class frm_Packing extends PBase {
                     double vFactor = ListBeProductoPresentacion.items.get(0).Factor;
                     boolean vPaletizado = ListBeProductoPresentacion.items.get(0).getEsPallet();
 
-                    if (vPaletizado ){
+                    if (vPaletizado || (IdPresCmb>0 && cvPresID==0 ) ){
                         if (!gl.Permitir_Decimales){
                             resto = vCantidadAUbicar % vFactor;
                             if (resto!=0){
@@ -1426,7 +1429,7 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.IdEmpresa = gl.IdEmpresa;
                 gMovimientoDet.IdBodegaOrigen = gl.IdBodega;
                 gMovimientoDet.IdTransaccion = 1;
-                gMovimientoDet.IdPropietarioBodega = gl.IdPropietarioBodega;
+                gMovimientoDet.IdPropietarioBodega = cvPropID;
                 gMovimientoDet.IdProductoBodega = obj.Stock.IdProductoBodega;
                 gMovimientoDet.IdUbicacionOrigen = obj.Stock.IdUbicacion_Anterior;
                 gMovimientoDet.IdUbicacionDestino = cvUbicDestID;
@@ -1604,7 +1607,7 @@ public class frm_Packing extends PBase {
 
             }
 
-            gMovimientoDet.Fecha = app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Fecha = du.getFullDate();
 
             if(Escaneo_Pallet &&  ListBeStockPallet != null ) {
                 gMovimientoDet.Barra_pallet = BeStockPallet.Lic_plate;
@@ -1612,9 +1615,9 @@ public class frm_Packing extends PBase {
                 gMovimientoDet.Barra_pallet = "";
             }
 
-            gMovimientoDet.Hora_ini =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Hora_fin =  app.strFechaXML(du.getFechaActual());
-            gMovimientoDet.Fecha_agr =  app.strFechaXML(du.getFechaActual());
+            gMovimientoDet.Hora_ini =  du.getFullDate();
+            gMovimientoDet.Hora_fin =  du.getFullDate();
+            gMovimientoDet.Fecha_agr =  du.getFullDate();
             gMovimientoDet.Usuario_agr = String.valueOf(gl.IdOperador);
             gMovimientoDet.Cantidad_hist = gMovimientoDet.Cantidad;
             gMovimientoDet.Peso_hist = gMovimientoDet.Peso;
@@ -2670,9 +2673,9 @@ public class frm_Packing extends PBase {
 
         try{
 
-            vLote = BeProductoUbicacionOrigen.Lote;
-            vFechaVence = du.convierteFechaMostrar(BeProductoUbicacionOrigen.FechaVence.toString());
-            vEstadoProducto = String.valueOf(cmbEstado.getSelectedItem().toString().split(" - ")[1]);
+            vLote = (cvLote==null?"":cvLote);
+            vFechaVence = du.convierteFechaMostrar(du.convierteFechaDiagonal(cvVence));
+            vEstadoProducto = cvNombreEstado;
 
             BluetoothConnection printerIns= new BluetoothConnection(gl.MacPrinter);
 

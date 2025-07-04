@@ -335,6 +335,7 @@ public class frm_preparacion_packing_bulto extends PBase {
                 }
             } catch (Exception e) {}
 
+
             listItems();
             idle=true;
         } catch (Exception e) {
