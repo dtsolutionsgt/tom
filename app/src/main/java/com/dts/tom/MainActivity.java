@@ -1469,7 +1469,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     //region Spinners
 
-    private void fillSpinemp()  {
+    private void fillSpinempAnt()  {
 
         String filePathImg = null;
 
@@ -1537,6 +1537,91 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
         } catch (Exception e)
         {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
+            Log.e("Error en fillspin", e.getMessage());
+        }
+    }
+
+    private void fillSpinemp()  {
+
+        String filePathImg = null;
+
+        try {
+            emplist.clear();
+
+            String dirLogosEmpresa = getApplicationContext().getFilesDir() + "/LogosEmpresa/";
+            int vCodigoEmpresa;
+
+            File dir = new File(dirLogosEmpresa);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            for (int i = 0; i < empresas.items.size(); i++) {
+
+                vCodigoEmpresa = empresas.items.get(i).getIdEmpresa();
+                emplist.add(empresas.items.get(i).Nombre);
+
+                try {
+                    String img = empresas.items.get(i).Imagen;
+
+                    if (img != null) {
+
+                        if (i == 0) {
+                            File f = new File(dirLogosEmpresa);
+                            if (!f.isDirectory()) f.mkdir();
+                        }
+
+                        filePathImg = dirLogosEmpresa + vCodigoEmpresa + ".png";
+                        File file = new File(filePathImg);
+
+                        // Eliminar el archivo si ya existe
+                        if (file.exists()) {
+                            boolean deleted = file.delete();
+                            if (!deleted) {
+                                Log.e("ImgOp", "No se pudo eliminar el archivo existente: " + filePathImg);
+                            }
+                        }
+
+                        // Crear el nuevo archivo con la imagen decodificada
+                        byte[] imgbytes = Base64.decode(img, Base64.DEFAULT);
+                        FileOutputStream fos = new FileOutputStream(filePathImg);
+                        BufferedOutputStream outputStream = new BufferedOutputStream(fos);
+                        outputStream.write(imgbytes);
+                        outputStream.close();
+                    }
+
+                } catch (Exception ee) {
+                    Log.e("ImgOp", ee.getMessage());
+                }
+            }
+
+            // Adaptador para el Spinner
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, emplist);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinemp.setAdapter(dataAdapter);
+
+            if (emplist.size() > 0) {
+                spinemp.setSelection(0);
+            }
+
+            // Cargar la imagen del logo actualizada al ImageView
+            if (filePathImg != null) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.inDither = true;
+
+                Bitmap bmImg = BitmapFactory.decodeFile(filePathImg, options);
+
+                if (bmImg != null) {
+                    imgEmpresaLogin.setImageBitmap(null); // Limpia la imagen anterior
+                    imgEmpresaLogin.setImageBitmap(bmImg); // Carga la nueva
+                } else {
+                    Log.e("ImgOp", "No se pudo decodificar la imagen: " + filePathImg);
+                }
+            }
+
+        } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + "." + e.getMessage());
             Log.e("Error en fillspin", e.getMessage());
         }

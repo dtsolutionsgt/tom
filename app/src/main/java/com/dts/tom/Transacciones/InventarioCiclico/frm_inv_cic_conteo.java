@@ -315,7 +315,6 @@ public class frm_inv_cic_conteo extends PBase {
                         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
                         listCiclico.setAdapter(adapter_ciclico);
 
-
                     }
                 }
             }
