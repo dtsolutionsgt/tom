@@ -116,7 +116,8 @@
             android:text="UM Bas"
             android:textColor="#000000"
             android:textSize="18sp"
-            tools:visibility="visible" />
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblPresentacion"

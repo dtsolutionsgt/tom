@@ -132,7 +132,8 @@
             android:paddingBottom="5dp"
             android:text="UM Bas"
             android:textSize="18sp"
-            tools:visibility="visible" />
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblPresentacion"
