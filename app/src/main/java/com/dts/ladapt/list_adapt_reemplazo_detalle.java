@@ -1,4 +1,4 @@
-package com.dts.ladapt.Verificacion;
+package com.dts.ladapt;
 
 import android.graphics.Color;
 import android.os.SystemClock;
@@ -15,12 +15,11 @@ import com.dts.tom.R;
 
 import java.util.List;
 
-public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<list_adapt_detalle_reemplazo_verif.ViewHolder> {
+public class list_adapt_reemplazo_detalle extends RecyclerView.Adapter<list_adapt_reemplazo_detalle.ViewHolder> {
 
     private List<clsBeStockReemplazo> items;
     private boolean isClickable = true;
     private int selectedIndex = -1;
-
     private OnItemClickListener clickListener;
     private OnItemLongClickListener longClickListener;
     private OnItemDoubleClickListener doubleClickListener;
@@ -37,7 +36,7 @@ public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<lis
         void onDoubleClick(clsBeStockReemplazo item, int position);
     }
 
-    public list_adapt_detalle_reemplazo_verif(List<clsBeStockReemplazo> items) {
+    public list_adapt_reemplazo_detalle(List<clsBeStockReemplazo> items) {
         this.items = items;
     }
 
@@ -66,8 +65,7 @@ public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<lis
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_list_adapt_detalle_reemplazo_verif, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_adapt_detalle_reemplazo_picking, parent, false);
         return new ViewHolder(view);
     }
 
@@ -75,20 +73,20 @@ public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<lis
     public void onBindViewHolder(@NonNull ViewHolder h, int position) {
         clsBeStockReemplazo item = items.get(position);
 
-        h.lblCodigoRe.setText(item.Codigo);
-        h.lblProductoRe.setText(item.Producto);
-        h.lblPresRe.setText(item.Presentacion);
-        h.lblUmbasRe.setText(item.UMBas);
-        h.lblCantRe.setText(String.valueOf(item.Cant));
-        h.lblUbicRe.setText(item.NombreUbicacion);
-        h.lblVenceRe.setText(item.FechaVence);
-        h.lblLpRe.setText(item.LicPlate);
-        h.lblLoteRe.setText(item.Lote);
-        h.lblCodPrRe.setText(item.CodigoProducto);
-        h.lblPesoRe.setText(String.valueOf(item.Peso));
-        h.lblEstadoRe.setText(item.Estado);
-        h.lblStock.setText(String.valueOf(item.IdStock));
-        h.lblDespachar.setText(item.Despachar);
+        h.lblCodigoRe.setText(item.Codigo.isEmpty() ? "0" : item.Codigo);
+        h.lblProductoRe.setText(item.Producto.isEmpty() ? "--" : item.Producto);
+        h.lblPresRe.setText(item.Presentacion.isEmpty() ? "--" : item.Presentacion);
+        h.lblUmbasRe.setText(item.UMBas.isEmpty() ? "--" : item.UMBas);
+        h.lblCantRe.setText(item.Cant != 0 ? String.valueOf(item.Cant) : "0");
+        h.lblUbicRe.setText(item.IdUbicacion != 0 ? item.NombreUbicacion : "0");
+        h.lblVenceRe.setText(item.FechaVence.isEmpty() ? "--" : item.FechaVence);
+        h.lblLpRe.setText(item.LicPlate.isEmpty() ? "--" : item.LicPlate);
+        h.lblLoteRe.setText(item.Lote.isEmpty() ? "--" : item.Lote);
+        h.lblCodPrRe.setText(item.CodigoProducto.isEmpty() ? "--" : item.CodigoProducto);
+        h.lblPesoRe.setText(item.Peso != 0 ? String.valueOf(item.Peso) : "0");
+        h.lblEstadoRe.setText(item.Estado.isEmpty() ? "--" : item.Estado);
+        h.lblStock.setText(item.IdStock != 0 ? String.valueOf(item.IdStock) : "0");
+        h.lblDespachar.setText(item.Despachar.isEmpty() ? "No" : item.Despachar);
 
         if (selectedIndex == position) {
             h.itemView.setBackgroundColor(Color.rgb(0, 128, 0));
@@ -105,6 +103,7 @@ public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<lis
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView lblCodigoRe, lblProductoRe, lblPresRe, lblUmbasRe, lblCantRe, lblUbicRe, lblVenceRe,
                 lblLpRe, lblLoteRe, lblCodPrRe, lblPesoRe, lblEstadoRe, lblStock, lblDespachar;
 
@@ -132,16 +131,10 @@ public class list_adapt_detalle_reemplazo_verif extends RecyclerView.Adapter<lis
             itemView.setOnClickListener(v -> {
                 if (!isClickable) return;
 
-                long now = SystemClock.elapsedRealtime();
-                if (now - lastClickTime < 300) {
-                    if (doubleClickListener != null) doubleClickListener.onDoubleClick(item, position);
-                } else {
-                    if (clickListener != null) clickListener.onClick(item, position);
-                }
-                lastClickTime = now;
-
                 isClickable = false;
                 itemView.postDelayed(() -> isClickable = true, 500);
+
+                if (clickListener != null) clickListener.onClick(item, position);
             });
 
             itemView.setOnLongClickListener(v -> {

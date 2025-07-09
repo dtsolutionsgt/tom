@@ -22,6 +22,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStockList;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_resList;
+import com.dts.ladapt.list_adapt_reemplazo_detalle;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 import com.dts.ladapt.list_adapt_detalle_reemplazo_picking;
@@ -37,11 +38,15 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class frm_list_prod_reemplazo_picking extends PBase {
 
     private TextView lblTituloForma,lblCantRegs, lbldDetProducto;
     private EditText txtFiltro;
     private ListView listDispProd;
+    private RecyclerView listaDispProd;
     private Button btnActualizaPickingDet,btnBack;
     private ProgressDialog progress;
 
@@ -57,7 +62,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
     private ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
     private final ArrayList<clsBeStockReemplazo> TempBeListStock= new ArrayList<clsBeStockReemplazo>();
-    private list_adapt_detalle_reemplazo_picking adapter;
+    private list_adapt_reemplazo_detalle adapter;
     private clsBeStockReemplazo selitem;
 
     private final clsBeTrans_picking_ubic BePickingUbic = new clsBeTrans_picking_ubic();
@@ -89,7 +94,9 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         txtFiltro = findViewById(R.id.txtFiltro);
 
-        listDispProd = findViewById(R.id.listDispProd);
+        //listDispProd = findViewById(R.id.listDispProd);
+
+        listaDispProd = findViewById(R.id.listDispProd);
 
         btnActualizaPickingDet = findViewById(R.id.btnActualizaPickingDet);
         btnBack = findViewById(R.id.btnBack);
@@ -162,9 +169,8 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
     private void setHandles(){
 
-        try{
-
-            listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        try {
+            /*listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -186,7 +192,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         procesar_registro();
 
                 }
-            });
+            });*/
 
             txtFiltro.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -495,8 +501,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 lblCantRegs.setText("No.Reg: "+count);
             }
 
-            adapter=new list_adapt_detalle_reemplazo_picking(this,BeListStock);
-            listDispProd.setAdapter(adapter);
+            adapter=new list_adapt_reemplazo_detalle(BeListStock);
+            listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+            listaDispProd.setAdapter(adapter);
+            setEventosRv();
 
         } catch (Exception e){
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
@@ -504,6 +512,21 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             hideProgressDialog();
         }
 
+    }
+
+    private void setEventosRv() {
+        try {
+            adapter.setOnItemClickListener((item, pos) -> {
+                selitem = item;
+                selid = item.IdStock;
+                selidx = pos;
+
+                adapter.setSelectedIndex(pos);
+                procesar_registro();
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void Lista_Filtrada(){
@@ -567,8 +590,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 lblCantRegs.setText("No.Reg: "+count);
             }
 
-            adapter=new list_adapt_detalle_reemplazo_picking(this,TempBeListStock);
-            listDispProd.setAdapter(adapter);
+            adapter=new list_adapt_reemplazo_detalle(TempBeListStock);
+            listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+            listaDispProd.setAdapter(adapter);
+            setEventosRv();
 
         } catch (Exception e){
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());

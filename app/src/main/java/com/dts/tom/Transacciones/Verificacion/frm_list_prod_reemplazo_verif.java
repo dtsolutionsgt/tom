@@ -22,6 +22,7 @@ import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Stock.Stock_res.clsBeStock_res;
 import com.dts.ladapt.Verificacion.list_adapt_detalle_reemplazo_verif;
 import com.dts.ladapt.list_adapt_detalle_reemplazo_picking;
+import com.dts.ladapt.list_adapt_reemplazo_detalle;
 import com.dts.tom.PBase;
 import com.dts.tom.R;
 
@@ -39,6 +40,9 @@ import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.Cant
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.gBeProducto;
 import static com.dts.tom.Transacciones.Verificacion.frm_verificacion_datos.pSubListPickingU;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class frm_list_prod_reemplazo_verif extends PBase {
 
     private frm_list_prod_reemplazo_verif.WebServiceHandler ws;
@@ -48,6 +52,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private TextView lblTituloForma,lblCantRegs,lbldDetProducto;
     private EditText txtFiltro;
     private ListView listDispProd;
+    private RecyclerView listaDispProd;
     private Button btnActualizaPickingDet,btnBack;
 
     private final ArrayList<clsBeStockReemplazo> BeListStock= new ArrayList<clsBeStockReemplazo>();
@@ -85,12 +90,14 @@ public class frm_list_prod_reemplazo_verif extends PBase {
         lblCantRegs = findViewById(R.id.lblCantRegs);
         lbldDetProducto = findViewById(R.id.lbldDetProducto);
 
-        listDispProd = findViewById(R.id.listDispProd);
+        //listDispProd = findViewById(R.id.listDispProd);
 
         txtFiltro = findViewById(R.id.txtFiltro);
 
         btnActualizaPickingDet = findViewById(R.id.btnActualizaPickingDet);
         btnBack = findViewById(R.id.btnBack);
+
+        listaDispProd = findViewById(R.id.listDispProd);
 
         pCantTotal = CantReemplazar;
         ConExistencia = false;
@@ -136,7 +143,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
         try{
 
-            listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*listDispProd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -162,7 +169,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
 
                 }
 
-            });
+            });*/
 
             txtFiltro.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -407,8 +414,10 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 int count =BeListStock.size();
                 lblCantRegs.setText("No.Reg: "+count);
 
-                adapter=new list_adapt_detalle_reemplazo_verif(this,BeListStock);
-                listDispProd.setAdapter(adapter);
+                adapter=new list_adapt_detalle_reemplazo_verif(BeListStock);
+                listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+                listaDispProd.setAdapter(adapter);
+                setEventosRv();
 
                 progress.cancel();
 
@@ -482,8 +491,10 @@ public class frm_list_prod_reemplazo_verif extends PBase {
                 lblCantRegs.setText("No.Reg: "+count);
             }
 
-            adapter=new list_adapt_detalle_reemplazo_verif(this,TempBeListStock);
-            listDispProd.setAdapter(adapter);
+            adapter=new list_adapt_detalle_reemplazo_verif(TempBeListStock);
+            listaDispProd.setLayoutManager(new LinearLayoutManager(this));
+            listaDispProd.setAdapter(adapter);
+            setEventosRv();
 
             progress.cancel();
 
@@ -492,6 +503,24 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
         }
 
+    }
+
+    private void setEventosRv() {
+        try {
+            adapter.setOnItemClickListener((item, pos) -> {
+                selitem = item;
+                selid = item.IdStock;
+                selidx = pos;
+                int Ubicacion = selitem.IdUbicacion;
+
+                adapter.setSelectedIndex(pos);
+
+                msgAskSeguroReemplazo(String.format("¿Desea reemplazar la cantidad: %s de la ubicación: %s?",
+                        CantReemplazar, Ubicacion));
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void  processReemplazo(){

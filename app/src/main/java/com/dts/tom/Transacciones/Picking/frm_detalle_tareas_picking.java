@@ -1257,10 +1257,10 @@ public class frm_detalle_tareas_picking extends PBase {
 
             if (CantidadPedidos > 1) {
                 TipoLista = 1;
-                btnRes_Det.setText("C.");
+                btnRes_Det.setText("D.");
             } else {
                 TipoLista = 2;
-                btnRes_Det.setText("D.");
+                btnRes_Det.setText("C.");
             }
 
             //#AT20250707 Aca obtenemos la lista de picking
