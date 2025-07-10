@@ -1180,6 +1180,10 @@ public class frm_inv_cic_add extends PBase {
                     pitem.Cantidad = Double.valueOf(txtCantContada.getText().toString().trim());
                     pitem.Cant_stock = invCongelado.Cant_stock;
 
+                    if (pitem.Cant_stock==0) {
+                        throw new Exception("La cantidad del inventario congelado no puede ser 0");
+                    }
+
                     if (pitem.IdPresentacion_nuevo > 0) {
                         pitem.Cantidad = pitem.Cantidad * vFactor;
                     }
@@ -1694,6 +1698,11 @@ public class frm_inv_cic_add extends PBase {
 
             BeTrans_inv_ciclico.Cantidad = Double.parseDouble(txtCantContada.getText().toString().trim());
             BeTrans_inv_ciclico.Cant_stock = gl.inv_ciclico.Cant_Stock;
+
+            if (BeTrans_inv_ciclico.Cant_stock==0) {
+                throw new Exception("La cantidad del inventario no puede ser 0");
+            }
+
             BeTrans_inv_ciclico.Cant_reconteo = 0;
 
             if(gl.inv_ciclico.control_peso){
