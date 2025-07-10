@@ -141,7 +141,11 @@ public class frm_list_prod_reemplazo_picking extends PBase {
         if (Tipo == 1) {
             IdUbicDest = IdUbicacionDestino;
             IdEstDanadoSelect = IdEstadoDanadoSelect;
+        }else if(Tipo == 2){
+            IdUbicDest = gl.gUbicProdNe;
+            IdEstDanadoSelect = gl.IdProductoEstadoNE;
         }
+
 
         execws(1);
     }
@@ -270,7 +274,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (CantReemplazar>0){
 
                 if (selitem.Despachar.equals("No")){
-                    msgNoDespachar("Se recomienda no despachar de este producto, ¿continuar de todas formas?");
+                    msgNoDespachar("Parámetros de aceptación no definidos. ¿Continuar?");
                 }else{
                     Continua_procesando_registro();
                 }
@@ -333,26 +337,14 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         try{
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
+            dialog.setTitle(R.string.app_name + " Producto NE (Pick)");
             dialog.setMessage(msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Continua_procesando_registro();
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> Continua_procesando_registro());
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
-            });
-
             dialog.show();
-
         }catch (Exception e){
             addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
@@ -579,9 +571,15 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                     vItem.IdProductoBodega = DT.getInt(14);
                     vItem.IdUnidadMedida = DT.getInt(20);
 
-                    if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains("" + Integer.valueOf(gl.termino)) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                    //#EJC20250710: La licencia puede contener letras y filtra la lista por la que coincide con el termino:
+                    if ((gl.termino.matches("\\d+") && String.valueOf(vItem.IdUbicacion).contains(gl.termino)) ||
+                            vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())) {
                         TempBeListStock.add(vItem);
                     }
+                    //#EJC20250710: Anteriormente:
+                    //if(String.valueOf(vItem.IdUbicacion).toLowerCase().contains("" + Integer.valueOf(gl.termino)) || vItem.LicPlate.toLowerCase().contains(gl.termino.toLowerCase())){
+                    //  TempBeListStock.add(vItem);
+                    //}
 
                     DT.moveToNext();
                 }

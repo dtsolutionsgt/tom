@@ -28,6 +28,7 @@ import com.dts.tom.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
@@ -617,7 +618,7 @@ public class frm_list_prod_reemplazo_verif extends PBase {
             if (CantReemplazar>0){
 
                 if (selitem.Despachar.equals("No")){
-                    msgAskNoDespachar("Se recomienda no despachar de este producto, ¿continuar de todas formas?");
+                    msgAskNoDespachar("Parámetros de aceptación no definidios. ¿Continuar?");
                 }else{
                     Continua_procesando_registro();
                 }
@@ -761,29 +762,21 @@ public class frm_list_prod_reemplazo_verif extends PBase {
     private void msgAskNoDespachar(String msg) {
 
         try{
+
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-            dialog.setTitle(R.string.app_name);
+            dialog.setTitle(R.string.app_name + " Reemplazo (Veri)");
             dialog.setMessage(msg);
-
             dialog.setIcon(R.drawable.ic_quest);
-
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Continua_procesando_registro();
-                }
-            });
-
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setPositiveButton("Si", (dialog1, which) -> Continua_procesando_registro());
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
 
             dialog.show();
 
         }catch (Exception e){
-            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+            addlog(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName(),e.getMessage(),"");
         }
     }
 
