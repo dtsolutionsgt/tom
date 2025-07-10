@@ -74,7 +74,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
 
     private Spinner spinemp,spinbod,spinprint,spinuser;
     private EditText txtpass;
-    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog, lblManufacturadorEquipo, lblModeloEquipo;
+    private TextView lblver,lbldate,lblurl, lblVersion, txtMensajeDialog, lblManufacturadorEquipo, lblModeloEquipo,lblIdDevice;
     //private ProgressDialog progress;
     Dialog progress;
     private ImageView imgIngresar;
@@ -190,7 +190,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             imgEmpresaLogin = findViewById(R.id.imgEmpresaLogin);
             lblModeloEquipo = findViewById(R.id.lblModeloEquipo);
             lblManufacturadorEquipo = findViewById(R.id.lblManufacturadorEquipo);
-
+            lblIdDevice = findViewById(R.id.lblIdDevice);
 
             lblver.setText(String.format("Versión: %s", gl.version));
             lblVersion.setText(String.format("v. %s", gl.version));
@@ -217,6 +217,8 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
             gl.deviceId =androidid();
             gl.devicename = getDeviceName();
             //getLocalBluetoothName();
+
+            lblIdDevice.setText(gl.deviceId);
 
             try {
 
