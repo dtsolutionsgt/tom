@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.dts.ladapt.list_adapt_detalle_reemplazo_picking">
 
     <LinearLayout
         android:id="@+id/relView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:addStatesFromChildren="true"
         android:clipChildren="true"
         android:clipToPadding="true"
@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/lblCodigoRe"
-            android:layout_width="80dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:minHeight="50dp"
@@ -78,10 +78,9 @@
 
         <TextView
             android:id="@+id/lblUbicRe"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:minHeight="50dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="1"
@@ -151,10 +150,10 @@
             android:id="@+id/lblEstadoRe"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
             android:visibility="visible" />
 
         <TextView
@@ -174,6 +173,7 @@
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
             android:visibility="visible" />
 
     </LinearLayout>

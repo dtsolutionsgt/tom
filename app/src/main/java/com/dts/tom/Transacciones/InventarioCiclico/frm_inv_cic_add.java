@@ -1,6 +1,8 @@
 package com.dts.tom.Transacciones.InventarioCiclico;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -1052,7 +1054,7 @@ public class frm_inv_cic_add extends PBase {
                 toast("¡Producto vacio!");
                 txtProd.requestFocus();
 
-            } else if (txtCantContada.getText().toString().trim().isEmpty() || txtCantContada.getText().toString().trim().equals("0")) {
+            } else if (txtCantContada.getText().toString().trim().isEmpty()) {
                 toast("¡Cantidad incorrecta!");
                 txtCantContada.requestFocus();
 
@@ -1126,11 +1128,16 @@ public class frm_inv_cic_add extends PBase {
 
                     pitem.lic_plate = txtLicencia.getText().toString().replace("$","");
                     pitem.Fec_agr = du.Fecha_CompletaT();
+                    pitem.Fec_Mod = du.Fecha_CompletaT();
                     pitem.Idoperador = gl.IdOperador;
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
                     pitem.IdBodega = gl.IdBodega;
 
-                    execws(9);
+                    if (pitem.Cantidad==0){
+                       msgAskCantidadCero("Guardar la cantidad en 0");
+                    }else{
+                        execws(9);
+                    }
                 } else if (esInvCongelado) {
                     pitem.Idinventarioenc = BeInvEnc.Idinventarioenc;
                     pitem.IdStock = invCongelado.IdStock;
@@ -1184,7 +1191,11 @@ public class frm_inv_cic_add extends PBase {
                     pitem.IdBodega = gl.IdBodega;
                     pitem.EsNuevo = true;
 
-                    execws(9);
+                    if (pitem.Cantidad==0){
+                        msgAskCantidadCero("Guardar la cantidad en 0");
+                    }else{
+                        execws(9);
+                    }
                 } else {
                     Guardar();
                 }
@@ -1196,19 +1207,6 @@ public class frm_inv_cic_add extends PBase {
 
     private void  Guardar(){
         try {
-            /*if (gl.pprod.Control_lote) {
-
-                gl.inv_ciclico.Lote =
-            }
-
-            if (gl.pprod.Control_vencimiento) {
-
-                try {
-                    gl.inv_ciclico.Fecha_Vence = du.convierteFecha(dtpVence.getText().toString().trim());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }*/
 
             if (IdPresentacionselected < 0) {
 
@@ -1261,97 +1259,15 @@ public class frm_inv_cic_add extends PBase {
                 }
 
                 //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
-                execws(1);
+                if (pitem.Cantidad==0){
+                    msgAskCantidadCeroActualiza("Guardar la cantidad en 0");
+                }else{
+                    execws(1);
+                }
             }
         } catch (Exception e) {
             mu.msgbox("Guardar: "+e.getMessage());
         }
-//-- ESTO SE COMENTARIZO PORQUE ESTA DENTRO DE CONTROL_LOTE, :(
-/*        if( gl.pprod.Control_lote){
-
-            if(noubicflag){
-
-                if(!AgregaNuevoRegistro(0)){
-                    toast("error con correlativo =0");
-                }
-
-            }else if(!(gl.inv_ciclico.Lote_stock.equals(txtLote1.getText().toString().trim()))){
-
-                //se omite funcionalidad, no actualiza registro de reconteo, sino agrega otra linea en la tabla
-                *//*if(!AgregaNuevoRegistro(1)){
-                    toast("Registro reconteo agregado!");
-                }*//*
-
-                //Es registro para reconteo
-                EnviarReconteo();
-            }else{
-
-                //GT 18012021 set para la clase que se envia como conteo.
-                pitem= new clsBeTrans_inv_ciclico();
-
-                //pitem.Idinvciclico = 0;
-                pitem.IdStock=0;
-                pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;;
-                pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
-                pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
-                pitem.Lote = gl.inv_ciclico.Lote;
-                pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
-                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
-                pitem.Cantidad = gl.inv_ciclico.cantidad;
-                pitem.Peso = gl.inv_ciclico.Peso;
-                pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
-                pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
-                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
-
-                if(pitem.IdPresentacion > 0){
-
-                    pitem.Cantidad = pitem.Cantidad *vFactor;
-                }
-                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
-                execws(1);
-            }
-
-        }else{
-
-            if(noubicflag){
-
-                if(!AgregaNuevoRegistro(0)){
-
-                    toast("Nuevo registro ok, idstock = 0!");
-                }
-
-                //Tarea_Conteo()
-            }else{
-
-                pitem= new clsBeTrans_inv_ciclico();
-               // pitem.Idinvciclico = 0;
-                pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
-                pitem.IdStock=0;
-                pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-                pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
-                pitem.Lote_stock = gl.inv_ciclico.Lote_stock;
-                pitem.Fecha_vence_stock = gl.inv_ciclico.Fecha_Vence;
-                pitem.Lote = gl.inv_ciclico.Lote;
-                pitem.Fecha_vence = gl.inv_ciclico.Fecha_Vence;
-
-                pitem.Cantidad = gl.inv_ciclico.cantidad;
-                pitem.Peso = gl.inv_ciclico.Peso;
-                pitem.IdPresentacion = gl.inv_ciclico.IdPresentacion;
-                pitem.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
-                pitem.IdProductoEst_nuevo = gl.inv_ciclico.IdProductoEst_nuevo;
-                pitem.lic_plate = gl.inv_ciclico.Licence_plate;
-
-                if(pitem.IdPresentacion > 0){
-                    pitem.Cantidad = pitem.Cantidad *vFactor;
-                }
-                //ejecutar proceso actualización Inventario_Ciclico_Actualiza_Conteo
-                execws(1);
-
-            }
-
-        }*/
 
     }
 
@@ -2086,7 +2002,6 @@ public class frm_inv_cic_add extends PBase {
         }
     }
 
-
     private void LLenaPresentacion() {
         try {
             PresList.clear();
@@ -2126,6 +2041,68 @@ public class frm_inv_cic_add extends PBase {
         } catch (Exception e) {
             mu.msgbox("LLenaPresentacion " + e.getMessage());
         }
+    }
+
+    private void msgAskCantidadCero(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(9);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgAskCantidadCeroActualiza(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    execws(1);
+                }
+            });
+
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
     }
 
     private void execws(int callbackvalue) {

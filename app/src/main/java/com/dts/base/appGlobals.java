@@ -227,7 +227,7 @@ public class appGlobals extends Application {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public final String version="7.3.6";
+    public final String version="7.4.9";
     public boolean VerificacionSinLoteFechaVen = false;
     public String gBodega_Destino = "";
 
@@ -299,6 +299,7 @@ public class appGlobals extends Application {
         listValidDevices.add("Honeywell");
         listValidDevices.add("AOSP on IA Emulator");
         listValidDevices.add("Android SDK built for x86");
+        listValidDevices.add("sdk_gphone64_x86_64");
         listValidDevices.add("MC3300x");
         listValidDevices.add("EDA61K");
         listValidDevices.add("EDA52");

@@ -66,6 +66,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trDispUm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">
@@ -127,6 +128,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/trResUm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp">

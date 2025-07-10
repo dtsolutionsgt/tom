@@ -72,7 +72,9 @@
             android:paddingBottom="5dp"
             android:text="UN"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblCantidad"

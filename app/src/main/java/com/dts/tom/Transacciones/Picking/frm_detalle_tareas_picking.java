@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -1096,6 +1097,9 @@ public class frm_detalle_tareas_picking extends PBase {
                                       "pIdOperadorBodega",gl.OperadorBodega.IdOperadorBodega,
                                       "Tipo",TipoLista);
                         break;
+                    case 7:
+                        callMethod("Get_CantidadPedidos_Picking","IdPickingEnc",gl.gIdPickingEnc);
+                        break;
                 }
 
                 //progress.cancel();
@@ -1131,8 +1135,10 @@ public class frm_detalle_tareas_picking extends PBase {
                 case 6:
                     processGetAllPickingUbic_Json();
                     break;
+                case 7:
+                    processCantidadPedidosPicking();
+                    break;
             }
-
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
@@ -1178,7 +1184,9 @@ public class frm_detalle_tareas_picking extends PBase {
 
         try{
 
-            execws(6);
+            //#AT20250707 Validamos si tiene mas de un pedido el picking
+            execws(7);
+            //execws(6);
 
            /* plistPickingUbi = gBePicking.ListaPickingUbic;
 
@@ -1238,6 +1246,28 @@ public class frm_detalle_tareas_picking extends PBase {
             mu.msgbox("processGetAllPickingUbic:"+e.getMessage());
         }finally {
             procesando = false;
+        }
+    }
+
+    private void processCantidadPedidosPicking() {
+        int CantidadPedidos = 0;
+        try {
+
+            CantidadPedidos = (Integer) xobj.getSingle("Get_CantidadPedidos_PickingResult",Integer.class);
+
+            if (CantidadPedidos > 1) {
+                TipoLista = 1;
+                btnRes_Det.setText("D.");
+            } else {
+                TipoLista = 2;
+                btnRes_Det.setText("C.");
+            }
+
+            //#AT20250707 Aca obtenemos la lista de picking
+            execws(6);
+
+        } catch (Exception e){
+            msgbox(Objects.requireNonNull(new Object() {}.getClass().getEnclosingMethod()).getName() + " . " + e.getMessage());
         }
     }
 

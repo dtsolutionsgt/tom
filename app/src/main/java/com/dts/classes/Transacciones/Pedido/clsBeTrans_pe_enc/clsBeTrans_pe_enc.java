@@ -91,6 +91,7 @@ public class clsBeTrans_pe_enc {
     @Element(required=false) public int IdMotivoDevolucion = 0;
     @Element(required=false) public String Codigo_Empresa_ERP="";
     @Element(required=false) public boolean EsExportacion=false;
+    @Element(required=false) public int IdMotivoAnulacionBodega = 0;
 
     public clsBeTrans_pe_enc() {
     }

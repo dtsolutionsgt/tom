@@ -315,7 +315,6 @@ public class frm_inv_cic_conteo extends PBase {
                         adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
                         listCiclico.setAdapter(adapter_ciclico);
 
-
                     }
                 }
             }
@@ -363,50 +362,50 @@ public class frm_inv_cic_conteo extends PBase {
         mu.msgbox("processReConteos:"+e.getMessage());
     }
 
-}
+   }
 
-    private void ListaFiltrada() {
+   private void ListaFiltrada() {
+        int registros = 0;
+        String filtroTexto = txtBuscFiltro.getText().toString().trim();
 
-        Integer registros = 0;
+        if (filtroTexto.isEmpty()) {
+            msgbox("Por favor ingrese una ubicación válida.");
+            return;
+        }
 
-        String evaluar = txtBuscFiltro.getText().toString().trim();
+        int evaluar;
+        try {
+            evaluar = Integer.parseInt(filtroTexto);
+        } catch (NumberFormatException e) {
+            msgbox("La ubicación debe ser un número válido.");
+            return;
+        }
 
-        //GT 01122020 inicia busqueda en lista por Ubicación
+        clsBe_inv_reconteo_data primeraCoincidencia = null;
+
         for (int i = 0; i < data_list.size(); i++) {
+            clsBe_inv_reconteo_data item = data_list.get(i);
 
-            String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+            if (item.NoUbic == evaluar && item.cantidad != null && item.cantidad.equals(0.0)) {
+                registros++;
 
-            if (ubicacion.equals(evaluar) && data_list.get(i).cantidad.equals(0.0)){
-
-                registros = registros+1;
-
-                if (registros==1){
-                    gl.inv_ciclico = (clsBe_inv_reconteo_data) listCiclico.getItemAtPosition(i);
+                if (registros == 1) {
+                    primeraCoincidencia = item;
                 }
             }
         }
 
-        if(registros>1){
-
-            //carga la lista con el Filtro Ubicación
+        if (registros > 1) {
             FiltroxUbicacion(evaluar);
-
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
-
-            msgbox("La úbicación contiene más codigos de producto, seleccione ahora el código de producto.");
-
+            msgbox("La ubicación contiene más códigos de producto, seleccione ahora el código de producto.");
             txtBuscFiltro.setText("");
-
             Busqueda = false;
-
-        }else if(registros==1){
-
+        } else if (registros == 1) {
+            gl.inv_ciclico = primeraCoincidencia;
             Busqueda = true;
-
             execws(4);
-            //startActivity(new Intent(getApplicationContext(),frm_inv_cic_add.class));
-
-        } else if(registros == 0){
+        } else {
             msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
         }
     }
@@ -593,72 +592,65 @@ public class frm_inv_cic_conteo extends PBase {
         cmdList.setText( count+ "/" + count);
     }
 
-    private void FiltroxUbicacion(String evaluar) {
-
-        clsBe_inv_reconteo_data rec;
-
+    private void FiltroxUbicacion(Integer evaluar) {
         lista_filtro.clear();
 
-        //rec = new clsBe_inv_reconteo_data();
-        //lista_filtro.add(rec);
-
         for (int i = 0; i < gl.reconteo_list.size(); i++) {
+            clsBe_inv_reconteo_data origen = gl.reconteo_list.get(i);
 
-            String ubicacion_lista = String.valueOf(gl.reconteo_list.get(i).NoUbic);
+            if (origen.NoUbic == evaluar) {
+                clsBe_inv_reconteo_data destino = new clsBe_inv_reconteo_data();
 
-            if (ubicacion_lista.equals(evaluar)){
+                destino.index = origen.index;
+                destino.idinventarioenc = origen.idinventarioenc;
+                destino.idinvreconteo = origen.idinvreconteo;
 
-                data_rec = new clsBe_inv_reconteo_data();
+                destino.NoUbic = origen.NoUbic;
+                destino.IdProductoBodega = origen.IdProductoBodega;
+                destino.IdProductoEstado = origen.IdProductoEstado;
+                destino.IdPresentacion = origen.IdPresentacion;
+                destino.Codigo = origen.Codigo;
+                destino.Producto_nombre = origen.Producto_nombre;
+                destino.Pres = origen.Pres;
+                destino.UMBas = origen.UMBas;
+                destino.cantidad = origen.cantidad;
+                destino.Lote = origen.Lote;
+                destino.Lote_stock = origen.Lote_stock;
+                destino.Peso = origen.Peso;
+                destino.Fecha_Vence = origen.Fecha_Vence;
+                destino.control_peso = origen.control_peso;
+                destino.Conteo = origen.Conteo;
+                destino.Ubic_nombre = origen.Ubic_nombre;
+                destino.Estado = origen.Estado;
+                destino.Factor = origen.Factor;
+                destino.idPresentacion_nuevo = origen.idPresentacion_nuevo;
+                destino.IdProductoEst_nuevo = origen.IdProductoEst_nuevo;
+                destino.Licence_plate = origen.Licence_plate;
 
-                data_rec.index = gl.reconteo_list.get(i).index;
+                lista_filtro.add(destino);
 
-                data_rec.idinventarioenc = gl.reconteo_list.get(i).idinventarioenc;
-                data_rec.idinvreconteo = gl.reconteo_list.get(i).idinvreconteo;
-
-                data_rec.NoUbic = gl.reconteo_list.get(i).NoUbic;
-                data_rec.IdProductoBodega = gl.reconteo_list.get(i).IdProductoBodega;
-                data_rec.IdProductoEstado = gl.reconteo_list.get(i).IdProductoEstado;
-                data_rec.IdPresentacion = gl.reconteo_list.get(i).IdPresentacion;
-                data_rec.Codigo = gl.reconteo_list.get(i).Codigo;
-                data_rec.Producto_nombre = gl.reconteo_list.get(i).Producto_nombre;
-                data_rec.Pres = gl.reconteo_list.get(i).Pres;
-                data_rec.UMBas = gl.reconteo_list.get(i).UMBas;
-                data_rec.cantidad = gl.reconteo_list.get(i).cantidad;
-                data_rec.Lote = gl.reconteo_list.get(i).Lote;
-                data_rec.Lote_stock = gl.reconteo_list.get(i).Lote_stock;
-                data_rec.Peso = gl.reconteo_list.get(i).Peso;
-                data_rec.Fecha_Vence =  gl.reconteo_list.get(i).Fecha_Vence;
-                data_rec.control_peso = gl.reconteo_list.get(i).control_peso;
-                data_rec.Conteo = gl.reconteo_list.get(i).Conteo;
-                data_rec.Ubic_nombre = gl.reconteo_list.get(i).Ubic_nombre;
-                data_rec.Estado = gl.reconteo_list.get(i).Estado;
-                data_rec.Factor = gl.reconteo_list.get(i).Factor;
-                data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
-                data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
-                data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
-                lista_filtro.add(data_rec);
             }
         }
 
-        adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),lista_filtro);
+        adapter_ciclico = new list_adapt_consulta_ciclico(getApplicationContext(), lista_filtro);
         listCiclico.setAdapter(adapter_ciclico);
 
-        int count =data_list.size();
-        cmdList.setText( count+ "/" + count);
+        int count = data_list.size();
+        cmdList.setText(count + "/" + count);
     }
 
     private void ListaFiltrada2() {
         try {
             Integer registros = 0;
 
-            String evaluar = txtBuscFiltro.getText().toString().trim();
+            Integer evaluar = Integer.valueOf(txtBuscFiltro.getText().toString().trim());
 
             //GT 01122020 inicia busqueda en lista por Ubicación
             for (int i = 0; i < data_list.size(); i++) {
 
-                String ubicacion = String.valueOf(data_list.get(i).NoUbic);
+                Integer ubicacion = Integer.valueOf(data_list.get(i).NoUbic);
 
-                if (ubicacion.equals(evaluar) && data_list.get(i).cantidad > 0) {
+                if (ubicacion==evaluar && data_list.get(i).cantidad > 0) {
 
                     registros = registros + 1;
 

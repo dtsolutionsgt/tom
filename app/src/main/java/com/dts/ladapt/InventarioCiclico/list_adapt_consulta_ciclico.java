@@ -102,7 +102,7 @@ public class list_adapt_consulta_ciclico extends BaseAdapter {
             holder.lblProducto_nombre.setText(data_list.get(position).Producto_nombre  +"");
             holder.lblUMBas.setText(data_list.get(position).UMBas  +"");
             holder.lblPres.setText(data_list.get(position).Pres  +"");
-            holder.lblCant_Conteo.setText(data_list.get(position).Cant_Conteo  +"");
+            holder.lblCant_Conteo.setText(data_list.get(position).cantidad  +"");
             holder.lblPeso_Conteo.setText(data_list.get(position).Peso_Conteo  +"");
             holder.lblCant_Stock.setText(data_list.get(position).Cant_Stock  +"");
             holder.lblPeso_Stock.setText(data_list.get(position).Peso_Stock  +"");

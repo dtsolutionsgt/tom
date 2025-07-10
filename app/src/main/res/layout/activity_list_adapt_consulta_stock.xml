@@ -46,7 +46,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="UN"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblExistUMBAs"
@@ -58,7 +60,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblPres"
@@ -94,7 +98,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblDisponibleUMBas"
@@ -105,7 +111,9 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/lblResPres"

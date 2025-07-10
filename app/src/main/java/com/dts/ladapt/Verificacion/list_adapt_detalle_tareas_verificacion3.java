@@ -111,11 +111,18 @@ public class list_adapt_detalle_tareas_verificacion3 extends BaseAdapter {
             holder.lblArea.setText(""+pListBeTareasVerificacionHH.get(position).NombreArea);
             holder.lblClasificacion.setText(""+pListBeTareasVerificacionHH.get(position).NombreClasificacion);
 
+            if (pListBeTareasVerificacionHH.get(position).IdPresentacion != 0) {
+                holder.lblPresentacion.setText(""+pListBeTareasVerificacionHH.get(position).Nom_Presentacion);
+            } else {
+                holder.lblPresentacion.setText(""+pListBeTareasVerificacionHH.get(position).Nom_Unid_Med);
+            }
+
             holder.lblPedidoEnc.setVisibility(View.GONE);
             holder.lblPedidoDet.setVisibility(View.GONE);
             holder.lblIdProductoBodega.setVisibility(View.GONE);
             holder.lblIdPresentacion.setVisibility(View.GONE);
             holder.lblNDias.setVisibility(View.GONE);
+            holder.lblUmBas.setVisibility(View.GONE);
 
             /*if(selectedIndex!= -1 && position == selectedIndex) {
                 convertView.setBackgroundColor(Color.rgb(0, 128, 0));

@@ -31,7 +31,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,
             lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate,
             lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres;
-    private TableRow trPresentacion, trResPresentacion;
+    private TableRow trPresentacion, trResPresentacion, trDispUm, trResUm;
     private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
     private XMLObject xobj;
@@ -71,6 +71,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
         lblResPres = findViewById(R.id.lblResPres);
         txtResPres = findViewById(R.id.txtResPres);
         trResPresentacion = findViewById(R.id.trResPresentacion);
+        trDispUm = findViewById(R.id.trDispUm);
+        trResUm = findViewById(R.id.trResUm);
 
         ProgressDialog();
 
@@ -173,6 +175,20 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 } else {
                     trResPresentacion.setVisibility(View.GONE);
                     txtResPres.setText(gl.existencia.Pres);
+                }
+
+                if (gl.existencia.IdPresentacion != 0) {
+                    trPresentacion.setVisibility(View.VISIBLE);
+                    trResPresentacion.setVisibility(View.VISIBLE);
+
+                    trResUm.setVisibility(View.GONE);
+                    trDispUm.setVisibility(View.GONE);
+                } else {
+                    trPresentacion.setVisibility(View.GONE);
+                    trResPresentacion.setVisibility(View.GONE);
+
+                    trResUm.setVisibility(View.VISIBLE);
+                    trDispUm.setVisibility(View.VISIBLE);
                 }
 
                 lblestado.setText(gl.existencia.Estado + "");
