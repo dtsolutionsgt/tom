@@ -139,6 +139,8 @@ public class list_adapt_detalle_tareas_picking2 extends BaseAdapter {
 
         if (!BeListTareasHH.get(position).ProductoPresentacion.isEmpty()){
             holder.lblPresDet.setText(BeListTareasHH.get(position).ProductoPresentacion);
+        } else {
+            holder.lblPresDet.setText(BeListTareasHH.get(position).ProductoUnidadMedida);
         }
 
         if (BeListTareasHH.get(position).Cantidad_Solicitada>0){
