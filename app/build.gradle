@@ -3,12 +3,12 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdk  34
+    compileSdk  36
         defaultConfig {
         applicationId "com.dts.tom"
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 24
+        targetSdkVersion 27
         renderscriptTargetApi 28
         versionCode 1
         versionName "7.3.6"
@@ -27,15 +27,17 @@ android {
     }
     namespace 'com.dts.tom'
     //buildToolsVersion '28.0.3'
-
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation files('libs/apache-commons-lang.jar')
     implementation files('libs/commons-io-2.4.jar')
     //implementation 'com.android.support:design:28.0.0'
@@ -57,19 +59,19 @@ dependencies {
     implementation files('libs/snmp6_1.jar')
     implementation files('libs/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.google.firebase:firebase-analytics:22.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
-    implementation 'com.google.firebase:firebase-perf:21.0.1'
+    implementation 'com.google.firebase:firebase-analytics:22.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.4'
+    implementation 'com.google.firebase:firebase-perf:21.0.5'
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
-    implementation 'com.google.firebase:firebase-storage:21.0.0'
-    implementation 'com.google.firebase:firebase-config:22.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.2'
+    implementation platform('com.google.firebase:firebase-bom:33.16.0')
+    implementation 'com.google.firebase:firebase-storage:21.0.2'
+    implementation 'com.google.firebase:firebase-config:22.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     compileOnly 'com.google.android.wearable:wearable:2.9.0'
-    implementation 'com.google.code.gson:gson:2.10'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
 }
