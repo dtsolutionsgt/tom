@@ -2,6 +2,7 @@ package com.dts.tom.Transacciones.InventarioCiclico;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
@@ -228,10 +231,11 @@ public class frm_inv_cic_add extends PBase {
             });
 
             txtProd.setOnKeyListener((v, keyCode, event) -> {
-                if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
                     if (NuevoConteo) {
                         if (!txtProd.getText().toString().isEmpty()) {
-                            execws(7);
+                            execws(7); // ← aquí debes mover el requestFocus si el WS es sincrónico
                         } else {
                             toast("Ingrese código de producto.");
                         }
@@ -239,17 +243,26 @@ public class frm_inv_cic_add extends PBase {
                         codigo_producto = txtProd.getText().toString().trim();
                         IdUbicacion = gl.inv_ciclico.NoUbic;
 
-                        //GT03120202: la busqueda por LP esta anidada dentro de scan_codigo_producto
                         if (Scan_Codigo_Producto()) {
                             btGuardar.setEnabled(true);
                             respuesta_producto = false;
+
+                            txtCantContada.postDelayed(() -> {
+                                txtCantContada.requestFocus();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.showSoftInput(txtCantContada, InputMethodManager.SHOW_IMPLICIT);
+                                }
+                            }, 200);
                         } else {
                             respuesta_producto = false;
                         }
                     }
+
+                    return true;
                 }
 
-                return respuesta_producto;
+                return false;
             });
 
             txtCantContada.setOnKeyListener(((v, keyCode, event) -> {
@@ -747,25 +760,15 @@ public class frm_inv_cic_add extends PBase {
         try {
             if(!codigo_producto.isEmpty()){
                 if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
-                    cboEstado.requestFocus();
+                    //new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
                     respuesta = true;
                 } else {
                     IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
 
-                    //el codigo ingresado no tiene match con el registro seleccionado, se procede a buscar en la lista
                     if (Buscar_producto(codigo_producto)){
                         respuesta = true;
                         new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
                     } else {
-                        /*//GT03122021: Al no encontrar match por cod_producto, se busca como LP
-                        if(Scan_por_LP()){
-                            respuesta = true;
-                            txtProd.setText(gl.inv_ciclico.Codigo);
-                            new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
-                        }else{
-                            //#AT20241210 Busca en inventario congelado
-                            execws(11);
-                        }*/
                         //#AT20241210 Busca en inventario congelado
                         execws(11);
                     }
@@ -1864,15 +1867,13 @@ public class frm_inv_cic_add extends PBase {
 
                 btGuardar.setEnabled(true);
             } else {
-                lblProd.setText ("Código no válido");
                 txtProd.requestFocus();
                 txtProd.selectAll();
-                toast("Producto no existe");
 
                 if (NuevoConteo || invCongelado == null) {
-                    gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
-                    gl.nuevo_producto_cic = txtProd.getText().toString();
-                    startActivity(new Intent(this, frm_inv_cic_nuevo.class));
+                    msgCrearNuevoProducto("Agregar producto");
+                } else {
+                    msgbox("Comunicarse con desarrollo");
                 }
             }
 
@@ -1975,7 +1976,7 @@ public class frm_inv_cic_add extends PBase {
 
                 execws(12);
             } else {
-                toastlong("Producto o licencia no asignado para conteo.");
+                Toast.makeText(this, "Producto o licencia no asignado para conteo.", Toast.LENGTH_LONG).show();
                 txtLicencia.setText("");
                 execws(7);
             }
@@ -2113,6 +2114,36 @@ public class frm_inv_cic_add extends PBase {
                 public void onClick(DialogInterface dialog, int which) {
                     return;
                 }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
+        }
+
+    }
+
+    private void msgCrearNuevoProducto(String msg) {
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle("Producto no válido");
+            dialog.setMessage("¿" + msg + "?");
+
+            dialog.setCancelable(false);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                gl.IdUbicInvCic = Integer.valueOf(txtUbic.getText().toString());
+                gl.nuevo_producto_cic = txtProd.getText().toString();
+                startActivity(new Intent(this, frm_inv_cic_nuevo.class));
+            });
+
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                NuevoConteo = false;
+                invCongelado = null;
             });
 
             dialog.show();
