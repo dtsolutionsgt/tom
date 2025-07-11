@@ -1239,6 +1239,7 @@ public class frm_inv_cic_add extends PBase {
                 String FechaVence = du.convierteFecha(dtpVence.getText().toString().trim());
 
                 pitem.Idinventarioenc = gl.inv_ciclico.idinventarioenc;
+                pitem.IdInvCiclico = gl.inv_ciclico.IdInventarioCiclico;
                 pitem.IdStock = 0;
                 pitem.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                 pitem.IdUbicacion = gl.inv_ciclico.NoUbic;
@@ -1256,6 +1257,8 @@ public class frm_inv_cic_add extends PBase {
                 pitem.lic_plate = gl.inv_ciclico.Licence_plate;
                 pitem.Idoperador = gl.IdOperador;
                 pitem.IdInvCiclico = gl.inv_ciclico.IdInventarioCiclico;
+                pitem.Cant_stock = gl.inv_ciclico.Cant_Stock;
+                pitem.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
 
                 if (pitem.IdPresentacion > 0) {
 
@@ -1313,6 +1316,7 @@ public class frm_inv_cic_add extends PBase {
                 BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
                 BeTrans_inv_ciclico.IdUbicacion = idubic;
                 BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;
+                BeTrans_inv_ciclico.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
                 BeTrans_inv_ciclico.EsNuevo = true;
 
                 if( gl.pprod.Control_lote){
@@ -1420,12 +1424,14 @@ public class frm_inv_cic_add extends PBase {
                             item.IdUbicacion =invCongelado.IdUbicacion;
                             item.IdProductoBodega = invCongelado.IdProductoBodega;
                             item.IdPresentacion = invCongelado.IdPresentacion;
+                            item.IdUnidadMedida =invCongelado.IdUnidadMedida;
                         } else {
                             item.Lote_stock = gl.inv_ciclico.Lote_stock;
                             item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
                             item.IdUbicacion = gl.inv_ciclico.NoUbic;
                             item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                             item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+                            item.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
                         }
 
                         callMethod("Get_Conteo_Inv_Ciclico", "pInvCiclico", item);
@@ -1653,6 +1659,8 @@ public class frm_inv_cic_add extends PBase {
 
                 toast("¡Todo bien, guardado!");
                 frm_inv_cic_add.super.finish();
+            }else{
+                toast("No se pudo guardar el conteo");
             }
 
         } catch (Exception e) {
@@ -1674,6 +1682,7 @@ public class frm_inv_cic_add extends PBase {
             BeTrans_inv_ciclico.IdProductoEstado =  gl.inv_ciclico.IdProductoEstado;
             BeTrans_inv_ciclico.IdProductoEst_nuevo =  gl.inv_ciclico.IdProductoEst_nuevo;
             BeTrans_inv_ciclico.IdPresentacion = gl.inv_ciclico.IdPresentacion;
+            BeTrans_inv_ciclico.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
             BeTrans_inv_ciclico.IdPresentacion_nuevo = gl.inv_ciclico.idPresentacion_nuevo;
             BeTrans_inv_ciclico.IdUbicacion = idubic;
             BeTrans_inv_ciclico.IdUbicacion_nuevo = idubic;

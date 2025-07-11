@@ -581,6 +581,7 @@ public class frm_inv_cic_conteo extends PBase {
                 data_rec.idPresentacion_nuevo = gl.reconteo_list.get(i).idPresentacion_nuevo;
                 data_rec.IdProductoEst_nuevo = gl.reconteo_list.get(i).IdProductoEst_nuevo;
                 data_rec.Licence_plate = gl.reconteo_list.get(i).Licence_plate;
+                data_rec.IdStock = gl.reconteo_list.get(i).IdStock;
                 lista_filtro.add(data_rec);
             }
         }
@@ -604,6 +605,7 @@ public class frm_inv_cic_conteo extends PBase {
                 destino.index = origen.index;
                 destino.idinventarioenc = origen.idinventarioenc;
                 destino.idinvreconteo = origen.idinvreconteo;
+                destino.IdInventarioCiclico =origen.IdInventarioCiclico;
 
                 destino.NoUbic = origen.NoUbic;
                 destino.IdProductoBodega = origen.IdProductoBodega;
@@ -611,6 +613,7 @@ public class frm_inv_cic_conteo extends PBase {
                 destino.IdPresentacion = origen.IdPresentacion;
                 destino.Codigo = origen.Codigo;
                 destino.Producto_nombre = origen.Producto_nombre;
+                destino.Ubic_nombre = origen.Ubic_nombre;
                 destino.Pres = origen.Pres;
                 destino.UMBas = origen.UMBas;
                 destino.cantidad = origen.cantidad;
@@ -618,6 +621,7 @@ public class frm_inv_cic_conteo extends PBase {
                 destino.Lote_stock = origen.Lote_stock;
                 destino.Peso = origen.Peso;
                 destino.Fecha_Vence = origen.Fecha_Vence;
+                destino.Fecha_Vence_Stock = origen.Fecha_Vence_Stock;
                 destino.control_peso = origen.control_peso;
                 destino.Conteo = origen.Conteo;
                 destino.Ubic_nombre = origen.Ubic_nombre;
@@ -626,6 +630,10 @@ public class frm_inv_cic_conteo extends PBase {
                 destino.idPresentacion_nuevo = origen.idPresentacion_nuevo;
                 destino.IdProductoEst_nuevo = origen.IdProductoEst_nuevo;
                 destino.Licence_plate = origen.Licence_plate;
+                destino.Cant_Stock = origen.Cant_Stock;
+                destino.IdUbicacion_nuevo = origen.IdUbicacion_nuevo;
+                destino.Nuevo_Estado = origen.Nuevo_Estado;
+                destino.IdStock = origen.IdStock;
 
                 lista_filtro.add(destino);
 

@@ -45,7 +45,7 @@ public class clsBe_inv_reconteo_data {
     @Element(required=false) public String Nuevo_Estado="";
     @Element(required=false) public int IdStock = 0;
     @Element(required=false) public int IdInventarioCiclico = 0;
-
+    @Element(required=false) public int IdUnidadMedida = 0;
 
     public clsBe_inv_reconteo_data(){}
 
