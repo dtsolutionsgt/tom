@@ -688,7 +688,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
 
-                //#GT11072025: Ya no es opcional preguntar si cierra o no la tarea, sino hay producto, se debe cerrar.
+                //#GT11072025: Ya no es opcional preguntar si cierra o no la tarea
                 //msgAskFinalizar("Finalizar tarea de verificación");
                 FinalizandoVerificacionCompleta();
             }
@@ -727,7 +727,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
-                //#GT11072025: ya no es opcional preguntar si quiere cerrar o no, con produto completo verificado.
+                //#GT11072025: ya no es opcional preguntar si quiere cerrar o no
                 //msgAskFinalizar("Finalizar tarea de verificación");
                 FinalizandoVerificacionCompleta();
             }
@@ -1090,7 +1090,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
                             btnRegs.setTextColor(Color.BLACK);
 
-                            //#GT11072025: No es opcional preguntar si cierra la tarea, porque el producto ya fue verificado
+                            //#GT11072025: No es opcional preguntar si cierra la tarea
                             //msgAskFinalizar("Finalizar tarea de verificación");
                             FinalizandoVerificacionCompleta();
                             return;
@@ -1176,7 +1176,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 if (preguntoPorDiferencia){
-                    //#GT11072025: No es opcional preguntar si cierra la tarea, porque el producto ya fue verificado
+                    //#GT11072025: No es opcional preguntar si cierra la tarea
                     //msgAskFinalizar("Finalizar tarea de verificación");
                     FinalizandoVerificacionCompleta();
                 }
