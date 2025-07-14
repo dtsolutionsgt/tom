@@ -21,6 +21,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
     private int selectedIndex;
 
     private final LayoutInflater l_Inflater;
+    private boolean AgruparSinLicencia = false;
 
     public list_adapt_detalle_tareas_verificacion(Context context, ArrayList<clsBeDetallePedidoAVerificar> results) {
         pListBeTareasVerificacionHH = results;
@@ -47,6 +48,11 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
 
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setAgruparSinLicencia(boolean Val) {
+        this.AgruparSinLicencia = Val;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -124,6 +130,7 @@ public class list_adapt_detalle_tareas_verificacion extends BaseAdapter {
             holder.lblNDias.setVisibility(View.GONE);
             holder.lblLicPlate.setVisibility(View.GONE);
             holder.lblArea.setVisibility(View.GONE);
+            holder.lblLicPlate.setVisibility(AgruparSinLicencia ? View.GONE : View.VISIBLE);
 
             //#AT20220531 Colores y estados según la cantidad solicitada, pickeada y verificada.
             double Pick  = pListBeTareasVerificacionHH.get(position).Cantidad_Recibida;

@@ -70,7 +70,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
     private ListView listDetVeri;
     private EditText txtCodProd;
-    private TextView lblNoDocumento, lblTituloForma;
+    private TextView lblNoDocumento, lblTituloForma, lblELicPlate;
     private LinearLayout encabezado1, encabezado2, encabezado3;
     private ImageView imgReemplazo;
     private RelativeLayout relbot;
@@ -131,12 +131,20 @@ public class frm_detalle_tareas_verificacion extends PBase {
             relbot = findViewById(R.id.relbot);
             chkPendientes = findViewById(R.id.chkPendientes);
 
+            lblELicPlate = findViewById(R.id.lblELicPlate);
+
             if (gl.TipoPantallaVerificacion != 3) {
                 if (mostrar_area) {
                     encabezado2.setVisibility(View.VISIBLE);
                 } else if (VerSinLoteFechaVen) {
                     encabezado3.setVisibility(View.VISIBLE);
                 } else {
+                    if (gl.Agrupar_Sin_Lic_Veri_No_Cons) {
+                        lblELicPlate.setVisibility(View.GONE);
+                    } else {
+                        lblELicPlate.setVisibility(View.VISIBLE);
+                    }
+
                     encabezado1.setVisibility(View.VISIBLE);
                 }
             }
@@ -1064,6 +1072,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                                 listDetVeri.setAdapter(adapter3);
                             } else {
                                 adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                                adapter.setAgruparSinLicencia(gl.Agrupar_Sin_Lic_Veri_No_Cons);
                                 listDetVeri.setAdapter(adapter);
                             }
                         }
@@ -1349,6 +1358,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                     listDetVeri.setAdapter(adapter3);
                 } else {
                     adapter = new list_adapt_detalle_tareas_verificacion(this, pListBeTareasVerificacionHH);
+                    adapter.setAgruparSinLicencia(gl.Agrupar_Sin_Lic_Veri_No_Cons);
                     listDetVeri.setAdapter(adapter);
                 }
             }

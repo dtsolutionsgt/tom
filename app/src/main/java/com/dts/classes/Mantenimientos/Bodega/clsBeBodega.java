@@ -89,7 +89,7 @@ public class clsBeBodega extends clsBeBodegaBase {
     @Element(required=false) public boolean Permitir_Cambio_Ubic_Recepcion = false;
     @Element(required=false) public String Ruta_CDN = "";
     @Element(required=false) public int Rango_Dias_Documentos = 0;
-
+    @Element(required=false) public boolean Agrupar_Sin_Lic_Veri_No_Cons = false;
 //
 //#EJC2022071953: CAMPOS NUEVOS HH
 
@@ -121,7 +121,8 @@ public class clsBeBodega extends clsBeBodegaBase {
                        boolean Liberar_Stock_Despachos_Parciales,
                        boolean Escanear_Licencia_Picking, int IdTipoEtiquetaLicencia, int IdSimbologiaLicencia,
                        boolean Interface_SAP, boolean Restringir_Areas_SAP, boolean Control_Pallet_Mixto,
-                       boolean Despacho_Automatico_HH, boolean Limpiar_Campos, boolean Permitir_Cambio_Ubic_Recepcion) {
+                       boolean Despacho_Automatico_HH, boolean Limpiar_Campos, boolean Permitir_Cambio_Ubic_Recepcion,
+                       boolean Agrupar_Sin_Lic_Veri_No_Cons) {
 
         this.IdBodega=IdBodega;
         this.IdPais=IdPais;
@@ -200,6 +201,7 @@ public class clsBeBodega extends clsBeBodegaBase {
         this.Despacho_Automatico_HH = Despacho_Automatico_HH;
         this.Limpiar_Campos = Limpiar_Campos;
         this.Permitir_Cambio_Ubic_Recepcion = Permitir_Cambio_Ubic_Recepcion;
+        this.Agrupar_Sin_Lic_Veri_No_Cons = Agrupar_Sin_Lic_Veri_No_Cons;
     }
 
     public int getIdPais() {
