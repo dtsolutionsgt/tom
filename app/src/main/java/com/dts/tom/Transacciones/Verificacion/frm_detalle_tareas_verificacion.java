@@ -687,7 +687,10 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
-                msgAskFinalizar("Finalizar tarea de verificación");
+
+                //#GT11072025: Ya no es opcional preguntar si cierra o no la tarea
+                //msgAskFinalizar("Finalizar tarea de verificación");
+                FinalizandoVerificacionCompleta();
             }
             orderar();
         } catch (Exception e) {
@@ -724,8 +727,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
                 progress.cancel();
                 toast("Este pedido ya no tiene productos pendientes de verificar");
-                msgAskFinalizar("Finalizar tarea de verificación");
-
+                //#GT11072025: ya no es opcional preguntar si quiere cerrar o no
+                //msgAskFinalizar("Finalizar tarea de verificación");
+                FinalizandoVerificacionCompleta();
             }
             orderar();
         } catch (Exception e) {
@@ -1086,7 +1090,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
                             relbot.setBackgroundColor(Color.parseColor("#C8E6C9"));
                             btnRegs.setTextColor(Color.BLACK);
 
-                            msgAskFinalizar("Finalizar tarea de verificación");
+                            //#GT11072025: No es opcional preguntar si cierra la tarea
+                            //msgAskFinalizar("Finalizar tarea de verificación");
+                            FinalizandoVerificacionCompleta();
                             return;
                         }
 
@@ -1170,7 +1176,9 @@ public class frm_detalle_tareas_verificacion extends PBase {
 
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 if (preguntoPorDiferencia){
-                    msgAskFinalizar("Finalizar tarea de verificación");
+                    //#GT11072025: No es opcional preguntar si cierra la tarea
+                    //msgAskFinalizar("Finalizar tarea de verificación");
+                    FinalizandoVerificacionCompleta();
                 }
             });
 
@@ -1206,6 +1214,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
             });
 
             dialog.setNegativeButton("No", (dialog12, which) -> {
+                frm_detalle_tareas_verificacion.super.finish();
             });
 
             dialog.show();
@@ -1313,6 +1322,16 @@ public class frm_detalle_tareas_verificacion extends PBase {
             return sortord*left.Nombre_Producto.compareTo(right.Nombre_Producto);
         }
     }
+
+    //#GT11072025: cerrar la tarea de verificación si ya no hay producto
+    //anteriormente se preguntaba, pero causa inconsistencia si presionan No Cerrar, aunque todo este verificado.
+    private void FinalizandoVerificacionCompleta()
+    {
+        progress.setMessage("Finalizando la tarea de verificación...");
+        progress.show();
+        execws(5);
+    }
+
 
     private void listSortedItems() {
 
