@@ -1875,6 +1875,7 @@ public class frm_inv_cic_add extends PBase {
                 } else {
                     msgbox("Comunicarse con desarrollo");
                 }
+
             }
 
         } catch (Exception e) {
@@ -2144,6 +2145,7 @@ public class frm_inv_cic_add extends PBase {
             dialog.setNegativeButton("No", (dialog2, which) -> {
                 NuevoConteo = false;
                 invCongelado = null;
+                txtLicencia.setText(gl.inv_ciclico.Licence_plate);
             });
 
             dialog.show();
