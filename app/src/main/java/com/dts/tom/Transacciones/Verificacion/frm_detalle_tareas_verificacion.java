@@ -487,7 +487,7 @@ public class frm_detalle_tareas_verificacion extends PBase {
                 switch (ws.callback) {
                     case 1:
                         callMethod("Get_Detalle_By_IdPedidoEnc",
-                                   "pIdPedidoEnc",gl.pIdPedidoEnc);
+                                   "pIdPedidoEnc",gl.pIdPedidoEnc, "pIdBodega", gl.IdBodega);
                         break;
                     case 2:
                         callMethod("Get_Single_By_IdPedidoEnc",
