@@ -1135,6 +1135,7 @@ public class frm_inv_cic_add extends PBase {
                     pitem.Idoperador = gl.IdOperador;
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
                     pitem.IdBodega = gl.IdBodega;
+                    pitem.Contado = true;
 
                     if (pitem.Cantidad==0){
                        msgAskCantidadCero("Guardar la cantidad en 0");
@@ -1197,6 +1198,7 @@ public class frm_inv_cic_add extends PBase {
                     pitem.User_agr = gl.OperadorBodega.Nombre_Completo;
                     pitem.IdBodega = gl.IdBodega;
                     pitem.EsNuevo = true;
+                    pitem.Contado = true;
 
                     if (pitem.Cantidad==0){
                         msgAskCantidadCero("Guardar la cantidad en 0");
@@ -1262,6 +1264,7 @@ public class frm_inv_cic_add extends PBase {
                 pitem.IdInvCiclico = gl.inv_ciclico.IdInventarioCiclico;
                 pitem.Cant_stock = gl.inv_ciclico.Cant_Stock;
                 pitem.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
+                pitem.Contado = true;
 
                 if (pitem.IdPresentacion > 0) {
 
