@@ -1431,6 +1431,7 @@ public class frm_inv_cic_add extends PBase {
                             item.IdProductoBodega = invCongelado.IdProductoBodega;
                             item.IdPresentacion = invCongelado.IdPresentacion;
                             item.IdUnidadMedida =invCongelado.IdUnidadMedida;
+                            item.IdStock = invCongelado.IdStock;
                         } else {
                             item.Lote_stock = gl.inv_ciclico.Lote_stock;
                             item.Fecha_vence_stock = app.strFechaXML2(gl.inv_ciclico.Fecha_Vence_Stock);
@@ -1438,6 +1439,7 @@ public class frm_inv_cic_add extends PBase {
                             item.IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
                             item.IdPresentacion = gl.inv_ciclico.IdPresentacion;
                             item.IdUnidadMedida = gl.inv_ciclico.IdUnidadMedida;
+                            item.IdStock = gl.inv_ciclico.IdStock;
                         }
 
                         callMethod("Get_Conteo_Inv_Ciclico", "pInvCiclico", item);

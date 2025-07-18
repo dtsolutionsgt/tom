@@ -1393,13 +1393,19 @@ public class frm_list_rec_prod extends PBase {
                 super.finish();
             }
 
-            if (gl.Codigo_Producto!=null){
-                if (!gl.Codigo_Producto.isEmpty()){
-                    txtCodigoProductoRecepcion.setText(gl.Codigo_Producto);
-                    Procesa_Barra_Producto();
-                    gl.Codigo_Producto = "";
+            //#CKFKAgregué este sino porque no funciona la recepcion en B&B
+            if (gl.Interface_SAP) {
+                if (gl.Codigo_Producto!=null){
+                    if (!gl.Codigo_Producto.isEmpty()){
+                        txtCodigoProductoRecepcion.setText(gl.Codigo_Producto);
+                        Procesa_Barra_Producto();
+                        gl.Codigo_Producto = "";
+                    }
                 }
+            }else{
+                Procesa_Barra_Producto();
             }
+
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
