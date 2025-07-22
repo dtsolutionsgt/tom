@@ -122,7 +122,8 @@ public class frm_consulta_stock extends PBase {
         setHandlers();
         lblTituloForma.setText(gl.CodigoBodega + "-" + gl.gNomBodega + "\n Consulta de Existencias ");
         txtUbic.requestFocus();
-        chkDetalle.setChecked(true);
+        //#AT20250722 Se carga el valor falso, para mostrar la lista consolidada.
+        chkDetalle.setChecked(false);
     }
 
     private void setHandlers() {

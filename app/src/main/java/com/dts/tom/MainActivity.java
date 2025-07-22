@@ -848,6 +848,7 @@ public class MainActivity extends PBase implements ForceUpdateChecker.OnUpdateNe
                     gl.Interface_SAP = bodegas.items.get(position).Interface_SAP;
                     gl.Restringir_Areas_SAP = bodegas.items.get(position).Restringir_Areas_SAP;
                     gl.Agrupar_Sin_Lic_Veri_No_Cons = bodegas.items.get(position).Agrupar_Sin_Lic_Veri_No_Cons;
+                    gl.Advertir_Mpq_Umbas = bodegas.items.get(position).Advertir_Mpq_Umbas;
 
                     idimpres=0;
                     execws(3);
