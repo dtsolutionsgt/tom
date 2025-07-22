@@ -53,7 +53,7 @@ public class frm_danado_picking extends PBase {
     private final ArrayList<String> EstadoList = new ArrayList<String>();
 
     public static int IdEstadoDanadoSelect = 0;
-    public static String vNomUbicDestino="";
+    public static String vNomUbicDestino="", NombreEstado="";
     public static boolean existe;
 
     @Override
@@ -404,6 +404,7 @@ public class frm_danado_picking extends PBase {
                     BeUbicDestino = new clsBeBodega_ubicacion();
                     BeUbicDestino.IdUbicacion = Integer.parseInt(ubic);
                     IdUbicacionDestino = BeUbicDestino.IdUbicacion;
+                    NombreEstado = stream(LProductoEstadoDanado.items).where(c->c.IdEstado == IdEstadoDanadoSelect).select(c->c.Nombre).first();
 
                     if (existe) {
                         execws(2);

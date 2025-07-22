@@ -37,6 +37,7 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.CantReemplazar
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
+import static com.dts.tom.Transacciones.Picking.frm_danado_picking.NombreEstado;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -360,16 +361,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Marcar_Danado();
-                }
-            });
+            dialog.setPositiveButton("Si", (dialog1, which) -> Marcar_Danado());
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
 
             dialog.show();
@@ -389,16 +384,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
             dialog.setIcon(R.drawable.ic_quest);
 
-            dialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Marcar_No_Encontrado();
-                }
-            });
+            dialog.setPositiveButton("Si", (dialog1, which) -> Marcar_No_Encontrado());
 
-            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                return;
             });
 
             dialog.show();
@@ -760,13 +749,10 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             if (DT.getCount() == 0) {
 
                 if (Tipo==1){
-                    msgMarcarDanado("No hay existencia de este producto en otra ubicación"+
-                                    "\n¿Marcar como producto para reemplazo de todas formas?");
-                    return;
+                    msgMarcarDanado("No hay producto para reemplazar, ¿Marcar de todas formas el producto en estado: "+ NombreEstado+"?");
                 }else{
                     msgMarcarNoEncontrado("No hay existencia de este producto en otra ubicación"+
                                            "\n¿Marcar como producto No Encontrado de todas formas?");
-                    return;
                 }
 
             }
