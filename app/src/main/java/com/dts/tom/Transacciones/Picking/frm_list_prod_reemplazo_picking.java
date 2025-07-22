@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.dts.base.WebService;
 import com.dts.base.XMLObject;
+import com.dts.classes.Mantenimientos.Producto.Producto_Presentacion.clsBeProducto_Presentacion;
 import com.dts.classes.Transacciones.Picking.clsBeStockReemplazo;
 import com.dts.classes.Transacciones.Picking.clsBeTrans_picking_ubic;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStockList;
@@ -38,6 +39,7 @@ import static com.dts.tom.Transacciones.Picking.frm_picking_datos.Tipo;
 import static com.dts.tom.Transacciones.Picking.frm_detalle_tareas_picking.TipoLista;
 import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBePickingUbic;
 import static com.dts.tom.Transacciones.Picking.frm_danado_picking.NombreEstado;
+import static com.dts.tom.Transacciones.Picking.frm_picking_datos.gBeProducto;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,6 +79,7 @@ public class frm_list_prod_reemplazo_picking extends PBase {
     private boolean ConExistencia = false;
     private final String resultado="";
     private double CantidadPendiente=0, CantPendSel = 0;
+    private clsBeProducto_Presentacion BePresentacion = null;
 
     private Cursor DT;
 
@@ -487,6 +490,9 @@ public class frm_list_prod_reemplazo_picking extends PBase {
             listaDispProd.setAdapter(adapter);
             setEventosRv();
 
+            if (gl.Advertir_Mpq_Umbas) {
+                execws(9);
+            }
         } catch (Exception e){
             mu.msgbox("Lista_Inventario_Disponible:"+e.getMessage());
         }finally {
@@ -502,8 +508,23 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                 selid = item.IdStock;
                 selidx = pos;
 
-                adapter.setSelectedIndex(pos);
-                procesar_registro();
+                //#AT20250722 Si Advertir es verdadero y existe una presentacion
+                //valida si la cantidad es multiplo del factor
+                if (gl.Advertir_Mpq_Umbas && BePresentacion != null) {
+                    double Factor = BePresentacion.Factor;
+
+                    //Si es multiplo continua el proceso normal, si no debe confirmar el operador.
+                    if (Factor > 0 && CantReemplazar % Factor == 0) {
+                        adapter.setSelectedIndex(pos);
+                        procesar_registro();
+                    } else {
+                        msgMultiploConfirmar("La cantidad a reemplazar ("+ CantReemplazar +") no es múltiplo de " + Factor +
+                                " para la presentación '" + BePresentacion.Nombre + "'. ¿Desea continuar?", pos);
+                    }
+                } else {
+                    adapter.setSelectedIndex(pos);
+                    procesar_registro();
+                }
             });
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -683,6 +704,14 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                                 "IdPropietarioBodega",gl.OperadorBodega.IdOperador,
                                 "IdPickingUbic",gBePickingUbic.IdPickingUbic);
                         break;
+                    case 9:
+                        if (gBeProducto.IdProducto == 0) {
+                            toast("El IdProducto es inválido");
+                            return;
+                        }
+
+                        callMethod("Get_Presentacion_Defecto_By_Producto","pIdProducto", gBeProducto.IdProducto);
+                        break;
                 }
 
             } catch (Exception e) {
@@ -722,12 +751,24 @@ public class frm_list_prod_reemplazo_picking extends PBase {
                         Lista_Inventario_Disponible();
                     }
                     break;
+                case 9:
+                    processPresentacionDefecto();
+                    break;
             }
 
         } catch (Exception e) {
             msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }finally {
             hideProgressDialog();
+        }
+    }
+
+    private void processPresentacionDefecto() {
+        try {
+            BePresentacion = null;
+            BePresentacion = xobj.getresult(clsBeProducto_Presentacion.class,"Get_Presentacion_Defecto_By_Producto");
+        } catch (Exception e) {
+            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
         }
     }
 
@@ -853,6 +894,34 @@ public class frm_list_prod_reemplazo_picking extends PBase {
 
         }catch (Exception e){
             mu.msgbox("processUbicacion:"+e.getMessage());
+        }
+    }
+
+    private void msgMultiploConfirmar(String msg, int posicion) {
+
+        try{
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setTitle(R.string.app_name);
+            dialog.setMessage(msg);
+
+            dialog.setIcon(R.drawable.ic_quest);
+
+            dialog.setPositiveButton("Si", (dialog1, which) -> {
+                adapter.setSelectedIndex(posicion);
+                procesar_registro();
+            });
+
+            dialog.setNegativeButton("No", (dialog2, which) -> {
+                if (Tipo==1){
+                    msgMarcarDanado("¿Marcar de todas formas el producto en estado: "+ NombreEstado+"?");
+                }
+            });
+
+            dialog.show();
+
+        }catch (Exception e){
+            addlog(new Object(){}.getClass().getEnclosingMethod().getName(),e.getMessage(),"");
         }
     }
 
