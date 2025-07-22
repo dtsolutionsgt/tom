@@ -30,7 +30,7 @@ public class clsBePropietarios {
     @Element(required=false) public String clave_acceso="";
     @Element(required=false) public clsBeEmpresa Empresa=new clsBeEmpresa();
     @Element(required=false) public boolean Es_Consolidador = false;
-
+    @Element(required=false) public boolean ControlUx = false;
 
     public clsBePropietarios() {
     }
