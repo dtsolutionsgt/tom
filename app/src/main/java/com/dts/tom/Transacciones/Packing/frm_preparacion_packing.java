@@ -105,7 +105,7 @@ public class frm_preparacion_packing extends PBase {
         xobj = new XMLObject(ws);
 
         setHandlers();
-        lblPicking.setText(String.format("Picking: %d - Pedido: %d", idPickingEnc, IdPedidoEnc));
+        lblPicking.setText(String.format("Pedido: %d - Picking: %d",IdPedidoEnc, idPickingEnc));
 
         Load();
         focusLP();
