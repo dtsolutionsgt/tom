@@ -78,6 +78,7 @@ import com.dts.classes.Transacciones.Recepcion.Trans_re_img.clsBeTrans_re_imgLis
 import com.dts.classes.Transacciones.Recepcion.clsBeTrans_re_enc;
 import com.dts.classes.Transacciones.Stock.Parametros.clsBeStock_parametro;
 import com.dts.classes.Transacciones.Stock.Stock.clsBeStock;
+import com.dts.classes.Transacciones.Stock.Stock.clsBeStockList;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_rec;
 import com.dts.classes.Transacciones.Stock.Stock_rec.clsBeStock_recList;
 import com.dts.classes.Transacciones.Stock.Stock_se_rec.clsBeStock_se_rec;
@@ -8179,6 +8180,11 @@ public class frm_recepcion_datos extends PBase {
                                 "pIdBodega",gl.IdBodega,
                                       "pNoLote",pNoLote);
                         break;
+                    case 37:
+                        callMethod("Get_All_By_IdUbicacion_And_LicPlate",
+                                "pIdUbicacion",gl.gBeRecepcion.IdUbicacionRecepcion,
+                                "pLicencia",txtNoLP.getText().toString());
+                        break;
 
                 }
 
@@ -8333,6 +8339,9 @@ public class frm_recepcion_datos extends PBase {
                 case 36:
                     Get_Homologacion_Lote_Vencimiento();
                     break;
+                case 37:
+                    processLicenciaUbicacion();
+                    break;
             }
 
         } catch (Exception e) {
@@ -8410,6 +8419,24 @@ public class frm_recepcion_datos extends PBase {
         }
     }
 
+
+    private void processLicenciaUbicacion() {
+        clsBeStockList Stock = null;
+        try {
+            Stock = xobj.getresult(clsBeStockList.class,"Get_All_By_IdUbicacion_And_LicPlate");
+
+            if (Stock == null) {
+                mu.msgbox("La licencia "+ txtNoLP.getText().toString() +" tiene una ubicación diferente al producto que está implosionando, no se puede realizar la transacción.");
+            } else {
+                ContinuaProcesoExisteLp();
+            }
+
+            progress.cancel();
+        } catch (Exception e) {
+            progress.cancel();
+            msgbox("processGetFotosProducto: "+ e.getMessage());
+        }
+    }
 
     private void BtnGuardarRecepcion(){
 
@@ -9557,7 +9584,84 @@ public class frm_recepcion_datos extends PBase {
                 Existe_Lp = xobj.getresult(Boolean.class,"Existe_Lp");
             }
 
-            if (Existe_Lp){
+            if (Existe_Lp) {
+                execws(37);
+            } else{
+                if (guardando_recepcion){
+
+                    //Agregué esta validación para que no se quede vacía la ubicación y se puede hacer el push en NAV
+                    if (gl.gBeOrdenCompra.Push_To_NAV &&
+                            (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
+                        if (lblUbicacion.getText().toString().isEmpty())
+                        {
+                            fillUbicacion();
+                            if (txtNoLP.getText().toString().trim().equals("")){
+                                progress.hide();
+                                msgbox("La licencia no puede ser vacía");
+                                return;
+                            }
+                        }
+                    }
+
+                    if (gl.gBeOrdenCompra.Push_To_NAV &&
+                            (gl.gBeOrdenCompra.IdTipoIngresoOC == dataContractDI.Orden_De_Produccion)){
+                        if (lblUbicacion.getText().toString().isEmpty())
+                        {
+                            progress.hide();
+                            msgbox("La ubicación de los lotes no puede ser vacía");
+                            return;
+                        }
+                    }
+
+                    if (BeProducto!=null){
+                        if(ValidaDatosIngresados()){
+                            if (Mostrar_Propiedades_Parametros){
+                                Muestra_Propiedades_Producto();
+                            }else{
+                                if (!Mostro_Propiedades){
+                                    Llena_Stock();
+                                    Mostro_Propiedades = true;
+                                }
+                            }
+
+                            if (!Mostro_Propiedades){
+                                Muestra_Propiedades_Producto();
+                                return;
+                            }
+
+                            if (gl.TipoOpcion==2 && gl.gBeRecepcion.IsNew){
+
+                                execws(12);
+
+                            }else{
+                                ContinuaGuardandoRecepcion();
+                            }
+                        }else{
+                            //#GT12102022_1420: cancelar progress y mostrar boton guardar, porque no paso la validación de campos.
+                            progress.cancel();
+                            btnTareas.setEnabled(true);
+                        }
+                    }else{
+                        msgbox("No está definido el producto que se va a recepcionar");
+                    }
+
+                }else{
+                    if (BeProducto.Control_vencimiento){
+                        cmbVenceRec.setSelectAllOnFocus(true);
+                        cmbVenceRec.requestFocus();
+                    }else if (BeProducto.Control_lote){
+                        txtLoteRec.setSelectAllOnFocus(true);
+                        txtLoteRec.requestFocus();
+                    }else {
+                        txtCantidadRec.requestFocus();
+                    }
+                    fillUbicacion();
+                }
+            }
+
+            //#AT20250723 Deje esto en comentario hasta estabilizar la nueva funcionaldiad agregada
+            //arriba, y asi poder corregir errores facilmente
+            /*if (Existe_Lp){
                 //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
                 if (gl.bloquear_lp_hh){
                     //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
@@ -9650,12 +9754,40 @@ public class frm_recepcion_datos extends PBase {
                     }
                     fillUbicacion();
                 }
-            }
+            }*/
 
         }catch (Exception e){
             mu.msgbox("processExisteLp:"+e.getMessage());
         }finally {
             progress.cancel();
+        }
+    }
+
+    private void ContinuaProcesoExisteLp() {
+        try {
+            //#CKFK20220328 Agregué esta validación para el caso en que ingresen una licencia duplicada
+            if (gl.bloquear_lp_hh){
+                //msgExisteLp("La licencia: "+pLp+ " ya existe, debe ingresar una nueva licencia");
+                //#GT23082022_1130: Se obtiene nueva LP por que la que se cargo, ya se grabo con mismo operador, distinta HH
+                //msgAskAsignarNuevaLp("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada, desea continuar ?");
+                //#GT23092022_0930: Se valida concurrencia, pero en este punto, la otra HH, ya grabo e imprimio, y aca apenas tenemos
+                //los datos en memoria previo a Guardar.
+                nBeResolucion = null;
+                CantidadCopias = 0;
+                CorelSiguiente = 0;
+                TmpMaxL = 0;
+
+                btnTareas.setEnabled(true);
+                progress.hide();
+                msgAskAsignarNuevaLp_Reload("Se ha asignado una nueva LP, porque la anterior "+pLp+ " ya fue asignada");
+
+            }else{
+                btnTareas.setEnabled(true);
+                progress.hide();
+                msgAskExisteLp("La licencia: "+pLp+ " ya existe, ¿Agregarlo nuevamente al producto: "+BeProducto.Codigo + "?");
+            }
+        } catch (Exception e) {
+            mu.msgbox("processExisteSerie:"+e.getMessage());
         }
     }
 
