@@ -2284,7 +2284,8 @@ public class frm_cambio_ubicacion_ciega extends PBase {
 
         } catch (Exception e) {
             progress.cancel();
-            msgbox(new Object() {}.getClass().getEnclosingMethod().getName() + " . " + e.getMessage());
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName() + " . " + e.getMessage());
         }
     }
 
@@ -2305,7 +2306,7 @@ public class frm_cambio_ubicacion_ciega extends PBase {
             }
 
         } catch (Exception e) {
-            msgbox(new Object() .getClass().getEnclosingMethod().getName() +" ."+ e.getMessage());
+            msgbox(Object.class.getEnclosingMethod().getName() +" ."+ e.getMessage());
         }
     }
 
@@ -3746,27 +3747,21 @@ public class frm_cambio_ubicacion_ciega extends PBase {
         try{
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
             dialog.setTitle(R.string.app_name);
             dialog.setMessage( msg);
-
             dialog.setCancelable(false);
-
             dialog.setIcon(R.drawable.cambioubic);
+            dialog.setNeutralButton("OK", (dialog1, which) -> {
+                cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
+                lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
 
-            dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    cvUbicDestID=bodega_ubicacion_destino.getIdUbicacion();
-                    lblUbicCompDestino.setText(bodega_ubicacion_destino.getDescripcion());
-
-                    //#CKFK20250118 Coloqué esto en comentario para que permita hacer el cambio de ubicación en el cambio de estado
-                    /*if(gl.modo_cambio==2 && !vProcesar){
-                        progress.cancel();
-                        cmbEstadoDestino.requestFocus();
-                    }else{*/
-                        datosOk();
-                    //}
-                }
+                //#CKFK20250118 Coloqué esto en comentario para que permita hacer el cambio de ubicación en el cambio de estado
+                /*if(gl.modo_cambio==2 && !vProcesar){
+                    progress.cancel();
+                    cmbEstadoDestino.requestFocus();
+                }else{*/
+                    datosOk();
+                //}
             });
 
             dialog.show();

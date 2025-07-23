@@ -463,6 +463,11 @@ public class frm_picking_datos extends PBase {
                 }
             });
 
+            lblLicPlate.setOnLongClickListener(v -> {
+                String licencia = lblLicPlate.getText().toString();
+                txtLicencia.setText(licencia);
+                return true;
+            });
 
         } catch (Exception e) {
             mu.msgbox("setHandlers:" + e.getMessage());
