@@ -99,16 +99,18 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
 
             //#GT 23072025: la linea puede tener presentacion 0 o ir vacia si fuera la linea de sumatoria.
-            if (BeListStock.get(position).Pres.equals("0") || BeListStock.get(position).Pres.isEmpty()) {
-                holder.lblPres.setText(BeListStock.get(position).UM);
-                holder.lblExistPres.setText(BeListStock.get(position).ExistUMBAs  +"");
-                holder.lblResPres.setText(BeListStock.get(position).ReservadoUMBAs+"");
-                holder.lblDispPres.setText(BeListStock.get(position).DisponibleUMBas+"");
-            } else {
+            //#AT 20250723: Cambie esto BeListStock.get(position).Pres.equals("0") || BeListStock.get(position).Pres.isEmpty()
+            // a esto BeListStock.get(position).IdPresentacion != 0
+            if (BeListStock.get(position).IdPresentacion != 0) {
                 holder.lblPres.setText(BeListStock.get(position).Pres + "");
                 holder.lblExistPres.setText(BeListStock.get(position).ExistPres + "");
                 holder.lblResPres.setText(BeListStock.get(position).ResPres+"");
                 holder.lblDispPres.setText(BeListStock.get(position).DispPres+"");
+            } else {
+                holder.lblPres.setText(BeListStock.get(position).UM);
+                holder.lblExistPres.setText(BeListStock.get(position).ExistUMBAs  +"");
+                holder.lblResPres.setText(BeListStock.get(position).ReservadoUMBAs+"");
+                holder.lblDispPres.setText(BeListStock.get(position).DisponibleUMBas+"");
             }
 
             holder.lblIdStock.setText(""+BeListStock.get(position).IdStock);
