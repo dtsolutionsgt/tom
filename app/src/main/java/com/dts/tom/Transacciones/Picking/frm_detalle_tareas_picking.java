@@ -607,6 +607,8 @@ public class frm_detalle_tareas_picking extends PBase {
             TipoOrden.add("Estado");
             TipoOrden.add("Clasificación");
             TipoOrden.add("Nombre Ubicación");
+            TipoOrden.add("Cantidad");
+            TipoOrden.add("Licencia");
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, TipoOrden);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -970,6 +972,10 @@ public class frm_detalle_tareas_picking extends PBase {
                 return sortord*left.NombreClasificacion.compareTo(rigth.NombreClasificacion);
             } else if(pOrden==6) {
                 return sortord*left.NombreUbicacion.compareTo(rigth.NombreUbicacion);
+            }else if(pOrden==7) {
+                return Double.compare(sortord * rigth.Cantidad_Solicitada, sortord * left.Cantidad_Solicitada);
+            }else if(pOrden==8) {
+                return sortord*left.Lic_plate.compareTo(rigth.Lic_plate);
             }
 
             return Integer.compare(sortord * left.IdPickingEnc, sortord * rigth.IdPickingEnc);

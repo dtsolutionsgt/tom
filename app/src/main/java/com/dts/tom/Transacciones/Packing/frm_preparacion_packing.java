@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static br.com.zbra.androidlinq.Linq.stream;
 
@@ -47,7 +48,7 @@ public class frm_preparacion_packing extends PBase {
 
     private ListView listView;
     private EditText txtLP,txtLinea;
-    private TextView lblProc,lblPend, txtLicenciaPacking;
+    private TextView lblProc,lblPend, txtLicenciaPacking, lblPicking;
     private ProgressBar pbar;
     private ImageView btnImprimir, btnBuscars;
 
@@ -87,6 +88,7 @@ public class frm_preparacion_packing extends PBase {
         lblPend = findViewById(R.id.btnRegsList2);
 
         txtLicenciaPacking = findViewById(R.id.txtLicenciaPacking);
+        lblPicking = findViewById(R.id.lblPicking);
 
         btnImprimir = findViewById(R.id.btnImprimir);
         btnBuscars = findViewById(R.id.btnBuscars);
@@ -103,6 +105,7 @@ public class frm_preparacion_packing extends PBase {
         xobj = new XMLObject(ws);
 
         setHandlers();
+        lblPicking.setText(String.format("Pedido: %d - Picking: %d",IdPedidoEnc, idPickingEnc));
 
         Load();
         focusLP();
@@ -134,7 +137,55 @@ public class frm_preparacion_packing extends PBase {
     public void doList(View view){
 
         //btnBuscars.setEnabled(false);
-        verLista();
+        procesarLicencia();
+    }
+
+    private void seleccionarLinea(int pos) {
+        try {
+            clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) listView.getItemAtPosition(pos);
+            selitem = sitem;
+            selid = sitem.Idpackingenc;
+            selidx = pos;
+            adapter.setSelectedIndex(pos);
+            listView.setSelection(pos);
+
+            if (selitem.Idpackingenc == 0) {
+                String[] licencia = selitem.nom_prod.split(":");
+                String lic = licencia[0].trim();
+                msgCambioLicPacking("¿Cambiar a licencia packing: " + lic + "?", lic);
+            }
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
+    }
+
+    private void procesarLicencia() {
+        try {
+            String Licencia = txtLP.getText().toString().replace("$", "");
+
+            int index = IntStream.range(0, item_list.size())
+            .filter(i -> {
+                String nomProd = item_list.get(i).nom_prod;
+                if (nomProd != null && nomProd.contains(":")) {
+                    String lic = nomProd.split(":")[0].trim();
+                    return Licencia.equalsIgnoreCase(lic);
+                }
+                return false;
+            })
+            .findFirst()
+            .orElse(-1);
+
+            if (index != -1) {
+                seleccionarLinea(index);
+            } else {
+                verLista();
+            }
+
+        } catch (Exception e) {
+            msgbox(Objects.requireNonNull(new Object() {
+            }.getClass().getEnclosingMethod()).getName()+" . "+e.getMessage());
+        }
     }
 
     private void verLista() {
@@ -167,19 +218,7 @@ public class frm_preparacion_packing extends PBase {
 
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 selid = 0;
-                Object lvObj = listView.getItemAtPosition(position);
-                clsBeTrans_packing_enc sitem = (clsBeTrans_packing_enc) lvObj;
-                selitem = sitem;
-                selid = sitem.Idpackingenc;
-                selidx = position;
-                adapter.setSelectedIndex(position);
-
-                if (selitem.Idpackingenc == 0) {
-                    String[] licencia = selitem.nom_prod.split(":");
-                    String lic = licencia[0].trim();
-                    msgCambioLicPacking("¿Cambiar a licencia packing: "+ lic +"?" ,lic);
-                }
-
+                seleccionarLinea(position);
             });
 
             listView.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -203,7 +242,8 @@ public class frm_preparacion_packing extends PBase {
                     }
 
                     gl.filtroprod = txtLP.getText().toString();
-                    verLista();
+
+                    procesarLicencia();
                 }
                 return false;
             });
@@ -1156,6 +1196,7 @@ public class frm_preparacion_packing extends PBase {
             dialog.setPositiveButton("Si", (dialog1, which) -> {
                 nBeResolucion = null;
                 txtLicenciaPacking.setText(lic_packing);
+                txtLP.setText("");
             });
 
             dialog.setNegativeButton("No", (dialog12, which) -> {});

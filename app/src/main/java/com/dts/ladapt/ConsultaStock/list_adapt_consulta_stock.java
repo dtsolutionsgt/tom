@@ -98,7 +98,8 @@ public class list_adapt_consulta_stock extends BaseAdapter {
             holder.lblCodigo.setText(BeListStock.get(position).Codigo  +" ");
             holder.lblNombre.setText(BeListStock.get(position).Nombre  +" ");
 
-            if (BeListStock.get(position).Pres.equals("0")) {
+            //#GT 23072025: la linea puede tener presentacion 0 o ir vacia si fuera la linea de sumatoria.
+            if (BeListStock.get(position).Pres.equals("0") || BeListStock.get(position).Pres.isEmpty()) {
                 holder.lblPres.setText(BeListStock.get(position).UM);
                 holder.lblExistPres.setText(BeListStock.get(position).ExistUMBAs  +"");
                 holder.lblResPres.setText(BeListStock.get(position).ReservadoUMBAs+"");
