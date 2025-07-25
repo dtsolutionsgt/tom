@@ -30,7 +30,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
 
     private TextView lblcodigo,lbldescripcion,lblexUnidad,lblexPres,lblestado,
             lblpedido,lblpicking,lblvence,lbllote,lblubic,lblnomUbic,lblLicPlate,
-            lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres;
+            lblPresentacion, lblUnidad, lblResUni, txtResUni, lblResPres, txtResPres,lblUbicacionPrevia;
     private TableRow trPresentacion, trResPresentacion, trDispUm, trResUm;
     private Spinner cmbCantidad;
     private frm_consulta_stock_detalleCI.WebServiceHandler ws;
@@ -73,6 +73,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
         trResPresentacion = findViewById(R.id.trResPresentacion);
         trDispUm = findViewById(R.id.trDispUm);
         trResUm = findViewById(R.id.trResUm);
+        lblUbicacionPrevia = findViewById(R.id.lblubicPrev);
+
 
         ProgressDialog();
 
@@ -202,6 +204,8 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lbllote.setText(gl.existencia.Lote + "");
                 lblubic.setText(gl.existencia.idUbic + "");
                 lblnomUbic.setText(gl.existencia.Ubic + "");
+                //GT25072025: mostrar ubicacion_anterior
+                lblUbicacionPrevia.setText(gl.existencia.idUbicAnterior);
 
                 if (gl.existencia.LicPlate.equals(0)) {
                     lblLicPlate.setText("");
