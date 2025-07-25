@@ -33,7 +33,7 @@ public class clsBeVW_stock_res_CI {
   @Element(required=false) public int IdPresentacion=0;
   @Element(required=false) public int IdArea=0;
   @Element(required=false) public int IdStock=0;
-  @Element(required=false) public int idUbicAnterior=0;
+  @Element(required=false) public int IdUbicacion_anterior=0;
   public
 
 

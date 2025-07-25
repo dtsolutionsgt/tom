@@ -73,7 +73,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
         trResPresentacion = findViewById(R.id.trResPresentacion);
         trDispUm = findViewById(R.id.trDispUm);
         trResUm = findViewById(R.id.trResUm);
-        lblUbicacionPrevia = findViewById(R.id.lblubicPrev);
+        lblUbicacionPrevia = findViewById(R.id.lblIdUbicacion_anterior);
 
 
         ProgressDialog();
@@ -205,7 +205,7 @@ public class frm_consulta_stock_detalleCI extends PBase {
                 lblubic.setText(gl.existencia.idUbic + "");
                 lblnomUbic.setText(gl.existencia.Ubic + "");
                 //GT25072025: mostrar ubicacion_anterior
-                lblUbicacionPrevia.setText(gl.existencia.idUbicAnterior);
+                lblUbicacionPrevia.setText(gl.existencia.IdUbicacion_anterior+"");
 
                 if (gl.existencia.LicPlate.equals(0)) {
                     lblLicPlate.setText("");

@@ -329,7 +329,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/UbicPrev"
+                    android:id="@+id/UbicacionPrevia"
                     android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -340,7 +340,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/lblubicPrev"
+                    android:id="@+id/lblIdUbicacion_anterior"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:gravity="center_vertical"
