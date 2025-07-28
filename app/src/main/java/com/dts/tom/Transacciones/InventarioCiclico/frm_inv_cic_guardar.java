@@ -142,8 +142,6 @@ public class frm_inv_cic_guardar extends PBase {
                         e.printStackTrace();
                   }
 
-
-
             }else{
 
                 try {
@@ -152,7 +150,6 @@ public class frm_inv_cic_guardar extends PBase {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
 
                 lblNPeso.setVisibility(TextView.INVISIBLE);
                 lblNLote.setVisibility(TextView.INVISIBLE);
@@ -179,7 +176,6 @@ public class frm_inv_cic_guardar extends PBase {
         txtpresent_cic.setVisibility(View.INVISIBLE);
         txtNProd.setEnabled(false);
         cmbLoteN.setVisibility(View.INVISIBLE);
-
 
         if(gl.pBeProductoNuevo.Control_peso){
             lblNPeso.setVisibility(View.VISIBLE);
@@ -494,6 +490,17 @@ public class frm_inv_cic_guardar extends PBase {
                    toast("Ingrese una ubicación");
 
                }else {
+
+                   String filtroTexto = txtNUbic.getText().toString().trim();
+
+                   int evaluar;
+                   try {
+                       evaluar = Integer.parseInt(filtroTexto);  // Ok, porque "00030" se convierte a 30
+                   } catch (NumberFormatException e) {
+                       msgbox("La ubicación debe ser un número válido.");
+                       return false;
+                   }
+
                    //valida úbicación nueva
                    execws(2);
                }

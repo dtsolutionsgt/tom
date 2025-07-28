@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,6 +63,7 @@ public class frm_inv_cic_conteo extends PBase {
     private Object item;
     private clsBeProducto BeProducto;
     public static boolean NuevoConteo = false;
+    private String ultimoCodigoEscaneado = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,31 +117,22 @@ public class frm_inv_cic_conteo extends PBase {
         try {
 
             txtBuscFiltro.setOnKeyListener((v, keyCode, event) -> {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_ENTER:
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        String texto = txtBuscFiltro.getText().toString().trim();
 
-                            if (txtBuscFiltro.getText().toString().isEmpty())
-                            {
-                                toast("No ingreso una Ubicación!");
+                        Log.d("DEBUG_UBIC", "Escaneado: [" + texto + "]");
 
-                            }else{
-                                adapter_ciclico= new list_adapt_consulta_ciclico(getApplicationContext(),data_list);
-                                listCiclico.setAdapter(adapter_ciclico);
+                        if (!texto.isEmpty()) {
+                            ListaFiltrada();  // Sigue usando parseInt adentro
+                        } else {
+                            toast("No ingresó una Ubicación!");
+                        }
 
-                                if(chkPendientes){
+                    }, 200);
 
-                                    ListaFiltrada();
-
-                                }else {
-
-                                    ListaFiltrada2();
-
-                                }
-
-                            }
-                    }
+                    return true;
                 }
                 return false;
             });
@@ -364,9 +358,10 @@ public class frm_inv_cic_conteo extends PBase {
 
    }
 
-   private void ListaFiltrada() {
+    private void ListaFiltrada() {
         int registros = 0;
         String filtroTexto = txtBuscFiltro.getText().toString().trim();
+        ultimoCodigoEscaneado=filtroTexto;
 
         if (filtroTexto.isEmpty()) {
             msgbox("Por favor ingrese una ubicación válida.");
@@ -375,7 +370,7 @@ public class frm_inv_cic_conteo extends PBase {
 
         int evaluar;
         try {
-            evaluar = Integer.parseInt(filtroTexto);
+            evaluar = Integer.parseInt(filtroTexto);  // Ok, porque "00030" se convierte a 30
         } catch (NumberFormatException e) {
             msgbox("La ubicación debe ser un número válido.");
             return;
@@ -383,23 +378,21 @@ public class frm_inv_cic_conteo extends PBase {
 
         clsBe_inv_reconteo_data primeraCoincidencia = null;
 
-        for (int i = 0; i < data_list.size(); i++) {
-            clsBe_inv_reconteo_data item = data_list.get(i);
-
+        for (clsBe_inv_reconteo_data item : data_list) {
             if (item.NoUbic == evaluar && item.cantidad != null && item.cantidad.equals(0.0)) {
                 registros++;
-
                 if (registros == 1) {
                     primeraCoincidencia = item;
                 }
             }
         }
 
+        txtBuscFiltro.setText("");  // ← ¡Siempre limpia después de escanear!
+
         if (registros > 1) {
             FiltroxUbicacion(evaluar);
             gl.inv_ciclico = new clsBe_inv_reconteo_data();
             msgbox("La ubicación contiene más códigos de producto, seleccione ahora el código de producto.");
-            txtBuscFiltro.setText("");
             Busqueda = false;
         } else if (registros == 1) {
             gl.inv_ciclico = primeraCoincidencia;
@@ -409,6 +402,7 @@ public class frm_inv_cic_conteo extends PBase {
             msgNuevoConteo("No existe la ubicación. ¿Desea agregar un nuevo conteo?");
         }
     }
+
 
     public void FiltroValores() {
         int registros = 0;
@@ -1061,7 +1055,7 @@ public class frm_inv_cic_conteo extends PBase {
             dialog.setPositiveButton("Si", (dialog1, which) -> {
 
                 NuevoConteo = true;
-                String u = txtBuscFiltro.getText().toString();
+                String u = ultimoCodigoEscaneado;
 
                 if  (isNumeric(u)) {
                     gl.ubicacionInv = Integer.valueOf(u);

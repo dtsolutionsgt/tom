@@ -59,7 +59,8 @@ public class clsBeTrans_inv_ciclico {
     @Element(required=false) public String EstadoNuevo = "";
     @Element(required=false) public double Nuevo_Stock = 0;
     @Element(required=false) public boolean Contado = false;
-
+    @Element(required=false) public boolean Regularizar = true;
+    @Element(required=false) public double Cantidad_Reservada_UMBas = 0;
 
     public clsBeTrans_inv_ciclico(){}
 

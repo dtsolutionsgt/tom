@@ -137,6 +137,48 @@ public class DateUtils {
 
 	}
 
+	public boolean EsFechaCorrectaInv(String vFecha) throws ParseException {
+
+		boolean correcta = false;
+		int cant = 0;
+		String mounth;
+		String day;
+		String year;
+
+		if (!vFecha.isEmpty()) {
+
+			vFecha.trim();
+
+			cant = vFecha.length();
+
+			day = vFecha.substring(0, 2);
+			mounth = vFecha.substring(3, 5);
+			year = vFecha.substring(6, 10);
+			SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy"); ;
+
+			try {
+
+				if (vFecha.contains("-")) {
+					dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+				}
+
+				dateFormat.setLenient(false);
+
+				if (vFecha.contains("-")) {
+					dateFormat.parse(day + "-" + mounth + "-" + year);
+				}
+
+				correcta = true;
+
+			} catch (Exception e) {
+				correcta = false;
+			}
+		}
+
+		return correcta;
+
+	}
+
 	public String geActTimeStr() {
 		long f, ch, cm, cs;
 		String s, ss;
@@ -592,6 +634,34 @@ public class DateUtils {
 
 			Date date = dateFormat.parse(Fecha);
 			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+			vFecha = dateFormat.format(date);
+
+		} catch (Exception e) {
+
+		}
+		return vFecha;
+	}
+
+	public String convierteFechaConGuion(String Fecha) {
+
+		String vFecha = "";
+
+		try {
+
+			long f;
+			String fechaS;
+			int cyear, cmonth, cday, ch, cm;
+			SimpleDateFormat dateFormat;
+
+			if (Fecha.contains("-")) {
+				dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			} else {
+				dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			}
+
+			Date date = dateFormat.parse(Fecha);
+			dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 			vFecha = dateFormat.format(date);
 

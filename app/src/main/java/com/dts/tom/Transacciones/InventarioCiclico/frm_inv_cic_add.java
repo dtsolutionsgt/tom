@@ -216,6 +216,30 @@ public class frm_inv_cic_add extends PBase {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     if (!txtUbicNueva.getText().toString().isEmpty()) {
 
+                        String filtroTexto = txtUbicNueva.getText().toString().trim();
+
+                        int evaluar;
+                        try {
+                            evaluar = Integer.parseInt(filtroTexto);
+                            txtUbicNueva.setText(evaluar);// Ok, porque "00030" se convierte a 30
+                        } catch (NumberFormatException e) {
+                            msgbox("La ubicación nueva debe ser un número válido.");
+                            txtUbicNueva.setText("");
+                            txtUbicNueva.requestFocus();
+                            return false;
+                        }
+
+                        filtroTexto = txtUbic.getText().toString().trim();
+                        try {
+                            evaluar = Integer.parseInt(filtroTexto);
+                            txtUbic.setText(evaluar);// Ok, porque "00030" se convierte a 30
+                        } catch (NumberFormatException e) {
+                            msgbox("La ubicación debe ser un número válido.");
+                            txtUbic.setText("");
+                            txtUbic.requestFocus();
+                            return false;
+                        }
+
                         if (!txtUbic.getText().toString().equals(txtUbicNueva.getText().toString())) {
                             pIdUbicacion = Integer.valueOf(txtUbicNueva.getText().toString());
                             execws(6);
@@ -235,7 +259,7 @@ public class frm_inv_cic_add extends PBase {
 
                     if (NuevoConteo) {
                         if (!txtProd.getText().toString().isEmpty()) {
-                            execws(7); // ← aquí debes mover el requestFocus si el WS es sincrónico
+                            execws(11); // ← aquí debes mover el requestFocus si el WS es sincrónico
                         } else {
                             toast("Ingrese código de producto.");
                         }
@@ -377,7 +401,21 @@ public class frm_inv_cic_add extends PBase {
             txtUbic.setOnKeyListener((v, keyCode, event) -> {
                 if ((event.getAction()==KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     if (!txtUbic.getText().toString().isEmpty()) {
-                        pIdUbicacion = Integer.valueOf(txtUbic.getText().toString());
+
+                        String filtroTexto = txtUbic.getText().toString().trim();
+
+                        int evaluar;
+                        try {
+                            evaluar = Integer.parseInt(filtroTexto);
+                        } catch (NumberFormatException e) {
+                            msgbox("La ubicación debe ser un número válido.");
+                            txtUbic.setText("");
+                            txtUbic.requestFocus();
+                            return false;
+                        }
+
+                        pIdUbicacion = evaluar;
+
                         execws(6);
                     } else {
                         toast("Ingrese ubicación");
@@ -762,6 +800,7 @@ public class frm_inv_cic_add extends PBase {
                 if(gl.inv_ciclico.Codigo.equals(codigo_producto)){
                     //new Handler(Looper.getMainLooper()).post(() -> txtCantContada.requestFocus());
                     respuesta = true;
+                    BeProductoUbicacion = gl.pprod;
                 } else {
                     IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
 
@@ -884,72 +923,6 @@ public class frm_inv_cic_add extends PBase {
 
     }
 
-
-
-/*    private void Scan_Codigo_Producto1() {
-
-        if(gl.inv_ciclico.codigo_producto == null){
-            toast("¡Producto no existe!");
-
-        }else{
-
-            if(!gl.inv_ciclico.Codigo.equals(txtProd.getText().toString().trim())){
-
-                toast("El código de producto no es válido");
-
-                txtProd.requestFocus();
-
-
-            }else{
-
-                IdProductoBodega = gl.inv_ciclico.IdProductoBodega;
-
-                if(IdProductoBodega != gl.inv_ciclico.IdProductoBodega){
-
-                    if(!buscaproducto(IdProductoBodega, txtProd.getText().toString().trim())){
-
-                        toast("¿Producto no pertence a esta ubicación, Registrar de todas formas?");
-
-                        *//*******************************************************************************//*
-                        *//****** FALTA CREAR TOAST PARA CONFIRMAR Y ENVIAR A FORM_CIC_NUEVO.JAVA *******//*
-                    } else{
-
-
-
-                    }
-                }
-
-                btGuardar.setEnabled(true);
-              //  if(gl.pprod.Control_lote && txtLote1.toString().isEmpty()){
-                if(gl.pprod.Control_lote){
-
-                    txtLote1.requestFocus();
-
-                }else{
-                    txtCantContada.requestFocus();
-                }
-            }
-        }
-    }
-
-    private boolean buscaproducto(int idprod, String prodtxt) {
-
-        boolean respuesta = false;
-        int ii, idu, idp;
-
-        for (ii = 0; ii < gl.reconteo_list.size() - 1; ii++) {
-
-            if (gl.reconteo_list.get(ii).IdUbicacion == idubic && gl.reconteo_list.get(ii).IdProductoBodega == idprod) {
-
-                txtUbic.setText(idubic + "");
-                respuesta = true;
-                break;
-            }
-        }
-
-        return respuesta;
-    }*/
-
     public void ChangeDate(View view) {
 
         final Calendar c = Calendar.getInstance();
@@ -1049,6 +1022,16 @@ public class frm_inv_cic_add extends PBase {
 
     public void btnGuardar(View view) {
         try {
+            String valor= "";
+            String fecha_ajustada = "";
+
+            if (BeProductoUbicacion!=null){
+                if (BeProductoUbicacion.Control_vencimiento){
+                    valor= dtpVence.getText().toString();
+                    fecha_ajustada =  du.convierteFechaConGuion(valor);
+                }
+            }
+
             if (txtUbic.getText().toString().trim().isEmpty()) {
                 msgbox("¡Ubicacion vacia!");
                 txtUbic.requestFocus();
@@ -1076,7 +1059,10 @@ public class frm_inv_cic_add extends PBase {
             } else if( txtLicencia.getText().toString().trim().isEmpty()) {
                 toast("¡Debe ingresar una licencia!!");
                 txtLicencia.requestFocus();
-            } else {
+            }else if (BeProductoUbicacion.Control_vencimiento && !du.EsFechaCorrectaInv(fecha_ajustada)) {
+                msgbox("No es una fecha válida, se colocará la fecha actual");
+                dtpVence.setText(du.convierteFechaMostrar(du.getFullDate()));
+            }else {
                 btGuardar.setEnabled(true);
 
                 pitem = new clsBeTrans_inv_ciclico();
@@ -1108,10 +1094,15 @@ public class frm_inv_cic_add extends PBase {
                     }
 
                     if (BeProductoUbicacion.Control_vencimiento) {
-                        String fecha = app.strFechaXML2(dtpVence.getText().toString());
+                        if (dtpVence.getText().toString().isEmpty()) {
+                            msgbox("No es una fecha válida, se colocará la fecha actual");
+                            dtpVence.setText(du.convierteFechaMostrar(du.getFullDate()));
+                        }else{
+                            String fecha = app.strFechaXML2(dtpVence.getText().toString());
 
-                        pitem.Fecha_vence = fecha;
-                        pitem.Fecha_vence_stock = fecha;
+                            pitem.Fecha_vence = fecha;
+                            pitem.Fecha_vence_stock = fecha;
+                        }
                     } else {
                         pitem.Fecha_vence = "1900-01-01T00:00:00";
                         pitem.Fecha_vence_stock = "1900-01-01T00:00:00";
@@ -1446,6 +1437,7 @@ public class frm_inv_cic_add extends PBase {
                         break;
                     case 11:
                         clsBeTrans_inv_ciclico invCiclico = new clsBeTrans_inv_ciclico();
+                        codigo_producto = txtProd.getText().toString();
                         invCiclico.lic_plate = codigo_producto;
                         invCiclico.IdUbicacion = Integer.valueOf(txtUbic.getText().toString());
                         invCiclico.IdBodega = gl.IdBodega;
@@ -2148,8 +2140,8 @@ public class frm_inv_cic_add extends PBase {
             });
 
             dialog.setNegativeButton("No", (dialog2, which) -> {
-                NuevoConteo = false;
-                invCongelado = null;
+                //NuevoConteo = false;
+                //invCongelado = null;
                 txtLicencia.setText(gl.inv_ciclico.Licence_plate);
             });
 

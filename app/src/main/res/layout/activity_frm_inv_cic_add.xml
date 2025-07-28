@@ -60,7 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:singleLine="true" />
 
             </TableRow>
 
@@ -135,7 +136,8 @@
                     android:id="@+id/txtProd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:singleLine="true" />
             </TableRow>
 
             <TableRow
@@ -173,10 +175,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    app:layout_constraintStart_toEndOf="@id/lblLicencia"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/btnSetLicencia"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintStart_toEndOf="@id/lblLicencia"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnSetLicencia"
@@ -249,7 +252,8 @@
                     android:id="@+id/txtLote1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:singleLine="true" />
             </TableRow>
 
 
@@ -324,7 +328,8 @@
                     android:id="@+id/lblCantStock"
                     style="@style/StyleText"
                     android:layout_width="250dp"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:singleLine="true" />
 
             </TableRow>
 
@@ -338,13 +343,15 @@
                     android:id="@+id/txtCantContada"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number|numberDecimal" />
+                    android:inputType="number|numberDecimal"
+                    android:singleLine="true" />
 
                 <EditText
                     android:id="@+id/txtPesoContado"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:singleLine="true" />
 
                 <Button
                     android:id="@+id/btnGuardar"

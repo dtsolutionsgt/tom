@@ -75,7 +75,6 @@ public class frm_consulta_stock_detalleCI extends PBase {
         trResUm = findViewById(R.id.trResUm);
         lblUbicacionPrevia = findViewById(R.id.lblIdUbicacion_anterior);
 
-
         ProgressDialog();
 
         asignarDatos();

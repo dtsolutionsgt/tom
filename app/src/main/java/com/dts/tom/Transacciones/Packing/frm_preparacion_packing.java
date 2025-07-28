@@ -363,7 +363,8 @@ public class frm_preparacion_packing extends PBase {
 
                     if (obj.Lic_plate.equals(packing.Lic_plate) &&
                         obj.Fecha_Vence.equals(packing.Fecha_vence) &&
-                            obj.IdProductoBodega == packing.getIdproductobodega()&&
+                            obj.IdProductoBodega == packing.getIdproductobodega() &&
+                            obj.IdProductoEstado == packing.Idproductoestado &&
                             (obj.Lote ==null || obj.Lote.equals(vLotePacking)) ) {
 
                         cant += packing.Cantidad_bultos_packing;
@@ -777,6 +778,7 @@ public class frm_preparacion_packing extends PBase {
                                 .filter(p -> p.getLic_plate().equals(obj.Lic_plate))
                                 .filter(p -> p.getIdproductobodega() == obj.IdProductoBodega)
                                 .filter(p -> p.getFecha_vence().equals(obj.getFecha_Vence()))
+                                .filter(p -> p.getIdproductoestado()==(obj.getIdProductoEstado()))
                                 .mapToDouble(clsBeTrans_packing_enc::getCantidad_bultos_packing) // Aquí accedemos a la cantidad
                                 .sum();
 
