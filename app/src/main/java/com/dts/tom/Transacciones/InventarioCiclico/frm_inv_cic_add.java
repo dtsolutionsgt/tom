@@ -1029,6 +1029,7 @@ public class frm_inv_cic_add extends PBase {
                 if (BeProductoUbicacion.Control_vencimiento){
                     valor= dtpVence.getText().toString();
                     fecha_ajustada =  du.convierteFechaConGuion(valor);
+                    dtpVence.setText(fecha_ajustada);
                 }
             }
 
