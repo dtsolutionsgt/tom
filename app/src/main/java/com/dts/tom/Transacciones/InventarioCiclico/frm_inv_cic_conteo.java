@@ -392,6 +392,10 @@ public class frm_inv_cic_conteo extends PBase {
             //Tipo 1 = Solicita código
             //Tipo 2 = Solicita ubicación
             if (esNumeroEntero(termino)) {
+                if (termino.length() == 5) {
+                   termino =  termino.replaceFirst("^0+(?!$)", "");
+                }
+
                 UbicacionEscaneada = termino;
                 tmp = buscarPorUbicacion(UbicacionEscaneada);
 
